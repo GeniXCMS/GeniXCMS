@@ -8,6 +8,9 @@ This CMSF is a starter point to build your own online applications. With already
 ### Credits ###
 **GeniXCMS** is using some of **FOSS** (free and opensource software) like *Bootstrap*, *Summernote* Text Editor, *JQuery*, *PHP*, *MySQL*, etc. 
 
+### Demo ###
+Demo URL : http://genixcms.metalgenix.com
+
 ### License ###
 **GeniXCMS** License : **MIT License**
 
