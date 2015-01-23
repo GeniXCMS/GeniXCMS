@@ -1,0 +1,63 @@
+Options +SymLinksIfOwnerMatch
+RewriteEngine On
+#RewriteBase /
+
+#------------------------------------------------------------------------------//
+### Don't Touch this unless You know what you are doing ########################
+#------------------------------------------------------------------------------//
+#
+# Changing without knowing will affect your URL Friendly 
+# or even ruin it.
+#
+###############################################################################//
+
+#RewriteRule ^(.*)/(.*)	index.php?post=$2 [L]
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule . /index.php [L]
+RewriteRule ^paging/([0-9]+)$                   index.php?paging=$1 [L]
+RewriteRule ^([0-9]+)/(.+)/paging/([0-9]+)$     index.php?cat=$1&paging=$3 [L]
+RewriteRule ^([0-9]+)/(.+)$                     index.php?cat=$1 [L]
+RewriteRule ^(.+)\.html$	                    index.php?page=$1 [L]
+RewriteRule ^(.+)/([0-9]+)$                     index.php?post=$2 [L]
+RewriteRule ^sitemap$	                        index.php?page=sitemap [L]
+
+
+# gZip compression
+<IfModule mod_deflate.c>
+    #The following line is enough for .js and .css
+    AddOutputFilter DEFLATE js css
+
+    #The following line also enables compression by file content type, for the following list of Content-Type:s
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml
+
+    #The following lines are to avoid bugs with some browsers
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary: Accept-Encoding
+  </FilesMatch>
+</IfModule>
+
+AddCharset UTF-8 .html
+
+### activate mod_expires
+ExpiresActive On
+### Expire .gif's 1 month from when they're accessed
+ExpiresByType image/gif A2592000
+ExpiresByType text/css M604800
+ExpiresByType text/javascript M604800
+
+### Expire everything else 8 day from when it's last access
+### (this uses the Alternative syntax)
+ExpiresDefault "access plus 8 days"
+### Apply a Cache-Control header to index.html
+#<Files index.php>
+#Header append Cache-Control "public, must-revalidate"
+#</Files>
+

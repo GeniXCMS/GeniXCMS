@@ -1,0 +1,390 @@
+<!doctype html>  
+<!--[if IE 6 ]><html lang="en-us" class="ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en-us" class="ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en-us" class="ie8"> <![endif]-->
+<!--[if (gt IE 7)|!(IE)]><!-->
+<html lang="en-us"><!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	
+	<title>GeniXCMS - Simple and Light Content Management System</title>
+	
+	<meta name="description" content="GeniXCMS is a simple and light content management system plus framework for your online web applications. GeniXCMS was build for easyness, simplicity, performance and stability.">
+	<meta name="author" content="GeniXCMS">
+	<meta name="copyright" content="GeniXCMS">
+	<meta name="date" content="2014-11-08T00:00:00+01:00">
+	
+	<link rel="stylesheet" href="assets/css/documenter_style.css" media="all">
+	<link rel="stylesheet" href="assets/js/google-code-prettify/prettify.css" media="screen">
+	<script src="assets/js/google-code-prettify/prettify.js"></script>
+
+	
+	
+	<script src="assets/js/jquery.js"></script>
+	
+	<script src="assets/js/jquery.scrollTo.js"></script>
+	<script src="assets/js/jquery.easing.js"></script>
+	
+	<script>document.createElement('section');var duration='500',easing='swing';</script>
+	<script src="assets/js/script.js"></script>
+	
+	<style>
+		html{background-color:#E0E4CC;color:#3D220C;}
+		::-moz-selection{background:#F38630;color:#FBFFE4;}
+		::selection{background:#F38630;color:#FBFFE4;}
+		#documenter_sidebar #documenter_logo{background-image:url(assets/images/image_30.png);}
+		a{color:#F38630;}
+		.btn {
+			border-radius:3px;
+		}
+		.btn-primary {
+			  background-image: -moz-linear-gradient(top, #B9F2EF, #9CCCC9);
+			  background-image: -ms-linear-gradient(top, #B9F2EF, #9CCCC9);
+			  background-image: -webkit-gradient(linear, 0 0, 0 B9F2EF%, from(#A7DBD8), to(#9CCCC9));
+			  background-image: -webkit-linear-gradient(top, #B9F2EF, #9CCCC9);
+			  background-image: -o-linear-gradient(top, #B9F2EF, #9CCCC9);
+			  background-image: linear-gradient(top, #B9F2EF, #9CCCC9);
+			  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B9F2EF', endColorstr='#9CCCC9', GradientType=0);
+			  border-color: #9CCCC9 #9CCCC9 #bfbfbf;
+			  color:#3D220C;
+		}
+		.btn-primary:hover,
+		.btn-primary:active,
+		.btn-primary.active,
+		.btn-primary.disabled,
+		.btn-primary[disabled] {
+		  border-color: #B9F2EF #B9F2EF #bfbfbf;
+		  background-color: #9CCCC9;
+		}
+		hr{border-top:1px solid #BEC2AD;border-bottom:1px solid #E9EDD4;}
+		#documenter_sidebar, #documenter_sidebar ul a{background-color:#A7DBD8;color:#3D220C;}
+		#documenter_sidebar ul a{-webkit-text-shadow:1px 1px 0px #B9F2EF;-moz-text-shadow:1px 1px 0px #B9F2EF;text-shadow:1px 1px 0px #B9F2EF;}
+		#documenter_sidebar ul{border-top:1px solid #9CCCC9;}
+		#documenter_sidebar ul a{border-top:1px solid #B9F2EF;border-bottom:1px solid #9CCCC9;color:#3D220C;}
+		#documenter_sidebar ul a:hover{background:#F38630;color:#FBFFE4;border-top:1px solid #F38630;}
+		#documenter_sidebar ul a.current{background:#F38630;color:#FBFFE4;border-top:1px solid #F38630;}
+		#documenter_copyright{display:block !important;visibility:visible !important;}
+	</style>
+	
+</head>
+<body class="documenter-project-genixcms">
+	<div id="documenter_sidebar">
+		<a href="#documenter_cover" id="documenter_logo"></a>
+		<ul id="documenter_nav">
+			<li><a class="current" href="#documenter_cover">Start</a></li>
+				
+			<li><a href="#installation" title="Installation">Installation</a></li>
+			<li><a href="#configuration" title="Configuration">Configuration</a></li>
+			<li><a href="#creating_categories" title="Creating Categories">Creating Categories</a></li>
+			<li><a href="#creating_pages" title="Creating Pages">Creating Pages</a></li>
+			<li><a href="#creating_menus" title="Creating Menus">Creating Menus</a></li>
+			<li><a href="#creating_posts" title="Creating Posts">Creating Posts</a></li>
+
+		</ul>
+		<div id="documenter_copyright">Copyright &copy; GeniXCMS 2014
+		</div>
+	</div>
+	<div id="documenter_content">
+	<section id="documenter_cover">
+	<h1>GeniXCMS</h1>
+	<h2>Simple and Light Content Management System</h2>
+	<div id="documenter_buttons">
+		<a href="http://www.genixcms.com" class="btn btn-primary btn-large">GeniXCMS</a>
+		<a href="http://www.metalgenix.com" class="btn btn-large">MetalGenix</a> 
+	</div>
+	<hr>
+	<ul>
+	<li>created: 09/25/2014</li>
+	<li>latest update: 11/08/2014</li>
+	<li>by: GeniXCMS</li>
+	<li><a href=""></a></li>
+	<li>email: <a href="mailto:&#105;&#110;&#102;&#111;&#64;&#103;&#101;&#110;&#105;&#120;&#99;&#109;&#115;&#46;&#99;&#111;&#109;">&#105;&#110;&#102;&#111;&#64;&#103;&#101;&#110;&#105;&#120;&#99;&#109;&#115;&#46;&#99;&#111;&#109;</a></li>
+	</ul>
+	<p>Thank you for downloading GeniXCMS - Simple and Light Content Management System. If you have any questions that are beyond the scope of this help file, please feel free to email via my user page contact form here. </p>
+	</section>
+	
+	<section id="installation">
+	<div class="page-header"><h3>Installation</h3><hr class="notop"></div>
+<p>
+	Before we can run your website, we have to install it first. Below are the step to install it.</p>
+<ol>
+	<li>
+		Prepare your MySQL Database</li>
+	<li>
+		Importing SQL</li>
+	<li>
+		Editing file config.php</li>
+	<li>
+		Upload all files</li>
+	<li>
+		Settings up Friendly URL</li>
+	<li>
+		Login to Backend and continue to Configuration.</li>
+</ol>
+<h4 id="installation_preparing_your_mysql_database">Preparing Your MySQL Database</h4>
+<p>
+	Before we started, we have to prepare the MySQL Database. Every each Hosting provider had their own settings for adding the MySQL database.&nbsp;</p>
+<h5>
+	CPanel</h5>
+<p>
+	For Cpanel User. Below are how to create database.&nbsp;Creating a MySQL database with cPanel, which is included in all of SiteGround&#39;s hosting plans, can be easily accomplished. In order to create a MySQL database on your hosting account, you need to log in cPanel. This can be done by either using the Go to cPanel button in the Customer Area -&gt;My Accounts section or by entering one of the following URLs in your web browser:</p>
+<p>
+	http://yourdomainname.com/cpanel</p>
+<p>
+	Login with Your CPanel username and password provided by your hosting provider.</p>
+<p>
+	Go to this section :</p>
+<p>
+	<img alt="" src="assets/images/image_36.jpg" style="width: 560px; height: 300px;"></p>
+<p>
+	<span>In order to create a new database you need to enter the desired name for the database in the New Database field and click on the Create Database button as shown below:</span></p>
+<p>
+	<img alt="" src="assets/images/image_31.jpg"></p>
+<p>
+	A confirmation screen will be displayed, informing that the database has been successfully created:</p>
+<p>
+	<img alt="" src="assets/images/image_32.jpg" style="width: 560px; height: 300px;"></p>
+<p>
+	You can click on the Go Back button to return to the database management screen.&nbsp;</p>
+<p>
+	After that, create your database username.</p>
+<p>
+	<img alt="" src="assets/images/image_33.jpg" style="width: 560px; height: 300px;"></p>
+<p>
+	Click Submit to save your MySQL username.</p>
+<p>
+	<img alt="" src="assets/images/image_34.jpg"></p>
+<p>
+	You will be redirected to a screen where you will be prompted to choose the desired privileges. It is advisable to select All Privileges and click on the Make Changes button:</p>
+<p>
+	<img alt="" src="assets/images/image_35.jpg" style="width: 560px; height: 300px;"></p>
+<p>
+	And now you have Database <strong>Username </strong>and <strong>Password </strong>ready.</p>
+<p>
+	&nbsp;</p>
+<h4 id="installation_importing_sql">Importing SQL</h4>
+<p>
+	After the database was created and the user was assigned to the database, now continue with importing the SQL.</p>
+<p>
+	Go to the <strong>PHPMyAdmin, </strong>Click it on the panel with this icon.</p>
+<p>
+	<img alt="" src="assets/images/image_17.png" style="width: 76px; height: 94px;"></p>
+<p>
+	After the <strong>PHPMyAdmin</strong> window is opened, browse to your database. After that click <strong>import</strong> menu.</p>
+<p>
+	<img alt="" src="assets/images/image_18.png" style="width: 600px;"></p>
+<p>
+	&nbsp;</p>
+<p>
+	Browse the SQL File.</p>
+<p>
+	<img alt="" src="assets/images/image_3.png" style="width: 582px; height: 166px;"></p>
+<p>
+	Pick the file</p>
+<p>
+	<img alt="" src="assets/images/image_2.png" style="width: 600px;"></p>
+<p>
+	And &nbsp;after that clock <strong>GO</strong> button on the bottom of the page.</p>
+<p>
+	&nbsp;</p>
+<h4 id="installation_editing_file_configphp">Editing file config.php</h4>
+<p>
+	After preparing the database is ready, it&#39;s now continue with settings up the script. First we take a look at the <strong>config.php</strong> file.&nbsp;</p>
+<p>
+	Go to this directory : <strong>genixcms </strong>-&gt; <strong>inc </strong>-&gt; <strong>config&nbsp;</strong></p>
+<p>
+	<strong><img alt="" src="assets/images/image_28.png" style="width: 133px; height: 73px;"></strong></p>
+<p>
+	Open <strong>config.php</strong> with text editor you have, eg: <em>notepad, notepad++, sublime, bluefish, etc</em>.</p>
+<pre class="prettyprint lang-php linenums">
+&lt;?php
+define(&#39;GX_URL&#39; , &#39;http://localhost/genixcms&#39;); // <strong>replace this with your own domain, this is must. Currently this variable is still used as 
+main variable. Will be removed on the next update.</strong>
+
+// DB CONFIG
+define(&#39;DB_HOST&#39;, &#39;localhost&#39;); // <strong>set your database hostname, default is localhost</strong>
+define(&#39;DB_NAME&#39;, &#39;user_newdatabase&#39;); // <strong>set your databasename</strong>
+define(&#39;DB_PASS&#39;, &#39;&#39;); // <strong>set your database password</strong>
+define(&#39;DB_USER&#39;, &#39;user_newuser&#39;); // <strong>set your database username</strong>
+define(&#39;DB_DRIVER&#39;, &#39;mysql&#39;); // <strong>leave it as mysql, no more dbdriver tested yet.</strong>
+
+
+define(&#39;THEME&#39;, &#39;default&#39;); // <strong>you can replace it with your themes.</strong>
+define(&#39;GX_LANG&#39;, &#39;english&#39;); // <strong>currently we are still managing the language.</strong>
+define(&#39;SMART_URL&#39;, false); //<strong>set &#39;true&#39; if you want use SMART URL (SEO Friendly URL)</strong>
+define(&#39;GX_URL_PREFIX&#39;, &#39;.html&#39;); // <strong>if you set this, you must replace the .htaccess file.</strong>
+define(&#39;SECURITY&#39;, &#39;9234qrioq@)(1-k23#-01iqjiq012iajdq&#39;); // <strong>don&#39;t remove, or replace this part. this is for security and password generator.</strong></pre>
+<p>
+	fill in the necessary value. After the values are set, save it.&nbsp;</p>
+<p>
+	&nbsp;</p>
+<h4 id="installation_upload_all_files">Upload all Files</h4>
+<p>
+	After setting up is done, now it&#39;s time to upload it to your webhosting. If you don&#39;t know your Hosting Login and Password, please ask your hosting provider.&nbsp;</p>
+<p>
+	There are so many ways, one easiest is using FTP.</p>
+<p>
+	Open FTP program, eg: <em>filezilla, cuteFTP, etc.</em></p>
+<p>
+	Fill in the server <strong>host</strong> or <strong>IP</strong>, server <strong>username</strong>, and <strong>password</strong>. After all is filled, just connect it.&nbsp;</p>
+<p>
+	<img alt="" src="assets/images/image_7.png" style="width: 600px; max-height: 60px;"></p>
+<p>
+	<img alt="" src="assets/images/image_25.png" style="width: 600px; max-height: 180px;"></p>
+<p>
+	On the server directory (<strong>RIGHT SIDE</strong>), go to your web folder. It&#39;s usually inside the <strong>public_html </strong>or<strong> www&nbsp;</strong>directory.</p>
+<p>
+	<img alt="" src="assets/images/image_20.png" style="width: 171px; height: 233px;"></p>
+<p>
+	On the local directory (<strong>LEFT SIDE</strong>), select all files. <strong>Right Click</strong> and <strong>Upload</strong> it.</p>
+<p>
+	<img alt="" src="assets/images/image_22.png" style="width: 427px; height: 227px;"></p>
+<p>
+	&nbsp;</p>
+<h4 id="installation_settings_up_friendly_url">Settings Up Friendly URL</h4>
+<p>
+	If you are using friendly URL, as you setting at the config.php file. Next step is activating the <strong>.htaccess</strong> files. On your ftp, right click <strong>htaccess.txt</strong> and rename it to <strong>.htaccess</strong></p>
+<p>
+	&nbsp;</p>
+<h4 id="installation_stronglogin_to_backend_strong"><strong>Login to BackEnd</strong></h4>
+<p>
+	After finish, go to http://yourdomain.com/gxadmin/</p>
+<p>
+	Insert</p>
+<p>
+	username : <strong>admin</strong></p>
+<p>
+	password : <strong>admin</strong></p>
+<p>
+	&nbsp;</p>
+<p>
+	<b>You can change the password later.</b></p>
+<p>
+	&nbsp;</p>
+</section>
+<section id="configuration">
+	<div class="page-header"><h3>Configuration</h3><hr class="notop"></div>
+<p>
+	After logging in, go to the Backend Dashboard. at http://yourdomain.com/<strong>gxadmin</strong></p>
+<p>
+	This page will shows up.&nbsp;</p>
+<p>
+	<img alt="" src="assets/images/image_16.png" style="width: 600px;"></p>
+<p>
+	Before You started you had to setting it first. Below are step by step to settings it.</p>
+<p>
+	&nbsp;</p>
+<h4 id="configuration_site_settings">Site Settings</h4>
+<p>
+	Click the Settings menu at the top right.</p>
+<p>
+	<img alt="" src="assets/images/image_29.png" style="width: 256px; height: 52px;"></p>
+<p>
+	On the General Settings Tab, fill all necessary field.</p>
+<p>
+	<img alt="" src="assets/images/image_12.png" style="width: 600px;"></p>
+<p>
+	Change the Website Name, Slogan, Domain, URL, Keywords, Descriptions and email.</p>
+<p>
+	&nbsp;</p>
+<p>
+	After general settings is set, click the &nbsp;Logo tab,&nbsp;</p>
+<p>
+	<img alt="" src="assets/images/image_27.png" style="width: 600px;"></p>
+<p>
+	In here, you can change your logo. Click the Browse file for upload your own logo.&nbsp;</p>
+<p>
+	To use available logo online, just fill the Use Image URL with the full url of the logo image. And don&#39;t forget to check the checkbox.</p>
+<p>
+	Fill the Favicon input if you want to use favicon. Don&#39;t forget to upload it first under your www or public_html directory.</p>
+<p>
+	After that, click the Posts tab.</p>
+<p>
+	<img alt="" src="assets/images/image_26.png" style="width: 600px;"></p>
+<p>
+	In here, you can set how many post shows on the frontpage. Set the value as you want.&nbsp;</p>
+<p>
+	There are two pagination type availbale, Number and Pager.&nbsp;</p>
+<p>
+	<strong>Number :&nbsp;</strong></p>
+<p>
+	<img alt="" src="assets/images/image_10.png" style="width: 235px; height: 55px;"></p>
+<p>
+	<strong>Pager :</strong></p>
+<p>
+	<img alt="" src="assets/images/image_21.png" style="width: 428px; height: 70px;"></p>
+<p>
+	After that click the <strong>Change</strong> Button.</p>
+<p>
+	&nbsp;</p>
+<h4 id="configuration__nbsp">&nbsp;</h4>
+</section>
+<section id="creating_categories">
+	<div class="page-header"><h3>Creating Categories</h3><hr class="notop"></div>
+<p>	Before you begin to grab Movies, Please make sure you had create the category. Open the Categories page.</p>
+<p>	<img alt="" src="assets/images/image_8.png" style="width: 600px;"></p>
+<p>	After that click the <strong>Add Category</strong> button on the top right.</p>
+<p>	<img alt="" src="assets/images/image_5.png" style="width: 600px; height: 312px;"></p>
+<p>	Pick Parent category you want. And fill in the Category Name. eg: <strong>Movies</strong></p>
+<p>	And than click the <strong>Save Changes</strong> button.</p>
+<p>	This will appear on the page.&nbsp;</p>
+<p>	<img alt="" src="assets/images/image_19.png"></p>
+<p>	After that go to the <strong>Movie Grabber </strong>Page.</p>
+</section>
+<section id="creating_pages">
+	<div class="page-header"><h3>Creating Pages</h3><hr class="notop"></div>
+<p>	To create pages, just click the Page Menus on the left.&nbsp;</p>
+<p>	<img alt="" src="assets/images/image_11.png" style="width: 600px; height: 98px;"></p>
+<p>	After the page is opened, click the <strong>Add New</strong> button.</p>
+<p>	<img alt="" src="assets/images/image_15.png" style="width: 600px; height: 327px;"></p>
+<p>	After the Form Page with editor is shows up. Fill in the title of the Page. eg: Disclaimer, Privacy Policy, etc.&nbsp;</p>
+<p>	And then, fill in the content. After that click the green <strong>Publish </strong>button.</p>
+<p>	&nbsp;</p>
+</section>
+<section id="creating_menus">
+	<div class="page-header"><h3>Creating Menus</h3><hr class="notop"></div>
+<p>	After All is set, now it&#39;s time for creating the menus. Open the menus link at the left.&nbsp;</p>
+<p>	There are two default menus, first is MainMenu and second is Footer Menu.</p>
+<p>	You don&#39;t have to create new one. But if You need it, You can create it by pressing the Add Menu button.</p>
+<p>	<img alt="" src="assets/images/image_13.png" style="width: 600px; height: 130px;"></p>
+<p>	Menu need <strong>Menu Item</strong>, to add new menu items just click the Menu you want to add items. eg: Main Menu</p>
+<p>	This will appears below the Menu.</p>
+<p>	<img alt="" src="assets/images/image_4.png" style="width: 600px; height: 244px;"></p>
+<p>	Click the <strong>Add Item</strong> menu. Until appears below.</p>
+<p>	<img alt="" src="assets/images/image_24.png" style="width: 600px; height: 356px;"></p>
+<p>	Fill in the <strong>Menu Name, Menu Class (if necessary),&nbsp;</strong>and last choose the type of the menu.</p>
+<p>	Check the radio Button, and Pick the dropdown.</p>
+<p>	<img alt="" src="assets/images/image_6.png" style="width: 330px; height: 156px;"></p>
+<p>	eg: Disclaimer Page. This means, the menu link will be the Disclaimer Page.</p>
+<p>	After that click the Add menu Button.</p>
+<p>	&nbsp;</p>
+<p>	The order of the menu is still messy.</p>
+<p>	<img alt="" src="assets/images/image_14.png" style="width: 600px; height: 202px;"></p>
+<p>	The Disclaimer menu is on the top of the list. Change the order of the menu by changing the number of the order at the right input. &nbsp;After the orders are set, press the <strong>Change Order </strong>button.</p>
+<p>	&nbsp;</p>
+</section>
+<section id="creating_posts">
+	<div class="page-header"><h3>Creating Posts</h3><hr class="notop"></div>
+<p>
+	After alls are set, it&#39;s time to create your post. To add post, click on the Post menu at the left sidebar.&nbsp;</p>
+<p>
+	<img alt="" src="assets/images/image_23.png" style="width: 216px; height: 53px;"></p>
+<p>
+	after you click the posts menu, this page will appear. To creae a new post, just click the Add New button like the images below.&nbsp;</p>
+<p>
+	<img alt="" src="assets/images/image_1.png" style="width: 602px; height: 64px;"></p>
+<p>
+	&nbsp;</p>
+<p>
+	New page with form input of post will appear. See image below.</p>
+<p>
+	<img alt="" src="assets/images/image_9.png"  ></p>
+<p>
+	There are some form input, Title, Content, Category, Status, and Post Date.</p>
+<p>
+	Input it with your desired content. After all are set. Press the Publish button on the top right.&nbsp;</p>
+</section>
+
+	</div>
+</body>
+</html>
