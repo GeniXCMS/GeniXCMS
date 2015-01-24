@@ -87,5 +87,5 @@ class Typo
     } 
 }
 
-/* End of file Db.class.php */
-/* Location: ./inc/lib/Db.class.php */
+/* End of file Typo.class.php */
+/* Location: ./inc/lib/Typo.class.php */
