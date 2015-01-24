@@ -9,4 +9,12 @@
          stopOnFailure="false"
          syntaxCheck="false"
 >
+<filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
