@@ -5,7 +5,7 @@
 *    Build          : 20140925
 *    Version        : 0.0.1 pre
 *    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : Private
+*    License        : MIT License
 *    ------------------------------------------------------------
 * filename : Typo.class.php
 * version : 0.0.1 pre
@@ -87,5 +87,5 @@ class Typo
     } 
 }
 
-/* End of file Typo.class.php */
-/* Location: ./inc/lib/Typo.class.php */
+/* End of file Db.class.php */
+/* Location: ./inc/lib/Db.class.php */

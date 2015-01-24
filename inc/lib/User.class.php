@@ -5,7 +5,7 @@
 *    Build          : 20140925
 *    Version        : 0.0.1 pre
 *    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : Private
+*    License        : MIT License
 *    ------------------------------------------------------------
 *    filename : user.class.php
 *    version : 0.0.1 pre
