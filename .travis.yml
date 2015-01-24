@@ -3,8 +3,4 @@ php:
   - 5.3
   - 5.4
   - 5.5
-  
-before_script:
-  - mysql -e 'create database myapp_test;' -u root
 
-script: phpunit
