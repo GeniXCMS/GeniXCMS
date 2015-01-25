@@ -56,6 +56,7 @@
                 </a>
             </div>
         </h1>
+        <hr />
     </div>
     <div class="col-sm-12">
         <div class="row">
@@ -76,10 +77,6 @@
                             <h3 class="panel-title">Options</h3>
                         </div>
                         <div class="panel-body">
-                            <div class="form-group">
-                                <label>Category</label>
-                                
-                            </div>
 
                             <div class="form-group">
                                 <label>Status</label>
