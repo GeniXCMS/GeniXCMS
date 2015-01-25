@@ -18,7 +18,7 @@ class Stats
     }
 
     public static function totalPost($vars) {
-        $posts = Db::query("SELECT `id` FROM `posts` WHERE `type` = '{$vars}'");
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}'");
         $npost = Db::$num_rows;
         return $npost;
     }

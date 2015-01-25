@@ -62,15 +62,23 @@ if(isset($_POST['register']))
                     );   
         User::create($vars);
         $alertgreen[] = "Thank You for Registering with Us. You can now <a href=\"login.php\">Login</a> with your username and password";
-  //       $to      = "{$_POST['email']}";
-		// $name    = $_POST['username'];
-		// $subject = 'Welcome to '.siteName();
-		// $message = 'Hi '.$_POST['username'].', Thank You for Registering with Us. You can now login : '.$website.'login.php with your username and password';
-		// $headers = 'From: '.$emailAdmin . "\r\n" .
-		// 'Reply-To: '.$emailAdmin . "\r\n" .
-		// 'X-Mailer: PHP/' . phpversion();
-		//mail($to, $subject, $message, $headers);
-		//sendEmail($to, $name, $subject, $msg);
+        $sitename = Options::get('sitename');
+        $vars = array(
+                'to'      => $_POST['email'],
+                'to_name' => $_POST['username'],
+                'subject' => 'Welcome to '.Options::get('sitename'),
+                'message' => '
+                            Hi '.$_POST['username'].', 
+
+                            Thank You for Registering with Us. You can now login : '.GX_URL.'/login.php with your username and password
+
+                            Sincerely,
+                            {$sitename}
+                            '
+            );
+        
+		Mail::send($vars);
+		
     }else{
         $data['alertred'] = $alertred;
     }

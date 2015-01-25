@@ -24,10 +24,10 @@ class Pinger
 
     public function __construct () {
         
-        $myBlogName          = Options::get('sitename');
-        $myBlogUrl           = Options::get('siteurl');
-        $myBlogUpdateUrl     = Options::get('siteurl');
-        $myBlogRSSFeedUrl    = Url::sitemap();
+        self::$myBlogName          = Options::get('sitename');
+        self::$myBlogUrl           = Options::get('siteurl');
+        self::$myBlogUpdateUrl     = Options::get('siteurl');
+        self::$myBlogRSSFeedUrl    = Url::sitemap();
     }
 
     public static function rpc ($url) {

@@ -27,14 +27,11 @@ class Db
         if(DB_DRIVER == 'mysql') {
             mysql_query('SET CHARACTER SET utf8');
             $q = mysql_query($vars)  or die(mysql_error());
-            $n = mysql_num_rows($q);
         } 
         elseif(DB_DRIVER == 'mysqli') {
             $q = mysqli_query($vars) or die(mysql_error());
-            $n = mysqli_num_rows($q);
         }
         self::$last_id = mysql_insert_id();
-        self::$num_rows = $n;
         return $q;
     }
 
