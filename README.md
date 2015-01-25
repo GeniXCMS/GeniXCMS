@@ -10,13 +10,13 @@ This CMSF is a starter point to build your own online applications. With already
 
 ### Credits ###
 **GeniXCMS** is using some of **FOSS** (free and opensource software) like :
-Twitter **Bootstrap**, 
-**Summernote** Text Editor, 
-**JQuery**, 
-**PHP**, 
-**MySQL**, 
-**SB-Admin 2**,
-etc. 
+- Twitter **Bootstrap**, 
+- **Summernote** Text Editor, 
+- **JQuery**, 
+- **PHP**, 
+- **MySQL**, 
+- **SB-Admin 2**,
+- etc. 
 
 ### Installation ###
 Installation : https://github.com/semplon/GeniXCMS/wiki/Installation
