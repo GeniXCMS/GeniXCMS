@@ -406,6 +406,16 @@
                           </select>
                           <small>Default Type of Pagination. Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code> </small>
                       </div>
+                      <div class="col-sm-6 form-group">
+                          <label>Pinger</label>
+                          <div class="input-group">
+                              <span class="input-group-addon">http://</span>
+                              <input type="text" name="pinger" value="<?=Options::get('pinger');?>" class="form-control" >
+                          </div>
+                          
+                          <small>Set the Pinger of Search Engine</small>
+                          
+                      </div>
                   </div>
               </div>
 

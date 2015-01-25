@@ -41,6 +41,7 @@ class Posts
                     );
             $post = Db::insert($ins);
             self::$last_id = Db::$last_id;
+            Pinger::rpc(Options::get('pinger'));
         }
         return $post;
     }
@@ -56,6 +57,7 @@ class Posts
                         'key' => $vars
                     );
             $post = Db::update($ins);
+            Pinger::rpc(Options::get('pinger'));
         }
         return $post;
     }
