@@ -1,4 +1,6 @@
 # GeniXCMS
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/semplon/GeniXCMS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![travis-ci](https://travis-ci.org/semplon/GeniXCMS.svg)
 
 **GeniXCMS** is a PHP Based Content Management System and Framework (*CMSF*). It's a simple and lightweight of CMSF. Very suitable for intermediate PHP developer to Advanced Developer. Some manual configurations are needed to make this application to work. 
