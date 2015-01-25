@@ -30,12 +30,14 @@
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1>Users<button class="btn btn-success pull-right" data-toggle="modal" data-target="#adduser">
+        <h1>Users
+            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#adduser">
                 <span class="glyphicon glyphicon-plus"></span> Add User
-            </button></h1>
+            </button>
+        </h1>
+        <hr />
     </div>
     <div class="col-sm-12">
-    <div class="row">
     <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -70,7 +72,6 @@
             ?>
         </tbody>
     </table>
-    </div>
     </div>
     </div>
 </div>

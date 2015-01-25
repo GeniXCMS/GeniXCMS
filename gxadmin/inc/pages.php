@@ -29,51 +29,50 @@
 <div class="row">
     <div class="col-md-12">
         <h1>Pages <a href="index.php?page=pages&act=add" class="btn btn-primary pull-right">Add New</a></h1>
+        <hr />
     </div>
-    <div class="col-sm-12">
-    <div class="row">
-    <div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Edit/Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                //print_r($data);
-            if($data['num'] > 0){
-                foreach ($data['posts'] as $p) {
-                    # code...
-                    //echo $p->id;
-                    echo "
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>{$p->id}</td>
-                        <td><a href=\"".Url::page($p->id)."\" target=\"_new\">{$p->title}</a></td>
-                        <td>{$p->date}</td>
-                        <td>
-                            <a href=\"index.php?page=pages&act=edit&id={$p->id}\" class=\"label label-success\">Edit</a> 
-                            <a href=\"index.php?page=pages&act=del&id={$p->id}\" class=\"label label-danger\" 
-                            onclick=\"return confirm('Are you sure you want to delete this item?');\">Delete</a>
-                        </td>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Edit/Delete</th>
                     </tr>
-                    ";
-                }
-            }else{
-                echo "
-                    <tr>
-                        <td>
-                            No Page Found 
-                        </td>
-                    </tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-    </div>
-    </div>
+                </thead>
+                <tbody>
+                    <?php
+                        //print_r($data);
+                    if($data['num'] > 0){
+                        foreach ($data['posts'] as $p) {
+                            # code...
+                            //echo $p->id;
+                            echo "
+                            <tr>
+                                <td>{$p->id}</td>
+                                <td><a href=\"".Url::page($p->id)."\" target=\"_new\">{$p->title}</a></td>
+                                <td>{$p->date}</td>
+                                <td>
+                                    <a href=\"index.php?page=pages&act=edit&id={$p->id}\" class=\"label label-success\">Edit</a> 
+                                    <a href=\"index.php?page=pages&act=del&id={$p->id}\" class=\"label label-danger\" 
+                                    onclick=\"return confirm('Are you sure you want to delete this item?');\">Delete</a>
+                                </td>
+                            </tr>
+                            ";
+                        }
+                    }else{
+                        echo "
+                            <tr>
+                                <td>
+                                    No Page Found 
+                                </td>
+                            </tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

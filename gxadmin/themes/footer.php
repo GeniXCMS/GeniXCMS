@@ -1,14 +1,19 @@
 
 
-
+            <br />
         </div>
-<?php
-    $end_time = microtime(TRUE);
-    $time_taken = $end_time - $GLOBALS['start_time'];
-    $time_taken = round($time_taken,5);
-    echo '<center>Page generated in '.$time_taken.' seconds.</center>';
-?>
+
     </div>
+    <footer class="footer">
+        <small>Copyright &copy; <?=date("Y");?> GeniXCMS <i><?=System::v();?></i></small><br />
+        <?php
+            $end_time = microtime(TRUE);
+            $time_taken = $end_time - $GLOBALS['start_time'];
+            $time_taken = round($time_taken,5);
+            echo '<small>Page generated in '.$time_taken.' seconds.</small>';
+        ?>
+    </footer>
+    
     <?php
       Theme::editor();
       Site::footer();

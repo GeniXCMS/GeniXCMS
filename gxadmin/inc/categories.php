@@ -5,51 +5,55 @@
                 <span class="glyphicon glyphicon-plus"></span> Add Category
             </button>
         </h1>
+        <hr />
     </div>
 
     <div class="col-sm-12">
-        <?php
-            foreach ($data['cat'] as $c) {
-                # code...
-                // echo "<td>".$c->id."</td>";
-                // echo "<td>".$c->name."</td>";
-                // echo "<td>".$c->parent."</td>";
-                // echo "<td></td>";
+        <div class="row">
+            <?php
+                foreach ($data['cat'] as $c) {
+                    # code...
+                    // echo "<td>".$c->id."</td>";
+                    // echo "<td>".$c->name."</td>";
+                    // echo "<td>".$c->parent."</td>";
+                    // echo "<td></td>";
 
-                if($c->parent == ""){
-                    echo "<div class=\"col-md-4 item\" >
-                    <div class=\"panel panel-default\">
-                        <div class=\"panel-heading\">
-                          <h3 class=\"panel-title\">{$c->name} 
-                          <a href=\"?page=categories&act=del&id={$c->id}\" class=\"pull-right\"
-                          onclick=\"return confirm('Are you sure you want to delete this item?');\">
-                          <span class=\"glyphicon glyphicon-remove\"></span></a></h3>
-                        </div>
-                        <div class=\"panel-body\">
-                        <ul class=\"list-group\">";
-                        foreach ($data['cat'] as $c2) {
-                            if($c2->parent == $c->id){
-                                echo "<li class=\"list-group-item\">
-                                <form action=\"\" method=\"POST\" name=\"updatecat\">
-                                <div class=\"input-group\">
-                                    <a href=\"?page=categories&act=del&id={$c2->id}\" class=\"input-group-addon\"
-                                    onclick=\"return confirm('Are you sure you want to delete this item?');\"
-                                    ><span class=\"glyphicon glyphicon-remove\"></span></a>
-                                    <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c2->name}\">
-                                    <input type=\"hidden\" name=\"id\" value=\"{$c2->id}\">
-                                    <span class=\"input-group-btn\">
-                                        <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
-                                    </span>
-                                </div>
-                                </form>
-                                 </li>";
+                    if($c->parent == ""){
+                        echo "<div class=\"col-md-4 item\" >
+                        <div class=\"panel panel-default\">
+                            <div class=\"panel-heading\">
+                              <h3 class=\"panel-title\">{$c->name} 
+                              <a href=\"?page=categories&act=del&id={$c->id}\" class=\"pull-right\"
+                              onclick=\"return confirm('Are you sure you want to delete this item?');\">
+                              <span class=\"glyphicon glyphicon-remove\"></span></a></h3>
+                            </div>
+                            <div class=\"panel-body\">
+                            <ul class=\"list-group\">";
+                            foreach ($data['cat'] as $c2) {
+                                if($c2->parent == $c->id){
+                                    echo "<li class=\"list-group-item\">
+                                    <form action=\"\" method=\"POST\" name=\"updatecat\">
+                                    <div class=\"input-group\">
+                                        <a href=\"?page=categories&act=del&id={$c2->id}\" class=\"input-group-addon\"
+                                        onclick=\"return confirm('Are you sure you want to delete this item?');\"
+                                        ><span class=\"glyphicon glyphicon-remove\"></span></a>
+                                        <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c2->name}\">
+                                        <input type=\"hidden\" name=\"id\" value=\"{$c2->id}\">
+                                        <span class=\"input-group-btn\">
+                                            <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
+                                        </span>
+                                    </div>
+                                    </form>
+                                     </li>";
+                                }
                             }
-                        }
-                    echo "</ul></div>";
-                    echo "</div></div>";
+                        echo "</ul></div>";
+                        echo "</div></div>";
+                    }
                 }
-            }
-        ?>
+            ?>
+        </div>
+        
 
 
     </div>

@@ -29,9 +29,9 @@
 <div class="row">
     <div class="col-md-12">
         <h1>Posts <a href="index.php?page=posts&act=add" class="btn btn-primary pull-right">Add New</a></h1>
+        <hr />
     </div>
     <div class="col-sm-12">
-    <div class="row">
     <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -75,7 +75,6 @@
             
         </tbody>
     </table>
-    </div>
     </div>
     </div>
 </div>

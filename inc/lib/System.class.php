@@ -15,7 +15,8 @@
 class System
 {
 
-    var $data = "";
+    static $version          = "0.0.1";
+    static $v_release        = "pre";
 
     public function __construct () {
         self::config('config');
@@ -82,6 +83,9 @@ class System
     }
 
 
+    public static function v () {
+        return self::$version." ".self::$v_release;
+    }
 
 
 }

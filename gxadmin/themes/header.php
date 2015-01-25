@@ -157,14 +157,14 @@
 
                 <ul class="nav" id="side-menu">
                   
-                  <li <?=$dashboard;?>><a href="index.php">Dashboard</a></li>
-                  <li <?=$postactive;?>><a href="index.php?page=posts">Posts</a></li>
-                  <li <?=$catactive;?>><a href="index.php?page=categories">Categories</a></li>
-                  <li <?=$pageactive;?>><a href="index.php?page=pages">Pages</a></li>
-                  <li <?=$useractive;?>><a href="index.php?page=users">Users</a></li>
-                  <li <?=$menuactive;?>><a href="index.php?page=menus">Menus</a></li>
-                  <li <?=$menuactive;?>><a href="index.php?page=settings">Settings</a></li>
-                  <li <?=$menuactive;?>><a href="logout.php">Log Out</a></li>
+                  <li <?=$dashboard;?>><a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
+                  <li <?=$postactive;?>><a href="index.php?page=posts"><i class="fa fa-file-text-o"></i> Posts</a></li>
+                  <li <?=$catactive;?>><a href="index.php?page=categories"><i class="fa fa-cubes"></i> Categories</a></li>
+                  <li <?=$pageactive;?>><a href="index.php?page=pages"><i class="fa fa-file-o"></i> Pages</a></li>
+                  <li <?=$useractive;?>><a href="index.php?page=users"><i class="fa fa-users"></i> Users</a></li>
+                  <li <?=$menuactive;?>><a href="index.php?page=menus"><i class="fa fa-sitemap"></i> Menus</a></li>
+                  <li <?=$menuactive;?>><a href="index.php?page=settings"><i class="fa fa-wrench"></i> Settings</a></li>
+                  <li <?=$menuactive;?>><a href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
                   <!-- <li <?=$themeactive;?>><a href="index.php?page=themes">Themes</a></li> -->
                   <!-- <li <?=$modactive;?>><a href="index.php?page=mods">Modules</a></li> -->
                 </ul>

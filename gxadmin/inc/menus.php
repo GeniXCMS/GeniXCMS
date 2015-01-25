@@ -8,87 +8,91 @@
                 </button>
             </div>
         </h1>
+        <hr />
     </div>
     <div class="col-sm-12">
-        <?php
-        if (isset($data['menus']) && $data['menus'] != '') {
-            # code...
-             foreach (json_decode($data['menus']) as $k => $m) {
-                # code...
-                echo "
-                <div class=\"panel-group\" id=\"accordion\">
-                  <div class=\"panel panel-default\">
-                    <div class=\"panel-heading\">
-                      <div class=\"panel-title clearfix\">
-                        <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#$k\">
-                            <div class=\"col-md-4\">
-                                <h4><strong>$m->name </strong></h4>
-                            </div>
-                            <div class=\"col-md-4\">
-                                <h4>
-                                <small>
-                                    <em>$k</em>
-                                </small>
-                                </h4>
-                            </div>
-                            </a>
-                            <div class=\"col-md-4\">
-                                <div class=\"input-group\">
-                                    <input type=\"text\" value=\"$m->class\" placeholder=\"Class Style\" class=\"form-control\">
-                                    <span class=\"input-group-btn\">
-                                    <button name=\"editclass\" type=\"submit\" class=\"btn btn-default\">
-                                        Go!
-                                    </button>
-                                    </span>
-                                    
-                                </div>
-                            </div>
-                        
-                      </div>
-                    </div>
-                    <div id=\"$k\" class=\"panel-collapse collapse\">
-                        <div class=\"panel-body\">
-                            <!-- Nav tabs -->
-                                <ul class=\"nav nav-tabs\" role=\"tablist\">
-                                    <li class=\"active\"><a href=\"#{$k}menuitem\" role=\"tab\" data-toggle=\"tab\">Menu Items</a></li>
-                                    <li><a href=\"#{$k}additem\" role=\"tab\" data-toggle=\"tab\">Add Item</a></li>
-                                </ul>
-                                <!-- Tab panes -->
-                                <div class=\"tab-content\">
-                                  <div class=\"tab-pane active\" id=\"{$k}menuitem\">
-                                  <br />
-                                      <div class=\"col-md-12\">
-                                   ";
-                                    echo Menus::getMenuAdmin($k,'nav nav-pills nav-stacked');
+        <div class="row">
+            <div class="col-sm-12">
+            <?php
+                if (isset($data['menus']) && $data['menus'] != '') {
+                    # code...
+                     foreach (json_decode($data['menus']) as $k => $m) {
+                        # code...
+                        echo "
+                        <div class=\"panel-group\" id=\"accordion\">
+                          <div class=\"panel panel-default\">
+                            <div class=\"panel-heading\">
+                              <div class=\"panel-title clearfix\">
+                                <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#$k\">
+                                    <div class=\"col-md-4\">
+                                        <h4><strong>$m->name </strong></h4>
+                                    </div>
+                                    <div class=\"col-md-4\">
+                                        <h4>
+                                        <small>
+                                            <em>$k</em>
+                                        </small>
+                                        </h4>
+                                    </div>
+                                    </a>
+                                    <div class=\"col-md-4\">
+                                        <div class=\"input-group\">
+                                            <input type=\"text\" value=\"$m->class\" placeholder=\"Class Style\" class=\"form-control\">
+                                            <span class=\"input-group-btn\">
+                                            <button name=\"editclass\" type=\"submit\" class=\"btn btn-default\">
+                                                Go!
+                                            </button>
+                                            </span>
 
-                    echo "
-                                      </div>
-                                  </div>
-                                  <div class=\"tab-pane\" id=\"{$k}additem\">
-                                  ";
-                                      $data['parent'] = Menus::getParent('', $k);
-                                      //print_r($data['parent']);
-                                      $data['menuid'] = $k;
-                                      System::inc('menus_form', $data);
-                    echo "
-                                  </div>
-                                </div>
-                      
+                                        </div>
+                                    </div>
 
+                              </div>
+                            </div>
+                            <div id=\"$k\" class=\"panel-collapse collapse\">
+                                <div class=\"panel-body\">
+                                    <!-- Nav tabs -->
+                                        <ul class=\"nav nav-tabs\" role=\"tablist\">
+                                            <li class=\"active\"><a href=\"#{$k}menuitem\" role=\"tab\" data-toggle=\"tab\">Menu Items</a></li>
+                                            <li><a href=\"#{$k}additem\" role=\"tab\" data-toggle=\"tab\">Add Item</a></li>
+                                        </ul>
+                                        <!-- Tab panes -->
+                                        <div class=\"tab-content\">
+                                          <div class=\"tab-pane active\" id=\"{$k}menuitem\">
+                                          <br />
+                                              <div class=\"col-md-12\">
+                                           ";
+                                            echo Menus::getMenuAdmin($k,'nav nav-pills nav-stacked');
+
+                            echo "
+                                              </div>
+                                          </div>
+                                          <div class=\"tab-pane\" id=\"{$k}additem\">
+                                          ";
+                                              $data['parent'] = Menus::getParent('', $k);
+                                              //print_r($data['parent']);
+                                              $data['menuid'] = $k;
+                                              System::inc('menus_form', $data);
+                            echo "
+                                          </div>
+                                        </div>
+
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                
-                
+                      </div>
+
+
                     ";
-            }
-        }
-           
+                    }
+                }
 
-            //echo "<pre>"; print_r(json_decode($data['menus'])); echo "</pre>";
-        ?>
+                    //echo "<pre>"; print_r(json_decode($data['menus'])); echo "</pre>";
+                ?>
+                </div>
+        </div>
 
-       
     </div>
 </div>
 
@@ -102,7 +106,7 @@
             <h4 class="modal-title" id="myModalLabel">Add Menu</h4>
           </div>
           <div class="modal-body clearfix">
-            
+
                 <div class="col-sm-12" >
                     <div class="form-group">
                         <label>Menu ID</label>
@@ -124,7 +128,7 @@
                         <small>Class Style of the menu. <code>.class</code> means menu class is <em>class</em></small>
                     </div>
                 </div>
-            
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

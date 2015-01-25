@@ -13,6 +13,7 @@
             </button>
           </div>
         </h1>
+        <hr />
     </div>
     <div class="col-sm-12" id="myTab">
         <ul class="nav nav-tabs" role="tablist">
