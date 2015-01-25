@@ -12,7 +12,7 @@
 * build : 20141007
 */
 
-    Sitemap::create('post','moviedb');
+    Sitemap::create();
 
 /* End of file sitemap.control.php */
 /* Location: ./inc/lib/Control/Frontend/sitemap.control.php */

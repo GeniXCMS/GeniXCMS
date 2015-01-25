@@ -15,7 +15,7 @@
             switch ($_GET['page']) {
                 case 'sitemap':
                     # code...
-                    Sitemap::create('post', 'moviedb');
+                    Sitemap::create();
                     break;
                 
                 default:
