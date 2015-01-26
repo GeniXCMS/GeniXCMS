@@ -28,14 +28,19 @@ class Mod
 
     public static function modList(){
         //$mod = '';
-        if ($handle = opendir(GX_MOD)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != ".." ) {
-                    $mod[] = "$entry";
-                }
+        $handle = dir(GX_MOD);
+        while (false !== ($entry = $handle->read())) {
+            if ($entry != "." && $entry != ".." ) {
+                    $dir = GX_MOD.$entry;
+                    if(is_dir($dir) == true){
+                        $mod[] = basename($dir);
+                    } 
+            }else{
+                $mod = "";
             }
-            closedir($handle);
         }
+        
+        $handle->close();
         return $mod;
     }
 
@@ -56,23 +61,28 @@ class Mod
         $d['url'] = $matches[1];
         preg_match('/\* License: (.*)\n\*/U', $data, $matches);
         $d['license'] = $matches[1];
+        preg_match('/\* Icon: (.*)\n\*/U', $data, $matches);
+        $d['icon'] = $matches[1];
         return $d;
     }
 
     public static function ModMenu(){
         $mod = self::modList();
-        echo "<ul class=\"nav nav-sidebar\">";
-        foreach ($mod as $m) {
-            # code...
-            $data = self::data($m);
-            if(isset($_GET['mod']) && $_GET['mod'] == $m){
-                $class = 'class="active"';
-            }else{
-                $class = "";
+        //print_r($mod);
+        if(is_array($mod)){
+            $list = '';
+            foreach ($mod as $m) {
+                # code...
+                $data = self::data($m);
+                if(isset($_GET['mod']) && $_GET['mod'] == $m){
+                    $class = 'class="active"';
+                }else{
+                    $class = "";
+                }
+                $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['icon']." ".$data['name']."</a></li>";
             }
-            echo "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['name']."</a></li>";
         }
-        echo "</ul>";
+        return $list;
     }
 
     public static function inc($vars, $data, $dir){

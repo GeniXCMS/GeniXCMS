@@ -164,11 +164,13 @@
                   <li <?=$useractive;?>><a href="index.php?page=users"><i class="fa fa-users"></i> Users</a></li>
                   <li <?=$menuactive;?>><a href="index.php?page=menus"><i class="fa fa-sitemap"></i> Menus</a></li>
                   <li <?=$menuactive;?>><a href="index.php?page=settings"><i class="fa fa-wrench"></i> Settings</a></li>
-                  <li <?=$menuactive;?>><a href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+                  
                   <!-- <li <?=$themeactive;?>><a href="index.php?page=themes">Themes</a></li> -->
                   <!-- <li <?=$modactive;?>><a href="index.php?page=mods">Modules</a></li> -->
+                  <?php echo Mod::ModMenu();?>
+                  <li <?=$menuactive;?>><a href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
                 </ul>
-                <?php //echo Mod::ModMenu();?>
+                
             </div>
           </div>
     </nav>
