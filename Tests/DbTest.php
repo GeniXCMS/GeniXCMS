@@ -5,7 +5,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        System::config('config');
+        //System::config('config');
         define('DB_DRIVER', 'mysqli');
         define('DBHOST', 'localhost');
         define('DBUSER', 'root');
