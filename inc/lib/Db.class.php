@@ -16,11 +16,16 @@ class Db
 {
     static $num_rows = "";
     static $last_id = "";
+    static $link = '';
 
     public function __construct () {
         global $vars;
-        mysql_connect(DB_HOST, DB_USER, DB_PASS);
-        mysql_select_db(DB_NAME);
+        if(DB_DRIVER == 'mysql') {
+            mysql_connect(DB_HOST, DB_USER, DB_PASS);
+            mysql_select_db(DB_NAME);
+        }elseif(DB_DRIVER == 'mysqli') {
+            self::$link = mysqli_connect(DBHOST, DBUSER, DB_PASS, DB_NAME);
+        }
     }
 
     public static function query ($vars) {
@@ -29,7 +34,7 @@ class Db
             $q = mysql_query($vars)  or die(mysql_error());
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = mysqli_query($vars) or die(mysql_error());
+            $q = mysqli_query(self::$link, $vars) or die(mysql_error());
         }
         self::$last_id = mysql_insert_id();
         return $q;
@@ -53,7 +58,7 @@ class Db
            
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = mysqli_query($vars) or die(mysqli_error());
+            $q = mysqli_query(self::$link, $vars) or die(mysqli_error());
             $r[] = mysqli_fetch_object($q);
 
         }
