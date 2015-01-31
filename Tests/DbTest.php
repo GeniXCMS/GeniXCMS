@@ -6,7 +6,10 @@ class DbTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         System::config('config');
-        mysqli_connect($GLOBALS['db_dsn'], $GLOBALS['db_username'], $GLOBALS['db_password']);
+        define('DB_DRIVER', 'mysqli');
+        define('DBHOST', 'localhost');
+        define('DBUSER', 'root')
+        mysqli_connect(DBHOST, DBUSER, '');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
     }
 
