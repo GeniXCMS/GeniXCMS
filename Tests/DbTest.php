@@ -5,6 +5,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        System::config('config');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
     }
 
