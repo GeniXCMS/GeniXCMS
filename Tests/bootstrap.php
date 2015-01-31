@@ -9,7 +9,7 @@ function loadlib($f) {
         require $file;
     }
 }
-
+spl_autoload_register('loadlib');
 
 function loader($class)
 {
