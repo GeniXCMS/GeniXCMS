@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="Tests/bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Hello World Test Suite">
+        <testsuite name="GeniXCMS Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>   
