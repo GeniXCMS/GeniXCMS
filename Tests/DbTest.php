@@ -16,7 +16,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
         //mysqli_select_db($link, 'db_test');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
-        return self::$mysqli;
+        //return self::$mysqli;
     }
 
     public function tearDown()
