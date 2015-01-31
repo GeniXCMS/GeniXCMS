@@ -25,6 +25,7 @@ class Db
             mysql_select_db(DB_NAME);
         }elseif(DB_DRIVER == 'mysqli') {
             self::$link = mysqli_connect(DBHOST, DBUSER, DB_PASS, DB_NAME);
+            return self::$link;
         }
     }
 
