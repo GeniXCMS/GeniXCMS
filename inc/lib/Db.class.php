@@ -25,7 +25,7 @@ class Db
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
         }elseif(DB_DRIVER == 'mysqli') {
-            self::$mysqli = new mysqli(DBHOST, DBUSER, DB_PASS, DB_NAME);
+            self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
             return self::$mysqli;
         }
     }
@@ -36,8 +36,8 @@ class Db
             $q = mysql_query($vars)  or die(mysql_error());
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = self::$mysqli->query($vars) or die(mysql_error());
-            self::$affect = self::$mysqli->affected_rows;
+            $q = self::$mysqli->query($vars);
+            self::$affect = $q->affected_rows;
         }
         
         return $q;
@@ -52,7 +52,7 @@ class Db
             $n = mysql_num_rows($q);
             if($n > 0){
                 for($i=0;$i<$n;$i++){
-                $r[] = mysql_fetch_object($q);
+                    $r[] = mysql_fetch_object($q);
                 }
             }else{
                 $r['error'] = 'data not found';
@@ -61,8 +61,8 @@ class Db
            
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = self::$mysqli->query($vars) or die(mysqli_error());
-            $n = $q->field_count;
+            $q = self::$mysqli->query($vars);
+            $n = $q->num_rows;
             if($n > 0){
                 for($i=0;$i<$n;$i++){
                     $r[] = $q->fetch_object();
@@ -74,6 +74,7 @@ class Db
             $q->close();
 
         }
+        echo "<pre>$n";print_r($r);
         self::$num_rows = $n;
         return $r;
     }
