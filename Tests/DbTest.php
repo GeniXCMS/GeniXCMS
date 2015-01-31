@@ -2,6 +2,7 @@
 
 class DbTest extends PHPUnit_Framework_TestCase
 {
+    static $mysqli;
 
     public function setUp()
     {
@@ -9,9 +10,11 @@ class DbTest extends PHPUnit_Framework_TestCase
         define('DB_DRIVER', 'mysqli');
         define('DBHOST', 'localhost');
         define('DBUSER', 'root');
-        $link = mysqli_connect(DBHOST, DBUSER, '', 'db_test');
+        self::$mysqli = new mysqli(DBHOST, DBUSER, '', 'db_test');
+
         //mysqli_select_db($link, 'db_test');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
+        return self::$mysqli;
     }
 
     public function tearDown()
