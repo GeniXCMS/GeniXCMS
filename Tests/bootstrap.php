@@ -3,8 +3,11 @@
 define('GX_PATH', realpath(__DIR__ . '/../'));
 define('GX_LIB', GX_PATH.'/inc/lib/');
 
-function __autoload($f) {
-    require GX_LIB. $f . '.class.php';
+function loadlib($f) {
+    $file =  GX_LIB. $f . '.class.php';
+    if (file_exists($file)) {
+        require $file;
+    }
 }
 
 
