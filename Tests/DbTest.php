@@ -9,7 +9,8 @@ class DbTest extends PHPUnit_Framework_TestCase
         define('DB_DRIVER', 'mysqli');
         define('DBHOST', 'localhost');
         define('DBUSER', 'root');
-        mysqli_connect(DBHOST, DBUSER, '', TRUE);
+        $link = mysqli_connect(DBHOST, DBUSER, '', TRUE);
+        mysqli_select_db($link, 'db_test');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
     }
 
