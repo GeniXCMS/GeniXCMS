@@ -16,7 +16,8 @@ class Db
 {
     static $num_rows = "";
     static $last_id = "";
-    static $link = '';
+    static $mysqli = '';
+    static $affect = "";
 
     public function __construct () {
         global $vars;
@@ -24,8 +25,8 @@ class Db
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
         }elseif(DB_DRIVER == 'mysqli') {
-            self::$link = mysqli_connect(DBHOST, DBUSER, DB_PASS, DB_NAME);
-            return self::$link;
+            self::$mysqli = new mysqli(DBHOST, DBUSER, DB_PASS, DB_NAME);
+            return self::$mysqli;
         }
     }
 
@@ -35,9 +36,10 @@ class Db
             $q = mysql_query($vars)  or die(mysql_error());
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = mysqli_query(self::$link, $vars) or die(mysql_error());
+            $q = self::$mysqli->query($vars) or die(mysql_error());
+            self::$affect = self::$mysqli->affected_rows;
         }
-        self::$last_id = mysql_insert_id();
+        
         return $q;
     }
 
@@ -59,8 +61,17 @@ class Db
            
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = mysqli_query(self::$link, $vars) or die(mysqli_error());
-            $r[] = mysqli_fetch_object($q);
+            $q = self::$mysqli->query($vars) or die(mysqli_error());
+            $n = $q->field_count;
+            if($n > 0){
+                for($i=0;$i<$n;$i++){
+                    $r[] = $q->fetch_object();
+                }
+            }else{
+                $r['error'] = 'data not found';
+            }
+
+            $q->close();
 
         }
         self::$num_rows = $n;
@@ -85,8 +96,12 @@ class Db
         }else{
             $sql = $vars;
         }
-        mysql_query('SET CHARACTER SET utf8');
-        $q = mysql_query($sql) or die(mysql_error());
+        if(DB_DRIVER == 'mysql') {
+            mysql_query('SET CHARACTER SET utf8');
+            $q = mysql_query($sql) or die(mysql_error());
+        }elseif(DB_DRIVER == 'mysqli'){
+            $q = self::$mysqli->query($sql);
+        }
         return true;
 
     }
@@ -116,8 +131,12 @@ class Db
         }else{
             $sql = $vars;
         }
-        mysql_query('SET CHARACTER SET utf8');
-        $q = mysql_query($sql) or die(mysql_error());
+        if(DB_DRIVER == 'mysql') {
+            mysql_query('SET CHARACTER SET utf8');
+            $q = mysql_query($sql) or die(mysql_error());
+        }elseif(DB_DRIVER == 'mysqli'){
+            $q = self::$mysqli->query($sql);
+        }
         return true;
     }
 
@@ -149,9 +168,15 @@ class Db
         }else{
             $sql = $vars;
         }
-        mysql_query('SET CHARACTER SET utf8');
-        $q = mysql_query($sql) or die(mysql_error());
-        self::$last_id = mysql_insert_id();
+        if(DB_DRIVER == 'mysql') {
+            mysql_query('SET CHARACTER SET utf8');
+            $q = mysql_query($sql) or die(mysql_error());
+            self::$last_id = mysql_insert_id();
+        }elseif(DB_DRIVER == 'mysqli'){
+            $q = self::$mysqli->query($sql);
+            self::$last_id = $q->affected_rows;
+        }
+        
         return true;
     }
 }
