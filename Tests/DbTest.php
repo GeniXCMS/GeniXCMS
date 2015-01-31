@@ -2,7 +2,6 @@
 
 class DbTest extends PHPUnit_Framework_TestCase
 {
-    private $pdo;
 
     public function setUp()
     {
