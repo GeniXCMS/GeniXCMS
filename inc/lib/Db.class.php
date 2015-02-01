@@ -173,7 +173,7 @@ class Db
             self::$last_id = mysql_insert_id();
         }elseif(DB_DRIVER == 'mysqli'){
             $q = self::$mysqli->query($sql);
-            self::$last_id = $q->affected_rows;
+            self::$last_id = self::$mysqli->insert_id;
         }
         
         return true;
