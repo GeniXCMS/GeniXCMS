@@ -17,7 +17,6 @@ class Db
     static $num_rows = "";
     static $last_id = "";
     static $mysqli = '';
-    static $affect = "";
 
     public function __construct () {
         global $vars;
@@ -37,7 +36,6 @@ class Db
         } 
         elseif(DB_DRIVER == 'mysqli') {
             $q = self::$mysqli->query($vars);
-            self::$affect = $q->affected_rows;
         }
         
         return $q;
@@ -74,7 +72,7 @@ class Db
             $q->close();
 
         }
-        echo "<pre>$n";print_r($r);
+        // echo "<pre>$n";print_r($r);
         self::$num_rows = $n;
         return $r;
     }
