@@ -16,21 +16,21 @@
 class Pinger
 {
 
-    static $myBlogName          = "";
-    static $myBlogUrl           = "";
-    static $myBlogUpdateUrl     = "";
-    static $myBlogRSSFeedUrl    = "";
+    private static $myBlogName;
+    private static $myBlogUrl;
+    private static $myBlogUpdateUrl;
+    private static $myBlogRSSFeedUrl;
 
 
     public function __construct () {
         
-        self::$myBlogName          = Options::get('sitename');
-        self::$myBlogUrl           = Options::get('siteurl');
-        self::$myBlogUpdateUrl     = Options::get('siteurl');
-        self::$myBlogRSSFeedUrl    = Url::sitemap();
     }
 
     public static function rpc ($url) {
+        self::$myBlogName          = Options::get('sitename');
+        self::$myBlogUrl           = Options::get('siteurl');
+        self::$myBlogUpdateUrl     = Options::get('siteurl');
+        self::$myBlogRSSFeedUrl    = Url::rss();
         require_once( GX_LIB.'/Vendor/IXR_Library.php' );
         $url = 'http://'.$url;
         $client = new IXR_Client( $url );

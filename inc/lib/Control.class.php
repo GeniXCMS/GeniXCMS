@@ -43,6 +43,8 @@ class Control
             self::incFront('mod');
         }elseif(isset($_GET['sitemap'])){
             self::incFront('sitemap');
+        }elseif(isset($_GET['rss'])){
+            self::incFront('rss');
         }else{
             self::incFront('default');
         }
@@ -56,6 +58,10 @@ class Control
         }else{
             self::incBack('default');
         }
+    }
+
+    public static function install () {
+        include(GX_PATH.'/inc/lib/Control/Install/default.control.php');
     }
 
 }

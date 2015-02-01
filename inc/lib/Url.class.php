@@ -107,6 +107,23 @@ class Url
         return $url;
     }
 
+    public static function rss() {
+        switch (SMART_URL) {
+            case true:
+                # code...
+                $url = GX_URL."/rss".GX_URL_PREFIX;
+                break;
+            
+            default:
+                # code...
+                $url = GX_URL."/index.php?rss";
+                break;
+
+        }
+
+        return $url;
+    }
+
     public static function slug($vars) {
         $s = Db::result("SELECT `slug` FROM `posts` WHERE `id` = '{$vars}' LIMIT 1");
         $s = $s[0]->slug;

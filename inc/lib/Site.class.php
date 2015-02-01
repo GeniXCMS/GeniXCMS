@@ -110,10 +110,26 @@ class Site
 
             \t<link href=\"".GX_URL."/assets/css/summernote.css\" rel=\"stylesheet\">
             \t<script src=\"".GX_URL."/assets/js/summernote.min.js\"></script>
+            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
+            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-hello.js\"></script>
+            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-video.js\"></script>
             \t<script>
               \t$(document).ready(function() {
                 \t$('textarea').summernote({
                     \theight: 300,
+                    \ttoolbar: [
+                            \t['style', ['style']],
+                            \t['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                            \t['fontname', ['fontname']],
+                            \t['fontsize', ['fontsize']],
+                            \t['color', ['color']],
+                            \t['para', ['ul', 'ol', 'paragraph']],
+                            \t['height', ['height']],
+                            \t['table', ['table']],
+                            \t['insert', ['link', 'picture', 'video', 'hr']],
+                            \t['view', ['fullscreen', 'codeview']],
+                            \t['help', ['help']]
+                        \t]
                 \t});
                 
                 \tfunction sendFile(file,editor,welEditable) {

@@ -23,7 +23,6 @@ class GxMain
         $u = new User();
         $thm = new Theme();
         
-        
     }
 
 
@@ -46,6 +45,14 @@ class GxMain
         Theme::admin('footer');
         System::Zipped();
 
+    }
+
+    public function install () {
+        global $u, $sys, $db;
+        Session::start();
+        System::gZip();
+        Control::handler('install');
+        System::Zipped();
     }
 
     
