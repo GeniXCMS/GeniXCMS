@@ -27,8 +27,8 @@ This CMSF is a starter point to build your own online applications. With already
 ### Installation ###
 Installation : https://github.com/semplon/GeniXCMS/wiki/Installation
 
-### Demo ###
-Demo URL : http://genixcms.metalgenix.com
+### Showcase ###
+Showcase URL : http://blog.metalgenix.com
 
 ### License ###
 **GeniXCMS** License : **MIT License**
