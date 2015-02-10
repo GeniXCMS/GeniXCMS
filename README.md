@@ -33,5 +33,8 @@ Showcase URL : http://blog.metalgenix.com
 ### License ###
 **GeniXCMS** License : **MIT License**
 
+### Website ###
+Link : http://www.genixcms.org
+
 ### Developer ###
 Developed by : Puguh Wijayanto - www.metalgenix.com
