@@ -111,7 +111,6 @@ if(isset($_POST['login']))
 		<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
 		<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
 		<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
-        <input type="hidden" name="postads" value="<?php echo $postads; ?>" />
 		<label class="checkbox">
 			<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
 		</label>

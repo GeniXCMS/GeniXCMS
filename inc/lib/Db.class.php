@@ -35,7 +35,11 @@ class Db
             $q = mysql_query($vars)  or die(mysql_error());
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = self::$mysqli->query($vars);
+            $q = self::$mysqli->query($vars) ;
+            if($q === false) {
+                user_error("Query failed: ".self::$mysqli->error."<br />\n$vars"); 
+                return false; 
+            }
         }
         
         return $q;
@@ -59,7 +63,7 @@ class Db
            
         } 
         elseif(DB_DRIVER == 'mysqli') {
-            $q = self::$mysqli->query($vars);
+            $q = self::query($vars);
             $n = $q->num_rows;
             if($n > 0){
                 for($i=0;$i<$n;$i++){
@@ -99,7 +103,7 @@ class Db
             mysql_query('SET CHARACTER SET utf8');
             $q = mysql_query($sql) or die(mysql_error());
         }elseif(DB_DRIVER == 'mysqli'){
-            $q = self::$mysqli->query($sql);
+            $q = self::query($sql);
         }
         return true;
 
@@ -134,7 +138,7 @@ class Db
             mysql_query('SET CHARACTER SET utf8');
             $q = mysql_query($sql) or die(mysql_error());
         }elseif(DB_DRIVER == 'mysqli'){
-            $q = self::$mysqli->query($sql);
+            $q = self::query($sql);
         }
         return true;
     }
@@ -172,8 +176,17 @@ class Db
             $q = mysql_query($sql) or die(mysql_error());
             self::$last_id = mysql_insert_id();
         }elseif(DB_DRIVER == 'mysqli'){
-            $q = self::$mysqli->query($sql);
-            self::$last_id = self::$mysqli->insert_id;
+            try {
+                if(!self::query($sql)){
+                    printf("<div class=\"alert alert-danger\">Errormessage: %s</div>\n", self::$mysqli->error);
+                }else{
+                    self::$last_id = self::$mysqli->insert_id;
+                }
+                
+            } catch (exception $e) {
+                echo $e->getMessage();
+            }
+            
         }
         
         return true;

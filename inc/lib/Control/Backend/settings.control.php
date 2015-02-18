@@ -31,6 +31,20 @@ switch (isset($_POST['change'])) {
 
         
         
+        //print_r($_POST);
+        $flip = array_flip($_POST);
+        $sql = "SELECT * FROM `options` WHERE `value` = 'on'";        
+        $q = Db::result($sql);
+        foreach($q as $ob) {
+            if( isset( $flip[$ob->name] ) ) {
+                $vars[$ob->name] = 'on';
+                //echo $ob->name;
+            }else{
+                $vars[$ob->name] = 'off';
+                //echo $ob->name;
+            }
+        }
+        //print_r($ob);
         foreach ($_POST as $key => $val) {
             # code...
             $vars[$key] = $val;

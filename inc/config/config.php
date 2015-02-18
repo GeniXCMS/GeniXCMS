@@ -21,7 +21,7 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'genixcms');
 define('DB_PASS', '');
 define('DB_USER', 'root');
-define('DB_DRIVER', 'mysql');
+define('DB_DRIVER', 'mysqli');
 
 
 define('THEME', 'default');

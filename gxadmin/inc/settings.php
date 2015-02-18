@@ -23,6 +23,7 @@
           <li><a href="#logo" role="tab" data-toggle="tab">Logo</a></li>
           <li><a href="#library" role="tab" data-toggle="tab">Library</a></li>
           <li><a href="#posts" role="tab" data-toggle="tab">Posts</a></li>
+          <li><a href="#payment" role="tab" data-toggle="tab">Payment</a></li>
         </ul>
         
         <!-- Tab panes -->
@@ -370,6 +371,33 @@
                           <small>Check this if you want to use Editor. Editor Version 
                           is not available, left it blank</small>
                       </div>
+                      <div class="col-sm-6 form-group">
+                          <label>Enable Bootstrap Validator</label>
+                              <?php 
+                                if(Options::get('use_bsvalidator') == 'on') { 
+                                    $use_bsvalidator = 'checked'; 
+                                  }else{ 
+                                    $use_bsvalidator = 'off';
+                                  } 
+                              ?>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_bsvalidator" rel="tooltip"
+                              title="Check here if you want to use URL" <?=$use_bsvalidator;?>> 
+                            </span>
+                              <input type="text" name="bsvalidator_v" rel="tooltip" 
+                              class="form-control disable" placeholder="Bootstrap Validator Version" 
+                              readonly value="<?=Options::get('bsvalidator_v');?>">
+                              <span class="input-group-btn">
+                                <button type="" name="" rel="tooltip"
+                                title="" class="btn btn-default">
+                                  LOCAL
+                                </button> 
+                              </span>
+                            </div>
+                          <small>Check this if you want to use Bootstrap Validator. Bootstrap Validator 
+                          Version is not available, left it blank</small>
+                      </div>
                   </div>
               </div>
 
@@ -421,6 +449,94 @@
 
           </div><!-- Posts Tab END -->
 
+          <?php
+              $curr = Options::get('currency');
+              if ($curr == "USD") {
+                  $usd = "SELECTED";
+                  $euro = "";
+                  $pound = "";
+              } elseif ($curr == "EUR") {
+                  $euro = "SELECTED";
+                  $usd = "";
+                  $pound = "";
+              } elseif ($curr == "GBP") {
+                  $pound = "SELECTED";
+                  $usd = "";
+                  $euro = "";
+              } else {
+                  $pound = "";
+                  $usd = "";
+                  $euro = "";
+              }
+          ?>
+
+          <!-- Payment Tab Start -->
+          <div class="tab-pane" id="payment">
+            <h3>Payment</h3>
+            <div class="col-sm-12">
+                <h4>PayPal Configuration</h4>
+                  <div class="row">
+                      <div class="form-group  col-md-12 clearfix">
+                          <label for="currency">Currency Symbol</label>
+                          <select class="form-control col-md-6" id="currency" name="currency" required>
+                              <option value="USD" <?=$usd;?>>$ (USD)</option>
+                              <option value="EUR" <?=$euro;?>>&euro; (EUR)</option>
+                              <option value="GBP" <?=$pound;?>>&pound; (GBP)</option>
+                          </select>
+                          <small class="help-block">Pick a Currency, default is USD</small>
+
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppsandbox">Enable Sandbox</label>
+                          <div class="form-group">
+                          <?php
+                          $ppsandbox = Options::get('ppsandbox');
+                            if($ppsandbox == 'on'){
+                                $sandbox = "checked";
+                                $sandval = 0;
+                            }else{
+                                $sandbox = "";
+                                $sandval = "1";
+                            }
+                          ?>
+                          
+                          <input type="checkbox" class="" id="ppsandbox"
+                          name="ppsandbox" value="<?=$ppsandbox;?>" <?=$sandbox;?>> Enable Sandbox ?
+                          </div>
+                          <small class="help-block">Enable Sandbox</small>
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppemail">PayPal API Username</label>
+                          <input type="text" class="form-control" id="ppemail" placeholder="API Username"
+                          name="ppuser" value="<?=Options::get('ppuser');?>">
+                          <small class="help-block">Your PayPal API Username</small>
+                      </div>
+                      <div class="form-group  col-md-6">
+                          <label for="ppsecurity">PayPal API Password</label>
+                          <input type="text" class="form-control" id="ppsecurity" placeholder="PayPal API Password"
+                          name="pppass" value="<?=Options::get('pppass');?>">
+                          <small class="help-block">Your API Password</small>
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppsecret">PayPal Signature</label>
+                          <input type="text" class="form-control" id="ppsecret" placeholder="PayPal Signature"
+                          name="ppsign" value="<?=Options::get('ppsign');?>">
+                          <small class="help-block">Your PayPal Signature</small>
+                      </div>
+                      </div>
+                      <div class="form-group col-md-12 clearfix">
+                          <span class="alert alert-warning center-block">
+                          Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at  
+                          <a href="https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/" target="_blank">
+                              https://developer.paypal.com
+                          </a>
+                          </span>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+          <!-- Payment Tab Stop -->
 
         </div> <!-- TAB PANE END -->
 

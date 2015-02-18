@@ -129,7 +129,10 @@ class Site
                             \t['insert', ['link', 'picture', 'video', 'hr']],
                             \t['view', ['fullscreen', 'codeview']],
                             \t['help', ['help']]
-                        \t]
+                        \t],
+                    \tonImageUpload: function(files, editor, welEditable) {
+                            \tsendFile(files[0],editor,welEditable);
+                        \t}
                 \t});
                 
                 \tfunction sendFile(file,editor,welEditable) {
@@ -169,6 +172,20 @@ class Site
             $foot .= $GLOBALS['validator_js'];
 
         }
+
+        $foot .= "
+                <script>
+                    $(\":checkbox\").change(function(){
+                        cb = $(this);
+                        if(cb.prop('checked')){
+                            cb.val('on');
+                        }else{
+                            cb.val('off');
+                        }
+                        alert(cb.val());
+                    });
+                </script>
+            ";
         echo $foot;
     }
 

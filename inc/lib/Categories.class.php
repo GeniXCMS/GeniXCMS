@@ -1,30 +1,54 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Categories.class.php
-* version : 0.0.1 pre
-* build : 20140930
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1-pre build date 20140930
+* @version 0.0.1-pre
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
+
+/**
+* Categories Class
+*
+* This class will process the categories function. Including Create, Edit, Delete
+* the categories.
+* 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1-pre
+*/
 class Categories
 {
     public function __construct() {
     }
 
-    /* Categories Dropdown
+    /**
+    * Categories Dropdown Function
     *
+    * This will list the categories into the HTML Dropdown
+    * Below are how to use it :
+    * <code>
     *    $vars = array(
     *                'name'    =>    'catname',
     *                'parent'    =>    'parent',
     *                'order_by'    =>    '',
     *                'sort'    =>    'ASC',
     *            )
+    *    Categories::dropdown($vars);
+    * </code>
+    *
+    * @param array $vars the delivered data must be in array with above format
+    * @uses Db::result();
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1-pre
     */
     public static function dropdown($vars) {
         if(is_array($vars)){
@@ -68,6 +92,16 @@ class Categories
         return $drop;
     }
 
+    /**
+    * Category Name function
+    *
+    * This will get the specified ID category name
+    * @param string $id
+    * @uses Db::result();
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1-pre
+    */
     public static function name($id) {
         if(isset($id)){
             $cat = Db::result("SELECT `name` FROM `cat` WHERE `id` = '{$id}' LIMIT 1");
@@ -85,12 +119,36 @@ class Categories
         //print_r($cat);
     }
 
+    /**
+    * Category Get Parent function
+    *
+    * This will get the specified ID category parent data
+    * @param string $id
+    * @uses Db::result();
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1-pre
+    */
     public static function getParent($id=''){
         $sql = sprintf("SELECT `parent` FROM `cat` WHERE `id` = '%d'", $id);
         $menu = Db::result($sql);
         return $menu;
     }
 
+    /**
+    * Category Delete function
+    *
+    * This will delete the specified ID category data
+    * @param string $id
+    * @param array $sql
+    * @uses self::getParent();
+    * @uses Db::delete();
+    * @uses Db::result();
+    * @uses Db::$num_rows;
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1-pre
+    */
     public static function delete($id){
         $parent = self::getParent($id);
 
