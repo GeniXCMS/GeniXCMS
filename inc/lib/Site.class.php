@@ -198,6 +198,20 @@ class Site
         
         return $desc;
     }
+
+    public static function logo ($width='', $height='') {
+        // check which logo is used, logourl or uploaded files.
+        if( Options::get('is_logourl') == "on" && Options::get('logourl') != "" ) {
+            $logo = "<img src=\"".Options::get('siteurl').Options::get('logourl')."\"
+                    style=\"width: $width; height: $height; margin: 1px;\">";
+        }elseif( Options::get('is_logourl') == "off" && Options::get('logo') != "" ){
+            $logo = "<img src=\"".Options::get('siteurl').Options::get('logo')."\"
+                    style=\"width: $width; height: $height; margin: 1px;\">";
+        }else{
+            $logo = "<span class=\"mg genixcms-logo\"></span>";
+        }
+        return $logo;
+    }
 }
 
 /* End of file Site.class.php */

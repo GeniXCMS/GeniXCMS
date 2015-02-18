@@ -55,7 +55,11 @@ class Options
 
     public static function get($vars) {
         $op = Db::result("SELECT `value` FROM `options` WHERE `name` = '{$vars}' LIMIT 1");
-        return $op[0]->value;
+        if(Db::$num_rows > 0){
+            return $op[0]->value;
+        }else{
+            return false;
+        }
     }
     
 }

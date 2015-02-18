@@ -35,8 +35,6 @@ class Mod
                     if(is_dir($dir) == true){
                         $mod[] = basename($dir);
                     } 
-            }else{
-                $mod = "";
             }
         }
         
