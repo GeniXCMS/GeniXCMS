@@ -41,12 +41,31 @@ class Pinger
         {
             return $client->getResponse();
         }
-        echo 'Failed extended XML-RPC ping for "' . $url . '": ' . $client->getErrorCode() . '->' . $client->getErrorMessage() . '<br />';
+        //echo 'Failed extended XML-RPC ping for "' . $url . '": ' . $client->getErrorCode() . '->' . $client->getErrorMessage() . '<br />';
         if( $client->query( 'weblogUpdates.ping', self::$myBlogName, self::$myBlogUrl ) )
         {
             return $client->getResponse();
         }
-        echo 'Failed basic XML-RPC ping for "' . $url . '": ' . $client->getErrorCode() . '->' . $client->getErrorMessage() . '<br />';
+        //echo 'Failed basic XML-RPC ping for "' . $url . '": ' . $client->getErrorCode() . '->' . $client->getErrorMessage() . '<br />';
         return false;
+    }
+
+    public static function run ($vars) {
+        if( is_array($vars) ) {
+            foreach ( $vars as $v ) {
+                # code...
+                self::rpc($v);
+            }
+        }else{
+            $pinger = str_replace("\r\n", "\n", $vars);
+            $pinger = explode("\n", $pinger);
+            $pinger = str_replace("\r\n", "", $pinger);
+            $pinger = str_replace("{{domain}}", Options::get('sitedomain'), $pinger);
+            foreach ($pinger as $p) {
+                # code...
+                self::rpc($p);
+                //echo "'$p'<br>";
+            }
+        }
     }
 }

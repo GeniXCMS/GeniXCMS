@@ -115,7 +115,7 @@ class Site
             \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-video.js\"></script>
             \t<script>
               \t$(document).ready(function() {
-                \t$('textarea').summernote({
+                \t$('.editor').summernote({
                     \theight: 300,
                     \ttoolbar: [
                             \t['style', ['style']],

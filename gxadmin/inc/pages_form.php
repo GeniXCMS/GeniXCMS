@@ -68,7 +68,7 @@
                     </div>
                     <div class="form-group">
                         <label for="content">Content</label>
-                        <textarea name="content" name="content" class="form-control content" id="content" rows="20"><?=$content;?></textarea>
+                        <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content;?></textarea>
                     </div>
                 </div>
                 <div class="col-sm-4">

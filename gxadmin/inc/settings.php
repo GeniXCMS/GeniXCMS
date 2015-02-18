@@ -438,10 +438,10 @@
                           <label>Pinger</label>
                           <div class="input-group">
                               <span class="input-group-addon">http://</span>
-                              <input type="text" name="pinger" value="<?=Options::get('pinger');?>" class="form-control" >
+                              <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::get('pinger');?></textarea>
                           </div>
                           
-                          <small>Set the Pinger of Search Engine</small>
+                          <small>Set the Pinger of Search Engine. Use <label>{{domain}}</label> for your domain</small>
                           
                       </div>
                   </div>
