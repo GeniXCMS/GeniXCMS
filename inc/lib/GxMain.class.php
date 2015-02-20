@@ -35,15 +35,18 @@ class GxMain
     }
 
     public function admin () {
-        global $u, $sys, $db, $sess;
         Session::start();
-        $u->secure(0);
+        User::secure();
         System::gZip();
         Theme::admin('header');
-        Control::handler('backend');
-        //Session::destroy();
+        if( User::access(2) ) {
+            Control::handler('backend');
+        }else{
+            Control::error('noaccess');
+        }
         Theme::admin('footer');
         System::Zipped();
+        
 
     }
 

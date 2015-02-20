@@ -15,7 +15,7 @@ class Image
     * @link http://php.net/manual/en/function.imagecopyresampled.php#104028
     */
 
-    static public function image_resize($src, $dst, $width, $height, $crop=0){
+    static public function resize($src, $dst, $width, $height, $crop=0){
 
         if(!list($w, $h) = getimagesize($src)) return "Unsupported picture type!";
 

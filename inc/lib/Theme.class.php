@@ -26,6 +26,14 @@ class Theme
         include(GX_THEME.THEME.'/'.$var.'.php');
     }
 
+    public static function exist ($vars) {
+        if(file_exists(GX_THEME.THEME.'/'.$vars.'.php')) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     public static function admin($var) {
         include(GX_PATH.'/gxadmin/themes/'.$var.'.php');
     }

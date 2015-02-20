@@ -21,11 +21,11 @@
                         'paging' => $paging,
                         'table' => 'posts',
                         'where' => '`type` = \'post\' AND `cat` = \''.$_GET['cat'].'\'',
-                        'max' => '10',
+                        'max' => $data['max'],
                         'url' => $url,
                         'type' => 'pager'
                     );
-        echo Paging::create($paging, true);
+        echo Paging::create($paging);
     }else{
         echo "No Post to show";
     }

@@ -24,7 +24,7 @@ function __autoload($f) {
 
 try {
     $gx = new GxMain();
-    echo $gx->admin();
+    $gx->admin();
 } catch (Exception $e) {
     echo $e->getMessage();
 }

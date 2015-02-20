@@ -31,7 +31,7 @@ try {
     $u = new User();
     Session::start();
     System::gZip();
-    $thm->admin('headermini');
+    $thm->admin('header');
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -76,7 +76,7 @@ if(isset($_POST['login']))
 			$_SESSION['login'] = "true";
 			$_SESSION['group'] = $group;
 			*/
-			print_r($_SESSION);
+			//print_r($_SESSION);
 			$alertgreen = "You are logged in now.";
 		}elseif($p != $pass){
 			$alertred[] = PASS_NOT_MATCH;
@@ -106,24 +106,33 @@ if(isset($_POST['login']))
 	if(!User::is_loggedin()){
 
 ?>
-<div style="max-width: 300px; margin-left: auto; margin-right: auto">
-	<form class="form-signin" role="form" method="post">
-		<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-		<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
-		<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
-		<label class="checkbox">
-			<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
-		</label>
-		<button class="btn btn-lg btn-success btn-block" name="login" type="submit">Sign in</button>
-	</form>
-</div>
 
+<div class="row">
+	<div style="max-width: 300px; margin-left: auto; margin-right: auto">
+		<form class="form-signin" role="form" method="post">
+			<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
+			<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
+			<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
+			<label class="checkbox">
+				<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
+			</label>
+			<button class="btn btn-lg btn-success btn-block" name="login" type="submit">Sign in</button>
+		</form>
+	</div>
+</div>
 <?php
 }else{
 	
 	header('location: index.php');
 }
+?>
+<style>
+	#page-wrapper {
+		margin-left: 0px!important;
+	}
+</style>
+<?php
 //Session::destroy();
-$thm->admin('footermini');
+$thm->admin('footer');
 System::Zipped();
 ?>

@@ -9,10 +9,18 @@
                 <p class=\"blog-post-meta\">{$p->date} by <a href=\"#\">{$p->author}</a></p>
                 ".Typo::Xclean($p->content)."
             </div>
+            <hr />
+            <div class=\"col-sm-12\">
+                <div class=\"row\">
+                <h3>Comments</h3>
+                <div class=\"fb-comments\" data-href=\"http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}\" data-width=\"100%\" data-numposts=\"5\" data-colorscheme=\"light\"></div>
+                </div>
+            </div>
                 ";
         }
     }else{
-        echo "Error, Post not found.";
+        //echo "Error, Post not found."; 
+        Control::error('404');
     }
     
     

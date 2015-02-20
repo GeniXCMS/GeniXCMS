@@ -24,12 +24,12 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.php">
-                <img src="<?=Options::get('siteurl').Options::get('logo');?>" style="border: 0; max-height: 49px;"> 
+                <?=Site::logo('','50px');?>
                 <?=Options::get('sitename');?>
             </a>
         </div>
 
-
+        <?php if( User::access(2) ) { ?>
           <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse collapse">
 
@@ -48,6 +48,7 @@
                 
             </div>
           </div>
+          <?php }else {} ?>
     </nav>
 
 

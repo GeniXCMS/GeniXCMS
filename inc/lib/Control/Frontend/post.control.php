@@ -11,16 +11,21 @@
 * version : 0.0.1 pre
 * build : 20141006
 */
-            $post = $_GET[$vars];
-            $data['posts'] = Db::result(
-                                sprintf("SELECT * FROM `posts` 
-                                        WHERE `id` = '%d' AND `type` = 'post' LIMIT 1",
-                                        $post
-                                        )
-                            );
-            Theme::theme('header', $data);
-            Theme::theme('single', $data);
-            Theme::footer();
+$post = $_GET[$vars];
+$data['posts'] = Db::result(
+                    sprintf("SELECT * FROM `posts` 
+                            WHERE `id` = '%d' AND `type` = 'post' LIMIT 1",
+                            $post
+                            )
+                );
+
+if(Db::$num_rows > 0) {
+    Theme::theme('header');
+    Theme::theme('single', $data);
+    Theme::footer();
+}else{
+    Control::error('404');
+}
 
 
 /* End of file post.control.php */

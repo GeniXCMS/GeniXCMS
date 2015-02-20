@@ -24,19 +24,21 @@ class User
         return $us;
     }
 
-    public function secure($grp='4')
+    public static function secure()
     {
         if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username']) ) {
             header('location: login.php');
         } else {
-            if ( isset($_SESSION['gxsess']['val']['group']) ) {
-                if($_SESSION['gxsess']['val']['group'] <= $grp) {
-                    //header('location: index.php');
-                    //break;
-                }else{
-                    header('location: '.GX_URL.'/index.php');
-                    //$alertred[] = "You are Not Allowed!";
-                }
+            return true;
+        }
+    }
+
+    public static function access ($grp='4') {
+        if ( isset($_SESSION['gxsess']['val']['group']) ) {
+            if($_SESSION['gxsess']['val']['group'] <= $grp) {
+                return true;
+            }else{
+                return false;
             }
         }
     }

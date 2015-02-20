@@ -60,7 +60,7 @@ class Upload
             
         }else{
             //$result['error'] = $_FILES[$input]['error'];
-            $result['error'] = '';
+             $result['error'] = '';
         }
 
         return $result;

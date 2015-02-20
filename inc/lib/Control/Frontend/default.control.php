@@ -13,25 +13,25 @@
 */
 
 
-            $post="";
-            $max = 10;
-            if(isset($_GET['paging'])){
-                $offset = ($_GET['paging']-1)*$max;
-            }else{
-                $offset = 0;
-            }
-            $data['posts'] = Db::result(
-                                    sprintf("SELECT * FROM `posts` 
-                                        WHERE `type` = 'post' 
-                                        ORDER BY `date` 
-                                        DESC LIMIT %d, %d",
-                                        $offset, $max
-                                        )
-                                    );
-            $num = Db::$num_rows;
-            Theme::theme('header');
-            Theme::theme('index', $data);
-            Theme::footer();
+$post="";
+$data['max'] = Options::get('post_perpage');
+if(isset($_GET['paging'])){
+    $offset = ($_GET['paging']-1)*$data['max'];
+}else{
+    $offset = 0;
+}
+$data['posts'] = Db::result(
+                        sprintf("SELECT * FROM `posts` 
+                            WHERE `type` = 'post' 
+                            ORDER BY `date` 
+                            DESC LIMIT %d, %d",
+                            $offset, $data['max']
+                            )
+                        );
+$num = Db::$num_rows;
+Theme::theme('header');
+Theme::theme('index', $data);
+Theme::footer();
 
 /* End of file default.control.php */
 /* Location: ./inc/lib/Control/Frontend/default.control.php */

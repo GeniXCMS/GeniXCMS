@@ -24,12 +24,14 @@ function __autoload($f) {
 
 try {
     $sys = new System();
+    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 
+User::access(2);
 // A list of permitted file extensions
-$allowed = array('png', 'jpg', 'gif','zip');
+$allowed = array('png', 'jpg', 'jpeg', 'gif');
 
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0){
 
@@ -48,5 +50,5 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0){
     }
 }
 
-echo '{"status":"error"}';
-exit;
+// echo '{"status":"error"}';
+// exit;

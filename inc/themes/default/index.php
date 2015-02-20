@@ -19,11 +19,11 @@
                     'paging' => $paging,
                     'table' => 'posts',
                     'where' => '`type` = \'post\'',
-                    'max' => '10',
-                    'url' => '',
+                    'max' => $data['max'],
+                    'url' => 'index.php?',
                     'type' => 'pager'
                 );
-    echo Paging::create($paging, true);
+    echo Paging::create($paging);
 ?>
 </div>
 <?php Theme::theme('rightside', $data); ?>
