@@ -69,7 +69,7 @@ class Upload
                     $result['filename'] = $uniqfile.$filename;
                     $result['path'] = $path.$uniqfile.$filename;
                     $result['filepath'] = $filepath;
-                    $result['fileurl'] = GX_URL.$path.$uniqfile.$filename;
+                    $result['fileurl'] = Options::get('siteurl').$path.$uniqfile.$filename;
 
                 }else{
                     $result['error'] = 'Cannot upload to directory, please check 
