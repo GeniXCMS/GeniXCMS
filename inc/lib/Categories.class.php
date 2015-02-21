@@ -5,8 +5,8 @@
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
-* @since 0.0.1-pre build date 20140930
-* @version 0.0.1-pre
+* @since 0.0.1 build date 20140930
+* @version 0.0.1
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -22,7 +22,7 @@
 * the categories.
 * 
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @since 0.0.1-pre
+* @since 0.0.1
 */
 class Categories
 {
@@ -48,7 +48,7 @@ class Categories
     * @uses Db::result();
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1-pre
+    * @since 0.0.1
     */
     public static function dropdown($vars) {
         if(is_array($vars)){
@@ -72,20 +72,22 @@ class Categories
         }
         $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
         $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
-        foreach ($cat as $c) {
-            # code...
-            if($c->parent == ''){
-                if(isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
-                foreach ($cat as $c2) {
-                    # code...
-                    if($c2->parent == $c->id){
-                        if(isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                        $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">&nbsp;&nbsp;&nbsp;{$c2->name}</option>";
+        if(Db::$num_rows > 0 ){
+            foreach ($cat as $c) {
+                # code...
+                if($c->parent == ''){
+                    if(isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
+                    $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
+                    foreach ($cat as $c2) {
+                        # code...
+                        if($c2->parent == $c->id){
+                            if(isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
+                            $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">&nbsp;&nbsp;&nbsp;{$c2->name}</option>";
+                        }
                     }
                 }
+                
             }
-            
         }
         $drop .= "</select>";
 
@@ -100,7 +102,7 @@ class Categories
     * @uses Db::result();
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1-pre
+    * @since 0.0.1
     */
     public static function name($id) {
         if(isset($id)){
@@ -127,7 +129,7 @@ class Categories
     * @uses Db::result();
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1-pre
+    * @since 0.0.1
     */
     public static function getParent($id=''){
         $sql = sprintf("SELECT `parent` FROM `cat` WHERE `id` = '%d'", $id);
@@ -147,7 +149,7 @@ class Categories
     * @uses Db::$num_rows;
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1-pre
+    * @since 0.0.1
     */
     public static function delete($id){
         $parent = self::getParent($id);

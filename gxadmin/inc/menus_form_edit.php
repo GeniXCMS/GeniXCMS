@@ -1,5 +1,19 @@
-
 <?php
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20150202
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
+*/
+
     if(isset($_GET['id'])){
         $menuid = $_GET['id'];
     }else{
@@ -7,11 +21,17 @@
     }
 
     //print_r($data['menus']);
+    if(isset($data['alertgreen']) ) {
+        echo "<div class=\"alert alert-success\">";
+            foreach ($data['alertgreen'] as $alert) {
+                echo "$alert"; 
+            }
+        echo "</div>"; }
 ?>
 <form action="" method="POST">
 <div class="row">
     <div class="col-md-12">
-<h1>Edit Menu
+<h1><i class="fa fa-sitemap"></i> Edit Menu
 <div class="pull-right">
 <button type="submit" name="edititem" class="btn btn-success">
     <span class="glyphicon glyphicon-ok"></span>

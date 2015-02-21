@@ -1,7 +1,22 @@
+<?php
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20150202
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
+*/?>
 <form action="" method="POST" enctype="multipart/form-data">
 <div class="row">
     <div class="col-md-12">
-        <h1 class="clearfix">Settings Page
+        <h1 class="clearfix"><i class="fa fa-wrench"></i> Settings Page
           <div class="pull-right">
             <button type="submit" name="change" class="btn btn-success" value="Change">
             <span class="glyphicon glyphicon-ok"></span>
@@ -86,7 +101,9 @@
                           <small>Your Website email.</small>
                       </div>
                       <div class="col-sm-6 form-group">
-                          
+                          <label>Timezone</label>
+                          <input type="text" name="timezone" value="<?=Options::get('timezone');?>" class="form-control">
+                          <small>Your Website Timezone.</small>
                       </div>
                   </div>
                   
@@ -99,16 +116,16 @@
               <div class="col-sm-12">
                   <div class="row">
                       <div class="col-sm-6 form-group">
-                          <label>Sendmail/SMTP</label>
+                          <label>Mail/SMTP</label>
                           <?php
                               if(Options::get('mailtype') == 0){ $o = "selected"; $s = "";}
                               elseif(Options::get('mailtype') == 1 ) {$s = "selected"; $o = "";}
                           ?>
                           <select name="mailtype" class="form-control">
-                              <option value="0" <?=$o;?>>SendMail</option>
+                              <option value="0" <?=$o;?>>Mail</option>
                               <option value="1" <?=$s;?>>SMTP</option>
                           </select>
-                          <small>Choose using SendMail or SMTP</small>
+                          <small>Choose using Mail or SMTP</small>
                       </div>
                       <div class="col-sm-6 form-group">
                           <label>Plain/SSL</label>
@@ -207,7 +224,7 @@
                               if($is_logourl == 'on' && $logourl != ''){
                                 $logoimg = "<img src=\"".Options::get('logourl')."\" class=\"clearfix\">";
                               }elseif($is_logourl == 'off' && $logo != ''){
-                                $logoimg = "<img src=\"".GX_URL.Options::get('logo')."\" class=\"clearfix\">";
+                                $logoimg = "<img src=\"".Options::get('siteurl').Options::get('logo')."\" class=\"clearfix\">";
                               }else{
                                 $logoimg = '';
                               }
@@ -501,7 +518,7 @@
                           ?>
                           
                           <input type="checkbox" class="" id="ppsandbox"
-                          name="ppsandbox" value="<?=$ppsandbox;?>" <?=$sandbox;?>> Enable Sandbox ?
+                          name="ppsandbox"  <?=$sandbox;?>> Enable Sandbox ?
                           </div>
                           <small class="help-block">Enable Sandbox</small>
                       </div>

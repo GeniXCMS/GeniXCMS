@@ -1,23 +1,47 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Db.class.php
-* version : 0.0.1 pre
-* build : 20140925
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140925
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
+/**
+* Database Class
+*
+* This class will process the database queries, including Create, Edit, Delete
+* 
+* 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
+*/
 class Db
 {
+    /** Num Rows Variable */
     static $num_rows = "";
+
+    /** Last Accessed ID Variable */
     static $last_id = "";
+
+    /** Mysqli db driver variable */
     static $mysqli = '';
 
+
+    /**
+    * Database Initiation.
+    * This will initiate database connection before all process.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function __construct () {
         global $vars;
         if(DB_DRIVER == 'mysql') {
@@ -29,6 +53,38 @@ class Db
         }
     }
 
+
+    /**
+    * Database Connect Function.
+    * This will do a connection with the database. This is called during the 
+    * installation process. Using mysqli because of the deprecation of mysql.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
+    public static function connect ($dbhost=DB_HOST, $dbuser=DB_USER, 
+        $dbpass=DB_PASS, $dbname=DB_NAME) {
+        
+        self::$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        
+        if (self::$mysqli->connect_error) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+
+    /**
+    * Database Query Function.
+    * This will proccess database query. 
+    *
+    * @param string $vars 
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function query ($vars) {
         if(DB_DRIVER == 'mysql') {
             mysql_query('SET CHARACTER SET utf8');
@@ -46,7 +102,16 @@ class Db
     }
 
     
-
+    /**
+    * Database Result Function.
+    * This will query the database and output the result as object.
+    * 
+    * @param string $vars 
+    * 
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function result ($vars) {
         if(DB_DRIVER == 'mysql') {
             mysql_query('SET CHARACTER SET utf8');
@@ -76,17 +141,26 @@ class Db
             $q->close();
 
         }
-        // echo "<pre>$n";print_r($r);
+
         self::$num_rows = $n;
         return $r;
     }
 
-    /*
-    *    delete sql
+    /**
+    * Delete Database Function.
+    * This will delete rows in the database with the certain 'where' value.
+    * <code>
     *    $vars = array(
     *                'table' =>    'table', // table name
     *                'where'    =>    array(), // where
-    *            )
+    *            );
+    * </code>
+    *
+    * @param array $vars
+    * 
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
     */
     public static function delete ($vars) {
         if(is_array($vars)){
@@ -109,8 +183,9 @@ class Db
 
     }
 
-    /*
-    *    update sql
+    /**
+    * Update Database Function. 
+    * <code>
     *    $vars = array(
     *                'table' =>    'table', // table name
     *                'id'    =>    'id', // item id
@@ -119,6 +194,12 @@ class Db
     *                                    'col2' => 'col2_val',
     *                                )
     *            )
+    * </code>
+    *
+    * @param array $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
     */
     public static function update ($vars) {
         if(is_array($vars)){
@@ -143,8 +224,10 @@ class Db
         return true;
     }
 
-    /*
-    *    inert sql
+    /**
+    * Insert Database Function.
+    * This function will do insert the value into the database.
+    * <code>
     *    $vars = array(
     *                'table' =>    'table', // table name
     *                'key'    =>    array(
@@ -152,6 +235,12 @@ class Db
     *                                    'col2' => 'col2_val',
     *                                )
     *            )
+    * </code>
+    *
+    * @param array $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
     */
     public static function insert ($vars) {
         if(is_array($vars)){
@@ -162,8 +251,6 @@ class Db
                 $k .= "`$key`,";
             }
             
-            //echo $set;
-            //echo $k;
             $set = substr($set, 0,-1);
             $k = substr($k, 0,-1);
             
@@ -193,8 +280,6 @@ class Db
     }
 }
 
-#global $db;
-#$db = new Db();
 
 /* End of file Db.class.php */
 /* Location: ./inc/lib/Db.class.php */

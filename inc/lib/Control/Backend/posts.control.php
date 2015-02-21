@@ -1,15 +1,17 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : posts.control.php
-* version : 0.0.1 pre
-* build : 20141006
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20141006
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
 
@@ -100,6 +102,40 @@ switch ($act) {
                 $data['alertred'][] = 'No ID Selected';
             }
             
+        }
+        if(isset($_POST['action'])) {
+            $action = $_POST['action'];
+        }else{
+            $action = '';
+        }
+        if(isset($_POST['post_id'])) { $post_id = $_POST['post_id']; } else { $post_id = ""; }
+        switch ($action) {
+
+            case 'publish':
+                # code...
+                foreach ($post_id as $id) {
+                    # code...
+                    Posts::publish($id);
+                }
+                break;
+            case 'unpublish':
+                # code...
+                foreach ($post_id as $id) {
+                    # code...
+                    Posts::unpublish($id);
+                }
+                break;
+            case 'delete':
+                # code...
+                foreach ($post_id as $id) {
+                    # code...
+                    Posts::delete($id);
+                }
+                break;
+            
+            default:
+                # code...
+                break;
         }
 
         $max = "10";

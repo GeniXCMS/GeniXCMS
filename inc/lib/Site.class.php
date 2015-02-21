@@ -1,17 +1,20 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Site.class.php
-* version : 0.0.1 pre
-* build : 20141004
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20141004
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
-//$GLOBALS['editor'] = 'on';
+
+
 class Site
 {
     static $editors;
@@ -74,7 +77,7 @@ class Site
         $bs = Options::get('use_bootstrap');
         if($bs == 'on'){
             $foot .= "
-    <link href=\"".GX_URL."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+    <link href=\"".Options::get('siteurl')."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
         }
 
         $jquery = Options::get('use_jquery');
@@ -88,8 +91,8 @@ class Site
         if($bs == 'on'){
             $foot .= "
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            \t<script src=\"".GX_URL."/assets/js/bootstrap.min.js\"></script>
-            \t<script src=\"".GX_URL."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
+            \t<script src=\"".Options::get('siteurl')."/assets/js/bootstrap.min.js\"></script>
+            \t<script src=\"".Options::get('siteurl')."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
         }
 
         $fa = Options::get('use_fontawesome');
@@ -108,11 +111,11 @@ class Site
             \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js\"></script>
             \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js\"></script>
 
-            \t<link href=\"".GX_URL."/assets/css/summernote.css\" rel=\"stylesheet\">
-            \t<script src=\"".GX_URL."/assets/js/summernote.min.js\"></script>
-            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
-            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-hello.js\"></script>
-            \t<script src=\"".GX_URL."/assets/js/plugins/summernote-ext-video.js\"></script>
+            \t<link href=\"".Options::get('siteurl')."/assets/css/summernote.css\" rel=\"stylesheet\">
+            \t<script src=\"".Options::get('siteurl')."/assets/js/summernote.min.js\"></script>
+            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
+            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-hello.js\"></script>
+            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-video.js\"></script>
             \t<script>
               \t$(document).ready(function() {
                 \t$('.editor').summernote({
@@ -165,27 +168,15 @@ class Site
 
         if(isset($GLOBALS['validator']) && $GLOBALS['validator'] == true){
             $foot .= "
-            \t<link href=\"".GX_URL."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
-            \t<script src=\"".GX_URL."/assets/js/bootstrapValidator.min.js\"></script>
+            \t<link href=\"".Options::get('siteurl')."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
+            \t<script src=\"".Options::get('siteurl')."/assets/js/bootstrapValidator.min.js\"></script>
             ";
 
             $foot .= $GLOBALS['validator_js'];
 
         }
 
-        $foot .= "
-                <script>
-                    $(\":checkbox\").change(function(){
-                        cb = $(this);
-                        if(cb.prop('checked')){
-                            cb.val('on');
-                        }else{
-                            cb.val('off');
-                        }
-                        alert(cb.val());
-                    });
-                </script>
-            ";
+        
         echo $foot;
     }
 

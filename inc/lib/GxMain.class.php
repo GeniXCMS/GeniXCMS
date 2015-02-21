@@ -1,39 +1,70 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : GxMain.class.php
-* version : 0.0.1 pre
-* build : 20140925
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140925
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
+/**
+* GxMain Class
+*
+* This class is the main class for call all the necessary controller.
+* 
+* 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
+*/
 class GxMain 
 {
 
+    /**
+    * GxMain Initiation Function.
+    * This will check the config file at inc/config/config.php exist or not
+    * if not exist, run the installation proccess.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function __construct() {
-        global $u, $sys, $db;
-        $sys = new System();
-        $sess = new Session();
-        $db = new Db();
-        $u = new User();
-        $thm = new Theme();
-        
+        if (System::existConf()) {
+            new System();
+            new Db();
+        }else{
+            $this->install();
+        }
     }
 
-
+    /**
+    * GxMain Index Function.
+    * This will load the frontpage controller.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function index() {
-        global $u, $sys, $db;
         Session::start();
         System::gZip();
         Control::handler('frontend');
         System::Zipped();
     }
 
+    /**
+    * GxMain Admin Function.
+    * This will load the backend controller. Secured, so to access it must be 
+    * logged in with a current privilege. Default privilege is 2.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function admin () {
         Session::start();
         User::secure();
@@ -50,11 +81,19 @@ class GxMain
 
     }
 
+    /**
+    * GxMain Install Function.
+    * This will load the install controller.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function install () {
-        global $u, $sys, $db;
         Session::start();
         System::gZip();
+        Theme::install('header');
         Control::handler('install');
+        Theme::install('footer');
         System::Zipped();
     }
 

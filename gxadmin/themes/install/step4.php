@@ -5,7 +5,7 @@
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
-* @since 0.0.1 build date 20150219
+* @since 0.0.1 build date 20150221
 * @version 0.0.1
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -13,17 +13,10 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-header("HTTP/1.0 400 Bad Request");
-if(Theme::exist('400')) {
-    Theme::theme('400');
-}else{
-    echo "<center>
-        <h1>Ooops!!</h1>
-        <h2 style=\"font-size: 20em\">400</h2>
-        <h3>Bad Request</h3>
-        Back to <a href=\"".Options::get('siteurl')."\">".Options::get('sitename')."</a>
-        </center>
-        ";
-    Site::footer();
-}
-
+?>
+<h3>Installation: Step 4</h3>
+<form action="?step=5" method="post">
+<h4>Config File Created</h4>
+Continue to Installation. 
+<input type="submit" name="step4" value="Install Now" class="btn btn-primary"> <a href="?step=2" class="btn btn-danger">Back Step</a>
+</form>

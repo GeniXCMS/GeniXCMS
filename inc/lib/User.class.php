@@ -1,27 +1,22 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-*    filename : user.class.php
-*    version : 0.0.1 pre
-*    build : 20140925
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140925
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
 class User
 {
     public function __construct () {
-        global $gx;
-
-    }
-
-    public function index () {
-        $us = "<pre>Admin</pre>";
-        return $us;
     }
 
     public static function secure()
@@ -53,8 +48,10 @@ class User
         return $v;
     }
 
-    /* Users Create
-    *
+    /**
+    * Create User Function
+    * This will insert certain value of user into the database.
+    * <code>
     *    $vars = array(
     *                'user' => array(
     *                                'userid' => '',
@@ -76,6 +73,7 @@ class User
     *                                'postcode' => ''
     *                            )
     *            );
+    * </code>
     */
     public static function create($vars) {
         if(is_array($vars)){
@@ -90,6 +88,13 @@ class User
 
             if(!isset($vars['detail']) || $vars['detail'] == ''){
                 Db::insert("INSERT INTO `user_detail` (`userid`) VALUES ('{$vars['user']['userid']}')");
+            }else{
+                $u = $vars['detail'];
+                $sql = array(
+                                'table' => 'user_detail',
+                                'key' => $u,
+                            );
+                Db::insert($sql);
             }
         }
     }
@@ -198,8 +203,6 @@ class User
     }
        
 }
-global $u;
-$u = new User();
 
 /* End of file user.class.php */
 /* Location: ./inc/lib/user.class.php */

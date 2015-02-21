@@ -1,17 +1,28 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Typo.class.php
-* version : 0.0.1 pre
-* build : 20140925
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140925
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
+/**
+* Typo Class
+*
+* This class will proccess text modifier, including sanitizing, slug, strip tags, 
+* create random characters. 
+* 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
+*/
 class Typo
 {
     public function __construct () {
@@ -84,7 +95,37 @@ class Typo
         return preg_replace('@</(\w+)\b.*?>@si', '', $text); 
       } 
       return $text; 
-    } 
+    }
+
+
+    /**
+    * Cryptography random characters
+    * @link http://stackoverflow.com/a/13733588
+    */
+    public static function crypto_rand_secure($min, $max) {
+        $range = $max - $min;
+        if ($range < 0) return $min; // not so random...
+        $log = log($range, 2);
+        $bytes = (int) ($log / 8) + 1; // length in bytes
+        $bits = (int) $log + 1; // length in bits
+        $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+        do {
+            $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+            $rnd = $rnd & $filter; // discard irrelevant bits
+        } while ($rnd >= $range);
+        return $min + $rnd;
+    }
+
+    public static function getToken($length){
+        $token = "";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+        $codeAlphabet.= "0123456789";
+        for($i=0;$i<$length;$i++){
+            $token .= $codeAlphabet[self::crypto_rand_secure(0,strlen($codeAlphabet))];
+        }
+        return $token;
+    }
 }
 
 /* End of file Db.class.php */

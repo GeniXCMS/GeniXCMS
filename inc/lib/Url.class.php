@@ -1,32 +1,52 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Url.class.php
-* version : 0.0.1 pre
-* build : 20140930
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140930
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
+/**
+* Url Class
+*
+* This class will create all the URL format automatically for Posts, Categories,
+* pages, sitemap, rss.
+* 
+* 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
+*/
 class Url
 {
     public function __construct() {
     }
 
+    /**
+    * Post URL Function.
+    * This will create the posts url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function post($vars) {
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = GX_URL."/".self::slug($vars)."/{$vars}";
+                $url = Options::get('siteurl')."/".self::slug($vars)."/{$vars}";
                 break;
             
             default:
                 # code...
-                $url = GX_URL."/index.php?post={$vars}";
+                $url = Options::get('siteurl')."/index.php?post={$vars}";
                 break;
 
         }
@@ -34,16 +54,24 @@ class Url
         return $url;
     }
 
-     public static function page($vars) {
+    /**
+    * Page URL Function.
+    * This will create the pages url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
+    public static function page($vars) {
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = GX_URL."/".self::slug($vars).GX_URL_PREFIX;
+                $url = Options::get('siteurl')."/".self::slug($vars).GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = GX_URL."/index.php?page={$vars}";
+                $url = Options::get('siteurl')."/index.php?page={$vars}";
                 break;
 
         }
@@ -52,17 +80,24 @@ class Url
     }
     
 
-
+    /**
+    * Categories URL Function.
+    * This will create the categories url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function cat($vars) {
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = GX_URL."/".$vars."/".Typo::slugify(Categories::name($vars));
+                $url = Options::get('siteurl')."/".$vars."/".Typo::slugify(Categories::name($vars));
                 break;
             
             default:
                 # code...
-                $url = GX_URL."/index.php?cat={$vars}";
+                $url = Options::get('siteurl')."/index.php?cat={$vars}";
                 break;
 
         }
@@ -70,36 +105,36 @@ class Url
         return $url;
     }
     
-
+    /**
+    * Custom URL Function.
+    * This will create the custom url. It will result as is.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function custom($vars) {
-        // switch (SMART_URL) {
-        //     case true:
-        //         # code...
-        //         // $url = GX_URL."/".self::slug($vars).GX_URL_PREFIX;
-        //         $url = $vars;
-        //         break;
-            
-        //     default:
-        //         # code...
-        //         $url = GX_URL."/index.php?page={$vars}";
-
-        //         break;
-
-        // }
         $url = $vars;
         return $url;
     }
 
+    /**
+    * Sitemap URL Function.
+    * This will create the sitemap url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function sitemap() {
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = GX_URL."/sitemap".GX_URL_PREFIX;
+                $url = Options::get('siteurl')."/sitemap".GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = GX_URL."/index.php?page=sitemap";
+                $url = Options::get('siteurl')."/index.php?page=sitemap";
                 break;
 
         }
@@ -107,16 +142,24 @@ class Url
         return $url;
     }
 
+    /**
+    * RSS URL Function.
+    * This will create the rss url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function rss() {
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = GX_URL."/rss".GX_URL_PREFIX;
+                $url = Options::get('siteurl')."/rss".GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = GX_URL."/index.php?rss";
+                $url = Options::get('siteurl')."/index.php?rss";
                 break;
 
         }
@@ -124,6 +167,13 @@ class Url
         return $url;
     }
 
+    /**
+    * URL Slug Function.
+    * This will load the url slug from the database according to the posts id.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function slug($vars) {
         $s = Db::result("SELECT `slug` FROM `posts` WHERE `id` = '{$vars}' LIMIT 1");
         $s = $s[0]->slug;

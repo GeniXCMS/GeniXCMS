@@ -1,30 +1,50 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Upload.class.php
-* version : 0.0.1 pre
-* build : 2014103
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20141003
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
 /**
+* Upload Class
+*
+* This class will run the upload files.
 * 
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
 */
 class Upload
 {
     
-    function __construct()
-    {
-        # code...
+    function __construct() {
     }
 
+    /**
+    * Upload Proccess Function.
+    * This will do the upload proccess. This function need some variables, eg: 
+    * @param string $input This is the input field name.
+    * @param string $path This is the path the file will be stored.
+    * @param array $allowed This is the array of the allowed file extension.
+    * @param false $uniq Set to true if want to use a unique name.
+    * @param int $size File size maximum allowed.
+    * @param int $width The width of the dimension.
+    * @param int $height The height of the dimension.
+    * 
+    * @return array
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function go($input, $path, $allowed='', $uniq=false, $size='', $width = '', $height = ''){
-        //$allowed = array('png', 'jpg', 'gif','zip');
         $filename = Typo::cleanX($_FILES[$input]['name']);
         $filename = str_replace(' ', '_', $filename);
         if(isset($_FILES[$input]) && $_FILES[$input]['error'] == 0){

@@ -46,7 +46,8 @@ switch (isset($_POST['updatecat'])) {
 if(isset($_GET['act']) == 'del'){
     Categories::delete($_GET['id']);
 }
-$data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC LIMIT 20");
+$data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC");
+$data['num'] = Db::$num_rows;
 System::inc('categories', $data);
 
 

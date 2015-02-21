@@ -1,0 +1,42 @@
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20150221
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
+*/
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.wrapper {
+    margin : 0;
+    padding: 0;
+}
+#page-wrapper {
+    padding: 30px;
+}
+
+.header {
+    background-color: #eee;
+    color: #333;
+    font-weight: bold;
+    margin: 0;
+    position: relative;
+}
+
+.header h1 {
+    font-weight: bold;
+}
+footer {
+    padding: 30px;
+    text-align: center;
+}

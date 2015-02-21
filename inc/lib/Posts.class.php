@@ -1,15 +1,17 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Posts.class.php
-* version : 0.0.1 pre
-* build : 20140930
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20140930
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
 
 class Posts
@@ -62,6 +64,30 @@ class Posts
         return $post;
     }
 
+    public static function publish($id) {
+        $ins = array(
+                    'table' => 'posts',
+                    'id' => $id,
+                    'key' => array(
+                                'status' => '1'
+                            )
+                );
+        $post = Db::update($ins);
+        return $post;
+    }
+
+    public static function unpublish($id) {
+        $ins = array(
+                    'table' => 'posts',
+                    'id' => $id,
+                    'key' => array(
+                                'status' => '0'
+                            )
+                );
+        $post = Db::update($ins);
+        return $post;
+    }
+
     public static function delete($id) {
         try
         {
@@ -97,6 +123,11 @@ class Posts
     public static function recent($vars, $type = 'post') {
         $sql = "SELECT * FROM `posts` WHERE `type` = '{$type}' ORDER BY `date` DESC LIMIT {$vars}";
         $posts = Db::result($sql);
+        if(isset($posts['error'])){
+            $posts['error'] = "No Posts found.";
+        }else{
+            $posts = $posts;
+        }
         return $posts;
     }
 

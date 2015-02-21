@@ -5,8 +5,8 @@
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
-* @since 0.0.1-pre build date 20141006
-* @version 0.0.1-pre
+* @since 0.0.1 build date 20141006
+* @version 0.0.1
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -14,15 +14,13 @@
 *
 */
 
-
 /**
 * Control Class
 *
-* This class will proccess the control c 
-* the categories.
+* This class will proccess the controller
 * 
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @since 0.0.1-pre
+* @since 0.0.1
 */
 class Control
 {
@@ -31,10 +29,30 @@ class Control
 
     }
 
+    /**
+    * Control Handler Function.
+    * This is the loader of the controller. This function is not necessary. 
+    * Controller can be loaded directly below. Will be removed on the next
+    * update.
+    *
+    * @param string $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function handler($vars) {
             self::$vars();
     }
 
+    /**
+    * Control Frontend Inclusion Function.
+    * This will include the controller at the Frontend directory.
+    *
+    * @param string $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function incFront($vars) {
         $file = GX_PATH.'/inc/lib/Control/Frontend/'.$vars.'.control.php';
         if ( file_exists($file) ) {
@@ -46,6 +64,15 @@ class Control
         
     }
 
+    /**
+    * Control Backend Inclusion Function.
+    * This will include the controller at the Backend directory.
+    *
+    * @param string $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function incBack($vars) {
         $file = GX_PATH.'/inc/lib/Control/Backend/'.$vars.'.control.php';
         if ( file_exists($file) ) {
@@ -56,6 +83,14 @@ class Control
         }
     }
 
+    /**
+    * Control Frontend Handler Function.
+    * This will handle the controller which file will be included at the Frontend
+    * controller.
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function frontend() {
         
         if($_GET){
@@ -80,25 +115,16 @@ class Control
             self::incFront('default');
         }
         
-        // $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss');
-        // if(isset($_GET['post'])) {
-        //     self::incFront('post');
-        // }elseif(isset($_GET['page'])){
-        //     self::incFront('page');
-        // }elseif(isset($_GET['cat'])){
-        //     self::incFront('cat');
-        // }elseif(isset($_GET['mod'])){
-        //     self::incFront('mod');
-        // }elseif(isset($_GET['sitemap'])){
-        //     self::incFront('sitemap');
-        // }elseif(isset($_GET['rss'])){
-        //     self::incFront('rss');
-        // }else{
-        //     self::incFront('default');
-            
-        // }
     }
 
+    /**
+    * Control Backend Handler Function.
+    * This will handle the controller which file will be included at the Backend
+    * controller.
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function backend($vars="") {
         //if(isset($_GET['post'])) {
         //echo "frontend";
@@ -109,7 +135,16 @@ class Control
         }
     }
 
-
+    /**
+    * Control Error Handler Function.
+    * This will handle the error page. Default is 404 not found. This handler 
+    * include file which is called by specific name at the Error directory.
+    *
+    * @param string $vars
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function error ($vars="") {
         if( isset($vars) && $vars != "" ) {
             include(GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php');
@@ -118,6 +153,13 @@ class Control
         }
     }
 
+    /**
+    * Control Install Handler Function.
+    * This will handle the Install page.
+    *
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1 
+    */
     public static function install () {
         include(GX_PATH.'/inc/lib/Control/Install/default.control.php');
     }

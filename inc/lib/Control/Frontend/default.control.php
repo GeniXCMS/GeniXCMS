@@ -1,17 +1,18 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : default.control.php
-* version : 0.0.1 pre
-* build : 20141006
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20141006
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
 */
-
 
 $post="";
 $data['max'] = Options::get('post_perpage');
@@ -28,7 +29,7 @@ $data['posts'] = Db::result(
                             $offset, $data['max']
                             )
                         );
-$num = Db::$num_rows;
+$data['num'] = Db::$num_rows;
 Theme::theme('header');
 Theme::theme('index', $data);
 Theme::footer();
