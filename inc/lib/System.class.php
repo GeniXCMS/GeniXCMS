@@ -19,7 +19,7 @@ class System
 {
 
     static $version          = "0.0.1";
-    static $v_release        = "pre";
+    static $v_release        = "";
 
     public function __construct () {
         if (self::existConf()) {
