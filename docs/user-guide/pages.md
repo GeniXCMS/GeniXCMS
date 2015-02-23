@@ -13,7 +13,7 @@ Insert the Post title, Post content, and Publish it.
 
 There are two options for page, **Publish status** and **Dates**. You can modify it as you like.
 
-![Pages New](img/pages-new.png)
+![Pages New](img/pages-new-post.png)
 
 After a post is submited back to the pages manager and see if the page is submitted succesfully. 
 
