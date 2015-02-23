@@ -1,8 +1,4 @@
 site_name: GeniXCMS
-site_url: http://genixcms.org
-repo_url: https://github.com/semplon/GeniXCMS
-site_description: GeniXCMS is a Free and Opensource CMS. Built for simplicity and ease to manage. Using PHP and MySQL
-site_author: Puguh Wijayanto (www.metalgenix.com)
 pages:
 - ['index.md', 'Home']
 - ['about.md', 'About']
@@ -41,4 +37,3 @@ pages:
 - ['api/url.class.md', 'API', 'Url Class']
 - ['api/user.class.md', 'API', 'User Class']
 
-theme: 'readthedocs'
