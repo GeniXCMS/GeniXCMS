@@ -25,13 +25,13 @@ This CMSF is a starter point to build your own online applications. With already
 * MariaDB Server
 
 ### Installation ###
-Installation : https://github.com/semplon/GeniXCMS/wiki/Installation
+Installation : http://genixcms.readthedocs.org/en/latest/user-guide/installation/
 
 ### Showcase ###
-Showcase URL : http://blog.metalgenix.com
+Showcase URL : http://demo.genixcms.org
 
 ### License ###
-**GeniXCMS** License : **MIT License**
+**GeniXCMS** License : [**MIT License**](LICENSE)
 
 ### Website ###
 Link : http://www.genixcms.org
