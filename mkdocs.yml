@@ -1,4 +1,5 @@
 site_name: GeniXCMS
+use_directory_urls: true
 pages:
 - ['index.md', 'Home']
 - ['about.md', 'About']
