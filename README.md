@@ -28,7 +28,9 @@ This CMSF is a starter point to build your own online applications. With already
 Installation : http://genixcms.readthedocs.org/en/latest/user-guide/installation/
 
 ### Showcase ###
-Showcase URL : http://demo.genixcms.org
+Showcase URL : 
+- http://demo.genixcms.org
+- http://serieshop2.gxapp.top
 
 ### License ###
 **GeniXCMS** License : [**MIT License**](LICENSE)
