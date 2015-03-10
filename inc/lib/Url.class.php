@@ -41,12 +41,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Options::get('siteurl')."/".self::slug($vars)."/{$vars}";
+                $url = Site::$url."/".self::slug($vars)."/{$vars}";
                 break;
             
             default:
                 # code...
-                $url = Options::get('siteurl')."/index.php?post={$vars}";
+                $url = Site::$url."/index.php?post={$vars}";
                 break;
 
         }
@@ -66,12 +66,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Options::get('siteurl')."/".self::slug($vars).GX_URL_PREFIX;
+                $url = Site::$url."/".self::slug($vars).GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = Options::get('siteurl')."/index.php?page={$vars}";
+                $url = Site::$url."/index.php?page={$vars}";
                 break;
 
         }
@@ -92,12 +92,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Options::get('siteurl')."/".$vars."/".Typo::slugify(Categories::name($vars));
+                $url = Site::$url."/".$vars."/".Typo::slugify(Categories::name($vars));
                 break;
             
             default:
                 # code...
-                $url = Options::get('siteurl')."/index.php?cat={$vars}";
+                $url = Site::$url."/index.php?cat={$vars}";
                 break;
 
         }
@@ -129,12 +129,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Options::get('siteurl')."/sitemap".GX_URL_PREFIX;
+                $url = Site::$url."/sitemap".GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = Options::get('siteurl')."/index.php?page=sitemap";
+                $url = Site::$url."/index.php?page=sitemap";
                 break;
 
         }
@@ -154,12 +154,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Options::get('siteurl')."/rss".GX_URL_PREFIX;
+                $url = Site::$url."/rss".GX_URL_PREFIX;
                 break;
             
             default:
                 # code...
-                $url = Options::get('siteurl')."/index.php?rss";
+                $url = Site::$url."/index.php?rss";
                 break;
 
         }

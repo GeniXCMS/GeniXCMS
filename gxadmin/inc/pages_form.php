@@ -13,20 +13,39 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-    if (isset($data['alertgreen'])) {
+
+isset($_GET['token'])? $token = $_GET['token']: $token = TOKEN;
+($_GET['act'] == "edit")? $pagetitle = "Edit": $pagetitle = "New";
+($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token={$_GET['token']}": $act = "add";
+
+if (isset($data['alertgreen'])) {
+    # code...
+    echo "<div class=\"alert alert-success\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    ";
+    foreach ($data['alertgreen'] as $alert) {
         # code...
-        echo "<div class=\"alert alert-success\" >
-        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-            <span aria-hidden=\"true\">&times;</span>
-            <span class=\"sr-only\">Close</span>
-        </button>
-        ";
-        foreach ($data['alertgreen'] as $alert) {
-            # code...
-            echo "$alert\n";
-        }
-        echo "</div>";
+        echo "$alert\n";
     }
+    echo "</div>";
+}
+
+if (isset($data['alertred'])) {
+    # code...
+    echo "<div class=\"alert alert-danger\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>";
+    foreach ($data['alertred'] as $alert) {
+        # code...
+        echo "$alert\n";
+    }
+    echo "</div>";
+}
 
     if(isset($data['post'])) {
         foreach ($data['post'] as $p) {
@@ -54,7 +73,7 @@
         $unpub = "";
     }
 ?>
-<form action="" method="post" role="form" class="">
+<form action="index.php?page=pages&act=<?=$act?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
         <h1><i class="fa fa-file-o"></i> New Page 
@@ -114,5 +133,6 @@
         
     </div>
 </div>
+<input type="hidden" name="token" value="<?=$token;?>">
 </form>
 

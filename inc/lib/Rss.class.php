@@ -27,9 +27,9 @@ class Rss
         $xml .= "
             <rss version=\"2.0\">
                 <channel>
-                    <title>".Options::get('sitename')."</title>
-                    <link>".Options::get('siteurl')."</link>
-                    <description>".Options::get('sitedesc')."</description>
+                    <title>".Site::$name."</title>
+                    <link>".Site::$url."</link>
+                    <description>".Site::$desc."</description>
             ";
         foreach ($posts as $p) {
             # code...

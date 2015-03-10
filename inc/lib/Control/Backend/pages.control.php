@@ -23,23 +23,31 @@ switch ($act) {
         switch (isset($_POST['submit'])) {
             case true:
                 # code...
-                if (!isset($_POST['date']) || $_POST['date'] == "") {
-                    # code...
-                    $date = date("Y-m-d H:i:s");
-                }else{
-                    $date = $_POST['date'];
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
                 }
-                $vars = array(
-                                'title' => Typo::cleanX($_POST['title']),
-                                'content' => Typo::cleanX($_POST['content']),
-                                'date' => $date,
-                                'type' => 'page',
-                                'author' => Session::val('username'),
-                                'status' => $_POST['status'],
-                            );
-                //print_r($vars);
-                Posts::insert($vars);
-                $data['alertgreen'][] = "Page : {$_POST['title']} Added.";
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    if (!isset($_POST['date']) || $_POST['date'] == "") {
+                        # code...
+                        $date = date("Y-m-d H:i:s");
+                    }else{
+                        $date = $_POST['date'];
+                    }
+                    $vars = array(
+                                    'title' => Typo::cleanX($_POST['title']),
+                                    'content' => Typo::cleanX($_POST['content']),
+                                    'date' => $date,
+                                    'type' => 'page',
+                                    'author' => Session::val('username'),
+                                    'status' => $_POST['status'],
+                                );
+                    //print_r($vars);
+                    Posts::insert($vars);
+                    $data['alertgreen'][] = "Page : {$_POST['title']} Added.";
+                }
                 break;
             
             default:
@@ -55,23 +63,31 @@ switch ($act) {
         switch (isset($_POST['submit'])) {
             case true:
                 # code...
-                if (!isset($_POST['date']) || $_POST['date'] == "") {
-                    # code...
-                    $date = date("Y-m-d H:i:s");
-                }else{
-                    $date = $_POST['date'];
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
                 }
-                $moddate = date("Y-m-d H:i:s");
-                $vars = array(
-                                'title' => Typo::cleanX($_POST['title']),
-                                'content' => Typo::cleanX($_POST['content']),
-                                'modified' => $moddate,
-                                'date' => $date,
-                                'status' => $_POST['status'],
-                            );
-                //print_r($vars);
-                Posts::update($vars);
-                $data['alertgreen'][] = "Page : {$_POST['title']} Updated.";
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    if (!isset($_POST['date']) || $_POST['date'] == "") {
+                        # code...
+                        $date = date("Y-m-d H:i:s");
+                    }else{
+                        $date = $_POST['date'];
+                    }
+                    $moddate = date("Y-m-d H:i:s");
+                    $vars = array(
+                                    'title' => Typo::cleanX($_POST['title']),
+                                    'content' => Typo::cleanX($_POST['content']),
+                                    'modified' => $moddate,
+                                    'date' => $date,
+                                    'status' => $_POST['status'],
+                                );
+                    //print_r($vars);
+                    Posts::update($vars);
+                    $data['alertgreen'][] = "Page : {$_POST['title']} Updated.";
+                }
                 break;
             
             default:
@@ -91,7 +107,15 @@ switch ($act) {
         if(isset($_GET['act']) && $_GET['act'] == 'del'){
             if(isset($_GET['id'])){
                 $title = Posts::title($_GET['id']);
-                $del = Posts::delete($_GET['id']);
+                if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    $del = Posts::delete($_GET['id']);
+                }
                 //echo $title['error'];
                 if(isset($del['error'])){
                     $data['alertred'][] = $del['error'];
@@ -114,23 +138,47 @@ switch ($act) {
             
             case 'publish':
                 # code...
-                foreach ($post_id as $id) {
-                    # code...
-                    Posts::publish($id);
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($post_id as $id) {
+                        # code...
+                        Posts::publish($id);
+                    }
                 }
                 break;
             case 'unpublish':
                 # code...
-                foreach ($post_id as $id) {
-                    # code...
-                    Posts::unpublish($id);
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($post_id as $id) {
+                        # code...
+                        Posts::unpublish($id);
+                    }
                 }
                 break;
             case 'delete':
                 # code...
-                foreach ($post_id as $id) {
-                    # code...
-                    Posts::delete($id);
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if(isset($alertred)){
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($post_id as $id) {
+                        # code...
+                        Posts::delete($id);
+                    }
                 }
                 break;
             

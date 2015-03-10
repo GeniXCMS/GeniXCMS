@@ -52,7 +52,7 @@ class Install
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
-*/
+*/error_reporting(0);
 
 // DB CONFIG
 define('DB_HOST', '".Session::val('dbhost')."');
@@ -66,6 +66,15 @@ define('THEME', 'default');
 define('GX_LANG', 'english');
 define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
 define('GX_URL_PREFIX', '.html');
+
+
+
+
+
+
+
+
+// DON't REMOVE or EDIT THIS.
 define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
 
         ";
@@ -191,7 +200,7 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
         $user_detail = "CREATE TABLE IF NOT EXISTS `user_detail` (
                 `id` bigint(20) NOT NULL,
                   `userid` varchar(32) COLLATE latin1_general_ci NOT NULL,
-                  `fname` varchar(32) COLLATE latin1_general_ci NOT NULL,
+                  `fname` varchar(32) COLLATE latin1_general_ci NULL,
                   `lname` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
                   `sex` varchar(2) COLLATE latin1_general_ci DEFAULT NULL,
                   `birthplace` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
@@ -272,7 +281,8 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
             (null, 'ppsandbox', 'off'),
             (null, 'ppuser', ''),
             (null, 'pppass', ''),
-            (null, 'ppsign', '')";
+            (null, 'ppsign', ''),
+            (null, 'tokens', '')";
         $db->query($options);
     }
 }

@@ -121,7 +121,7 @@ class Posts
     }
 
     public static function recent($vars, $type = 'post') {
-        $sql = "SELECT * FROM `posts` WHERE `type` = '{$type}' ORDER BY `date` DESC LIMIT {$vars}";
+        $sql = "SELECT * FROM `posts` WHERE `type` = '{$type}' AND `status` = '1' ORDER BY `date` DESC LIMIT {$vars}";
         $posts = Db::result($sql);
         if(isset($posts['error'])){
             $posts['error'] = "No Posts found.";
@@ -167,7 +167,7 @@ class Posts
         if(is_array($vars)){
             //print_r($vars);
             $name = $vars['name'];
-            $where = "WHERE ";
+            $where = "WHERE `status` = '1' AND ";
             if(isset($vars['type'])) {
                 $where .= " `type` = '{$vars['type']}' AND ";
             }else{

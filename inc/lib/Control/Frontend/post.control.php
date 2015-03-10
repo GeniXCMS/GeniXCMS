@@ -17,17 +17,22 @@
 $post = $_GET[$vars];
 $data['posts'] = Db::result(
                     sprintf("SELECT * FROM `posts` 
-                            WHERE `id` = '%d' AND `type` = 'post' LIMIT 1",
+                            WHERE `id` = '%d' 
+                            AND `type` = 'post'
+                            AND `status` = '1' 
+                            LIMIT 1",
                             $post
                             )
                 );
 
 if(Db::$num_rows > 0) {
-    Theme::theme('header');
+    Theme::theme('header',$data);
     Theme::theme('single', $data);
     Theme::footer();
+    exit;
 }else{
     Control::error('404');
+    exit;
 }
 
 

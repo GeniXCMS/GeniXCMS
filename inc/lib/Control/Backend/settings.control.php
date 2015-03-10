@@ -14,48 +14,56 @@
 *
 */
 
-
+$data = "";
 switch (isset($_POST['change'])) {
     case '1':
         # code...
-        $vars = array();
-        if(isset($_FILES['logo']) && $_FILES['logo'] != ''){
-            $path = "/assets/images/";
-            $allowed = array('png', 'jpg', 'gif');
-            $upload = Upload::go('logo', $path, $allowed );
-            if(isset($upload['error']) != ''){
-                echo $upload['error'];
-            }else{
-                $vars['logo'] = $upload['path'];
-            }
+        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            // VALIDATE ALL
+            $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+        }
+        if(isset($alertred)){
+            $data['alertred'] = $alertred;
         }else{
-            unset($_POST['logo']);
-        }
-
-        
-        
-        //print_r($_POST);
-        $flip = array_flip($_POST);
-        $sql = "SELECT * FROM `options` WHERE `value` = 'on'";        
-        $q = Db::result($sql);
-        foreach($q as $ob) {
-            if( isset( $flip[$ob->name] ) ) {
-                $vars[$ob->name] = 'on';
-                //echo $ob->name;
+            $vars = array();
+            if(isset($_FILES['logo']) && $_FILES['logo'] != ''){
+                $path = "/assets/images/";
+                $allowed = array('png', 'jpg', 'gif');
+                $upload = Upload::go('logo', $path, $allowed );
+                if(isset($upload['error']) != ''){
+                    echo $upload['error'];
+                }else{
+                    $vars['logo'] = $upload['path'];
+                }
             }else{
-                $vars[$ob->name] = 'off';
-                //echo $ob->name;
+                unset($_POST['logo']);
             }
-        }
-        //print_r($ob);
-        foreach ($_POST as $key => $val) {
-            # code...
-            $vars[$key] = $val;
-        }
-        unset($vars['change']);
-        //print_r($vars);
-        Options::update($vars);
 
+            
+            
+            //print_r($_POST);
+            $flip = array_flip($_POST);
+            $sql = "SELECT * FROM `options` WHERE `value` = 'on'";        
+            $q = Db::result($sql);
+            foreach($q as $ob) {
+                if( isset( $flip[$ob->name] ) ) {
+                    $vars[$ob->name] = 'on';
+                    //echo $ob->name;
+                }else{
+                    $vars[$ob->name] = 'off';
+                    //echo $ob->name;
+                }
+            }
+            //print_r($ob);
+            foreach ($_POST as $key => $val) {
+                # code...
+                $vars[$key] = $val;
+            }
+            unset($vars['change']);
+            //print_r($vars);
+            Options::update($vars);
+            $data['alertgreen'][] = "New Settings Saved.";
+        }
         break;
     
     default:
@@ -63,7 +71,7 @@ switch (isset($_POST['change'])) {
         //print_r($data);
         break;
 }
-System::inc('settings');
+System::inc('settings',$data);
 
 /* End of file settings.control.php */
 /* Location: ./inc/lib/Control/Backend/settings.control.php */

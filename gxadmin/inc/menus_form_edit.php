@@ -21,12 +21,34 @@
     }
 
     //print_r($data['menus']);
-    if(isset($data['alertgreen']) ) {
-        echo "<div class=\"alert alert-success\">";
-            foreach ($data['alertgreen'] as $alert) {
-                echo "$alert"; 
-            }
-        echo "</div>"; }
+    if (isset($data['alertgreen'])) {
+    # code...
+    echo "<div class=\"alert alert-success\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    <ul>";
+    foreach ($data['alertgreen'] as $alert) {
+        # code...
+        echo "<li>$alert</li>\n";
+    }
+    echo "</ul></div>";
+}elseif (isset($data['alertred'])) {
+    # code...
+    //print_r($data['alertred']);
+    echo "<div class=\"alert alert-danger\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    <ul>";
+    foreach ($data['alertred'] as $alert) {
+        # code...
+        echo "<li>$alert</li>\n";
+    }
+    echo "</ul></div>";
+}
 ?>
 <form action="" method="POST">
 <div class="row">
@@ -48,11 +70,12 @@
     <div class="col-sm-4">
         <div class="form-group">
             <label>Parent Menu</label>
+            
             <select class="form-control" name="parent">
                 <option></option>
             <?php
                //echo($data['abc']);
-                //print_r($data['parent']);
+                //print_r($data['menus']);
                 foreach ($data['parent'] as $p) {
                     # code...
                     if($data['menus'][0]->parent == $p->id){
@@ -183,5 +206,6 @@
         </div>
     </div>
 </div>
+<input type="hidden" name="token" value="<?=$_GET['token'];?>">
 </form>
 </div>

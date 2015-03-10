@@ -55,6 +55,7 @@
                 <th>Title</th>
                 <th>Category</th>
                 <th>Date</th>
+                <th>Status</th>
                 <th>Edit/Delete</th>
                 <th>All <input type="checkbox" id="selectall"></th>
             </tr>
@@ -66,15 +67,21 @@
                     foreach ($data['posts'] as $p) {
                         # code...
                         //echo $p->id;
+                        if($p->status == '0'){
+                            $status = "UnPublished";
+                        }else{
+                            $status = "Published";
+                        }
                         echo "
                         <tr>
                             <td>{$p->id}</td>
                             <td><a href=\"".Url::post($p->id)."\" target=\"_new\">{$p->title}</a></td>
                             <td>".Categories::name($p->cat)."</td>
                             <td>{$p->date}</td>
+                            <td>{$status}</td>
                             <td>
-                                <a href=\"index.php?page=posts&act=edit&id={$p->id}\" class=\"label label-success\">Edit</a> 
-                                <a href=\"index.php?page=posts&act=del&id={$p->id}\" class=\"label label-danger\" 
+                                <a href=\"index.php?page=posts&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 
+                                <a href=\"index.php?page=posts&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
                                 onclick=\"return confirm('Are you sure you want to delete this item?');\">Delete</a>
                             </td>
                             <td>
@@ -98,12 +105,14 @@
             <th>Title</th>
             <th>Category</th>
             <th>Date</th>
+            <th>Status</th>
             <th>
             <select name="action" class="form-control">
                 <option value="publish">Publish</option>
                 <option value="unpublish">UnPublish</option>
                 <option value="delete">Delete</option>
             </select>
+            <input type="hidden" name="token" value="<?=TOKEN;?>">
             </th>
             <th>
                 <button type="submit" name="doaction" class="btn btn-danger">

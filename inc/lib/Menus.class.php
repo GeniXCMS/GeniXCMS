@@ -1,36 +1,68 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-* filename : Menus.class.php
-* version : 0.0.1 pre
-* build : 20141007
+/**
+* GeniXCMS - Content Management System
+* 
+* PHP Based Content Management System and Framework
+*
+* @package GeniXCMS
+* @since 0.0.1 build date 20141007
+* @version 0.0.1
+* @link https://github.com/semplon/GeniXCMS
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @copyright 2014-2015 Puguh Wijayanto
+* @license http://www.opensource.org/licenses/mit-license.php MIT
+*
+*/
+
+/**
+* Menus Class.
+* This class is for managing the menu at the dasboard. 
+*
+* @author Puguh Wijayanto (www.metalgenix.com)
+* @since 0.0.1
 */
 class Menus
 {
-
+    /**
+    * Menus Constructor.
+    * Nothing to construct
+    * @since 0.0.1
+    *
+    */
     public function __construct(){
-
     }
 
-    public static function getParent($parent='', $menuid = ''){
+
+    /**
+    * isHadParent Function
+    * 
+    * This function is to get the list of parent in certain conditions. There are 
+    * two paramaters to be inserted. 
+    * @param int $parent
+    * @param string $menuid
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
+    public static function isHadParent($parent='', $menuid = ''){
         if(isset($menuid)){
             $where = " AND `menuid` = '{$menuid}'";
         }else{
             $where = '';
         }
-        $sql = sprintf("SELECT * FROM `menus` WHERE `parent` = '%s' %s", $parent, $where);
+        if(isset($parent)){
+            $parent = " `parent` = '{$parent}'";
+        }else{
+            $parent = '1';
+        }
+        $sql = sprintf("SELECT * FROM `menus` WHERE %s %s", $parent, $where);
         $menu = Db::result($sql);
         return $menu;
     }
 
-    public static function isHadSub($parent, $menuid =''){
-        $sql = sprintf("SELECT * FROM `menus` WHERE `parent` = '%s' %s", $parent, $where);
+    public static function getParent($id){
+        $q = self::getId($id);
+        return $q[0]->parent;
     }
 
 
@@ -50,7 +82,7 @@ class Menus
             foreach ($menus as $m) {
                 # code...
                 if($m->parent == ''){
-                    $parent = self::getParent($m->id, $menuid);
+                    $parent = self::isHadParent($m->id, $menuid);
                     $n = Db::$num_rows;
                     if($n > 0 && $bsnav) { 
                         $class = "class=\"dropdown\"";
@@ -70,7 +102,7 @@ class Menus
                         $menu .= "<ul class=\"submenu {$class}\" role=\"dropdown\">";
                             foreach ($menus as $m2) {
                                 if($m2->parent == $m->id){
-                                    $parent = self::getParent($m2->id, $menuid);
+                                    $parent = self::isHadParent($m2->id, $menuid);
                                     $n = Db::$num_rows;
                                     if($n > 0 && $bsnav) { 
                                         $class = "class=\"dropdown\"";
@@ -88,7 +120,7 @@ class Menus
                                             $menu .= "<ul class=\"submenu {$class}\">";
                                             foreach ($menus as $m3) {
                                                 if($m3->parent == $m2->id){
-                                                    $parent = self::getParent($m3->id, $menuid);
+                                                    $parent = self::isHadParent($m3->id, $menuid);
                                                     $n = Db::$num_rows;
                                                     if($n > 0 && $bsnav) { 
                                                         $class = "class=\"dropdown\"";
@@ -107,7 +139,7 @@ class Menus
                                                             $menu .= "<ul class=\"submenu {$class}\">";
                                                             foreach ($menus as $m4) {
                                                                 if($m4->parent == $m3->id){
-                                                                    $parent = self::getParent($m4->id, $menuid);
+                                                                    $parent = self::isHadParent($m4->id, $menuid);
                                                                     $n = Db::$num_rows;
                                                                     if($n > 0 && $bsnav) { 
                                                                         $class = "class=\"dropdown\"";
@@ -167,10 +199,10 @@ class Menus
                     $menu .= "<li clas=\"form-inline\"><div class=\"row\">";
                     $menu .= "
                             <h4 class=\"col-md-10\">".$m->name." 
-                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}\" class=\"label label-primary pull-right\" >
+                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
                                     <span class=\"glyphicon glyphicon-edit\"></span>
                                 </a>
-                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}\" class=\"label label-danger pull-right\" >
+                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"label label-danger pull-right\" >
                                     <span class=\"glyphicon glyphicon-remove\"></span>
                                 </a>
                             </h4>
@@ -183,7 +215,7 @@ class Menus
                     
                     $parent = $m->id;
                     //echo $parent;
-                    $parent = self::getParent($m->id, $menuid);
+                    $parent = self::isHadParent($m->id, $menuid);
                     $n = Db::$num_rows;
                     if($n > 0){
                         $menu .= "<ul class=\"submenu {$class}\">";
@@ -191,10 +223,10 @@ class Menus
                                 if($m2->parent == $m->id){
                                     $menu .= "<li><div class=\"row\">";
                                     $menu .= "<h5 class=\"col-md-10\">".$m2->name."
-                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m2->id}\" class=\"label label-primary pull-right\" >
+                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m2->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
                                                     <span class=\"glyphicon glyphicon-edit\"></span>
                                                 </a>
-                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m2->id}\" class=\"label label-danger pull-right\" >
+                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m2->id}&token=".TOKEN."\" class=\"label label-danger pull-right\" >
                                                     <span class=\"glyphicon glyphicon-remove\"></span>
                                                 </a>
 
@@ -207,7 +239,7 @@ class Menus
                                         </div>
                                         
                                                 ";
-                                        $parent = self::getParent($m2->id, $menuid);
+                                        $parent = self::isHadParent($m2->id, $menuid);
                                         $n = Db::$num_rows;
                                         if($n > 0){
                                             $menu .= "<ul class=\"submenu {$class}\">";
@@ -215,10 +247,10 @@ class Menus
                                                 if($m3->parent == $m2->id){
                                                     $menu .= "<li><div class=\"row\">";
                                                     $menu .= "<h6 class=\"col-md-10\">".$m3->name."
-                                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m3->id}\" class=\"label label-primary pull-right\" >
+                                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m3->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
                                                                     <span class=\"glyphicon glyphicon-edit\"></span>
                                                                 </a>
-                                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m3->id}\" class=\"label label-danger pull-right\" >
+                                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m3->id}&token=".TOKEN."\" class=\"label label-danger pull-right\" >
                                                                     <span class=\"glyphicon glyphicon-remove\"></span>
                                                                 </a>
                                                             </h6>";
@@ -228,7 +260,7 @@ class Menus
                                                             </div>
                                                         </div>
                                                                 ";
-                                                        $parent = self::getParent($m3->id, $menuid);
+                                                        $parent = self::isHadParent($m3->id, $menuid);
                                                         $n = Db::$num_rows;
                                                         if($n > 0){
                                                             $menu .= "<ul class=\"submenu {$class}\">";
@@ -236,10 +268,10 @@ class Menus
                                                                 if($m4->parent == $m3->id){
                                                                     $menu .= "<li><div class=\"row\">";
                                                                     $menu .= "<h6 class=\"col-md-10\">".$m4->name."
-                                                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m4->id}\" class=\"label label-primary pull-right\" >
+                                                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m4->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
                                                                                     <span class=\"glyphicon glyphicon-edit\"></span>
                                                                                 </a>
-                                                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m4->id}\" class=\"label label-primary pull-right\" >
+                                                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m4->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
                                                                                     <span class=\"glyphicon glyphicon-remove\"></span>
                                                                                 </a>
                                                                             </h6>";
@@ -299,7 +331,7 @@ class Menus
 
     public static function getId($id=''){
         if(isset($id)){
-            $sql = sprintf("SELECT * FROM `menus` WHERE `id` = '%d' ORDER BY `order` ASC", $id);
+            $sql = sprintf("SELECT * FROM `menus` WHERE `id` = '%d'", $id);
             $menus = Db::result($sql);
             $n = Db::$num_rows;
         }else{

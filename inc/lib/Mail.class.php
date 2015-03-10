@@ -27,7 +27,7 @@ class Mail
     static $siteemail   = "";
     static $sitename    = "";
     
-    function __construct()
+    public function __construct()
     {
         # code...
         self::$smtphost    = Options::get('smtphost');

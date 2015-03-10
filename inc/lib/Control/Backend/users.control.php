@@ -23,6 +23,11 @@ switch ($act) {
         switch (isset($_POST['edituser'])) {
             case true:
                 # code...
+                //check token first 
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
                 // VALIDATE ALL
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = "User Exist!! Choose another userid.";
@@ -59,6 +64,8 @@ switch ($act) {
                 }else{
                     $data['alertred'] = $alertred;
                 }
+                
+                
                 break;
             
             default:
@@ -70,8 +77,14 @@ switch ($act) {
     case 'del':
             if(isset($_GET['id'])){
                 $user = User::userid($_GET['id']);
-                User::delete($_GET['id']);
-                $data['alertgreen'][] = "User : ".$user." Removed";
+                if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    // VALIDATE ALL
+                    $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }else{
+                    User::delete($_GET['id']);
+                    $data['alertgreen'][] = "User : ".$user." Removed";
+                }
+                
             }else{
                 $data['alertred'][] = "No ID selected";
             }
@@ -85,7 +98,12 @@ switch ($act) {
         switch (isset($_POST['adduser'])) {
             case true:
                 # code...
-                // VALIDATE ALL
+                // CHECK TOKEN FIRST 
+                //echo Token::isExist($_POST['token']);
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = "User Exist!! Choose another userid.";
                 }
@@ -108,9 +126,11 @@ switch ($act) {
                                     
                                 );   
                     User::create($vars);
+                    Token::remove(TOKEN);
                 }else{
                     $data['alertred'] = $alertred;
                 }
+
                 break;
             
             default:

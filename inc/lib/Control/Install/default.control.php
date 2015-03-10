@@ -95,6 +95,7 @@ switch ($step){
                 <br>
                 After You had set the permission, please refresh this page. 
                 <br>
+                <br>
                 or <a href=\"?step=4\" class=\"btn btn-primary\">Click Here</a>";
             }
         }catch (exception $e) {

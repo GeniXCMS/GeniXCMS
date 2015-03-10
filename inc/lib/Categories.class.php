@@ -68,14 +68,17 @@ class Categories
             }
             if (isset($vars['sort'])) {
                 $sort = " {$vars['sort']}";
+            }else{
+                $sort = " ASC";
             }
         }
         $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
+        //print_r($cat);
         $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
         if(Db::$num_rows > 0 ){
             foreach ($cat as $c) {
                 # code...
-                if($c->parent == ''){
+                if($c->parent == null || $c->parent == '0' ){
                     if(isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
                     $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
                     foreach ($cat as $c2) {

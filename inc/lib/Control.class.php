@@ -145,11 +145,11 @@ class Control
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1 
     */
-    public static function error ($vars="") {
+    public static function error ($vars="", $val='') {
         if( isset($vars) && $vars != "" ) {
             include(GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php');
         }else{
-            include(GX_PATH.'/inc/lib/Control/Error/404.control.php');
+            include(GX_PATH.'/inc/lib/Control/Error/unknown.control.php');
         }
     }
 

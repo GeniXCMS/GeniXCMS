@@ -19,11 +19,21 @@ class Site
 {
     static $editors;
     static $data;
+    static $url;
+    static $domain;
+    static $name;
+    static $key;
+    static $desc;
 
     public function __construct() {
         global $GLOBALS, $data;
         self::$editors =& $GLOBALS;
         self::$data =& $data;
+        self::$url = Options::get('siteurl');
+        self::$domain = Options::get('sitedomain');
+        self::$name = Options::get('sitename');
+        self::$key = Options::get('sitekeywords');
+        self::$desc = Options::get('sitedesc');
     }
 
     /* Call all Website Meta at Header
@@ -36,7 +46,7 @@ class Site
 
         if(is_array($data) && isset($data['posts'][0]->title)){
             
-            $sitenamelength = strlen(Options::get('sitename'));
+            $sitenamelength = strlen(self::$name);
             $limit = 70-$sitenamelength-6;
             $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)),0,$limit);
             $titlelength = strlen($data['posts'][0]->title);
@@ -54,8 +64,8 @@ class Site
         $meta = "
     <!--// Start Meta: Generated Automaticaly by GeniXCMS -->
     <!-- SEO: Title stripped 70chars for SEO Purpose -->
-    <title>{$cont_title}".Options::get('sitename')."</title>
-    <meta name=\"Keyword\" content=\"".Options::get('sitekeywords')."\">
+    <title>{$cont_title}".self::$name."</title>
+    <meta name=\"Keyword\" content=\"".self::$key."\">
     <!-- SEO: Description stripped 150chars for SEO Purpose -->
     <meta name=\"Description\" content=\"".self::desc($desc)."\">
     <meta name=\"Author\" content=\"Puguh Wijayanto | MetalGenix IT Solutions - www.metalgenix.com\">
@@ -77,7 +87,7 @@ class Site
         $bs = Options::get('use_bootstrap');
         if($bs == 'on'){
             $foot .= "
-    <link href=\"".Options::get('siteurl')."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+    <link href=\"".self::$url."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
         }
 
         $jquery = Options::get('use_jquery');
@@ -91,8 +101,8 @@ class Site
         if($bs == 'on'){
             $foot .= "
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            \t<script src=\"".Options::get('siteurl')."/assets/js/bootstrap.min.js\"></script>
-            \t<script src=\"".Options::get('siteurl')."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
+            \t<script src=\"".self::$url."/assets/js/bootstrap.min.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
         }
 
         $fa = Options::get('use_fontawesome');
@@ -111,11 +121,11 @@ class Site
             \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js\"></script>
             \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js\"></script>
 
-            \t<link href=\"".Options::get('siteurl')."/assets/css/summernote.css\" rel=\"stylesheet\">
-            \t<script src=\"".Options::get('siteurl')."/assets/js/summernote.min.js\"></script>
-            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
-            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-hello.js\"></script>
-            \t<script src=\"".Options::get('siteurl')."/assets/js/plugins/summernote-ext-video.js\"></script>
+            \t<link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
+            \t<script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-hello.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
             \t<script>
               \t$(document).ready(function() {
                 \t$('.editor').summernote({
@@ -168,8 +178,8 @@ class Site
 
         if(isset($GLOBALS['validator']) && $GLOBALS['validator'] == true){
             $foot .= "
-            \t<link href=\"".Options::get('siteurl')."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
-            \t<script src=\"".Options::get('siteurl')."/assets/js/bootstrapValidator.min.js\"></script>
+            \t<link href=\"".self::$url."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
+            \t<script src=\"".self::$url."/assets/js/bootstrapValidator.min.js\"></script>
             ";
 
             $foot .= $GLOBALS['validator_js'];
@@ -182,9 +192,9 @@ class Site
 
     public static function desc($vars){
         if(!empty($vars)){
-            $desc = substr(strip_tags(htmlspecialchars_decode($vars).". ".Options::get('sitedesc')),0,150);
+            $desc = substr(strip_tags(htmlspecialchars_decode($vars).". ".self::$desc),0,150);
         }else{
-            $desc = substr(Options::get('sitedesc'),0,150);
+            $desc = substr(self::$desc,0,150);
         }
         
         return $desc;
@@ -193,10 +203,10 @@ class Site
     public static function logo ($width='', $height='') {
         // check which logo is used, logourl or uploaded files.
         if( Options::get('is_logourl') == "on" && Options::get('logourl') != "" ) {
-            $logo = "<img src=\"".Options::get('siteurl').Options::get('logourl')."\"
+            $logo = "<img src=\"".self::$url.Options::get('logourl')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         }elseif( Options::get('is_logourl') == "off" && Options::get('logo') != "" ){
-            $logo = "<img src=\"".Options::get('siteurl').Options::get('logo')."\"
+            $logo = "<img src=\"".self::$url.Options::get('logo')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         }else{
             $logo = "<span class=\"mg genixcms-logo\"></span>";

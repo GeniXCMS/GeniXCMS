@@ -12,7 +12,38 @@
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
-*/?>
+*/
+
+if (isset($data['alertgreen'])) {
+    # code...
+    echo "<div class=\"alert alert-success\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    ";
+    foreach ($data['alertgreen'] as $alert) {
+        # code...
+        echo "$alert\n";
+    }
+    echo "</div>";
+}
+
+if (isset($data['alertred'])) {
+    # code...
+    echo "<div class=\"alert alert-danger\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>";
+    foreach ($data['alertred'] as $alert) {
+        # code...
+        echo "$alert\n";
+    }
+    echo "</div>";
+}
+
+?>
 <form action="" method="POST" enctype="multipart/form-data">
 <div class="row">
     <div class="col-md-12">
@@ -50,7 +81,7 @@
                   <div class="row">
                       <div class="col-sm-6 form-group">
                           <label>Website Name</label>
-                          <input type="text" name="sitename" value="<?=Options::get('sitename');?>" class="form-control">
+                          <input type="text" name="sitename" value="<?=Site::$name;?>" class="form-control">
                           <small>Your Website Name, Title</small>
                       </div>
                       <div class="col-sm-6 form-group">
@@ -66,12 +97,12 @@
                   <div class="row">
                       <div class="col-sm-6 form-group">
                           <label>Website Domain</label>
-                          <input type="text" name="sitedomain" value="<?=Options::get('sitedomain');?>" class="form-control">
+                          <input type="text" name="sitedomain" value="<?=Site::$domain;?>" class="form-control">
                           <small>Your Domain, eg: example.org</small>
                       </div>
                       <div class="col-sm-6 form-group">
                           <label>Website URL</label>
-                          <input type="text" name="siteurl" value="<?=Options::get('siteurl');?>" class="form-control">
+                          <input type="text" name="siteurl" value="<?=Site::$url;?>" class="form-control">
                           <small>Your Website URL, eg: http://www.example.org</small>
                       </div>
                   </div>
@@ -82,12 +113,12 @@
                   <div class="row">
                       <div class="col-sm-6 form-group">
                           <label>Website Keywords</label>
-                          <input type="text" name="sitekeywords" value="<?=Options::get('sitekeywords');?>" class="form-control">
+                          <input type="text" name="sitekeywords" value="<?=Site::$key;?>" class="form-control">
                           <small>Your Website Keywords, type your website main keywords.</small>
                       </div>
                       <div class="col-sm-6 form-group">
                           <label>Website Description</label>
-                          <textarea  name="sitedesc" class="form-control"><?=Options::get('sitedesc');?></textarea>
+                          <textarea  name="sitedesc" class="form-control"><?=Site::$desc;?></textarea>
                           <small>Your Website Description, describe your website.</small>
                       </div>
                   </div>
@@ -224,7 +255,7 @@
                               if($is_logourl == 'on' && $logourl != ''){
                                 $logoimg = "<img src=\"".Options::get('logourl')."\" class=\"clearfix\">";
                               }elseif($is_logourl == 'off' && $logo != ''){
-                                $logoimg = "<img src=\"".Options::get('siteurl').Options::get('logo')."\" class=\"clearfix\">";
+                                $logoimg = "<img src=\"".Site::$url.Options::get('logo')."\" class=\"clearfix\">";
                               }else{
                                 $logoimg = '';
                               }
@@ -562,6 +593,7 @@
 
     </div>
 </div>
+<input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>
 <script>
 $('#myTab a').click(function (e) {

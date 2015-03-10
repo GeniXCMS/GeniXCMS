@@ -17,21 +17,42 @@
 
 class System
 {
-
+    /** 
+    * GeniXCMS Version Variable 
+    * @return double
+    */
     static $version          = "0.0.1";
+
+    /** 
+    * GeniXCMS Version Release 
+    * @return string
+    */
     static $v_release        = "";
 
+    /**
+    * System Constructor.
+    * Initializing the system, check the config file, if exist run the config
+    * loader. 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public function __construct () {
         if (self::existConf()) {
             # code...
             self::config('config');
-            self::lang(GX_LANG);
+            self::lang(GX_LANG);            
         }else{
             GxMain::install();
         }
         
     }
 
+    /**
+    * System Library Loader.
+    * This will include library which is called.
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.1
+    */
     public static function lib($var) {
         include(GX_LIB.$var.'.class.php');
     }

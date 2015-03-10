@@ -38,6 +38,8 @@ class GxMain
         if (System::existConf()) {
             new System();
             new Db();
+            new Site();
+            Token::create();
         }else{
             $this->install();
         }

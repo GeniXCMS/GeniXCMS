@@ -16,8 +16,23 @@ $data[] = "";
 switch (isset($_POST['addcat'])) {
     case true:
         # code...
-        $slug = Typo::slugify($_POST['cat']);
-        $cat = Db::insert("INSERT INTO `cat` VALUES ('', '{$_POST['cat']}', '{$slug}', '{$_POST['parent']}', '' )");
+        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            // VALIDATE ALL
+            $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+        }
+        if(isset($alertred)){
+            $data['alertred'] = $alertred;
+        }else{
+            $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
+            $cat = Typo::cleanX($_POST['cat']);
+            $cat = Db::insert(
+                        sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '' )", 
+                            $cat, $slug, $_POST['parent']
+                        )
+                    );
+            //print_r($cat);
+            $data['alertgreen'][] = "Category Added: ".$_POST['cat'];
+        }
         break;
     
     default:
@@ -28,14 +43,23 @@ switch (isset($_POST['addcat'])) {
 switch (isset($_POST['updatecat'])) {
     case true:
         # code...
-        $vars = array(
-                    'table' => 'cat',
-                    'id' => $_POST['id'],
-                    'key' => array(
-                                'name' => $_POST['cat']
-                            )
-                );
-        $cat = Db::update($vars);
+        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            // VALIDATE ALL
+            $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+        }
+        if(isset($alertred)){
+            $data['alertred'] = $alertred;
+        }else{
+            $vars = array(
+                        'table' => 'cat',
+                        'id' => $_POST['id'],
+                        'key' => array(
+                                    'name' => Typo::cleanX($_POST['cat'])
+                                )
+                    );
+            $cat = Db::update($vars);
+            $data['alertgreen'][] = "Category Updated: ".$_POST['cat'];
+        }
         break;
     
     default:
@@ -44,7 +68,16 @@ switch (isset($_POST['updatecat'])) {
 }
 
 if(isset($_GET['act']) == 'del'){
-    Categories::delete($_GET['id']);
+    if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+        // VALIDATE ALL
+        $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+    }
+    if(isset($alertred)){
+        $data['alertred'] = $alertred;
+    }else{
+        Categories::delete($_GET['id']);
+        $data['alertgreen'][] = "Category Removed";
+    }
 }
 $data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC");
 $data['num'] = Db::$num_rows;

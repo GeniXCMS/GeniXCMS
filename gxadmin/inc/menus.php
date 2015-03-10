@@ -12,7 +12,37 @@
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
-*/?>
+*/
+
+if (isset($data['alertgreen'])) {
+    # code...
+    echo "<div class=\"alert alert-success\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    <ul>";
+    foreach ($data['alertgreen'] as $alert) {
+        # code...
+        echo "<li>$alert</li>\n";
+    }
+    echo "</ul></div>";
+}elseif (isset($data['alertred'])) {
+    # code...
+    //print_r($data['alertred']);
+    echo "<div class=\"alert alert-danger\" >
+    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        <span aria-hidden=\"true\">&times;</span>
+        <span class=\"sr-only\">Close</span>
+    </button>
+    <ul>";
+    foreach ($data['alertred'] as $alert) {
+        # code...
+        echo "<li>$alert</li>\n";
+    }
+    echo "</ul></div>";
+}
+?>
 <div class="row">
     <div class="col-md-12">
 
@@ -84,7 +114,7 @@
                                           </div>
                                           <div class=\"tab-pane\" id=\"{$k}additem\">
                                           ";
-                                              $data['parent'] = Menus::getParent('', $k);
+                                              $data['parent'] = Menus::isHadParent('', $k);
                                               //print_r($data['parent']);
                                               $data['menuid'] = $k;
                                               System::inc('menus_form', $data);
@@ -146,6 +176,7 @@
 
           </div>
           <div class="modal-footer">
+            <input type="hidden" name="token" value="<?=TOKEN;?>">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-success" name="submit">Save changes</button>
           </div>

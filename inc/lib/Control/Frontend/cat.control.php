@@ -26,6 +26,7 @@ $data['posts'] = Db::result(
                         sprintf("SELECT * FROM `posts` 
                             WHERE `type` = 'post' 
                             AND `cat` = '%d'
+                            AND `status` = '1'
                             ORDER BY `date` 
                             DESC LIMIT %d, %d",
                             $_GET['cat'], $offset, $data['max']
@@ -33,11 +34,13 @@ $data['posts'] = Db::result(
                         );
 $data['num'] = Db::$num_rows;
 if($data['num'] > 0) {
-    Theme::theme('header');
+    Theme::theme('header',$data);
     Theme::theme('cat', $data);
     Theme::footer();
+    exit;
 }else{
     Control::error('404');
+    exit;
 }
 
 /* End of file cat.control.php */

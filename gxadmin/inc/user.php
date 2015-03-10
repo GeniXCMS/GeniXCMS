@@ -75,9 +75,9 @@
                         <td>{$p->userid}</td>
                         <td>{$p->email}</td>
                         <td>
-                            <a href=\"index.php?page=users&act=edit&id={$p->id}\" class=\"label label-success\">Edit</a> 
-                            <a href=\"index.php?page=users&act=del&id={$p->id}\" class=\"label label-danger\" 
-                            onclick=\"return confirm('Are you sure you want to delete this item?');\">Delete</a>
+                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 
+                            <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
+                            onclick=\"return confirm('Are you sure you want to delete this?');\">Delete</a>
                         </td>
                     </tr>
                     ";
@@ -114,7 +114,7 @@
                 </div>
                 <div class="form-group">
                     <label>E-Mail</label>
-                    <input type="password" name="email" class="form-control">
+                    <input type="email" name="email" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Group Level</label>
@@ -129,6 +129,7 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-success" name="adduser">Save changes</button>
           </div>
+          <input type="hidden" name="token" value="<?=TOKEN;?>">
           </form>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

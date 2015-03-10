@@ -24,13 +24,14 @@ if(isset($_GET['paging'])){
 $data['posts'] = Db::result(
                         sprintf("SELECT * FROM `posts` 
                             WHERE `type` = 'post' 
+                            AND `status` = '1'
                             ORDER BY `date` 
                             DESC LIMIT %d, %d",
                             $offset, $data['max']
                             )
                         );
 $data['num'] = Db::$num_rows;
-Theme::theme('header');
+Theme::theme('header',$data);
 Theme::theme('index', $data);
 Theme::footer();
 

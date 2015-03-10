@@ -22,26 +22,21 @@ class Options
     }
 
     // $vars = array(
-    //             'title' => '',
-    //             'cat' => '',
-    //             'content' => '',
-    //             'date' => '',
-    //             'author' => '',
-    //             'type' => '',
-    //             'status' => ''
+    //             'name' => '',
+    //             'value' => ''
     //         );
     public static function insert($vars) {
         if(is_array($vars)) {
-            $slug = Typo::slugify($vars['title']);
-            $vars = array_merge($vars, array('slug' => $slug));
-            //print_r($vars);
             $ins = array(
                         'table' => 'options',
-                        'key' => $vars
+                        'name' => $vars['name'],
+                        'value' => $vars['value']
                     );
-            $post = Db::insert($ins);
+            $opt = Db::insert($ins);
+        }else{
+            Control::error('unknown','Format not Found, please in array');
         }
-        return $post;
+        return $opt;
     }
 
     public static function update($key, $val = '') {

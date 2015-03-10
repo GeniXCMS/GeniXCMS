@@ -48,8 +48,19 @@ class Db
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
         }elseif(DB_DRIVER == 'mysqli') {
-            self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            return self::$mysqli;
+            try {
+                self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                if (self::$mysqli->connect_error) {
+                    Control::error('db', self::$mysqli->connect_error);
+                    exit;
+                }else{
+                    return true;
+                }
+            } catch (exception $e) {
+                Control::error('db', $e->getMessage() );
+            }
+            
+            //return self::$mysqli;
         }
     }
 
@@ -93,8 +104,7 @@ class Db
         elseif(DB_DRIVER == 'mysqli') {
             $q = self::$mysqli->query($vars) ;
             if($q === false) {
-                user_error("Query failed: ".self::$mysqli->error."<br />\n$vars"); 
-                return false; 
+                Control::error('db',"Query failed: ".self::$mysqli->error."<br />\n"); 
             }
         }
         
@@ -265,7 +275,8 @@ class Db
         }elseif(DB_DRIVER == 'mysqli'){
             try {
                 if(!self::query($sql)){
-                    printf("<div class=\"alert alert-danger\">Errormessage: %s</div>\n", self::$mysqli->error);
+                    // printf("<div class=\"alert alert-danger\">Errormessage: %s</div>\n", self::$mysqli->error);
+                    //Control::error('db',self::$mysqli->error);
                 }else{
                     self::$last_id = self::$mysqli->insert_id;
                 }
