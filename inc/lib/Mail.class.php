@@ -44,6 +44,7 @@ class Mail
     //             'to_name'    => $to_name,
     //             'subject'    => $subject,
     //             'message'    => $message,
+    //             'msgtype'    => $msgtype,
     //         );
 
     public static function send ($vars) {
@@ -59,7 +60,7 @@ class Mail
         $to_name = $vars['to_name'];
         $subject = $vars['subject'];
         $message = $vars['message'];
-        
+        $msgtype = $vars['msgtype'];
         require_once GX_LIB.'/Vendor/PHPMailer/PHPMailerAutoload.php';
         // check if using plain mail or smtp
         $type = Options::get('mailtype');
@@ -80,7 +81,14 @@ class Mail
                 //Set the subject line
                 $mail->Subject = $subject;
                 //Replace the plain text body with one created manually
-                $mail->Body = $message;
+                if($msgtype == 'text'){
+                    $mail->ContentType = 'text/plain'; 
+                    $mail->IsHTML(false);
+                    $mail->Body = $message;
+                }else{
+                    $mail->msgHTML($message);
+                }
+                
 
                 $mail->send();
             } catch (phpmailerException $e) {
@@ -133,7 +141,13 @@ class Mail
                 //Set the subject line
                 $mail->Subject = $subject;
                 //Replace the plain text body with one created manually
-                $mail->Body = $message;
+                if($msgtype == 'text'){
+                    $mail->ContentType = 'text/plain'; 
+                    $mail->IsHTML(false);
+                    $mail->Body = $message;
+                }else{
+                    $mail->msgHTML($message);
+                }
                 $mail->send();
             } catch (phpmailerException $e) {
                 echo $e->errorMessage(); //Pretty error messages from PHPMailer

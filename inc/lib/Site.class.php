@@ -24,6 +24,7 @@ class Site
     static $name;
     static $key;
     static $desc;
+    static $email;
 
     public function __construct() {
         global $GLOBALS, $data;
@@ -34,6 +35,7 @@ class Site
         self::$name = Options::get('sitename');
         self::$key = Options::get('sitekeywords');
         self::$desc = Options::get('sitedesc');
+        self::$email = Options::get('siteemail');
     }
 
     /* Call all Website Meta at Header
