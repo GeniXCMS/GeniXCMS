@@ -46,6 +46,61 @@
         <hr />
     </div>
     <div class="col-sm-12">
+        <form action="index.php?page=posts" method="get">
+            <input type="hidden" name="page" value="posts">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5>Find Posts</h5>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search Posts">
+                    </div>
+                    
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                    <?php 
+                        $vars = array(
+                                    'name' => 'cat',
+
+                                    ); 
+                        echo Categories::dropdown($vars);
+                    ?>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="from">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="to">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select name="status" class="form-control">
+                            <option value="1">Published</option>
+                            <option value="0">Unpublished</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            Find Posts
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="token" value="<?=TOKEN;?>">
+        </form>
+    </div>
+    <div class="col-sm-12">
+
     <div class="table-responsive">
     <table class="table table-hover">
         <form action="" method="post">
@@ -66,6 +121,7 @@
                 if($data['num'] > 0){
                     foreach ($data['posts'] as $p) {
                         # code...
+                        //print_r($p);
                         //echo $p->id;
                         if($p->status == '0'){
                             $status = "UnPublished";

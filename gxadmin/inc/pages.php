@@ -45,6 +45,50 @@ if (isset($data['alertred'])) {
         <h1><i class="fa fa-file-o"></i> Pages <a href="index.php?page=pages&act=add" class="btn btn-primary pull-right">Add New</a></h1>
         <hr />
     </div>
+    <div class="col-sm-12">
+        <form action="index.php?page=pages" method="get">
+            <input type="hidden" name="page" value="pages">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5>Find Pages</h5>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search Pages">
+                    </div>
+                    
+                </div>
+                
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="from">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="to">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select name="status" class="form-control">
+                            <option value="1">Published</option>
+                            <option value="0">Unpublished</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            Find Posts
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="token" value="<?=TOKEN;?>">
+        </form>
+    </div>
     <div class="col-md-12">
         <form action="" method="post">
             <div class="table-responsive">

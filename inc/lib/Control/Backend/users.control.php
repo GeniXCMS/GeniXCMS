@@ -92,6 +92,40 @@ switch ($act) {
             $data['num'] = Db::$num_rows;
             System::inc('user', $data);
         break;
+    case 'active':
+            if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                // VALIDATE ALL
+                $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+            }else{
+                if(User::activate($_GET['id'])){
+                    $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Activated.";
+                }else{
+                    $data['alertred'][] = "User ".User::userid($_GET['id'])." Activation fail.";
+                }
+
+            }
+            $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+            $data['num'] = Db::$num_rows;
+            System::inc('user', $data);
+        break;
+        
+    case 'inactive':
+            if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                // VALIDATE ALL
+                $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+            }else{
+                if(User::deactivate($_GET['id'])){
+                    $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Deactivated.";
+                }else{
+                    $data['alertred'][] = "User ".User::userid($_GET['id'])." Deactivation fail.";
+                }
+            }
+            $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+            $data['num'] = Db::$num_rows;
+            System::inc('user', $data);
+        break;
+        
+
     default:
         # code...
         $data[] = "";
@@ -121,12 +155,14 @@ switch ($act) {
                                                     'userid' => $_POST['userid'],
                                                     'pass' => User::randpass($_POST['pass1']),
                                                     'email' => $_POST['email'],
-                                                    'group' => $_POST['group']
+                                                    'group' => $_POST['group'],
+                                                    'status' => '1'
                                                 ),
                                     
                                 );   
                     User::create($vars);
-                    Token::remove(TOKEN);
+                    Token::remove($_POST['token']);
+                    $data['alertgreen'][] = "User: {$_POST['userid']}, Added.";
                 }else{
                     $data['alertred'] = $alertred;
                 }
@@ -137,9 +173,114 @@ switch ($act) {
                 # code...
                 break;
         }
-        $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+
+        if(isset($_POST['action'])) {
+            $action = $_POST['action'];
+        }else{
+            $action = '';
+        }
+        if(isset($_POST['user_id'])) { $user_id = $_POST['user_id']; } else { $user_id = ""; }
+        switch ($action) {
+
+            case 'activate':
+                # code...
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if (isset($alertred)) {
+                    # code...
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($user_id as $id) {
+                        # code...
+                        User::activate($id);
+                    }
+                }
+                break;
+            case 'deactivate':
+                # code...
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if (isset($alertred)) {
+                    # code...
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($user_id as $id) {
+                        # code...
+                        User::deactivate($id);
+                    }
+                }
+                break;
+            case 'delete':
+                # code...
+                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    // VALIDATE ALL
+                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                }
+                if (isset($alertred)) {
+                    # code...
+                    $data['alertred'] = $alertred;
+                }else{
+                    foreach ($user_id as $id) {
+                        # code...
+                        User::delete($id);
+                    }
+                }
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+
+        // search query 
+        $where = " 1 ";
+        $qpage = "";
+        if(isset($_GET['q']) && $_GET['q'] != ''){
+            $where .= "AND (`userid` LIKE '%%{$_GET['q']}%%' OR `email` LIKE '%%{$_GET['q']}%%') ";
+            $qpage .= "&q={$_GET['q']}";
+        }
+        if(isset($_GET['from']) && $_GET['from'] != ''){
+            $where .= "AND `join_date` >= '{$_GET['from']}' ";
+            $qpage .= "&from={$_GET['from']}";
+        }
+        if(isset($_GET['to']) && $_GET['to'] != ''){
+            $where .= "AND `join_date` <= '{$_GET['to']}' ";
+            $qpage .= "&to={$_GET['to']}";
+        }
+        if(isset($_GET['status']) && $_GET['status'] != ''){
+            $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
+            $qpage .= "&status={$_GET['status']}";
+        }
+
+
+        $max = "10";
+        if(isset($_GET['paging'])){
+            $paging = $_GET['paging'];
+            $offset = ($_GET['paging']-1)*$max;
+        }else{
+            $paging = 1;
+            $offset = 0;
+        }
+
+        $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
         $data['num'] = Db::$num_rows;
         System::inc('user', $data);
+
+        $page = array(
+                    'paging' => $paging,
+                    'table' => 'user',
+                    'where' => $where,
+                    'max' => $max,
+                    'url' => 'index.php?page=users'.$qpage,
+                    'type' => 'pager'
+                );
+        echo Paging::create($page);
+
         break;
 }
 

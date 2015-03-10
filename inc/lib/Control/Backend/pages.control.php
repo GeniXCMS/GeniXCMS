@@ -187,6 +187,31 @@ switch ($act) {
                 break;
         }
         
+
+        // search query 
+        $where = "";
+        $qpage = "";
+        if(isset($_GET['q']) && $_GET['q'] != ''){
+            $where .= "AND (`title` LIKE '%%{$_GET['q']}%%' OR `content` LIKE '%%{$_GET['q']}%%') ";
+            $qpage .= "&q={$_GET['q']}";
+        }
+        if(isset($_GET['cat']) && $_GET['cat'] != ''){
+            $where .= "AND `cat` = '{$_GET['cat']}' ";
+            $qpage .= "&cat={$_GET['cat']}";
+        }
+        if(isset($_GET['from']) && $_GET['from'] != ''){
+            $where .= "AND `date` >= '{$_GET['from']}' ";
+            $qpage .= "&from={$_GET['from']}";
+        }
+        if(isset($_GET['to']) && $_GET['to'] != ''){
+            $where .= "AND `date` <= '{$_GET['to']}' ";
+            $qpage .= "&to={$_GET['to']}";
+        }
+        if(isset($_GET['status']) && $_GET['status'] != ''){
+            $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
+            $qpage .= "&status={$_GET['status']}";
+        }
+
         $max = "10";
         if(isset($_GET['paging'])){
             $paging = $_GET['paging'];
@@ -196,16 +221,16 @@ switch ($act) {
             $offset = 0;
         }
         
-        $data['posts'] = Db::result("SELECT * FROM `posts` WHERE `type` = 'page' ORDER BY `date` DESC LIMIT {$offset},{$max}");
+        $data['posts'] = Db::result("SELECT * FROM `posts` WHERE `type` = 'page' {$where} ORDER BY `date` DESC LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
         System::inc('pages', $data);
 
         $page = array(
                     'paging' => $paging,
                     'table' => 'posts',
-                    'where' => "`type` = 'page'",
+                    'where' => "`type` = 'page'".$where,
                     'max' => $max,
-                    'url' => 'index.php?page=pages',
+                    'url' => 'index.php?page=pages'.$qpage,
                     'type' => 'pager'
                 );
         echo Paging::create($page);

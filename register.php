@@ -31,16 +31,21 @@ try {
     $thm = new Theme();
     $db = new Db();
     $u = new User();
+    new Site();
     Session::start();
     System::gZip();
-    $thm->header();
+    Token::create();
+    $thm->header($data);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 
 if(isset($_POST['register']))
 {
-
+    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+        // VALIDATE ALL
+        $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+    }
 	if(!User::is_exist($_POST['userid'])){
         $alertred[] = "User Exist!! Choose another userid.";
     }
@@ -52,31 +57,39 @@ if(isset($_POST['register']))
     }
 
     if(!isset($alertred)){
-
+        $activation = Typo::getToken(60);
         $vars = array(
                         'user' => array(
-                                        'userid' => Typo::cleanX($_POST['userid']),
-                                        'pass' => User::randpass(Typo::cleanX($_POST['pass1'])),
+                                        'userid' => Typo::cleanX(Typo::strip($_POST['userid'])),
+                                        'pass' => User::randpass($_POST['pass1']),
                                         'email' => $_POST['email'],
-                                        'group' => '4'
+                                        'group' => '4',
+                                        'status' => '0',
+                                        'activation' => $activation
                                     ),
                         
                     );   
-        User::create($vars);
-        $alertgreen[] = "Thank You for Registering with Us. You can now <a href=\"login.php\">Login</a> with your username and password";
-        $sitename = Options::get('sitename');
+        if(User::create($vars)){
+            $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+        }else{
+            $alertred[] = "We can't create your account";
+        }
+        
+        
         $vars = array(
                 'to'      => $_POST['email'],
-                'to_name' => $_POST['username'],
-                'subject' => 'Welcome to '.Options::get('sitename'),
+                'to_name' => $_POST['userid'],
+                'subject' => 'Account Activation Needed at '.Site::$name,
                 'message' => '
-                            Hi '.$_POST['username'].', 
+                            Hi '.$_POST['userid'].', 
 
-                            Thank You for Registering with Us. You can now login : '.GX_URL.'/login.php with your username and password
+                            Thank You for Registering with Us. Please activate your account by clicking this link :
+                            '.Site::$url.'/register.php?activation='.$activation.'
 
                             Sincerely,
                             {$sitename}
-                            '
+                            ',
+                'mailtype' => 'text'
             );
         
 		Mail::send($vars);
@@ -88,144 +101,197 @@ if(isset($_POST['register']))
 	
 	
 }
+if (isset($_GET['activation'])) {
+    # code...
+    $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `activation` = '%s' LIMIT 1", $_GET['activation'] ));
+    if(Db::$num_rows > 0){
+        $act = Db::query(sprintf("UPDATE `user` SET `status` = '1',`activation` = NULL WHERE `id` = '%d' ", $usr[0]->id));
+        if($act){
+            $data['alertgreen'][] = "Your Account activated succesfully. You can now Login with your username and Password.";
+            $vars = array(
+                'to'      => $usr[0]->email,
+                'to_name' => $usr[0]->userid,
+                'subject' => 'Welcome to '.Site::$name,
+                'message' => '
+                            Hi '.$usr[0]->userid.', 
+
+                            Thank You for Registering with Us. Your Account is Activated. 
+                            You can now login : '.Site::$url.'/login.php with your username and password
+
+                            Sincerely,
+                            {$sitename}
+                            ',
+                'mailtype' => 'text'
+            );
+        
+        Mail::send($vars);
+        }else{
+            $data['alertred'][] = "Activation Failed.";
+        }
+        
+    }else{
+        $data['alertred'][] = "Activation Failed. No such code, or maybe already activated";
+    }
+}
+$loggedin = Session::val('loggedin');
+if(isset($loggedin)){
+    echo "<div class=\"alert alert-info\">You are already registered and Logged In. </div>";
+}else{
 ?>
 <div class="col-md-8">
 <?php
-	if(isset($alertred)) {
-		echo "
-		<div class=\"alert alert-danger\">
-		<button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+	if (isset($data['alertgreen'])) {
+        # code...
+        echo "<div class=\"alert alert-success\" >
+        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
             <span aria-hidden=\"true\">&times;</span>
             <span class=\"sr-only\">Close</span>
         </button>
-        <ul>
-			";
-			foreach($alertred as $alert)
-			{
-				echo "<li>".$alert."</li>";
-			}
-		echo"
-		</ul>
-		</div>";
-	}
-	if(isset($alertgreen)) {
-		echo "
-		<div class=\"alert alert-success\">
-		<button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+        ";
+        foreach ($data['alertgreen'] as $alert) {
+            # code...
+            echo "$alert\n";
+        }
+        echo "</div>";
+    }elseif (isset($data['alertred'])) {
+        # code...
+        //print_r($data['alertred']);
+        echo "<div class=\"alert alert-danger\" >
+        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
             <span aria-hidden=\"true\">&times;</span>
             <span class=\"sr-only\">Close</span>
         </button>
-			{$alertgreen}
-		</div>";
-	}
-	$loggedin = Session::val('loggedin');
-	if(isset($loggedin)){
-		echo "You are already registered and Logged In. ";
-	}else{
+        <ul>";
+        foreach ($data['alertred'] as $alert) {
+            # code...
+            echo "<li>$alert</li>\n";
+        }
+        echo "</ul></div>";
+    }
+	
 ?>
 <h1>Register</h1>
 <form action="" method="post" name="register" class="registerform">
 	<div class="form-group">
-		<label for="exampleInputEmail1">Username</label>
-		<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Username" name="userid" required="required" value="">
+		<label for="username">Username</label>
+		<input type="text" class="form-control" id="username" placeholder="Username" name="userid" required="required" value="">
 	</div>
 	<div class="form-group">
-		<label for="exampleInputPassword1">Password</label>
-		<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pass1" required="required">
+		<label for="password1">Password</label>
+		<input type="password" class="form-control" id="password1" placeholder="Password" name="pass1" required="required">
 	</div>
 	<div class="form-group">
-		<label for="exampleInputPassword1">Retype Password</label>
-		<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pass2" required="required">
+		<label for="password2">Retype Password</label>
+		<input type="password" class="form-control" id="password2" placeholder="Password" name="pass2" required="required">
 	</div>
 	<div class="form-group">
-		<label for="exampleInputEmail1">Email address</label>
-		<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" name="email" required="required" value="">
+		<label for="email">Email address</label>
+		<input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required="required" value="">
 	</div>
 	
 		<button type="submit" name="register" class="btn btn-success">Submit</button>
+        <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>
+<div class="clearfix">
+&nbsp;
 </div>
-
+</div>
+<div class="center-block col-sm-4">
+    <div class="alert alert-success">
+        Already have an account ? Login now !
+    </div>
+    <form class="form-signin" role="form" method="post" action="login.php">
+        <h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
+        <label class="checkbox">
+            <a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
+        </label>
+        <button class="btn btn-success" name="login" type="submit">Sign in</button>
+    </form>
+</div>
 <?php
 $js = "
-            <script>
-                $(document).ready(function() {
-                    $('.registerform').bootstrapValidator({
-                        message: 'This value is not valid',
-                        feedbackIcons: {
-                            valid: 'glyphicon glyphicon-ok',
-                            invalid: 'glyphicon glyphicon-remove',
-                            validating: 'glyphicon glyphicon-refresh'
-                        },
-                        fields: {
-                            userid: {
-                                message: 'The username is not valid',
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The username is required and cannot be empty'
-                                    },
-                                    stringLength: {
-                                        min: 6,
-                                        max: 30,
-                                        message: 'The username must be more than 6 and less than 30 characters long'
-                                    },
-                                    regexp: {
-                                        regexp: /^[a-zA-Z0-9_]+$/,
-                                        message: 'The username can only consist of alphabetical, number and underscore'
-                                    },
-                                    different: {
-                                        field: 'password',
-                                        message: 'The username and password cannot be the same as each other'
-                                    }
-                                }
+                <script>
+                    $(document).ready(function() {
+                        $('.registerform').bootstrapValidator({
+                            message: 'This value is not valid',
+                            feedbackIcons: {
+                                valid: 'glyphicon glyphicon-ok',
+                                invalid: 'glyphicon glyphicon-remove',
+                                validating: 'glyphicon glyphicon-refresh'
                             },
-                            pass1: {
-                                message: 'The password is not valid',
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The password is required and cannot be empty'
-                                    },
-                                    different: {
-                                        field: 'userid',
-                                        message: 'The password cannot be the same as username'
-                                    },
-                                    identical: {
-                                        field: 'pass2',
-                                        message: 'The password and its confirm are not the same'
+                            fields: {
+                                userid: {
+                                    message: 'The username is not valid',
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'The username is required and cannot be empty'
+                                        },
+                                        stringLength: {
+                                            min: 4,
+                                            max: 30,
+                                            message: 'The username must be more than 6 and less than 30 characters long'
+                                        },
+                                        regexp: {
+                                            regexp: /^[a-zA-Z0-9_]+$/,
+                                            message: 'The username can only consist of alphabetical, number and underscore'
+                                        },
+                                        different: {
+                                            field: 'password',
+                                            message: 'The username and password cannot be the same as each other'
+                                        }
                                     }
-                                }
-                            },
-                            pass2: {
-                                message: 'The password is not valid',
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The password is required and cannot be empty'
-                                    },
-                                    different: {
-                                        field: 'userid',
-                                        message: 'The password cannot be the same as username'
-                                    },
-                                    identical: {
-                                        field: 'pass1',
-                                        message: 'The password and its confirm are not the same'
+                                },
+                                pass1: {
+                                    message: 'The password is not valid',
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'The password is required and cannot be empty'
+                                        },
+                                        different: {
+                                            field: 'userid',
+                                            message: 'The password cannot be the same as username'
+                                        },
+                                        identical: {
+                                            field: 'pass2',
+                                            message: 'The password and its confirm are not the same'
+                                        }
                                     }
+                                },
+                                pass2: {
+                                    message: 'The password is not valid',
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'The password is required and cannot be empty'
+                                        },
+                                        different: {
+                                            field: 'userid',
+                                            message: 'The password cannot be the same as username'
+                                        },
+                                        identical: {
+                                            field: 'pass1',
+                                            message: 'The password and its confirm are not the same'
+                                        }
 
-                                }
-                            },
-                            email: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The email is required and cannot be empty'
-                                    },
-                                    emailAddress: {
-                                        message: 'The input is not a valid email address'
+                                    }
+                                },
+                                email: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'The email is required and cannot be empty'
+                                        },
+                                        emailAddress: {
+                                            message: 'The input is not a valid email address'
+                                        }
                                     }
                                 }
                             }
-                        }
+                        });
                     });
-                });
-            </script>
+                </script>
 ";
 $thm->validator($js);
 	}

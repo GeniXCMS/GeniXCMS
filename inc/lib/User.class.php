@@ -188,18 +188,36 @@ class User
     }
 
     public static function userid($id){
-        $usr = Db::result("SELECT * FROM `user` WHERE `id` = '{$id}' LIMIT 1");
+        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
         return $usr[0]->userid;
     }
 
     public static function email($id){
-        $usr = Db::result("SELECT * FROM `user` WHERE `id` = '{$id}' LIMIT 1");
+        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
         return $usr[0]->email;
     }
 
     public static function group($id){
-        $usr = Db::result("SELECT * FROM `user` WHERE `id` = '{$id}' LIMIT 1");
+        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
         return $usr[0]->group;
+    }
+
+    public static function activate($id){
+        $act = Db::query(sprintf("UPDATE `user` SET `status` = '1' WHERE `id` = '%d'", $id));
+        if($act){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function deactivate($id){
+        $act = Db::query(sprintf("UPDATE `user` SET `status` = '0' WHERE `id` = '%d'", $id));
+        if($act){
+            return true;
+        }else{
+            return false;
+        }
     }
        
 }
