@@ -20,6 +20,8 @@ An improvement probably added in the future. Below are the explanation each func
 
 Usage : `echo Categories::dropdown(array '$vars');`
 
+Return: `string`
+
 This function was intended to create an automatic dropdown options from available categories at the database. This means that the developer can create dropdown easily just fill in the parameters and a **select input** created automatically.
 
 Example:
@@ -62,7 +64,30 @@ See also:
 
 Usage: `echo Categories::name(int '$id');`
 
+Return: `string`
+
 This function will get the name of Category for the specific ID.
+
+example:
+
+we have a list of categories with sample below :
+
+
+
+| ID | Name  |
+|----|-------|
+| 1 | News  |
+| 2 | Article  |
+
+
+```
+$cat = Categories::name(1);
+echo $cat;
+```
+
+this will output `News`.
+
+
 
 See also:
 
@@ -73,7 +98,29 @@ See also:
 
 Usage: `echo Categories::getParent(int '$id');`
 
+Return: `int`
+
 This is to get the parent of a speicific ID.
+
+example:
+
+we have a list of categories with sample below :
+
+
+
+| ID | Name  | Parent |
+|----|-------|--------|
+| 1 | News  | 0
+| 2 | Article  | 0
+| 3 | Latest  | 1
+
+
+```
+$parent = Categories::getParent(3);
+echo $parent;
+```
+
+this will output `1`.
 
 See also:
 
@@ -84,6 +131,8 @@ See also:
 ## Delete Function
 
 Usage: `Categories::delete(int '$id');`
+
+Return: `bool`
 
 This function will delete Category with a specific ID.
 
