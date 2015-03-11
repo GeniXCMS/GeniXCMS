@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140928
-* @version 0.0.1
+* @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -32,6 +32,7 @@ try {
     $thm = new Theme();
     $db = new Db();
     $u = new User();
+    new Site();
     Session::start();
     System::gZip();
     $thm->admin('header');

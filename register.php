@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20141003
-* @version 0.0.1
+* @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -65,6 +65,7 @@ if(isset($_POST['register']))
                                         'email' => $_POST['email'],
                                         'group' => '4',
                                         'status' => '0',
+                                        'join_date' => date("Y-m-d H:i:s"),
                                         'activation' => $activation
                                     ),
                         

@@ -28,13 +28,12 @@ class Token
     }
 
     public static function create() {
-        self::ridOld();
         $length = "80";
         $token = "";
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
         $codeAlphabet.= "0123456789";
-        $codeAlphabet.= SECURITY;
+        //$codeAlphabet.= SECURITY;
         for($i=0;$i<$length;$i++){
             $token .= $codeAlphabet[Typo::crypto_rand_secure(0,strlen($codeAlphabet))];
         }
@@ -69,7 +68,7 @@ class Token
         if(is_array($token)){
             $newtoken = array_merge($token, $newtoken);
         }
-
+        $newtoken = self::ridOld($newtoken);
         $newtoken = json_encode($newtoken);
         return $newtoken;
     }
@@ -97,23 +96,13 @@ class Token
         }
     }
 
-    public static function ridOld() {
-        $json = Options::get('tokens');
-        $tokens = json_decode($json, true);
+    public static function ridOld($tokens) {
         $time = time();
         foreach ($tokens as $token => $value) {
-            # code...
-            //print_r($token);
-            if ($time - $value['time'] > 600) {
-                # code...
+            if ($time - $value['time'] > 3600) {
                 unset($tokens[$token]);
             }
         }
-        $tokens = json_encode($tokens);
-        if(Options::update('tokens',$tokens)){
-            return true;
-        }else{
-            return false;
-        }
+        return $tokens;
     }
 }

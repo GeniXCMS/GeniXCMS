@@ -9,7 +9,7 @@
     </div>
 
     <?=Site::footer();?>
-    <link href="<?=Options::get('siteurl');?>/assets/css/genixfont.css" rel="stylesheet">
-    <link href="<?=Options::get('siteurl');?>/inc/themes/default/css/blog.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/inc/themes/default/css/blog.css" rel="stylesheet">
   </body>
 </html>

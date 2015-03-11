@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.1
+* @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -46,7 +46,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.1
+* @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -187,7 +187,10 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
                   `pass` varchar(255) NOT NULL,
                   `confirm` varchar(255) DEFAULT NULL,
                   `group` enum('0','1','2','3','4','5') NOT NULL,
-                  `email` varchar(255) NOT NULL
+                  `email` varchar(255) NOT NULL,
+                  `join_date` datetime NOT NULL,
+                  `status` enum('0','1') NOT NULL,
+                  `activation` text
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($user);
 

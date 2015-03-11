@@ -25,7 +25,7 @@
             </button>
             <a class="navbar-brand" href="index.php">
                 <?=Site::logo('','50px');?>
-                <?=Options::get('sitename');?>
+                <?=Site::$name;?>
             </a>
         </div>
 

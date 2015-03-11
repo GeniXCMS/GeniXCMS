@@ -44,7 +44,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="<?=Options::get('siteurl');?>"><?=Options::get('sitename');?></a>
+              <a class="navbar-brand" href="<?=Site::$url;?>"><?=Options::get('sitename');?></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -62,7 +62,7 @@
     <div class="container">
 
       <div class="blog-header">
-        <h1 class="blog-title"><a href="<?=Options::get('siteurl');?>"><?=Options::get('sitename');?></a></h1>
+        <h1 class="blog-title"><a href="<?=Site::$url;?>"><?=Site::$name;?></a></h1>
         <p class="lead blog-description"><?=Options::get('siteslogan');?></p>
       </div>
 

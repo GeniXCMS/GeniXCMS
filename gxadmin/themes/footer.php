@@ -25,32 +25,32 @@
               //alert(cb.val());
         });
     </script>
-<!-- <link href="<?=Options::get('siteurl');?>/assets/css/dashboard.css" rel="stylesheet"> -->
+<!-- <link href="<?=Site::$url;?>/assets/css/dashboard.css" rel="stylesheet"> -->
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="<?=Options::get('siteurl');?>/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
 
     <!-- Morris Charts JavaScript -->
-    <script src="<?=Options::get('siteurl');?>/assets/js/plugins/morris/raphael.min.js"></script>
-    <script src="<?=Options::get('siteurl');?>/assets/js/plugins/morris/morris.min.js"></script>
-    <script src="<?=Options::get('siteurl');?>/assets/js/plugins/morris/morris-data.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/plugins/morris/raphael.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/plugins/morris/morris.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/plugins/morris/morris-data.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="<?=Options::get('siteurl');?>/assets/js/sb-admin-2.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/sb-admin-2.js"></script>
 
     <!-- MetisMenu CSS -->
-    <link href="<?=Options::get('siteurl');?>/assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- Timeline CSS -->
-    <link href="<?=Options::get('siteurl');?>/assets/css/plugins/timeline.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/plugins/timeline.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="<?=Options::get('siteurl');?>/assets/css/sb-admin-2.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
-    <link href="<?=Options::get('siteurl');?>/assets/css/plugins/morris.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/plugins/morris.css" rel="stylesheet">
 
 
-    <link href="<?=Options::get('siteurl');?>/assets/css/genixfont.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
   </body>
 </html>
 

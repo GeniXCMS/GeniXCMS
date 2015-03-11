@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20141003
-* @version 0.0.1
+* @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
@@ -40,7 +40,7 @@ try {
             }
             if(move_uploaded_file($_FILES['file']['tmp_name'], GX_PATH.'/assets/images/uploads/'.$_FILES['file']['name'])){
                 $tmp=GX_PATH.'/assets/images/uploads/'.$_FILES['file']['name'];
-                echo Options::get('siteurl').'/assets/images/uploads/'.$_FILES['file']['name'];
+                echo Site::$url.'/assets/images/uploads/'.$_FILES['file']['name'];
                 //echo '{"status":"success"}';
                 exit;
             }
