@@ -21,7 +21,7 @@ class System
     * GeniXCMS Version Variable 
     * @return double
     */
-    static $version          = "0.0.1";
+    static $version          = "0.0.2";
 
     /** 
     * GeniXCMS Version Release 
