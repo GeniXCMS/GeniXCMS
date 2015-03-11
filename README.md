@@ -25,7 +25,7 @@ This CMSF is a starter point to build your own online applications. With already
 * MariaDB Server
 
 ### Installation ###
-Installation : http://genixcms.readthedocs.org/en/latest/user-guide/installation/
+Installation : http://docs.genixcms.org/en/latest/user-guide/installation/
 
 ### Showcase ###
 Showcase URL : 
