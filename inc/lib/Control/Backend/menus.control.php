@@ -173,6 +173,8 @@ switch ($act) {
         }else{
             $data['alertred'][] = 'No ID Selected.';
         }
+        $data['menus'] = Options::get('menus');
+        System::inc('menus', $data);
         break;
     default:
         # code...
@@ -206,6 +208,7 @@ switch ($act) {
                     
                     $menu = json_encode($menu);
                     Options::update('menus', $menu);
+                    $data['alertgreen'][] = 'Menu Added';
                 }
                 break;
             
