@@ -159,16 +159,10 @@ if (isset($data['alertred'])) {
                           <small>Choose using Mail or SMTP</small>
                       </div>
                       <div class="col-sm-6 form-group">
-                          <label>Plain/SSL</label>
-                          <?php
-                              if(Options::get('smtpssl') == 0){ $o = "selected"; $s = "";}
-                              elseif(Options::get('smtpssl') == 1 ) {$s = "selected"; $o = "";}
-                          ?>
-                          <select name="smtpssl" class="form-control">
-                              <option value="0" <?=$o;?>>Plain</option>
-                              <option value="1" <?=$s;?>>SSL</option>
-                          </select>
-                          <small>Use Plain Authentification or SSL</small>
+                          <label>SMTP Port</label>
+                          <input type="text" name="smtpport" value="<?=Options::get('smtpport');?>" class="form-control">
+                              
+                          <small>Fill in with the SMTP Port Number</small>
                       </div>
                   </div>
                   

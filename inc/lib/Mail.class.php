@@ -33,7 +33,7 @@ class Mail
         self::$smtphost    = Options::get('smtphost');
         self::$smtpuser    = Options::get('smtpuser');
         self::$smtppass    = Options::get('smtppass');
-        self::$smtpssl     = Options::get('smtpssl');
+        self::$smtpport    = Options::get('smtpport');
         self::$siteemail   = Options::get('siteemail');
         self::$sitename    = Options::get('sitename');
     }
@@ -51,7 +51,7 @@ class Mail
         self::$smtphost    = Options::get('smtphost');
         self::$smtpuser    = Options::get('smtpuser');
         self::$smtppass    = Options::get('smtppass');
-        self::$smtpssl     = Options::get('smtpssl');
+        self::$smtpport     = Options::get('smtpport');
         self::$siteemail   = Options::get('siteemail');
         self::$sitename    = Options::get('sitename');
 
@@ -120,11 +120,7 @@ class Mail
                 //Set the hostname of the mail server
                 $mail->Host = self::$smtphost;
                 //Set the SMTP port number - likely to be 25, 465 or 587
-                if(self::$smtpssl == 1) {
-                    $mail->Port = 587;
-                }else{
-                    $mail->Port = 465;
-                }
+                $mail->Port = self::$smtpport;
                 
                 //Whether to use SMTP authentication
                 $mail->SMTPAuth = true;

@@ -262,7 +262,7 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
             (null, 'smtphost', ''),
             (null, 'smtpuser', ''),
             (null, 'smtppass', ''),
-            (null, 'smtpssl', '0'),
+            (null, 'smtpport', '25'),
             (null, 'timezone', '+7'),
             (null, 'paypalemail', ''),
             (null, 'robots', 'index, follow'),
