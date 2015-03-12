@@ -103,18 +103,61 @@ And Default controller is `default.control.php`
 
 ## ERROR Function
 
-Usage: `Control::error((string) $vars='');`
+Usage: `Control::error((string) $vars='',(string) $val'');`
 
 
 This function is to load the Error handler. The default is 404 not found. 
 
-There are some error already built. Especially for the system error, eg: `404`, `400`, `403`, `500`
+There are some error page already built. Especially for the system error, eg: `404`, `400`, `403`, `500`
 
 Those error page had specific header so when it loaded it will read by the system as it.
 
 Anothere error pages are : 
 
-- Database Error
-- Unknown Error
-- No Access error
+- Database Error `db`
+- Unknown Error `unknown`
+- No Access error `noaccess`
+
+### How to use Error Handler
+
+Using error handle is simple. Below are some examples how to use it.
+
+#### File Inclusion
+```
+$file = "/path/to/file.php";
+if ( file_exists($file) ) {
+    include($file);
+}else{
+    Control::error('404');
+}
+```
+
+
+#### No Access / Restricted Access
+
+```
+if(User::access(2)){
+   echo "You are ready to go.";
+}else{
+   Control::error('noaccess');
+}
+```
+
+
+#### Database Error 
+
+```
+$sql = 'SELECT * FROM `table` WHERE `id` = '{$id}'';
+$db = Db::result($sql);
+if(!$db){
+   Control::error('db');
+}
+```
+
+
+### Creating Your own Error Page
+
+If yo want to use your error handler, just create a file at Error directory inside the Control directory.
+
+And load it when there is an error with your desired error pages.
 
