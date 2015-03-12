@@ -147,10 +147,11 @@ if(User::access(2)){
 #### Database Error 
 
 ```
+$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 $sql = 'SELECT * FROM `table` WHERE `id` = '{$id}'';
-$db = Db::result($sql);
+$db = $mysqli->query($sql);
 if(!$db){
-   Control::error('db');
+   Control::error('db', $mysqli->error);
 }
 ```
 
