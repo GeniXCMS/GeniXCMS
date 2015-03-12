@@ -95,21 +95,36 @@ class Control
         
         if($_GET){
             //print_r($_GET);
-            $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss');
-
+            $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss','pay','paidorder','cancelorder');
+            $get =0;
             foreach ($_GET as $k => $v) {
-                # code...
-                //echo $k;
-                if(in_array($k, $arr)){
-                    self::incFront($k);
-                }elseif($k == "error"){
-                    self::error($v);
-                }elseif(!in_array($k, $arr) && $k != 'paging'){
-                    self::error('404');
+                    # code...
+                    //echo $k;
+                if (in_array($k,$arr ) || $k == 'paging') {
+                    $get = $get+1;
                 }else{
-                    self::incFront('default');
+                    $get = $get;
                 }
+
+
             }
+            //echo $get;
+            if ($get>0) {
+                foreach ($_GET as $k => $v) {
+                    if(in_array($k, $arr)){
+                        self::incFront($k);
+                    }elseif($k == "error"){
+                        self::error($v);
+                    }elseif(!in_array($k, $arr) && $k != 'paging'){
+                        //self::error('404');
+                    }else{
+                        self::incFront('default');
+                    }
+                }
+            }else{
+                self::error('404');
+            }
+            
             
         }else{
             self::incFront('default');
