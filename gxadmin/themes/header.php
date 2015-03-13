@@ -41,6 +41,8 @@
                   <li ><a href="index.php?page=pages"><i class="fa fa-file-o"></i> Pages</a></li>
                   <li ><a href="index.php?page=users"><i class="fa fa-users"></i> Users</a></li>
                   <li><a href="index.php?page=menus"><i class="fa fa-sitemap"></i> Menus</a></li>
+                  <li><a href="index.php?page=themes"><i class="fa fa-paint-brush"></i> Themes</a></li>
+                  <li><a href="index.php?page=modules"><i class="fa fa-plug"></i> Modules</a></li>
                   <li ><a href="index.php?page=settings"><i class="fa fa-wrench"></i> Settings</a></li>
                   <?php echo Mod::ModMenu();?>
                   <li><a href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
