@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20140928
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -52,6 +53,8 @@ class Mod
         fclose($handle);
         preg_match('/\* Name: (.*)\n\*/U', $data, $matches);
         $d['name'] = $matches[1];
+        preg_match('/\* Desc: (.*)\n\*/U', $data, $matches);
+        $d['desc'] = $matches[1];
         preg_match('/\* Version: (.*)\n\*/U', $data, $matches);
         $d['version'] = $matches[1];
         preg_match('/\* Build: (.*)\n\*/U', $data, $matches);
@@ -68,10 +71,13 @@ class Mod
     }
 
     public static function ModMenu(){
-        $mod = self::modList();
+        $json = Options::get('modules');
+        $mod = json_decode($json, true);
+        //$mod = self::modList();
         //print_r($mod);
         if(is_array($mod)){
             $list = '';
+            asort($mod);
             foreach ($mod as $m) {
                 # code...
                 $data = self::data($m);
@@ -82,6 +88,8 @@ class Mod
                 }
                 $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['icon']." ".$data['name']."</a></li>";
             }
+        }else{
+            $list = "";
         }
         return $list;
     }
@@ -90,6 +98,135 @@ class Mod
         include($dir."/".$vars.".php");
     }
 
+    public static function activate($mod){
+        $json = Options::get('modules');
+        $mods = json_decode($json, true);
+        //print_r($mods);
+        if (!is_array($mods) || $mods == "") {
+            $mods = array();
+        }
+        if (!in_array($mod, $mods)) {
+            # code...
+            $mods = array_merge($mods, array($mod));
+        }
+        
+
+        $mods = json_encode($mods);
+
+        $mods = Options::update('modules', $mods);
+        if($mods){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function deactivate($mod){
+        $mods = Options::get('modules');
+        $mods = json_decode($mods, true);
+        if (!is_array($mods) || $mods == "") {
+            $mods = array();
+        }
+        //print_r($mods);
+        $arr = "";
+        for ($i=0;$i<count($mods);$i++) {
+            # code...
+            if ($mods[$i] == $mod) {
+                //unset($mods[$i]);
+            }else{
+                $arr[] = $mods[$i];
+            }
+            
+        }
+        //print_r($arr);
+        //asort($mods);
+        $mods = json_encode($arr);
+        $mods = Options::update('modules', $mods);
+        if($mods){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function isActive($mod){
+        $json = Options::get('modules');
+        $mods = json_decode($json, true);
+        //print_r($mods);
+        if (!is_array($mods) || $mods == "") {
+            $mods = array();
+        }
+
+        if(in_array($mod, $mods)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function loader() {
+        $data = "";
+        if (isset($_GET['page']) && $_GET['page'] == "modules") {
+            if (isset($_GET['act'])) {
+
+                if ($_GET['act'] == 'activate') {
+
+                    if(!Token::isExist($_GET['token'])){
+                        $alertred[] = TOKEN_NOT_EXIST;
+                    }
+
+                    if(!isset($alertred)){
+                        self::activate($_GET['modules']);
+                    }else{
+                        $_GLOBALS['alertred'] = $alertred;
+                    }
+                }elseif($_GET['act'] == 'deactivate'){
+                    if(!Token::isExist($_GET['token'])){
+                        $alertred[] = TOKEN_NOT_EXIST;
+                    }
+
+                    if(!isset($alertred)){
+                        self::deactivate($_GET['modules']);
+                    }else{
+                        $_GLOBALS['alertred'] = $alertred;
+                    }
+                }elseif ($_GET['act'] == 'remove') {
+                    if(!Token::isExist($_GET['token'])){
+                        $alertred[] = TOKEN_NOT_EXIST;
+                    }
+                    if (Mod::isActive($_GET['modules'])) {
+                        $alertred[] = "Module is Active. Please deactivate first.";
+                    }
+                    if(!isset($alertred)){
+                        self::deactivate($_GET['modules']);
+                        Files::delTree(GX_MOD."/".$_GET['modules']);
+                    }else{
+                        $_GLOBALS['alertred'] = $alertred;
+                    }
+                }
+                
+            }
+        }
+
+        $json = Options::get('modules');
+        $mods = json_decode($json, true);
+        if (!is_array($mods) || $mods == "") {
+            $mods = array();
+        }
+        foreach ($mods as $m) {
+            self::load($m);
+        }
+
+        return $data;
+
+    }
+
+    public static function load($mod) {
+        $file = GX_MOD."/".$mod."/index.php";
+        if(file_exists($file)){
+            include ($file);
+        }
+    }
 }
 
 /* End of file Mod.class.php */

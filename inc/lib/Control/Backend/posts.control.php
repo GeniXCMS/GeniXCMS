@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20141006
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -25,7 +26,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
@@ -68,7 +69,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -109,7 +110,7 @@ switch ($act) {
             if(isset($_GET['id'])){
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -143,7 +144,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -159,7 +160,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -175,7 +176,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...

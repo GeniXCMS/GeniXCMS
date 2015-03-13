@@ -18,7 +18,7 @@ switch (isset($_POST['addcat'])) {
         # code...
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
-            $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+            $alertred[] = TOKEN_NOT_EXIST;
         }
         if(isset($alertred)){
             $data['alertred'] = $alertred;
@@ -45,7 +45,7 @@ switch (isset($_POST['updatecat'])) {
         # code...
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
-            $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+            $alertred[] = TOKEN_NOT_EXIST;
         }
         if(isset($alertred)){
             $data['alertred'] = $alertred;
@@ -70,7 +70,7 @@ switch (isset($_POST['updatecat'])) {
 if(isset($_GET['act']) == 'del'){
     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
         // VALIDATE ALL
-        $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+        $alertred[] = TOKEN_NOT_EXIST;
     }
     if(isset($alertred)){
         $data['alertred'] = $alertred;

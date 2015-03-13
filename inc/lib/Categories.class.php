@@ -8,12 +8,12 @@
 * @since 0.0.1 build date 20140930
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
 
 /**
 * Categories Class
@@ -85,7 +85,8 @@ class Categories
                         # code...
                         if($c2->parent == $c->id){
                             if(isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                            $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">&nbsp;&nbsp;&nbsp;{$c2->name}</option>";
+                            $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">
+                                    &nbsp;&nbsp;&nbsp;{$c2->name}</option>";
                         }
                     }
                 }
@@ -101,7 +102,7 @@ class Categories
     * Category Name function
     *
     * This will get the specified ID category name
-    * @param string $id
+    * @param int $id
     * @uses Db::result();
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
@@ -109,7 +110,8 @@ class Categories
     */
     public static function name($id) {
         if(isset($id)){
-            $cat = Db::result("SELECT `name` FROM `cat` WHERE `id` = '{$id}' LIMIT 1");
+            $cat = Db::result("SELECT `name` FROM `cat` 
+                                WHERE `id` = '{$id}' LIMIT 1");
             //print_r($cat);
             if(isset($cat['error'])){
                 return '';
@@ -128,14 +130,15 @@ class Categories
     * Category Get Parent function
     *
     * This will get the specified ID category parent data
-    * @param string $id
+    * @param int $id
     * @uses Db::result();
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
     public static function getParent($id=''){
-        $sql = sprintf("SELECT `parent` FROM `cat` WHERE `id` = '%d'", $id);
+        $sql = sprintf("SELECT `parent` FROM `cat` 
+                        WHERE `id` = '%d'", $id);
         $menu = Db::result($sql);
         return $menu;
     }
@@ -144,7 +147,7 @@ class Categories
     * Category Delete function
     *
     * This will delete the specified ID category data
-    * @param string $id
+    * @param int $id
     * @param array $sql
     * @uses self::getParent();
     * @uses Db::delete();
@@ -163,14 +166,22 @@ class Categories
                                     'id' => $id
                                 )
                 );
-        $menu = Db::delete($sql);
-        // check all posts with this category
-        $post = Db::result("SELECT `id` FROM `posts` WHERE `cat` = '{$id}'");
+        $cat = Db::delete($sql);
+        if($cat){
+            return true;
+        }else{
+            return false;
+        }
+        // check all posts with this category and move to parent categories
+        $post = Db::result("SELECT `id` FROM `posts` 
+                            WHERE `cat` = '{$id}'");
         $npost = Db::$num_rows;
         
         //print_r($parent);
         if($npost > 0){
-            $sql = "UPDATE `posts` SET `cat` = '{$parent[0]->parent}' WHERE `cat` = '{$id}'";
+            $sql = "UPDATE `posts` 
+                    SET `cat` = '{$parent[0]->parent}' 
+                    WHERE `cat` = '{$id}'";
             Db::query($sql);
         }
         

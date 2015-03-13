@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20141006
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,7 +27,7 @@ switch ($act) {
                 //check token first 
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 // VALIDATE ALL
                 if(!User::is_exist($_POST['userid'])){
@@ -79,7 +80,7 @@ switch ($act) {
                 $user = User::userid($_GET['id']);
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
-                    $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $data['alertred'][] = TOKEN_NOT_EXIST;
                 }else{
                     User::delete($_GET['id']);
                     $data['alertgreen'][] = "User : ".$user." Removed";
@@ -95,7 +96,7 @@ switch ($act) {
     case 'active':
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::activate($_GET['id'])){
                     $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Activated.";
@@ -112,7 +113,7 @@ switch ($act) {
     case 'inactive':
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $data['alertred'][] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::deactivate($_GET['id'])){
                     $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Deactivated.";
@@ -136,7 +137,7 @@ switch ($act) {
                 //echo Token::isExist($_POST['token']);
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = "User Exist!! Choose another userid.";
@@ -187,7 +188,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -203,7 +204,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...
@@ -219,7 +220,7 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = "Token not exist, or your time has expired. Please refresh your browser to get a new token.";
+                    $alertred[] = TOKEN_NOT_EXIST;
                 }
                 if (isset($alertred)) {
                     # code...

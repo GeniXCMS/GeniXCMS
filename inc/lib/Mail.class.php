@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20150126
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -23,7 +24,7 @@ class Mail
     static $smtphost    = "";
     static $smtpuser    = "";
     static $smtppass    = "";
-    static $smtpssl     = "";
+    static $smtpport    = "";
     static $siteemail   = "";
     static $sitename    = "";
     

@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20140925
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -93,6 +94,69 @@ class Theme
 
     public static function install ($var) {
         include(GX_PATH.'/gxadmin/themes/install/'.$var.'.php');
+    }
+
+
+    public static function thmList(){
+        //$mod = '';
+        $handle = dir(GX_THEME);
+        while (false !== ($entry = $handle->read())) {
+            if ($entry != "." && $entry != ".." ) {
+                    $dir = GX_THEME.$entry;
+                    if(is_dir($dir) == true){
+                        $thm[] = basename($dir);
+                    } 
+            }
+        }
+        
+        $handle->close();
+        return $thm;
+    }
+
+    public static function activate($thm) {
+        if (Options::update('themes', $thm)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public static function data($vars){
+        $file = GX_THEME.'/'.$vars.'/themeinfo.php';
+        $handle = fopen($file, 'r');
+        $data = fread($handle, filesize($file));
+        fclose($handle);
+        preg_match('/\* Name: (.*)\n\*/U', $data, $matches);
+        $d['name'] = $matches[1];
+        preg_match('/\* Desc: (.*)\n\*/U', $data, $matches);
+        $d['desc'] = $matches[1];
+        preg_match('/\* Version: (.*)\n\*/U', $data, $matches);
+        $d['version'] = $matches[1];
+        preg_match('/\* Build: (.*)\n\*/U', $data, $matches);
+        $d['build'] = $matches[1];
+        preg_match('/\* Developer: (.*)\n\*/U', $data, $matches);
+        $d['developer'] = $matches[1];
+        preg_match('/\* URI: (.*)\n\*/U', $data, $matches);
+        $d['url'] = $matches[1];
+        preg_match('/\* License: (.*)\n\*/U', $data, $matches);
+        $d['license'] = $matches[1];
+        preg_match('/\* Icon: (.*)\n\*/U', $data, $matches);
+        $d['icon'] = $matches[1];
+        return $d;
+    }
+
+    public static function isActive($thm){
+        if(Options::get('themes') === $thm){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function loader(){
+        $theme = Options::get('themes');
+        define('THEME', $theme);
     }
 }
 
