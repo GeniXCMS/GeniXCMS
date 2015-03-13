@@ -62,7 +62,6 @@ if (isset($_GET['act'])) {
             $alertred[] = "Theme is Active. Please deactivate first.";
         }
         if(!isset($alertred)){
-            Theme::deactivate($_GET['themes']);
             Files::delTree(GX_THEMES."/".$_GET['themes']);
             $data['alertgreen'][] = THEME_REMOVED;
         }else{
