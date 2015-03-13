@@ -8,6 +8,7 @@
 * @since 0.0.2 build date 20150309
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -76,6 +77,9 @@ class Token
     public static function isExist($token){
         $json = Options::get('tokens');
         $tokens = json_decode($json, true);
+        if(!is_array($tokens) || $tokens == ""){
+            $tokens = array();
+        }
         if(array_key_exists($token, $tokens)){
             $call = true;
         }else{
