@@ -36,6 +36,8 @@ try {
     Session::start();
     System::gZip();
     Token::create();
+    Mod::loader();
+    Theme::loader();
     $thm->header($data);
 } catch (Exception $e) {
     echo $e->getMessage();
