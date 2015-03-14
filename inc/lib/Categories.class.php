@@ -109,6 +109,7 @@ class Categories
     * @since 0.0.1
     */
     public static function name($id) {
+        $id = sprintf('%d', $id);
         if(isset($id)){
             $cat = Db::result("SELECT `name` FROM `cat` 
                                 WHERE `id` = '{$id}' LIMIT 1");
@@ -158,6 +159,7 @@ class Categories
     * @since 0.0.1
     */
     public static function delete($id){
+        $id = sprintf('%d', $id);
         $parent = self::getParent($id);
 
         $sql = array(

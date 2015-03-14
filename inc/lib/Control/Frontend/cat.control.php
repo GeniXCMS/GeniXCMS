@@ -23,16 +23,17 @@ if(isset($_GET['paging'])){
 }else{
     $offset = 0;
 }
+$cat = Db::$mysqli->real_escape_string(Typo::Xclean($_GET['cat']));
 $data['posts'] = Db::result(
-                        sprintf("SELECT * FROM `posts` 
-                            WHERE `type` = 'post' 
-                            AND `cat` = '%d'
-                            AND `status` = '1'
-                            ORDER BY `date` 
-                            DESC LIMIT %d, %d",
-                            $_GET['cat'], $offset, $data['max']
-                            )
-                        );
+                sprintf("SELECT * FROM `posts` 
+                    WHERE `type` = 'post' 
+                    AND `cat` = '%d'
+                    AND `status` = '1'
+                    ORDER BY `date` 
+                    DESC LIMIT %d, %d",
+                    $cat, $offset, $data['max']
+                    )
+                );
 $data['num'] = Db::$num_rows;
 if($data['num'] > 0) {
     Theme::theme('header',$data);

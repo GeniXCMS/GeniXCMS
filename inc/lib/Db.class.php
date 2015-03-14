@@ -124,6 +124,7 @@ class Db
     * @since 0.0.1
     */
     public static function result ($vars) {
+        //print_r($vars);
         if(DB_DRIVER == 'mysql') {
             mysql_query('SET CHARACTER SET utf8');
             $q = mysql_query($vars)  or die(mysql_error());
@@ -139,6 +140,7 @@ class Db
            
         } 
         elseif(DB_DRIVER == 'mysqli') {
+           //echo $vars;
             $q = self::query($vars);
             $n = $q->num_rows;
             if($n > 0){

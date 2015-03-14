@@ -216,6 +216,13 @@ class Site
         }
         return $logo;
     }
+
+    public static function generated(){
+        $end_time = microtime(TRUE);
+        $time_taken = $end_time - $GLOBALS['start_time'];
+        $time_taken = round($time_taken,5);
+        echo '<center><small>Page generated in '.$time_taken.' seconds.</small></center>';
+    }
 }
 
 /* End of file Site.class.php */

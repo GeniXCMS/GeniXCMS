@@ -62,8 +62,12 @@ if (isset($_GET['act'])) {
             $alertred[] = "Theme is Active. Please deactivate first.";
         }
         if(!isset($alertred)){
-            Files::delTree(GX_THEMES."/".$_GET['themes']);
-            $data['alertgreen'][] = THEME_REMOVED;
+            if(Files::delTree(GX_THEME."/".$_GET['themes'])){
+                $data['alertgreen'][] = THEME_REMOVED;
+            }else{
+                $data['alertred'][] = "Theme Cannot removed. Please check if You had permission to remove the files.";
+            }
+            
         }else{
             $data['alertred'] = $alertred;
         }
