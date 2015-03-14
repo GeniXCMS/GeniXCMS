@@ -77,7 +77,9 @@ switch ($step){
                             'userid' => Session::val('adminuser'),
                             'pass' => User::randpass(Session::val('adminpass')),
                             'email' => 'admin@'.Session::val('sitedomain'),
-                            'group' => '0'
+                            'group' => '0',
+                            'join_date' => date("Y-m-d H:i:s"),
+                            'status' => '1'
                             ),
                         'detail' => array(
                             'userid' => Session::val('adminuser'),

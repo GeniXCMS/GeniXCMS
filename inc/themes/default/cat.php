@@ -20,7 +20,7 @@
         $paging = array(
                         'paging' => $paging,
                         'table' => 'posts',
-                        'where' => '`type` = \'post\' AND `cat` = \''.$_GET['cat'].'\'',
+                        'where' => '`type` = \'post\' AND `cat` = \''.sprintf("%d",$_GET['cat']).'\'',
                         'max' => $data['max'],
                         'url' => $url,
                         'type' => 'pager'
