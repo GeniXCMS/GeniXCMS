@@ -20,10 +20,10 @@
                             </a>
                         </li>
                       <?php } 
-                        if(null != Options::get('facebook')){
+                        if(null != Options::get('fbacc')){
                       ?>
                         <li>
-                            <a href="https://facebook.com/fbacc">
+                            <a href="https://facebook.com/<?=Options::get('fbacc');?>">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
