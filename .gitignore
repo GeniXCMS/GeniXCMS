@@ -1,1 +1,6 @@
 inc/config/*
+docs
+Tests
+.travis.yml
+mkdocs.yml
+phpunit.xml
