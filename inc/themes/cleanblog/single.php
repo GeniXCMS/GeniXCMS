@@ -24,9 +24,7 @@
                         foreach ($data['posts'] as $p) {
                             # code...
                             echo "
-                            <div class=\"blog-post\">
-                                <h2 class=\"blog-post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>
-                                <p class=\"blog-post-meta\">{$p->date} by <a href=\"#\">{$p->author}</a></p>
+                            <div class=\"\">
                                 ".Typo::Xclean($p->content)."
                             </div>
                             <hr />
