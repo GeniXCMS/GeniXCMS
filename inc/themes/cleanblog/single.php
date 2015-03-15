@@ -7,7 +7,7 @@
                     <div class="post-heading">
                         <h1><?=$data['posts'][0]->title;?></h1>
                         <!-- <h2 class="subheading"></h2> -->
-                        <span class="meta">Posted by <a href="#"><?=$data['posts'][0]->author;?></a> on <?=$data['posts'][0]->date;?></span>
+                        <span class="meta">Posted by <a href="#"><?=$data['posts'][0]->author;?></a> on <?=Date::local($data['posts'][0]->date);?></span>
                     </div>
                 </div>
             </div>

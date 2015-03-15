@@ -30,3 +30,14 @@ define('ACOUNT_NOT_ACTIVE', 'Your Account is not active. Please activate it firs
 define('ACOUNT_NOT_ACTIVE_BLOCK', 'Your Account is not active. Please contact Support for this problems.');
 define('PASSWORD_SENT_NOTIF', 'Your new Password just sent to your email account. Please check your email.');
 define('REQUEST_PASS', 'Request Password');
+define('TITLE_CANNOT_EMPTY','Title cannot be empty.');
+define('CATEGORY_CANNOT_EMPTY','Category cannot be empty.');
+define('USERID_CANNOT_EMPTY','Username cannot be empty.');
+define('PASS1_CANNOT_EMPTY','Password 1 cannot be empty.');
+define('PASS2_CANNOT_EMPTY','Password 2 cannot be empty.');
+define('MENUID_CANNOT_EMPTY','MenuID cannot be empty.');
+define('MENUNAME_CANNOT_EMPTY','Menu Name cannot be empty.');
+define('NOFILE_UPLOADED','No Files Uploaded.');
+define('MODULES_DELETED','Modules Deleted.');
+define('MODULES_DEACTIVATED','Modules deactivated.');
+define('MODULES_ACTIVATED','Modules activated.');

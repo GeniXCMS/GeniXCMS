@@ -186,6 +186,33 @@ switch ($act) {
         $data['menus'] = Options::get('menus');
         System::inc('menus', $data);
         break;
+
+    case 'remove':
+        if(isset($_GET['menuid'])){
+            if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                // VALIDATE ALL
+                $alertred[] = TOKEN_NOT_EXIST;
+            }
+            if(isset($alertred)){
+                $data['alertred'] = $alertred;
+            }else{
+                $menus = json_decode(Options::get('menus'), true);
+                unset($menus[$_GET['menuid']]);
+
+                $sql = sprintf("DELETE FROM `menus` WHERE `menuid` = '%s' ", $_GET['menuid']);
+                Db::query($sql);
+                $menu = json_encode($menus);
+                Options::update('menus', $menu);
+                $data['alertgreen'][] = 'Menu Deleted';
+            }
+            if(isset($_GET['token'])){ Token::remove($_GET['token']); }
+        }else{
+            $data['alertred'][] = 'No ID Selected.';
+        }
+        $data['menus'] = Options::get('menus');
+        System::inc('menus', $data);
+        break;
+
     default:
         # code...
         if (isset($_POST['submit'])) {

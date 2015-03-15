@@ -27,7 +27,7 @@
                             <h2 class=\"post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>
                             
                             <p class=\"post-subtitle\">".substr(Posts::content($p->content),0,250)."</p>
-                            <p class=\"post-meta\">{$p->date} by <a href=\"#\">{$p->author}</a></p>
+                            <p class=\"post-meta\">".Date::format($p->date)." by <a href=\"#\">{$p->author}</a></p>
                         </div>
                             ";
                     }
