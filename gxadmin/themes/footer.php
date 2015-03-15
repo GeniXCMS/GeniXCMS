@@ -25,7 +25,6 @@
               //alert(cb.val());
         });
     </script>
-<!-- <link href="<?=Site::$url;?>/assets/css/dashboard.css" rel="stylesheet"> -->
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?=Site::$url;?>/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
 

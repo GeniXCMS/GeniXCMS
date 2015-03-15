@@ -29,9 +29,15 @@ switch ($act) {
             case true:
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-                    // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
+                if (!isset($_POST['id']) || $_POST['id'] == "") {
+                    $alertred[] = MENUID_CANNOT_EMPTY;
+                }
+                if (!isset($_POST['name']) || $_POST['name'] == "") {
+                    $alertred[] = MENUNAME_CANNOT_EMPTY;
+                }
+                echo $_POST['name'];
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
                 }else{
@@ -194,6 +200,12 @@ switch ($act) {
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
+                }
+                if (!isset($_POST['id']) || $_POST['id'] == "") {
+                    $alertred[] = MENUID_CANNOT_EMPTY;
+                }
+                if (!isset($_POST['name']) || $_POST['name'] == "") {
+                    $alertred[] = MENUNAME_CANNOT_EMPTY;
                 }
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;

@@ -29,6 +29,8 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
+                
+
                 // VALIDATE ALL
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = "User Exist!! Choose another userid.";
@@ -142,6 +144,20 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
+
+                if (!isset($_POST['userid']) || $_POST['userid'] == "") {
+                    // VALIDATE ALL
+                    $alertred[] = USERID_CANNOT_EMPTY;
+                }
+                if (!isset($_POST['pass1']) || $_POST['pass1'] == "") {
+                    // VALIDATE ALL
+                    $alertred[] = PASS1_CANNOT_EMPTY;
+                }
+                if (!isset($_POST['pass2']) || $_POST['pass2'] == "") {
+                    // VALIDATE ALL
+                    $alertred[] = PASS2_CANNOT_EMPTY;
+                }
+
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = "User Exist!! Choose another userid.";
                 }

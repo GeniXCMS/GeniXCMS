@@ -177,8 +177,9 @@ class Mod
 
                     if(!isset($alertred)){
                         self::activate($_GET['modules']);
+                        $GLOBALS['alertgreen'] = MODULES_ACTIVATED;
                     }else{
-                        $_GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertred'] = $alertred;
                     }
                 }elseif($_GET['act'] == 'deactivate'){
                     if(!Token::isExist($_GET['token'])){
@@ -187,8 +188,9 @@ class Mod
 
                     if(!isset($alertred)){
                         self::deactivate($_GET['modules']);
+                        $GLOBALS['alertgreen'] = MODULES_DEACTIVATED;
                     }else{
-                        $_GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertred'] = $alertred;
                     }
                 }elseif ($_GET['act'] == 'remove') {
                     if(!Token::isExist($_GET['token'])){
@@ -200,8 +202,9 @@ class Mod
                     if(!isset($alertred)){
                         self::deactivate($_GET['modules']);
                         Files::delTree(GX_MOD."/".$_GET['modules']);
+                        $GLOBALS['alertgreen'] = MODULES_DELETED;
                     }else{
-                        $_GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertred'] = $alertred;
                     }
                 }
                 

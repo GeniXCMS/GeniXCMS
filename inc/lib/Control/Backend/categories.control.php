@@ -20,6 +20,9 @@ switch (isset($_POST['addcat'])) {
             // VALIDATE ALL
             $alertred[] = TOKEN_NOT_EXIST;
         }
+        if (!isset($_POST['cat']) || $_POST['cat'] == "") {
+            $alertred[] = CATEGORY_CANNOT_EMPTY;
+        }
         if(isset($alertred)){
             $data['alertred'] = $alertred;
         }else{

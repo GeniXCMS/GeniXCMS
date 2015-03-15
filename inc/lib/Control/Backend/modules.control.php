@@ -14,10 +14,17 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
+if(isset($GLOBALS['alertred']))
+    $data['alertred'] = $GLOBALS['alertred'];
+if(isset($GLOBALS['alertgreen']))
+    $data['alertgreen'][] = $GLOBALS['alertgreen'];
 
 if (isset($_POST['upload'])) {
     if(!Token::isExist($_POST['token'])){
         $alertred[] = TOKEN_NOT_EXIST;
+    }
+    if (!isset($_POST['module']) || $_POST['module'] == "") {
+        $alertred[] = NOFILE_UPLOADED;
     }
 
     if(!isset($alertred)){

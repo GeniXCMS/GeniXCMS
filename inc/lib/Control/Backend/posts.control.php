@@ -28,6 +28,9 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
+                if (!isset($_POST['title']) || $_POST['title'] == "") {
+                    $alertred[] = TITLE_CANNOT_EMPTY;
+                }
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
                 }else{
@@ -70,6 +73,9 @@ switch ($act) {
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
+                }
+                if (!isset($_POST['title']) || $_POST['title'] == "") {
+                    $alertred[] = TITLE_CANNOT_EMPTY;
                 }
                 if (isset($alertred)) {
                     # code...

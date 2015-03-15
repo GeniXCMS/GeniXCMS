@@ -28,14 +28,14 @@ if (isset($data['alertgreen'])) {
     }
     echo "</div>";
 }
-if (isset($_GLOBALS['alertred'])) {
+if (isset($data['alertred'])) {
     # code...
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">Close</span>
     </button>";
-    foreach ($_GLOBALS['alertred'] as $alert) {
+    foreach ($data['alertred'] as $alert) {
         # code...
         echo "$alert\n";
     }

@@ -140,7 +140,7 @@ class User
                             'key' => $u,
                         );
             Db::update($sql);
-            if(isset($vars['detail']) || $vars['detail'] != ''){
+            if(isset($vars['detail']) && $vars['detail'] != ''){
                 
                 $u = $vars['detail'];
                 $sql = array(

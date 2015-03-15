@@ -127,7 +127,6 @@ class Site
             \t<link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
             \t<script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
             \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-hello.js\"></script>
             \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
             \t<script>
               \t$(document).ready(function() {

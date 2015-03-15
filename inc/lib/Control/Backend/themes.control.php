@@ -19,6 +19,9 @@ if (isset($_POST['upload'])) {
     if(!Token::isExist($_POST['token'])){
         $alertred[] = TOKEN_NOT_EXIST;
     }
+    if (!isset($_POST['theme']) || $_POST['theme'] == "") {
+        $alertred[] = NOFILE_UPLOADED;
+    }
 
     if(!isset($alertred)){
         //Mod::activate($_GET['themes']);
