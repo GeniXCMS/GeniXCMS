@@ -28,6 +28,7 @@ function __autoload($f) {
 try {
     $sys = new System();
     new Db();
+    new Site();
     Session::start();
     User::secure();
     if( User::access(2) ) {
