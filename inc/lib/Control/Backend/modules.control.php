@@ -23,7 +23,7 @@ if (isset($_POST['upload'])) {
     if(!Token::isExist($_POST['token'])){
         $alertred[] = TOKEN_NOT_EXIST;
     }
-    if (!isset($_POST['module']) || $_POST['module'] == "") {
+    if (!isset($_FILES['module']['name']) || $_FILES['module']['name'] == "") {
         $alertred[] = NOFILE_UPLOADED;
     }
 
