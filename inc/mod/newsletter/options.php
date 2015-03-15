@@ -4,7 +4,7 @@ if(isset($_POST['sendmail'])){
     // check token first
     if ( !isset($_POST['token']) || !Token::isExist($_POST['token']) ) {
         # code...
-        $alertred[] = "Token not exist, or maybe your time has expired. Please refresh your browser.";
+        $alertred[] = TOKEN_NOT_EXIST;
     }
     if(isset($alertred)){
         $data['alertred'] = $alertred;
@@ -38,7 +38,10 @@ if(isset($_POST['sendmail'])){
                             'subject' => $subject,
                             'msgtype' => $_POST['type']
                         );
-                Mail::send($vars);
+                $mailsend = Mail::send($vars);
+                if($mailsend !== null){
+                    $alertmailsend[] = $mailsend;
+                }
                 sleep(3);
             }
         }elseif($_POST['recipient'] != ''){
@@ -53,11 +56,19 @@ if(isset($_POST['sendmail'])){
                             'subject' => $subject,
                             'msgtype' => $_POST['type']
                         );
-                Mail::send($vars);
+                $mailsend = Mail::send($vars);
+                if($mailsend !== null){
+                    $alermailsend[] = $mailsend;
+                }
                 sleep(3);
             }
         }
-        $data['alertgreen'][] = "Success Sending Email";
+        if (isset($alertmailsend)) {
+            $data['alertred'] = $alertmailsend;
+        }else{
+            $data['alertgreen'][] = "Success Sending Email";
+        }
+        
     }
 }
 

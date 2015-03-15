@@ -93,9 +93,9 @@ class Mail
 
                 $mail->send();
             } catch (phpmailerException $e) {
-                echo $e->errorMessage(); //Pretty error messages from PHPMailer
+                return $e->errorMessage(); //Pretty error messages from PHPMailer
             } catch (Exception $e) {
-                echo $e->getMessage(); //Boring error messages from anything else!
+                return $e->getMessage(); //Boring error messages from anything else!
             }
             //send the message, check for errors
             // if (!$mail->send()) {
@@ -147,9 +147,9 @@ class Mail
                 }
                 $mail->send();
             } catch (phpmailerException $e) {
-                echo $e->errorMessage(); //Pretty error messages from PHPMailer
+                return $e->errorMessage(); //Pretty error messages from PHPMailer
             } catch (Exception $e) {
-                echo $e->getMessage(); //Boring error messages from anything else!
+                return $e->getMessage(); //Boring error messages from anything else!
             }
             // //send the message, check for errors
             // if (!$mail->send()) {
