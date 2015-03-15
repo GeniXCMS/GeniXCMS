@@ -91,6 +91,7 @@ switch ($act) {
                     Menus::insert($vars);
                     $data['alertgreen'][] = 'Menu Added';
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -142,6 +143,7 @@ switch ($act) {
                     Menus::update($vars);
                     $data['alertgreen'][] = 'Menu Updated';
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -171,6 +173,7 @@ switch ($act) {
                 Menus::delete($_GET['itemid']);
                 $data['alertgreen'][] = 'Menu Deleted';
             }
+            if(isset($_GET['token'])){ Token::remove($_GET['token']); }
         }else{
             $data['alertred'][] = 'No ID Selected.';
         }
@@ -211,6 +214,7 @@ switch ($act) {
                     Options::update('menus', $menu);
                     $data['alertgreen'][] = 'Menu Added';
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -249,6 +253,7 @@ switch ($act) {
                     Menus::insert($vars);
                     $data['alertgreen'][] = 'Menu Item Added';
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -282,6 +287,7 @@ switch ($act) {
                     Menus::updateMenuOrder($_POST['order']);
                     $data['alertgreen'][] = 'Menu Order Changed';
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:

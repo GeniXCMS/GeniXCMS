@@ -38,6 +38,7 @@ if (isset($_POST['upload'])) {
     }else{
         $data['alertred'] = $alertred;
     }
+    if(isset($_POST['token'])){ Token::remove($_POST['token']); }
 }
 
 

@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20150202
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -119,7 +120,7 @@ if (isset($data['alertred'])) {
                                 <tr>
                                     <td>{$p->id}</td>
                                     <td><a href=\"".Url::page($p->id)."\" target=\"_new\">{$p->title}</a></td>
-                                    <td>{$p->date}</td>
+                                    <td>".Date::format($p->date)."</td>
                                     <td>{$status}</td>
                                     <td>
                                         <a href=\"index.php?page=pages&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 

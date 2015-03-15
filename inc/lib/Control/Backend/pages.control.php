@@ -49,6 +49,7 @@ switch ($act) {
                     Posts::insert($vars);
                     $data['alertgreen'][] = "Page : {$_POST['title']} Added.";
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -89,6 +90,7 @@ switch ($act) {
                     Posts::update($vars);
                     $data['alertgreen'][] = "Page : {$_POST['title']} Updated.";
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -123,6 +125,7 @@ switch ($act) {
                 }else{
                     $data['alertgreen'][] = 'Post <b>'.$title.'</b> Removed';
                 }
+                if(isset($_GET['token'])){ Token::remove($_GET['token']); }
                 
             }else{
                 $data['alertred'][] = 'No ID Selected';
@@ -151,6 +154,7 @@ switch ($act) {
                         Posts::publish($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             case 'unpublish':
                 # code...
@@ -166,6 +170,7 @@ switch ($act) {
                         Posts::unpublish($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             case 'delete':
                 # code...
@@ -181,6 +186,7 @@ switch ($act) {
                         Posts::delete($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:

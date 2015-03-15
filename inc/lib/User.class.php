@@ -100,6 +100,35 @@ class User
         }
     }
 
+
+    /**
+    * Update User Function.
+    * This will insert certain value of user into the database.
+    * <code>
+    *    $vars = array(
+    *                'id' => '',
+    *                'user' => array(
+    *                                'userid' => '',
+    *                                'passwd' => '',
+    *                                'email' => '',
+    *                                'group' => ''  
+    *                            ),
+    *                'detail' => array(
+    *                                'userid' => '',
+    *                                'fname' => '',
+    *                                'lname' => '',
+    *                                'sex' => '',
+    *                                'birthplace' => '',
+    *                                'birthdate' => '',
+    *                                'addr' => '',
+    *                                'city' => '',
+    *                                'state' => '',
+    *                                'country' => '',
+    *                                'postcode' => ''
+    *                            )
+    *            );
+    * </code>
+    */
     public static function update($vars) {
         if(is_array($vars)){
             
@@ -107,11 +136,20 @@ class User
             $u = $vars['user'];
             $sql = array(
                             'table' => 'user',
-                            'id' => $_GET['id'],
+                            'id' => $vars['id'],
                             'key' => $u,
                         );
             Db::update($sql);
-
+            if(isset($vars['detail']) || $vars['detail'] != ''){
+                
+                $u = $vars['detail'];
+                $sql = array(
+                                'table' => 'user_detail',
+                                'id' => $vars['id'],
+                                'key' => $u,
+                            );
+                Db::update($sql);
+            }
             
         }
     }
@@ -147,6 +185,13 @@ class User
         
         $hash = substr($hash, 5, 16);
         $pass = md5($hash);
+        return $pass;
+    }
+
+    public static function generatePass(){
+        $vars = microtime().Site::$name.rand();
+        $hash = sha1($vars.SECURITY);        
+        $pass = substr($hash, 5, 8);
         return $pass;
     }
 
@@ -186,6 +231,11 @@ class User
         }else{
             return true;
         }
+    }
+
+    public static function id($userid){
+        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1", $userid));
+        return $usr[0]->id;
     }
 
     public static function userid($id){

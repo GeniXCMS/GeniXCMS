@@ -65,6 +65,7 @@ switch (isset($_POST['change'])) {
             Options::update($vars);
             $data['alertgreen'][] = "New Settings Saved.";
         }
+        if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
     
     default:

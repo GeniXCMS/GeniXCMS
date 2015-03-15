@@ -33,6 +33,7 @@ switch (isset($_POST['addcat'])) {
             //print_r($cat);
             $data['alertgreen'][] = "Category Added: ".$_POST['cat'];
         }
+        if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
     
     default:
@@ -60,6 +61,7 @@ switch (isset($_POST['updatecat'])) {
             $cat = Db::update($vars);
             $data['alertgreen'][] = "Category Updated: ".$_POST['cat'];
         }
+        if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
     
     default:
@@ -78,6 +80,7 @@ if(isset($_GET['act']) == 'del'){
         Categories::delete($_GET['id']);
         $data['alertgreen'][] = "Category Removed";
     }
+    if(isset($_GET['token'])){ Token::remove($_GET['token']); }
 }
 $data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC");
 $data['num'] = Db::$num_rows;

@@ -8,11 +8,13 @@
 * @since 0.0.1 build date 20150202
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
+
 
 if (isset($data['alertgreen'])) {
     # code...
@@ -132,9 +134,24 @@ if (isset($data['alertred'])) {
                           <small>Your Website email.</small>
                       </div>
                       <div class="col-sm-6 form-group">
-                          <label>Timezone</label>
-                          <input type="text" name="timezone" value="<?=Options::get('timezone');?>" class="form-control">
-                          <small>Your Website Timezone.</small>
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <label>Country</label>
+                                  <select name="country_id" class="form-control">
+                                    <?=Date::optCountry(Options::get('country_id'));?>
+                                  </select>
+                                  <small>Your Website Country.</small>
+                              </div>
+                              <div class="col-sm-6">
+                                  <label>Timezone</label>
+                                  <select name="timezone" class="form-control">
+                                    <?=Date::optTimeZone(Options::get('timezone'));?>
+                                  </select>
+                                  <small>Your Website Timezone.</small>
+                              </div>
+
+                          </div>
+                          
                       </div>
                   </div>
                   

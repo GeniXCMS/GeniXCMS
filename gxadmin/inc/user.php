@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20150202
 * @version 0.0.2
 * @link https://github.com/semplon/GeniXCMS
+* @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -138,7 +139,7 @@
                         <td>{$p->email}</td>
                         <td>{$status}</td>
                         <td>{$grp}</td>
-                        <td>{$p->join_date}</td>
+                        <td>".Date::format($p->join_date)."</td>
                         <td>
                             <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 
                             <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 

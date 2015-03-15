@@ -41,6 +41,7 @@ switch ($act) {
                 if(!isset($alertred)){
 
                     $vars = array(
+                                    'id' => sprintf('%d',$_GET['id']),
                                     'user' => array(
                                                     'userid' => $_POST['userid'],
                                                     'email' => $_POST['email'],
@@ -66,7 +67,7 @@ switch ($act) {
                     $data['alertred'] = $alertred;
                 }
                 
-                
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -85,7 +86,7 @@ switch ($act) {
                     User::delete($_GET['id']);
                     $data['alertgreen'][] = "User : ".$user." Removed";
                 }
-                
+                if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
                 $data['alertred'][] = "No ID selected";
             }
@@ -105,6 +106,7 @@ switch ($act) {
                 }
 
             }
+            if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
             System::inc('user', $data);
@@ -121,6 +123,7 @@ switch ($act) {
                     $data['alertred'][] = "User ".User::userid($_GET['id'])." Deactivation fail.";
                 }
             }
+            if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
             System::inc('user', $data);
@@ -168,7 +171,7 @@ switch ($act) {
                 }else{
                     $data['alertred'] = $alertred;
                 }
-
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:
@@ -199,6 +202,7 @@ switch ($act) {
                         User::activate($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             case 'deactivate':
                 # code...
@@ -215,6 +219,7 @@ switch ($act) {
                         User::deactivate($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             case 'delete':
                 # code...
@@ -231,6 +236,7 @@ switch ($act) {
                         User::delete($id);
                     }
                 }
+                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
             
             default:

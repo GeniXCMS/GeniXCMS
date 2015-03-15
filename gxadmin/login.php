@@ -91,9 +91,9 @@ if(isset($_POST['login']))
 			}
 		}else{
 			if($usr[0]->activation != ''){
-				$alertred[] = "Your Account is not active. Please activate it first. Check your email for the activation link.";
+				$alertred[] = ACOUNT_NOT_ACTIVE;
 			}else{
-				$alertred[] = "Your Account is not active. Please contact Support for this problems. ";
+				$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
 			}
 		}
 	}elseif($c == "0"){
