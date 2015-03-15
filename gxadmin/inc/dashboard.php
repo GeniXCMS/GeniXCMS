@@ -16,7 +16,7 @@
 */?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+        <h1><i class="fa fa-dashboard"></i> <?=DASHBOARD;?></h1>
         <hr>
     </div>
     <div class="col-md-12">
@@ -24,7 +24,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Latest Post</h3>
+                        <h3 class="panel-title"><?=LATEST_POST;?></h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
@@ -56,13 +56,13 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Statistic</h3>
+                        <h3 class="panel-title"><?=STATISTIC;?></h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
                         <?php 
-                            echo "<li class=\"list-group-item\">Total Post: ".Stats::totalPost('post')."</li>"
-                                ."<li class=\"list-group-item\">Total Page: ".Stats::totalPost('page')."</li>";
+                            echo "<li class=\"list-group-item\">".TOTAL_POST.": ".Stats::totalPost('post')."</li>"
+                                ."<li class=\"list-group-item\">".TOTAL_PAGE.": ".Stats::totalPost('page')."</li>";
                         ?>
                         </ul>
                     </div>

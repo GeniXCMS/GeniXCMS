@@ -18,7 +18,7 @@
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Menu</span>
+                <span class="sr-only"><?=MENU;?></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -35,17 +35,17 @@
 
                 <ul class="nav" id="side-menu">
                   
-                  <li><a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-                  <li ><a href="index.php?page=posts"><i class="fa fa-file-text-o"></i> Posts</a></li>
-                  <li ><a href="index.php?page=categories"><i class="fa fa-cubes"></i> Categories</a></li>
-                  <li ><a href="index.php?page=pages"><i class="fa fa-file-o"></i> Pages</a></li>
-                  <li ><a href="index.php?page=users"><i class="fa fa-users"></i> Users</a></li>
-                  <li><a href="index.php?page=menus"><i class="fa fa-sitemap"></i> Menus</a></li>
-                  <li><a href="index.php?page=themes"><i class="fa fa-paint-brush"></i> Themes</a></li>
-                  <li><a href="index.php?page=modules"><i class="fa fa-plug"></i> Modules</a></li>
-                  <li ><a href="index.php?page=settings"><i class="fa fa-wrench"></i> Settings</a></li>
+                  <li><a href="index.php"><i class="fa fa-dashboard fa-fw"></i> <?=DASHBOARD;?></a></li>
+                  <li ><a href="index.php?page=posts"><i class="fa fa-file-text-o"></i> <?=POSTS;?></a></li>
+                  <li ><a href="index.php?page=categories"><i class="fa fa-cubes"></i> <?=CATEGORIES;?></a></li>
+                  <li ><a href="index.php?page=pages"><i class="fa fa-file-o"></i> <?=PAGES;?></a></li>
+                  <li ><a href="index.php?page=users"><i class="fa fa-users"></i> <?=USERS;?></a></li>
+                  <li><a href="index.php?page=menus"><i class="fa fa-sitemap"></i> <?=MENUS;?></a></li>
+                  <li><a href="index.php?page=themes"><i class="fa fa-paint-brush"></i> <?=THEMES;?></a></li>
+                  <li><a href="index.php?page=modules"><i class="fa fa-plug"></i> <?=MODULES;?></a></li>
+                  <li ><a href="index.php?page=settings"><i class="fa fa-wrench"></i> <?=SETTINGS;?></a></li>
                   <?php echo Mod::ModMenu();?>
-                  <li><a href="logout.php"><i class="fa fa-power-off"></i> Log Out</a></li>
+                  <li><a href="logout.php"><i class="fa fa-power-off"></i> <?=LOGOUT;?></a></li>
                 </ul>
                 
             </div>

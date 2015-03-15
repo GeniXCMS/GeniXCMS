@@ -43,7 +43,11 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-file-o"></i> Pages <a href="index.php?page=pages&act=add" class="btn btn-primary pull-right">Add New</a></h1>
+        <h1><i class="fa fa-file-o"></i> <?=PAGES;?> 
+            <a href="index.php?page=pages&act=add" class="btn btn-primary pull-right">
+                <?=ADD_NEW_PAGE;?>
+            </a>
+        </h1>
         <hr />
     </div>
     <div class="col-sm-12">
@@ -51,11 +55,11 @@ if (isset($data['alertred'])) {
             <input type="hidden" name="page" value="pages">
             <div class="row">
                 <div class="col-sm-12">
-                    <h5>Find Pages</h5>
+                    <h5><?=FIND_PAGES;?></h5>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search Pages">
+                        <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_PAGES;?> ">
                     </div>
                     
                 </div>
@@ -73,8 +77,8 @@ if (isset($data['alertred'])) {
                 <div class="col-sm-2">
                     <div class="form-group">
                         <select name="status" class="form-control">
-                            <option value="1">Published</option>
-                            <option value="0">Unpublished</option>
+                            <option value="1"><?=PUBLISHED;?></option>
+                            <option value="0"><?=UNPUBLISHED;?></option>
                             
                         </select>
                     </div>
@@ -82,7 +86,7 @@ if (isset($data['alertred'])) {
                 <div class="col-sm-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
-                            Find Posts
+                            <?=FIND_PAGES;?>
                         </button>
                     </div>
                 </div>
@@ -96,12 +100,12 @@ if (isset($data['alertred'])) {
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Edit/Delete</th>
-                            <th>All <input type="checkbox" id="selectall"></th>
+                            <th><?=ID;?></th>
+                            <th><?=TITLE;?></th>
+                            <th><?=DATE;?></th>
+                            <th><?=STATUS;?></th>
+                            <th><?=ACTION;?></th>
+                            <th><?=ALL;?> <input type="checkbox" id="selectall"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,9 +116,9 @@ if (isset($data['alertred'])) {
                                 # code...
                                 //echo $p->id;
                                 if($p->status == '0'){
-                                    $status = "UnPublished";
+                                    $status = UNPUBLISHED;
                                 }else{
-                                    $status = "Published";
+                                    $status = PUBLISHED;
                                 }
                                 echo "
                                 <tr>
@@ -123,9 +127,9 @@ if (isset($data['alertred'])) {
                                     <td>".Date::format($p->date)."</td>
                                     <td>{$status}</td>
                                     <td>
-                                        <a href=\"index.php?page=pages&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 
+                                        <a href=\"index.php?page=pages&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a> 
                                         <a href=\"index.php?page=pages&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
-                                        onclick=\"return confirm('Are you sure you want to delete this item?');\">Delete</a>
+                                        onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
                                     </td>
                                         <td>
                                         <input type=\"checkbox\" name=\"post_id[]\" value=\"{$p->id}\" id=\"select\">
@@ -137,28 +141,28 @@ if (isset($data['alertred'])) {
                             echo "
                                 <tr>
                                     <td>
-                                        No Pages Found 
+                                        ".NO_PAGE_FOUND."
                                     </td>
                                 </tr>";
                         }
                         ?>
                     </tbody>
                     <tfoot>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Date</th>
-                        <th>Status</th>
+                        <th><?=ID;?></th>
+                        <th><?=TITLE;?></th>
+                        <th><?=DATE;?></th>
+                        <th><?=STATUS;?></th>
                         <th>
                         <select name="action" class="form-control">
-                            <option value="publish">Publish</option>
-                            <option value="unpublish">UnPublish</option>
-                            <option value="delete">Delete</option>
+                            <option value="publish"><?=PUBLISH;?></option>
+                            <option value="unpublish"><?=UNPUBLISH;?></option>
+                            <option value="delete"><?=DELETE;?></option>
                         </select>
                         <input type="hidden" name="token" value="<?=TOKEN;?>">
                         </th>
                         <th>
                             <button type="submit" name="doaction" class="btn btn-danger">
-                                Submit
+                                <?=SUBMIT;?>
                             </button>
                         </th>
                     </tfoot>

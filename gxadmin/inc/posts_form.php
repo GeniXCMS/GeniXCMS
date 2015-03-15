@@ -73,16 +73,16 @@ if(isset($data['post'])) {
 <form action="index.php?page=posts&act=<?=$act?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-file-text-o"></i> <?=$pagetitle;?> Post
+        <h1><i class="fa fa-file-text-o"></i> <?=$pagetitle;?> <?=POST;?>
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
-                    Publish
+                    <?=PUBLISH;?>
                 </button>
 
                 <a href="index.php?page=posts" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove"></span>
-                    Cancel
+                    <?=CANCEL;?>
                 </a>
             </div>
         </h1>
@@ -93,22 +93,22 @@ if(isset($data['post'])) {
             
                 <div class="col-sm-8">
                     <div class="form-group">
-                        <label for="title">Title</label>
+                        <label for="title"><?=TITLE;?></label>
                         <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title;?>">
                     </div>
                     <div class="form-group">
-                        <label for="content">Content</label>
+                        <label for="content"><?=CONTENT;?></label>
                         <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content;?></textarea>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Options</h3>
+                            <h3 class="panel-title"><?=OPTIONS;?></h3>
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <label>Category</label>
+                                <label><?=CATEGORY;?></label>
                                 <?php 
                                     $vars = array(
                                                 'order_by'    =>    'name',
@@ -124,18 +124,18 @@ if(isset($data['post'])) {
                             </div>
 
                             <div class="form-group">
-                                <label>Status</label>
+                                <label><?=STATUS;?></label>
                                 <select name="status" class="form-control">
-                                    <option value="1" <?=$pub;?>>Publish</option>
-                                    <option value="0" <?=$unpub;?>>Unpublish</option>
+                                    <option value="1" <?=$pub;?>><?=PUBLISH;?></option>
+                                    <option value="0" <?=$unpub;?>><?=UNPUBLISH;?></option>
                                 </select>
-                                <small>published or unpublished</small>
+                                <small><?=PUBLISHED_LOWER;?> or <?=UNPUBLISHED_LOWER;?></small>
                             </div>
 
                             <div class="form-group">
-                                <label>Post Date</label>
+                                <label><?=POST_DATE;?></label>
                                 <input type="text" name="date" class="form-control" value="<?=$date;?>">
-                                <small>left it blank to make it now</small>
+                                <small><?=LEFT_IT_BLANK_NOW_DATE;?></small>
                             </div>
                         </div>
                     </div>

@@ -44,9 +44,9 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-cubes"></i>  Categories 
+        <h1><i class="fa fa-cubes"></i>  <?=CATEGORIES;?> 
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> Add Category
+                <span class="glyphicon glyphicon-plus"></span> <?=ADD_CATEGORY;?>
             </button>
         </h1>
         <hr />
@@ -114,12 +114,12 @@ if (isset($data['alertred'])) {
             <form action="" method="post">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Categories</h4>
+            <h4 class="modal-title" id="myModalLabel"><?=ADD_CATEGORY;?></h4>
           </div>
           <div class="modal-body">
             
                 <div class="form-group">
-                    <label>Parent</label>
+                    <label><?=PARENTS;?></label>
                     <?php
                         $vars = array(
                                     'parent' => '0',
@@ -131,15 +131,15 @@ if (isset($data['alertred'])) {
                     ?>
                 </div>
                 <div class="form-group">
-                    <label>Category Name</label>
+                    <label><?=CATEGORY_NAME;?></label>
                     <input type="text" name="cat" class="form-control">
                 </div>
             
           </div>
           <div class="modal-footer">
             <input type="hidden" name="token" value="<?=TOKEN;?>">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" name="addcat">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?=CLOSE;?></button>
+            <button type="submit" class="btn btn-success" name="addcat"><?=SUBMIT;?></button>
           </div>
           </form>
         </div><!-- /.modal-content -->
