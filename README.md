@@ -26,7 +26,25 @@ This CMSF is a starter point to build your own online applications. With already
 * MariaDB Server
 
 ### Installation
-Installation : http://docs.genixcms.org/en/latest/user-guide/installation/
+
+Upload all files to your site. 
+
+Set this directory permission to 777 (writable) :
+
+- inc/config
+- inc/themes
+- inc/mods
+- assets/images
+- assets/images/uploads
+- assets/images/uploads/thumbs
+
+
+After upload is done. Open your site at the browser. eg: http://yoursite.com
+
+The installation wizard will appear, just follow all the instructions.
+
+more details of installation : 
+http://docs.genixcms.org/en/latest/user-guide/installation/
 
 ### Showcase
 Showcase URL : 
