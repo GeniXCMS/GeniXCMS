@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -85,7 +85,7 @@ class User
                             'table' => 'user',
                             'key' => $u,
                         );
-            Db::insert($sql);
+            $db = Db::insert($sql);
 
             if(!isset($vars['detail']) || $vars['detail'] == ''){
                 Db::insert("INSERT INTO `user_detail` (`userid`) VALUES ('{$vars['user']['userid']}')");
@@ -98,6 +98,8 @@ class User
                 Db::insert($sql);
             }
         }
+
+        return $db;
     }
 
 

@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -280,8 +280,10 @@ class Db
                 if(!self::query($sql)){
                     // printf("<div class=\"alert alert-danger\">Errormessage: %s</div>\n", self::$mysqli->error);
                     //Control::error('db',self::$mysqli->error);
+                    return false;
                 }else{
                     self::$last_id = self::$mysqli->insert_id;
+                    return true;
                 }
                 
             } catch (exception $e) {
@@ -290,7 +292,7 @@ class Db
             
         }
         
-        return true;
+        //return true;
     }
 }
 

@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -47,7 +47,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -156,7 +156,7 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
                   `content` mediumtext NOT NULL,
                   `author` text NOT NULL,
                   `type` text NOT NULL,
-                  `cat` int(11) NOT NULL,
+                  `cat` varchar(11) NOT NULL,
                   `modified` datetime DEFAULT NULL,
                   `status` enum('0','1','2') NOT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";

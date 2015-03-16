@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20141003
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -73,7 +73,7 @@ if(isset($_POST['register']))
                                     ),
                         
                     );   
-        if(User::create($vars)){
+        if(User::create($vars) === true){
             $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
         }else{
             $alertred[] = "We can't create your account";
@@ -96,13 +96,18 @@ if(isset($_POST['register']))
                 'mailtype' => 'text'
             );
         
-		Mail::send($vars);
+		$mailsend = Mail::send($vars);
+        if($mailsend != ""){
+            $alertred[] = $mailsend;
+        }else{
+            $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+        }
 		
     }else{
         $data['alertred'] = $alertred;
     }
 
-	
+	if(isset($_POST['token'])){ Token::remove($_POST['token']); }
 	
 }
 if (isset($_GET['activation'])) {
@@ -128,7 +133,12 @@ if (isset($_GET['activation'])) {
                 'mailtype' => 'text'
             );
         
-        Mail::send($vars);
+            $mailsend = Mail::send($vars);
+            if($mailsend != ""){
+                $alertred[] = $mailsend;
+            }else{
+                $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+            }
         }else{
             $data['alertred'][] = "Activation Failed.";
         }
