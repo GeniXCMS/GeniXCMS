@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140928
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -137,7 +137,7 @@ if(isset($_POST['forgotpass']))
 if(!User::is_loggedin()){
 
 ?>
-<div class="row">
+<div class="container">
 	<div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 30px; margin-bottom: 60px ">
 		<form action="" class="form-signin" role="form" method="post">
 			<h2 class="form-signin-heading"><?=FORGOT_PASS;?></h2>

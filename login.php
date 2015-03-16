@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140928
-* @version 0.0.2
+* @version 0.0.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -43,7 +43,7 @@ try {
     echo $e->getMessage();
 }
 
-
+echo "<div class=\"container\">";
 if(isset($_POST['login']))
 {
 	/*check if username is exist or not */
@@ -91,9 +91,9 @@ if(isset($_POST['login']))
 			}
 		}else{
 			if($usr[0]->activation != ''){
-				$alertred[] = "Your Account is not active. Please activate it first. Check your email for the activation link.";
+				$alertred[] = ACOUNT_NOT_ACTIVE;
 			}else{
-				$alertred[] = "Your Account is not active. Please contact Support for this problems. ";
+				$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
 			}
 		}
 	}elseif($c == "0"){
@@ -121,23 +121,24 @@ if(isset($_POST['login']))
 	if(!User::is_loggedin()){
 
 ?>
-<div class="center-block col-sm-4">
-	<form class="form-signin" role="form" method="post">
-		<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-		<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
-		<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
-		<label class="checkbox">
-			<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
-		</label>
-		<button class="btn btn-lg btn-success btn-block" name="login" type="submit">Sign in</button>
-	</form>
-</div>
+
+	<div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 60px; margin-bottom: 60px ">
+		<form class="form-signin" role="form" method="post">
+			<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
+			<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
+			<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
+			<label class="checkbox">
+				<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
+			</label>
+			<button class="btn btn-lg btn-success btn-block" name="login" type="submit">Sign in</button>
+		</form>
+	</div>
 
 <?php
 }else {
 	echo"<div class=\"alert alert-info\">You're already Logged In. <br /><a href=\"logout.php\">Logout</a></div>";
 }
-
+echo "</div>";
 $thm->theme('footer');
 System::Zipped();
 ?>
