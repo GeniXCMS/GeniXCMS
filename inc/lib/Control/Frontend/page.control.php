@@ -24,7 +24,9 @@ switch ($_GET['page']) {
     
     default:
         # code...
-        $page = $_GET['page'];
+        $page = Typo::cleanX(
+                    $_GET['page']
+                );
         $data['posts'] = Db::result(
                             sprintf("SELECT * FROM `posts` 
                                     WHERE (`id` = '%d' OR `slug` = '%s')
@@ -32,7 +34,7 @@ switch ($_GET['page']) {
                                     AND `status` = '1'
                                     LIMIT 1", 
                                     $page, 
-                                    Typo::cleanX($page)
+                                    $page
                                     )
                             );
         if(Db::$num_rows > 0) {

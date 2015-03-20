@@ -100,7 +100,9 @@ class Control
             foreach ($_GET as $k => $v) {
                     # code...
                     //echo $k;
-                if (in_array($k,$arr ) || $k == 'paging') {
+                if (in_array($k,$arr ) 
+                    || $k == 'paging' 
+                    || $k == 'error' ) {
                     $get = $get+1;
                 }else{
                     $get = $get;

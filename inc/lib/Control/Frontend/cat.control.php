@@ -19,7 +19,12 @@
 $post="";
 $data['max'] = Options::get('post_perpage');
 if(isset($_GET['paging'])){
-    $offset = ($_GET['paging']-1)*$data['max'];
+    $paging = sprintf('%d', $_GET['paging']);
+    if($paging > 0) {
+        $offset = ($paging-1)*$data['max'];
+    }else{
+        $offset = 0;
+    }
 }else{
     $offset = 0;
 }

@@ -91,6 +91,8 @@ class Site
         if($bs == 'on'){
             $foot .= "
     <link href=\"".self::$url."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+            $foot .= "
+    <link href=\"".self::$url."/assets/css/bootstrap-theme.min.css\" rel=\"stylesheet\">\n";
         }
 
         $jquery = Options::get('use_jquery');

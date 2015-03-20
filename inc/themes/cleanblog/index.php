@@ -47,7 +47,7 @@
                                 'url' => 'index.php?',
                                 'type' => 'pager'
                             );
-                echo Paging::create($paging);
+                echo Paging::create($paging, SMART_URL);
             ?>
             </div>
         </div>

@@ -36,13 +36,20 @@ class Typo
         //         ENT_QUOTES, 
         //         "utf-8"
         //     );
-        $val = htmlentities($c, ENT_QUOTES | ENT_IGNORE, "UTF-8");
+        if(DB_DRIVER == 'mysqli'){
+            $c = Db::$mysqli->real_escape_string($c);
+        }else{
+            $c = $c;
+        }
+        $val = htmlentities(
+                    $c, 
+                    ENT_QUOTES | ENT_IGNORE, "UTF-8");
         return $val;
     }
 
     public static function Xclean($vars) {
         // $var = htmlspecialchars_decode($vars);
-      $var = html_entity_decode($vars);
+        $var = html_entity_decode($vars);
         return $var;
     }
     public static function slugify($text)
@@ -75,27 +82,27 @@ class Typo
 
     public static function strip($text, $tags = '', $invert = FALSE) { 
 
-      preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
-      $tags = array_unique($tags[1]); 
-        
-      if(is_array($tags) AND count($tags) > 0) { 
-        if($invert == FALSE) { 
-          /*return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); */
-          return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
-          return preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
+        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
+        $tags = array_unique($tags[1]); 
+
+        if(is_array($tags) AND count($tags) > 0) { 
+            if($invert == FALSE) { 
+                /*return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); */
+                return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
+                return preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
+            } 
+            else { 
+                /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
+                return preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text); 
+                return preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text); 
+            } 
+            }
+        elseif($invert == FALSE) { 
+            /*return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); */
+            return preg_replace('@<(\w+)\b.*?>@si', '', $text); 
+            return preg_replace('@</(\w+)\b.*?>@si', '', $text); 
         } 
-        else { 
-          /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
-          return preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text); 
-          return preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text); 
-        } 
-      } 
-      elseif($invert == FALSE) { 
-        /*return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); */
-        return preg_replace('@<(\w+)\b.*?>@si', '', $text); 
-        return preg_replace('@</(\w+)\b.*?>@si', '', $text); 
-      } 
-      return $text; 
+        return $text; 
     }
 
 
