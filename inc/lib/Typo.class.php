@@ -36,11 +36,6 @@ class Typo
         //         ENT_QUOTES, 
         //         "utf-8"
         //     );
-        if(DB_DRIVER == 'mysqli'){
-            $c = Db::$mysqli->real_escape_string($c);
-        }else{
-            $c = $c;
-        }
         $val = htmlentities(
                     $c, 
                     ENT_QUOTES | ENT_IGNORE, "UTF-8");
@@ -52,6 +47,7 @@ class Typo
         $var = html_entity_decode($vars);
         return $var;
     }
+
     public static function slugify($text)
     {
       // strip tags
@@ -133,6 +129,11 @@ class Typo
             $token .= $codeAlphabet[self::crypto_rand_secure(0,strlen($codeAlphabet))];
         }
         return $token;
+    }
+
+    public static function int($var) {
+        $var = sprintf('%d', $var);
+        return $var;
     }
 }
 
