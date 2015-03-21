@@ -1,0 +1,66 @@
+server {
+       listen 80 default_server;
+       server_name localhost;
+       root /var/www/html;
+       index index.php;
+
+        location / {
+            try_files $uri  $uri/ @rewrite;
+            add_header  X-Content-Type-Options "nosniff";
+            add_header  X-XSS-Protection "1; mode=block";
+        }
+
+        location @rewrite {
+            #rewrite ^/(.+)$ /index.php$args last; break;
+            rewrite ^/(.*)\.html$ /index.php?page=$1 last;
+            rewrite ^/(.+)/([0-9]+)$ /index.php?post=$2 last;
+            rewrite ^/([0-9]+)/(.+)$ /index.php?cat=$1 last;
+            rewrite ^/([0-9]+)/(.+)/paging/([0-9]+)$ /index.php?cat=$1&paging=$3 last;
+        }
+        error_page 404 /error/404;
+        error_page 400 /error/400;
+        error_page 403 /error/403;
+        error_page 500 /error/500;
+
+
+        location = /error/403 {
+            rewrite ^/error/403$ /index.php?error=403 last;
+        }
+        location = /error/404 {
+            rewrite ^/error/404$ /index.php?error=404 last;
+        }
+        location = /error/400 {
+            rewrite ^/error/400$ /index.php?error=400 last;
+        }
+        location = /error/500 {
+            rewrite ^/error/500$ /index.php?error=500 last;
+        }
+
+        location ~ \.html$ {
+            try_files $uri $uri/ @rewrite;
+        }
+        location ~ \.php$ {
+            #try_files = $uri $uri/ @missing;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            # With php5-fpm:
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_index index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+
+        location /paging {
+            rewrite ^/paging/([0-9]+)$ /index.php?paging=$1 last;
+        }
+
+
+        location = /sitemap {
+            rewrite ^(.*)$ /index.php?page=sitemap last;
+        }
+        location = /rss {
+            rewrite ^(.*)$ /index.php?rss last;
+        }
+
+        #include /etc/nginx/cache_expires.conf;
+
+}
