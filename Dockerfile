@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:utopic
 
 MAINTAINER Puguh Wijayanto
 
@@ -21,15 +21,11 @@ RUN chmod -R 777 /var/www/html/assets/images && \
 	chmod -R 777 /var/www/html/assets/images/uploads && \
 	chmod -R 777 /var/www/html/assets/images/uploads/thumbs && \
 	chmod -R 777 /var/www/html/inc/mod && \
-	chmod -R 777 /var/www/html/inc/theme
+	chmod -R 777 /var/www/html/inc/themes
 
 RUN sed -i -e 's/^listen =.*/listen = \/var\/run\/php5-fpm.sock/' /etc/php5/fpm/pool.d/www.conf
 
-RUN mkdir -p /var/www/html
-
-VOLUME ["/var/www/html"]
-
-EXPOSE 80
+EXPOSE 80 3306
 
 ADD docker-config/run.sh /run.sh
 RUN chmod +x /run.sh
