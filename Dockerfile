@@ -8,7 +8,6 @@ RUN apt-get update
 
 RUN apt-get install -y nginx \
 	php5-fpm php5-mysql php-apc php5-imagick php5-imap php5-mcrypt php5-gd libssh2-php && \
-	apt-get install -y mariadb-server && \
 	docker-php-ext-install mbstring mysqli 
 
 RUN echo "cgi.fix_pathinfo = 0;" >> /etc/php5/fpm/php.ini
