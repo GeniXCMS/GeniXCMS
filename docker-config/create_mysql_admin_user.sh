@@ -10,8 +10,8 @@ while [[ RET -ne 0 ]]; do
     RET=$?
 done
 
-echo "=> Creating database cakephp in MySQL"
-/create_db.sh cakephp
+echo "=> Creating database genixcms in MySQL"
+/create_db.sh genixcms
 
 
 PASS=${MYSQL_PASS:-$(pwgen -s 12 1)}
