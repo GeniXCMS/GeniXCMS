@@ -15,6 +15,7 @@ ADD docker-config/nginx.conf /etc/nginx/nginx.conf
 ADD docker-config/sites-enabled /etc/nginx/sites-enabled
 
 RUN rm -fr /var/www/html && git clone https://github.com/semplon/GeniXCMS /var/www/html
+VOLUME ["/var/www/html"]
 
 RUN chmod -R 777 /var/www/html/assets/images && \
 	chmod -R 777 /var/www/html/assets/images/uploads && \
