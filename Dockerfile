@@ -5,7 +5,7 @@ MAINTAINER Puguh Wijayanto
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
-RUN apt-get -y install build-essential g++
+RUN apt-get -y install build-essential g++ git
 RUN apt-get install -y nginx \
 	php5-fpm php5-mysql php-apc php5-imagick php5-imap php5-mcrypt php5-gd libssh2-php \
 	mariadb-server 
