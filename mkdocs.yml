@@ -1,5 +1,6 @@
 site_name: GeniXCMS
 use_directory_urls: false
+theme: journal
 pages:
 - ['index.md', 'Home']
 - ['about.md', 'About']
