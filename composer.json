@@ -1,0 +1,23 @@
+{
+    "name": "genix/cms",
+    "description": "Simple and Free Opensource CMS and Framework",
+    "version": "0.0.3",
+    "homepage": "http://genixcms.org",
+    "keywords": ["genixcms", "genix", "cms", "metalgenix"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Puguh Wijayanto",
+            "email": "hangbowl@gmail.com"
+        }
+    ],
+    "config": {
+        "vendor-dir": "inc/lib/Vendor"
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "phpmailer/phpmailer": "5.2.9",
+        "angelleye/paypal-php-library": "2.0.3",
+        "lsmonki/php-ixr": "1.7.5"
+    }
+}
