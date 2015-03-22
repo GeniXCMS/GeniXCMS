@@ -34,7 +34,7 @@ class Pinger
         self::$myBlogUrl           = Options::get('siteurl');
         self::$myBlogUpdateUrl     = Options::get('siteurl');
         self::$myBlogRSSFeedUrl    = Url::rss();
-        require_once( GX_LIB.'/Vendor/IXR_Library.php' );
+        //require_once( GX_LIB.'/Vendor/IXR_Library.php' );
         $url = 'http://'.$url;
         $client = new IXR_Client( $url );
         $client->timeout = 3;

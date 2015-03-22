@@ -35,9 +35,7 @@ define('GX_ASSET', GX_PATH.'/assets/');
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
-function __autoload($f) {
-    require GX_LIB. $f . '.class.php';
-}
+require("../autoload.php");
 
 /**
 * Run the Main caller at GxMain Class.

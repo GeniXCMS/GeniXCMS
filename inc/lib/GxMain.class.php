@@ -40,6 +40,7 @@ class GxMain
             new System();
             new Db();
             new Site();
+            Vendor::autoload();
             Token::create();
             Mod::loader();
             Theme::loader();
