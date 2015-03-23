@@ -27,6 +27,8 @@ This CMSF is a starter point to build your own online applications. With already
 
 ### Installation
 
+#### Manual Upload
+
 Upload all files to your site. 
 
 Set this directory permission to 777 (writable) :
@@ -42,6 +44,14 @@ Set this directory permission to 777 (writable) :
 After upload is done. Open your site at the browser. eg: http://yoursite.com
 
 The installation wizard will appear, just follow all the instructions.
+
+#### Using Composer 
+
+We are now ready for composer installation. Run this command at your server.
+
+`php composer.phar create-project genix/cms`
+
+more detail about composer, please read the documentationa t http://getcomposer.org
 
 more details of installation : 
 http://docs.genixcms.org/en/latest/user-guide/installation/
