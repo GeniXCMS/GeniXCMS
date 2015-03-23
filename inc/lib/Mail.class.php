@@ -62,7 +62,7 @@ class Mail
         $subject = $vars['subject'];
         $message = $vars['message'];
         (isset($vars['msgtype']))? $msgtype = $vars['msgtype']: $msgtype = 'html';
-        require_once GX_LIB.'/Vendor/PHPMailer/PHPMailerAutoload.php';
+        //require_once GX_LIB.'/Vendor/PHPMailer/PHPMailerAutoload.php';
         // check if using plain mail or smtp
         $type = Options::get('mailtype');
 
