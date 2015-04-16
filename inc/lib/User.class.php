@@ -157,6 +157,7 @@ class User
     }
 
     public static function delete($id){
+        $id = Typo::int($id);
         $vars = array(
                 'table' => 'user',
                 'where' => array(
@@ -198,12 +199,15 @@ class User
     }
 
     public static function is_exist($user) {
+        $id = Typo::int($_GET['id']);
         if(isset($_GET['act']) && $_GET['act'] == 'edit'){
-            $where = "AND `id` != '{$_GET['id']}' ";
+            $where = "AND `id` != '{$id}' ";
         }else{
             $where = '';
         }
-        $usr = Db::result("SELECT `userid` FROM `user` WHERE `userid` = '{$user}' {$where} ");
+        $user = sprintf('%s', Typo::cleanX($user));
+        $sql = sprintf("SELECT `userid` FROM `user` WHERE `userid` = '%s' %s ", $user, $where);
+        $usr = Db::result($sql);
         $n = Db::$num_rows;
         if($n > 0 ){
             return false;
@@ -222,12 +226,15 @@ class User
     }
 
     public static function is_email($vars){
+        $id = Typo::int($_GET['id']);
         if(isset($_GET['act']) && $_GET['act'] == 'edit'){
-            $where = "AND `id` != '{$_GET['id']}' ";
+            $where = "AND `id` != '{$id}' ";
         }else{
             $where = '';
         }
-        $e = Db::result("SELECT * FROM `user` WHERE `email` = '{$vars}' {$where}");
+        $vars = sprintf('%s', Typo::cleanX($vars));
+        $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where );
+        $e = Db::result("");
         if(Db::$num_rows > 0){
             return false;
         }else{
@@ -236,27 +243,69 @@ class User
     }
 
     public static function id($userid){
-        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1", $userid));
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1", 
+                Typo::cleanX($userid)
+                )
+            );
         return $usr[0]->id;
     }
 
     public static function userid($id){
-        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", 
+                Typo::int($id)
+                )
+            );
         return $usr[0]->userid;
     }
 
     public static function email($id){
-        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
+                Typo::int($id), 
+                Typo::cleanX($id)
+                )
+            );
         return $usr[0]->email;
     }
 
     public static function group($id){
-        $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", $id));
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
+                Typo::int($id), 
+                Typo::cleanX($id)
+                )
+            );
         return $usr[0]->group;
     }
 
+    public static function regdate($id){
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
+                Typo::int($id), 
+                Typo::cleanX($id)
+                )
+            );
+        return $usr[0]->join_date;
+    }
+
+    public static function avatar($id){
+        $usr = Db::result(
+            sprintf("SELECT * FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
+                Typo::int($id), 
+                Typo::cleanX($id)
+                )
+            );
+        return $usr[0]->avatar;
+    }
+    
     public static function activate($id){
-        $act = Db::query(sprintf("UPDATE `user` SET `status` = '1' WHERE `id` = '%d'", $id));
+        $act = Db::query(
+            sprintf("UPDATE `user` SET `status` = '1' WHERE `id` = '%d'", 
+                Typo::int($id)
+                )
+            );
         if($act){
             return true;
         }else{
@@ -265,7 +314,11 @@ class User
     }
 
     public static function deactivate($id){
-        $act = Db::query(sprintf("UPDATE `user` SET `status` = '0' WHERE `id` = '%d'", $id));
+        $act = Db::query(
+            sprintf("UPDATE `user` SET `status` = '0' WHERE `id` = '%d'", 
+                Typo::int($id)
+                )
+            );
         if($act){
             return true;
         }else{
