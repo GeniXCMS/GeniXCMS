@@ -199,8 +199,9 @@ class User
     }
 
     public static function is_exist($user) {
-        $id = Typo::int($_GET['id']);
+
         if(isset($_GET['act']) && $_GET['act'] == 'edit'){
+            $id = Typo::int($_GET['id']);
             $where = "AND `id` != '{$id}' ";
         }else{
             $where = '';
@@ -226,8 +227,9 @@ class User
     }
 
     public static function is_email($vars){
-        $id = Typo::int($_GET['id']);
+
         if(isset($_GET['act']) && $_GET['act'] == 'edit'){
+            $id = Typo::int($_GET['id']);
             $where = "AND `id` != '{$id}' ";
         }else{
             $where = '';
