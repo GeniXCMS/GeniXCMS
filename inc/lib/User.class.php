@@ -157,7 +157,6 @@ class User
     }
 
     public static function delete($id){
-        $id = Typo::int($id);
         $vars = array(
                 'table' => 'user',
                 'where' => array(
@@ -227,7 +226,7 @@ class User
     }
 
     public static function is_email($vars){
-
+        
         if(isset($_GET['act']) && $_GET['act'] == 'edit'){
             $id = Typo::int($_GET['id']);
             $where = "AND `id` != '{$id}' ";
@@ -236,7 +235,7 @@ class User
         }
         $vars = sprintf('%s', Typo::cleanX($vars));
         $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where );
-        $e = Db::result("");
+        $e = Db::result($sql);
         if(Db::$num_rows > 0){
             return false;
         }else{
@@ -301,7 +300,7 @@ class User
             );
         return $usr[0]->avatar;
     }
-    
+
     public static function activate($id){
         $act = Db::query(
             sprintf("UPDATE `user` SET `status` = '1' WHERE `id` = '%d'", 
