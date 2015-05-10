@@ -46,7 +46,21 @@
                 //print_r($data['parent']);
                 foreach ($data['parent'] as $p) {
                     # code...
-                    echo "<option value=\"$p->id\">$p->name</option>";
+                    if($p->parent == ''){
+                        echo "<option value=\"$p->id\">$p->name</option>";
+                        $parent2 = $data['parent'];
+                        foreach ( $parent2 as $p2) {
+                            if ($p2->parent == $p->id) {
+                                echo "<option value=\"$p2->id\">&nbsp;&nbsp;&nbsp;$p2->name</option>";
+                                foreach ($data['parent'] as $p3) {
+                                    if ($p3->parent == $p2->id) {
+                                        echo "<option value=\"$p3->id\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                 }
                 
             ?>

@@ -47,7 +47,7 @@ if (isset($data['alertgreen'])) {
 <div class="row">
     <div class="col-md-12">
 
-        <h1><i class="fa fa-sitemap"></i> Menus
+        <h1><i class="fa fa-sitemap"></i> <?=MENUS;?>
             <div class="pull-right">
                 <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
                     <span class="glyphicon glyphicon-plus"></span> Add Menu

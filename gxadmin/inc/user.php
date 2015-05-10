@@ -122,6 +122,8 @@
 
                     if($p->group == 0){
                         $grp = "Administrator";
+                    }elseif($p->group == 3){
+                        $grp = "Author";
                     }elseif($p->group == 4){
                         $grp = "General Member";
                     }
@@ -210,6 +212,7 @@
                     <label>Group Level</label>
                     <select name="group" class="form-control">
                         <option value="0">Administrator</option>
+                        <option value="3">Author</option>
                         <option value="4" selected="on">General Members</option>
                     </select> 
                 </div>

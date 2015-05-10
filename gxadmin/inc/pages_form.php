@@ -15,8 +15,13 @@
 *
 */
 
-isset($_GET['token'])? $token = $_GET['token']: $token = TOKEN;
-($_GET['act'] == "edit")? $pagetitle = "Edit": $pagetitle = "New";
+if (isset($_GET['token']) 
+    && Token::isExist($_GET['token'])) {
+    $token = TOKEN;
+}else{
+    $token = '';
+}
+($_GET['act'] == "edit")? $pagetitle = 'Edit': $pagetitle = 'New';
 ($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token={$_GET['token']}": $act = "add";
 
 if (isset($data['alertgreen'])) {
@@ -74,14 +79,14 @@ if (isset($data['alertred'])) {
         $unpub = "";
     }
 ?>
-<form action="index.php?page=pages&act=<?=$act?>" method="post" role="form" class="">
+<form action="index.php?page=pages&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
         <h1><i class="fa fa-file-o"></i> <?=$pagetitle;?> <?=PAGE;?> 
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
-                    <?=PUBLISH;?>
+                    <?=SUBMIT;?>
                 </button>
 
                 <a href="index.php?page=pages" class="btn btn-danger">

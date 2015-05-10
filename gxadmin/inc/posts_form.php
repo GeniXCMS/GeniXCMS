@@ -14,7 +14,12 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-isset($_GET['token'])? $token = $_GET['token']: $token = TOKEN;
+if (isset($_GET['token']) 
+    && Token::isExist($_GET['token'])) {
+    $token = TOKEN;
+}else{
+    $token = '';
+}
 ($_GET['act'] == "edit")? $pagetitle = "Edit": $pagetitle = "New";
 ($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token={$_GET['token']}": $act = "add";
 if (isset($data['alertgreen'])) {
@@ -70,14 +75,14 @@ if(isset($data['post'])) {
     $unpub = "";
 }
 ?>
-<form action="index.php?page=posts&act=<?=$act?>" method="post" role="form" class="">
+<form action="index.php?page=posts&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
         <h1><i class="fa fa-file-text-o"></i> <?=$pagetitle;?> <?=POST;?>
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
-                    <?=PUBLISH;?>
+                    <?=SUBMIT;?>
                 </button>
 
                 <a href="index.php?page=posts" class="btn btn-danger">

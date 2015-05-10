@@ -92,14 +92,21 @@ if (isset($data['alertgreen'])) {
             if(User::group($_GET['id']) == 0){
                 $adm = "SELECTED";
                 $mem = "";
+                $aut = "";
+            }elseif(User::group($_GET['id']) == 3){
+                $aut = "SELECTED";
+                $adm = "";
+                $mem = "";
             }elseif(User::group($_GET['id']) == 4){
                 $mem = "SELECTED";
                 $adm = "";
+                $aut = "";
             }
 
             ?>
             <select name="group" class="form-control">
                 <option value="0" <?=$adm;?>>Administrator</option>
+                <option value="3" <?=$aut;?>>Author</option>
                 <option value="4" <?=$mem;?>>General Members</option>
             </select> 
             <small>Group Level of the user.</small>

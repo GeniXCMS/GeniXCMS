@@ -21,8 +21,14 @@
     ?>
     <script>
          $("#selectall").change(function(){
-              $('input:checkbox').not(this).prop('checked', this.checked);
+            $('input:checkbox').not(this).prop('checked', this.checked);
               //alert(cb.val());
+           
+        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                    placement: 'top'
+                });
         });
     </script>
     <!-- Metis Menu Plugin JavaScript -->

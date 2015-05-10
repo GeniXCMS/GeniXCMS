@@ -44,9 +44,9 @@
 <div class="row">
     <div class="col-md-12">
         <h1><i class="fa fa-file-text-o"></i> <?=POSTS;?> 
-            <a href="index.php?page=posts&act=add" 
+            <a href="index.php?page=posts&act=add&token=<?=TOKEN;?>" 
             class="btn btn-primary pull-right">
-                <?=ADD_NEW_POST;?>
+                <i class="fa fa-plus"></i> <?=ADD_NEW_POST;?>
             </a>
         </h1>
         <hr />
@@ -168,8 +168,7 @@
             <th><?=TITLE;?></th>
             <th><?=CATEGORY;?></th>
             <th><?=DATE;?></th>
-            <th><?=STATUS;?></th>
-            <th>
+            <th colspan="2">
             <select name="action" class="form-control">
                 <option value="publish"><?=PUBLISH;?></option>
                 <option value="unpublish"><?=UNPUBLISH;?></option>

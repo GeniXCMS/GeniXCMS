@@ -44,8 +44,8 @@ if (isset($data['alertred'])) {
 <div class="row">
     <div class="col-md-12">
         <h1><i class="fa fa-file-o"></i> <?=PAGES;?> 
-            <a href="index.php?page=pages&act=add" class="btn btn-primary pull-right">
-                <?=ADD_NEW_PAGE;?>
+            <a href="index.php?page=pages&act=add&token=<?=TOKEN;?>" class="btn btn-primary pull-right">
+                <i class="fa fa-plus"></i> <?=ADD_NEW_PAGE;?>
             </a>
         </h1>
         <hr />
@@ -151,8 +151,7 @@ if (isset($data['alertred'])) {
                         <th><?=ID;?></th>
                         <th><?=TITLE;?></th>
                         <th><?=DATE;?></th>
-                        <th><?=STATUS;?></th>
-                        <th>
+                        <th colspan="2">
                         <select name="action" class="form-control">
                             <option value="publish"><?=PUBLISH;?></option>
                             <option value="unpublish"><?=UNPUBLISH;?></option>

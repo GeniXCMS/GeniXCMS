@@ -17,7 +17,7 @@
     <div id="wrapper">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-nav">
                 <span class="sr-only"><?=MENU;?></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -44,6 +44,7 @@
                   <li><a href="index.php?page=themes"><i class="fa fa-paint-brush"></i> <?=THEMES;?></a></li>
                   <li><a href="index.php?page=modules"><i class="fa fa-plug"></i> <?=MODULES;?></a></li>
                   <li ><a href="index.php?page=settings"><i class="fa fa-wrench"></i> <?=SETTINGS;?></a></li>
+                  <?php echo Theme::thmMenu();?>
                   <?php echo Mod::ModMenu();?>
                   <li><a href="logout.php"><i class="fa fa-power-off"></i> <?=LOGOUT;?></a></li>
                 </ul>

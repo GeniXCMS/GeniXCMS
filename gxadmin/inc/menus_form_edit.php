@@ -15,14 +15,14 @@
 *
 */
 
-    if(isset($_GET['id'])){
-        $menuid = $_GET['id'];
-    }else{
-        $menuid = $data['menuid'];
-    }
+if(isset($_GET['id'])){
+    $menuid = $_GET['id'];
+}else{
+    $menuid = $data['menuid'];
+}
 
-    //print_r($data['menus']);
-    if (isset($data['alertgreen'])) {
+    // print_r($data['menus']);
+if (isset($data['alertgreen'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
@@ -49,6 +49,13 @@
         echo "<li>$alert</li>\n";
     }
     echo "</ul></div>";
+}
+
+if (isset($_GET['token']) 
+    && Token::isExist($_GET['token'])) {
+    $token = TOKEN;
+}else{
+    $token = '';
 }
 ?>
 <form action="" method="POST">
@@ -77,16 +84,40 @@
             <?php
                //echo($data['abc']);
                 //print_r($data['menus']);
+                
                 foreach ($data['parent'] as $p) {
                     # code...
-                    if($data['menus'][0]->parent == $p->id){
-                        $sel = 'SELECTED';
-                    }else{
-                        $sel = '';
+                    if($p->parent == ''){
+                        if($data['menus'][0]->parent == $p->id){
+                            $sel = 'SELECTED';
+                        }else{
+                            $sel = '';
+                        }
+                        echo "<option value=\"$p->id\" $sel>$p->name</option>";
+                        $parent2 = $data['parent'];
+                        foreach ( $parent2 as $p2) {
+                            if ($p2->parent == $p->id) {
+                                if($data['menus'][0]->parent == $p2->id){
+                                    $sel = 'SELECTED';
+                                }else{
+                                    $sel = '';
+                                }
+                                echo "<option value=\"$p2->id\" $sel>&nbsp;&nbsp;&nbsp;$p2->name</option>";
+                                foreach ($data['parent'] as $p3) {
+                                    if ($p3->parent == $p2->id) {
+                                        if($data['menus'][0]->parent == $p3->id){
+                                            $sel = 'SELECTED';
+                                        }else{
+                                            $sel = '';
+                                        }
+                                        echo "<option value=\"$p3->id\" $sel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
+                                    }
+                                }
+                            }
+                        }
                     }
-                    echo "<option value=\"$p->id\" $sel>$p->name</option>";
+                    
                 }
-                
             ?>
             </select>
             <small>Parent menu</small>
@@ -207,6 +238,6 @@
         </div>
     </div>
 </div>
-<input type="hidden" name="token" value="<?=$_GET['token'];?>">
+<input type="hidden" name="token" value="<?=$token;?>">
 </form>
 </div>
