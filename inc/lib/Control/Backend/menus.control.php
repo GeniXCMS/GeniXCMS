@@ -15,6 +15,7 @@
 *
 */
 
+$data['sitetitle'] = MENUS;
 if(isset($_GET['act'])) { $act = $_GET['act'];}else{$act = '';}
 switch ($act) {
     case 'add':
@@ -113,7 +114,9 @@ switch ($act) {
         }
         $data['parent'] = Menus::isHadParent('', $menuid);
         //echo "<pre>"; print_r($data); echo "</pre>";
+        Theme::admin('header', $data);
         System::inc('menus_form', $data);
+        Theme::admin('footer');
         break;
 
     case 'edit':
@@ -148,8 +151,9 @@ switch ($act) {
                             );
                     Menus::update($vars);
                     $data['alertgreen'][] = 'Menu Updated';
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -165,7 +169,9 @@ switch ($act) {
         }
         $data['menus'] = Menus::getId($_GET['itemid']);
         $data['parent'] = Menus::isHadParent('', $menuid);
+        Theme::admin('header', $data);
         System::inc('menus_form_edit', $data);
+        Theme::admin('footer');
         break;
     case 'del':
         if(isset($_GET['itemid'])){
@@ -184,7 +190,9 @@ switch ($act) {
             $data['alertred'][] = 'No ID Selected.';
         }
         $data['menus'] = Options::get('menus');
+        Theme::admin('header', $data);
         System::inc('menus', $data);
+        Theme::admin('footer');
         break;
 
     case 'remove':
@@ -210,7 +218,9 @@ switch ($act) {
             $data['alertred'][] = 'No ID Selected.';
         }
         $data['menus'] = Options::get('menus');
+        Theme::admin('header', $data);
         System::inc('menus', $data);
+        Theme::admin('footer');
         break;
 
     default:
@@ -278,6 +288,12 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
+                if (!isset($_POST['name']) || $_POST['name'] == '' ) {
+                    $alertred[] = MENU_NAME_CANNOT_EMPTY;
+                }
+                if (!isset($_POST['type']) || $_POST['type'] == '' ) {
+                    $alertred[] = MENU_TYPE_CANNOT_EMPTY;
+                }
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
                 }else{
@@ -291,8 +307,9 @@ switch ($act) {
                             );
                     Menus::insert($vars);
                     $data['alertgreen'][] = 'Menu Item Added';
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -337,7 +354,9 @@ switch ($act) {
         // CHANGE ORDER END
 
         $data['menus'] = Options::get('menus');
+        Theme::admin('header', $data);
         System::inc('menus', $data);
+        Theme::admin('footer');
         break;
 }
     

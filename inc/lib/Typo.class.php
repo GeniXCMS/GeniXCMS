@@ -84,19 +84,19 @@ class Typo
         if(is_array($tags) AND count($tags) > 0) { 
             if($invert == FALSE) { 
                 /*return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); */
-                return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
-                return preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
+                $text = preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
+                $text = preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
             } 
             else { 
                 /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
-                return preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text); 
-                return preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text); 
+                $text = preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text); 
+                $text = preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text); 
             } 
             }
         elseif($invert == FALSE) { 
             /*return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); */
-            return preg_replace('@<(\w+)\b.*?>@si', '', $text); 
-            return preg_replace('@</(\w+)\b.*?>@si', '', $text); 
+            $text = preg_replace('@<(\w+)\b.*?>@si', '', $text); 
+            $text = preg_replace('@</(\w+)\b.*?>@si', '', $text); 
         } 
         return $text; 
     }
@@ -135,7 +135,16 @@ class Typo
         $var = sprintf('%d', $var);
         return $var;
     }
+
+    public static function float($var) {
+        $var = sprintf('%2f', $var);
+        return $var;
+    }
+
+    public static function escape($vars) {
+        return Db::escape($vars);
+    }
 }
 
-/* End of file Db.class.php */
-/* Location: ./inc/lib/Db.class.php */
+/* End of file Typo.class.php */
+/* Location: ./inc/lib/Typo.class.php */

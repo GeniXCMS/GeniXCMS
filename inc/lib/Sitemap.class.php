@@ -23,20 +23,25 @@ class Sitemap
     }
 
 
-    public static function create($url="post", $type='post'){
+    public static function create($url="post", $type='post', $class='Url'){
         $posts = Posts::recent(20,$type);
         header("Content-Type: text/xml");
         $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         $xml .= "
             <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
             ";
-        foreach ($posts as $p) {
-            # code...
-            $xml .= "
-                <url>
-                    <loc>".Url::$url($p->id)."</loc>
-                </url>
-                ";
+            //print_r($posts);
+        if (!isset($posts['error'])) {
+                # code...
+            
+            foreach ($posts as $p) {
+                # code...
+                $xml .= "
+                    <url>
+                        <loc>".$class::$url($p->id)."</loc>
+                    </url>
+                    ";
+            }
         }
         
         $xml .= "

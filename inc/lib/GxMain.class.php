@@ -38,7 +38,6 @@ class GxMain
     public function __construct() {
         if (System::existConf()) {
             new System();
-            new Db();
             new Site();
             Vendor::autoload();
             Token::create();
@@ -75,16 +74,14 @@ class GxMain
         Session::start();
         User::secure();
         System::gZip();
-        Theme::admin('header');
         if( User::access(2) ) {
             Control::handler('backend');
         }else{
+            Theme::admin('header');
             Control::error('noaccess');
+            Theme::admin('footer');
         }
-        Theme::admin('footer');
         System::Zipped();
-        
-
     }
 
     /**

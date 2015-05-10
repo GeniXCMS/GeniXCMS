@@ -17,18 +17,23 @@
 
 
 $post="";
+$cat = Db::escape(Typo::Xclean($_GET['cat']));
+
 $data['max'] = Options::get('post_perpage');
 if(isset($_GET['paging'])){
-    $paging = sprintf('%d', $_GET['paging']);
+    $paging = Typo::int($_GET['paging']);
     if($paging > 0) {
         $offset = ($paging-1)*$data['max'];
     }else{
         $offset = 0;
     }
+    $pagingtitle = " - Page {$paging}";
 }else{
     $offset = 0;
+    $paging = 1;
+    $pagingtitle = "";
 }
-$cat = Db::$mysqli->real_escape_string(Typo::Xclean($_GET['cat']));
+$data['sitetitle'] = "Category: ".Categories::name($cat).$pagingtitle;
 $data['posts'] = Db::result(
                 sprintf("SELECT * FROM `posts` 
                     WHERE `type` = 'post' 
@@ -40,15 +45,21 @@ $data['posts'] = Db::result(
                     )
                 );
 $data['num'] = Db::$num_rows;
-if($data['num'] > 0) {
-    Theme::theme('header',$data);
-    Theme::theme('cat', $data);
-    Theme::footer();
-    exit;
-}else{
-    Control::error('404');
-    exit;
-}
+$url = Url::cat($_GET['cat']);
+$paging = array(
+                'paging' => $paging,
+                'table' => 'posts',
+                'where' => '`type` = \'post\' AND `cat` = \''.$cat.'\'',
+                'max' => $data['max'],
+                'url' => $url,
+                'type' => Options::get('pagination')
+            );
+$data['paging'] = Paging::create($paging);
+Theme::theme('header',$data);
+Theme::theme('cat', $data);
+Theme::footer();
+exit;
+
 
 /* End of file cat.control.php */
 /* Location: ./inc/lib/Control/Frontend/cat.control.php */

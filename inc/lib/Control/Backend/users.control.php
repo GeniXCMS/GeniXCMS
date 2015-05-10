@@ -15,7 +15,7 @@
 *
 */
 
-
+$data['sitetitle'] = USERS;
 if(isset($_GET['act'])){ $act = $_GET['act']; }else{$act="";}
 switch ($act) {
     case 'edit':
@@ -76,7 +76,9 @@ switch ($act) {
                 # code...
                 break;
             }
+        Theme::admin('header', $data);
         System::inc('user_form', $data);
+        Theme::admin('footer');
         break;
     case 'del':
             if(isset($_GET['id'])){
@@ -94,7 +96,9 @@ switch ($act) {
             }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
+            Theme::admin('header', $data);
             System::inc('user', $data);
+            Theme::admin('footer');
         break;
     case 'active':
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
@@ -111,7 +115,9 @@ switch ($act) {
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
+            Theme::admin('header', $data);
             System::inc('user', $data);
+            Theme::admin('footer');
         break;
         
     case 'inactive':
@@ -128,7 +134,9 @@ switch ($act) {
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
+            Theme::admin('header', $data);
             System::inc('user', $data);
+            Theme::admin('footer');
         break;
         
 
@@ -293,7 +301,9 @@ switch ($act) {
 
         $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
         $data['num'] = Db::$num_rows;
+        Theme::admin('header', $data);
         System::inc('user', $data);
+        Theme::admin('footer');
 
         $page = array(
                     'paging' => $paging,

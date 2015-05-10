@@ -18,16 +18,20 @@
 $post="";
 $data['max'] = Options::get('post_perpage');
 if(isset($_GET['paging'])){
-    $paging = sprintf('%d', $_GET['paging']);
+    $paging = Typo::int($_GET['paging']);
     if($paging > 0) {
         $offset = ($paging-1)*$data['max'];
     }else{
         $offset = 0;
     }
+    $pagingtitle = " - Page {$paging}";
 }else{
     $offset = 0;
+    $paging = 1;
+    $pagingtitle = "";
 }
 //echo $paging;
+$data['sitetitle'] = Site::$slogan.$pagingtitle;
 $data['posts'] = Db::result(
                         sprintf("SELECT * FROM `posts` 
                             WHERE `type` = 'post' 
@@ -38,6 +42,15 @@ $data['posts'] = Db::result(
                             )
                         );
 $data['num'] = Db::$num_rows;
+$paging = array(
+                'paging' => $paging,
+                'table' => 'posts',
+                'where' => '`type` = \'post\'',
+                'max' => $data['max'],
+                'url' => 'index.php?',
+                'type' => Options::get('pagination')
+            );
+$data['paging'] = Paging::create($paging);
 Theme::theme('header',$data);
 Theme::theme('index', $data);
 Theme::footer();

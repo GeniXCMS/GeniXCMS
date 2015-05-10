@@ -90,6 +90,7 @@ class Posts
     }
 
     public static function delete($id) {
+        $id = Typo::int($id);
         try
         {
             $vars1 = array(

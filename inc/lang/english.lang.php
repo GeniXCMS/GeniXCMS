@@ -115,3 +115,5 @@ define('PUBLISHED_LOWER', 'published');
 define('UNPUBLISHED_LOWER', 'unpublished');
 define('LEFT_IT_BLANK_NOW_DATE', 'left it blank to make it now');
 
+define('MENU_NAME_CANNOT_EMPTY', 'Menu Name Cannot be Empty');
+define('MENU_TYPE_CANNOT_EMPTY', 'Menu Type Cannot be Empty');

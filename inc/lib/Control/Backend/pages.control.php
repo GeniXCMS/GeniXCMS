@@ -14,7 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
+$data['sitetitle'] = PAGES;
 if(isset($_GET['act'])) { $act = $_GET['act']; }else{ $act = "";}
 switch ($act) {
     case 'add':
@@ -41,18 +41,19 @@ switch ($act) {
                         $date = $_POST['date'];
                     }
                     $vars = array(
-                                    'title' => Typo::cleanX($_POST['title']),
-                                    'content' => Typo::cleanX($_POST['content']),
+                                    'title' => $_POST['title'],
+                                    'content' => $_POST['content'],
                                     'date' => $date,
                                     'type' => 'page',
                                     'author' => Session::val('username'),
-                                    'status' => $_POST['status'],
+                                    'status' => Typo::int($_POST['status']),
                                 );
                     //print_r($vars);
                     Posts::insert($vars);
                     $data['alertgreen'][] = "Page : {$_POST['title']} Added.";
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -60,7 +61,9 @@ switch ($act) {
                 //System::inc('pages_form', $data);
                 break;
         }
+        Theme::admin('header', $data);
         System::inc('pages_form', $data);
+        Theme::admin('footer');
         break;
 
     case 'edit':
@@ -86,17 +89,18 @@ switch ($act) {
                     }
                     $moddate = date("Y-m-d H:i:s");
                     $vars = array(
-                                    'title' => Typo::cleanX($_POST['title']),
-                                    'content' => Typo::cleanX($_POST['content']),
+                                    'title' => $_POST['title'],
+                                    'content' => $_POST['content'],
                                     'modified' => $moddate,
                                     'date' => $date,
-                                    'status' => $_POST['status'],
+                                    'status' => Typo::int($_POST['status']),
                                 );
                     //print_r($vars);
                     Posts::update($vars);
                     $data['alertgreen'][] = "Page : {$_POST['title']} Updated.";
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -106,7 +110,9 @@ switch ($act) {
         }
 
         $data['post'] = Db::result("SELECT * FROM `posts` WHERE `id` = '{$_GET['id']}' ");
+        Theme::admin('header', $data);
         System::inc('pages_form', $data);
+        Theme::admin('footer');
 
         break;
 
@@ -225,7 +231,7 @@ switch ($act) {
             $qpage .= "&status={$_GET['status']}";
         }
 
-        $max = "10";
+        $max = "20";
         if(isset($_GET['paging'])){
             $paging = $_GET['paging'];
             $offset = ($_GET['paging']-1)*$max;
@@ -236,7 +242,9 @@ switch ($act) {
         
         $data['posts'] = Db::result("SELECT * FROM `posts` WHERE `type` = 'page' {$where} ORDER BY `date` DESC LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
+        Theme::admin('header', $data);
         System::inc('pages', $data);
+        Theme::admin('footer');
 
         $page = array(
                     'paging' => $paging,

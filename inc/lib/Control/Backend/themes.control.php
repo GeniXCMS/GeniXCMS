@@ -15,74 +15,85 @@
 *
 */
 
-if (isset($_POST['upload'])) {
-    if(!Token::isExist($_POST['token'])){
-        $alertred[] = TOKEN_NOT_EXIST;
-    }
-    if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == "") {
-        $alertred[] = NOFILE_UPLOADED;
-    }
+if (isset($_GET['view']) && $_GET['view'] == 'options') {
+    $data['sitetitle'] = THEMES;
+    Theme::admin('header', $data);
+    Theme::options(Options::get('themes'));
+    Theme::admin('footer');
+}else{
 
-    if(!isset($alertred)){
-        //Mod::activate($_GET['themes']);
-        $path = "/inc/themes/";
-        $allowed = array('zip');
-        $theme = Upload::go('theme', $path, $allowed);
-        //print_r($theme);
-        $zip = new ZipArchive;
-        if ($zip->open($theme['filepath']) === TRUE) {
-            $zip->extractTo(GX_THEME);
-            $zip->close();
-            $data['alertgreen'][] = "Themes Installed Sucesfully.";
-        } else {
-            $data['alertred'][] = "Can't extract files.";
-        }
-        unlink($theme['filepath']);
-    }else{
-        $data['alertred'] = $alertred;
-    }
-    if(isset($_POST['token'])){ Token::remove($_POST['token']); }
-}
 
-if (isset($_GET['act'])) {
-
-    if ($_GET['act'] == 'activate') {
-
-        if(!Token::isExist($_GET['token'])){
+    if (isset($_POST['upload'])) {
+        if(!Token::isExist($_POST['token'])){
             $alertred[] = TOKEN_NOT_EXIST;
+        }
+        if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == "") {
+            $alertred[] = NOFILE_UPLOADED;
         }
 
         if(!isset($alertred)){
-            Theme::activate($_GET['themes']);
-            $data['alertgreen'][] = THEME_ACTIVATED;
-        }else{
-            $data['alertred'] = $alertred;
-        }
-    }elseif ($_GET['act'] == 'remove') {
-        if(!Token::isExist($_GET['token'])){
-            $alertred[] = TOKEN_NOT_EXIST;
-        }
-        if (Theme::isActive($_GET['themes'])) {
-            $alertred[] = "Theme is Active. Please deactivate first.";
-        }
-        if(!isset($alertred)){
-            if(Files::delTree(GX_THEME."/".$_GET['themes'])){
-                $data['alertgreen'][] = THEME_REMOVED;
-            }else{
-                $data['alertred'][] = "Theme Cannot removed. Please check if You had permission to remove the files.";
+            //Mod::activate($_GET['themes']);
+            $path = "/inc/themes/";
+            $allowed = array('zip');
+            $theme = Upload::go('theme', $path, $allowed);
+            //print_r($theme);
+            $zip = new ZipArchive;
+            if ($zip->open($theme['filepath']) === TRUE) {
+                $zip->extractTo(GX_THEME);
+                $zip->close();
+                $data['alertgreen'][] = "Themes Installed Sucesfully.";
+            } else {
+                $data['alertred'][] = "Can't extract files.";
             }
-            
+            unlink($theme['filepath']);
         }else{
             $data['alertred'] = $alertred;
         }
+        if(isset($_POST['token'])){ Token::remove($_POST['token']); }
     }
-    
+
+    if (isset($_GET['act'])) {
+
+        if ($_GET['act'] == 'activate') {
+
+            if(!Token::isExist($_GET['token'])){
+                $alertred[] = TOKEN_NOT_EXIST;
+            }
+
+            if(!isset($alertred)){
+                Theme::activate($_GET['themes']);
+                $data['alertgreen'][] = THEME_ACTIVATED;
+            }else{
+                $data['alertred'] = $alertred;
+            }
+        }elseif ($_GET['act'] == 'remove') {
+            if(!Token::isExist($_GET['token'])){
+                $alertred[] = TOKEN_NOT_EXIST;
+            }
+            if (Theme::isActive($_GET['themes'])) {
+                $alertred[] = "Theme is Active. Please deactivate first.";
+            }
+            if(!isset($alertred)){
+                if(Files::delTree(GX_THEME."/".$_GET['themes'])){
+                    $data['alertgreen'][] = THEME_REMOVED;
+                }else{
+                    $data['alertred'][] = "Theme Cannot removed. Please check if You had permission to remove the files.";
+                }
+                
+            }else{
+                $data['alertred'] = $alertred;
+            }
+        }
+        
+    }
+
+    $data['sitetitle'] = THEMES;
+    $data['themes'] = Theme::thmList();
+    Theme::admin('header', $data);
+    System::inc('themes',$data);
+    Theme::admin('footer');
+
 }
-
-
-$data['themes'] = Theme::thmList();
-System::inc('themes',$data);
-
 
 /* End of file mods.control.php */
 /* Location: ./inc/lib/Control/Backend/mods.control.php */

@@ -15,7 +15,7 @@
 *
 */
 
-$data = "";
+$data['sitetitle'] = SETTINGS;
 switch (isset($_POST['change'])) {
     case '1':
         # code...
@@ -73,7 +73,9 @@ switch (isset($_POST['change'])) {
         //print_r($data);
         break;
 }
+Theme::admin('header', $data);
 System::inc('settings',$data);
+Theme::admin('footer');
 
 /* End of file settings.control.php */
 /* Location: ./inc/lib/Control/Backend/settings.control.php */

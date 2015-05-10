@@ -14,20 +14,8 @@
     }else{
         echo "No Post to Show";
     }
-    if(isset($_GET['paging'])){
-        $paging = $_GET['paging'];
-    }else{
-        $paging = 1;
-    }
-    $paging = array(
-                    'paging' => $paging,
-                    'table' => 'posts',
-                    'where' => '`type` = \'post\'',
-                    'max' => $data['max'],
-                    'url' => 'index.php?',
-                    'type' => 'pager'
-                );
-    echo Paging::create($paging);
+
+    echo $data['paging'];
 ?>
 </div>
 <?php Theme::theme('rightside', $data); ?>

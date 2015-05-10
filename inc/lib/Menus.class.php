@@ -51,7 +51,7 @@ class Menus
         }else{
             $where = '';
         }
-        if(isset($parent)){
+        if(isset($parent) && $parent != ''){
             $parent = " `parent` = '{$parent}'";
         }else{
             $parent = '1';
@@ -100,13 +100,13 @@ class Menus
                     
                     if($n > 0){
                         $class = "dropdown-menu";
-                        $menu .= "<ul class=\"submenu {$class}\" role=\"dropdown\">";
+                        $menu .= "<ul class=\" {$class}\" role=\"dropdown\">";
                             foreach ($menus as $m2) {
                                 if($m2->parent == $m->id){
                                     $parent = self::isHadParent($m2->id, $menuid);
                                     $n = Db::$num_rows;
                                     if($n > 0 && $bsnav) { 
-                                        $class = "class=\"dropdown\"";
+                                        $class = "class=\"dropdown-submenu\"";
                                         $aclass = "dropdown-toggle\" data-toggle=\"dropdown";
                                     }else{ 
                                         $class ="";
@@ -118,13 +118,13 @@ class Menus
                                         
                                         if($n > 0){
                                             $class = "dropdown-menu";
-                                            $menu .= "<ul class=\"submenu {$class}\">";
+                                            $menu .= "<ul class=\" {$class}\">";
                                             foreach ($menus as $m3) {
                                                 if($m3->parent == $m2->id){
                                                     $parent = self::isHadParent($m3->id, $menuid);
                                                     $n = Db::$num_rows;
                                                     if($n > 0 && $bsnav) { 
-                                                        $class = "class=\"dropdown\"";
+                                                        $class = "class=\"dropdown-submenu\"";
                                                         $aclass = "dropdown-toggle\" data-toggle=\"dropdown";
                                                     }else{ 
                                                         $class ="";
@@ -132,18 +132,18 @@ class Menus
                                                     }
                                                     $type = $m3->type;
                                                     $menu .= "<li $class>";
-                                                    $menu .= "<li>";
+                                                    //$menu .= "<li>";
                                                     $menu .= "<a href='".Url::$type($m3->value)."' class=\"{$m3->class} {$aclass}\">".$m3->name."</a>";
                                                         
                                                         if($n > 0){
                                                             $class = "dropdown-menu";
-                                                            $menu .= "<ul class=\"submenu {$class}\">";
+                                                            $menu .= "<ul class=\" {$class}\">";
                                                             foreach ($menus as $m4) {
                                                                 if($m4->parent == $m3->id){
                                                                     $parent = self::isHadParent($m4->id, $menuid);
                                                                     $n = Db::$num_rows;
                                                                     if($n > 0 && $bsnav) { 
-                                                                        $class = "class=\"dropdown\"";
+                                                                        $class = "class=\"dropdown-submenu\"";
                                                                         $aclass = "dropdown-toggle\" data-toggle=\"dropdown";
                                                                     }else{ 
                                                                         $class ="";
@@ -306,6 +306,7 @@ class Menus
             $menu .= "</ul>
                     <div class=\"row\">
                         <div class=\"col-md-2 pull-right\">
+                            <input type=\"hidden\" name=\"token\" value=\"".TOKEN."\">
                             <button name=\"changeorder\" type=\"submit\" class=\"btn btn-warning pull-right\">
                                 Change Order
                             </button>

@@ -38,14 +38,9 @@ class System
     * @since 0.0.1
     */
     public function __construct () {
-        if (self::existConf()) {
-            # code...
-            self::config('config');
-            self::lang(GX_LANG);            
-        }else{
-            GxMain::install();
-        }
-        
+        self::config('config');
+        new Db();
+        self::lang(Options::get('system_lang'));
     }
 
     /**

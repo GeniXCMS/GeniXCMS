@@ -50,11 +50,12 @@ class Upload
         $filename = str_replace(' ', '_', $filename);
         if(isset($_FILES[$input]) && $_FILES[$input]['error'] == 0){
             if($uniq == true){
-                $uniqfile = sha1(microtime().$filename);
+                $site = Typo::slugify(Options::get('sitename'));
+                $uniqfile = $site.'-'.sha1(microtime().$filename).'-';
             }else{
                 $uniqfile = '';
             }
-
+            
             $extension = pathinfo($_FILES[$input]['name'], PATHINFO_EXTENSION);
             $filetmp = $_FILES[$input]['tmp_name'];
             $filepath = GX_PATH.$path.$uniqfile.$filename;

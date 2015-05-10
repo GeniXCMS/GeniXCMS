@@ -11,9 +11,11 @@
 * version : 0.0.1 pre
 * build : 20141006
 */
-    $data = '';
+    $data['sitetitle'] = DASHBOARD;
+    Theme::admin('header', $data);
     System::inc('dashboard', $data);
     //Mod::Options('moviedb');
+    Theme::admin('footer');
 
 /* End of file default.control.php */
 /* Location: ./inc/lib/Control/Backend/default.control.php */

@@ -95,6 +95,10 @@ class Session
 
     }
 
+    public static function set($vars) {
+        self::set_session($vars);
+    }
+
     public static function destroy () {
         session_destroy();
         unset($_SESSION['gxsess']);

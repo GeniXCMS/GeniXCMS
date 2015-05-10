@@ -14,6 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
+$data['sitetitle'] = MODULES;
 if(isset($GLOBALS['alertred']))
     $data['alertred'] = $GLOBALS['alertred'];
 if(isset($GLOBALS['alertgreen']))
@@ -51,8 +52,9 @@ if (isset($_POST['upload'])) {
 
 
 $data['mods'] = Mod::modList();
+Theme::admin('header', $data);
 System::inc('modules',$data);
-
+Theme::admin('footer');
 
 /* End of file mods.control.php */
 /* Location: ./inc/lib/Control/Backend/mods.control.php */

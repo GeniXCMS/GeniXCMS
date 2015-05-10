@@ -14,10 +14,10 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
-
+$data['sitetitle'] = MODULES;
+Theme::admin('header', $data);
 Mod::options($_GET['mod']);
-
+Theme::admin('footer');
 
 /* End of file mods.control.php */
 /* Location: ./inc/lib/Control/Backend/mods.control.php */

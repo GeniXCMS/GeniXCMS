@@ -27,7 +27,12 @@ class Theme
             # code...
             $GLOBALS['data'] = $data;
         }
-        include(GX_THEME.THEME.'/'.$var.'.php');
+        if (self::exist($var)) {
+            include(GX_THEME.THEME.'/'.$var.'.php');
+        }else{
+            Control::error('unknown','Theme file is missing.');
+        }
+        
     }
 
     public static function exist ($vars) {
@@ -38,7 +43,11 @@ class Theme
         }
     }
     
-    public static function admin($var) {
+    public static function admin($var, $data='') {
+        if (isset($data)) {
+            # code...
+            $GLOBALS['data'] = $data;
+        }
         include(GX_PATH.'/gxadmin/themes/'.$var.'.php');
     }
 
@@ -93,6 +102,21 @@ class Theme
         include(GX_PATH.'/gxadmin/themes/install/'.$var.'.php');
     }
 
+    public static function options($var) {
+        if (self::optionsExist($var)) {
+            include(GX_THEME.$var.'/options.php');
+        }
+        
+    }
+
+    public static function optionsExist($var) {
+        if (file_exists(GX_THEME.$var.'/options.php')) {
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
 
     public static function thmList(){
         //$mod = '';
@@ -154,6 +178,33 @@ class Theme
     public static function loader(){
         $theme = Options::get('themes');
         define('THEME', $theme);
+    }
+
+    public static function thmMenu(){
+        $thm = Options::get('themes');
+        //$mod = self::modList();
+        //print_r($mod);
+        $list = '';
+        # code...
+        $data = self::data($thm);
+        if(isset($_GET['page']) 
+            && $_GET['page'] == 'themes' 
+            && isset($_GET['view'])
+            && $_GET['view'] == 'options'){
+            $class = 'class="active"';
+        }else{
+            $class = "";
+        }
+        if (self::optionsExist($thm)) {
+            $list .= "
+            <li $class>
+                <a href=\"index.php?page=themes&view=options\" >".$data['icon']." ".$data['name']."</a>
+            </li>";
+        }else{
+            $list = '';
+        }
+
+        return $list;
     }
 }
 

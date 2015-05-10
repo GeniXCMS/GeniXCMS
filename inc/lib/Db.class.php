@@ -103,6 +103,7 @@ class Db
             $q = mysql_query($vars)  or die(mysql_error());
         } 
         elseif(DB_DRIVER == 'mysqli') {
+            self::$mysqli->set_charset("utf8");
             $q = self::$mysqli->query($vars) ;
             if($q === false) {
                 Control::error('db',"Query failed: ".self::$mysqli->error."<br />\n"); 
@@ -179,6 +180,7 @@ class Db
         if(is_array($vars)){
             $where = '';
             foreach ($vars['where'] as $key => $val) {
+                $val = self::escape($val);
                 $where .= "`$key` = '$val' AND ";
             }
             $where = $where." 1";
@@ -218,6 +220,7 @@ class Db
         if(is_array($vars)){
             $set = "";
             foreach ($vars['key'] as $key => $val) {
+                $val = self::escape($val);
                 $set .= "`$key` = '$val',";
             }
             
@@ -259,9 +262,12 @@ class Db
         if(is_array($vars)){
             $set = "";
             $k = "";
+            //print_r($vars['key']);
             foreach ($vars['key'] as $key => $val) {
-                $set .= "'$val',";
-                $k .= "`$key`,";
+                //print_r($val);
+                $val = self::escape($val);
+                $set .= "'{$val}',";
+                $k .= "`{$key}`,";
             }
             
             $set = substr($set, 0,-1);
@@ -293,6 +299,17 @@ class Db
         }
         
         //return true;
+    }
+
+    public static function escape($vars) {
+        if(DB_DRIVER == 'mysql') {
+            $vars = mysql_escape_string($vars);
+        }elseif(DB_DRIVER == 'mysqli'){
+            $vars = self::$mysqli->escape_string($vars);
+        }else{
+            $vars = $vars;
+        }
+        return $vars;
     }
 }
 

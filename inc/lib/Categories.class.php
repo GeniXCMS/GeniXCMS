@@ -98,6 +98,73 @@ class Categories
         return $drop;
     }
 
+
+    public static function lists($vars) {
+        if(is_array($vars)){
+            //print_r($vars);
+            
+            $where = "WHERE ";
+            if(isset($vars['parent'])) {
+                $where .= " `parent` = '{$vars['parent']}' AND ";
+            }
+            if(isset($vars['type'])) {
+                $where .= " `type` = '{$vars['type']}' AND ";
+            }
+            $where .= "1 ";
+            $order_by = "ORDER BY ";
+            if(isset($vars['order_by'])) {
+                $order_by .= " {$vars['order_by']} ";
+            }else{
+                $order_by .= " `name` ";
+            }
+            if (isset($vars['sort'])) {
+                $sort = " {$vars['sort']}";
+            }else{
+                $sort = " ASC";
+            }
+        }
+        $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
+        //print_r($cat);
+        $drop = "<div class=\"panel-group\" id=\"accordion\" role=\"tablist\">
+            ";
+        if(Db::$num_rows > 0 ){
+            foreach ($cat as $c) {
+                # code...
+                if($c->parent == null || $c->parent == '0' ){
+                    //if(isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
+                    if(isset($_GET['cat'])){
+                        $catparent = self::getParent($_GET['cat']);
+                        $in = ($catparent[0]->parent === $c->id)? 'in': '';
+                    }else{
+                        $catparent = '';
+                        $in =  '';
+                    }
+                    // print_r($catparent);
+                    
+                    $drop .= "<div class=\"panel panel-default\">
+                    <div id=\"collapseListGroupHeading{$c->id}\" class=\"panel-heading\" role=\"tab\" >
+                    <a href=\"#collapse-{$c->id}\" data-toggle=\"collapse\"  aria-expanded=\"false\" 
+                    aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>
+                    </div>
+                    <div class=\"panel-collapse collapse {$in}\" role=\"tabpanel\" id=\"collapse-{$c->id}\" aria-labelledby=\"collapseListGroupHeading{$c->id}\">
+                    <ul class=\"nav nav-pills nav-stacked \" >";
+                    foreach ($cat as $c2) {
+                        # code...
+                        if($c2->parent == $c->id){
+                            //if(isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
+                            $drop .= "<li><a href=\"".Url::cat($c2->id)."\">{$c2->name}</a></li>";
+                        }
+                    }
+                    $drop .= "</ul></div></div>";
+                }
+                
+            }
+        }
+        $drop .= "</div>";
+
+        return $drop;
+    }
+
     /**
     * Category Name function
     *
@@ -140,8 +207,8 @@ class Categories
     public static function getParent($id=''){
         $sql = sprintf("SELECT `parent` FROM `cat` 
                         WHERE `id` = '%d'", $id);
-        $menu = Db::result($sql);
-        return $menu;
+        $cat = Db::result($sql);
+        return $cat;
     }
 
     /**

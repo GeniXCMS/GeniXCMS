@@ -26,6 +26,7 @@ class Site
     static $key;
     static $desc;
     static $email;
+    static $slogan;
 
     public function __construct() {
         global $GLOBALS, $data;
@@ -37,6 +38,7 @@ class Site
         self::$key = Options::get('sitekeywords');
         self::$desc = Options::get('sitedesc');
         self::$email = Options::get('siteemail');
+        self::$slogan = Options::get('siteslogan');
     }
 
     /* Call all Website Meta at Header
@@ -47,12 +49,20 @@ class Site
         //print_r($data);
         //if(empty($data['posts'][0]->title)){ 
 
-        if(is_array($data) && isset($data['posts'][0]->title)){
+        if( is_array($data) ){
             
             $sitenamelength = strlen(self::$name);
             $limit = 70-$sitenamelength-6;
-            $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)),0,$limit);
-            $titlelength = strlen($data['posts'][0]->title);
+            if(isset($data['sitetitle'])){
+                $cont_title = substr(Typo::Xclean(Typo::strip($data['sitetitle'])),0,$limit);
+                $titlelength = strlen($data['sitetitle']);
+            }elseif(isset($data['posts'][0]->title) && !isset($data['posts'][1]->title)){
+                $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)),0,$limit);
+                $titlelength = strlen($data['posts'][0]->title);
+            }else{
+                $cont_title = substr(Typo::Xclean(Typo::strip(Options::get('siteslogan'))),0,$limit);
+                $titlelength = strlen(Options::get('siteslogan'));
+            }
             if($titlelength > $limit+3) { $dotted = "...";} else {$dotted = "";}
             $cont_title = "{$pre} {$cont_title}{$dotted} - ";
         }else{
@@ -66,15 +76,20 @@ class Site
 
         $meta = "
     <!--// Start Meta: Generated Automaticaly by GeniXCMS -->
+    <meta charset=\"".Options::get('charset')."\">";
+        $meta .= "
     <!-- SEO: Title stripped 70chars for SEO Purpose -->
     <title>{$cont_title}".self::$name."</title>
     <meta name=\"Keyword\" content=\"".self::$key."\">
     <!-- SEO: Description stripped 150chars for SEO Purpose -->
-    <meta name=\"Description\" content=\"".self::desc($desc)."\">
-    <meta name=\"Author\" content=\"Puguh Wijayanto | MetalGenix IT Solutions - www.metalgenix.com\">
-    <meta name=\"Generator\" content=\"GeniXCMS\">
+    <meta name=\"Description\" content=\"".self::desc($desc)."\">";
+    if (isset($data['posts'][0]->author) && !isset($data['posts'][1]->author)) {
+         $meta .= "
+    <meta name=\"Author\" content=\"{$data['posts'][0]->author}\">";
+    }
+        $meta .= "
+    <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
     <meta name=\"robots\" content=\"".Options::get('robots')."\">
-    <meta name=\"revisit-after\" content=\" days\">
     <link rel=\"shortcut icon\" href=\"".Options::get('siteicon')."\" />            
         ";
         

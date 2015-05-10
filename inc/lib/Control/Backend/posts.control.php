@@ -15,7 +15,7 @@
 *
 */
 
-
+$data['sitetitle'] = POSTS;
 if(isset($_GET['act'])) $act = $_GET['act']; else $act = "";
 switch ($act) {
     case 'add':
@@ -41,19 +41,20 @@ switch ($act) {
                         $date = $_POST['date'];
                     }
                     $vars = array(
-                                    'title' => Typo::cleanX($_POST['title']),
+                                    'title' => $_POST['title'],
                                     'cat' => $_POST['cat'],
-                                    'content' => Typo::cleanX($_POST['content']),
+                                    'content' => $_POST['content'],
                                     'date' => $date,
                                     'type' => 'post',
                                     'author' => Session::val('username'),
-                                    'status' => $_POST['status'],
+                                    'status' => Typo::int($_POST['status'])
                                 );
                     //print_r($vars);
                     Posts::insert($vars);
                     $data['alertgreen'][] = "Post : {$_POST['title']} Added.";
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -61,7 +62,9 @@ switch ($act) {
                 
                 break;
         }
+        Theme::admin('header', $data);
         System::inc('posts_form', $data);
+        Theme::admin('footer');
         //echo "add";
         break;
 
@@ -83,19 +86,20 @@ switch ($act) {
                 }else{
                     $moddate = date("Y-m-d H:i:s");
                     $vars = array(
-                                    'title' => Typo::cleanX($_POST['title']),
+                                    'title' => $_POST['title'],
                                     'cat' => $_POST['cat'],
-                                    'content' => Typo::cleanX($_POST['content']),
+                                    'content' => $_POST['content'],
                                     'modified' => $moddate,
                                     'date' => $_POST['date'],
-                                    'status' => $_POST['status'],
+                                    'status' => Typo::int($_POST['status'])
                                 );
                     //print_r($vars);
                     
                     Posts::update($vars);
                     $data['alertgreen'][] = "Post : <b>{$_POST['title']}</b> Updated.";
+                    Token::remove($_POST['token']);
                 }
-                if(isset($_POST['token'])){ Token::remove($_POST['token']); }
+
                 break;
             
             default:
@@ -105,7 +109,9 @@ switch ($act) {
         }
 
         $data['post'] = Db::result("SELECT * FROM `posts` WHERE `id` = '{$_GET['id']}' ");
+        Theme::admin('header', $data);
         System::inc('posts_form', $data);
+        Theme::admin('footer');
 
         break;
 
@@ -228,7 +234,7 @@ switch ($act) {
         }
         
 
-        $max = "10";
+        $max = "20";
         if(isset($_GET['paging'])){
             $paging = $_GET['paging'];
             $offset = ($_GET['paging']-1)*$max;
@@ -244,7 +250,9 @@ switch ($act) {
                         ORDER BY `date` DESC 
                         LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
+        Theme::admin('header', $data);
         System::inc('posts', $data);
+        Theme::admin('footer');
 
         $page = array(
                     'paging' => $paging,

@@ -12,7 +12,7 @@
 * build : 20141006
 */
 
-$data[] = "";
+$data['sitetitle'] = CATEGORIES;
 switch (isset($_POST['addcat'])) {
     case true:
         # code...
@@ -87,7 +87,9 @@ if(isset($_GET['act']) == 'del'){
 }
 $data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC");
 $data['num'] = Db::$num_rows;
+Theme::admin('header', $data);
 System::inc('categories', $data);
+Theme::admin('footer');
 
 
 /* End of file categories.control.php */
