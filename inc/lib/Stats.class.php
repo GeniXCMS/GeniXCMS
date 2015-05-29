@@ -32,6 +32,12 @@ class Stats
         $npost = Db::$num_rows;
         return $npost;
     }
+	
+	public static function totalUsers($vars) {
+        $posts = Db::result("SELECT `id` FROM `user`");
+        $npost = Db::$num_rows;
+        return $npost;
+    }
 
 }
 
