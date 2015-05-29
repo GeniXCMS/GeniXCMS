@@ -268,12 +268,18 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label>Facebook Account</label>
+								<div class="input-group">
+                         <span class="input-group-addon"><i class="fa fa-facebook fa-lg" style="color:#3b5998"></i></span>
                                 <input type="text" name="fbacc" value="<?=Options::get('fbacc');?>" class="form-control">
+								</div> 
                                 <small>Your Facebook Account</small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label>Facebook Page</label>
+								<div class="input-group">
+                         <span class="input-group-addon"><i class="fa fa-facebook fa-lg" style="color:#3b5998"></i></span>
                                 <input type="text" name="fbpage" value="<?=Options::get('fbpage');?>" class="form-control">
+								</div>
                                 <small>Your Facebook Page</small>
                             </div>
                         </div>
@@ -285,14 +291,17 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label>Twitter Account</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon">@</span>
+                              <span class="input-group-addon"><i class="fa fa-twitter fa-lg" style="color:#00a0d1"></i></span>
                                     <input type="text" name="twitter" value="<?=Options::get('twitter');?>" class="form-control">
                                 </div>
                                 <small>Your Twitter Account</small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label>LinkedIn Account</label>
+								<div class="input-group">
+							  <span class="input-group-addon"><i class="fa fa-linkedin fa-lg" style="color:#007bb6"></i></span>
                                 <input type="text" name="linkedin" value="<?=Options::get('linkedin');?>" class="form-control">
+								</div>
                                 <small>Your LinkedIn Account</small>
                             </div>
                         </div>
