@@ -24,7 +24,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><?=LATEST_POST;?></h3>
+                        <h3 class="panel-title"><i class="fa fa-file-text-o"></i> <?=LATEST_POST;?></h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
@@ -56,7 +56,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><?=STATISTIC;?></h3>
+                        <h3 class="panel-title"><i class="fa fa-bar-chart"></i> <?=STATISTIC;?></h3>
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
