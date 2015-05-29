@@ -68,14 +68,14 @@ if (isset($data['alertred'])) {
         </div>
         <div class="col-sm-12" id="myTab">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#general" role="tab" data-toggle="tab">General</a></li>
-                <li><a href="#localization" role="tab" data-toggle="tab">Localization</a></li>
-                <li><a href="#email" role="tab" data-toggle="tab">E-Mail</a></li>
-                <li><a href="#social" role="tab" data-toggle="tab">Social</a></li>
-                <li><a href="#logo" role="tab" data-toggle="tab">Logo</a></li>
-                <li><a href="#library" role="tab" data-toggle="tab">Library</a></li>
-                <li><a href="#posts" role="tab" data-toggle="tab">Posts</a></li>
-                <li><a href="#payment" role="tab" data-toggle="tab">Payment</a></li>
+                <li class="active"><a href="#general" role="tab" data-toggle="tab">GENERAL</a></li>
+                <li><a href="#localization" role="tab" data-toggle="tab">LOCALIZATION</a></li>
+                <li><a href="#email" role="tab" data-toggle="tab">E-MAIL</a></li>
+                <li><a href="#social" role="tab" data-toggle="tab">SOCIAL</a></li>
+                <li><a href="#logo" role="tab" data-toggle="tab">LOGO</a></li>
+                <li><a href="#library" role="tab" data-toggle="tab">LIBRARY</a></li>
+                <li><a href="#posts" role="tab" data-toggle="tab">POSTS</a></li>
+                <li><a href="#payment" role="tab" data-toggle="tab">PAYMENT</a></li>
             </ul>
 
             <!-- Tab panes -->
