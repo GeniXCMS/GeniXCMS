@@ -62,7 +62,8 @@
                         <ul class="list-group">
                         <?php 
                             echo "<li class=\"list-group-item\">".TOTAL_POST.": ".Stats::totalPost('post')."</li>"
-                                ."<li class=\"list-group-item\">".TOTAL_PAGE.": ".Stats::totalPost('page')."</li>";
+                                ."<li class=\"list-group-item\">".TOTAL_PAGE.": ".Stats::totalPost('page')."</li>"
+								."<li class=\"list-group-item\">".TOTAL_CAT.": ".Stats::totalCat('cat')."</li>";
                         ?>
                         </ul>
                     </div>
