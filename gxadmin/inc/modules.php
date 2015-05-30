@@ -44,9 +44,9 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-plug"></i>  Modules 
+        <h1><i class="fa fa-plug"></i>  <?=MODULES;?> 
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> Upload Modules
+                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_MODULES;?> 
             </button>
         </h1>
         <hr />
@@ -56,9 +56,9 @@ if (isset($data['alertred'])) {
         <div class="row">
             <table class="table table-responsive">
                 <thead>
-                    <th>Name</th>
-                    <th>Descriptions</th>
-                    <th>Actions</th>
+                    <th><?=NAME;?></th>
+                    <th><?=DESC;?></th>
+                    <th><?=ACTION;?> </th>
                 </thead>
                 <tbody>
                     <?php
@@ -68,16 +68,16 @@ if (isset($data['alertred'])) {
                                 if (Mod::isActive($mod)) {
                                     # code...
                                     $btnact = "warning";
-                                    $act = "deactivate";
+                                    $act = DEACTIVATE;
                                 }else{
                                     $btnact = "success";
-                                    $act = "activate";
+                                    $act = ACTIVATE;
                                 }
                                 echo "
                                 <tr>
                                     <td>
                                         {$m['icon']} <strong>{$m['name']}</strong><br />
-                                        <small>version: {$m['version']} - license: {$m['license']}</small>
+                                        <small>".VERSION.": {$m['version']} - ".LICENSE.": {$m['license']}</small>
                                     </td>
                                     <td>
                                         <p title=\"{$m['desc']}\">".substr($m['desc'], 0,180)."</p>
@@ -96,7 +96,7 @@ if (isset($data['alertred'])) {
                                 
                             }
                         }else{
-                            echo "<div class=\"col-md-12\">No Categories Found</div>";
+                            echo "<div class=\"col-md-12\">".NO_MODULES_FOUND."</div>";
                         }
                     ?>
                     
@@ -122,21 +122,21 @@ if (isset($data['alertred'])) {
             <form action="index.php?page=modules" method="post" enctype="multipart/form-data">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Upload Module</h4>
+            <h4 class="modal-title" id="myModalLabel"><?=UPLOAD_MODULES;?></h4>
           </div>
           <div class="modal-body">
 
                 <div class="form-group">
-                    <label>Choose Module</label>
+                    <label><?=BROWSE_MODULES;?></label>
                     <input type="file" name="module" class="form-control">
-                    <small>choose the modules file. in zip compression</small>
+                    <small><?=BROWSE_MODULES_DESC;?></small>
                 </div>
             
           </div>
           <div class="modal-footer">
             <input type="hidden" name="token" value="<?=TOKEN;?>">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" name="upload">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?=CLOSE;?></button>
+            <button type="submit" class="btn btn-success" name="upload"><?=UPLOAD_MODULES;?></button>
           </div>
           </form>
         </div><!-- /.modal-content -->

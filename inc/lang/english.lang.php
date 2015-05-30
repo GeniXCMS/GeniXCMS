@@ -22,6 +22,7 @@ define('NO_USER', 'Username is incorrect, No such user available. Please check y
 define('LOGIN_TITLE', 'Member Login');
 define('USERNAME', 'Username');
 define('PASSWORD', 'Password');
+define('RETYPE_PASSWORD', 'Retype Password');
 define('FORGOT_PASS', 'Forgot Password');
 define('FILLIN_USERNAME', 'Fill in your Username');
 define('FILLIN_PASSWORD', 'Fill in your Password');
@@ -115,5 +116,70 @@ define('PUBLISHED_LOWER', 'published');
 define('UNPUBLISHED_LOWER', 'unpublished');
 define('LEFT_IT_BLANK_NOW_DATE', 'left it blank to make it now');
 
+define('ADD_USER', 'Add User');
+define('FIND_USER', 'Find user');
+define('SEARCH_USER', 'Search user');
+define('ACTIVE', 'Active');
+define('INACTIVE', 'Inactive');
+define('ACTIVATE', 'activate');
+define('DEACTIVATE', 'deactivate');
+define('EMAIL', 'Email');
+define('GROUP', 'Group');
+define('JOIN_DATE', 'Join Date');
+define('ADMINISTRATOR', 'Administrator');
+define('AUTHOR', 'Author');
+define('GENERAL_MEMBER', 'General Member');
+
+define('DELETE_CONFIRM', 'Are you sure you want to delete this?');
+
 define('MENU_NAME_CANNOT_EMPTY', 'Menu Name Cannot be Empty');
 define('MENU_TYPE_CANNOT_EMPTY', 'Menu Type Cannot be Empty');
+
+define('ADD_MENU', 'Add Menu');
+define('MENU_ID', 'Menu ID');
+define('MENU_ID_DESC', 'ID of the menu, eg. <code>mainmenu</code>');
+define('MENU_NAME', 'Menu Name');
+define('MENU_NAME_DESC', 'Name of the menu');
+define('MENU_CLASS', 'Menu CLass');
+define('MENU_CLASS_DESC', 'Class Style of the menu. <code>.class</code> means menu class is <em>class</em>');
+define('MENU_ITEMS', 'Menu Items');
+define('ADD_MENU_ITEM', 'Add Menu Item');
+
+define('UPLOAD_THEMES', 'Upload Themes');
+define('ACTIVE_THEME', 'Active Themes');
+define('NO_THEMES_FOUND', 'No Themes Found');
+define('INSTALL_THEME', 'Install Themes');
+define('BROWSE_THEMES', 'Browse Themes');
+define('BROWSE_THEME_DESC', 'choose the theme file. in zip compression');
+
+
+define('UPLOAD_MODULES', 'Upload Modules');
+define('ACTIVE_MODULE', 'Active Modules');
+define('NO_MODULES_FOUND', 'No Modules Found');
+define('INSTALL_MODULE', 'Install Modules');
+define('BROWSE_MODULES', 'Browse Modules');
+define('BROWSE_MODULES_DESC', 'choose the module file. in zip compression');
+
+define('NAME', 'Name');
+define('DESC', 'Description');
+
+define('VERSION', 'Version');
+define('LICENSE', 'License');
+
+define('CHANGE', 'Change');
+define('GENERAL', 'General');
+define('LOCALIZATION', 'Localization');
+define('SOCIAL', 'Social');
+define('LOGO', 'Logo');
+define('LIBRARY', 'Library');
+define('PAYMENT', 'Payment');
+
+define('WEBSITE_DETAIL', 'Website Detail');
+define('WEBSITE_NAME', 'Website Name');
+define('WEBSITE_NAME_DESC', 'your website name');
+define('WEBSITE_SLOGAN', 'Website Slogan');
+define('WEBSITE_SLOGAN_DESC', 'your website slogan');
+define('WEBSITE_DOMAIN', 'Website Domain');
+define('WEBSITE_DOMAIN_DESC', 'Your Domain, eg: example.org');
+define('WEBSITE_URI', 'Website URL');
+define('WEBSITE_URI_DESC', 'Your Website URL, eg: http://www.example.org');

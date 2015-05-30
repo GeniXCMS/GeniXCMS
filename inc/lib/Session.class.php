@@ -104,6 +104,10 @@ class Session
         unset($_SESSION['gxsess']);
     }
 
+    public static function remove($var) {
+        unset($_SESSION['gxsess']['val'][$var]);
+    }
+
 }
 
 

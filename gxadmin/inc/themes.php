@@ -44,9 +44,9 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-paint-brush"></i>  Themes 
+        <h1><i class="fa fa-paint-brush"></i>  <?=THEMES;?> 
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> Upload Themes
+                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_THEMES;?> 
             </button>
         </h1>
         <hr />
@@ -59,7 +59,7 @@ if (isset($data['alertred'])) {
                 $adata = Theme::data($active);
                 echo "
                 <div class=\"col-sm-12\">
-                <label>Active Theme</label>
+                <label>".ACTIVE_THEME."</label>
                     <div class=\"row\">
 
                     <div class=\"col-sm-3\">
@@ -134,7 +134,7 @@ if (isset($data['alertred'])) {
                         echo "</div>";
                     }
                 }else{
-                    echo "<div class=\"col-md-12\">No Themes Found</div>";
+                    echo "<div class=\"col-md-12\">".NO_THEMES_FOUND."</div>";
                 }
             ?>
         </div>
@@ -150,20 +150,20 @@ if (isset($data['alertred'])) {
             <form action="index.php?page=themes" method="post" enctype="multipart/form-data">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Install Themes</h4>
+            <h4 class="modal-title" id="myModalLabel"><?=INSTALL_THEME;?></h4>
           </div>
           <div class="modal-body">
                 <div class="form-group">
-                    <label>Browse Theme</label>
+                    <label><?=BROWSE_THEMES;?></label>
                     <input type="file" name="theme" class="form-control">
-                    <small>choose the theme file. in zip compression</small>
+                    <small><?=BROWSE_THEME_DESC;?></small>
                 </div>
             
           </div>
           <div class="modal-footer">
             <input type="hidden" name="token" value="<?=TOKEN;?>">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" name="upload">Upload</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?=CLOSE;?></button>
+            <button type="submit" class="btn btn-success" name="upload"><?=UPLOAD_THEMES;?></button>
           </div>
           </form>
         </div><!-- /.modal-content -->
