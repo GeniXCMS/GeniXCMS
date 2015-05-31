@@ -14,8 +14,6 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
-
 if (isset($data['alertgreen'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
@@ -30,7 +28,6 @@ if (isset($data['alertgreen'])) {
     }
     echo "</div>";
 }
-
 if (isset($data['alertred'])) {
     # code...
     echo "<div class=\"alert alert-danger\" >
@@ -44,23 +41,22 @@ if (isset($data['alertred'])) {
     }
     echo "</div>";
 }
-
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-12">
             <h1 class="clearfix">
                 <div class="pull-left">
-                    <i class="fa fa-wrench"></i> Settings Page
+                    <i class="fa fa-wrench"></i> <?=SETTINGS;?>
                 </div>
                 <div class="pull-right">
                     <button type="submit" name="change" class="btn btn-success" value="Change">
                         <span class="glyphicon glyphicon-ok"></span>
-                        Change
+                        <?=CHANGE;?>
                     </button>
                     <button type="reset" class="btn btn-danger" value="Cancel">
                         <span class="glyphicon glyphicon-remove"></span>
-                        Cancel
+                        <?=CANCEL;?>
                     </button>
                 </div>
             </h1>
@@ -68,14 +64,14 @@ if (isset($data['alertred'])) {
         </div>
         <div class="col-sm-12" id="myTab">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#general" role="tab" data-toggle="tab">GENERAL</a></li>
-                <li><a href="#localization" role="tab" data-toggle="tab">LOCALIZATION</a></li>
-                <li><a href="#email" role="tab" data-toggle="tab">E-MAIL</a></li>
-                <li><a href="#social" role="tab" data-toggle="tab">SOCIAL</a></li>
-                <li><a href="#logo" role="tab" data-toggle="tab">LOGO</a></li>
-                <li><a href="#library" role="tab" data-toggle="tab">LIBRARY</a></li>
-                <li><a href="#posts" role="tab" data-toggle="tab">POSTS</a></li>
-                <li><a href="#payment" role="tab" data-toggle="tab">PAYMENT</a></li>
+                <li class="active"><a href="#general" role="tab" data-toggle="tab"><?=GENERAL;?></a></li>
+                <li><a href="#localization" role="tab" data-toggle="tab"><?=LOCALIZATION;?></a></li>
+                <li><a href="#email" role="tab" data-toggle="tab"><?=EMAIL;?></a></li>
+                <li><a href="#social" role="tab" data-toggle="tab"><?=SOCIAL;?></a></li>
+                <li><a href="#logo" role="tab" data-toggle="tab"><?=LOGO;?></a></li>
+                <li><a href="#library" role="tab" data-toggle="tab"><?=LIBRARY;?></a></li>
+                <li><a href="#posts" role="tab" data-toggle="tab"><?=POSTS;?></a></li>
+                <li><a href="#payment" role="tab" data-toggle="tab"><?=PAYMENT;?></a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -83,20 +79,20 @@ if (isset($data['alertred'])) {
 
                 <div class="tab-pane active" id="general">
                     <h3>
-                        Website Details
+                        <?=WEBSITE_DETAIL;?>
                         <hr />
                     </h3>
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label>Website Name</label>
+                                <label><?=WEBSITE_NAME;?></label>
                                 <input type="text" name="sitename" value="<?=Site::$name;?>" class="form-control">
-                                <small>Your Website Name, Title</small>
+                                <small><?=WEBSITE_NAME_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
-                                <label>Website Slogan</label>
+                                <label><?=WEBSITE_SLOGAN;?></label>
                                 <input type="text" name="siteslogan" value="<?=Options::get('siteslogan');?>" class="form-control">
-                                <small>Your Website Slogan</small>
+                                <small><?=WEBSITE_SLOGAN_DESC;?></small>
                             </div>
                         </div>
                         
@@ -105,14 +101,14 @@ if (isset($data['alertred'])) {
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label>Website Domain</label>
+                                <label><?=WEBSITE_DOMAIN;?></label>
                                 <input type="text" name="sitedomain" value="<?=Site::$domain;?>" class="form-control">
-                                <small>Your Domain, eg: example.org</small>
+                                <small><?=WEBSITE_DOMAIN_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
-                                <label>Website URL</label>
+                                <label><?=WEBSITE_URI;?></label>
                                 <input type="text" name="siteurl" value="<?=Site::$url;?>" class="form-control">
-                                <small>Your Website URL, eg: http://www.example.org</small>
+                                <small><?=WEBSITE_URI_DESC;?></small>
                             </div>
                         </div>
                         
@@ -268,18 +264,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label>Facebook Account</label>
-								<div class="input-group">
-                         <span class="input-group-addon"><i class="fa fa-facebook fa-lg" style="color:#3b5998"></i></span>
                                 <input type="text" name="fbacc" value="<?=Options::get('fbacc');?>" class="form-control">
-								</div> 
                                 <small>Your Facebook Account</small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label>Facebook Page</label>
-								<div class="input-group">
-                         <span class="input-group-addon"><i class="fa fa-facebook fa-lg" style="color:#3b5998"></i></span>
                                 <input type="text" name="fbpage" value="<?=Options::get('fbpage');?>" class="form-control">
-								</div>
                                 <small>Your Facebook Page</small>
                             </div>
                         </div>
@@ -291,17 +281,14 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label>Twitter Account</label>
                                 <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-twitter fa-lg" style="color:#00a0d1"></i></span>
+                                    <span class="input-group-addon">@</span>
                                     <input type="text" name="twitter" value="<?=Options::get('twitter');?>" class="form-control">
                                 </div>
                                 <small>Your Twitter Account</small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label>LinkedIn Account</label>
-								<div class="input-group">
-							  <span class="input-group-addon"><i class="fa fa-linkedin fa-lg" style="color:#007bb6"></i></span>
                                 <input type="text" name="linkedin" value="<?=Options::get('linkedin');?>" class="form-control">
-								</div>
                                 <small>Your LinkedIn Account</small>
                             </div>
                         </div>
