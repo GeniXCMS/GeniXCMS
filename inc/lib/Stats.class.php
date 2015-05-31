@@ -26,6 +26,18 @@ class Stats
         $npost = Db::$num_rows;
         return $npost;
     }
+	
+	public static function totalCat($vars) {
+        $posts = Db::result("SELECT `id` FROM `cat`");
+        $npost = Db::$num_rows;
+        return $npost;
+    }
+	
+	public static function totalUser($vars) {
+        $posts = Db::result("SELECT `id` FROM `user`");
+        $npost = Db::$num_rows;
+        return $npost;
+    }
 
 }
 

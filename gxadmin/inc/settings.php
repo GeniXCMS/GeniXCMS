@@ -14,8 +14,6 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
-
 if (isset($data['alertgreen'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
@@ -30,7 +28,6 @@ if (isset($data['alertgreen'])) {
     }
     echo "</div>";
 }
-
 if (isset($data['alertred'])) {
     # code...
     echo "<div class=\"alert alert-danger\" >
@@ -44,7 +41,6 @@ if (isset($data['alertred'])) {
     }
     echo "</div>";
 }
-
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="row">

@@ -86,7 +86,7 @@ if (isset($data['alertred'])) {
                 <div class="col-sm-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
-                            <?=FIND_PAGES;?>
+                            <span class="glyphicon glyphicon-search"></span> <?=FIND_PAGES;?>
                         </button>
                     </div>
                 </div>
@@ -161,7 +161,7 @@ if (isset($data['alertred'])) {
                         </th>
                         <th>
                             <button type="submit" name="doaction" class="btn btn-danger">
-                                <?=SUBMIT;?>
+                                 <span class="glyphicon glyphicon-ok"></span> <?=SUBMIT;?>
                             </button>
                         </th>
                     </tfoot>
