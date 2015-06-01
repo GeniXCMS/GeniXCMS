@@ -88,7 +88,7 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
-                            <?=FIND_USER;?>
+                            <span class="glyphicon glyphicon-search"></span> <?=FIND_USER;?>
                         </button>
                     </div>
                 </div>

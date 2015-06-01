@@ -51,7 +51,7 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::insert($vars);
-                    $data['alertgreen'][] = "Post : {$_POST['title']} Added.";
+                    $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_ADDED;
                     Token::remove($_POST['token']);
                 }
 
@@ -96,7 +96,7 @@ switch ($act) {
                     //print_r($vars);
                     
                     Posts::update($vars);
-                    $data['alertgreen'][] = "Post : <b>{$_POST['title']}</b> Updated.";
+                    $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_UPDATED;
                     Token::remove($_POST['token']);
                 }
 
@@ -135,12 +135,12 @@ switch ($act) {
                     if(isset($del['error'])){
                         $data['alertred'][] = $del['error'];
                     }else{
-                        $data['alertgreen'][] = 'Post <b>'.$title.'</b> Removed';
+                        $data['alertgreen'][] = POST." {$title} ".MSG_PAGE_REMOVED;
                     }
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
-                $data['alertred'][] = 'No ID Selected';
+                $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
             }
             
         }

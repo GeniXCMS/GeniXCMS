@@ -63,7 +63,7 @@ switch (isset($_POST['change'])) {
             unset($vars['change']);
             //print_r($vars);
             Options::update($vars);
-            $data['alertgreen'][] = "New Settings Saved.";
+            $data['alertgreen'][] = MSG_SETTINGS_SAVED;
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;

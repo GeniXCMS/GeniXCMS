@@ -23,22 +23,22 @@
 
 ?>
 <form action="" method="POST">
-<h1><i class="fa fa-sitemap"></i> Add Menu
+<h1><i class="fa fa-sitemap"></i> <?=ADD_MENU;?>
 <div class="pull-right">
 <button type="submit" name="additem" class="btn btn-success">
     <span class="glyphicon glyphicon-ok"></span>
-    Submit
+    <?=SUBMIT;?>
 </button>
 <a href="index.php?page=menus" class="btn btn-danger">
     <span class="glyphicon glyphicon-remove"></span>
-    Cancel
+    <?=CANCEL;?>
 </a>
 </div>
 </h1>
 <div class="col-sm-12">
     <div class="col-sm-4">
         <div class="form-group">
-            <label>Parent Menu</label>
+            <label><?=MENU_PARENT;?></label>
             <select class="form-control" name="parent">
                 <option></option>
             <?php
@@ -65,35 +65,35 @@
                 
             ?>
             </select>
-            <small>Parent menu</small>
+            <small><?=MENU_PARENT;?></small>
         </div>
     </div>
     <div class="col-sm-4" >
         <div class="form-group">
-            <label>Menu ID</label>
+            <label><?=MENU_ID;?></label>
             <input type="text" name='id' class="form-control" value="<?=$menuid;?>" readonly >
-            <small>ID of the menu, eg. <code>mainmenu</code></small>
+            <small><?=MENU_ID_DESCR;?>, eg. <code>mainmenu</code></small>
         </div>
     </div>
     <div class="col-sm-4" >
         <div class="form-group">
-            <label>Menu Name</label>
+            <label><?=MENU_NAME;?></label>
             <input type="text" name='name' class="form-control" >
-            <small>Name of the menu</small>
+            <small><?=MENU_NAME_DESCR;?></small>
         </div>
     </div>
     <div class="col-sm-4" >
         <div class="form-group">
-            <label>Menu Class</label>
+            <label><?=MENU_CLASS;?></label>
             <input type="text" name='class' class="form-control">
-            <small>Class Style of the menu. <code>.class</code> means menu class is <em>class</em></small>
+            <small><?=MENU_CLASS_DESCR;?></small>
         </div>
     </div>
     <div class="col-sm-12">
-        <h3>Menu Type</h3>
+        <h3><?=MENU_TYPE;?></h3>
         <div class="col-sm-4" >
             <div class="form-group">
-                <label>Page</label>
+                <label><?=PAGE;?></label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <input type="radio" name='type' class="" value="page">
@@ -108,12 +108,12 @@
                         echo Posts::dropdown($vars);
                     ?>
                  </div>
-                <small>Choose This if you want menu for Pages. Pick Page Name</small>
+                <small><?=MENU_PAGE_DESCR;?></small>
             </div>
         </div>
         <div class="col-sm-4" >
             <div class="form-group">
-                <label>Categories</label>
+                <label><?=CATEGORIES;?></label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <input type="radio" name='type' class="" value="cat">
@@ -127,12 +127,12 @@
                         echo Categories::dropdown($vars);
                     ?>
                  </div>
-                <small>Choose This if you want menu for Categories. Pick Category Name</small>
+                <small><?=MENU_CATEGORIES_DESCR;?></small>
             </div>
         </div>
         <div class="col-sm-4" >
             <div class="form-group">
-                <label>Mod</label>
+                <label><?=MODULES;?></label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <input type="radio" name='type' class="" value="mod">
@@ -141,19 +141,19 @@
                         
                     </select>
                  </div>
-                <small>Choose This if you want menu for Modules(Mod). Pick Module Name</small>
+                <small><?=MENU_MODULES_DESCR;?></small>
             </div>
         </div>
         <div class="col-sm-4" >
             <div class="form-group">
-                <label>Custom Link</label>
+                <label><?=MENU_CUSTOM_LINK;?></label>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <input type="radio" name='type' class="" value="custom">
                     </span>
                     <input class="form-control" name="custom">
                  </div>
-                <small>Choose This if you want menu with Custom Link Categories. Insert Custom Link</small>
+                <small><?=MENU_CUSTOM_LINK_DESCR;?></small>
             </div>
         </div>
     </div>

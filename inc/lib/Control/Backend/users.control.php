@@ -33,11 +33,11 @@ switch ($act) {
 
                 // VALIDATE ALL
                 if(!User::is_exist($_POST['userid'])){
-                    $alertred[] = "User Exist!! Choose another userid.";
+                    $alertred[] = MSG_USER_EXIST;
                 }
                 
                 if(!User::is_email($_POST['email'])){
-                    $alertred[] = "Email already used. Please use another email.";
+                    $alertred[] = MSG_USER_EMAIL_EXIST;
                 }
 
                 if(!isset($alertred)){
@@ -88,11 +88,11 @@ switch ($act) {
                     $data['alertred'][] = TOKEN_NOT_EXIST;
                 }else{
                     User::delete($_GET['id']);
-                    $data['alertgreen'][] = "User : ".$user." Removed";
+                    $data['alertgreen'][] = USER." ".$user." ".MSG_USER_REMOVED;
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
-                $data['alertred'][] = "No ID selected";
+                $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
             }
             $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
             $data['num'] = Db::$num_rows;
@@ -106,9 +106,9 @@ switch ($act) {
                 $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::activate($_GET['id'])){
-                    $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Activated.";
+                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_ACTIVATED;
                 }else{
-                    $data['alertred'][] = "User ".User::userid($_GET['id'])." Activation fail.";
+                    $data['alertred'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_ACTIVATION_FAIL;
                 }
 
             }
@@ -126,9 +126,9 @@ switch ($act) {
                 $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::deactivate($_GET['id'])){
-                    $data['alertgreen'][] = "User ".User::userid($_GET['id'])." Deactivated.";
+                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_DEACTIVATED;
                 }else{
-                    $data['alertred'][] = "User ".User::userid($_GET['id'])." Deactivation fail.";
+                    $data['alertred'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_DEACTIVATION_FAIL;
                 }
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
@@ -167,13 +167,13 @@ switch ($act) {
                 }
 
                 if(!User::is_exist($_POST['userid'])){
-                    $alertred[] = "User Exist!! Choose another userid.";
+                    $alertred[] = MSG_USER_EXIST;
                 }
                 if(!User::is_same($_POST['pass1'], $_POST['pass1'])){
-                    $alertred[] = "Password Didn't Match!! Retype Your Password again.";
+                    $alertred[] = MSG_USER_PWD_MISMATCH;
                 }
                 if(!User::is_email($_POST['email'])){
-                    $alertred[] = "Email already used. Please use another email.";
+                    $alertred[] = MSG_USER_EMAIL_EXIST;
                 }
 
                 if(!isset($alertred)){
@@ -191,7 +191,7 @@ switch ($act) {
                                 );   
                     User::create($vars);
                     Token::remove($_POST['token']);
-                    $data['alertgreen'][] = "User: {$_POST['userid']}, Added.";
+                    $data['alertgreen'][] = USER." {$_POST['userid']}, ".MSG_USER_ADDED;
                 }else{
                     $data['alertred'] = $alertred;
                 }

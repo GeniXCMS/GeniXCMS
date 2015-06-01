@@ -83,7 +83,7 @@ if(isset($_POST['login']))
 				$_SESSION['group'] = $group;
 				*/
 				//print_r($_SESSION);
-				$alertgreen = "You are logged in now.";
+				$alertgreen = "".MSG_USER_LOGGED_IN."";
 			}elseif($p != $pass){
 				$alertred[] = PASS_NOT_MATCH;
 			}
@@ -123,25 +123,19 @@ if(isset($_POST['login']))
 	<div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 60px; margin-bottom: 60px ">
 		<form class="form-signin" role="form" method="post">
 			<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-			<div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-user fa-lg" style="color:#3b5998"></i></span>
 			<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
-			</div>
 			<br>
-			<div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-lock fa-lg" style="color:#3b5998"></i></span>
 			<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
-			</div>
 			<label class="checkbox">
 				<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
 			</label>
-			<button class="btn btn-lg btn-success btn-block" name="login" type="submit"><span class="glyphicon glyphicon-log-in"></span> <?=SIGN_IN;?></button>
+			<button class="btn btn-lg btn-success btn-block" name="login" type="submit"><?=FORM_SIGN_IN;?></button>
 		</form>
 	</div>
 
 <?php
 }else {
-	echo"<div class=\"alert alert-info\">You're already Logged In. <br /><a href=\"logout.php\">Logout</a></div>";
+	echo"<div class=\"alert alert-info\">".MSG_USER_ALREADY_LOGGED."<br /><a href=\"logout.php\">".LOGOUT."</a></div>";
 }
 echo "</div>";
 $thm->theme('footer');

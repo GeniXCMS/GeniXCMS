@@ -41,9 +41,9 @@ if (isset($_GET['view']) && $_GET['view'] == 'options') {
             if ($zip->open($theme['filepath']) === TRUE) {
                 $zip->extractTo(GX_THEME);
                 $zip->close();
-                $data['alertgreen'][] = "Themes Installed Sucesfully.";
+                $data['alertgreen'][] = MSG_THEME_INSTALLED;
             } else {
-                $data['alertred'][] = "Can't extract files.";
+                $data['alertred'][] = MSG_THEME_CANT_EXTRACT;
             }
             unlink($theme['filepath']);
         }else{
@@ -71,13 +71,13 @@ if (isset($_GET['view']) && $_GET['view'] == 'options') {
                 $alertred[] = TOKEN_NOT_EXIST;
             }
             if (Theme::isActive($_GET['themes'])) {
-                $alertred[] = "Theme is Active. Please deactivate first.";
+                $alertred[] = MSG_THEME_IS_ACTIVE;
             }
             if(!isset($alertred)){
                 if(Files::delTree(GX_THEME."/".$_GET['themes'])){
                     $data['alertgreen'][] = THEME_REMOVED;
                 }else{
-                    $data['alertred'][] = "Theme Cannot removed. Please check if You had permission to remove the files.";
+                    $data['alertred'][] = MSG_THEME_NOT_REMOVED;
                 }
                 
             }else{
