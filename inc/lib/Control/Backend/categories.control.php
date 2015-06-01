@@ -34,7 +34,7 @@ switch (isset($_POST['addcat'])) {
                         )
                     );
             //print_r($cat);
-            $data['alertgreen'][] = "Category Added: ".$_POST['cat'];
+            $data['alertgreen'][] = MSG_CATEGORY_ADDED." ".$_POST['cat'];
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
@@ -62,7 +62,7 @@ switch (isset($_POST['updatecat'])) {
                                 )
                     );
             $cat = Db::update($vars);
-            $data['alertgreen'][] = "Category Updated: ".$_POST['cat'];
+            $data['alertgreen'][] = MSG_CATEGORY_UPDATED." ".$_POST['cat'];
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
@@ -81,7 +81,7 @@ if(isset($_GET['act']) == 'del'){
         $data['alertred'] = $alertred;
     }else{
         Categories::delete($_GET['id']);
-        $data['alertgreen'][] = "Category Removed";
+        $data['alertgreen'][] = MSG_CATEGORY_REMOVED;
     }
     if(isset($_GET['token'])){ Token::remove($_GET['token']); }
 }

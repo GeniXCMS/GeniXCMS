@@ -50,7 +50,7 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::insert($vars);
-                    $data['alertgreen'][] = "Page : {$_POST['title']} Added.";
+                    $data['alertgreen'][] = PAGE." {$_POST['title']} ".MSG_PAGE_ADDED;
                     Token::remove($_POST['token']);
                 }
 
@@ -97,7 +97,7 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::update($vars);
-                    $data['alertgreen'][] = "Page : {$_POST['title']} Updated.";
+                    $data['alertgreen'][] = PAGE."  {$_POST['title']} ".MSG_PAGE_UPDATED;
                     Token::remove($_POST['token']);
                 }
 
@@ -135,7 +135,7 @@ switch ($act) {
                 if(isset($del['error'])){
                     $data['alertred'][] = $del['error'];
                 }else{
-                    $data['alertgreen'][] = 'Post <b>'.$title.'</b> Removed';
+                    $data['alertgreen'][] = PAGE." {$title} ".MSG_PAGE_REMOVED;
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
                 

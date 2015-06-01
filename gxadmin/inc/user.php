@@ -45,9 +45,9 @@
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-group"></i> Users
+        <h1><i class="fa fa-group"></i> <?=USERS;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#adduser">
-                <span class="glyphicon glyphicon-plus"></span> Add User
+                <span class="glyphicon glyphicon-plus"></span> <?=ADD_USER;?>
             </button>
         </h1>
         <hr />
@@ -57,11 +57,11 @@
             <input type="hidden" name="page" value="users">
             <div class="row">
                 <div class="col-sm-12">
-                    <h5>Find user</h5>
+                    <h5><?=FIND_USER;?></h5>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search Users">
+                        <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_USER;?>">
                     </div>
                     
                 </div>
@@ -79,8 +79,8 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <select name="status" class="form-control">
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
+                            <option value="1"><?=ACTIVE;?></option>
+                            <option value="0"><?=INACTIVE;?></option>
                             
                         </select>
                     </div>
@@ -88,7 +88,7 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
-                            Find Users
+                            <span class="glyphicon glyphicon-search"></span> <?=FIND_USER;?>
                         </button>
                     </div>
                 </div>
@@ -102,14 +102,14 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Group Level</th>
-                <th>Join Date</th>
-                <th>Edit/Delete</th>
-                <th>All <input type="checkbox" id="selectall"></th>
+                <th><?=ID;?></th>
+                <th><?=USERNAME;?></th>
+                <th><?=EMAIL;?></th>
+                <th><?=STATUS;?></th>
+                <th><?=GROUP;?></th>
+                <th><?=JOIN_DATE;?></th>
+                <th><?=ACTION;?></th>
+                <th><?=ALL;?> <input type="checkbox" id="selectall"></th>
             </tr>
         </thead>
         <tbody>
@@ -121,11 +121,11 @@
                     //echo $p->id;
 
                     if($p->group == 0){
-                        $grp = "Administrator";
+                        $grp = ADMINISTRATOR;
                     }elseif($p->group == 3){
-                        $grp = "Author";
+                        $grp = AUTHOR;
                     }elseif($p->group == 4){
-                        $grp = "General Member";
+                        $grp = GENERAL_MEMBER;
                     }
                     if($p->status == 0){
                         $status = "<a href=\"index.php?page=users&act=active&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\">Inactive</a>";
@@ -143,9 +143,9 @@
                         <td>{$grp}</td>
                         <td>".Date::format($p->join_date)."</td>
                         <td>
-                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">Edit</a> 
+                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a> 
                             <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
-                            onclick=\"return confirm('Are you sure you want to delete this?');\">Delete</a>
+                            onclick=\"return confirm('".DELETE_CONFIRM."');\">".DELETE."</a>
                         </td>
                         <td>
                             <input type=\"checkbox\" name=\"user_id[]\" value=\"{$p->id}\" id=\"select\">
@@ -156,22 +156,22 @@
             }
             ?>
             <tfoot>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Group Level</th>
+                <th><?=ID;?></th>
+                <th><?=USERNAME;?></th>
+                <th><?=EMAIL;?></th>
+                <th><?=STATUS;?></th>
+                <th><?=GROUP;?></th>
                 <th colspan=2>
                 <select name="action" class="form-control">
-                    <option value="activate">Activate</option>
-                    <option value="deactivate">Deactivate</option>
-                    <option value="delete">Delete</option>
+                    <option value="activate"><?=ACTIVATE;?></option>
+                    <option value="deactivate"><?=DEACTIVATE;?></option>
+                    <option value="delete"><?=DELETE;?></option>
                 </select>
                 <input type="hidden" name="token" value="<?=TOKEN;?>">
                 </th>
                 <th>
                     <button type="submit" name="doaction" class="btn btn-danger btn-sm">
-                        Submit
+                        <?=SUBMIT;?>
                     </button>
                 </th>
             </tfoot>
@@ -188,39 +188,39 @@
             <form action="index.php?page=users" method="post">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Add User</h4>
+            <h4 class="modal-title" id="myModalLabel"><?=ADD_USER;?></h4>
           </div>
           <div class="modal-body">
             
                 <div class="form-group">
-                    <label>Username</label>
+                    <label><?=USERNAME;?></label>
                     <input type="text" name='userid' class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
+                    <label><?=PASSWORD;?></label>
                     <input type="password" name="pass1" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Retype Password</label>
+                    <label><?=RETYPE_PASSWORD;?></label>
                     <input type="password" name="pass2" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>E-Mail</label>
+                    <label><?=EMAIL;?></label>
                     <input type="email" name="email" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Group Level</label>
+                    <label><?=GROUP;?></label>
                     <select name="group" class="form-control">
-                        <option value="0">Administrator</option>
-                        <option value="3">Author</option>
-                        <option value="4" selected="on">General Members</option>
+                        <option value="0"><?=ADMINISTRATOR;?></option>
+                        <option value="3"><?=AUTHOR;?></option>
+                        <option value="4" selected="on"><?=GENERAL_MEMBER;?></option>
                     </select> 
                 </div>
             
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success" name="adduser">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?=CLOSE;?></button>
+            <button type="submit" class="btn btn-success" name="adduser"><?=SUBMIT;?></button>
           </div>
           <input type="hidden" name="token" value="<?=TOKEN;?>">
           </form>

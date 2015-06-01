@@ -20,7 +20,7 @@ if (isset($data['alertgreen'])) {
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
+        <span class=\"sr-only\"><?=CLOSE;?></span>
     </button>
     <ul>";
     foreach ($data['alertgreen'] as $alert) {
@@ -34,7 +34,7 @@ if (isset($data['alertgreen'])) {
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
+        <span class=\"sr-only\"><?=CLOSE;?></span>
     </button>
     <ul>";
     foreach ($data['alertred'] as $alert) {
@@ -50,7 +50,7 @@ if (isset($data['alertgreen'])) {
         <h1><i class="fa fa-sitemap"></i> <?=MENUS;?>
             <div class="pull-right">
                 <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                    <span class="glyphicon glyphicon-plus"></span> Add Menu
+                    <span class="glyphicon glyphicon-plus"></span> <?=ADD_MENU;?>
                 </button>
             </div>
         </h1>
@@ -101,8 +101,8 @@ if (isset($data['alertgreen'])) {
                                 <div class=\"panel-body\">
                                     <!-- Nav tabs -->
                                         <ul class=\"nav nav-tabs\" role=\"tablist\">
-                                            <li class=\"active\"><a href=\"#{$k}menuitem\" role=\"tab\" data-toggle=\"tab\">Menu Items</a></li>
-                                            <li><a href=\"#{$k}additem\" role=\"tab\" data-toggle=\"tab\">Add Item</a></li>
+                                            <li class=\"active\"><a href=\"#{$k}menuitem\" role=\"tab\" data-toggle=\"tab\">".MENU_ITEMS."</a></li>
+                                            <li><a href=\"#{$k}additem\" role=\"tab\" data-toggle=\"tab\">".ADD_MENU_ITEM."</a></li>
                                         </ul>
                                         <!-- Tab panes -->
                                         <div class=\"tab-content\">
@@ -151,29 +151,29 @@ if (isset($data['alertgreen'])) {
             <form action="index.php?page=menus" method="post">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Add Menu</h4>
+            <h4 class="modal-title" id="myModalLabel"><?=ADD_MENU;?></h4>
           </div>
           <div class="modal-body clearfix">
 
                 <div class="col-sm-12" >
                     <div class="form-group">
-                        <label>Menu ID</label>
+                        <label><?=MENU_ID;?></label>
                         <input type="text" name='id' class="form-control">
-                        <small>ID of the menu, eg. <code>mainmenu</code></small>
+                        <small><?=MENU_ID_DESC;?></small>
                     </div>
                 </div>
                 <div class="col-sm-12" >
                     <div class="form-group">
-                        <label>Menu Name</label>
+                        <label><?=MENU_NAME;?></label>
                         <input type="text" name='name' class="form-control">
-                        <small>Name of the menu</small>
+                        <small><?=MENU_NAME_DESC;?></small>
                     </div>
                 </div>
                 <div class="col-sm-12" >
                     <div class="form-group">
-                        <label>Menu Class</label>
+                        <label><?=MENU_CLASS;?></label>
                         <input type="text" name='class' class="form-control">
-                        <small>Class Style of the menu. <code>.class</code> means menu class is <em>class</em></small>
+                        <small<?=MENU_CLASS_DESC;?></small>
                     </div>
                 </div>
 

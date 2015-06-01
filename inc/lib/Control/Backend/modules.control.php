@@ -38,9 +38,9 @@ if (isset($_POST['upload'])) {
         if ($zip->open($mod['filepath']) === TRUE) {
             $zip->extractTo(GX_MOD);
             $zip->close();
-            $data['alertgreen'][] = "Files Installed Sucesfully.";
+            $data['alertgreen'][] = MSG_MOD_INSTALLED;
         } else {
-            $data['alertred'][] = "Can't extract files.";
+            $data['alertred'][] = MSG_MOD_CANT_EXTRACT;
         }
         unlink($mod['filepath']);
     }else{

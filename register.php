@@ -48,13 +48,13 @@ if(isset($_POST['register']))
         $alertred[] = TOKEN_NOT_EXIST;
     }
 	if(!User::is_exist($_POST['userid'])){
-        $alertred[] = "User Exist!! Choose another userid.";
+        $alertred[] = "".MSG_USER_EXIST."";
     }
     if(!User::is_same($_POST['pass1'], $_POST['pass1'])){
-        $alertred[] = "Password Didn't Match!! Retype Your Password again.";
+        $alertred[] = "".MSG_USER_PWD_MISMATCH."";
     }
     if(!User::is_email($_POST['email'])){
-        $alertred[] = "Email already used. Please use another email.";
+        $alertred[] = "".MSG_USER_EMAIL_EXIST."";
     }
 
     if(!isset($alertred)){
@@ -72,9 +72,9 @@ if(isset($_POST['register']))
                         
                     );   
         if(User::create($vars) === true){
-            $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+            $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
         }else{
-            $alertred[] = "We can't create your account";
+            $alertred[] = "".REG_CANT_CREATE_ACCOUNT."";
         }
         
         
@@ -98,7 +98,7 @@ if(isset($_POST['register']))
         if($mailsend != ""){
             $alertred[] = $mailsend;
         }else{
-            $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+            $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
         }
 		
     }else{
@@ -114,7 +114,7 @@ if (isset($_GET['activation'])) {
     if(Db::$num_rows > 0){
         $act = Db::query(sprintf("UPDATE `user` SET `status` = '1',`activation` = NULL WHERE `id` = '%d' ", $usr[0]->id));
         if($act){
-            $data['alertgreen'][] = "Your Account activated succesfully. You can now Login with your username and Password.";
+            $data['alertgreen'][] = "".REG_ACCOUNT_ACTIVATED."";
             $vars = array(
                 'to'      => $usr[0]->email,
                 'to_name' => $usr[0]->userid,
@@ -135,19 +135,19 @@ if (isset($_GET['activation'])) {
             if($mailsend != ""){
                 $alertred[] = $mailsend;
             }else{
-                $data['alertgreen'][] = "Thank You for Registering with Us. Please activate Your account to login.";
+                $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
             }
         }else{
-            $data['alertred'][] = "Activation Failed.";
+            $data['alertred'][] = "".REG_ACTIVATION_FAILED."";
         }
         
     }else{
-        $data['alertred'][] = "Activation Failed. No such code, or maybe already activated";
+        $data['alertred'][] = "".REG_ACTIVATION_FAILED_CODE."";
     }
 }
 $loggedin = Session::val('loggedin');
 if(isset($loggedin)){
-    echo "<div class=\"alert alert-info\">You are already registered and Logged In. </div>";
+    echo "<div class=\"alert alert-info\">".REG_ALREADY_REGISTERED_ACC." </div>";
 }else{
 ?>
 <div class="col-md-8">
@@ -182,26 +182,26 @@ if(isset($loggedin)){
     }
 	
 ?>
-<h1>Register</h1>
+<h1><?=REG_FORM;?></h1>
 <form action="" method="post" name="register" class="registerform">
 	<div class="form-group">
-		<label for="username">Username</label>
+		<label for="username"><?=USERNAME;?></label>
 		<input type="text" class="form-control" id="username" placeholder="Username" name="userid" required="required" value="">
 	</div>
 	<div class="form-group">
-		<label for="password1">Password</label>
+		<label for="password1"><?=PASSWORD;?></label>
 		<input type="password" class="form-control" id="password1" placeholder="Password" name="pass1" required="required">
 	</div>
 	<div class="form-group">
-		<label for="password2">Retype Password</label>
+		<label for="password2"><?=RETYPE_USR_PASSWORD;?></label>
 		<input type="password" class="form-control" id="password2" placeholder="Password" name="pass2" required="required">
 	</div>
 	<div class="form-group">
-		<label for="email">Email address</label>
+		<label for="email"><?=E_MAIL;?></label>
 		<input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required="required" value="">
 	</div>
 	
-		<button type="submit" name="register" class="btn btn-success">Submit</button>
+		<button type="submit" name="register" class="btn btn-success"><?=SUBMIT;?></button>
         <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>
 <div class="clearfix">
@@ -210,18 +210,18 @@ if(isset($loggedin)){
 </div>
 <div class="center-block col-sm-4">
     <div class="alert alert-success">
-        Already have an account ? Login now !
+        <?=REG_ALREADY_HAVE_ACC;?>
     </div>
     <form class="form-signin" role="form" method="post" action="login.php">
         <h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-        <label for="username">Username</label>
+        <label for="username"><?=USERNAME;?></label>
         <input type="text" id="username" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
-        <label for="password">Password</label>
+        <label for="password"><?=PASSWORD;?></label>
         <input type="password" id="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
         <label class="checkbox">
             <a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
         </label>
-        <button class="btn btn-success" name="login" type="submit">Sign in</button>
+        <button class="btn btn-success" name="login" type="submit"><?=FORM_SIGN_IN;?></button>
     </form>
 </div>
 <?php

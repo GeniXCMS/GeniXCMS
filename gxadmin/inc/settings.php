@@ -117,14 +117,14 @@ if (isset($data['alertred'])) {
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label>Website Keywords</label>
+                                <label><?=WEBSITE_KEYWORDS;?></label>
                                 <input type="text" name="sitekeywords" value="<?=Site::$key;?>" class="form-control">
-                                <small>Your Website Keywords, type your website main keywords.</small>
+                                <small><?=WEBSITE_KEYWORDS_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
-                                <label>Website Description</label>
+                                <label><?=WEBSITE_DESCRIPTION;?></label>
                                 <textarea  name="sitedesc" class="form-control"><?=Site::$desc;?></textarea>
-                                <small>Your Website Description, describe your website.</small>
+                                <small><?=WEBSITE_DESCRIPTION_DESC;?></small>
                             </div>
                         </div>
                         
@@ -132,9 +132,9 @@ if (isset($data['alertred'])) {
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label>Website E-mail</label>
+                                <label><?=WEBSITE_EMAIL;?></label>
                                 <input type="text" name="siteemail" value="<?=Options::get('siteemail');?>" class="form-control">
-                                <small>Your Website email.</small>
+                                <small><?=WEBSITE_EMAIL_DESCR;?></small>
                             </div>
                             
                         </div>
@@ -146,7 +146,7 @@ if (isset($data['alertred'])) {
 
                 <div class="tab-pane" id="localization">
                     <h3>
-                        Localization
+                        <?=LOCALIZATION;?>
                         <hr />
                     </h3>
                     
@@ -155,18 +155,18 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label>Country</label>
+                                        <label><?=COUNTRY;?></label>
                                         <select name="country_id" class="form-control">
                                             <?=Date::optCountry(Options::get('country_id'));?>
                                         </select>
-                                        <small>Your Website Country.</small>
+                                        <small><?=COUNTRY_DESC;?></small>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Timezone</label>
+                                        <label><?=TIMEZONE;?></label>
                                         <select name="timezone" class="form-control">
                                             <?=Date::optTimeZone(Options::get('timezone'));?>
                                         </select>
-                                        <small>Your Website Timezone.</small>
+                                        <small><?=TIMEZONE_DESC;?></small>
                                     </div>
 
                                 </div>
@@ -174,16 +174,16 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label>System Language</label>
+                                        <label><?=WEBSITE_LANG;?></label>
                                         <select name="system_lang" class="form-control">
                                             <?=Language::optDropdown(Options::get('system_lang'));?>
                                         </select>
-                                        <small>Your Website System Language.</small>
+                                        <small><?=WEBSITE_LANG_DESC;?></small>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Default Charset</label>
+                                        <label><?=CHARSET;?></label>
                                         <input name="charset" class="form-control" value="<?=Options::get('charset');?>">
-                                        <small>Your Website Charset/Encoding.</small>
+                                        <small><?=CHARSET_DESC;?></small>
                                     </div>
 
                                 </div>
@@ -197,460 +197,435 @@ if (isset($data['alertred'])) {
                 </div>
 
                 <div class="tab-pane" id="email">
-                    <h3>
-                        Email Settings
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Mail/SMTP</label>
-                                <?php
-                                if(Options::get('mailtype') == 0){ $o = "selected"; $s = "";}
-                                elseif(Options::get('mailtype') == 1 ) {$s = "selected"; $o = "";}
-                                ?>
-                                <select name="mailtype" class="form-control">
-                                    <option value="0" <?=$o;?>>Mail</option>
-                                    <option value="1" <?=$s;?>>SMTP</option>
-                                </select>
-                                <small>Choose using Mail or SMTP</small>
+              <h3><?=SETTINGS_EMAIL_SETTINGS;?></h3>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_EMAIL_MAIL;?></label>
+                          <?php
+                              if(Options::get('mailtype') == 0){ $o = "selected"; $s = "";}
+                              elseif(Options::get('mailtype') == 1 ) {$s = "selected"; $o = "";}
+                          ?>
+                          <select name="mailtype" class="form-control">
+                              <option value="0" <?=$o;?>>Mail</option>
+                              <option value="1" <?=$s;?>>SMTP</option>
+                          </select>
+                          <small><?=SETTINGS_EMAIL_MAIL_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_EMAIL_SMTP;?></label>
+                          <input type="text" name="smtpport" value="<?=Options::get('smtpport');?>" class="form-control">
+                              
+                          <small><?=SETTINGS_EMAIL_SMTP_DESCR;?></small>
+                      </div>
+                  </div>
+                  
+              </div>
+
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_EMAIL_MAILSRV;?></label>
+                          <input type="text" name="smtphost" value="<?=Options::get('smtphost');?>" class="form-control">
+                          <small><?=SETTINGS_EMAIL_MAILSRV_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_EMAIL_SMTP_USR;?></label>
+                          <input type="text" name="smtpuser" value="<?=Options::get('smtpuser');?>" class="form-control">
+                          <small><?=SETTINGS_EMAIL_SMTP_USR_DESCR;?></small>
+                      </div>
+                  </div>
+                  
+              </div>
+
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_EMAIL_SMTP_PWD;?></label>
+                          <input type="password" name="smtppass" value="<?=Options::get('smtppass');?>" class="form-control">
+                          <small><?=SETTINGS_EMAIL_SMTP_PWD_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+          <div class="tab-pane" id="social">
+              <h3><?=SETTINGS_SOCIAL;?></h3>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_SOCIAL_FBACC;?></label>
+                          <input type="text" name="fbacc" value="<?=Options::get('fbacc');?>" class="form-control">
+                          <small><?=SETTINGS_SOCIAL_FBACC_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_SOCIAL_FBPAGE;?></label>
+                          <input type="text" name="fbpage" value="<?=Options::get('fbpage');?>" class="form-control">
+                          <small><?=SETTINGS_SOCIAL_FBPAGE_DESCR;?></small>
+                      </div>
+                  </div>
+                  
+              </div>
+
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_SOCIAL_TWITTER;?></label>
+                          <div class="input-group">
+                              <span class="input-group-addon">@</span>
+                              <input type="text" name="twitter" value="<?=Options::get('twitter');?>" class="form-control">
+                          </div>
+                          <small><?=SETTINGS_SOCIAL_TWITTER_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_SOCIAL_LINKEDIN;?></label>
+                          <input type="text" name="linkedin" value="<?=Options::get('linkedin');?>" class="form-control">
+                          <small><?=SETTINGS_SOCIAL_LINKEDIN_DESCR;?></small>
+                      </div>
+                  </div>
+                  
+              </div>
+
+          </div>
+          <div class="tab-pane" id="logo">
+              <h3><?=SETTINGS_LOGO;?></h3>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LOGO_CURRENT;?></label>
+                          <?php
+                              $is_logourl = Options::get('is_logourl');
+                              $logourl = Options::get('logourl');
+                              $logo = Options::get('logo');
+                              if($is_logourl == 'on' && $logourl != ''){
+                                $logoimg = "<img src=\"".Options::get('logourl')."\" class=\"clearfix\">";
+                              }elseif($is_logourl == 'off' && $logo != ''){
+                                $logoimg = "<img src=\"".Site::$url.Options::get('logo')."\" class=\"clearfix\">";
+                              }else{
+                                $logoimg = '';
+                              }
+                          ?>
+                          <div class="col-sm-12 clearfix">
+                          <?=$logoimg;?>
+                          
+                          </div>
+                          <small><?=SETTINGS_LOGO_CURRENT_DESCR;?></small>
+                          
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LOGO_BROWSE;?></label>
+                          <div class="">
+                          <input type="file" name="logo" class="form-control" accept=".job,.png,.gif">
+                          <small><?=SETTINGS_LOGO_BROWSE_DESCR;?></small>
+                          </div>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          
+                          <label><?=SETTINGS_LOGO_URL;?></label>
+                          <div class="input-group">
+
+                              <span class="input-group-addon">
+                              <?php if(Options::get('is_logourl') == 'on') { $is_logourl = 'checked'; } 
+                              else{ $is_logourl = 'off';} 
+                              ?>
+                              <input type="checkbox" name="is_logourl" rel="tooltip" 
+                              title="Check here if you want to use URL" <?=$is_logourl;?>>
+                              </span>
+                              <input type="text" name="logourl" value="<?=Options::get('logourl');?>" class="form-control">
+                          </div>
+                          <small><?=SETTINGS_LOGO_URL_DESCR;?></small>
+                      </div>
+                      
+                  </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LOGO_FAVICON;?></label>
+                          <input type="text" name="siteicon" value="<?=Options::get('siteicon');?>" class="form-control">
+                          <small><?=SETTINGS_LOGO_FAVICON_DESCR;?></small>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="tab-pane" id="library">
+              <h3><?=SETTINGS_LIBRARY;?></h3>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
+                              <?php if(Options::get('use_jquery') == 'on') { $use_jquery = 'checked'; } 
+                              else{ $use_jquery = 'off';} 
+                              ?>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_jquery" rel="tooltip"
+                              title="Check here if you want to use URL" <?=$use_jquery;?>> 
+                            </span>
+                              <input type="text" name="jquery_v" rel="tooltip" 
+                              class="form-control" placeholder="Jquery Version" 
+                              value="<?=Options::get('jquery_v');?>">
+                            <span class="input-group-btn">
+                              <button type="" name="" rel="tooltip"
+                              title="" class="btn btn-default">
+                                <?=SETTINGS_LIBRARY_CDN;?>
+                              </button> 
+                            </span>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Port</label>
-                                <input type="text" name="smtpport" value="<?=Options::get('smtpport');?>" class="form-control">
-
-                                <small>Fill in with the SMTP Port Number</small>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP MailServer</label>
-                                <input type="text" name="smtphost" value="<?=Options::get('smtphost');?>" class="form-control">
-                                <small>Your mailserver, eg: mail.example.org. This will used when using SMTP</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Username</label>
-                                <input type="text" name="smtpuser" value="<?=Options::get('smtpuser');?>" class="form-control">
-                                <small>Your SMTP Username, eg: user@example.org. This will used when using SMTP</small>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>SMTP Password</label>
-                                <input type="password" name="smtppass" value="<?=Options::get('smtppass');?>" class="form-control">
-                                <small>Your SMTP Password. This will used when using SMTP</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="tab-pane" id="social">
-                    <h3>
-                        Social Networking
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Facebook Account</label>
-                                <input type="text" name="fbacc" value="<?=Options::get('fbacc');?>" class="form-control">
-                                <small>Your Facebook Account</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Facebook Page</label>
-                                <input type="text" name="fbpage" value="<?=Options::get('fbpage');?>" class="form-control">
-                                <small>Your Facebook Page</small>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Twitter Account</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">@</span>
-                                    <input type="text" name="twitter" value="<?=Options::get('twitter');?>" class="form-control">
-                                </div>
-                                <small>Your Twitter Account</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>LinkedIn Account</label>
-                                <input type="text" name="linkedin" value="<?=Options::get('linkedin');?>" class="form-control">
-                                <small>Your LinkedIn Account</small>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="tab-pane" id="logo">
-                    <h3>
-                        Website Logo
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Current Logo</label>
-                                <?php
-                                $is_logourl = Options::get('is_logourl');
-                                $logourl = Options::get('logourl');
-                                $logo = Options::get('logo');
-                                if($is_logourl == 'on' && $logourl != ''){
-                                    $logoimg = "<img src=\"".Options::get('logourl')."\" class=\"clearfix\">";
-                                }elseif($is_logourl == 'off' && $logo != ''){
-                                    $logoimg = "<img src=\"".Site::$url.Options::get('logo')."\" class=\"clearfix\">";
-                                }else{
-                                    $logoimg = '';
-                                }
-                                ?>
-                                <div class="col-sm-12 clearfix">
-                                    <?=$logoimg;?>
-
-                                </div>
-                                <small>Your Website Logo</small>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Browse Image Logo</label>
-                                <div class="">
-                                    <input type="file" name="logo" class="form-control" accept=".job,.png,.gif">
-                                    <small>Browse images if You want to upload your logo.</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 form-group">
-
-                                <label>Use Image URL</label>
-                                <div class="input-group">
-
-                                    <span class="input-group-addon">
-                                        <?php if(Options::get('is_logourl') == 'on') { $is_logourl = 'checked'; } 
-                                        else{ $is_logourl = 'off';} 
-                                        ?>
-                                        <input type="checkbox" name="is_logourl" rel="tooltip" 
-                                        title="Check here if you want to use URL" <?=$is_logourl;?>>
-                                    </span>
-                                    <input type="text" name="logourl" value="<?=Options::get('logourl');?>" class="form-control">
-                                </div>
-                                <small>Your Website Logo URL</small>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Website Favicon</label>
-                                <input type="text" name="siteicon" value="<?=Options::get('siteicon');?>" class="form-control">
-                                <small>Your Website Favicon URL</small>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="tab-pane" id="library">
-                    <h3>
-                        Enable or Disable Library
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Enable JQuery</label>
-                                <?php if(Options::get('use_jquery') == 'on') { $use_jquery = 'checked'; } 
-                                else{ $use_jquery = 'off';} 
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_jquery" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_jquery;?>> 
-                                    </span>
-                                    <input type="text" name="jquery_v" rel="tooltip" 
-                                    class="form-control" placeholder="Jquery Version" 
-                                    value="<?=Options::get('jquery_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                        CDN
-                                    </button> 
-                                </span>
-                            </div>
-                            <small>Check this if you want to use Jquery. Fill the version 
-                                of Jquery. Default version is 1.11.1</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Enable Bootstrap</label>
-                                <?php 
+                          <small><?=SETTINGS_LIBRARY_JQUERY_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
+                              <?php 
                                 if(Options::get('use_bootstrap') == 'on') { 
-                                    $use_bootstrap = 'checked'; 
+                                  $use_bootstrap = 'checked'; 
                                 }else{ 
-                                    $use_bootstrap = 'off';
+                                  $use_bootstrap = 'off';
                                 } 
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_bootstrap" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bootstrap;?>> 
-                                    </span>
-                                    <input type="text" name="bs_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Bootstrap Version" 
-                                    readonly value="<?=Options::get('bs_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                        LOCAL
-                                    </button> 
-                                </span>
+                              ?>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_bootstrap" rel="tooltip"
+                              title="Check here if you want to use URL" <?=$use_bootstrap;?>> 
+                            </span>
+                              <input type="text" name="bs_v" rel="tooltip" 
+                              class="form-control disable" placeholder="Bootstrap Version" 
+                              readonly value="<?=Options::get('bs_v');?>">
+                              <span class="input-group-btn">
+                                <button type="" name="" rel="tooltip"
+                                title="" class="btn btn-default">
+                                  <?=SETTINGS_LIBRARY_LOCAL;?>
+                                </button> 
+                              </span>
                             </div>
-                            <small>Check this if you want to use Bootstrap. Bootstrap 
-                                Version is not available, left it blank</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Enable Fontawesome</label>
-                                <?php 
+                          <small><?=SETTINGS_LIBRARY_BOOTSTRAP_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LIBRARY_FAWESOME;?></label>
+                              <?php 
                                 if(Options::get('use_fontawesome') == 'on') { 
                                     $use_fontawesome = 'checked'; 
-                                }else{ 
+                                  }else{ 
                                     $use_fontawesome = 'off';
-                                } 
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_fontawesome" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_fontawesome;?>> 
-                                    </span>
-                                    <input type="text" name="fontawesome_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Fontawesome Version" 
-                                    readonly value="<?=Options::get('fontawesome_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                        CDN
-                                    </button> 
-                                </span>
+                                  } 
+                              ?>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_fontawesome" rel="tooltip"
+                              title="Check here if you want to use URL" <?=$use_fontawesome;?>> 
+                            </span>
+                              <input type="text" name="fontawesome_v" rel="tooltip" 
+                              class="form-control disable" placeholder="Fontawesome Version" 
+                              readonly value="<?=Options::get('fontawesome_v');?>">
+                              <span class="input-group-btn">
+                                <button type="" name="" rel="tooltip"
+                                title="" class="btn btn-default">
+                                  <?=SETTINGS_LIBRARY_CDN;?>
+                                </button> 
+                              </span>
                             </div>
-                            <small>Check this if you want to use Fontawesome. Fontawesome 
-                                Version is not available, left it blank</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Enable Editor</label>
-                                <?php 
+                          <small><?=SETTINGS_LIBRARY_FAWESOME_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LIBRARY_EDITOR;?></label>
+                              <?php 
                                 if(Options::get('use_editor') == 'on') { 
-                                    $use_editor = 'checked'; 
+                                  $use_editor = 'checked'; 
                                 }else{ 
-                                    $use_editor = 'off';
+                                  $use_editor = 'off';
                                 } 
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_editor" rel="tooltip"
-                                        title="Check here if you want to use Editor" <?=$use_editor;?>> 
-                                    </span>
-                                    <input type="text" name="editor_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Editor Version" 
-                                    readonly value="<?=Options::get('editor_v');?>">
-                                    <span class="input-group-btn">
-                                        <select name="editor_type" rel="tooltip"
-                                        title=""
-                                        class="btn btn-default">
-                                        <option value="summernote">Summernote</option>
-                                    </select> 
-                                </span>
-                            </div>
-                            <small>Check this if you want to use Editor. Editor Version 
-                                is not available, left it blank</small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Enable Bootstrap Validator</label>
-                                <?php 
+                              ?>
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_editor" rel="tooltip"
+                              title="Check here if you want to use Editor" <?=$use_editor;?>> 
+                            </span>
+                              <input type="text" name="editor_v" rel="tooltip" 
+                              class="form-control disable" placeholder="Editor Version" 
+                              readonly value="<?=Options::get('editor_v');?>">
+                            <span class="input-group-btn">
+                              <select name="editor_type" rel="tooltip"
+                              title=""
+                              class="btn btn-default">
+                                <option value="summernote"><?=SETTINGS_LIBRARY_SUMMERNOTE;?></option>
+                              </select> 
+                            </span>
+                          </div>
+                          <small><?=SETTINGS_LIBRARY_EDITOR_DESCR;?></small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_LIBRARY_BVALIDATOR;?></label>
+                              <?php 
                                 if(Options::get('use_bsvalidator') == 'on') { 
                                     $use_bsvalidator = 'checked'; 
-                                }else{ 
+                                  }else{ 
                                     $use_bsvalidator = 'off';
-                                } 
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_bsvalidator" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bsvalidator;?>> 
-                                    </span>
-                                    <input type="text" name="bsvalidator_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Bootstrap Validator Version" 
-                                    readonly value="<?=Options::get('bsvalidator_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                        LOCAL
-                                    </button> 
-                                </span>
-                            </div>
-                            <small>Check this if you want to use Bootstrap Validator. Bootstrap Validator 
-                                Version is not available, left it blank</small>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="tab-pane" id="posts">
-                    <h3>
-                        Posts Config
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>Post per Page</label>
-                                <input type="number" name="post_perpage" value="<?=Options::get('post_perpage');?>" class="form-control" min='1'>
-                                <small>Number of Posts to show per page. </small>
-
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Pagination Type</label>
-                                <?php
-                                if(Options::get('pagination')=='number'){
-                                    $number = 'selected'; 
-                                    $pager = '';
-                                }elseif(Options::get('pagination') == 'pager'){
-                                    $pager = 'selected';
-                                    $number = '';
-                                }else{
-                                    $pager = '';
-                                    $number = '';
-                                }
-                                ?>
-                                <select  name="pagination" class="form-control">
-                                    <option value="number" <?=$number;?>>Number</option>
-                                    <option value="pager" <?=$pager;?>>Pager</option>
-                                </select>
-                                <small>Default Type of Pagination. Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code> </small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Pinger</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">http://</span>
-                                    <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::get('pinger');?></textarea>
-                                </div>
-
-                                <small>Set the Pinger of Search Engine. Use <label>{{domain}}</label> for your domain</small>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- Posts Tab END -->
-
-                <?php
-                $curr = Options::get('currency');
-                if ($curr == "USD") {
-                    $usd = "SELECTED";
-                    $euro = "";
-                    $pound = "";
-                } elseif ($curr == "EUR") {
-                    $euro = "SELECTED";
-                    $usd = "";
-                    $pound = "";
-                } elseif ($curr == "GBP") {
-                    $pound = "SELECTED";
-                    $usd = "";
-                    $euro = "";
-                } else {
-                    $pound = "";
-                    $usd = "";
-                    $euro = "";
-                }
-                ?>
-
-                <!-- Payment Tab Start -->
-                <div class="tab-pane" id="payment">
-                    <h3>
-                        Payment
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <h4>PayPal Configuration</h4>
-                        <div class="row">
-                            <div class="form-group  col-md-12 clearfix">
-                                <label for="currency">Currency Symbol</label>
-                                <select class="form-control col-md-6" id="currency" name="currency" required>
-                                    <option value="USD" <?=$usd;?>>$ (USD)</option>
-                                    <option value="EUR" <?=$euro;?>>&euro; (EUR)</option>
-                                    <option value="GBP" <?=$pound;?>>&pound; (GBP)</option>
-                                </select>
-                                <small class="help-block">Pick a Currency, default is USD</small>
-
-                            </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppsandbox">Enable Sandbox</label>
-                                <div class="form-group">
-                                    <?php
-                                    $ppsandbox = Options::get('ppsandbox');
-                                    if($ppsandbox == 'on'){
-                                        $sandbox = "checked";
-                                        $sandval = 0;
-                                    }else{
-                                        $sandbox = "";
-                                        $sandval = "1";
-                                    }
-                                    ?>
-
-                                    <input type="checkbox" class="" id="ppsandbox"
-                                    name="ppsandbox"  <?=$sandbox;?>> Enable Sandbox ?
-                                </div>
-                                <small class="help-block">Enable Sandbox</small>
-                            </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppemail">PayPal API Username</label>
-                                <input type="text" class="form-control" id="ppemail" placeholder="API Username"
-                                name="ppuser" value="<?=Options::get('ppuser');?>">
-                                <small class="help-block">Your PayPal API Username</small>
-                            </div>
-                            <div class="form-group  col-md-6">
-                                <label for="ppsecurity">PayPal API Password</label>
-                                <input type="text" class="form-control" id="ppsecurity" placeholder="PayPal API Password"
-                                name="pppass" value="<?=Options::get('pppass');?>">
-                                <small class="help-block">Your API Password</small>
-                            </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppsecret">PayPal Signature</label>
-                                <input type="text" class="form-control" id="ppsecret" placeholder="PayPal Signature"
-                                name="ppsign" value="<?=Options::get('ppsign');?>">
-                                <small class="help-block">Your PayPal Signature</small>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12 clearfix">
-                            <span class="alert alert-warning center-block">
-                                Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at  
-                                <a href="https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/" target="_blank">
-                                    https://developer.paypal.com
-                                </a>
+                                  } 
+                              ?>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                              <input type="checkbox" name="use_bsvalidator" rel="tooltip"
+                              title="Check here if you want to use URL" <?=$use_bsvalidator;?>> 
                             </span>
-                        </div>
-                    </div>
+                              <input type="text" name="bsvalidator_v" rel="tooltip" 
+                              class="form-control disable" placeholder="Bootstrap Validator Version" 
+                              readonly value="<?=Options::get('bsvalidator_v');?>">
+                              <span class="input-group-btn">
+                                <button type="" name="" rel="tooltip"
+                                title="" class="btn btn-default">
+                                  <?=SETTINGS_LIBRARY_LOCAL;?>
+                                </button> 
+                              </span>
+                            </div>
+                          <small><?=SETTINGS_LIBRARY_BVALIDATOR_DESCR;?></small>
+                      </div>
+                  </div>
+              </div>
 
-                </div>
-            </div>
-            <!-- Payment Tab Stop -->
+          </div>
+
+
+          <div class="tab-pane" id="posts">
+              <h3><?=SETTINGS_POSTS;?></h3>
+              <div class="col-sm-12">
+                  <div class="row">
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_POSTS_PERPAGE;?></label>
+                          <input type="number" name="post_perpage" value="<?=Options::get('post_perpage');?>" class="form-control" min='1'>
+                          <small><?=SETTINGS_POSTS_PERPAGE_DESCR;?></small>
+                          
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_POSTS_PAGINATION;?></label>
+                          <?php
+                              if(Options::get('pagination')=='number'){
+                                  $number = 'selected'; 
+                                  $pager = '';
+                              }elseif(Options::get('pagination') == 'pager'){
+                                  $pager = 'selected';
+                                  $number = '';
+                              }else{
+                                  $pager = '';
+                                  $number = '';
+                              }
+                          ?>
+                          <select  name="pagination" class="form-control">
+                              <option value="number" <?=$number;?>><?=SETTINGS_POSTS_PAGINATION_NUMBER;?></option>
+                              <option value="pager" <?=$pager;?>><?=SETTINGS_POSTS_PAGINATION_PAGER;?></option>
+                          </select>
+                          <small><?=SETTINGS_POSTS_PAGINATION_DESCR;?> Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code> </small>
+                      </div>
+                      <div class="col-sm-6 form-group">
+                          <label><?=SETTINGS_POSTS_PINGER;?></label>
+                          <div class="input-group">
+                              <span class="input-group-addon"><?=SETTINGS_POSTS_PINGER_HTTP?></span>
+                              <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::get('pinger');?></textarea>
+                          </div>
+                          
+                          <small><?=SETTINGS_POSTS_PINGER_DESCR?></small>
+                          
+                      </div>
+                  </div>
+              </div>
+
+          </div><!-- Posts Tab END -->
+
+          <?php
+              $curr = Options::get('currency');
+              if ($curr == "USD") {
+                  $usd = "SELECTED";
+                  $euro = "";
+                  $pound = "";
+              } elseif ($curr == "EUR") {
+                  $euro = "SELECTED";
+                  $usd = "";
+                  $pound = "";
+              } elseif ($curr == "GBP") {
+                  $pound = "SELECTED";
+                  $usd = "";
+                  $euro = "";
+              } else {
+                  $pound = "";
+                  $usd = "";
+                  $euro = "";
+              }
+          ?>
+
+          <!-- Payment Tab Start -->
+          <div class="tab-pane" id="payment">
+            <h3><?=SETTINGS_PAYMENT?></h3>
+            <div class="col-sm-12">
+                <h4><?=SETTINGS_PAYMENT_PAYPAL_CONF?></h4>
+                  <div class="row">
+                      <div class="form-group  col-md-12 clearfix">
+                          <label for="currency"><?=SETTINGS_PAYMENT_PAYPAL_CSYMB?></label>
+                          <select class="form-control col-md-6" id="currency" name="currency" required>
+                              <option value="USD" <?=$usd;?>>$ (USD)</option>
+                              <option value="EUR" <?=$euro;?>>&euro; (EUR)</option>
+                              <option value="GBP" <?=$pound;?>>&pound; (GBP)</option>
+                          </select>
+                          <small class="help-block"><?=SETTINGS_PAYMENT_PAYPAL_CSYMB_DESCR?></small>
+
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppsandbox"><?=SETTINGS_PAYMENT_SENDBOX?></label>
+                          <div class="form-group">
+                          <?php
+                          $ppsandbox = Options::get('ppsandbox');
+                            if($ppsandbox == 'on'){
+                                $sandbox = "checked";
+                                $sandval = 0;
+                            }else{
+                                $sandbox = "";
+                                $sandval = "1";
+                            }
+                          ?>
+                          
+                          <input type="checkbox" class="" id="ppsandbox"
+                          name="ppsandbox"  <?=$sandbox;?>><?=SETTINGS_PAYMENT_SENDBOX_EN?>
+                          </div>
+                          <small class="help-block"><?=SETTINGS_PAYMENT_SENDBOX_EN_DESCR?></small>
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppemail"><?=SETTINGS_PAYMENT_PAYPALAPI_USR?></label>
+                          <input type="text" class="form-control" id="ppemail" placeholder="API Username"
+                          name="ppuser" value="<?=Options::get('ppuser');?>">
+                          <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_USR_DESCR?></small>
+                      </div>
+                      <div class="form-group  col-md-6">
+                          <label for="ppsecurity"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD?></label>
+                          <input type="text" class="form-control" id="ppsecurity" placeholder="PayPal API Password"
+                          name="pppass" value="<?=Options::get('pppass');?>">
+                          <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD_DESCR?></small>
+                      </div>
+                      <div class="form-group  col-md-6 clearfix">
+                          <label for="ppsecret"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN?></label>
+                          <input type="text" class="form-control" id="ppsecret" placeholder="PayPal Signature"
+                          name="ppsign" value="<?=Options::get('ppsign');?>">
+                          <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR?></small>
+                      </div>
+                      </div>
+                      <div class="form-group col-md-12 clearfix">
+                          <span class="alert alert-warning center-block">
+                          <?=SETTINGS_PAYMENT_ALERT?>
+                          </a>
+                          </span>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+          <!-- Payment Tab Stop -->
 
         </div> <!-- TAB PANE END -->
 
