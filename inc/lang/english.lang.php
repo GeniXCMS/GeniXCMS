@@ -403,4 +403,4 @@ define('MSG_UNKNOWN_ERROR', 'Unknown Error Occurred!');
 
 // Other Functions
 
-define('REMOVED');
+define('REMOVE');
