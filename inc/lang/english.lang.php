@@ -400,3 +400,7 @@ define('MSG_SETTINGS_SAVED', 'New Settings Saved Successfully.');
 define('MSG_DATABASE_ERROR', 'Database Error!');
 define('MSG_DATABASE_ERROR_DESCR', 'Something went wrong with the Database.');
 define('MSG_UNKNOWN_ERROR', 'Unknown Error Occurred!');
+
+// Other Functions
+
+define('REMOVED');
