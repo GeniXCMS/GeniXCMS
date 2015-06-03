@@ -83,7 +83,7 @@ if(isset($_POST['login']))
 				$_SESSION['group'] = $group;
 				*/
 				//print_r($_SESSION);
-				$alertgreen = "".MSG_USER_LOGGED_IN."";
+				$alertgreen = MSG_USER_LOGGED_IN;
 			}elseif($p != $pass){
 				$alertred[] = PASS_NOT_MATCH;
 			}
@@ -129,7 +129,7 @@ if(isset($_POST['login']))
 			<label class="checkbox">
 				<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
 			</label>
-			<button class="btn btn-lg btn-success btn-block" name="login" type="submit"><?=FORM_SIGN_IN;?></button>
+			<button class="btn btn-lg btn-success btn-block" name="login" type="submit"><?=SIGN_IN;?></button>
 		</form>
 	</div>
 

@@ -165,17 +165,15 @@ define('MENU_ITEMS', 'Menu Items');
 define('ADD_MENU_ITEM', 'Add Menu Item');
 
 
-define('MENU_SUBMIT', 'Submit');
-define('MENU_CANCEL', 'Cancel');
 define('MENU_PARENT', 'Parent Menu');
 define('MENU_TYPE', 'Menu Type');
 define('MENU_CUSTOM_LINK', 'Custom Link');
 define('MENU_EDIT', 'Edit Menu');
 define('MENU_ADD_ITEM', 'Add Item');
 
-define('MENU_ID_DESCR', 'Your Menu ID');
+define('MENU_ID_DESCR', 'Your Menu ID, eg. <code>mainmenu</code> ');
 define('MENU_NAME_DESCR', 'Your Menu Name');
-define('MENU_CLASS_DESCR', 'Class Style of the menu');
+define('MENU_CLASS_DESCR', 'Class Style of the menu, <code>.class</code> means menu class is <em>class</em>');
 define('MENU_PAGE_DESCR', 'Choose This if you want menu for Pages. Pick Page Name');
 define('MENU_CATEGORIES_DESCR', 'Choose This if you want menu for Categories. Pick Category Name');
 define('MENU_MODULES_DESCR', 'Choose This if you want menu for Modules(Mod). Pick Module Name');
@@ -343,7 +341,6 @@ define('SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR', 'Your PayPal Signature');
 define('REG_FORM', 'Register');
 define('REG_ALREADY_HAVE_ACC', 'Already Have an Account ? Login Now!');
 define('REG_ALREADY_REGISTERED_ACC', 'You are Already Registered and Logged In!');
-define('FORM_SIGN_IN', 'SIGN IN');
 define('REG_USERNAME_REQUIRED', 'The Username is required and cannot be empty');
 define('REG_ACTIVATE_ACCOUNT', 'Thank You for Registering with Us. Please Activate Your Account to login');
 define('REG_CANT_CREATE_ACCOUNT', 'We can not create your account');

@@ -48,13 +48,13 @@ if(isset($_POST['register']))
         $alertred[] = TOKEN_NOT_EXIST;
     }
 	if(!User::is_exist($_POST['userid'])){
-        $alertred[] = "".MSG_USER_EXIST."";
+        $alertred[] = MSG_USER_EXIST;
     }
     if(!User::is_same($_POST['pass1'], $_POST['pass1'])){
-        $alertred[] = "".MSG_USER_PWD_MISMATCH."";
+        $alertred[] = MSG_USER_PWD_MISMATCH;
     }
     if(!User::is_email($_POST['email'])){
-        $alertred[] = "".MSG_USER_EMAIL_EXIST."";
+        $alertred[] = MSG_USER_EMAIL_EXIST;
     }
 
     if(!isset($alertred)){
@@ -72,9 +72,9 @@ if(isset($_POST['register']))
                         
                     );   
         if(User::create($vars) === true){
-            $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
+            $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
         }else{
-            $alertred[] = "".REG_CANT_CREATE_ACCOUNT."";
+            $alertred[] = REG_CANT_CREATE_ACCOUNT;
         }
         
         
@@ -98,7 +98,7 @@ if(isset($_POST['register']))
         if($mailsend != ""){
             $alertred[] = $mailsend;
         }else{
-            $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
+            $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
         }
 		
     }else{
@@ -114,7 +114,7 @@ if (isset($_GET['activation'])) {
     if(Db::$num_rows > 0){
         $act = Db::query(sprintf("UPDATE `user` SET `status` = '1',`activation` = NULL WHERE `id` = '%d' ", $usr[0]->id));
         if($act){
-            $data['alertgreen'][] = "".REG_ACCOUNT_ACTIVATED."";
+            $data['alertgreen'][] = REG_ACCOUNT_ACTIVATED;
             $vars = array(
                 'to'      => $usr[0]->email,
                 'to_name' => $usr[0]->userid,
@@ -135,14 +135,14 @@ if (isset($_GET['activation'])) {
             if($mailsend != ""){
                 $alertred[] = $mailsend;
             }else{
-                $data['alertgreen'][] = "".REG_ACTIVATE_ACCOUNT."";
+                $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
             }
         }else{
-            $data['alertred'][] = "".REG_ACTIVATION_FAILED."";
+            $data['alertred'][] = REG_ACTIVATION_FAILED;
         }
         
     }else{
-        $data['alertred'][] = "".REG_ACTIVATION_FAILED_CODE."";
+        $data['alertred'][] = REG_ACTIVATION_FAILED_CODE;
     }
 }
 $loggedin = Session::val('loggedin');
@@ -157,7 +157,7 @@ if(isset($loggedin)){
         echo "<div class=\"alert alert-success\" >
         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
             <span aria-hidden=\"true\">&times;</span>
-            <span class=\"sr-only\">Close</span>
+            <span class=\"sr-only\">".CLOSE."</span>
         </button>
         ";
         foreach ($data['alertgreen'] as $alert) {
@@ -171,7 +171,7 @@ if(isset($loggedin)){
         echo "<div class=\"alert alert-danger\" >
         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
             <span aria-hidden=\"true\">&times;</span>
-            <span class=\"sr-only\">Close</span>
+            <span class=\"sr-only\">".CLOSE."</span>
         </button>
         <ul>";
         foreach ($data['alertred'] as $alert) {
@@ -193,11 +193,11 @@ if(isset($loggedin)){
 		<input type="password" class="form-control" id="password1" placeholder="Password" name="pass1" required="required">
 	</div>
 	<div class="form-group">
-		<label for="password2"><?=RETYPE_USR_PASSWORD;?></label>
+		<label for="password2"><?=RETYPE_PASSWORD;?></label>
 		<input type="password" class="form-control" id="password2" placeholder="Password" name="pass2" required="required">
 	</div>
 	<div class="form-group">
-		<label for="email"><?=E_MAIL;?></label>
+		<label for="email"><?=EMAIL;?></label>
 		<input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required="required" value="">
 	</div>
 	
@@ -221,7 +221,7 @@ if(isset($loggedin)){
         <label class="checkbox">
             <a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
         </label>
-        <button class="btn btn-success" name="login" type="submit"><?=FORM_SIGN_IN;?></button>
+        <button class="btn btn-success" name="login" type="submit"><?=SIGN_IN;?></button>
     </form>
 </div>
 <?php
