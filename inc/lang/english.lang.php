@@ -40,6 +40,7 @@ define('CATEGORY_CANNOT_EMPTY','Category cannot be empty.');
 define('USERID_CANNOT_EMPTY','Username cannot be empty.');
 define('PASS1_CANNOT_EMPTY','Password 1 cannot be empty.');
 define('PASS2_CANNOT_EMPTY','Password 2 cannot be empty.');
+define('USER', 'User');
 
 /** Token */
 define('TOKEN_NOT_EXIST', 'Token not exist, or your time has expired. Please refresh your browser to get a new token.');
@@ -184,6 +185,7 @@ define('MENU_PARENT_DESCR', 'Choose Parent Menu');
 /** Themes Related */
 define('UPLOAD_THEMES', 'Upload Themes');
 define('ACTIVE_THEME', 'Active Themes');
+define('AVAILABLE_THEME', 'Active Themes');
 define('NO_THEMES_FOUND', 'No Themes Found');
 define('INSTALL_THEME', 'Install Themes');
 define('BROWSE_THEMES', 'Browse Themes');
@@ -400,4 +402,4 @@ define('MSG_UNKNOWN_ERROR', 'Unknown Error Occurred!');
 
 // Other Functions
 
-define('REMOVE');
+define('REMOVE', 'remove');
