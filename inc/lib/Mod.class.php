@@ -192,7 +192,7 @@ class Mod
                     }else{
                         $GLOBALS['alertred'] = $alertred;
                     }
-                }elseif ($_GET['act'] == REMOVE) {
+                }elseif ($_GET['act'] == 'remove') {
                     if(!Token::isExist($_GET['token'])){
                         $alertred[] = TOKEN_NOT_EXIST;
                     }
