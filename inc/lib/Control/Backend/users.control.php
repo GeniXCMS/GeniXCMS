@@ -169,7 +169,7 @@ switch ($act) {
                 if(!User::is_exist($_POST['userid'])){
                     $alertred[] = MSG_USER_EXIST;
                 }
-                if(!User::is_same($_POST['pass1'], $_POST['pass1'])){
+                if(!User::is_same($_POST['pass1'], $_POST['pass2'])){
                     $alertred[] = MSG_USER_PWD_MISMATCH;
                 }
                 if(!User::is_email($_POST['email'])){
