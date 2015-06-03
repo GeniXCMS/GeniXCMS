@@ -169,7 +169,7 @@ class Mod
         if (isset($_GET['page']) && $_GET['page'] == "modules") {
             if (isset($_GET['act'])) {
 
-                if ($_GET['act'] == 'activate') {
+                if ($_GET['act'] == "".ACTIVATE."") {
 
                     if(!Token::isExist($_GET['token'])){
                         $alertred[] = TOKEN_NOT_EXIST;
@@ -181,7 +181,7 @@ class Mod
                     }else{
                         $GLOBALS['alertred'] = $alertred;
                     }
-                }elseif($_GET['act'] == 'deactivate'){
+                }elseif($_GET['act'] == "".DEACTIVATE.""){
                     if(!Token::isExist($_GET['token'])){
                         $alertred[] = TOKEN_NOT_EXIST;
                     }

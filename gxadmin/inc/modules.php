@@ -87,7 +87,7 @@ if (isset($data['alertred'])) {
                                         <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a> 
                                         ";
                                 if (!Mod::isActive($mod)) {
-                                    echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."\" class=\"label label-danger\" disable>remove</a>";
+                                    echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."\" class=\"label label-danger\" disable>".REMOVE."</a>";
                                 }
                                 echo"
                                     </td>
