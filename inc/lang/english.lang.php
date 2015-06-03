@@ -185,7 +185,7 @@ define('MENU_PARENT_DESCR', 'Choose Parent Menu');
 /** Themes Related */
 define('UPLOAD_THEMES', 'Upload Themes');
 define('ACTIVE_THEME', 'Active Themes');
-define('AVAILABLE_THEME', 'Active Themes');
+define('AVAILABLE_THEME', 'Available Themes');
 define('NO_THEMES_FOUND', 'No Themes Found');
 define('INSTALL_THEME', 'Install Themes');
 define('BROWSE_THEMES', 'Browse Themes');
