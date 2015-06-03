@@ -20,7 +20,7 @@ if (isset($data['alertgreen'])) {
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
+        <span class=\"sr-only\">".CLOSE."</span>
     </button>";
     foreach ($data['alertgreen'] as $alert) {
         # code...
@@ -33,7 +33,7 @@ if (isset($data['alertred'])) {
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
+        <span class=\"sr-only\">".CLOSE."</span>
     </button>";
     foreach ($data['alertred'] as $alert) {
         # code...
@@ -57,9 +57,10 @@ if (isset($data['alertred'])) {
             <?php
                 $active = Options::get('themes');
                 $adata = Theme::data($active);
+                // print_r($adata);
                 echo "
                 <div class=\"col-sm-12\">
-                <label>".ACTIVE_THEME."</label>
+                <h3>".ACTIVE_THEME."</h3>
                     <div class=\"row\">
 
                     <div class=\"col-sm-3\">
@@ -74,7 +75,10 @@ if (isset($data['alertred'])) {
                 ";
                 echo "</div>
                     <strong>".$adata['name']."</strong><br />
+                    <i class=\"fa fa-code\"></i> {$adata['version']}<br />
                     <i class=\"fa fa-user\"></i> <a href=\"{$adata['url']}\" target=\"_new\">{$adata['developer']}</a><br />
+                    <i class=\"fa fa-info-circle\"></i> {$adata['desc']}<br />
+
                 ";
                 if(!Theme::isActive($active)){
                     echo "
@@ -100,7 +104,7 @@ if (isset($data['alertred'])) {
                             //$data['themes'][] = $data['themes'][$i];
                         }
                     }
-                    echo "&nbsp;<hr>";
+                    echo "<div class=\"col-md-12\"><h3>".AVAILABLE_THEME."</h3><hr><div class=\"row\">";
                     foreach ($data['themes'] as $thm) {
                         $t = Theme::data($thm);
                         echo "
@@ -133,6 +137,7 @@ if (isset($data['alertred'])) {
                         }
                         echo "</div>";
                     }
+                    echo "</div></div>";
                 }else{
                     echo "<div class=\"col-md-12\">".NO_THEMES_FOUND."</div>";
                 }
