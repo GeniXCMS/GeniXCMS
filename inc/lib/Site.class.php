@@ -128,7 +128,7 @@ class Site
         $fa = Options::get('use_fontawesome');
         if($fa == 'on'){
             $foot .= "
-            \t<link href=\"http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
+            \t<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
         }
 
         if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
