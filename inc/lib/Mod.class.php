@@ -230,6 +230,11 @@ class Mod
             include ($file);
         }
     }
+
+    public static function url($mod) {
+        $url = Site::$url."/inc/mod/".$mod;
+        return $url;
+    }
 }
 
 /* End of file Mod.class.php */

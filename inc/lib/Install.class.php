@@ -63,8 +63,6 @@ define('DB_PASS', '".Session::val('dbpass')."');
 define('DB_USER', '".Session::val('dbuser')."');
 define('DB_DRIVER', 'mysqli');
 
-
-define('GX_LANG', 'english');
 define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
 define('GX_URL_PREFIX', '.html');
 
@@ -288,7 +286,9 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
             (null, 'ppsign', ''),
             (null, 'tokens', ''),
             (null, 'modules', ''),
-            (null, 'themes', 'default')";
+            (null, 'themes', 'default'),
+            (null, 'system_lang', 'english'),
+            (null, 'charset', 'utf-8')";
         $db->query($options);
     }
 }
