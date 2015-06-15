@@ -67,5 +67,8 @@ Showcase URL :
 ### Website
 Link : http://www.genixcms.org
 
+### Funder 
+https://www.indiegogo.com/projects/genixcms/x/10970277
+
 ### Developer
 Developed by : Puguh Wijayanto - www.metalgenix.com
