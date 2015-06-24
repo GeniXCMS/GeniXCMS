@@ -67,10 +67,20 @@ if (isset($data['alertred'])) {
                             echo "<div class=\"col-md-4 item\" >
                             <div class=\"panel panel-default\">
                                 <div class=\"panel-heading\">
-                                  <h3 class=\"panel-title\">{$c->name} 
-                                  <a href=\"?page=categories&act=del&id={$c->id}&token=".TOKEN."\" class=\"pull-right\"
-                                  onclick=\"return confirm('Are you sure you want to delete this item?');\">
-                                  <span class=\"glyphicon glyphicon-remove\"></span></a></h3>
+                                    <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
+                                    <div class=\"input-group\">
+                                        <a href=\"?page=categories&act=del&id={$c->id}&token=".TOKEN."\" class=\"input-group-addon\"
+                                        onclick=\"return confirm('Are you sure you want to delete this item?');\"
+                                        ><span class=\"glyphicon glyphicon-remove\"></span></a>
+                                        <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c->name}\">
+                                        <input type=\"hidden\" name=\"id\" value=\"{$c->id}\">
+                                        <input type=\"hidden\" name=\"token\" value=\"".TOKEN."\">
+                                        <span class=\"input-group-btn\">
+                                            <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
+                                        </span>
+                                    </div>
+                                    </form>
+                                  
                                 </div>
                                 <div class=\"panel-body\">
                                 <ul class=\"list-group\">";
@@ -125,7 +135,8 @@ if (isset($data['alertred'])) {
                                     'parent' => '0',
                                     'name' => 'parent',
                                     'sort' => 'ASC',
-                                    'order_by' => 'name'
+                                    'order_by' => 'name',
+                                    'type' => ''
                                 );
                         echo Categories::dropdown($vars);
                     ?>

@@ -66,7 +66,7 @@ switch ($act) {
                     $menu[$_POST['id']]['menu'] = $menus[$_POST['id']]['menu'];
                     $menu[$_POST['id']]['menu'][] = array(
                                                         'parent' => $_POST['parent'],
-                                                        'menuid' => $_POST['id'],
+                                                        'menuid' => Typo::int($_POST['id']),
                                                         'name' => Typo::cleanX($_POST['name']),
                                                         'type' => $_POST['type'],
                                                         'value' => $_POST[$_POST['type']],
@@ -298,12 +298,12 @@ switch ($act) {
                     $data['alertred'] = $alertred;
                 }else{
                     $vars = array(
-                                'parent' => $_POST['parent'],
-                                'menuid' => $_POST['id'],
+                                'parent' => Typo::int($_POST['parent']),
+                                'menuid' => Typo::int($_POST['id']),
                                 'name' => Typo::cleanX($_POST['name']),
                                 'class' => Typo::cleanX($_POST['class']),
-                                'type' => $_POST['type'],
-                                'value' => $_POST[$_POST['type']]
+                                'type' => Typo::strip($_POST['type']),
+                                'value' => Typo::cleanX($_POST[$_POST['type']])
                             );
                     Menus::insert($vars);
                     $data['alertgreen'][] = 'Menu Item Added';
@@ -340,7 +340,9 @@ switch ($act) {
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
                 }else{
-                    Menus::updateMenuOrder($_POST['order']);
+                    Menus::updateMenuOrder(
+                        Typo::int($_POST['order'])
+                    );
                     $data['alertgreen'][] = 'Menu Order Changed';
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }

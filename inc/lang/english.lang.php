@@ -330,7 +330,7 @@ define('SETTINGS_PAYMENT_PAYPALAPI_PWD', 'PayPal API Password');
 define('SETTINGS_PAYMENT_PAYPALAPI_SIGN', 'PayPal Signature1');
 define('SETTINGS_PAYMENT_ALERT', 'Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at  
                           <a href="https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/" target="_blank">
-                              https://developer.paypal.com');
+                              https://developer.paypal.com</a>');
 
 define('SETTINGS_PAYMENT_PAYPAL_CSYMB_DESCR', 'Pick a Currency, default is USD');
 define('SETTINGS_PAYMENT_SENDBOX_EN_DESCR', 'Enable Sandbox');

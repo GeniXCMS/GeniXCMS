@@ -45,9 +45,9 @@ switch ($act) {
                     $vars = array(
                                     'id' => sprintf('%d',$_GET['id']),
                                     'user' => array(
-                                                    'userid' => $_POST['userid'],
-                                                    'email' => $_POST['email'],
-                                                    'group' => $_POST['group']
+                                                    'userid' => Typo::cleanX($_POST['userid']),
+                                                    'email' => Typo::cleanX($_POST['email']),
+                                                    'group' => Typo::int($_POST['group'])
                                                 )
                                     
                                 ); 
@@ -153,7 +153,11 @@ switch ($act) {
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
 
-                if (!isset($_POST['userid']) || $_POST['userid'] == "") {
+                $userid = Typo::cleanX($_POST['userid']);
+                $email = Typo::cleanX($_POST['email']);
+                $group = Typo::int($_POST['group']);
+
+                if (!isset($userid) || $userid == "") {
                     // VALIDATE ALL
                     $alertred[] = USERID_CANNOT_EMPTY;
                 }
@@ -180,10 +184,10 @@ switch ($act) {
 
                     $vars = array(
                                     'user' => array(
-                                                    'userid' => $_POST['userid'],
+                                                    'userid' => $userid,
                                                     'pass' => User::randpass($_POST['pass1']),
-                                                    'email' => $_POST['email'],
-                                                    'group' => $_POST['group'],
+                                                    'email' => $email,
+                                                    'group' => $group,
                                                     'status' => '1',
                                                     'join_date' => date("Y-m-d H:i:s")
                                                 ),
@@ -273,7 +277,8 @@ switch ($act) {
         $where = " 1 ";
         $qpage = "";
         if(isset($_GET['q']) && $_GET['q'] != ''){
-            $where .= "AND (`userid` LIKE '%%{$_GET['q']}%%' OR `email` LIKE '%%{$_GET['q']}%%') ";
+            $q = Typo::cleanX($_GET['q']);
+            $where .= "AND (`userid` LIKE '%%{$q}%%' OR `email` LIKE '%%{$q}%%') ";
             $qpage .= "&q={$_GET['q']}";
         }
         if(isset($_GET['from']) && $_GET['from'] != ''){
@@ -292,8 +297,8 @@ switch ($act) {
 
         $max = "10";
         if(isset($_GET['paging'])){
-            $paging = $_GET['paging'];
-            $offset = ($_GET['paging']-1)*$max;
+            $paging = Typo::int($_GET['paging']);
+            $offset = ($paging-1)*$max;
         }else{
             $paging = 1;
             $offset = 0;
@@ -301,10 +306,6 @@ switch ($act) {
 
         $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
         $data['num'] = Db::$num_rows;
-        Theme::admin('header', $data);
-        System::inc('user', $data);
-        Theme::admin('footer');
-
         $page = array(
                     'paging' => $paging,
                     'table' => 'user',
@@ -313,7 +314,11 @@ switch ($act) {
                     'url' => 'index.php?page=users'.$qpage,
                     'type' => 'pager'
                 );
-        echo Paging::create($page);
+        $data['paging'] = Paging::create($page);
+
+        Theme::admin('header', $data);
+        System::inc('user', $data);
+        Theme::admin('footer');
 
         break;
 }

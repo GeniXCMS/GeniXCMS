@@ -53,6 +53,7 @@
         <hr />
     </div>
     <div class="col-sm-12">
+    <?=$data['paging'];?>
         <form action="index.php?page=users" method="get">
             <input type="hidden" name="page" value="users">
             <div class="row">
@@ -178,6 +179,7 @@
         </tbody>
     </table>
     </form>
+    <?=$data['paging'];?>
     </div>
     </div>
 </div>

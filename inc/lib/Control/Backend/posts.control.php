@@ -24,11 +24,15 @@ switch ($act) {
         switch (isset($_POST['submit'])) {
             case true:
                 # code...
+                // check token first
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
-                if (!isset($_POST['title']) || $_POST['title'] == "") {
+                //cleanup first
+                $title = Typo::cleanX($_POST['title']);
+                $content = Typo::cleanX($_POST['content']);
+                if (!isset($title) || $title == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
                 }
                 if(isset($alertred)){
@@ -41,9 +45,9 @@ switch ($act) {
                         $date = $_POST['date'];
                     }
                     $vars = array(
-                                    'title' => $_POST['title'],
-                                    'cat' => $_POST['cat'],
-                                    'content' => $_POST['content'],
+                                    'title' => $title,
+                                    'cat' => Typo::int($_POST['cat']),
+                                    'content' => $content,
                                     'date' => $date,
                                     'type' => 'post',
                                     'author' => Session::val('username'),
@@ -73,11 +77,16 @@ switch ($act) {
         switch (isset($_POST['submit'])) {
             case true:
                 # code...
+                // check token first
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-                    // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
-                if (!isset($_POST['title']) || $_POST['title'] == "") {
+
+                //clean up first
+                $title = Typo::cleanX($_POST['title']);
+                $content = Typo::cleanX($_POST['content']);
+
+                if (!isset($title) || $title == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
                 }
                 if (isset($alertred)) {
@@ -86,15 +95,13 @@ switch ($act) {
                 }else{
                     $moddate = date("Y-m-d H:i:s");
                     $vars = array(
-                                    'title' => $_POST['title'],
-                                    'cat' => $_POST['cat'],
-                                    'content' => $_POST['content'],
+                                    'title' => $title,
+                                    'cat' => Typo::int($_POST['cat']),
+                                    'content' => $content,
                                     'modified' => $moddate,
                                     'date' => $_POST['date'],
                                     'status' => Typo::int($_POST['status'])
                                 );
-                    //print_r($vars);
-                    
                     Posts::update($vars);
                     $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_UPDATED;
                     Token::remove($_POST['token']);
@@ -103,8 +110,7 @@ switch ($act) {
                 break;
             
             default:
-                # code...
-                //System::inc('posts_form', $data);
+
                 break;
         }
 
@@ -213,12 +219,14 @@ switch ($act) {
         $where = "";
         $qpage = "";
         if(isset($_GET['q']) && $_GET['q'] != ''){
-            $where .= "AND (`title` LIKE '%%{$_GET['q']}%%' OR `content` LIKE '%%{$_GET['q']}%%') ";
-            $qpage .= "&q={$_GET['q']}";
+            $q = Typo::cleanX($_GET['q']);
+            $where .= "AND (`title` LIKE '%{$q}%' OR `content` LIKE '%{$q}%') ";
+            $qpage .= "&q={$q}";
         }
         if(isset($_GET['cat']) && $_GET['cat'] != ''){
-            $where .= "AND `cat` = '{$_GET['cat']}' ";
-            $qpage .= "&cat={$_GET['cat']}";
+            $cat = Typo::int($_GET['cat']);
+            $where .= "AND `cat` = '{$cat}' ";
+            $qpage .= "&cat={$cat}";
         }
         if(isset($_GET['from']) && $_GET['from'] != ''){
             $where .= "AND `date` >= '{$_GET['from']}' ";
@@ -229,15 +237,15 @@ switch ($act) {
             $qpage .= "&to={$_GET['to']}";
         }
         if(isset($_GET['status']) && $_GET['status'] != ''){
-            $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
+            $where .= "AND `status` LIKE '%{$_GET['status']}%' ";
             $qpage .= "&status={$_GET['status']}";
         }
         
 
-        $max = "20";
+        $max = "15";
         if(isset($_GET['paging'])){
-            $paging = $_GET['paging'];
-            $offset = ($_GET['paging']-1)*$max;
+            $paging = Typo::int($_GET['paging']);
+            $offset = ($paging-1)*$max;
         }else{
             $paging = 1;
             $offset = 0;
@@ -250,19 +258,20 @@ switch ($act) {
                         ORDER BY `date` DESC 
                         LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
-        Theme::admin('header', $data);
-        System::inc('posts', $data);
-        Theme::admin('footer');
-
         $page = array(
                     'paging' => $paging,
                     'table' => 'posts',
                     'where' => "`type` = 'post' ".$where,
                     'max' => $max,
                     'url' => 'index.php?page=posts'.$qpage,
-                    'type' => 'pager'
+                    'type' => 'number'
                 );
-        echo Paging::create($page);
+        $data['paging'] = Paging::create($page);
+        Theme::admin('header', $data);
+        System::inc('posts', $data);
+        Theme::admin('footer');
+
+        
         break;
 }
 

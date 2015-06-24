@@ -80,13 +80,15 @@ class Mod
             asort($mod);
             foreach ($mod as $m) {
                 # code...
-                $data = self::data($m);
-                if(isset($_GET['mod']) && $_GET['mod'] == $m){
-                    $class = 'class="active"';
-                }else{
-                    $class = "";
+                if(self::exist($m)){
+                    $data = self::data($m);
+                    if(isset($_GET['mod']) && $_GET['mod'] == $m){
+                        $class = 'class="active"';
+                    }else{
+                        $class = "";
+                    }
+                    $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['icon']." ".$data['name']."</a></li>";
                 }
-                $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['icon']." ".$data['name']."</a></li>";
             }
         }else{
             $list = "";
@@ -217,7 +219,10 @@ class Mod
             $mods = array();
         }
         foreach ($mods as $m) {
-            self::load($m);
+            if (self::exist($m)) {
+                self::load($m);
+            }
+            
         }
 
         return $data;
@@ -234,6 +239,15 @@ class Mod
     public static function url($mod) {
         $url = Site::$url."/inc/mod/".$mod;
         return $url;
+    }
+
+    public static function exist($mod) {
+        $file = GX_MOD."/".$mod."/index.php";
+        if(file_exists($file)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

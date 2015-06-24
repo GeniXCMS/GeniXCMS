@@ -31,20 +31,21 @@ class Typo
     }
 
     public static function cleanX ($c) {
-        // $val = htmlspecialchars(
-        //         mysql_real_escape_string($c), 
-        //         ENT_QUOTES, 
-        //         "utf-8"
-        //     );
-        $val = htmlentities(
-                    $c, 
-                    ENT_QUOTES | ENT_IGNORE, "UTF-8");
+        $val = self::strip_tags_content($c, '<script>', TRUE);
+        $val = htmlspecialchars(
+                $val, 
+                ENT_QUOTES|ENT_HTML5, 
+                "utf-8"
+            );
+        // $val = htmlentities(
+        //             $c, 
+        //             ENT_QUOTES | ENT_IGNORE, "UTF-8");
         return $val;
     }
 
     public static function Xclean($vars) {
-        // $var = htmlspecialchars_decode($vars);
-        $var = html_entity_decode($vars);
+        $var = htmlspecialchars_decode($vars);
+        // $var = html_entity_decode($vars);
         return $var;
     }
 
@@ -60,8 +61,8 @@ class Typo
       $text = trim($text, '-');
 
       // transliterate
-      $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
+      setlocale(LC_CTYPE, Options::get('country').'.utf8');
+      $text = iconv('utf-8', 'ASCII//TRANSLIT', $text);
       // lowercase
       $text = strtolower($text);
 
@@ -75,7 +76,10 @@ class Typo
       return $text;
     }
 
-
+    /**
+    * Remove Tags
+    * @link http://php.net/manual/es/function.strip-tags.php#86964
+    */
     public static function strip($text, $tags = '', $invert = FALSE) { 
 
         preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
@@ -101,6 +105,29 @@ class Typo
         return $text; 
     }
 
+    /**
+    * Remove Tags and Content inside tags
+    * @link http://php.net/manual/es/function.strip-tags.php#86964
+    * @since 0.0.4
+    */
+    public static function strip_tags_content($text, $tags = '', $invert = FALSE) { 
+
+        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
+        $tags = array_unique($tags[1]); 
+
+        if(is_array($tags) AND count($tags) > 0) { 
+            if($invert == FALSE) { 
+                return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); 
+            } 
+            else { 
+                return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); 
+            } 
+        } 
+        elseif($invert == FALSE) { 
+            return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); 
+        } 
+        return $text; 
+    } 
 
     /**
     * Cryptography random characters
@@ -143,6 +170,34 @@ class Typo
 
     public static function escape($vars) {
         return Db::escape($vars);
+    }
+
+    /**
+    * Change New Line (nl) to Paragraph
+    *
+    * @since 0.0.4
+    */
+    public static function nl2p($string, $line_breaks = true, $xml = true) {
+
+        $string = str_replace(array('<p>', '</p>', '<br>', '<br />'), '', $string);
+
+        // It is conceivable that people might still want single line-breaks
+        // without breaking into a new paragraph.
+        if ($line_breaks == true)
+            return '<p>'.preg_replace(array("/([\n]{2,})/i", "/([^>])\n([^<])/i"), 
+            array("</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'), trim($string)).'</p>';
+        else 
+            return '<p>'.preg_replace(
+            array("/([\n]{2,})/i", "/([\r\n]{3,})/i","/([^>])\n([^<])/i"),
+            array("</p>\n<p>", "</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'),
+
+            trim($string)).'</p>'; 
+    }
+
+    public static function url2link($text){
+        // The Regular Expression filter
+        $reg_exUrl = preg_replace('@((https?://)(www\.|[-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
+        return $reg_exUrl;   
     }
 }
 

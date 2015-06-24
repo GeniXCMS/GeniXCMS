@@ -40,6 +40,7 @@ class Categories
     *                'parent'    =>    'parent',
     *                'order_by'    =>    '',
     *                'sort'    =>    'ASC',
+    *                'type'    => ''
     *            )
     *    Categories::dropdown($vars);
     * </code>
@@ -59,6 +60,11 @@ class Categories
                 $where .= " `parent` = '{$vars['parent']}' ";
             }else{
                 $where .= "1 ";
+            }
+            if(isset($vars['type'])) {
+                $where .= " AND `type` = '{$vars['type']}' ";
+            }else{
+                $where .= " AND 1 ";
             }
             $order_by = "ORDER BY ";
             if(isset($vars['order_by'])) {
@@ -141,7 +147,7 @@ class Categories
                     }
                     // print_r($catparent);
                     
-                    $drop .= "<div class=\"panel panel-default\">
+                    $drop .= "<div class=\"panel panel-gxmarket\">
                     <div id=\"collapseListGroupHeading{$c->id}\" class=\"panel-heading\" role=\"tab\" >
                     <a href=\"#collapse-{$c->id}\" data-toggle=\"collapse\"  aria-expanded=\"false\" 
                     aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>

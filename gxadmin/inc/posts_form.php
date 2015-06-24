@@ -52,7 +52,8 @@ if (isset($data['alertred'])) {
 if(isset($data['post'])) {
     foreach ($data['post'] as $p) {
         # code...
-        $title = $p->title;
+        $title = "{$p->title}";
+        // echo $title;
         $content = $p->content;
         $date = $p->date;
         $status = $p->status;

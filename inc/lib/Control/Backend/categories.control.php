@@ -16,6 +16,10 @@ $data['sitetitle'] = CATEGORIES;
 switch (isset($_POST['addcat'])) {
     case true:
         # code...
+        // cleanup first
+        $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
+        $cat = Typo::cleanX($_POST['cat']);
+
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
             $alertred[] = TOKEN_NOT_EXIST;
@@ -26,10 +30,9 @@ switch (isset($_POST['addcat'])) {
         if(isset($alertred)){
             $data['alertred'] = $alertred;
         }else{
-            $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
-            $cat = Typo::cleanX($_POST['cat']);
+            
             $cat = Db::insert(
-                        sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '' )", 
+                        sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', '' )", 
                             $cat, $slug, $_POST['parent']
                         )
                     );
@@ -47,6 +50,8 @@ switch (isset($_POST['addcat'])) {
 switch (isset($_POST['updatecat'])) {
     case true:
         # code...
+        // cleanup first
+        $cat = Typo::cleanX($_POST['cat']);
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
             $alertred[] = TOKEN_NOT_EXIST;
@@ -56,9 +61,9 @@ switch (isset($_POST['updatecat'])) {
         }else{
             $vars = array(
                         'table' => 'cat',
-                        'id' => $_POST['id'],
+                        'id' => Typo::int($_POST['id']),
                         'key' => array(
-                                    'name' => Typo::cleanX($_POST['cat'])
+                                    'name' => $cat
                                 )
                     );
             $cat = Db::update($vars);

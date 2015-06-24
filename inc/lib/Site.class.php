@@ -98,6 +98,8 @@ class Site
         echo $meta;
     }
 
+
+
     public static function footer(){
        //global $editors;
         //echo $GLOBALS['editor'].' one '. self::$editors;

@@ -58,7 +58,7 @@ switch (isset($_POST['change'])) {
             //print_r($ob);
             foreach ($_POST as $key => $val) {
                 # code...
-                $vars[$key] = $val;
+                $vars[$key] = Typo::cleanX($val);
             }
             unset($vars['change']);
             //print_r($vars);

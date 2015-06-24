@@ -36,12 +36,11 @@ try {
     Token::create();
     Mod::loader();
     Theme::loader();
-    $thm->theme('header');
+    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 
-echo "<div class=\"container\">";
 if(isset($_POST['login']))
 {
 	/*check if username is exist or not */
@@ -98,6 +97,8 @@ if(isset($_POST['login']))
 		$alertred[] = NO_USER;
 	}
 }
+$thm->theme('header');
+echo "<div class=\"container\">";
 
 	if(isset($alertred)) {
 		echo "
