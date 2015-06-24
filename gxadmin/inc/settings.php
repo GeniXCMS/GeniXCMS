@@ -501,7 +501,6 @@ if (isset($data['alertred'])) {
 
                 </div><!-- Tab Pane Library END -->
 
-
                 <div class="tab-pane" id="posts">
                     <h3><?=SETTINGS_POSTS;?></h3>
                     <div class="col-sm-12">
@@ -634,10 +633,7 @@ if (isset($data['alertred'])) {
             <!-- Payment Tab Stop -->
 
         </div> <!-- TAB PANE END -->
-
-
-
-
+        
     </div>
 </div>
 <input type="hidden" name="token" value="<?=TOKEN;?>">
