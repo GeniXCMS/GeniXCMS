@@ -103,7 +103,8 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
                   `name` text NOT NULL,
                   `slug` text NOT NULL,
                   `parent` text DEFAULT NULL,
-                  `desc` text DEFAULT  NULL
+                  `desc` text DEFAULT  NULL,
+                  `type` text NOT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ";
         $db->query($cat);
 
