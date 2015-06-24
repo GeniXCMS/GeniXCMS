@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150202
-* @version 0.0.3
+* @version 0.0.4
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -501,6 +501,7 @@ if (isset($data['alertred'])) {
 
                 </div><!-- Tab Pane Library END -->
 
+
                 <div class="tab-pane" id="posts">
                     <h3><?=SETTINGS_POSTS;?></h3>
                     <div class="col-sm-12">
@@ -633,7 +634,10 @@ if (isset($data['alertred'])) {
             <!-- Payment Tab Stop -->
 
         </div> <!-- TAB PANE END -->
-        
+
+
+
+
     </div>
 </div>
 <input type="hidden" name="token" value="<?=TOKEN;?>">

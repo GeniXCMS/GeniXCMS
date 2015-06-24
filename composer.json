@@ -11,10 +11,6 @@
             "email": "hangbowl@gmail.com"
         }
     ],
-    "support": {
-        "issues": "https://github.com/semplon/GeniXCMS/issues",
-        "source": "https://github.com/semplon/GeniXCMS"
-    },
     "config": {
         "vendor-dir": "inc/lib/Vendor"
     },
