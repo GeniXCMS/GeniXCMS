@@ -32,7 +32,7 @@ switch (isset($_POST['addcat'])) {
         }else{
             
             $cat = Db::insert(
-                        sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', '' )", 
+                        sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'post' )", 
                             $cat, $slug, $_POST['parent']
                         )
                     );
@@ -90,7 +90,7 @@ if(isset($_GET['act']) == 'del'){
     }
     if(isset($_GET['token'])){ Token::remove($_GET['token']); }
 }
-$data['cat'] = Db::result("SELECT * FROM `cat` ORDER BY `id` DESC");
+$data['cat'] = Db::result("SELECT * FROM `cat` WHERE `type` = 'post' ORDER BY `id` DESC");
 $data['num'] = Db::$num_rows;
 Theme::admin('header', $data);
 System::inc('categories', $data);

@@ -11,7 +11,7 @@ server {
 
         location @rewrite {
                 #rewrite ^/(.+)$ /index.php$args last; break;
-                rewrite ^/(.+)\.html$ /index.php?page=$1 last;
+                rewrite ^/(.*)\.html$ /index.php?page=$1 last;
                 rewrite ^/(.+)/([0-9]+)$ /index.php?post=$2 last;
                 rewrite ^/([0-9]+)/(.+)$ /index.php?cat=$1 last;
                 rewrite ^/([0-9]+)/(.+)/paging/([0-9]+)$ /index.php?cat=$1&paging=$3 last;
@@ -34,6 +34,9 @@ server {
         location = /error/500 {
                 rewrite ^/error/500$ /index.php?error=500 last;
         }
+	location ~ \.html$ {
+		try_files $uri $uri/ @rewrite;
+	}
         location ~ \.php$ {
         #       try_files = $uri $uri/ @missing;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;

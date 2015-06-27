@@ -117,7 +117,10 @@ switch ($act) {
                 break;
         }
         $id = Typo::int($_GET['id']);
-        $data['post'] = Db::result("SELECT * FROM `posts` WHERE `id` = '{$id}' ");
+        $data['post'] = Db::result("SELECT * FROM `posts` AS A 
+            LEFT JOIN `posts_param` AS B
+            ON A.`id` = B.`post_id` 
+            WHERE A.`id` = '{$id}' ");
         Theme::admin('header', $data);
         System::inc('pages_form', $data);
         Theme::admin('footer');
@@ -251,7 +254,10 @@ switch ($act) {
             $offset = 0;
         }
         
-        $data['posts'] = Db::result("SELECT * FROM `posts` WHERE `type` = 'page' {$where} ORDER BY `date` DESC LIMIT {$offset},{$max}");
+        $data['posts'] = Db::result("SELECT * FROM `posts` 
+            WHERE `type` = 'page' {$where} 
+            ORDER BY `date` DESC 
+            LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
         Theme::admin('header', $data);
         System::inc('pages', $data);

@@ -196,9 +196,13 @@ class Theme
             $class = "";
         }
         if (self::optionsExist($thm)) {
+            $active = (isset($_GET['page']) 
+                && $_GET['page'] == 'themes' 
+                && isset($_GET['view']) 
+                && $_GET['view']  == 'options')?"class=\"active\"":"";
             $list .= "
             <li $class>
-                <a href=\"index.php?page=themes&view=options\" >".$data['icon']." ".$data['name']."</a>
+                <a href=\"index.php?page=themes&view=options\" $active>".$data['icon']." ".$data['name']."</a>
             </li>";
         }else{
             $list = '';

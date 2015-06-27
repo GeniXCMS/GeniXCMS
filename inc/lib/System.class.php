@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -18,22 +18,22 @@
 
 class System
 {
-    /** 
-    * GeniXCMS Version Variable 
+    /**
+    * GeniXCMS Version Variable
     * @return double
     */
     static $version          = "0.0.4";
 
-    /** 
-    * GeniXCMS Version Release 
+    /**
+    * GeniXCMS Version Release
     * @return string
     */
-    static $v_release        = "";
+    static $v_release        = "patch";
 
     /**
     * System Constructor.
     * Initializing the system, check the config file, if exist run the config
-    * loader. 
+    * loader.
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -53,7 +53,7 @@ class System
         include(GX_LIB.$var.'.class.php');
     }
 
-    
+
 
     public static function lang($vars) {
         include(GX_PATH.'/inc/lang/'.$vars.'.lang.php');
@@ -61,7 +61,7 @@ class System
 
     public static function config($var) {
         include(GX_PATH.'/inc/config/'.$var.'.php');
-        
+
     }
 
     public static function existConf () {
@@ -109,7 +109,7 @@ class System
     }
 
     public static function admin () {
-        
+
 
     }
 

@@ -403,3 +403,7 @@ define('MSG_UNKNOWN_ERROR', 'Unknown Error Occurred!');
 // Other Functions
 
 define('REMOVE', 'remove');
+
+
+define('TAGS', 'Tags');
+define('TAGS_DESC', 'write tags separated by comma.');

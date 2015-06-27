@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -18,9 +18,9 @@
 /**
 * Typo Class
 *
-* This class will proccess text modifier, including sanitizing, slug, strip tags, 
-* create random characters. 
-* 
+* This class will proccess text modifier, including sanitizing, slug, strip tags,
+* create random characters.
+*
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
@@ -33,12 +33,12 @@ class Typo
     public static function cleanX ($c) {
         $val = self::strip_tags_content($c, '<script>', TRUE);
         $val = htmlspecialchars(
-                $val, 
-                ENT_QUOTES|ENT_HTML5, 
+                $val,
+                ENT_QUOTES|ENT_HTML5,
                 "utf-8"
             );
         // $val = htmlentities(
-        //             $c, 
+        //             $c,
         //             ENT_QUOTES | ENT_IGNORE, "UTF-8");
         return $val;
     }
@@ -53,7 +53,7 @@ class Typo
     {
       // strip tags
       $text = strip_tags($text);
-      
+
       // replace non letter or digits by -
       $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
@@ -80,29 +80,29 @@ class Typo
     * Remove Tags
     * @link http://php.net/manual/es/function.strip-tags.php#86964
     */
-    public static function strip($text, $tags = '', $invert = FALSE) { 
+    public static function strip($text, $tags = '', $invert = FALSE) {
 
-        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
-        $tags = array_unique($tags[1]); 
+        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
+        $tags = array_unique($tags[1]);
 
-        if(is_array($tags) AND count($tags) > 0) { 
-            if($invert == FALSE) { 
+        if(is_array($tags) AND count($tags) > 0) {
+            if($invert == FALSE) {
                 /*return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); */
-                $text = preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
-                $text = preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text); 
-            } 
-            else { 
-                /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
-                $text = preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text); 
-                $text = preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text); 
-            } 
+                $text = preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text);
+                $text = preg_replace('@</(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>@si', '', $text);
             }
-        elseif($invert == FALSE) { 
+            else {
+                /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
+                $text = preg_replace('@<('. implode('|', $tags) .')\b.*?>@si', '', $text);
+                $text = preg_replace('@</('. implode('|', $tags) .')\b.*?>@si', '', $text);
+            }
+            }
+        elseif($invert == FALSE) {
             /*return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); */
-            $text = preg_replace('@<(\w+)\b.*?>@si', '', $text); 
-            $text = preg_replace('@</(\w+)\b.*?>@si', '', $text); 
-        } 
-        return $text; 
+            $text = preg_replace('@<(\w+)\b.*?>@si', '', $text);
+            $text = preg_replace('@</(\w+)\b.*?>@si', '', $text);
+        }
+        return $text;
     }
 
     /**
@@ -110,24 +110,24 @@ class Typo
     * @link http://php.net/manual/es/function.strip-tags.php#86964
     * @since 0.0.4
     */
-    public static function strip_tags_content($text, $tags = '', $invert = FALSE) { 
+    public static function strip_tags_content($text, $tags = '', $invert = FALSE) {
 
-        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags); 
-        $tags = array_unique($tags[1]); 
+        preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
+        $tags = array_unique($tags[1]);
 
-        if(is_array($tags) AND count($tags) > 0) { 
-            if($invert == FALSE) { 
-                return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); 
-            } 
-            else { 
-                return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); 
-            } 
-        } 
-        elseif($invert == FALSE) { 
-            return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); 
-        } 
-        return $text; 
-    } 
+        if(is_array($tags) AND count($tags) > 0) {
+            if($invert == FALSE) {
+                return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
+            }
+            else {
+                return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text);
+            }
+        }
+        elseif($invert == FALSE) {
+            return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text);
+        }
+        return $text;
+    }
 
     /**
     * Cryptography random characters
@@ -184,20 +184,22 @@ class Typo
         // It is conceivable that people might still want single line-breaks
         // without breaking into a new paragraph.
         if ($line_breaks == true)
-            return '<p>'.preg_replace(array("/([\n]{2,})/i", "/([^>])\n([^<])/i"), 
+            return '<p>'.preg_replace(array("/([\n]{2,})/i", "/([^>])\n([^<])/i"),
             array("</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'), trim($string)).'</p>';
-        else 
+        else
             return '<p>'.preg_replace(
             array("/([\n]{2,})/i", "/([\r\n]{3,})/i","/([^>])\n([^<])/i"),
             array("</p>\n<p>", "</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'),
 
-            trim($string)).'</p>'; 
+            trim($string)).'</p>';
     }
 
     public static function url2link($text){
         // The Regular Expression filter
-        $reg_exUrl = preg_replace('@((https?://)(www\.|[-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
-        return $reg_exUrl;   
+        $reg_exUrl = preg_replace('@((https?://)(www\.|[-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',
+            '<a href="$1" target="_blank">$1</a>',
+            $text);
+        return $reg_exUrl;
     }
 }
 

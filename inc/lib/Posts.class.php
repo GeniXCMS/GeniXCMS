@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -123,7 +123,9 @@ class Posts
     }
 
     public static function recent($vars, $type = 'post') {
-        $sql = "SELECT * FROM `posts` WHERE `type` = '{$type}' AND `status` = '1' ORDER BY `date` DESC LIMIT {$vars}";
+        $sql = "SELECT * FROM `posts`
+                WHERE `type` = '{$type}' AND `status` = '1'
+                ORDER BY `date` DESC LIMIT {$vars}";
         $posts = Db::result($sql);
         if(isset($posts['error'])){
             $posts['error'] = "No Posts found.";
@@ -144,13 +146,13 @@ class Posts
             }else{
                 $title = $r[0]->title;
             }
-            
+
         }
         catch (Exception $e)
         {
             $title = $e->getMessage();
         }
-        
+
         return $title;
     }
     /* Page Dropdown
@@ -205,14 +207,14 @@ class Posts
                     //     }
                     // }
                 // }
-                
+
             }
         }
         $drop .= "</select>";
 
         return $drop;
     }
-    
+
 }
 
 /* End of file Posts.class.php */

@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -18,7 +18,7 @@
 * Control Class
 *
 * This class will proccess the controller
-* 
+*
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
@@ -31,14 +31,14 @@ class Control
 
     /**
     * Control Handler Function.
-    * This is the loader of the controller. This function is not necessary. 
+    * This is the loader of the controller. This function is not necessary.
     * Controller can be loaded directly below. Will be removed on the next
     * update.
     *
     * @param string $vars
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function handler($vars) {
             self::$vars();
@@ -51,7 +51,7 @@ class Control
     * @param string $vars
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function incFront($vars) {
         $file = GX_PATH.'/inc/lib/Control/Frontend/'.$vars.'.control.php';
@@ -61,7 +61,7 @@ class Control
         }else{
             self::error('404');
         }
-        
+
     }
 
     /**
@@ -71,7 +71,7 @@ class Control
     * @param string $vars
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function incBack($vars) {
         $file = GX_PATH.'/inc/lib/Control/Backend/'.$vars.'.control.php';
@@ -89,19 +89,20 @@ class Control
     * controller.
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function frontend() {
-        
+
         if($_GET){
             //print_r($_GET);
-            $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss','pay','paidorder','cancelorder');
+            $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss','pay',
+            'paidorder','cancelorder');
             $get =0;
             foreach ($_GET as $k => $v) {
                     # code...
                     //echo $k;
-                if (in_array($k,$arr ) 
-                    || $k == 'paging' 
+                if (in_array($k,$arr )
+                    || $k == 'paging'
                     || $k == 'error' ) {
                     $get = $get+1;
                 }else{
@@ -126,12 +127,12 @@ class Control
             }else{
                 self::error('404');
             }
-            
-            
+
+
         }else{
             self::incFront('default');
         }
-        
+
     }
 
     /**
@@ -140,7 +141,7 @@ class Control
     * controller.
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function backend($vars="") {
         //if(isset($_GET['post'])) {
@@ -154,13 +155,13 @@ class Control
 
     /**
     * Control Error Handler Function.
-    * This will handle the error page. Default is 404 not found. This handler 
+    * This will handle the error page. Default is 404 not found. This handler
     * include file which is called by specific name at the Error directory.
     *
     * @param string $vars
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function error ($vars="", $val='') {
         if( isset($vars) && $vars != "" ) {
@@ -175,7 +176,7 @@ class Control
     * This will handle the Install page.
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1 
+    * @since 0.0.1
     */
     public static function install () {
         include(GX_PATH.'/inc/lib/Control/Install/default.control.php');

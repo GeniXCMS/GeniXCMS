@@ -120,6 +120,7 @@ if(isset($data['post'])) {
                                                 'order_by'    =>    'name',
                                                 'name'    =>    'cat',
                                                 'sort'    =>    'ASC',
+                                                'type' => 'post'
                                             );
                                     if(isset($cat)) {
                                         $vars = array_merge($vars, array('selected' => $cat));

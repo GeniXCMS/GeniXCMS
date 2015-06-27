@@ -1,14 +1,14 @@
 {
     "name": "genix/cms",
     "description": "Simple and Free Opensource CMS and Framework",
-    "version": "0.0.3",
+    "version": "0.0.4-patch",
     "homepage": "http://genixcms.org",
     "keywords": ["genixcms", "genix", "cms", "metalgenix"],
     "license": "MIT",
     "authors": [
         {
             "name": "Puguh Wijayanto",
-            "email": "hangbowl@gmail.com"
+            "email": "info@genixcms.com"
         }
     ],
     "config": {

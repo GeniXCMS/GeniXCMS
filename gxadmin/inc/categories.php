@@ -136,7 +136,7 @@ if (isset($data['alertred'])) {
                                     'name' => 'parent',
                                     'sort' => 'ASC',
                                     'order_by' => 'name',
-                                    'type' => ''
+                                    'type' => 'post'
                                 );
                         echo Categories::dropdown($vars);
                     ?>

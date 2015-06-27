@@ -110,7 +110,7 @@ if (isset($data['alertred'])) {
                     </thead>
                     <tbody>
                         <?php
-                            //print_r($data);
+                            // print_r($data);
                         if($data['num'] > 0){
                             foreach ($data['posts'] as $p) {
                                 # code...

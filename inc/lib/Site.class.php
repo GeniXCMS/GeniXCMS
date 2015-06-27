@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -47,10 +47,10 @@ class Site
     public static function meta($cont_title='', $cont_desc='', $pre =''){
         global $data;
         //print_r($data);
-        //if(empty($data['posts'][0]->title)){ 
+        //if(empty($data['posts'][0]->title)){
 
         if( is_array($data) ){
-            
+
             $sitenamelength = strlen(self::$name);
             $limit = 70-$sitenamelength-6;
             if(isset($data['sitetitle'])){
@@ -90,9 +90,9 @@ class Site
         $meta .= "
     <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
     <meta name=\"robots\" content=\"".Options::get('robots')."\">
-    <link rel=\"shortcut icon\" href=\"".Options::get('siteicon')."\" />            
+    <link rel=\"shortcut icon\" href=\"".Options::get('siteicon')."\" />
         ";
-        
+
         $meta .= "
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->";
         echo $meta;
@@ -136,12 +136,12 @@ class Site
         if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
             $foot .= "
             \t<!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js)-->
-            \t<link rel=\"stylesheet\" type=\"text/css\" href=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css\" />
-            \t<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/blackboard.min.css\">
-            \t<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.min.css\">
-            \t<script type=\"text/javascript\" src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js\"></script>
-            \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js\"></script>
-            \t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js\"></script>
+            \t<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css\" />
+            \t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/blackboard.min.css\">
+            \t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.min.css\">
+            \t<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js\"></script>
+            \t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js\"></script>
+            \t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js\"></script>
 
             \t<link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
             \t<script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
@@ -168,7 +168,7 @@ class Site
                             \tsendFile(files[0],editor,welEditable);
                         \t}
                 \t});
-                
+
                 \tfunction sendFile(file,editor,welEditable) {
                   \tdata = new FormData();
                   \tdata.append(\"file\", file);
@@ -207,7 +207,7 @@ class Site
 
         }
 
-        
+
         echo $foot;
     }
 
@@ -217,7 +217,7 @@ class Site
         }else{
             $desc = substr(self::$desc,0,150);
         }
-        
+
         return $desc;
     }
 

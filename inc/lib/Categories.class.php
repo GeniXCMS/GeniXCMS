@@ -141,15 +141,21 @@ class Categories
                     if(isset($_GET['cat'])){
                         $catparent = self::getParent($_GET['cat']);
                         $in = ($catparent[0]->parent === $c->id)? 'in': '';
+                        $collapseHeading = ($catparent[0]->parent === $c->id)? "collapseListGroupHeading{$c->id}": '';
+                        $href = ($catparent[0]->parent === $c->id)? "#collapse-{$c->id}": Url::cat($c->id);
+                        $data_toggle = ($catparent[0]->parent === $c->id)? "collapse": "";
                     }else{
                         $catparent = '';
                         $in =  '';
+                        $collapseHeading = "";
+                        $href = "";
+                        $data_toggle = "";
                     }
                     // print_r($catparent);
                     
                     $drop .= "<div class=\"panel panel-gxmarket\">
-                    <div id=\"collapseListGroupHeading{$c->id}\" class=\"panel-heading\" role=\"tab\" >
-                    <a href=\"#collapse-{$c->id}\" data-toggle=\"collapse\"  aria-expanded=\"false\" 
+                    <div id=\"{$collapseHeading}\" class=\"panel-heading\" role=\"tab\" >
+                    <a href=\"{$href}\" data-toggle=\"{$data_toggle}\"  aria-expanded=\"false\" 
                     aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>
                     </div>
                     <div class=\"panel-collapse collapse {$in}\" role=\"tabpanel\" id=\"collapse-{$c->id}\" aria-labelledby=\"collapseListGroupHeading{$c->id}\">
@@ -260,6 +266,26 @@ class Categories
             Db::query($sql);
         }
         
+    }
+
+
+    public static function type($id) {
+        $id = sprintf('%d', $id);
+        if(isset($id)){
+            $cat = Db::result("SELECT `type` FROM `cat` 
+                                WHERE `id` = '{$id}' LIMIT 1");
+            //print_r($cat);
+            if(isset($cat['error'])){
+                return '';
+            }else{
+                return $cat[0]->type;
+            }
+            
+        }else{
+            echo "No ID Selected";
+        }
+        
+        //print_r($cat);
     }
     
 }
