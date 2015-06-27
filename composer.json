@@ -1,5 +1,6 @@
 {
     "name": "genix/cms",
+    "type": "project",
     "description": "Simple and Free Opensource CMS and Framework",
     "version": "0.0.4-patch",
     "homepage": "http://genixcms.org",
@@ -8,7 +9,8 @@
     "authors": [
         {
             "name": "Puguh Wijayanto",
-            "email": "info@genixcms.com"
+            "homepage": "https://github.com/semplon",
+            "role": "Developer"
         }
     ],
     "config": {
