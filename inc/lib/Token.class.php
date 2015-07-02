@@ -34,7 +34,7 @@ class Token
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
         $codeAlphabet.= "0123456789";
-        //$codeAlphabet.= SECURITY;
+        //$codeAlphabet.= SECURITY_KEY;
         for($i=0;$i<$length;$i++){
             $token .= $codeAlphabet[Typo::crypto_rand_secure(0,strlen($codeAlphabet))];
         }

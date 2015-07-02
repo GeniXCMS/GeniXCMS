@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
+    'EasyPeasyICS' => $vendorDir . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
     'IXR_Base64' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
     'IXR_ClassServer' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
     'IXR_Client' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
@@ -18,8 +19,11 @@ return array(
     'IXR_Request' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
     'IXR_Server' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
     'IXR_Value' => $vendorDir . '/lsmonki/php-ixr/IXR_Library.php',
+    'Omnipay\\Omnipay' => $vendorDir . '/omnipay/common/src/Omnipay/Omnipay.php',
     'PHPMailer' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
     'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
     'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
+    'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
+    'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
     'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );

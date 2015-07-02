@@ -23,11 +23,14 @@ class Mod
     }
     
     public static function mod($var) {
-        include(GX_MOD.$var.'/index.php');
+        self::load($var);
     }
 
     public static function options($var) {
-        include(GX_MOD.$var.'/options.php');
+        $file = GX_MOD.$var.'/options.php';
+        if(file_exists($file)){
+            include ($file);
+        }
     }
 
     public static function modList(){
@@ -97,7 +100,10 @@ class Mod
     }
 
     public static function inc($vars, $data, $dir){
-        include($dir."/".$vars.".php");
+        $file = $dir."/".$vars.".php";
+        if (file_exists($file)) {
+            include($file);
+        }
     }
 
     public static function activate($mod){
@@ -242,7 +248,7 @@ class Mod
     }
 
     public static function exist($mod) {
-        $file = GX_MOD."/".$mod."/index.php";
+        $file = GX_MOD."/".$mod."/options.php";
         if(file_exists($file)){
             return true;
         }else{

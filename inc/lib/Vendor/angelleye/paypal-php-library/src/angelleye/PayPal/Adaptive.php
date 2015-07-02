@@ -24,7 +24,6 @@
  * @link			https://github.com/angelleye/paypal-php-library/
  * @website			http://www.angelleye.com
  * @support         http://www.angelleye.com/product/premium-support/
- * @version			v2.0.3
  * @filesource
 */
 
@@ -285,18 +284,10 @@ class Adaptive extends PayPal
 		
 		// Receivers Fields
 		$Receivers = isset($DataArray['Receivers']) ? $DataArray['Receivers'] : array();
-		$Amount = isset($Receivers['Amount']) ? $Receivers['Amount'] : '';
-		$Email = isset($Receivers['Email']) ? $Receivers['Email'] : '';
-		$InvoiceID = isset($Receivers['InvoiceID']) ? $Receivers['InvoiceID'] : '';
-		$PaymentType = isset($Receivers['PaymentType']) ? $Receivers['PaymentType'] : '';
-		$PaymentSubType = isset($Receivers['PaymentSubType']) ? $Receivers['PaymentSubType'] : '';
-		$Phone = isset($Receivers['Phone']) ? $Receivers['Phone'] : '';
-		$Primary = isset($Receivers['Primary']) ? strtolower($Receivers['Primary']) : '';
-		
+
 		// SenderIdentifier Fields
 		$SenderIdentifierFields = isset($DataArray['SenderIdentifierFields']) ? $DataArray['SenderIdentifierFields'] : array();
-		$UseCredentials = isset($SenderIdentifierFields['UseCredentials']) ? $SenderIdentifierFields['UseCredentials'] : '';
-		
+
 		// AccountIdentifierFields Fields
 		$AccountIdentifierFields = isset($DataArray['AccountIdentifierFields']) ? $DataArray['AccountIdentifierFields'] : array();
 		$AccountEmail = isset($AccountIdentifierFields['Email']) ? $AccountIdentifierFields['Email'] : '';
@@ -357,6 +348,7 @@ class Adaptive extends PayPal
 			$XMLRequest .= '<receiver xmlns="">';
 			$XMLRequest .= $Receiver['Amount'] != '' ? '<amount xmlns="">' . $Receiver['Amount'] . '</amount>' : '';
 			$XMLRequest .= $Receiver['Email'] != '' ? '<email xmlns="">' . $Receiver['Email'] . '</email>' : '';
+			$XMLRequest .= $Receiver['AccountID'] != '' ? '<accountId xmlns="">' . $Receiver['AccountID'] . '</accountId>' : '';
 			$XMLRequest .= $Receiver['InvoiceID'] != '' ? '<invoiceId xmlns="">' . $Receiver['InvoiceID'] . '</invoiceId>' : '';
 			$XMLRequest .= $Receiver['PaymentType'] != '' ? '<paymentType xmlns="">' . $Receiver['PaymentType'] . '</paymentType>' : '';
 			$XMLRequest .= $Receiver['PaymentSubType'] != '' ? '<paymentSubType xmlns="">' . $Receiver['PaymentSubType'] . '</paymentSubType>' : '';
@@ -629,7 +621,7 @@ class Adaptive extends PayPal
 		$DOM = new DOMDocument();
 		$DOM -> loadXML($XMLResponse);
 
-        $this->Logger($this->LogPath, 'PayRequest', $PayXMLResponse);
+        $this->Logger($this->LogPath, 'PayRequest', $PayXMLRequest);
         $this->Logger($this->LogPath, 'PayResponse', $PayXMLResponse);
 	
 		// Parse XML values
@@ -1219,6 +1211,7 @@ class Adaptive extends PayPal
 			// ReceiverIdentifer Fields
 			$ReceiverIdentifier = isset($ReceiverOption['ReceiverIdentifier']) ? $ReceiverOption['ReceiverIdentifier'] : array();
 			$ReceiverIdentifierEmail = isset($ReceiverIdentifier['Email']) ? $ReceiverIdentifier['Email'] : '';
+			$ReceiverIdentifierAccountID = isset($ReceiverIdentifier['AccountID']) ? $ReceiverIdentifier['AccountID'] : '';
 			$PhoneCountryCode = isset($ReceiverIdentifier['PhoneCountryCode']) ? $ReceiverIdentifier['PhoneCountryCode'] : '';
 			$PhoneNumber = isset($ReceiverIdentifier['PhoneNumber']) ? $ReceiverIdentifier['PhoneNumber'] : '';
 			$PhoneExtension = isset($ReceiverIdentifier['PhoneExtension']) ? $ReceiverIdentifier['PhoneExtension'] : '';
@@ -1253,6 +1246,7 @@ class Adaptive extends PayPal
 				{
 					$ReceiverOptionsXML .= '<receiver xmlns="">';
 					$ReceiverOptionsXML .= $ReceiverIdentifierEmail != '' ? '<email xmlns="">'.$ReceiverIdentifierEmail.'</email>' : '';
+					$ReceiverOptionsXML .= $ReceiverIdentifierAccountID != '' ? '<accountId xmlns="">'.$ReceiverIdentifierAccountID.'</accountId>' : '';
 			
 					if($PhoneNumber != '')
 					{
@@ -1369,8 +1363,9 @@ class Adaptive extends PayPal
 		$StartingDate = isset($PreapprovalFields['StartingDate']) ? $PreapprovalFields['StartingDate'] : '';
 		$FeesPayer = isset($PreapprovalFields['FeesPayer']) ? $PreapprovalFields['FeesPayer'] : '';
 		$DisplayMaxTotalAmount = isset($PreapprovalFields['DisplayMaxTotalAmount']) ? $PreapprovalFields['DisplayMaxTotalAmount'] : '';
-		
-		$ClientDetailsFields = isset($DataArray['ClientDetailsFields']) ? $DataArray['ClientDetailsFields'] : array();
+        $RequireInstantFundingSource = isset($PreapprovalFields['RequireInstantFundingSource']) ? $PreapprovalFields['RequireInstantFundingSource'] : '';
+
+        $ClientDetailsFields = isset($DataArray['ClientDetailsFields']) ? $DataArray['ClientDetailsFields'] : array();
 		$CustomerID = isset($ClientDetailsFields['CustomerID']) ? $ClientDetailsFields['CustomerID'] : '';
 		$CustomerType = isset($ClientDetailsFields['CustomerType']) ? $ClientDetailsFields['CustomerType'] : '';
 		$GeoLocation = isset($ClientDetailsFields['GeoLocation']) ? $ClientDetailsFields['GeoLocation'] : '';
@@ -1407,7 +1402,8 @@ class Adaptive extends PayPal
 		$XMLRequest .= $PaymentPeriod != '' ? '<paymentPeriod xmlns="">' . $PaymentPeriod . '</paymentPeriod>' : '';
 		$XMLRequest .= $PinType != '' ? '<pinType xmlns="">' . $PinType . '</pinType>' : '';
 		$XMLRequest .= $FeesPayer != '' ? '<feesPayer xmlns="">' . $FeesPayer . '</feesPayer>' : '';
-		$XMLRequest .= $DisplayMaxTotalAmount != '' ? '<displayMaxTotalAmount xmlns="">' . $DisplayMaxTotalAmount . '</displayMaxTotalAmount>' : '';
+        $XMLRequest .= $RequireInstantFundingSource != '' ? '<requireInstantFundingSource xmlns="">' . $RequireInstantFundingSource . '</requireInstantFundingSource>' : '';
+        $XMLRequest .= $DisplayMaxTotalAmount != '' ? '<displayMaxTotalAmount xmlns="">' . $DisplayMaxTotalAmount . '</displayMaxTotalAmount>' : '';
 		$XMLRequest .= $ReturnURL != '' ? '<returnUrl xmlns="">' . $ReturnURL . '</returnUrl>' : '';
 		$XMLRequest .= $SenderEmail != '' ? '<senderEmail xmlns="">' . $SenderEmail . '</senderEmail>' : '';
 		$XMLRequest .= $StartingDate != '' ? '<startingDate xmlns="">' . $StartingDate . '</startingDate>' : '';
@@ -1825,13 +1821,17 @@ class Adaptive extends PayPal
 		$CurrencyCode = isset($CreateAccountFields['CurrencyCode']) ? $CreateAccountFields['CurrencyCode'] : '';
 		$DateOfBirth = isset($CreateAccountFields['DateOfBirth']) ? $CreateAccountFields['DateOfBirth'] : '';
 		$EmailAddress = isset($CreateAccountFields['EmailAddress']) ? $CreateAccountFields['EmailAddress'] : '';
+		$FunctionalArea = isset($CreateAccountFields['FunctionalArea']) ? $CreateAccountFields['FunctionalArea'] : '';
 		$Salutation = isset($CreateAccountFields['Salutation']) ? $CreateAccountFields['Salutation'] : '';
 		$FirstName = isset($CreateAccountFields['FirstName']) ? $CreateAccountFields['FirstName'] : '';
 		$MiddleName = isset($CreateAccountFields['MiddleName']) ? $CreateAccountFields['MiddleName'] : '';
 		$LastName = isset($CreateAccountFields['LastName']) ? $CreateAccountFields['LastName'] : '';
 		$Suffix = isset($CreateAccountFields['Suffix']) ? $CreateAccountFields['Suffix'] : '';
 		$NotificationURL = isset($CreateAccountFields['NotificationURL']) ? $CreateAccountFields['NotificationURL'] : '';
-		$PerformExtraVettingOnThisAccount  = isset($CreateAccountFields['PerformExtraVettingOnThisAccount']) ? $CreateAccountFields['PerformExtraVettingOnThisAccount'] : '';		
+		$Occupation = isset($CreateAccountFields['Occupation']) ? $CreateAccountFields['Occupation'] : '';
+		$PerformExtraVettingOnThisAccount  = isset($CreateAccountFields['PerformExtraVettingOnThisAccount']) ? $CreateAccountFields['PerformExtraVettingOnThisAccount'] : '';
+		$PurposeOfAccount  = isset($CreateAccountFields['PurposeOfAccount']) ? $CreateAccountFields['PurposeOfAccount'] : '';
+		$Profession  = isset($CreateAccountFields['Profession']) ? $CreateAccountFields['Profession'] : '';
 		$PreferredLanguageCode = isset($CreateAccountFields['PreferredLanguageCode']) && $CreateAccountFields['PreferredLanguageCode'] != '' ? $CreateAccountFields['PreferredLanguageCode'] : 'en_US';
 		$RegistrationType = isset($CreateAccountFields['RegistrationType']) ? $CreateAccountFields['RegistrationType'] : 'Web';
 		$SuppressWelcomeEmail = isset($CreateAccountFields['SuppressWelcomeEmail']) ? $CreateAccountFields['SuppressWelcomeEmail'] : '';
@@ -1842,7 +1842,9 @@ class Adaptive extends PayPal
 		$ShowMobileConfirm = isset($CreateAccountFields['ShowMobileConfirm']) ? $CreateAccountFields['ShowMobileConfirm'] : '';
 		$ReturnURLDescription = isset($CreateAccountFields['ReturnURLDescription']) ? $CreateAccountFields['ReturnURLDescription'] : '';
 		$UseMiniBrowser = isset($CreateAccountFields['UseMiniBrowser']) ? $CreateAccountFields['UseMiniBrowser'] : '';
-		
+		$ReminderEmailFrequency = isset($CreateAccountFields['ReminderEmailFrequency']) ? $CreateAccountFields['ReminderEmailFrequency'] : '';
+		$ConfirmEmail = isset($CreateAccountFields['ConfirmEmail']) ? $CreateAccountFields['ConfirmEmail'] : '';
+
 		$Address = isset($DataArray['Address']) ? $DataArray['Address'] : array();
 		$Line1 = isset($Address['Line1']) ? $Address['Line1'] : '';
 		$Line2 = isset($Address['Line2']) ? $Address['Line2'] : '';
@@ -1877,6 +1879,14 @@ class Adaptive extends PayPal
 		$VatID = isset($BusinessInfo['VatID']) ? $BusinessInfo['VatID'] : '';
 		$WebSite = isset($BusinessInfo['WebSite']) ? $BusinessInfo['WebSite'] : '';
 		$WorkPhone = isset($BusinessInfo['WorkPhone']) ? $BusinessInfo['WorkPhone'] : '';
+
+		$GovernmentIDPair = isset($DataArray['GovernmentIDPair']) ? $DataArray['GovernmentIDPair'] : array();
+		$GovernmentIDValue = isset($GovernmentIDPair['Value']) ? $GovernmentIDPair['Value'] : '';
+		$GovernmentIDType = isset($GovernmentIDPair['Type']) ? $GovernmentIDPair['Type'] : '';
+
+		$LegalAgreement = isset($DataArray['LegalAgreement']) ? $DataArray['LegalAgreement'] : array();
+		$LegalAgreementAccepted = isset($LegalAgreement['Accepted']) ? $LegalAgreement['Accepted'] : '';
+		$LegalAgreementType = isset($LegalAgreement['Type']) ? $LegalAgreement['Type'] : '';
 		
 		$BusinessAddress = isset($DataArray['BusinessAddress']) ? $DataArray['BusinessAddress'] : array();
 		$BusinessAddressLine1 = isset($BusinessAddress['Line1']) ? $BusinessAddress['Line1'] : '';
@@ -1885,7 +1895,7 @@ class Adaptive extends PayPal
 		$BusinessAddressState = isset($BusinessAddress['State']) ? $BusinessAddress['State'] : '';
 		$BusinessAddressPostalCode = isset($BusinessAddress['PostalCode']) ? $BusinessAddress['PostalCode'] : '';
 		$BusinessAddressCountryCode = isset($BusinessAddress['CountryCode']) ? $BusinessAddress['CountryCode'] : '';
-		
+
 		$PrinciplePlaceOfBusinessAddress = isset($DataArray['PrinciplePlaceOfBusinessAddress']) ? $DataArray['PrinciplePlaceOfBusinessAddress'] : array();
 		$PrinciplePlaceOfBusinessAddressLine1 = isset($PrinciplePlaceOfBusinessAddress['Line1']) ? $PrinciplePlaceOfBusinessAddress['Line1'] : '';
 		$PrinciplePlaceOfBusinessAddressLine2 = isset($PrinciplePlaceOfBusinessAddress['Line2']) ? $PrinciplePlaceOfBusinessAddress['Line2'] : '';
@@ -1934,6 +1944,7 @@ class Adaptive extends PayPal
 		$XMLRequest .= $this -> GetXMLRequestEnvelope();
 		$XMLRequest .= $AccountType != '' ? '<accountType xmlns="">' . $AccountType . '</accountType>' : '';
 		$XMLRequest .= $EmailAddress != '' ? '<emailAddress xmlns="">' . $EmailAddress . '</emailAddress>' : '';
+		$XMLRequest .= $FunctionalArea != '' ? '<functionalArea xmlns="">' . $FunctionalArea . '</functionalArea>' : '';
 		
 		if($Salutation != '' || $FirstName != '' || $MiddleName != '' || $LastName != '' || $Suffix != '')
 		{
@@ -1967,6 +1978,7 @@ class Adaptive extends PayPal
 		$XMLRequest .= $CitizenshipCountryCode != '' ? '<citizenshipCountryCode xmlns="">' . $CitizenshipCountryCode . '</citizenshipCountryCode>' : '';
 		$XMLRequest .= $PreferredLanguageCode != '' ? '<preferredLanguageCode xmlns="">' . $PreferredLanguageCode . '</preferredLanguageCode>' : '';
 		$XMLRequest .= $NotificationURL != '' ? '<notificationURL xmlns="">' . $NotificationURL . '</notificationURL>' : '';
+		$XMLRequest .= $Occupation != '' ? '<occupation xmlns="">' . $Occupation . '</occupation>' : '';
 		$XMLRequest .= $PartnerField1 != '' ? '<partnerField1 xmlns="">' . $PartnerField1 . '</partnerField1>' : '';
 		$XMLRequest .= $PartnerField2 != '' ? '<partnerField2 xmlns="">' . $PartnerField2 . '</partnerField2>' : '';
 		$XMLRequest .= $PartnerField3 != '' ? '<partnerField3 xmlns="">' . $PartnerField3 . '</partnerField3>' : '';
@@ -1975,9 +1987,11 @@ class Adaptive extends PayPal
 		$XMLRequest .= $RegistrationType != '' ? '<registrationType xmlns="">' . $RegistrationType . '</registrationType>' : '';
 		$XMLRequest .= $SuppressWelcomeEmail != '' ? '<suppressWelcomeEmail xmlns="">' . $SuppressWelcomeEmail . '</suppressWelcomeEmail>' : '';
 		$XMLRequest .= $PerformExtraVettingOnThisAccount != '' ? '<performExtraVettingOnthisAccount xmlns="">' . $PerformExtraVettingOnThisAccount . '</performExtraVettingOnthisAccount>' : '';
+		$XMLRequest .= $PurposeOfAccount != '' ? '<purposeOfAccount xmlns="">' . $PurposeOfAccount . '</purposeOfAccount>' : '';
+		$XMLRequest .= $Profession != '' ? '<profession xmlns="">' . $Profession . '</profession>' : '';
 		$XMLRequest .= $TaxID != '' ? '<taxId xmlns="">' . $TaxID . '</taxId>' : '';
 		
-		if($ReturnURL != '' || $ReturnURLDescription != '' || $ShowAddCreditCard != '' || $ShowMobileConfirm != '' || $UseMiniBrowser != '')
+		if($ReturnURL != '' || $ReturnURLDescription != '' || $ShowAddCreditCard != '' || $ShowMobileConfirm != '' || $UseMiniBrowser != '' || $ReminderEmailFrequency != '')
 		{
 			$XMLRequest .= '<createAccountWebOptions xmlns="">';
 			$XMLRequest .= $ReturnURL != '' ? '<returnUrl xmlns="">' . $ReturnURL . '</returnUrl>' : '';
@@ -1985,7 +1999,25 @@ class Adaptive extends PayPal
 			$XMLRequest .= $ShowAddCreditCard != '' ? '<showAddCreditCard xmlns="">' . $ShowAddCreditCard . '</showAddCreditCard>' : '';
 			$XMLRequest .= $ShowMobileConfirm != '' ? '<showMobileConfirm xmlns="">' . $ShowMobileConfirm . '</showMobileConfirm>' : '';
 			$XMLRequest .= $UseMiniBrowser != '' ? '<useMiniBrowser xmlns="">' . $UseMiniBrowser . '</useMiniBrowser>' : '';
+			$XMLRequest .= $ReminderEmailFrequency != '' ? '<reminderEmailFrequency xmlns="">' . $ReminderEmailFrequency . '</reminderEmailFrequency>' : '';
+			$XMLRequest .= $ConfirmEmail != '' ? '<confirmEmail xmlns="">' . $ConfirmEmail . '</confirmEmail>' : '';
 			$XMLRequest .= '</createAccountWebOptions>';
+		}
+
+		if(!empty($GovernmentIDPair))
+		{
+			$XMLRequest .= '<governmentId xmlns="">';
+			$XMLRequest .= $GovernmentIDValue != '' ? '<value xmlns="">' . $GovernmentIDValue . '</value>' : '';
+			$XMLRequest .= $GovernmentIDType != '' ? '<type xmlns="">' . $GovernmentIDType . '</type>' : '';
+			$XMLRequest .= '</governmentId>';
+		}
+
+		if(!empty($LegalAgreement))
+		{
+			$XMLRequest .= '<legalAgreement xmlns="">';
+			$XMLRequest .= $LegalAgreementAccepted != '' ? '<accepted xmlns="">' . $LegalAgreementAccepted . '</accepted>' : '';
+			$XMLRequest .= $LegalAgreementType != '' ? '<type xmlns="">' . $LegalAgreementType . '</type>' : '';
+			$XMLRequest .= '</legalAgreement>';
 		}
 		
 		if(!empty($BusinessInfo))

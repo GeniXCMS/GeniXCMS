@@ -180,9 +180,9 @@ class User
     //             );
     public static function randpass($vars){
         if(is_array($vars)){
-            $hash = sha1($vars['passwd'].SECURITY.$vars['userid']);
+            $hash = sha1($vars['passwd'].SECURITY_KEY.$vars['userid']);
         }else{
-            $hash = sha1($vars.SECURITY);
+            $hash = sha1($vars.SECURITY_KEY);
         }
         
         $hash = substr($hash, 5, 16);
@@ -192,7 +192,7 @@ class User
 
     public static function generatePass(){
         $vars = microtime().Site::$name.rand();
-        $hash = sha1($vars.SECURITY);        
+        $hash = sha1($vars.SECURITY_KEY);        
         $pass = substr($hash, 5, 8);
         return $pass;
     }

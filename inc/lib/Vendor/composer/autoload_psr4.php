@@ -6,4 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
+    'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
+    'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
+    'ReCaptcha\\' => array($vendorDir . '/google/recaptcha/src/ReCaptcha'),
+    'Omnipay\\TwoCheckout\\' => array($vendorDir . '/omnipay/2checkout/src'),
+    'Omnipay\\Stripe\\' => array($vendorDir . '/omnipay/stripe/src'),
+    'Omnipay\\PayPal\\' => array($vendorDir . '/omnipay/paypal/src'),
+    'Omnipay\\BitPay\\' => array($vendorDir . '/omnipay/bitpay/src'),
 );

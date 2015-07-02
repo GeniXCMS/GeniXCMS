@@ -1,0 +1,40 @@
+{
+    "name": "omnipay/bitpay",
+    "type": "library",
+    "description": "BitPay driver for the Omnipay payment processing library",
+    "keywords": [
+        "bitcoin",
+        "bitpay",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment"
+    ],
+    "homepage": "https://github.com/thephpleague/omnipay-bitpay",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrian Macneil",
+            "email": "adrian@adrianmacneil.com"
+        },
+        {
+            "name": "Omnipay Contributors",
+            "homepage": "https://github.com/thephpleague/omnipay-bitpay/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Omnipay\\BitPay\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}

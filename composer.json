@@ -18,8 +18,14 @@
     },
     "require": {
         "php": ">=5.3.0",
-        "phpmailer/phpmailer": "5.2.9",
-        "angelleye/paypal-php-library": "2.0.3",
-        "lsmonki/php-ixr": "1.7.5"
+        "phpmailer/phpmailer": "5.2.10",
+        "angelleye/paypal-php-library": "2.0.4",
+        "lsmonki/php-ixr": "1.7.5",
+        "google/recaptcha": "~1.1",
+        "omnipay/common": "2.3.4",
+        "omnipay/paypal": "2.4.2",
+        "omnipay/stripe": "2.2.1",
+        "omnipay/2checkout": "2.1.1",
+        "omnipay/bitpay": "dev-master"
     }
 }

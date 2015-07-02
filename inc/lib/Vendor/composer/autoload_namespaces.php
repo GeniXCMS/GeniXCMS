@@ -7,4 +7,7 @@ $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
     'angelleye\\PayPal' => array($vendorDir . '/angelleye/paypal-php-library/src'),
+    'Omnipay\\Common\\' => array($vendorDir . '/omnipay/common/src'),
+    'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
+    'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
 );

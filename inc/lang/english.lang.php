@@ -323,17 +323,17 @@ define('SETTINGS_POSTS_PINGER_DESCR', 'Set the Pinger of Search Engine. Use {{do
 define('SETTINGS_PAYMENT', 'Payment');
 define('SETTINGS_PAYMENT_PAYPAL_CONF', 'PayPal Configuration');
 define('SETTINGS_PAYMENT_PAYPAL_CSYMB', 'Currency Symbol');
-define('SETTINGS_PAYMENT_SENDBOX', 'Enable Sandbox');
-define('SETTINGS_PAYMENT_SENDBOX_EN', 'Enable Sandbox?');
+define('SETTINGS_PAYMENT_SANDBOX', 'Enable Sandbox');
+define('SETTINGS_PAYMENT_SANDBOX_EN', 'Enable Sandbox?');
 define('SETTINGS_PAYMENT_PAYPALAPI_USR', 'PayPal API Username');
 define('SETTINGS_PAYMENT_PAYPALAPI_PWD', 'PayPal API Password');
-define('SETTINGS_PAYMENT_PAYPALAPI_SIGN', 'PayPal Signature1');
+define('SETTINGS_PAYMENT_PAYPALAPI_SIGN', 'PayPal Signature');
 define('SETTINGS_PAYMENT_ALERT', 'Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at  
                           <a href="https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/" target="_blank">
                               https://developer.paypal.com</a>');
 
 define('SETTINGS_PAYMENT_PAYPAL_CSYMB_DESCR', 'Pick a Currency, default is USD');
-define('SETTINGS_PAYMENT_SENDBOX_EN_DESCR', 'Enable Sandbox');
+define('SETTINGS_PAYMENT_SANDBOX_EN_DESCR', 'Enable Sandbox');
 define('SETTINGS_PAYMENT_PAYPALAPI_USR_DESCR', 'Your PayPal API Username');
 define('SETTINGS_PAYMENT_PAYPALAPI_PWD_DESCR', 'Your API Password');
 define('SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR', 'Your PayPal Signature');
@@ -407,3 +407,16 @@ define('REMOVE', 'remove');
 
 define('TAGS', 'Tags');
 define('TAGS_DESC', 'write tags separated by comma.');
+define('SECURITY', 'Security');
+define('GOOGLE_RECAPTCHA', 'Google reCaptcha');
+define('GOOGLE_RECAPTCHA_ENABLE', 'Enable Google Recaptcha ?');
+define('GOOGLE_RECAPTCHA_ENABLE_DESCR', 'Check this if you want to enable Google reCaptcha');
+define('GOOGLE_RECAPTCHA_LANG', 'Google reCaptcha Language');
+define('GOOGLE_RECAPTCHA_LANG_DESCR', 'type the language you want to use');
+define('GOOGLE_RECAPTCHA_SITEKEY', 'Google reCaptcha SiteKey');
+define('GOOGLE_RECAPTCHA_SITEKEY_DESCR', 'type the google recaptcha sitekey.');
+define('GOOGLE_RECAPTCHA_SECRET', 'Google reCaptcha Secret');
+define('GOOGLE_RECAPTCHA_SECRET_DESCR', 'type the google recaptcha secret.');
+define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i> 
+                        To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to 
+                        <a target="_new" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');

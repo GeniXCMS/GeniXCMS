@@ -31,6 +31,7 @@ try {
     $db = new Db();
     $u = new User();
     new Site();
+    Vendor::autoload();
     Session::start();
     System::gZip();
     Token::create();
@@ -47,6 +48,15 @@ if(isset($_POST['register']))
         // VALIDATE ALL
         $alertred[] = TOKEN_NOT_EXIST;
     }
+    if (Xaptcha::isEnable()) {
+        
+        if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '' ) {
+            $alertred[] = "Please insert the Captcha";
+        }
+        if (!Xaptcha::verify($_POST['g-recaptcha-response'])) {
+            $alertred[] = "Your Captcha is not correct.";
+        }
+    }
 	if(!User::is_exist($_POST['userid'])){
         $alertred[] = MSG_USER_EXIST;
     }
@@ -60,15 +70,18 @@ if(isset($_POST['register']))
     if(!isset($alertred)){
         $activation = Typo::getToken(60);
         $vars = array(
-                        'user' => array(
-                                        'userid' => Typo::cleanX(Typo::strip($_POST['userid'])),
-                                        'pass' => User::randpass($_POST['pass1']),
-                                        'email' => $_POST['email'],
-                                        'group' => '4',
-                                        'status' => '0',
-                                        'join_date' => date("Y-m-d H:i:s"),
-                                        'activation' => $activation
-                                    ),
+             'user' => array(
+                    'userid' => Typo::cleanX(Typo::strip($_POST['userid'])),
+                    'pass' => User::randpass($_POST['pass1']),
+                    'email' => $_POST['email'],
+                    'group' => '4',
+                    'status' => '0',
+                    'join_date' => date("Y-m-d H:i:s"),
+                    'activation' => $activation
+                ),
+            'user_detail' => array(
+                    'userid' => Typo::cleanX(Typo::strip($_POST['userid']))
+                )
                         
                     );   
         if(User::create($vars) === true){
@@ -200,7 +213,7 @@ if(isset($loggedin)){
 		<label for="email"><?=EMAIL;?></label>
 		<input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required="required" value="">
 	</div>
-	
+	<?=Xaptcha::html();?>
 		<button type="submit" name="register" class="btn btn-success"><?=SUBMIT;?></button>
         <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>

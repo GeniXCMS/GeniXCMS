@@ -74,7 +74,7 @@ define('GX_URL_PREFIX', '.html');
 
 
 // DON't REMOVE or EDIT THIS.
-define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
+define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
 
         ";
         try{
@@ -114,6 +114,21 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
         $pr = "ALTER TABLE `cat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
         $db->query($pr);
 
+        $cat_param = "CREATE TABLE IF NOT EXISTS `cat_param` (
+                    `id` int(11) NOT NULL,
+                      `cat_id` int(11) NOT NULL,
+                      `name` text CHARACTER SET utf8 NOT NULL,
+                      `value` text CHARACTER SET utf8 NOT NULL
+                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+        $db->query($cat_param);
+
+        $pr = "ALTER TABLE `cat_param` ADD PRIMARY KEY (`id`)";
+        $db->query($pr);
+
+        $pr = "ALTER TABLE `cat_param` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+        $db->query($pr);
+
+
         $menu = "CREATE TABLE IF NOT EXISTS `menus` (
                 `id` int(11) NOT NULL,
                   `name` varchar(64) NOT NULL,
@@ -137,7 +152,7 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
         $options = "CREATE TABLE IF NOT EXISTS `options` (
                     `id` int(11) NOT NULL,
                       `name` text CHARACTER SET utf8 NOT NULL,
-                      `value` text CHARACTER SET utf8 NOT NULL
+                      `value` longtext CHARACTER SET utf8 NOT NULL
                     ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($options);
 
@@ -289,7 +304,11 @@ define('SECURITY', '".Typo::getToken(200)."'); // for security purpose, will be 
             (null, 'modules', ''),
             (null, 'themes', 'default'),
             (null, 'system_lang', 'english'),
-            (null, 'charset', 'utf-8')";
+            (null, 'charset', 'utf-8'),
+            (null, 'google_captcha_sitekey', ''),
+            (null, 'google_captcha_secret', ''),
+            (null, 'google_captcha_lang', 'en'),
+            (null, 'google_captcha_enable', 'off')";
         $db->query($options);
     }
 }

@@ -53,66 +53,62 @@ if (isset($data['alertred'])) {
     </div>
 
     <div class="col-sm-12">
-        <div class="row">
-            <table class="table table-responsive">
-                <thead>
-                    <th><?=NAME;?></th>
-                    <th><?=DESC;?></th>
-                    <th><?=ACTION;?> </th>
-                </thead>
-                <tbody>
-                    <?php
-                        if(count($data['mods']) > 0) {
-                            foreach ($data['mods'] as $mod) {
-                                $m = Mod::data($mod);
-                                if (Mod::isActive($mod)) {
-                                    # code...
-                                    $btnact = "warning";
-                                    $act = DEACTIVATE;
-                                }else{
-                                    $btnact = "success";
-                                    $act = ACTIVATE;
-                                }
-                                echo "
-                                <tr>
-                                    <td>
-                                        {$m['icon']} <strong>{$m['name']}</strong><br />
-                                        <small>".VERSION.": {$m['version']} - ".LICENSE.": {$m['license']}</small>
-                                    </td>
-                                    <td>
-                                        <p title=\"{$m['desc']}\">".substr($m['desc'], 0,180)."</p>
-                                        <small>author: <a href=\"{$m['url']}\">{$m['developer']}</a></small>
-                                    </td>
-                                    <td>
-                                        <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a> 
-                                        ";
-                                if (!Mod::isActive($mod)) {
-                                    echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."\" class=\"label label-danger\" disable>".REMOVE."</a>";
-                                }
-                                echo"
-                                    </td>
-                                </tr>";
-                                //echo $m;
-                                
+
+        <table class="table table-responsive">
+            <thead>
+                <th><?=NAME;?></th>
+                <th><?=DESC;?></th>
+                <th><?=ACTION;?> </th>
+            </thead>
+            <tbody>
+                <?php
+                    if(count($data['mods']) > 0) {
+                        foreach ($data['mods'] as $mod) {
+                            $m = Mod::data($mod);
+                            if (Mod::isActive($mod)) {
+                                # code...
+                                $btnact = "warning";
+                                $act = DEACTIVATE;
+                            }else{
+                                $btnact = "success";
+                                $act = ACTIVATE;
                             }
-                        }else{
-                            echo "<div class=\"col-md-12\">".NO_MODULES_FOUND."</div>";
+                            echo "
+                            <tr>
+                                <td>
+                                    {$m['icon']} <strong>{$m['name']}</strong><br />
+                                    <small>".VERSION.": {$m['version']} - ".LICENSE.": {$m['license']}</small>
+                                </td>
+                                <td>
+                                    <p title=\"{$m['desc']}\">".substr($m['desc'], 0,180)."</p>
+                                    <small>author: <a href=\"{$m['url']}\">{$m['developer']}</a></small>
+                                </td>
+                                <td>
+                                    <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a> 
+                                    ";
+                            if (!Mod::isActive($mod)) {
+                                echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."\" class=\"label label-danger\" disable>".REMOVE."</a>";
+                            }
+                            echo"
+                                </td>
+                            </tr>";
+                            //echo $m;
+                            
                         }
-                    ?>
-                    
-                </tbody>
-                <tfoot>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    }else{
+                        echo "<div class=\"col-md-12\">".NO_MODULES_FOUND."</div>";
+                    }
+                ?>
+                
+            </tbody>
+            <tfoot>
+                <td></td>
+                <td></td>
+                <td></td>
 
-                </tfoot>
-            </table>
+            </tfoot>
+        </table>
             
-        </div>
-        
-
-
     </div>
 </div>
 <!-- Modal -->
