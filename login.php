@@ -23,24 +23,14 @@ define('GX_ASSET', GX_PATH.'/assets/');
 
 require("autoload.php");
 
-
 try {
-    $sys = new System();
-    $sess = new Session();
-    $thm = new Theme();
-    $db = new Db();
-    $u = new User();
-    new Site();
-    Vendor::autoload();
-    Session::start();
-    System::gZip();
-    Token::create();
-    Mod::loader();
-    Theme::loader();
-    
+	new System();   
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+Session::start();
+System::gZip();
 
 if(isset($_POST['login']))
 {
@@ -64,7 +54,7 @@ if(isset($_POST['login']))
 		/*check if username is exist or not */
 		$username = Typo::cleanX(Typo::strip($_POST['username']));
 		$sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
-		$usr = $db->result($sql);
+		$usr = Db::result($sql);
 		$c = Db::$num_rows;
 		//echo $c;
 		//print_r($usr);
@@ -76,7 +66,7 @@ if(isset($_POST['login']))
 				$pass = User::randpass($_POST['password']);
 				$sql = "SELECT `pass`,`group` FROM `user` WHERE `userid` = '{$username}'";
 
-				$l = $db->result($sql);
+				$l = Db::result($sql);
 				$c = Db::$num_rows;
 
 				foreach ($l as $v) {
@@ -86,14 +76,13 @@ if(isset($_POST['login']))
 					$g = $v->group;
 				}
 				//echo $p;
-				if($p == $pass)
-				{
+				if($p == $pass){
 					$vars = array(
 								'username'	=> $username,
 								'loggedin'	=> true,
 								'group'		=> $g
 							);
-					$sess->set_session($vars);
+					Session::set_session($vars);
 					/*
 					$_SESSION['username'] = $_POST['username'];
 					$_SESSION['login'] = "true";
@@ -116,7 +105,7 @@ if(isset($_POST['login']))
 		}
 	}
 }
-$thm->theme('header');
+Theme::theme('header');
 echo "<div class=\"container\">";
 
 	if(isset($alertred)) {
@@ -172,6 +161,6 @@ echo "<div class=\"container\">";
 	echo"<div class=\"alert alert-info\">".MSG_USER_ALREADY_LOGGED."<br /><a href=\"logout.php\">".LOGOUT."</a></div>";
 }
 echo "</div>";
-$thm->theme('footer');
+Theme::theme('footer');
 System::Zipped();
 ?>

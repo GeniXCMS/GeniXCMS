@@ -25,89 +25,98 @@ require("../autoload.php");
 
 
 try {
-    $sys = new System();
-    $sess = new Session();
-    $thm = new Theme();
-    $db = new Db();
-    $u = new User();
-    new Site();
-    Session::start();
-    System::gZip();
-    Token::create();
-    Mod::loader();
-    Theme::loader();
-    $thm->admin('header');
+    new System();
+    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
 
+Session::start();
+System::gZip();
 
 if(isset($_POST['login']))
 {
-	/*check if username is exist or not */
-	$username = Typo::cleanX(Typo::strip($_POST['username']));
-	$sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
-	$usr = $db->result($sql);
-	$c = Db::$num_rows;
-	//echo $c;
-	//print_r($usr);
-	if($c == "1"){
-		//$alertgreen = "";
-		// check if user is active 
-		if($usr[0]->status == '1') {
-			/* get user password */
-			$pass = User::randpass($_POST['password']);
-			$sql = "SELECT `pass`,`group` FROM `user` WHERE `userid` = '{$username}'";
+	if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+        // VALIDATE ALL
+        $alertred[] = TOKEN_NOT_EXIST;
+    }
+    if (Xaptcha::isEnable()) {
+    	
+	    if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '' ) {
+	    	$alertred[] = "Please insert the Captcha";
+	    }
+	    if (!Xaptcha::verify($_POST['g-recaptcha-response'])) {
+	    	$alertred[] = "Your Captcha is not correct.";
+	    }
+	}
 
-			$l = $db->result($sql);
-			$c = Db::$num_rows;
+	if (!isset($alertred)) {
+		/*check if username is exist or not */
+		$username = Typo::cleanX(Typo::strip($_POST['username']));
+		$sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
+		$usr = Db::result($sql);
+		$c = Db::$num_rows;
+		//echo $c;
+		//print_r($usr);
+		if($c == "1"){
+			//$alertgreen = "";
+			// check if user is active 
+			if($usr[0]->status == '1') {
+				/* get user password */
+				$pass = User::randpass($_POST['password']);
+				$sql = "SELECT `pass`,`group` FROM `user` WHERE `userid` = '{$username}'";
 
-			foreach ($l as $v) {
-				# code...
-				//print_r($v);
-				$p = $v->pass;
-				$g = $v->group;
-			}
-			//echo $p;
-			if($p == $pass)
-			{
-				$vars = array(
-							'username'	=> $username,
-							'loggedin'	=> true,
-							'group'		=> $g
-						);
-				$sess->set_session($vars);
-				/*
-				$_SESSION['username'] = $_POST['username'];
-				$_SESSION['login'] = "true";
-				$_SESSION['group'] = $group;
-				*/
-				//print_r($_SESSION);
-				$alertgreen = "You are logged in now.";
-			}elseif($p != $pass){
-				$alertred[] = PASS_NOT_MATCH;
-			}
-		}else{
-			if($usr[0]->activation != ''){
-				$alertred[] = ACOUNT_NOT_ACTIVE;
+				$l = Db::result($sql);
+				$c = Db::$num_rows;
+
+				foreach ($l as $v) {
+					# code...
+					//print_r($v);
+					$p = $v->pass;
+					$g = $v->group;
+				}
+				//echo $p;
+				if($p == $pass)
+				{
+					$vars = array(
+								'username'	=> $username,
+								'loggedin'	=> true,
+								'group'		=> $g
+							);
+					Session::set_session($vars);
+					/*
+					$_SESSION['username'] = $_POST['username'];
+					$_SESSION['login'] = "true";
+					$_SESSION['group'] = $group;
+					*/
+					//print_r($_SESSION);
+					$alertgreen = "You are logged in now.";
+				}elseif($p != $pass){
+					$alertred[] = PASS_NOT_MATCH;
+				}
 			}else{
-				$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
+				if($usr[0]->activation != ''){
+					$alertred[] = ACOUNT_NOT_ACTIVE;
+				}else{
+					$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
+				}
 			}
+		}elseif($c == "0"){
+			$alertred[] = NO_USER;
 		}
-	}elseif($c == "0"){
-		$alertred[] = NO_USER;
 	}
 }
-
+Theme::admin('header');
 	if(isset($alertred)) {
 		echo "
 		<div class=\"alert alert-danger\">
+			<ul>
 			";
 			foreach($alertred as $alert)
 			{
-				echo $alert;
+				echo "<li>".$alert."</li>";
 			}
-		echo"
+		echo"</ul>
 		</div>";
 	}
 	if(isset($alertgreen)) {
@@ -116,26 +125,33 @@ if(isset($_POST['login']))
 			{$alertgreen}
 		</div>";
 	}
-	if(!User::is_loggedin()){
+
+
+if(!User::is_loggedin()){
 
 ?>
 <div class="row">
-	<div style="max-width: 300px; margin-left: auto; margin-right: auto">
+	<div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 50px;">
 		<form class="form-signin" role="form" method="post">
-			<h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-			<div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-user fa-lg" style="color:#3b5998"></i></span>
-			<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
+			<h3 class="form-signin-heading"><?=LOGIN_TITLE;?></h3>
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user"></i></span>
+					<input type="text" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
+				</div>
 			</div>
-			<br>
-			<div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-lock fa-lg" style="color:#3b5998"></i></span>
-			<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-key"></i></span>
+					<input type="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
+				</div>
 			</div>
+			<?=Xaptcha::html();?>
 			<label class="checkbox">
 				<a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
 			</label>
-			<button class="btn btn-lg btn-success btn-block" name="login" type="submit"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;<?=SIGN_IN;?></button>
+			<input type="hidden" name="token" value="<?=TOKEN;?>">
+			<button class="btn  btn-success center-block" name="login" type="submit"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;<?=SIGN_IN;?></button>
 		</form>
 	</div>
 </div>
@@ -153,7 +169,7 @@ if(isset($_POST['login']))
 </style>
 
 <?php
-$thm->admin('footer');
+Theme::admin('footer');
 System::Zipped();
 ?>
 

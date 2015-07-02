@@ -38,11 +38,6 @@ class GxMain
     public function __construct() {
         if (System::existConf()) {
             new System();
-            new Site();
-            Vendor::autoload();
-            Token::create();
-            Mod::loader();
-            Theme::loader();
         }else{
             $this->install();
         }

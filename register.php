@@ -25,22 +25,14 @@ require("autoload.php");
 
 
 try {
-    $sys = new System();
-    $sess = new Session();
-    $thm = new Theme();
-    $db = new Db();
-    $u = new User();
-    new Site();
-    Vendor::autoload();
-    Session::start();
-    System::gZip();
-    Token::create();
-    Mod::loader();
-    Theme::loader();
-    $thm->header($data);
+    new System();
+    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+Session::start();
+System::gZip();
 
 if(isset($_POST['register']))
 {
@@ -158,6 +150,7 @@ if (isset($_GET['activation'])) {
         $data['alertred'][] = REG_ACTIVATION_FAILED_CODE;
     }
 }
+Theme::header($data);
 $loggedin = Session::val('loggedin');
 if(isset($loggedin)){
     echo "<div class=\"alert alert-info\">".REG_ALREADY_REGISTERED_ACC." </div>";
@@ -318,9 +311,9 @@ $js = "
                     });
                 </script>
 ";
-$thm->validator($js);
+Theme::validator($js);
 	}
-$thm->footer($vars);
+Theme::footer($vars);
 System::Zipped();
 
 ?>

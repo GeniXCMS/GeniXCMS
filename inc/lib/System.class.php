@@ -41,6 +41,11 @@ class System
         self::config('config');
         new Db();
         self::lang(Options::get('system_lang'));
+        new Site();
+        Vendor::autoload();
+        Token::create();
+        Mod::loader();
+        Theme::loader();
     }
 
     /**
@@ -50,18 +55,29 @@ class System
     * @since 0.0.1
     */
     public static function lib($var) {
-        include(GX_LIB.$var.'.class.php');
+        $file = GX_LIB.$var.'.class.php';
+        if (file_exists($file)) {
+            include($file);
+        }
+        
     }
 
 
 
     public static function lang($vars) {
-        include(GX_PATH.'/inc/lang/'.$vars.'.lang.php');
+        $file = GX_PATH.'/inc/lang/'.$vars.'.lang.php';
+        if (file_exists($file)) {
+            include($file);
+        }
+        
     }
 
     public static function config($var) {
-        include(GX_PATH.'/inc/config/'.$var.'.php');
-
+        $file = GX_PATH.'/inc/config/'.$var.'.php';
+        if (file_exists($file)) {
+            include($file);
+        }
+        
     }
 
     public static function existConf () {
@@ -114,7 +130,11 @@ class System
     }
 
     public static function inc ($vars, $data = "") {
-        include(GX_PATH.'/gxadmin/inc/'.$vars.'.php');
+        $file = GX_PATH.'/gxadmin/inc/'.$vars.'.php';
+        if (file_exists($file)) {
+            include($file);
+        }
+        
     }
 
 
