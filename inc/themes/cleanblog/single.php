@@ -25,7 +25,7 @@
                             # code...
                             echo "
                             <div class=\"\">
-                                ".Typo::Xclean($p->content)."
+                                ".Posts::content($p->content)."
                             </div>
                             <hr />
                             <div class=\"col-sm-12\">

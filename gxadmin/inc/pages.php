@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150202
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -161,7 +161,7 @@ if (isset($data['alertred'])) {
                         </th>
                         <th>
                             <button type="submit" name="doaction" class="btn btn-danger">
-                                 <span class="glyphicon glyphicon-ok"></span> <?=SUBMIT;?>
+                                 <span class="glyphicon glyphicon-ok"></span>
                             </button>
                         </th>
                     </tfoot>

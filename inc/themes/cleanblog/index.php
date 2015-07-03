@@ -26,28 +26,16 @@
                         <div class=\"post-preview\">
                             <h2 class=\"post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>
                             
-                            <p class=\"post-subtitle\">".substr(Posts::content($p->content),0,250)."</p>
+                            <p class=\"post-subtitle\">".Posts::format($p->content, $p->id)."</p>
                             <p class=\"post-meta\">".Date::local($p->date)." by <a href=\"#\">{$p->author}</a></p>
                         </div>
                             ";
                     }
+                    echo $data['paging'];
                 }else{
                     echo "No Post to Show";
                 }
-                if(isset($_GET['paging'])){
-                    $paging = $_GET['paging'];
-                }else{
-                    $paging = 1;
-                }
-                $paging = array(
-                                'paging' => $paging,
-                                'table' => 'posts',
-                                'where' => '`type` = \'post\'',
-                                'max' => $data['max'],
-                                'url' => 'index.php?',
-                                'type' => 'pager'
-                            );
-                echo Paging::create($paging, SMART_URL);
+
             ?>
             </div>
         </div>

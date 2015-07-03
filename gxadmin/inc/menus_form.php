@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150202
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -46,7 +46,7 @@
                 //print_r($data['parent']);
                 foreach ($data['parent'] as $p) {
                     # code...
-                    if($p->parent == ''){
+                    if($p->parent == '0'){
                         echo "<option value=\"$p->id\">$p->name</option>";
                         $parent2 = $data['parent'];
                         foreach ( $parent2 as $p2) {

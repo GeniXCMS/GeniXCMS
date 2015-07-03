@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -47,7 +47,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -170,7 +170,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `content` mediumtext NOT NULL,
                   `author` text NOT NULL,
                   `type` text NOT NULL,
-                  `cat` varchar(11) NOT NULL,
+                  `cat` varchar(11) DEFAULT NULL,
                   `modified` datetime DEFAULT NULL,
                   `status` enum('0','1','2') NOT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
@@ -217,17 +217,17 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $user_detail = "CREATE TABLE IF NOT EXISTS `user_detail` (
                 `id` bigint(20) NOT NULL,
-                  `userid` varchar(32) COLLATE latin1_general_ci NOT NULL,
-                  `fname` varchar(32) COLLATE latin1_general_ci NULL,
-                  `lname` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-                  `sex` varchar(2) COLLATE latin1_general_ci DEFAULT NULL,
-                  `birthplace` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
+                  `userid` varchar(32)  NOT NULL,
+                  `fname` varchar(32)  DEFAULT NULL,
+                  `lname` varchar(255)  DEFAULT NULL,
+                  `sex` varchar(2)  DEFAULT NULL,
+                  `birthplace` varchar(32)  DEFAULT NULL,
                   `birthdate` date DEFAULT NULL,
-                  `addr` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-                  `city` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-                  `state` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-                  `country` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-                  `postcode` varchar(32) COLLATE latin1_general_ci DEFAULT NULL
+                  `addr` varchar(255)  DEFAULT NULL,
+                  `city` varchar(255)  DEFAULT NULL,
+                  `state` varchar(255)  DEFAULT NULL,
+                  `country` varchar(255)  DEFAULT NULL,
+                  `postcode` varchar(32)  DEFAULT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($user_detail);
 

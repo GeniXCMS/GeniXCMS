@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20141007
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -68,11 +68,12 @@ class Menus
 
 
 
-    /*   Menu for User Frontend
-    *    ========================================
-    *    used for frontend interface. 4 level deep submenu. 
+    /**
+    * Menu for User Frontend
+    * 
+    * used for frontend interface. 4 level deep submenu. 
     *
-    *    @since: 0.0.1pre
+    * @since 0.0.1pre
     */
 
     public static function getMenu($menuid, $class='', $bsnav=false){
@@ -82,7 +83,7 @@ class Menus
             $menu = "<ul class=\"menu-{$menuid} {$class}\">";
             foreach ($menus as $m) {
                 # code...
-                if($m->parent == ''){
+                if($m->parent == '0'){
                     $parent = self::isHadParent($m->id, $menuid);
                     $n = Db::$num_rows;
                     if($n > 0 && $bsnav) { 
@@ -182,11 +183,12 @@ class Menus
     }
 
 
-    /*   Menu for Admin Backeend
-    *    ========================================
-    *    so this won't make general menu messed up. 
+    /**
+    * Menu for Admin Backeend
+    * 
+    * so this won't make general menu messed up. 
     *
-    *    @since: 0.0.1pre
+    * @since 0.0.1-pre
     */
 
     public static function getMenuAdmin($menuid, $class=''){
@@ -196,7 +198,7 @@ class Menus
             $menu = "<form action=\"\" method=\"post\"><ul class=\"menu-{$menuid} {$class} \">";
             foreach ($menus as $m) {
                 # code...
-                if($m->parent == ''){
+                if($m->parent == '0'){
                     $menu .= "<li clas=\"form-inline\"><div class=\"row\">";
                     $menu .= "
                             <h4 class=\"col-md-10\">".$m->name." 

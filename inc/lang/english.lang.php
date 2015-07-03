@@ -420,3 +420,6 @@ define('GOOGLE_RECAPTCHA_SECRET_DESCR', 'type the google recaptcha secret.');
 define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i> 
                         To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to 
                         <a target="_new" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');
+
+define('GO', 'Go!');
+define('READ_MORE', 'Read More..');

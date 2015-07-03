@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20141006
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -42,15 +42,16 @@ $data['posts'] = Db::result(
                             )
                         );
 $data['num'] = Db::$num_rows;
+$url = (SMART_URL)? Site::$url: Site::$url.'/index.php?';
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',
                 'where' => '`type` = \'post\'',
                 'max' => $data['max'],
-                'url' => 'index.php?',
+                'url' => $url,
                 'type' => Options::get('pagination')
             );
-$data['paging'] = Paging::create($paging);
+$data['paging'] = Paging::create($paging, SMART_URL);
 Theme::theme('header',$data);
 Theme::theme('index', $data);
 Theme::footer();

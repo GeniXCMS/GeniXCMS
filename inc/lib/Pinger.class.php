@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150202
-* @version 0.0.4
+* @version 0.0.5
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -26,14 +26,14 @@ class Pinger
 
 
     public function __construct () {
-        
-    }
-
-    public static function rpc ($url) {
         self::$myBlogName          = Options::get('sitename');
         self::$myBlogUrl           = Options::get('siteurl');
         self::$myBlogUpdateUrl     = Options::get('siteurl');
         self::$myBlogRSSFeedUrl    = Url::rss();
+    }
+
+    public static function rpc ($url) {
+        new Pinger();
         //require_once( GX_LIB.'/Vendor/IXR_Library.php' );
         $url = 'http://'.$url;
         $client = new IXR_Client( $url );
