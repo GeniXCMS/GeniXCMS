@@ -108,8 +108,6 @@ class Site
         if($bs == 'on'){
             $foot .= "
     <link href=\"".self::$url."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
-            $foot .= "
-    <link href=\"".self::$url."/assets/css/bootstrap-theme.min.css\" rel=\"stylesheet\">\n";
         }
 
         $jquery = Options::get('use_jquery');
@@ -145,8 +143,9 @@ class Site
 
             \t<link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
             \t<script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-fontstyle.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
             \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
+            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
             \t<script>
               \t$(document).ready(function() {
                 \t$('.editor').summernote({
@@ -160,7 +159,7 @@ class Site
                             \t['para', ['ul', 'ol', 'paragraph']],
                             \t['height', ['height']],
                             \t['table', ['table']],
-                            \t['insert', ['link', 'picture', 'video', 'hr']],
+                            \t['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
                             \t['view', ['fullscreen', 'codeview']],
                             \t['help', ['help']]
                         \t],

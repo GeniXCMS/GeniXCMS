@@ -19,6 +19,7 @@
       Site::footer();
 
     ?>
+    <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <script>
          $("#selectall").change(function(){
             $('input:checkbox').not(this).prop('checked', this.checked);

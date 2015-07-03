@@ -118,8 +118,30 @@ class Posts
     }
 
     public static function content($vars) {
-        $c = Typo::Xclean($vars);
-        return $c;
+        $post = Typo::Xclean($vars);
+
+        preg_match_all("[[\-\-readmore\-\-]]", $post, $more);
+ 
+        if (is_array($more[0])) {
+            $post = str_replace('[[--readmore--]]', '', $post);
+            return $post;
+        }else{
+            return $post;
+        }
+
+    }
+
+    public static function format ($post, $id) {
+        // split post for readmore...
+        $post = Typo::Xclean($post);
+        $more = explode('[[--readmore--]]', $post);
+        //print_r($more);
+        if (count($more) > 1) {
+            $post = explode('[[--readmore--]]', $post);
+            return $post[0]." <a href=\"".Url::post($id)."\">".READ_MORE."</a>";
+        }else{
+            return $post;
+        }
     }
 
     public static function recent($vars, $type = 'post') {
