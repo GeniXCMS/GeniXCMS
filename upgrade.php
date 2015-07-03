@@ -58,6 +58,9 @@ if (isset($_POST['004-patch'])) {
 
     $sql = "ALTER TABLE `user_detail` CHANGE `fname` `fname` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
     $q = Db::query($sql);
+
+    $sql = "UPDATE `menus` SET `parent` = '0' WHERE `parent` = '' ";
+    $q = Db::query($sql);
     if ($q) {
         # code...
         $alertgreen = 'Upgrade Success!';
