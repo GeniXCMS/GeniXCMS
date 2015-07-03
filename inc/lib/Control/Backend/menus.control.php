@@ -299,7 +299,7 @@ switch ($act) {
                 }else{
                     $vars = array(
                                 'parent' => Typo::int($_POST['parent']),
-                                'menuid' => Typo::int($_POST['id']),
+                                'menuid' => Typo::strip($_POST['id']),
                                 'name' => Typo::cleanX($_POST['name']),
                                 'class' => Typo::cleanX($_POST['class']),
                                 'type' => Typo::strip($_POST['type']),
