@@ -40,6 +40,7 @@ define('CATEGORY_CANNOT_EMPTY','Kategori tidak boleh kosong.');
 define('USERID_CANNOT_EMPTY','Nama Pengguna tidak boleh kosong.');
 define('PASS1_CANNOT_EMPTY','Sandi 1 tidak boleh kosong.');
 define('PASS2_CANNOT_EMPTY','Sandi 2 tidak boleh kosong.');
+define('USER', 'User');
 
 /** Token */
 define('TOKEN_NOT_EXIST', 'Token tidak ada atau tidak sesuai dengan database kami. Silahkan refresh atau ulangi tindakan Anda.');
@@ -322,8 +323,8 @@ define('SETTINGS_POSTS_PINGER_DESCR', 'Set the Pinger of Search Engine. Use {{do
 define('SETTINGS_PAYMENT', 'Pembayaran');
 define('SETTINGS_PAYMENT_PAYPAL_CONF', 'Konfigurasi PayPal');
 define('SETTINGS_PAYMENT_PAYPAL_CSYMB', 'Simbol Mata Uang');
-define('SETTINGS_PAYMENT_SENDBOX', 'Jalankan Sandbox');
-define('SETTINGS_PAYMENT_SENDBOX_EN', 'Jalankan Sandbox?');
+define('SETTINGS_PAYMENT_SANDBOX', 'Jalankan Sandbox');
+define('SETTINGS_PAYMENT_SANDBOX_EN', 'Jalankan Sandbox?');
 define('SETTINGS_PAYMENT_PAYPALAPI_USR', 'Pengguna API PayPal');
 define('SETTINGS_PAYMENT_PAYPALAPI_PWD', 'Sandi API PayPal');
 define('SETTINGS_PAYMENT_PAYPALAPI_SIGN', 'Signature API PayPal');
@@ -332,7 +333,7 @@ define('SETTINGS_PAYMENT_ALERT', 'Perhatian, mohon di isi dengan Data API PayPal
                               https://developer.paypal.com</a>');
 
 define('SETTINGS_PAYMENT_PAYPAL_CSYMB_DESCR', 'Pilih Mata Uang,  default USD');
-define('SETTINGS_PAYMENT_SENDBOX_EN_DESCR', 'Jalankan Sandbox');
+define('SETTINGS_PAYMENT_SANDBOX_EN_DESCR', 'Jalankan Sandbox');
 define('SETTINGS_PAYMENT_PAYPALAPI_USR_DESCR', 'Pengguna API PayPal Anda');
 define('SETTINGS_PAYMENT_PAYPALAPI_PWD_DESCR', 'Sandi API PayPal Anda');
 define('SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR', 'Signature API PayPal Anda');
@@ -402,3 +403,23 @@ define('MSG_UNKNOWN_ERROR', 'Terjadi Kesalahan!');
 // Other Functions
 
 define('REMOVE', 'hapus');
+
+
+define('TAGS', 'Tags');
+define('TAGS_DESC', 'write tags separated by comma.');
+define('SECURITY', 'Security');
+define('GOOGLE_RECAPTCHA', 'Google reCaptcha');
+define('GOOGLE_RECAPTCHA_ENABLE', 'Enable Google Recaptcha ?');
+define('GOOGLE_RECAPTCHA_ENABLE_DESCR', 'Check this if you want to enable Google reCaptcha');
+define('GOOGLE_RECAPTCHA_LANG', 'Google reCaptcha Language');
+define('GOOGLE_RECAPTCHA_LANG_DESCR', 'type the language you want to use');
+define('GOOGLE_RECAPTCHA_SITEKEY', 'Google reCaptcha SiteKey');
+define('GOOGLE_RECAPTCHA_SITEKEY_DESCR', 'type the google recaptcha sitekey.');
+define('GOOGLE_RECAPTCHA_SECRET', 'Google reCaptcha Secret');
+define('GOOGLE_RECAPTCHA_SECRET_DESCR', 'type the google recaptcha secret.');
+define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i> 
+                        To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to 
+                        <a target="_new" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');
+
+define('GO', 'Go!');
+define('READ_MORE', 'Read More..');
