@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.5
+* @version 0.0.6
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -47,7 +47,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.5
+* @version 0.0.6
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -117,7 +117,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         $cat_param = "CREATE TABLE IF NOT EXISTS `cat_param` (
                     `id` int(11) NOT NULL,
                       `cat_id` int(11) NOT NULL,
-                      `name` text CHARACTER SET utf8 NOT NULL,
+                      `param` text CHARACTER SET utf8 NOT NULL,
                       `value` text CHARACTER SET utf8 NOT NULL
                     ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($cat_param);

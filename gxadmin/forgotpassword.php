@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140928
-* @version 0.0.5
+* @version 0.0.6
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -25,18 +25,8 @@ require("../autoload.php");
 
 
 try {
-    $sys = new System();
-    $sess = new Session();
-    $thm = new Theme();
-    $db = new Db();
-    $u = new User();
-    new Site();
-    Session::start();
-    System::gZip();
-    Token::create();
-    Mod::loader();
-    Theme::loader();
-    $thm->admin('header');
+    new System();
+    
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -50,7 +40,7 @@ if(isset($_POST['forgotpass']))
 		/*check if username is exist or not */
 		$username = Typo::cleanX(Typo::strip($_POST['username']));
 		$sql = sprintf("SELECT `userid`,`email`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
-		$usr = $db->result($sql);
+		$usr = Db::result($sql);
 		$c = Db::$num_rows;
 		//echo $c;
 		//print_r($usr);
@@ -114,7 +104,7 @@ if(isset($_POST['forgotpass']))
 		$alertred[] = TOKEN_NOT_EXIST;
 	}
 }
-
+Theme::admin('header');
 	if(isset($alertred)) {
 		echo "
 		<div class=\"alert alert-danger\">
@@ -158,6 +148,6 @@ if(!User::is_loggedin()){
 	echo"<div class=\"alert alert-info\">You're already Logged In. <br /><a href=\"logout.php\">Logout</a></div>";
 }
 
-$thm->admin('footer');
+Theme::admin('footer');
 System::Zipped();
 ?>
