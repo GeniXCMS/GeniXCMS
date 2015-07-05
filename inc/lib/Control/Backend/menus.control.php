@@ -66,7 +66,7 @@ switch ($act) {
                     $menu[$_POST['id']]['menu'] = $menus[$_POST['id']]['menu'];
                     $menu[$_POST['id']]['menu'][] = array(
                                                         'parent' => $_POST['parent'],
-                                                        'menuid' => Typo::int($_POST['id']),
+                                                        'menuid' => Typo::strip($_POST['id']),
                                                         'name' => Typo::cleanX($_POST['name']),
                                                         'type' => $_POST['type'],
                                                         'value' => $_POST[$_POST['type']],
@@ -138,8 +138,8 @@ switch ($act) {
                 }else{
 
                     $vars = array(
-                                'parent' => $_POST['parent'],
-                                'menuid' => $_POST['id'],
+                                'parent' => Typo::int($_POST['parent']),
+                                'menuid' => Typo::strip($_POST['id']),
                                 'name' => Typo::cleanX($_POST['name']),
                                 'class' => Typo::cleanX($_POST['class']),
                                 'type' => $_POST['type'],
@@ -341,7 +341,7 @@ switch ($act) {
                     $data['alertred'] = $alertred;
                 }else{
                     Menus::updateMenuOrder(
-                        Typo::int($_POST['order'])
+                        $_POST['order']
                     );
                     $data['alertgreen'][] = 'Menu Order Changed';
                 }

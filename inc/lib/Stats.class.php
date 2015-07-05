@@ -39,6 +39,60 @@ class Stats
         return $npost;
     }
 
+    public static function addViews($id) {
+        $botlist = self::botlist();
+        $nom = 0;
+        foreach($botlist as $bot) {
+            if(preg_match("/{$bot}/", $_SERVER['HTTP_USER_AGENT'])) {
+                $nom = 1+$nom;
+            }else{
+                $nom = 0;
+            }
+        }
+        if ($nom == 0) {
+            # code...
+            $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = '{$id}' LIMIT 1";
+            $q = Db::query($sql);
+        }
+    }
+
+
+    public static function botlist() {
+        $botlist = array(   
+                "Teoma",
+                "alexa",
+                "froogle",
+                "inktomi",
+                "looksmart",
+                "URL_Spider_SQL",
+                "Firefly",
+                "NationalDirectory",
+                "Ask Jeeves",
+                "TECNOSEEK",
+                "InfoSeek",
+                "WebFindBot",
+                "girafabot",
+                "crawler",
+                "www.galaxy.com",
+                "Googlebot",
+                "Scooter",
+                "Slurp",
+                "appie",
+                "FAST",
+                "WebBug",
+                "Spade",
+                "ZyBorg",
+                "rabaz",
+                "Twitterbot",
+                "MJ12bot",
+                "AhrefsBot",
+                "bingbot",
+                "YandexBot",
+                "spbot"
+                        );
+        return $botlist;
+    }
+
 }
 
 /* End of file Stats.class.php */

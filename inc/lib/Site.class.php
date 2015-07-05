@@ -180,7 +180,7 @@ class Site
                         \ttype: 'POST',
                         \tsuccess: function(data){
                         \talert(data);
-                          \teditor.insertImage(welEditable, data);
+                          \t$('.editor').summernote('editor.insertImage', data);
                         \t},
                        \terror: function(jqXHR, textStatus, errorThrown) {
                          \tconsole.log(textStatus+\" \"+errorThrown);

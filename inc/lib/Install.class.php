@@ -172,7 +172,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `type` text NOT NULL,
                   `cat` varchar(11) DEFAULT NULL,
                   `modified` datetime DEFAULT NULL,
-                  `status` enum('0','1','2') NOT NULL
+                  `status` enum('0','1','2') NOT NULL,
+                  `views` int(11) NOT NULL DEFAULT '0'
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($posts);
 

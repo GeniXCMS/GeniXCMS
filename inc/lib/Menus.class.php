@@ -349,10 +349,10 @@ class Menus
     public static function updateMenuOrder($vars){
         foreach ($vars as $k => $v) {
             # code...
-            //print_r($v);
+            // print_r($v);
             $sql = array(
                         'table' => 'menus',
-                        'id' => $k,
+                        'id' => Typo::int($k),
                         'key' => $v
                     );
             Db::update($sql);
