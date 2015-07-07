@@ -46,6 +46,9 @@ if (isset($data['alertgreen'])) {
 <form action="" method="post">
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-group"></i> Edit User 
             <div class="pull-right">
                 <button  class="btn btn-success " type="submit" name="edituser">

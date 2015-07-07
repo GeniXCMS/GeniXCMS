@@ -79,6 +79,9 @@ if(isset($data['post'])) {
 <form action="index.php?page=posts&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-file-text-o"></i> <?=$pagetitle;?> <?=POST;?>
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">

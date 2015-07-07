@@ -105,7 +105,7 @@ if(isset($_POST['register']))
         }else{
             $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
         }
-		
+		echo Hooks::run('user_reg_action');
     }else{
         $data['alertred'] = $alertred;
     }
@@ -142,6 +142,7 @@ if (isset($_GET['activation'])) {
             }else{
                 $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
             }
+            echo Hooks::run('user_activation_action');
         }else{
             $data['alertred'][] = REG_ACTIVATION_FAILED;
         }
@@ -156,7 +157,7 @@ if(isset($loggedin)){
     echo "<div class=\"alert alert-info\">".REG_ALREADY_REGISTERED_ACC." </div>";
 }else{
 ?>
-<div class="col-md-8">
+<div class="col-md-4 col-md-offset-4">
 <?php
 	if (isset($data['alertgreen'])) {
         # code...
@@ -188,7 +189,7 @@ if(isset($loggedin)){
     }
 	
 ?>
-<h1><?=REG_FORM;?></h1>
+<h2 class="text-center"><?=REG_FORM;?></h2>
 <form action="" method="post" name="register" class="registerform">
 	<div class="form-group">
 		<label for="username"><?=USERNAME;?></label>
@@ -214,22 +215,7 @@ if(isset($loggedin)){
 &nbsp;
 </div>
 </div>
-<div class="center-block col-sm-4">
-    <div class="alert alert-success">
-        <?=REG_ALREADY_HAVE_ACC;?>
-    </div>
-    <form class="form-signin" role="form" method="post" action="login.php">
-        <h2 class="form-signin-heading"><?=LOGIN_TITLE;?></h2>
-        <label for="username"><?=USERNAME;?></label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="<?=USERNAME;?>" required autofocus>
-        <label for="password"><?=PASSWORD;?></label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="<?=PASSWORD;?>" required>
-        <label class="checkbox">
-            <a href="forgotpassword.php"><?=FORGOT_PASS;?></a>
-        </label>
-        <button class="btn btn-success" name="login" type="submit"><?=SIGN_IN;?></button>
-    </form>
-</div>
+
 <?php
 $js = "
                 <script>
@@ -249,7 +235,7 @@ $js = "
                                             message: 'The username is required and cannot be empty'
                                         },
                                         stringLength: {
-                                            min: 4,
+                                            min: 6,
                                             max: 30,
                                             message: 'The username must be more than 6 and less than 30 characters long'
                                         },

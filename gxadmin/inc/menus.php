@@ -46,6 +46,9 @@ if (isset($data['alertgreen'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
 
         <h1><i class="fa fa-sitemap"></i> <?=MENUS;?>
             <div class="pull-right">

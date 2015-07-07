@@ -100,6 +100,9 @@ if (isset($data['alertred'])) {
 <form action="index.php?page=pages&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-file-o"></i> <?=$pagetitle;?> <?=PAGE;?> 
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
@@ -152,7 +155,15 @@ if (isset($data['alertred'])) {
                         </div>
                     </div>
 
-                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><?=TAGS;?></h3>
+                        </div>
+                        <div class="panel-body">
+                            <textarea name="tags" class="form-control"><?=$tags;?></textarea>
+                            <small><?=TAGS_DESC;?></small>
+                        </div>
+                    </div>
                 </div>
             
         </div>

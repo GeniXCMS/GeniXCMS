@@ -16,11 +16,16 @@
 */?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+        <?=Hooks::run('admin_page_top_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-dashboard"></i> <?=DASHBOARD;?></h1>
         <hr>
     </div>
     <div class="col-md-12">
         <div class="row">
+            <?=Hooks::run('admin_page_dashboard_action', $data);?>
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -65,6 +70,7 @@
                                 ."<li class=\"list-group-item\">".TOTAL_PAGE.": ".Stats::totalPost('page')."</li>"
                                 ."<li class=\"list-group-item\">".TOTAL_CAT.": ".Stats::totalCat('cat')."</li>"
                                 ."<li class=\"list-group-item\">".TOTAL_USER.": ".Stats::totalUser('user')."</li>";
+                            echo Hooks::run('admin_page_dashboard_statslist_action', $data);
                         ?>
                         </ul>
                     </div>

@@ -45,6 +45,9 @@ if (isset($data['alertred'])) {
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-12">
+            <?=Hooks::run('admin_page_notif_action', $data);?>
+        </div>
+        <div class="col-md-12">
             <h1 class="clearfix">
                 <div class="pull-left">
                     <i class="fa fa-wrench"></i> <?=SETTINGS;?>

@@ -61,6 +61,9 @@ if (isset($_GET['token'])
 <form action="" method="POST">
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
 <h1><i class="fa fa-sitemap"></i> <?=MENU_EDIT;?>
 <div class="pull-right">
 <button type="submit" name="edititem" class="btn btn-success">

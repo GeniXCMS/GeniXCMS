@@ -90,6 +90,7 @@ if(isset($_POST['login']))
 					*/
 					//print_r($_SESSION);
 					$alertgreen = MSG_USER_LOGGED_IN;
+					echo Hooks::run('user_login_action');
 				}elseif($p != $pass){
 					$alertred[] = PASS_NOT_MATCH;
 				}

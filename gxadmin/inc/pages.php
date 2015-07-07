@@ -43,6 +43,9 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-file-o"></i> <?=PAGES;?> 
             <a href="index.php?page=pages&act=add&token=<?=TOKEN;?>" class="btn btn-primary pull-right">
                 <i class="fa fa-plus"></i> <?=ADD_NEW_PAGE;?>

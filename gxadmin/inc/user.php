@@ -45,6 +45,9 @@
 ?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-group"></i> <?=USERS;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#adduser">
                 <span class="glyphicon glyphicon-plus"></span> <?=ADD_USER;?>

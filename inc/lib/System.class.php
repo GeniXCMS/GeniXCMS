@@ -32,20 +32,23 @@ class System
 
     /**
     * System Constructor.
-    * Initializing the system, check the config file, if exist run the config
-    * loader.
+    * Initializing the system, check the config file
+    * 
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
     public function __construct () {
         self::config('config');
         new Db();
+        new Hooks();
         self::lang(Options::get('system_lang'));
         new Site();
         Vendor::autoload();
         Token::create();
         Mod::loader();
         Theme::loader();
+
+        Hooks::run('init');
     }
 
     /**

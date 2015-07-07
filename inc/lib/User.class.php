@@ -97,6 +97,7 @@ class User
                             );
                 Db::insert($sql);
             }
+            Hooks::run('user_sqladd_action', $vars);
         }
 
         return $db;
@@ -152,6 +153,7 @@ class User
                             );
                 Db::update($sql);
             }
+            Hooks::run('user_sqledit_action', $vars);
             
         }
     }
@@ -172,6 +174,7 @@ class User
                             )
             );
         Db::delete($vars);
+        Hooks::run('user_sqldel_action', $vars);
     }
 
     // $vars = array(

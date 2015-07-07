@@ -43,6 +43,9 @@
 ?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-file-text-o"></i> <?=POSTS;?> 
             <a href="index.php?page=posts&act=add&token=<?=TOKEN;?>" 
             class="btn btn-primary pull-right">

@@ -44,7 +44,12 @@ class Posts
                     );
             $post = Db::insert($ins);
             self::$last_id = Db::$last_id;
-            Pinger::run(Options::get('pinger'));
+            Hooks::run('post_sqladd_action', $vars, self::$last_id);
+            $pinger = Options::get('pinger');
+            if ($pinger != "") {
+                Pinger::run($pinger);
+            }
+            
         }
         return $post;
     }
@@ -54,18 +59,24 @@ class Posts
             //$slug = Typo::slugify($vars['title']);
             //$vars = array_merge($vars, array('slug' => $slug));
             //print_r($vars);
+            $id = Typo::int($_GET['id']);
             $ins = array(
                         'table' => 'posts',
-                        'id' => $_GET['id'],
+                        'id' => $id,
                         'key' => $vars
                     );
             $post = Db::update($ins);
-            Pinger::run(Options::get('pinger'));
+            Hooks::run('post_sqladd_action', $vars, $id);
+            $pinger = Options::get('pinger');
+            if ($pinger != "") {
+                Pinger::run($pinger);
+            }
         }
         return $post;
     }
 
     public static function publish($id) {
+        $id = Typo::int($id);
         $ins = array(
                     'table' => 'posts',
                     'id' => $id,
@@ -78,6 +89,7 @@ class Posts
     }
 
     public static function unpublish($id) {
+        $id = Typo::int($id);
         $ins = array(
                     'table' => 'posts',
                     'id' => $id,
@@ -108,6 +120,7 @@ class Posts
                                     )
                         );
             $d = Db::delete($vars2);
+            Hooks::run('post_sqldel_action', $id);
             return true;
         }
         catch (Exception $e)
@@ -124,11 +137,12 @@ class Posts
  
         if (is_array($more[0])) {
             $post = str_replace('[[--readmore--]]', '', $post);
-            return $post;
+            // return $post;
         }else{
-            return $post;
+            $post = $post;
         }
-
+        $post = Hooks::filter('post_content_filter', $post);
+        return $post;
     }
 
     public static function format ($post, $id) {
@@ -138,10 +152,13 @@ class Posts
         //print_r($more);
         if (count($more) > 1) {
             $post = explode('[[--readmore--]]', $post);
-            return $post[0]." <a href=\"".Url::post($id)."\">".READ_MORE."</a>";
+            $post = $post[0]." <a href=\"".Url::post($id)."\">".READ_MORE."</a>";
         }else{
-            return $post;
+            $post = $post;
         }
+
+        $post = Hooks::filter('post_content_filter', $post);
+        return $post;
     }
 
     public static function recent($vars, $type = 'post') {
@@ -235,6 +252,36 @@ class Posts
         $drop .= "</select>";
 
         return $drop;
+    }
+
+    public static function getParam($param, $post_id) {
+        $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            return $q[0]->value;
+        }else{
+            return '';
+        }
+    }
+
+    public static function delParam($param, $post_id) {
+        $sql = "DELETE FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
+        $q = Db::query($sql);
+        if ($q) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static function existParam($param, $post_id) {
+        $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

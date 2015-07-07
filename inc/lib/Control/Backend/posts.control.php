@@ -31,7 +31,11 @@ switch ($act) {
                 }
                 //cleanup first
                 $title = Typo::cleanX($_POST['title']);
+                $title = Hooks::filter('post_submit_title_filter', $title);
+
                 $content = Typo::cleanX($_POST['content']);
+                $content = Hooks::filter('post_submit_content_filter', $content);
+
                 if (!isset($title) || $title == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
                 }
@@ -56,6 +60,7 @@ switch ($act) {
                     //print_r($vars);
                     Posts::insert($vars);
                     $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_ADDED;
+                    Hooks::run('post_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
                 }
 
@@ -104,6 +109,7 @@ switch ($act) {
                                 );
                     Posts::update($vars);
                     $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_UPDATED;
+                    Hooks::run('post_submit_edit_action', $_POST);
                     Token::remove($_POST['token']);
                 }
 
@@ -142,7 +148,9 @@ switch ($act) {
                         $data['alertred'][] = $del['error'];
                     }else{
                         $data['alertgreen'][] = POST." {$title} ".MSG_PAGE_REMOVED;
+                        Hooks::run('post_delete_action', $_GET);
                     }
+
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
@@ -205,6 +213,7 @@ switch ($act) {
                     foreach ($post_id as $id) {
                         # code...
                         Posts::delete($id);
+                        Hooks::run('post_delete_action', $id);
                     }
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }

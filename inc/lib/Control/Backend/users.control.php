@@ -65,6 +65,7 @@ switch ($act) {
                         # code...
                         $data['alertgreen'] = $alertgreen;
                     }
+                    Hooks::run('user_submit_edit_action', $_GET);
                 }else{
                     $data['alertred'] = $alertred;
                 }
@@ -88,6 +89,7 @@ switch ($act) {
                     $data['alertred'][] = TOKEN_NOT_EXIST;
                 }else{
                     User::delete($_GET['id']);
+                    Hooks::run('user_delete_action', $_GET);
                     $data['alertgreen'][] = USER." ".$user." ".MSG_USER_REMOVED;
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
@@ -194,6 +196,7 @@ switch ($act) {
                                     
                                 );   
                     User::create($vars);
+                    Hooks::run('user_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
                     $data['alertgreen'][] = USER." {$_POST['userid']}, ".MSG_USER_ADDED;
                 }else{

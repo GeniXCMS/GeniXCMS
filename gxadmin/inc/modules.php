@@ -44,6 +44,9 @@ if (isset($data['alertred'])) {
 ?>
 <div class="row">
     <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
+    <div class="col-md-12">
         <h1><i class="fa fa-plug"></i>  <?=MODULES;?> 
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_MODULES;?> 

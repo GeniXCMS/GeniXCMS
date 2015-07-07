@@ -73,35 +73,37 @@ class Site
         }else{
             $desc = "";
         }
-
-        $meta = "
+        $cont_title = Hooks::filter('site_title_filter', $cont_title);
+        $keyword = Hooks::filter('site_key_filter', self::$key);
+        echo "
     <!--// Start Meta: Generated Automaticaly by GeniXCMS -->
     <meta charset=\"".Options::get('charset')."\">";
-        $meta .= "
+        echo "
     <!-- SEO: Title stripped 70chars for SEO Purpose -->
     <title>{$cont_title}".self::$name."</title>
-    <meta name=\"Keyword\" content=\"".self::$key."\">
+    <meta name=\"Keyword\" content=\"".$keyword."\">
     <!-- SEO: Description stripped 150chars for SEO Purpose -->
     <meta name=\"Description\" content=\"".self::desc($desc)."\">";
     if (isset($data['posts'][0]->author) && !isset($data['posts'][1]->author)) {
-         $meta .= "
+         echo "
     <meta name=\"Author\" content=\"{$data['posts'][0]->author}\">";
     }
-        $meta .= "
+        echo "
     <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
     <meta name=\"robots\" content=\"".Options::get('robots')."\">
     <link rel=\"shortcut icon\" href=\"".Options::get('siteicon')."\" />
         ";
-
-        $meta .= "
+        echo Hooks::run('header_load_meta', $data);
+        echo "
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->";
-        echo $meta;
+        // echo $meta;
+
     }
 
 
 
     public static function footer(){
-       //global $editors;
+        global $data;
         //echo $GLOBALS['editor'].' one '. self::$editors;
         $foot ="";
         $bs = Options::get('use_bootstrap');
@@ -208,6 +210,7 @@ class Site
 
 
         echo $foot;
+        echo Hooks::run('footer_load_lib', $data);
     }
 
     public static function desc($vars){
@@ -216,7 +219,7 @@ class Site
         }else{
             $desc = substr(self::$desc,0,150);
         }
-
+        $desc = Hooks::filter('site_desc_filter', $desc);
         return $desc;
     }
 
