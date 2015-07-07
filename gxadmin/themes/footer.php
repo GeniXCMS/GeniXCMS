@@ -17,7 +17,7 @@
     <?php
       Theme::editor();
       Site::footer();
-
+      echo Hooks::run('admin_footer_action', $data);
     ?>
     <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <script>

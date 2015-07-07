@@ -70,6 +70,12 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="index.php?page=media" 
+                                <?=(isset($_GET['page']) && $_GET['page'] == 'media')?"class=\"active\"":"";?>>
+                                    <i class="fa fa-file-archive-o"></i> Media
+                                </a>
+                            </li>
+                            <li>
                                 <a href="index.php?page=menus" 
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'menus')?"class=\"active\"":"";?>>
                                     <i class="fa fa-sitemap"></i> <?=MENUS;?>

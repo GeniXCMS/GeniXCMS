@@ -24,6 +24,13 @@ return array(
     'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
     'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
+    'elFinder' => $vendorDir . '/studio-42/elfinder/php/elFinder.class.php',
+    'elFinderConnector' => $vendorDir . '/studio-42/elfinder/php/elFinderConnector.class.php',
+    'elFinderVolumeDriver' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDriver.class.php',
+    'elFinderVolumeFTP' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeFTP.class.php',
+    'elFinderVolumeFTPIIS' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeFTPIIS.class.php',
+    'elFinderVolumeLocalFileSystem' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeLocalFileSystem.class.php',
+    'elFinderVolumeMySQL' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeMySQL.class.php',
     'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
     'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );
