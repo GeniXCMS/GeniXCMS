@@ -15,6 +15,7 @@
 *
 */
 $data['sitetitle'] = PAGES;
+Theme::editor();
 if(isset($_GET['act'])) { $act = $_GET['act']; }else{ $act = "";}
 switch ($act) {
     case 'add':
@@ -259,9 +260,6 @@ switch ($act) {
             ORDER BY `date` DESC 
             LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
-        Theme::admin('header', $data);
-        System::inc('pages', $data);
-        Theme::admin('footer');
 
         $page = array(
                     'paging' => $paging,
@@ -271,7 +269,13 @@ switch ($act) {
                     'url' => 'index.php?page=pages'.$qpage,
                     'type' => 'pager'
                 );
-        echo Paging::create($page);
+        $data['paging'] = Paging::create($page);
+        
+        Theme::admin('header', $data);
+        System::inc('pages', $data);
+        Theme::admin('footer');
+
+        
         break;
 }
 

@@ -134,6 +134,7 @@ class Site
         }
 
         if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
+            Hooks::attach('footer_load_lib', array('Files','elfinderLib'));
             $foot .= "
             \t<!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js)-->
             \t<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css\" />
@@ -162,6 +163,7 @@ class Site
                             \t['height', ['height']],
                             \t['table', ['table']],
                             \t['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                            \t['genixcms', ['elfinder']],
                             \t['view', ['fullscreen', 'codeview']],
                             \t['help', ['help']]
                         \t],

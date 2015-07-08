@@ -16,6 +16,7 @@
 */
 
 $data['sitetitle'] = POSTS;
+Theme::editor();
 if(isset($_GET['act'])) $act = $_GET['act']; else $act = "";
 switch ($act) {
     case 'add':
@@ -276,6 +277,7 @@ switch ($act) {
                     'type' => 'number'
                 );
         $data['paging'] = Paging::create($page);
+
         Theme::admin('header', $data);
         System::inc('posts', $data);
         Theme::admin('footer');

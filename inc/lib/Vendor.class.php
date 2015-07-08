@@ -24,4 +24,8 @@ class Vendor
     public static function autoload() {
         include (GX_LIB."Vendor/autoload.php");
     }
+
+    public static function url() {
+        return Site::$url.'/inc/lib/Vendor';
+    }
 }

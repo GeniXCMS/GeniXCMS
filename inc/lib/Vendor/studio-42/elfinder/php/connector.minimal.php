@@ -34,9 +34,12 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '../../../../../../assets/',         // path to files (REQUIRED)
-			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../../../../../../assets/', // URL to files (REQUIRED)
-			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+			'path'          => '../../../../../../assets/images/uploads/',         // path to files (REQUIRED)
+			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../../../../../../assets/images/uploads/', // URL to files (REQUIRED)
+			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
+			'uploadAllow' => array('image', 'audio', 'video'),
+			'uploadDeny' => array('application'),
+			'uploadOrder'=> array( 'allow', 'deny' )
 		)
 	)
 );
