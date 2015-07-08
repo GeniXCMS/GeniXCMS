@@ -17,6 +17,38 @@
 
 $data['sitetitle'] = USERS;
 if(isset($_GET['act'])){ $act = $_GET['act']; }else{$act="";}
+
+// search query 
+$where = " 1 ";
+$qpage = "";
+if(isset($_GET['q']) && $_GET['q'] != ''){
+    $q = Typo::cleanX($_GET['q']);
+    $where .= "AND (`userid` LIKE '%%{$q}%%' OR `email` LIKE '%%{$q}%%') ";
+    $qpage .= "&q={$_GET['q']}";
+}
+if(isset($_GET['from']) && $_GET['from'] != ''){
+    $where .= "AND `join_date` >= '{$_GET['from']}' ";
+    $qpage .= "&from={$_GET['from']}";
+}
+if(isset($_GET['to']) && $_GET['to'] != ''){
+    $where .= "AND `join_date` <= '{$_GET['to']}' ";
+    $qpage .= "&to={$_GET['to']}";
+}
+if(isset($_GET['status']) && $_GET['status'] != ''){
+    $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
+    $qpage .= "&status={$_GET['status']}";
+}
+
+
+$max = "10";
+if(isset($_GET['paging'])){
+    $paging = Typo::int($_GET['paging']);
+    $offset = ($paging-1)*$max;
+}else{
+    $paging = 1;
+    $offset = 0;
+}
+
 switch ($act) {
     case 'edit':
         # code...
@@ -96,8 +128,17 @@ switch ($act) {
             }else{
                 $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
             }
-            $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+            $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
             $data['num'] = Db::$num_rows;
+            $page = array(
+                        'paging' => $paging,
+                        'table' => 'user',
+                        'where' => $where,
+                        'max' => $max,
+                        'url' => 'index.php?page=users'.$qpage,
+                        'type' => 'pager'
+                    );
+            $data['paging'] = Paging::create($page);
             Theme::admin('header', $data);
             System::inc('user', $data);
             Theme::admin('footer');
@@ -108,15 +149,24 @@ switch ($act) {
                 $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::activate($_GET['id'])){
-                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_ACTIVATED;
+                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATED;
                 }else{
-                    $data['alertred'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_ACTIVATION_FAIL;
+                    $data['alertred'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATION_FAIL;
                 }
 
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
-            $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+            $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
             $data['num'] = Db::$num_rows;
+            $page = array(
+                        'paging' => $paging,
+                        'table' => 'user',
+                        'where' => $where,
+                        'max' => $max,
+                        'url' => 'index.php?page=users'.$qpage,
+                        'type' => 'pager'
+                    );
+            $data['paging'] = Paging::create($page);
             Theme::admin('header', $data);
             System::inc('user', $data);
             Theme::admin('footer');
@@ -128,14 +178,23 @@ switch ($act) {
                 $data['alertred'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::deactivate($_GET['id'])){
-                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_DEACTIVATED;
+                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATED;
                 }else{
-                    $data['alertred'][] = USER." ".User::userid($_GET['id'])."".MSG_USER_DEACTIVATION_FAIL;
+                    $data['alertred'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATION_FAIL;
                 }
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
-            $data['usr'] = Db::result("SELECT * FROM `user` ORDER BY `userid` ASC LIMIT 10");
+            $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
             $data['num'] = Db::$num_rows;
+            $page = array(
+                        'paging' => $paging,
+                        'table' => 'user',
+                        'where' => $where,
+                        'max' => $max,
+                        'url' => 'index.php?page=users'.$qpage,
+                        'type' => 'pager'
+                    );
+            $data['paging'] = Paging::create($page);
             Theme::admin('header', $data);
             System::inc('user', $data);
             Theme::admin('footer');
@@ -276,36 +335,7 @@ switch ($act) {
         }
 
 
-        // search query 
-        $where = " 1 ";
-        $qpage = "";
-        if(isset($_GET['q']) && $_GET['q'] != ''){
-            $q = Typo::cleanX($_GET['q']);
-            $where .= "AND (`userid` LIKE '%%{$q}%%' OR `email` LIKE '%%{$q}%%') ";
-            $qpage .= "&q={$_GET['q']}";
-        }
-        if(isset($_GET['from']) && $_GET['from'] != ''){
-            $where .= "AND `join_date` >= '{$_GET['from']}' ";
-            $qpage .= "&from={$_GET['from']}";
-        }
-        if(isset($_GET['to']) && $_GET['to'] != ''){
-            $where .= "AND `join_date` <= '{$_GET['to']}' ";
-            $qpage .= "&to={$_GET['to']}";
-        }
-        if(isset($_GET['status']) && $_GET['status'] != ''){
-            $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
-            $qpage .= "&status={$_GET['status']}";
-        }
-
-
-        $max = "10";
-        if(isset($_GET['paging'])){
-            $paging = Typo::int($_GET['paging']);
-            $offset = ($paging-1)*$max;
-        }else{
-            $paging = 1;
-            $offset = 0;
-        }
+        
 
         $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
         $data['num'] = Db::$num_rows;

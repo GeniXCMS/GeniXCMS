@@ -95,7 +95,7 @@ class Control
 
         if($_GET){
             //print_r($_GET);
-            $arr = array ('post','page', 'cat', 'mod', 'sitemap', 'rss','pay',
+            $arr = array ('ajax', 'post','page', 'cat', 'mod', 'sitemap', 'rss','pay',
             'paidorder','cancelorder');
             $get =0;
             foreach ($_GET as $k => $v) {
@@ -115,7 +115,11 @@ class Control
             if ($get>0) {
                 foreach ($_GET as $k => $v) {
                     if(in_array($k, $arr)){
-                        self::incFront($k);
+                        if ($k == 'ajax') {
+                            self::ajax($v);
+                        }else{
+                            self::incFront($k);
+                        }
                     }elseif($k == "error"){
                         self::error($v);
                     }elseif(!in_array($k, $arr) && $k != 'paging'){
@@ -165,7 +169,10 @@ class Control
     */
     public static function error ($vars="", $val='') {
         if( isset($vars) && $vars != "" ) {
-            include(GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php');
+            $file = GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php';
+            if (file_exists($file)) {
+                include($file);
+            }
         }else{
             include(GX_PATH.'/inc/lib/Control/Error/unknown.control.php');
         }
@@ -180,6 +187,19 @@ class Control
     */
     public static function install () {
         include(GX_PATH.'/inc/lib/Control/Install/default.control.php');
+    }
+
+
+    public static function ajax ($vars="", $val='') {
+        if( isset($vars) && $vars != "" ) {
+            $file = GX_PATH.'/inc/lib/Control/Ajax/'.$vars.'-ajax.control.php';
+            if (file_exists($file)) {
+                include($file);
+            }
+            
+        }else{
+            include(GX_PATH.'/inc/lib/Control/Ajax/unknown.control.php');
+        }
     }
 
 }

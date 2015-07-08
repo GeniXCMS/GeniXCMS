@@ -28,6 +28,7 @@ class Files
     }
 
     public static function elfinderLib() {
+
         $html = "
     <script src=\"".Vendor::url()."/studio-42/elfinder/jquery/jquery-ui.min.js\" type=\"text/javascript\" charset=\"utf-8\"></script>
     <link rel=\"stylesheet\" href=\"".Vendor::url()."/studio-42/elfinder/jquery/ui-themes/smoothness/jquery-ui.min.css\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">
@@ -43,7 +44,7 @@ class Files
     <script>
         $(document).ready(function() {
             $('#elfinder').elfinder({
-                url : '".Vendor::url()."/studio-42/elfinder/php/connector.minimal.php',
+                url : '".Site::$url."/index.php?ajax=elfinder&token=".TOKEN."',
                 height : '500',
                 handlers : {
                     select : function(event, elfinderInstance) {
@@ -52,7 +53,6 @@ class Files
                     
                 },
                 
-
                 lang : 'en',
                 customData : {answer : 42},
                 
@@ -61,15 +61,14 @@ class Files
 
         function elfinderDialog(){
             var fm = $('<div/>').dialogelfinder({
-                url : '".Vendor::url()."/studio-42/elfinder/php/connector.minimal.php',
+                url : '".Site::$url."/index.php?ajax=elfinder&token=".TOKEN."',
                 lang : 'en',
                 width : 840,
                 height: 450,
                 destroyOnClose : true,
                 getFileCallback : function(files, fm) {
                     console.log(files);
-                    var file = '".Site::$url."/assets/images/'+files.path;
-                    $('.editor').summernote('editor.insertImage',file);
+                    $('.editor').summernote('editor.insertImage',files.url);
                 },
                 commandsOptions : {
                     getfile : {

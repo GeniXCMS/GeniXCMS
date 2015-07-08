@@ -64,15 +64,15 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=users" 
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'users')?"class=\"active\"":"";?>>
-                                    <i class="fa fa-users"></i> <?=USERS;?>
+                                <a href="index.php?page=media" 
+                                <?=(isset($_GET['page']) && $_GET['page'] == 'media')?"class=\"active\"":"";?>>
+                                    <i class="fa fa-list-alt"></i> Media
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=media" 
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'media')?"class=\"active\"":"";?>>
-                                    <i class="fa fa-file-archive-o"></i> Media
+                                <a href="index.php?page=users" 
+                                <?=(isset($_GET['page']) && $_GET['page'] == 'users')?"class=\"active\"":"";?>>
+                                    <i class="fa fa-users"></i> <?=USERS;?>
                                 </a>
                             </li>
                             <li>

@@ -81,12 +81,17 @@ class Theme
         
     }
 
-    public static function editor(){
+    public static function editor($mode = 'light'){
         $editor = Options::get('use_editor');
         if($editor == 'on'){
             $GLOBALS['editor'] = true;
         }else{
             $GLOBALS['editor'] = false;
+        }
+        if ($mode == 'light') {
+            $GLOBALS['editor_mode'] = 'light';
+        }else{
+            $GLOBALS['editor_mode'] = 'full';
         }
         
         //return $editor;

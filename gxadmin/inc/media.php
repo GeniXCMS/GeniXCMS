@@ -47,7 +47,7 @@ if (isset($data['alertred'])) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-file-archive-o"></i>  Media 
+        <h1><i class="fa fa-list-alt"></i>  Media 
             
         </h1>
         <hr />

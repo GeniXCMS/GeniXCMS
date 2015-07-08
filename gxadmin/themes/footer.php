@@ -15,7 +15,7 @@
     </footer>
     
     <?php
-      Theme::editor();
+      
       Site::footer();
       echo Hooks::run('admin_footer_action', $data);
     ?>

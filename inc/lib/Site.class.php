@@ -123,87 +123,91 @@ class Site
         if($bs == 'on'){
             $foot .= "
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            \t<script src=\"".self::$url."/assets/js/bootstrap.min.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
+            <script src=\"".self::$url."/assets/js/bootstrap.min.js\"></script>
+            <script src=\"".self::$url."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
         }
 
         $fa = Options::get('use_fontawesome');
         if($fa == 'on'){
             $foot .= "
-            \t<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
+            <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
         }
 
         if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
             Hooks::attach('footer_load_lib', array('Files','elfinderLib'));
+            if ($GLOBALS['editor_mode'] == 'light') {
+                $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['view', ['fullscreen']]";
+            }elseif ($GLOBALS['editor_mode'] == 'full') {
+                $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['genixcms', ['elfinder']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]";
+            }
+
             $foot .= "
-            \t<!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js)-->
-            \t<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css\" />
-            \t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/blackboard.min.css\">
-            \t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.min.css\">
-            \t<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js\"></script>
-            \t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js\"></script>
-            \t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js\"></script>
 
-            \t<link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
-            \t<script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
-            \t<script src=\"".self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
-            \t<script>
-              \t$(document).ready(function() {
-                \t$('.editor').summernote({
-                    \theight: 300,
-                    \ttoolbar: [
-                            \t['style', ['style']],
-                            \t['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                            \t['fontname', ['fontname']],
-                            \t['fontsize', ['fontsize']],
-                            \t['color', ['color']],
-                            \t['para', ['ul', 'ol', 'paragraph']],
-                            \t['height', ['height']],
-                            \t['table', ['table']],
-                            \t['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
-                            \t['genixcms', ['elfinder']],
-                            \t['view', ['fullscreen', 'codeview']],
-                            \t['help', ['help']]
-                        \t],
-                    \tonImageUpload: function(files, editor, welEditable) {
-                            \tsendFile(files[0],editor,welEditable);
-                        \t}
-                \t});
+    <link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
+    <script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
+    <script src=\"".self::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
+    <script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
+    <script src=\"".self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
+    <script>
+      $(document).ready(function() {
+        $('.editor').summernote({
+            height: 300,
+            toolbar: [
+                    ".$toolbar."
+                ],
+            onImageUpload: function(files, editor, welEditable) {
+                    sendFile(files[0],editor,welEditable);
+                }
+        });
 
-                \tfunction sendFile(file,editor,welEditable) {
-                  \tdata = new FormData();
-                  \tdata.append(\"file\", file);
-                    \t$.ajax({
-                        \turl: \"saveimage.php\",
-                        \tdata: data,
-                        \tcache: false,
-                        \tcontentType: false,
-                        \tprocessData: false,
-                        \ttype: 'POST',
-                        \tsuccess: function(data){
-                        \talert(data);
-                          \t$('.editor').summernote('editor.insertImage', data);
-                        \t},
-                       \terror: function(jqXHR, textStatus, errorThrown) {
-                         \tconsole.log(textStatus+\" \"+errorThrown);
-                       \t}
-                    \t});
-                  \t}
+        function sendFile(file,editor,welEditable) {
+          data = new FormData();
+          data.append(\"file\", file);
+            $.ajax({
+                url: \"".Site::$url."/index.php?ajax=saveimage&token=".TOKEN."\",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(data){
+                //alert(data);
+                  $('.editor').summernote('editor.insertImage', data);
+                },
+               error: function(jqXHR, textStatus, errorThrown) {
+                 console.log(textStatus+\" \"+errorThrown);
+               }
+            });
+          }
 
-                \t $(\".alert\").alert();
-              \t});
+         $(\".alert\").alert();
+      });
 
 
-            \t</script>
+    </script>
               ";
         }
 
         if(isset($GLOBALS['validator']) && $GLOBALS['validator'] == true){
             $foot .= "
-            \t<link href=\"".self::$url."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
-            \t<script src=\"".self::$url."/assets/js/bootstrapValidator.min.js\"></script>
+            <link href=\"".self::$url."/assets/css/bootstrapValidator.min.css\" rel=\"stylesheet\">
+            <script src=\"".self::$url."/assets/js/bootstrapValidator.min.js\"></script>
             ";
 
             $foot .= $GLOBALS['validator_js'];

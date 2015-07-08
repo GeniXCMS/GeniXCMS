@@ -28,4 +28,8 @@ class Vendor
     public static function url() {
         return Site::$url.'/inc/lib/Vendor';
     }
+
+    public static function path($var) {
+        return GX_LIB.'Vendor/'.$var."/";
+    }
 }

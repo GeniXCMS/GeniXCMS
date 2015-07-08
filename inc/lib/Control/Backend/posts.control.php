@@ -16,7 +16,7 @@
 */
 
 $data['sitetitle'] = POSTS;
-Theme::editor();
+Theme::editor('full');
 if(isset($_GET['act'])) $act = $_GET['act']; else $act = "";
 switch ($act) {
     case 'add':
