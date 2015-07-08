@@ -30,7 +30,7 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
 	// set path for specific access
 	// admin
 	if(User::access(0)){
-		$path = '/';
+		$path = '/assets/';
 		$allowed = array('image', 'audio', 'video', 'text/plain', 'text/php', 
 			'text/javascript', 'text/css', 'text/html');
 	}elseif(User::access(2)){
