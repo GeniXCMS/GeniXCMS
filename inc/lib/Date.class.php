@@ -71,7 +71,7 @@ class Date
         return $cities;
     }
 
-    public static function optTimeZone($val) {
+    public static function optTimeZone($val='') {
         $tz = self::TimeZone();
         $opt = "";
         foreach($tz as $t => $z){
