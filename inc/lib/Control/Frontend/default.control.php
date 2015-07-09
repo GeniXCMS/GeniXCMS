@@ -47,7 +47,8 @@ if(Options::get('multilang_enable') === 'on') {
     
     if (isset($_GET['lang'])) {
         foreach ($data['posts'] as $p) {
-            if (Posts::existParam('multilang', $p->id)) {
+            if (Posts::existParam('multilang', $p->id)
+                && Options::get('multilang_default') !== $_GET['lang']) {
                 # code...
                 $multilang = json_decode(Posts::getParam('multilang', $p->id),true);
                 foreach ($multilang as $key => $value) {
@@ -56,10 +57,13 @@ if(Options::get('multilang_enable') === 'on') {
                     // print_r($keys);
                     if ($keys[0] == $_GET['lang']) {
                         $lang = $multilang[$key][$_GET['lang']];
+                        $posts = get_object_vars($p);
+                        $posts = array_replace($posts, $lang);
+                    }else{
+                        $posts = $p;
                     }
                 }
-                $posts = get_object_vars($p);
-                $posts = array_replace($posts, $lang);
+                
                 
             }else{
                 $posts = $p;

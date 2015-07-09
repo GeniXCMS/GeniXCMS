@@ -39,10 +39,12 @@ if(Options::get('multilang_enable') === 'on') {
                     // print_r($keys);
                     if ($keys[0] == $_GET['lang']) {
                         $lang = $multilang[$key][$_GET['lang']];
+                        $posts = get_object_vars($p);
+                        $posts = array_replace($posts, $lang);
+                    }else{
+                        $posts = $p;
                     }
                 }
-                $posts = get_object_vars($p);
-                $posts = array_replace($posts, $lang);
                 
             }else{
                 $posts = $p;
