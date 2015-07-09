@@ -75,7 +75,7 @@ switch ($act) {
                     $post_id = Posts::$last_id;
                     if(Options::get('multilang_enable') === 'on') {
                         // insert param multilang
-                        // unset($_POST['title'][$def]);
+                        unset($_POST['title'][$def]);
                         foreach ($_POST['title'] as $key => $value) {
                             $multilang[] = array(
                                                 $key => array(

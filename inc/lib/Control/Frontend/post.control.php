@@ -29,7 +29,8 @@ $num_rows = Db::$num_rows;
 if(Options::get('multilang_enable') === 'on') {
     if (isset($_GET['lang'])) {
         foreach ($data['posts'] as $p) {
-            if (Posts::existParam('multilang', $p->id)) {
+            if (Posts::existParam('multilang', $p->id) 
+                && Options::get('multilang_default') !== $_GET['lang']) {
                 # code...
                 $multilang = json_decode(Posts::getParam('multilang', $p->id),true);
                 foreach ($multilang as $key => $value) {
