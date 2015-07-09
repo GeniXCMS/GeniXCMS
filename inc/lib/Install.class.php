@@ -309,7 +309,11 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'google_captcha_sitekey', ''),
             (null, 'google_captcha_secret', ''),
             (null, 'google_captcha_lang', 'en'),
-            (null, 'google_captcha_enable', 'off')";
+            (null, 'google_captcha_enable', 'off'),
+            (null, 'multilang_enable', 'off'),
+            (null, 'multilang_default', ''),
+            (null, 'multilang_country', 'off')
+            ";
         $db->query($options);
     }
 }
