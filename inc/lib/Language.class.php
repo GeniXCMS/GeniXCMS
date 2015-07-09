@@ -52,6 +52,13 @@ class Language
         }
         return $opt;
     }
+
+    public static function getDefaultLang() {
+        $def = Options::get('multilang_default');
+        $lang = json_decode(Options::get('multilang_country'), true);
+        $deflang = $lang[$def];
+        return $deflang;
+    }
 }
 /* End of file Language.class.php */
 /* Location: ./inc/lib/Language.class.php */

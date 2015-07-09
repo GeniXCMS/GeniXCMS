@@ -45,6 +45,44 @@ $data['posts'] = Db::result(
                     )
                 );
 $data['num'] = Db::$num_rows;
+
+if(Options::get('multilang_enable') === 'on') {
+    if (isset($_GET['lang'])) {
+        foreach ($data['posts'] as $p) {
+            if (Posts::existParam('multilang', $p->id)) {
+                # code...
+                $multilang = json_decode(Posts::getParam('multilang', $p->id),true);
+                foreach ($multilang as $key => $value) {
+                    // print_r($value);
+                    $keys = array_keys($value);
+                    // print_r($keys);
+                    if ($keys[0] == $_GET['lang']) {
+                        $lang = $multilang[$key][$_GET['lang']];
+                    }
+                }
+
+                
+                // print_r($data['posts']);
+                $posts = get_object_vars($p);
+                $posts = array_replace($posts, $lang);
+                
+            }else{
+                $posts = $p;
+            }
+            $posts_arr = array();
+            $posts_arr = json_decode(json_encode($posts), FALSE);
+            // $posts[] = $posts;
+            $post_arr[] = $posts_arr;
+            $data['posts'] = $post_arr;
+        }
+    }else{
+        $data['posts'] = $data['posts'];
+    }
+
+}else{
+    $data['posts'] = $data['posts'];
+}
+// print_r($data['posts']);
 $url = Url::cat($_GET['cat']);
 $paging = array(
                 'paging' => $paging,

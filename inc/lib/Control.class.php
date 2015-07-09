@@ -103,7 +103,8 @@ class Control
                     //echo $k;
                 if (in_array($k,$arr )
                     || $k == 'paging'
-                    || $k == 'error' ) {
+                    || $k == 'error'
+                    || $k == 'lang' ) {
                     $get = $get+1;
                 }else{
                     $get = $get;
@@ -122,7 +123,7 @@ class Control
                         }
                     }elseif($k == "error"){
                         self::error($v);
-                    }elseif(!in_array($k, $arr) && $k != 'paging'){
+                    }elseif(!in_array($k, $arr) && $k != 'paging' && $k != 'lang'){
                         //self::error('404');
                     }else{
                         self::incFront('default');

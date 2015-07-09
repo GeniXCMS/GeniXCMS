@@ -15,7 +15,7 @@
 *
 */
 
-$post = $_GET[$vars];
+$post = Typo::int($_GET['post']);
 $data['posts'] = Db::result(
                     sprintf("SELECT * FROM `posts` 
                             WHERE `id` = '%d' 
@@ -25,8 +25,43 @@ $data['posts'] = Db::result(
                             $post
                             )
                 );
+$num_rows = Db::$num_rows;
+if(Options::get('multilang_enable') === 'on') {
+    if (isset($_GET['lang'])) {
+        foreach ($data['posts'] as $p) {
+            if (Posts::existParam('multilang', $p->id)) {
+                # code...
+                $multilang = json_decode(Posts::getParam('multilang', $p->id),true);
+                foreach ($multilang as $key => $value) {
+                    // print_r($value);
+                    $keys = array_keys($value);
+                    // print_r($keys);
+                    if ($keys[0] == $_GET['lang']) {
+                        $lang = $multilang[$key][$_GET['lang']];
+                    }
+                }
+                $posts = get_object_vars($p);
+                $posts = array_replace($posts, $lang);
+                
+            }else{
+                $posts = $p;
+            }
+            $posts_arr = array();
+            $posts_arr = json_decode(json_encode($posts), FALSE);
+            // $posts[] = $posts;
+            $post_arr[] = $posts_arr;
+            $data['posts'] = $post_arr;
+        }
+    }else{
+        $data['posts'] = $data['posts'];
+    }
 
-if(Db::$num_rows > 0) {
+}else{
+    $data['posts'] = $data['posts'];
+}
+
+// print_r($data['posts']);
+if($num_rows > 0) {
     Theme::theme('header',$data);
     Theme::theme('single', $data);
     Theme::footer();

@@ -254,6 +254,23 @@ class Posts
         return $drop;
     }
 
+    public static function addParam($param, $value, $post_id) {
+        $sql = array(
+                'table' => 'posts_param',
+                'key' => array(
+                        'post_id' => $post_id,
+                        'param' => $param,
+                        'value' => $value
+                    )
+            );
+        $q = Db::insert($sql);
+        if ($q) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public static function getParam($param, $post_id) {
         $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::result($sql);

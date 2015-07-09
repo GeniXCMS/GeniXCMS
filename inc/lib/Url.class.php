@@ -46,8 +46,12 @@ class Url
                 break;
             
             default:
-                # code...
-                $url = Site::$url."/index.php?post={$vars}";
+                if (isset($_GET['lang'])) {
+                    $lang = Typo::cleanX($_GET['lang']);
+                    $url = Site::$url."/index.php?post={$vars}&lang={$lang}";
+                }else{
+                    $url = Site::$url."/index.php?post={$vars}";
+                }
                 break;
 
         }
@@ -71,8 +75,12 @@ class Url
                 break;
             
             default:
-                # code...
-                $url = Site::$url."/index.php?page={$vars}";
+                if (isset($_GET['lang'])) {
+                    $lang = Typo::cleanX($_GET['lang']);
+                    $url = Site::$url."/index.php?page={$vars}&lang={$lang}";
+                }else{
+                    $url = Site::$url."/index.php?page={$vars}";
+                }
                 break;
 
         }
@@ -97,8 +105,12 @@ class Url
                 break;
             
             default:
-                # code...
-                $url = Site::$url."/index.php?cat={$vars}";
+                if (isset($_GET['lang'])) {
+                    $lang = Typo::cleanX($_GET['lang']);
+                    $url = Site::$url."/index.php?cat={$vars}&lang={$lang}";
+                }else{
+                    $url = Site::$url."/index.php?cat={$vars}";
+                }
                 break;
 
         }

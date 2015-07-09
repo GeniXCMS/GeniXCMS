@@ -81,7 +81,19 @@ class Date
         return $opt;
     }
 
-    public static function optCountry($val) {
+    public static function optCountry($val='') {
+        $countries = self::countryList();
+        $opt = "";
+        foreach($countries as $key => $value) {
+            ($key == $val)? $sel = "SELECTED": $sel = "";
+            $opt .= "<option value=\"{$key}\" title=\"".htmlspecialchars($value)."\" {$sel}>".htmlspecialchars($value)."</option>";
+
+        }
+        return $opt;
+
+    }
+
+    public static function countryList() {
         $countries = array("AF" => "Afghanistan",
                         "AX" => "Åland Islands",
                         "AL" => "Albania",
@@ -326,13 +338,6 @@ class Date
                         "YE" => "Yemen",
                         "ZM" => "Zambia",
                         "ZW" => "Zimbabwe");
-        $opt = "";
-        foreach($countries as $key => $value) {
-            ($key == $val)? $sel = "SELECTED": $sel = "";
-            $opt .= "<option value=\"{$key}\" title=\"".htmlspecialchars($value)."\" {$sel}>".htmlspecialchars($value)."</option>";
-
-        }
-        return $opt;
-
+        return $countries;
     }
 }

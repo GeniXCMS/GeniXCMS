@@ -45,6 +45,7 @@
     <link href="<?=Site::$url;?>/assets/css/sb-admin-2.css" rel="stylesheet">
 
     <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/flag-icon.min.css" rel="stylesheet">
   </body>
 </html>
 
