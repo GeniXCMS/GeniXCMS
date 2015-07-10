@@ -31,8 +31,22 @@ switch ($act) {
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
                 //clean up first
-                $title = Typo::cleanX($_POST['title']);
-                $content = Typo::cleanX($_POST['content']);
+                if(Options::get('multilang_enable') === 'on') {
+                    $def = Options::get('multilang_default');
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title'][$def]);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content'][$def]);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }else{
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title']);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content']);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }
                 if (!isset($_POST['title']) || $_POST['title'] == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
                 }
@@ -55,7 +69,24 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::insert($vars);
-                    $data['alertgreen'][] = PAGE." {$_POST['title']} ".MSG_PAGE_ADDED;
+                    $post_id = Posts::$last_id;
+                    if(Options::get('multilang_enable') === 'on') {
+                        // insert param multilang
+                        unset($_POST['title'][$def]);
+                        foreach ($_POST['title'] as $key => $value) {
+                            $multilang[] = array(
+                                                $key => array(
+                                                        'title' => $_POST['title'][$key],
+                                                        'content' => $_POST['content'][$key]
+                                                    )
+                                            );
+                        }
+                        $multilang = json_encode($multilang);
+                        Posts::addParam('multilang', $multilang, $post_id);
+                        print_r($multilang);
+                    }
+                    $data['alertgreen'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
+                    Hooks::run('post_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
                 }
 
@@ -81,9 +112,22 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
-                //clean up first
-                $title = Typo::cleanX($_POST['title']);
-                $content = Typo::cleanX($_POST['content']);
+                if(Options::get('multilang_enable') === 'on') {
+                    $def = Options::get('multilang_default');
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title'][$def]);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content'][$def]);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }else{
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title']);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content']);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }
                 if (!isset($_POST['title']) || $_POST['title'] == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
                 }
@@ -106,7 +150,27 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::update($vars);
-                    $data['alertgreen'][] = PAGE."  {$_POST['title']} ".MSG_PAGE_UPDATED;
+                    if(Options::get('multilang_enable') === 'on') {
+                        // insert param multilang
+                        unset($_POST['title'][$def]);
+                        foreach ($_POST['title'] as $key => $value) {
+                            $multilang[] = array(
+                                                $key => array(
+                                                        'title' => $_POST['title'][$key],
+                                                        'content' => $_POST['content'][$key]
+                                                    )
+                                            );
+                        }
+                        $multilang = json_encode($multilang);
+                        if (Posts::existParam('multilang', $_GET['id'])) {
+                            Posts::editParam('multilang', $multilang, $_GET['id']);
+                        }else{
+                            Posts::addParam('multilang', $multilang, $_GET['id']);
+                        }
+                        
+                        print_r($multilang);
+                    }
+                    $data['alertgreen'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
                     Token::remove($_POST['token']);
                 }
 

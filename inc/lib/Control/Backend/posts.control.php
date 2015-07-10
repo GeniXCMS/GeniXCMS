@@ -86,7 +86,7 @@ switch ($act) {
                         }
                         $multilang = json_encode($multilang);
                         Posts::addParam('multilang', $multilang, $post_id);
-                        print_r($multilang);
+                        // print_r($multilang);
                     }
                     $data['alertgreen'][] = POST." {$title} ".MSG_POST_ADDED;
                     Hooks::run('post_submit_add_action', $_POST);
@@ -116,9 +116,22 @@ switch ($act) {
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
 
-                //clean up first
-                $title = Typo::cleanX($_POST['title']);
-                $content = Typo::cleanX($_POST['content']);
+                if(Options::get('multilang_enable') === 'on') {
+                    $def = Options::get('multilang_default');
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title'][$def]);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content'][$def]);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }else{
+                    //cleanup first
+                    $title = Typo::cleanX($_POST['title']);
+                    $title = Hooks::filter('post_submit_title_filter', $title);
+
+                    $content = Typo::cleanX($_POST['content']);
+                    $content = Hooks::filter('post_submit_content_filter', $content);
+                }
 
                 if (!isset($title) || $title == "") {
                     $alertred[] = TITLE_CANNOT_EMPTY;
@@ -137,7 +150,22 @@ switch ($act) {
                                     'status' => Typo::int($_POST['status'])
                                 );
                     Posts::update($vars);
-                    $data['alertgreen'][] = POST." {$_POST['title']} ".MSG_POST_UPDATED;
+                    if(Options::get('multilang_enable') === 'on') {
+                        // insert param multilang
+                        unset($_POST['title'][$def]);
+                        foreach ($_POST['title'] as $key => $value) {
+                            $multilang[] = array(
+                                                $key => array(
+                                                        'title' => $_POST['title'][$key],
+                                                        'content' => $_POST['content'][$key]
+                                                    )
+                                            );
+                        }
+                        $multilang = json_encode($multilang);
+                        Posts::editParam('multilang', $multilang, $_GET['id']);
+                        // print_r($multilang);
+                    }
+                    $data['alertgreen'][] = POST." {$title} ".MSG_POST_UPDATED;
                     Hooks::run('post_submit_edit_action', $_POST);
                     Token::remove($_POST['token']);
                 }

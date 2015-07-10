@@ -271,6 +271,16 @@ class Posts
         }
     }
 
+    public static function editParam($param, $value, $post_id) {
+        $sql = "UPDATE `posts_param` SET `value` = '{$value}' WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' ";
+        $q = Db::query($sql);
+        if ($q) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public static function getParam($param, $post_id) {
         $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::result($sql);
