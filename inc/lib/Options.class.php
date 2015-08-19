@@ -23,17 +23,21 @@ class Options
     }
 
     // $vars = array(
-    //             'name' => '',
-    //             'value' => ''
+    //             'name' => 'value',
     //         );
     public static function insert($vars) {
         if(is_array($vars)) {
-            $ins = array(
+            foreach ($vars as $name => $value) {
+                $ins = array(
                         'table' => 'options',
-                        'name' => $vars['name'],
-                        'value' => $vars['value']
+                        'key' => array(
+                            'name' => $name,
+                            'value' => $value
+                            )
                     );
-            $opt = Db::insert($ins);
+                $opt = Db::insert($ins);
+            }
+            
         }else{
             Control::error('unknown','Format not Found, please in array');
         }

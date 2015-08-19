@@ -15,13 +15,25 @@
 *
 */
 
-
+//print_r($param);
 $post="";
-$cat = Db::escape(Typo::Xclean($_GET['cat']));
 
+$data = Router::scrap($param);
+//$cat = Db::escape(Typo::Xclean($_GET['cat']));
+$cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
 $data['max'] = Options::get('post_perpage');
-if(isset($_GET['paging'])){
-    $paging = Typo::int($_GET['paging']);
+if (SMART_URL) {
+    if ( isset($data['paging']) ) {
+        $paging = $data['paging'];
+    }
+}else{
+    if (isset($_GET['paging'])) {
+        $paging = Typo::int($_GET['paging']);
+    }
+}
+
+//$paging = (SMART_URL) ? $data['paging'] : Typo::int(is_int($_GET['paging']));
+if(isset($paging)){
     if($paging > 0) {
         $offset = ($paging-1)*$data['max'];
     }else{
@@ -45,7 +57,7 @@ $data['posts'] = Db::result(
                     )
                 );
 $data['num'] = Db::$num_rows;
-$url = Url::cat($_GET['cat']);
+$url = Url::cat($cat);
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',

@@ -43,6 +43,7 @@ class System
         new Hooks();
         self::lang(Options::get('system_lang'));
         new Site();
+        new Router();
         Vendor::autoload();
         Token::create();
         Mod::loader();

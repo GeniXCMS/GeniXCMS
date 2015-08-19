@@ -93,7 +93,7 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Site::$url."/".$vars."/".Typo::slugify(Categories::name($vars));
+                $url = Site::$url."/category/".$vars."/".Typo::slugify(Categories::name($vars));
                 break;
             
             default:

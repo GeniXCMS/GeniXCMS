@@ -14,11 +14,20 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
+//print_r($param);
+$data = Router::scrap($param);
 $post="";
 $data['max'] = Options::get('post_perpage');
-if(isset($_GET['paging'])){
-    $paging = Typo::int($_GET['paging']);
+if (SMART_URL) {
+    if ( isset($data['paging']) ) {
+        $paging = $data['paging'];
+    }
+}else{
+    if (isset($_GET['paging'])) {
+        $paging = Typo::int($_GET['paging']);
+    }
+}
+if(isset($paging)) {
     if($paging > 0) {
         $offset = ($paging-1)*$data['max'];
     }else{

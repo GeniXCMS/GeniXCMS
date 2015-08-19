@@ -1,6 +1,6 @@
 Options +SymLinksIfOwnerMatch
 RewriteEngine On
-#RewriteBase /
+RewriteBase /
 
 #------------------------------------------------------------------------------//
 ### Don't Touch this unless You know what you are doing ########################
@@ -11,34 +11,11 @@ RewriteEngine On
 #
 ###############################################################################//
 
-RewriteRule ^paging/([0-9]+)$                   index.php?paging=$1 [L]
-RewriteRule ^([0-9]+)/(.+)/paging/([0-9]+)$     index.php?cat=$1&paging=$3 [L]
-RewriteRule ^([0-9]+)/(.+)$                     index.php?cat=$1 [L]
-RewriteRule ^rss$                               index.php?rss [L]
-RewriteRule ^item/(.+)/([0-9])$                 index.php?item=$2 [L]
-RewriteRule ^account.html$                      index.php?account [L]
-RewriteRule ^purchase.html$                     index.php?purchase [L]
-RewriteRule ^items.html$                        index.php?items [L]
-RewriteRule ^profile.html$                      index.php?profile [L]
-RewriteRule ^profile/(.*)$                      index.php?profile=$1 [L]
-RewriteRule ^earnings.html$                     index.php?earnings [L]
-RewriteRule ^revision/([0-9])$                  index.php?revision=$1 [L]
-RewriteRule ^additem.html$                      index.php?additem [L]
-RewriteRule ^edititem/([0-9])$                  index.php?edititem=$1 [L]
-RewriteRule ^sitemap/(.*)$                      index.php?sitemap=$1 [L]
-RewriteRule ^sitemap$                           index.php?page=sitemap [L]
-RewriteRule ^comments/(.+)/([0-9])$             index.php?comments=$2 [L]
-RewriteRule ^withdraw.html$                     index.php?withdraw [L]
-RewriteRule ^author.html$                       index.php?author [L]
-RewriteRule ^([0-9]+)/(.+)/paging/([0-9]+)$     index.php?cat=$1&paging=$3 [L]
-RewriteRule ^([0-9]+)/(.+)$                     index.php?cat=$1 [L]
-RewriteRule ^error/$                         	index.php?error [L]
-RewriteRule ^error/400$                         index.php?error=400 [L]
-RewriteRule ^error/403$                         index.php?error=403 [L]
-RewriteRule ^error/404$                         index.php?error=404 [L]
-RewriteRule ^error/500$                         index.php?error=500 [L]
-RewriteRule ^(.*)\.html$                       	index.php?page=$1 [L]
-RewriteRule ^(.+)/([0-9]+)$                     index.php?post=$2 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.+)$ index.php [QSA,L]
+
 
 ErrorDocument 400     /error/400
 ErrorDocument 403     /error/403

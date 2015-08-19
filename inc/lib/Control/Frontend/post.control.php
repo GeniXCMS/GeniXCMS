@@ -15,7 +15,23 @@
 *
 */
 
-$post = $_GET[$vars];
+$data = Router::scrap($param);
+if (SMART_URL == true) {
+    if ( isset($data['post']) ) {
+        
+        $post = $data['post'];
+        
+    }elseif (isset($_GET['post'])){
+        
+        $post = Typo::int($_GET['post']);
+        
+    }
+}elseif (isset($_GET['post'])){
+    
+    $post = Typo::int($_GET['post']);
+    
+}
+
 $data['posts'] = Db::result(
                     sprintf("SELECT * FROM `posts` 
                             WHERE `id` = '%d' 
