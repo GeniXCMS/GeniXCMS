@@ -61,8 +61,8 @@ class Language
     }
 
     public static function getLangParam($lang, $post_id) {
-        if (Posts::existParam('multilang', $post_id)) {
-            $multilang = json_decode(Posts::getParam('multilang', $post_id),true);
+        if (Posts::existParam('multilang',$post_id)) {
+            $multilang = json_decode(Posts::getParam('multilang', $post_id), true);;
             foreach ($multilang as $key => $value) {
                 // print_r($value);
                 $keys = array_keys($value);
@@ -73,8 +73,6 @@ class Language
                 }
             }
         }
-        
-        
     }
 }
 /* End of file Language.class.php */

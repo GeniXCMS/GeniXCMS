@@ -30,6 +30,7 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+Session::start();
 
 if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
@@ -56,7 +57,7 @@ if (isset($_POST['004-patch'])) {
     $sql = "ALTER TABLE `posts` CHANGE `cat` `cat` VARCHAR(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
     $q = Db::query($sql);
 
-    $sql = "ALTER TABLE `posts` ADD `views` int(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'";
+    $sql = "ALTER TABLE `posts` ADD `views` int(11) NOT NULL DEFAULT '0'";
     $q = Db::query($sql);
 
     $sql = "ALTER TABLE `user_detail` CHANGE `fname` `fname` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
@@ -73,7 +74,7 @@ if (isset($_POST['004-patch'])) {
         $alertred[] = 'Upgrade Failed';
     }
 }elseif(isset($_POST['005'])){
-    $sql = "ALTER TABLE `posts` ADD `views` int(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'";
+    $sql = "ALTER TABLE `posts` ADD `views` int(11) NOT NULL DEFAULT '0'";
     $q = Db::query($sql);
     if ($q) {
         $alertgreen = 'Upgrade Success!';

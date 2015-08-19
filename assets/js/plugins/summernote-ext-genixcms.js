@@ -20,7 +20,14 @@
           title: 'Read more',
           hide: false
         });
-      }
+      },
+      elfinder: function () {
+        return tmpl.iconButton('fa fa-list-alt', {
+          event: 'elfinder',
+          title: 'File Manager',
+          hide: false
+        });
+      },
     },
 
     events: { // events
@@ -28,7 +35,11 @@
         // var $editable = layoutInfo.editable();
         // editor.insertText($editable, '<!--readmore-->');
         layoutInfo.holder().summernote("insertText", "[[--readmore--]]");
-      }
+      },
+      elfinder: function (event, editor, layoutInfo) {
+        elfinderDialog();
+      },
+
     }
   });
 }));
