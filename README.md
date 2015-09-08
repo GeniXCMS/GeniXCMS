@@ -51,7 +51,7 @@ We are now ready for composer installation. Run this command at your server.
 
 `php composer.phar create-project genix/cms`
 
-more detail about composer, please read the documentationa t http://getcomposer.org
+more detail about composer, please read the documentation at http://getcomposer.org
 
 more details of installation : 
 http://docs.genixcms.org/en/latest/user-guide/installation/
