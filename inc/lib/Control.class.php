@@ -8,6 +8,7 @@
 * @since 0.0.1 build date 20141006
 * @version 0.0.6
 * @link https://github.com/semplon/GeniXCMS
+*  @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2015 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -53,7 +54,7 @@ class Control
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
-    public static function incFront($vars) {
+    public static function incFront($vars, $param='') {
         $file = GX_PATH.'/inc/lib/Control/Frontend/'.$vars.'.control.php';
         if ( file_exists($file) ) {
             # code...
@@ -90,56 +91,130 @@ class Control
     *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
+    * 
+    * Add New SMART URL handler for better and simple router.  
+    * @since 0.0.7
     */
     public static function frontend() {
+        
+        $arr = array ('ajax', 'post' ,'page', 'cat', 'mod', 'sitemap', 'rss', 'pay',
+            'paidorder', 'cancelorder');
+        
+        if (SMART_URL) {
+            if ( isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0 ) {
 
-        if($_GET){
-            //print_r($_GET);
-            $arr = array ('ajax', 'post','page', 'cat', 'mod', 'sitemap', 'rss','pay',
-            'paidorder','cancelorder');
-            $get =0;
-            foreach ($_GET as $k => $v) {
-                    # code...
-                    //echo $k;
-                if (in_array($k,$arr )
-                    || $k == 'paging'
-                    || $k == 'error'
-                    || $k == 'lang' ) {
-                    $get = $get+1;
-                }else{
-                    $get = $get;
-                }
+                (SMART_URL && isset($_GET))? self::route($arr): self::get($arr);
+                
+            } else {
 
-
+                self::route($arr);
+                
             }
-            //echo $get;
-            if ($get>0) {
-                foreach ($_GET as $k => $v) {
-                    if(in_array($k, $arr)){
-                        if ($k == 'ajax') {
-                            self::ajax($v);
-                        }else{
-                            self::incFront($k);
-                        }
-                    }elseif($k == "error"){
-                        self::error($v);
-                    }elseif(!in_array($k, $arr) && $k != 'paging' && $k != 'lang'){
-                        //self::error('404');
-                    }else{
-                        self::incFront('default');
-                    }
-                }
-            }else{
-                self::error('404');
-            }
+            
+    
+        } elseif ( !SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0  ){
 
+            self::get($arr);
 
-        }else{
+        } else {
+            
             self::incFront('default');
+            
         }
 
     }
+    
+    public static function get($arr) {
+        $get = 0;
+        foreach ($_GET as $k => $v) {
 
+            if (in_array($k,$arr )
+                || $k == 'paging'
+                || $k == 'error'
+                || $k == 'ajax') {
+                
+                $get = $get+1;
+                
+            }else{
+                
+                $get = $get;
+                
+            }
+
+        }
+//        echo $get;
+        if ($get>0) {
+            
+            foreach ($_GET as $k => $v) {
+                
+                if(in_array($k, $arr)){
+                    
+                    if ($k == 'ajax') {
+                        
+                        self::ajax($v);
+                        
+                    }else{
+                        
+                        self::incFront($k);
+                        
+                    }
+                    
+                }elseif($k == "error"){
+                    
+                    self::error($v);
+                    
+                }elseif(!in_array($k, $arr) && $k != 'paging'){
+                    //self::error('404');
+                }else{
+                    
+                    self::incFront('default');
+                    
+                }
+                
+            }
+            
+        }else{
+
+            self::error('404');
+            
+        }
+    }
+
+    public static function route($arr) {
+        $var = Router::run();
+
+        foreach ((array)$var[0] as $k => $v){
+
+            if ( $k == '0' && $v != 'error' && $v != 'ajax' ) {
+
+                self::incFront($v, $var);
+
+            } elseif ( !SMART_URL && isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0 ) {
+
+                self::get($arr);
+
+            }elseif ( $v == 'error' || $k == 'error' ) {
+
+                $error = ( $k == 'error') ? $v: '404'; 
+                self::error($error, $var);
+
+            } else {
+
+                if (in_array($k, $arr)) {
+
+                    self::incFront($k, $var);
+
+                } else {
+
+                    self::error('404');
+
+                }
+
+            }
+
+        }
+    }
+    
     /**
     * Control Backend Handler Function.
     * This will handle the controller which file will be included at the Backend
@@ -149,8 +224,7 @@ class Control
     * @since 0.0.1
     */
     public static function backend($vars="") {
-        //if(isset($_GET['post'])) {
-        //echo "frontend";
+
         if(!empty($_GET['page'])) {
             self::incBack($_GET['page']);
         }else{
@@ -170,12 +244,18 @@ class Control
     */
     public static function error ($vars="", $val='') {
         if( isset($vars) && $vars != "" ) {
+            
             $file = GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php';
             if (file_exists($file)) {
+                
                 include($file);
+                
             }
+            
         }else{
+            
             include(GX_PATH.'/inc/lib/Control/Error/unknown.control.php');
+            
         }
     }
 
@@ -187,20 +267,25 @@ class Control
     * @since 0.0.1
     */
     public static function install () {
+        
         include(GX_PATH.'/inc/lib/Control/Install/default.control.php');
+        
     }
 
 
     public static function ajax ($vars="", $val='') {
+        
         if( isset($vars) && $vars != "" ) {
+            
             $file = GX_PATH.'/inc/lib/Control/Ajax/'.$vars.'-ajax.control.php';
             if (file_exists($file)) {
+                
                 include($file);
+                
             }
             
-        }else{
-            include(GX_PATH.'/inc/lib/Control/Ajax/unknown.control.php');
         }
+        
     }
 
 }

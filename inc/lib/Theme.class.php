@@ -123,6 +123,22 @@ class Theme
         
     }
 
+    public static function incFunc($var) {
+        if (self::functionExist($var)) {
+            include(GX_THEME.$var.'/function.php');
+        }
+        
+    }
+
+    public static function functionExist($var) {
+        if (file_exists(GX_THEME.$var.'/function.php')) {
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+
     public static function thmList(){
         //$mod = '';
         $handle = dir(GX_THEME);
@@ -183,6 +199,7 @@ class Theme
     public static function loader(){
         $theme = Options::get('themes');
         define('THEME', $theme);
+        self::incFunc($theme);
     }
 
     public static function thmMenu(){

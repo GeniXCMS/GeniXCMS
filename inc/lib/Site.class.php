@@ -161,6 +161,7 @@ class Site
 
     <link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
     <script src=\"".self::$url."/assets/js/summernote.min.js\"></script>
+    <script src=\"".self::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
     <script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
     <script src=\"".self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
     <script>

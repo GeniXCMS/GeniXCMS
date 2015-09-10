@@ -17,7 +17,10 @@
 
 
 $post="";
-$cat = Db::escape(Typo::Xclean($_GET['cat']));
+$data = Router::scrap($param);
+//$cat = Db::escape(Typo::Xclean($_GET['cat']));
+$cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
+
 
 $data['max'] = Options::get('post_perpage');
 if(isset($_GET['paging'])){

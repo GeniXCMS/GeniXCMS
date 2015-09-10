@@ -15,6 +15,9 @@
 *
 */
 
+$data = Router::scrap($param);
+$page = (SMART_URL) ? $data['page'] : Typo::cleanX(Typo::strip($_GET['page']));
+
 switch ($_GET['page']) {
     case 'sitemap':
         # code...

@@ -46,12 +46,8 @@ class Url
                 break;
             
             default:
-                if (isset($_GET['lang'])) {
-                    $lang = Typo::cleanX($_GET['lang']);
-                    $url = Site::$url."/index.php?post={$vars}&lang={$lang}";
-                }else{
-                    $url = Site::$url."/index.php?post={$vars}";
-                }
+                # code...
+                $url = Site::$url."/index.php?post={$vars}";
                 break;
 
         }
@@ -75,12 +71,8 @@ class Url
                 break;
             
             default:
-                if (isset($_GET['lang'])) {
-                    $lang = Typo::cleanX($_GET['lang']);
-                    $url = Site::$url."/index.php?page={$vars}&lang={$lang}";
-                }else{
-                    $url = Site::$url."/index.php?page={$vars}";
-                }
+                # code...
+                $url = Site::$url."/index.php?page={$vars}";
                 break;
 
         }
@@ -101,16 +93,12 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Site::$url."/".$vars."/".Typo::slugify(Categories::name($vars));
+                $url = Site::$url."/category/".$vars."/".Typo::slugify(Categories::name($vars));
                 break;
             
             default:
-                if (isset($_GET['lang'])) {
-                    $lang = Typo::cleanX($_GET['lang']);
-                    $url = Site::$url."/index.php?cat={$vars}&lang={$lang}";
-                }else{
-                    $url = Site::$url."/index.php?cat={$vars}";
-                }
+                # code...
+                $url = Site::$url."/index.php?cat={$vars}";
                 break;
 
         }
