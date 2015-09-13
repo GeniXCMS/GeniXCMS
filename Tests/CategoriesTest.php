@@ -9,25 +9,23 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
                 'type' => 'post'
             )
         );
-        $expectedResult = true;
+
         $db = Db::insert($vars);
         if($db) {
             $result = true;
         }else{
             $result = false;
         }
-        $this->assertEquals($expectedResult, $result);
+        $this->assertTrue($result);
     }
     
     public function deleteCategoriesTest () {
-        
-        $expectedResult = true;
         $db = Categories::delete(1);
         if($db) {
             $result = true;
         }else{
             $result = false;
         }
-        $this->assertEquals($expectedResult, $result);
+        $this->assertTrue($result);
     }
 }
