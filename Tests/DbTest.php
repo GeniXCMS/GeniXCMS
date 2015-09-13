@@ -12,7 +12,7 @@ class DbTest extends PHPUnit_Framework_TestCase
         define('DB_USER', 'root');
         define('DB_PASS', '');
         define('DB_NAME', 'db_test');
-        //self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        self::$mysqli = Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
         //mysqli_select_db($link, 'db_test');
         Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
