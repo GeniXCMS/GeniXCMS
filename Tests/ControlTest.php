@@ -3,7 +3,7 @@
 class ControlTest extends \PHPUnit_Framework_TestCase 
 {
 
-    public function getControlTest () {
+    public function testGetControl () {
         $arr = array('ajax', 'post');
         if(Control::get($arr)){
             $result = true;

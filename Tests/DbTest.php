@@ -4,7 +4,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
 {
     static $mysqli = '';
 
-    public function setUp()
+    public function testSetUp()
     {
         //System::config('config');
         define('DB_DRIVER', 'mysqli');
@@ -134,12 +134,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
         //return self::$mysqli;
     }
 
-    public function tearDown()
+    public function testTearDown()
     {
         Db::query("DROP TABLE test_table");
     }
 
-    public function testquery () {
+    public function testQuery () {
         $expected = '';
         $result = Db::query('SELECT * FROM `test_table`');
         

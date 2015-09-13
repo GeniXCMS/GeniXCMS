@@ -2,7 +2,7 @@
 
 class CategoriesTest extends \PHPUnit_Framework_TestCase 
 {
-    public function addCategoriesTest () {
+    public function testAddCategories () {
         $vars = array(
             'table' => 'cat',
             'key' => array(
@@ -21,20 +21,20 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
     }
     
-    public function typeCategoriesTest () {
+    public function testTypeCategories () {
         $db = Categories::type(1);
         $expected = 'post';
         $this->assertEqual($expected, $db);
     }
     
-    public function nameCategoriesTest () {
+    public function testNameCategories () {
         $db = Categories::name(1);
         $expected = 'Categories';
         $this->assertEqual($expected, $db);
     }
     
     
-    public function deleteCategoriesTest () {
+    public function testDeleteCategories () {
         $db = Categories::delete(1);
         if($db) {
             $result = true;
