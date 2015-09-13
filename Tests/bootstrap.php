@@ -2,7 +2,7 @@
 
 define('GX_PATH', realpath(__DIR__ . '/../'));
 define('GX_LIB', GX_PATH.'/inc/lib/');
-
+define('DB_DRIVER', 'mysqli');
 function loadlib($f) {
     $file =  GX_LIB. $f . '.class.php';
     if (file_exists($file)) {
