@@ -30,7 +30,7 @@ class DbTest extends PHPUnit_Framework_TestCase
         $result = Db::query('SELECT * FROM `test_table`');
         foreach($result as $r) {
         
-            $this->assertEquals($expected, $result->what);
+            $this->assertEquals($expected, $r->what);
         }
     }
 
