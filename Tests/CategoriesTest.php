@@ -25,6 +25,12 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
         $this->assertEqual($expected, $db);
     }
     
+    public function nameCategoriesTest () {
+        $db = Categories::name(1);
+        $expected = 'Categories';
+        $this->assertEqual($expected, $db);
+    }
+    
     
     public function deleteCategoriesTest () {
         $db = Categories::delete(1);
