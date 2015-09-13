@@ -1,6 +1,6 @@
 <?php
 
-class ControlTest extends PHPUnit_Framework_TestCase 
+class ControlTest extends \PHPUnit_Framework_TestCase 
 {
 
     public function getControlTest () {
