@@ -16,7 +16,6 @@ class DbTest extends PHPUnit_Framework_TestCase
 
         //mysqli_select_db($link, 'db_test');
         Db::query("CREATE TABLE `test_table` (what VARCHAR(50) NOT NULL)");
-        Db::query("INSERT INTO `test_table` VALUES ('true') ");
         //return self::$mysqli;
     }
 
@@ -26,7 +25,7 @@ class DbTest extends PHPUnit_Framework_TestCase
     }
 
     public function testquery () {
-        $expected = '1';
+        $expected = '';
         $result = Db::query('SELECT * FROM `test_table`');
         
         $this->assertEquals($expected, Db::$num_rows);
