@@ -15,7 +15,8 @@ class DbTest extends PHPUnit_Framework_TestCase
         self::$mysqli = Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
         //mysqli_select_db($link, 'db_test');
-        Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
+        Db::query("CREATE TABLE `test_table` (what VARCHAR(50) NOT NULL)");
+        Db::query("INSERT INTO `test_table` VALUES ('true') ");
         //return self::$mysqli;
     }
 
@@ -25,8 +26,9 @@ class DbTest extends PHPUnit_Framework_TestCase
     }
 
     public function testquery () {
-
-        $this->assertEquals('SELECT * FROM `test_table`', Db::query());
+        $expected = '1';
+        $result = Db::query('SELECT count(*) FROM `test_table`');
+        $this->assertEquals($expected, $result);
     }
 
 }
