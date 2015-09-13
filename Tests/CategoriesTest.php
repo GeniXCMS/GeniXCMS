@@ -1,6 +1,6 @@
 <?php
 
-class CategoriesTest extends \PHPUnit_Framework_TestCase 
+class CategoriesTest extends PHPUnit_Framework_TestCase 
 {
     public function testAddCategories () {
         $vars = array(
