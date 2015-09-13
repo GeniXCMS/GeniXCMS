@@ -18,4 +18,16 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expectedResult, $result);
     }
+    
+    public function deleteCategoriesTest () {
+        
+        $expectedResult = true;
+        $db = Categories::delete(1);
+        if($db) {
+            $result = true;
+        }else{
+            $result = false;
+        }
+        $this->assertEquals($expectedResult, $result);
+    }
 }
