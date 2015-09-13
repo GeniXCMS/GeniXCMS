@@ -26,12 +26,10 @@ class DbTest extends PHPUnit_Framework_TestCase
     }
 
     public function testquery () {
-        $expected = 'true';
+        $expected = '1';
         $result = Db::query('SELECT * FROM `test_table`');
-        foreach($result as $r) {
         
-            $this->assertEquals($expected, $r->what);
-        }
+        $this->assertEquals($expected, Db::$num_rows);
     }
 
 }
