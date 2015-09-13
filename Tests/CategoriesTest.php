@@ -9,13 +9,13 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
                 'type' => 'post'
             )
         );
-        
+        $expectedResult = true;
         $db = Db::insert($vars);
         if($db) {
-            return true;
+            $result = true;
         }else{
-            return false;
+            $result = false;
         }
-        
+        $this->assertEquals($expectedResult, $result);
     }
 }
