@@ -26,9 +26,9 @@ class DbTest extends PHPUnit_Framework_TestCase
     }
 
     public function testquery () {
-        $expected = '1';
-        $result = Db::query('SELECT count(*) FROM `test_table`');
-        $this->assertEquals($expected, $result);
+        $expected = 'true';
+        $result = Db::query('SELECT * FROM `test_table`');
+        $this->assertEquals($expected, $result[0]);
     }
 
 }
