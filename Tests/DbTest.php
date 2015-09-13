@@ -7,7 +7,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testSetUp()
     {
         //System::config('config');
-        
+        define('DB_DRIVER', 'mysqli');
+        define('DB_HOST', 'localhost');
+        define('DB_USER', 'root');
+        define('DB_PASS', '');
+        define('DB_NAME', 'db_test');
         self::$mysqli = Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
         //mysqli_select_db($link, 'db_test');
