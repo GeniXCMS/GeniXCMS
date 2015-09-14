@@ -2,6 +2,9 @@
 
 class CategoriesTest extends PHPUnit_Framework_TestCase 
 {
+    public function __construct () {
+        new Db();
+    }
     public function testAddCategories () {
         $vars = array(
             'table' => 'cat',
