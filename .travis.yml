@@ -6,7 +6,10 @@ php:
 env:
   - DB=mysql
 
+addons:
+  mariadb: '10.0'
+
 before_script:
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS db_test;" -uroot; fi
-  
+
 script: phpunit
