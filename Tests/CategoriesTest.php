@@ -13,9 +13,6 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
                   `type` text NOT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ";
         Db::query($cat);
-
-    }
-    public function testAddCategories () {
         $vars = array(
             'table' => 'cat',
             'key' => array(
@@ -26,6 +23,10 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
         );
 
         $db = Db::insert($vars);
+
+    }
+    public function testAddCategories () {
+        
         if($db) {
             $result = true;
         }else{
