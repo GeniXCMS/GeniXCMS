@@ -37,13 +37,13 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
     public function testTypeCategories () {
         $db = Categories::type(1);
         $expected = 'post';
-        $this->assertEqual($expected, $db);
+        $this->assertEquals($expected, $db);
     }
     
     public function testNameCategories () {
         $db = Categories::name(1);
         $expected = 'Categories';
-        $this->assertEqual($expected, $db);
+        $this->assertEquals($expected, $db);
     }
     
     
