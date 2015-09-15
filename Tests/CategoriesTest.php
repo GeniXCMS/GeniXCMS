@@ -1,9 +1,9 @@
 <?php
 
-class CategoriesTest extends \PHPUnit_Framework_TestCase 
+class CategoriesTest extends PHPUnit_Framework_TestCase 
 {
     public function __construct () {
-        new Db();
+        Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $cat = "CREATE TABLE IF NOT EXISTS `cat` (
                 `id` int(11) NOT NULL,
                   `name` text NOT NULL,
