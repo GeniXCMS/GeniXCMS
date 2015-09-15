@@ -35,12 +35,14 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
     }
     
     public function testTypeCategories () {
+        $this->testAddCategories();
         $db = Categories::type(1);
         $expected = 'post';
         $this->assertEquals($expected, $db);
     }
     
     public function testNameCategories () {
+        $this->testAddCategories();
         $db = Categories::name(1);
         $expected = 'Categories';
         $this->assertEquals($expected, $db);
