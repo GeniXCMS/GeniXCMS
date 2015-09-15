@@ -13,10 +13,7 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
                   `type` text NOT NULL
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ";
         Db::query($cat);
-        $pr = "ALTER TABLE `cat` ADD PRIMARY KEY (`id`)";
-        Db::query($pr);
-        $pr = "ALTER TABLE `cat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
-        Db::query($pr);
+
     }
     public function testAddCategories () {
         $vars = array(
