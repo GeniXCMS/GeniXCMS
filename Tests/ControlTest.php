@@ -7,7 +7,11 @@ class ControlTest extends PHPUnit_Framework_TestCase
         $_GET['ajax'] = '';
         $arr = array ('ajax', 'post' ,'page', 'cat', 'mod', 'sitemap', 'rss', 'pay',
             'paidorder', 'cancelorder');
-        $get = Control::get($arr);
+        if(Control::get($arr)) {
+            $get = true;
+        }else{
+            $get = false;
+        }
         $this->assertTrue($get);
     }
 
