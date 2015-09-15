@@ -17,6 +17,7 @@ class CategoriesTest extends PHPUnit_Framework_TestCase
         $vars = array(
             'table' => 'cat',
             'key' => array(
+                'id' => '1',
                 'name' => 'Categories',
                 'parent' => '0',
                 'type' => 'post'
