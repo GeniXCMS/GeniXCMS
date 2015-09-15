@@ -7,7 +7,7 @@ class DbTest extends PHPUnit_Framework_TestCase
         Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         
     }
-    
+
     public function testSetUp()
     {
         Db::query("CREATE TABLE `test_table` (what VARCHAR(50) NOT NULL)");
@@ -16,7 +16,7 @@ class DbTest extends PHPUnit_Framework_TestCase
     
 
     public function testQuery () {
-        $expected = '';
+        $expected = 0;
         $result = Db::query('SELECT * FROM `test_table`');
         
         $this->assertEquals($expected, Db::$num_rows);
