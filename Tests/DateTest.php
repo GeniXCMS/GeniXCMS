@@ -12,7 +12,7 @@ class DateTest extends PHPUnit_Framework_TestCase
                     ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         Db::query($options);
         $options = "INSERT INTO `options` (`id`, `name`, `value`) VALUES 
-        (null, 'timezone', 'Asia/Jakarta')";
+        (1, 'timezone', 'Asia/Jakarta')";
         Db::query($options);
     }
 
