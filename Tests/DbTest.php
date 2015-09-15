@@ -16,7 +16,7 @@ class DbTest extends PHPUnit_Framework_TestCase
     
 
     public function testQuery () {
-        $expected = 0;
+        $expected = 4;
         $result = Db::query('SELECT * FROM `test_table`');
         
         $this->assertEquals($expected, Db::$num_rows);
