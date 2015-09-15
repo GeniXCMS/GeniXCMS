@@ -3,14 +3,18 @@
 class DbTest extends PHPUnit_Framework_TestCase
 {
 
+    public function __construct() {
+        Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        Db::query("CREATE TABLE `test_table` (what VARCHAR(50) NOT NULL)");
+    }
     public function testSetUp()
     {
         //System::config('config');
         
-        Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        
 
         //mysqli_select_db($link, 'db_test');
-        Db::query("CREATE TABLE `test_table` (what VARCHAR(50) NOT NULL)");
+        
         
         $cat = "CREATE TABLE IF NOT EXISTS `cat` (
                 `id` int(11) NOT NULL,
@@ -129,16 +133,19 @@ class DbTest extends PHPUnit_Framework_TestCase
         //return self::$mysqli;
     }
 
-    public function testTearDown()
-    {
-        Db::query("DROP TABLE test_table");
-    }
+    
 
     public function testQuery () {
         $expected = '';
         $result = Db::query('SELECT * FROM `test_table`');
         
         $this->assertEquals($expected, Db::$num_rows);
+    }
+
+
+    public function testTearDown()
+    {
+        Db::query("DROP TABLE `test_table`");
     }
 
 }
