@@ -14,7 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-//print_r($param);
+
 $data = Router::scrap($param);
 $post="";
 $data['max'] = Options::get('post_perpage');
@@ -51,6 +51,37 @@ $data['posts'] = Db::result(
                             )
                         );
 $data['num'] = Db::$num_rows;
+
+if(Options::get('multilang_enable') === 'on') {
+    
+    if (isset($_GET['lang'])) {
+        foreach ($data['posts'] as $p) {
+            if (Posts::existParam('multilang', $p->id)
+                && Options::get('multilang_default') !== $_GET['lang']) {
+                # code...
+                $lang = Language::getLangParam($_GET['lang'], $p->id);
+                $posts = get_object_vars($p);
+                $posts = array_merge($posts,$lang);
+                
+                
+            }else{
+                $posts = $p;
+            }
+            $posts_arr = array();
+            $posts_arr = json_decode(json_encode($posts), FALSE);
+            // $posts[] = $posts;
+            $post_arr[] = $posts_arr;
+            $data['posts'] = $post_arr;
+        }
+    }else{
+        $data['posts'] = $data['posts'];
+    }
+    
+
+}else{
+    $data['posts'] = $data['posts'];
+}
+
 $url = (SMART_URL)? Site::$url: Site::$url.'/index.php?';
 $paging = array(
                 'paging' => $paging,

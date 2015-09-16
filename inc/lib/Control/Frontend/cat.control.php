@@ -15,9 +15,8 @@
 *
 */
 
-//print_r($param);
-$post="";
 
+$post="";
 $data = Router::scrap($param);
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
@@ -28,7 +27,7 @@ if (SMART_URL) {
     }
 }else{
     if (isset($_GET['paging'])) {
-        $paging = Typo::int($_GET['paging']);
+    $paging = Typo::int($_GET['paging']);
     }
 }
 
@@ -57,7 +56,35 @@ $data['posts'] = Db::result(
                     )
                 );
 $data['num'] = Db::$num_rows;
-$url = Url::cat($cat);
+
+if(Options::get('multilang_enable') === 'on') {
+    if (isset($_GET['lang'])) {
+        foreach ($data['posts'] as $p) {
+            if (Posts::existParam('multilang', $p->id)
+                && Options::get('multilang_default') !== $_GET['lang']) {
+                # code...
+                $lang = Language::getLangParam($_GET['lang'], $p->id);
+                $posts = get_object_vars($p);
+                $posts = array_merge($posts,$lang);
+                
+            }else{
+                $posts = $p;
+            }
+            $posts_arr = array();
+            $posts_arr = json_decode(json_encode($posts), FALSE);
+            // $posts[] = $posts;
+            $post_arr[] = $posts_arr;
+            $data['posts'] = $post_arr;
+        }
+    }else{
+        $data['posts'] = $data['posts'];
+    }
+
+}else{
+    $data['posts'] = $data['posts'];
+}
+// print_r($data['posts']);
+$url = Url::cat($_GET['cat']);
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',
