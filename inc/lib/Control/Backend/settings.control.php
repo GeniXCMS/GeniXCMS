@@ -46,16 +46,18 @@ switch (isset($_POST['change'])) {
             $flip = array_flip($_POST);
             $sql = "SELECT * FROM `options` WHERE `value` = 'on'";        
             $q = Db::result($sql);
+            $input = array('is_logourl', 'use_jquery', 'use_bootstrap', 'use_fontawesome', 
+                'use_editor', 'use_bsvalidator', 'ppsandbox', 'google_captcha_enable');
             foreach($q as $ob) {
-                // if (array_key_exists($ob->name, $_POST)) {
-                    if( isset( $flip[$ob->name] ) ) {
-                        $vars[$ob->name] = 'on';
-                        //echo $ob->name;
-                    }else{
-                        $vars[$ob->name] = 'off';
-                        //echo $ob->name;
+                    if( in_array($ob->name, $input ) ) {
+                        if( isset( $flip[$ob->name] ) ) {
+                            $vars[$ob->name] = 'on';
+                            //echo $ob->name;
+                        }else{
+                            $vars[$ob->name] = 'off';
+                            //echo $ob->name;
+                        }
                     }
-                // }
             }
             //print_r($ob);
             foreach ($_POST as $key => $val) {

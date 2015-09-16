@@ -52,6 +52,28 @@ class Language
         }
         return $opt;
     }
+
+    public static function getDefaultLang() {
+        $def = Options::get('multilang_default');
+        $lang = json_decode(Options::get('multilang_country'), true);
+        $deflang = $lang[$def];
+        return $deflang;
+    }
+
+    public static function getLangParam($lang, $post_id) {
+        if (Posts::existParam('multilang',$post_id)) {
+            $multilang = json_decode(Posts::getParam('multilang', $post_id), true);;
+            foreach ($multilang as $key => $value) {
+                // print_r($value);
+                $keys = array_keys($value);
+                // print_r($keys);
+                if ($keys[0] == $lang) {
+                    $lang = $multilang[$key][$lang];
+                    return $lang;
+                }
+            }
+        }
+    }
 }
 /* End of file Language.class.php */
 /* Location: ./inc/lib/Language.class.php */

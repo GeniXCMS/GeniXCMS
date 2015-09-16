@@ -50,7 +50,14 @@ class Router
             '/paging/([0-9]+)' => array('default', 'paging' => '1'),
             '/error/([0-9]+)' => array('error' => '1'),
             '/(.*)/([0-9]+)' => array('post' => '2'),
+<<<<<<< HEAD
             '/ajax/(.*)' => array('ajax' => '1'),
+=======
+<<<<<<< HEAD
+            '/ajax/(.*)' => array('ajax' => '1'),
+=======
+>>>>>>> master
+>>>>>>> multilang
             '/error' => array('error'),
             '/' => array('default'),
         );
@@ -235,4 +242,8 @@ class Router
         
         return $data;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> multilang

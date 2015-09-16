@@ -28,7 +28,7 @@ class Files
     }
 
     public static function elfinderLib() {
-
+        $url = (SMART_URL)? Site::$url . '/ajax/elfinder?token=' . TOKEN : Site::$url . "/index.php?ajax=elfinder&token=" . TOKEN;
         $html = "
     <script src=\"".Vendor::url()."/studio-42/elfinder/jquery/jquery-ui.min.js\" type=\"text/javascript\" charset=\"utf-8\"></script>
     <link rel=\"stylesheet\" href=\"".Vendor::url()."/studio-42/elfinder/jquery/ui-themes/smoothness/jquery-ui.min.css\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">
@@ -44,7 +44,7 @@ class Files
     <script>
         $(document).ready(function() {
             $('#elfinder').elfinder({
-                url : '".Site::$url."/index.php?ajax=elfinder&token=".TOKEN."',
+                url : '".$url."',
                 height : '500',
                 handlers : {
                     select : function(event, elfinderInstance) {
@@ -61,7 +61,7 @@ class Files
 
         function elfinderDialog(){
             var fm = $('<div/>').dialogelfinder({
-                url : '".Site::$url."/index.php?ajax=elfinder&token=".TOKEN."',
+                url : '".$url."',
                 lang : 'en',
                 width : 840,
                 height: 450,

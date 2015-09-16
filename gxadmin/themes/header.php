@@ -91,12 +91,25 @@
                                 <a href="index.php?page=modules" 
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'modules')?"class=\"active\"":"";?>>
                                     <i class="fa fa-plug"></i> <?=MODULES;?>
-                                </a></li>
-                            <li>
-                                <a href="index.php?page=settings" 
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'settings')?"class=\"active\"":"";?>>
-                                    <i class="fa fa-wrench"></i> <?=SETTINGS;?>
-                                </a></li>
+                                </a>
+                            </li>
+                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'))?"class=\"active\"":"";?> >
+                                <a href="#"><i class="fa fa-wrench fa-fw"></i> <?=SETTINGS;?><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level" style="">
+                                    <li>
+                                        <a href="index.php?page=settings" 
+                                        <?=(isset($_GET['page']) && $_GET['page'] == 'settings')?"class=\"active\"":"";?>>
+                                            <i class="fa fa-wrench"></i> Global Settings
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="index.php?page=multilang" 
+                                        <?=(isset($_GET['page']) && $_GET['page'] == 'multilang')?"class=\"active\"":"";?>>
+                                            <i class="fa fa-flag"></i> Multilanguage
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <?php echo Theme::thmMenu();?>
                             <?php echo Mod::ModMenu();?>
                             <li>

@@ -121,7 +121,78 @@ if (isset($data['alertred'])) {
     <div class="col-sm-12">
         <div class="row">
             
-                <div class="col-sm-8">
+                <div class="col-sm-8" id="myTab">
+                    <?php
+                if(Options::get('multilang_enable') === 'on') {
+                    $def = Options::get('multilang_default');
+                    $deflang = Language::getDefaultLang();
+                    $listlang = json_decode(Options::get('multilang_country'), true);
+                    $deflag = strtolower($listlang[$def]['flag']);
+
+                    echo "
+                    <ul class=\"nav nav-tabs\" role=\"tablist\">
+                        <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
+                    
+                    unset($listlang[Options::get('multilang_default')]);
+                    foreach ($listlang as $key => $value) {
+                        $flag = strtolower($value['flag']);
+                        echo "
+                        <li><a href=\"#lang-{$key}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$flag}\"></span> {$value['country']}</a></li>";
+                    }
+                    
+                    echo "
+                    </ul>
+                    <div class=\"clearfix\">&nbsp;</div>
+                    <div class=\"tab-content\">
+                    <!-- Tab Pane General -->
+                    <div class=\"tab-pane active\" id=\"lang-{$def}\">
+                        <div class=\"form-group\">
+                            <label for=\"title\">".TITLE." ({$def}) </label>
+                            <input type=\"title\" name=\"title[{$def}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$title}\">
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"content\">".CONTENT."</label>
+                            <textarea name=\"content[{$def}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$content}</textarea>
+                        </div>
+                    </div>
+                    ";
+                    unset($listlang[Options::get('multilang_default')]);
+                    foreach ($listlang as $key => $value) {
+                        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
+                            $lang = Language::getLangParam($key, $_GET['id']);
+                            if ($lang == '') {
+                                $lang['title'] = $title;
+                                $lang['content'] = $content; 
+                            }else{
+                                $lang = $lang;
+                            }
+                        }else{
+                            $lang['title'] = '';
+                            $lang['content'] = ''; 
+                        }
+                        echo "
+                    <div class=\"tab-pane\" id=\"lang-{$key}\">
+
+                        <div class=\"form-group\">
+                            <label for=\"title\">".TITLE." ({$key}) </label>
+                            <input type=\"title\" name=\"title[{$key}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$lang['title']}\">
+                        </div>
+                        <div class=\"form-group\">
+                            <label for=\"content\">".CONTENT."</label>
+                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$lang['content']}</textarea>
+                        </div>
+                    </div>
+
+                        ";
+                        unset($lang);
+
+                    }
+
+                    echo "</div>";
+
+                }else{
+
+                ?>
                     <div class="form-group">
                         <label for="title"><?=TITLE;?></label>
                         <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title;?>">
@@ -130,6 +201,9 @@ if (isset($data['alertred'])) {
                         <label for="content"><?=CONTENT;?></label>
                         <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content;?></textarea>
                     </div>
+                <?php
+                }
+                ?>
                 </div>
                 <div class="col-sm-4">
                     <div class="panel panel-default">
