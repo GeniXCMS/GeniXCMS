@@ -50,6 +50,7 @@ class Router
             '/paging/([0-9]+)' => array('default', 'paging' => '1'),
             '/error/([0-9]+)' => array('error' => '1'),
             '/(.*)/([0-9]+)' => array('post' => '2'),
+            '/ajax/(.*)' => array('ajax' => '1'),
             '/error' => array('error'),
             '/' => array('default'),
         );

@@ -157,6 +157,7 @@ class Site
                     ['help', ['help']]";
             }
 
+            $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
             $foot .= "
 
     <link href=\"".self::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
@@ -180,7 +181,7 @@ class Site
           data = new FormData();
           data.append(\"file\", file);
             $.ajax({
-                url: \"".Site::$url."/index.php?ajax=saveimage&token=".TOKEN."\",
+                url: \"".$url."\",
                 data: data,
                 cache: false,
                 contentType: false,

@@ -23,7 +23,7 @@
         "lsmonki/php-ixr": "1.7.5",
         "google/recaptcha": "~1.1",
         "omnipay/common": "2.3.4",
-        "omnipay/paypal": "2.4.2",
+        "omnipay/paypal": "2.4.3",
         "omnipay/stripe": "2.2.1",
         "omnipay/2checkout": "2.1.1",
         "omnipay/bitpay": "dev-master",

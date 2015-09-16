@@ -2,31 +2,26 @@
 
 class DbTest extends PHPUnit_Framework_TestCase
 {
-    //static $mysqli = '';
 
-    public function setUp()
-    {
-        //System::config('config');
-        define('DB_DRIVER', 'mysqli');
-        define('DB_HOST', 'localhost');
-        define('DB_USER', 'root');
-        define('DB_PASS', '');
-        define('DB_NAME', 'db_test');
-        //self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    public function __construct() {
+        Db::connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        Db::query("DROP TABLE IF EXISTS `test_table`");
+        Db::query("CREATE TABLE IF NOT EXISTS `test_table` (what VARCHAR(50) NOT NULL)");
+        Db::query("TRUNCATE TABLE `test_table`");
+    }
+    
 
-        //mysqli_select_db($link, 'db_test');
-        Db::query("CREATE TABLE test_table (what VARCHAR(50) NOT NULL)");
-        //return self::$mysqli;
+    public function testQuery () {
+        $expected = 1;
+        $result = Db::query('SELECT * FROM `test_table`');
+        
+        $this->assertEquals($expected, Db::$num_rows);
     }
 
-    public function tearDown()
+
+    public function testTearDown()
     {
-        Db::query("DROP TABLE test_table");
-    }
-
-    public function testquery () {
-
-        $this->assertEquals('SELECT * FROM `test_table`', Db::query());
+        Db::query("DROP TABLE `test_table`");
     }
 
 }

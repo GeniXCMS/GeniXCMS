@@ -14,11 +14,9 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
 $data = Router::scrap($param);
 $page = (SMART_URL) ? $data['page'] : Typo::cleanX(Typo::strip($_GET['page']));
-
-switch ($_GET['page']) {
+switch ($page) {
     case 'sitemap':
         # code...
         Sitemap::create();
@@ -27,9 +25,7 @@ switch ($_GET['page']) {
     
     default:
         # code...
-        $page = Typo::cleanX(
-                    Typo::strip($_GET['page'])
-                );
+        
         $data['posts'] = Db::result(
                             sprintf("SELECT * FROM `posts` 
                                     WHERE (`id` = '%d' OR `slug` = '%s')
