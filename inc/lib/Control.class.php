@@ -182,7 +182,7 @@ class Control
 
     public static function route($arr) {
         $var = Router::run();
-
+        // print_r($var);
         foreach ((array)$var[0] as $k => $v){
 
             if ( $k == '0' && $v != 'error' && $v != 'ajax' ) {
@@ -193,7 +193,7 @@ class Control
 
                 self::get($arr);
 
-            }elseif ( $v == 'error' || $k == 'error' ) {
+            } elseif ( $v == 'error' || $k == 'error' ) {
 
                 $error = ( $k == 'error') ? $v: '404'; 
                 self::error($error, $var);
@@ -201,7 +201,7 @@ class Control
             } else {
 
                 if (in_array($k, $arr)) {
-
+                    // print_r($k);
                     self::incFront($k, $var);
 
                 } else {
