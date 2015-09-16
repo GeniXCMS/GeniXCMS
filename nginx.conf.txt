@@ -5,17 +5,11 @@ server {
        index index.php;
 
         location / {
-                try_files $uri  $uri/ @rewrite;
+                try_files $uri  $uri/ /index.php;
 
         }
 
-        location @rewrite {
-                #rewrite ^/(.+)$ /index.php$args last; break;
-                rewrite ^/(.*)\.html$ /index.php?page=$1 last;
-                rewrite ^/(.+)/([0-9]+)$ /index.php?post=$2 last;
-                rewrite ^/([0-9]+)/(.+)$ /index.php?cat=$1 last;
-                rewrite ^/([0-9]+)/(.+)/paging/([0-9]+)$ /index.php?cat=$1&paging=$3 last;
-        }
+
         error_page 404 /error/404;
         error_page 400 /error/400;
         error_page 403 /error/403;
@@ -38,7 +32,6 @@ server {
 		try_files $uri $uri/ @rewrite;
 	}
         location ~ \.php$ {
-        #       try_files = $uri $uri/ @missing;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
         #       # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
         #
@@ -51,9 +44,7 @@ server {
                 include fastcgi_params;
         }
 
-        #location @missing {
-        #       rewrite ^ $scheme://$host/index.php?$args permanent;
-        #}
+
 
         location /paging {
                 rewrite ^/paging/([0-9]+)$ /index.php?paging=$1 last;

@@ -1,3 +1,7 @@
 inc/config/*
 docs
+<<<<<<< HEAD
+=======
+.travis.yml
+>>>>>>> master
 mkdocs.yml
