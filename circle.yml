@@ -1,2 +1,6 @@
 general:
     build_dir: multilang
+
+test:
+  override:
+    - php ./Tests/bootstrap.php --unit-tests
