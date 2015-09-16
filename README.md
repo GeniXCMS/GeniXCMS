@@ -3,6 +3,7 @@
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
+[![wercker status](https://app.wercker.com/status/69ad23cfc66fab2f4155d69bf4d47d0d/s "wercker status")](https://app.wercker.com/project/bykey/69ad23cfc66fab2f4155d69bf4d47d0d)
 [![Codeship](https://codeship.com/projects/64d60110-3e1c-0133-6054-5a0949beaeb8/status?branch=master)](https://codeship.com/projects/102695)
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![Total Downloads](https://poser.pugx.org/genix/cms/downloads)](https://packagist.org/packages/genix/cms) [![Latest Unstable Version](https://poser.pugx.org/genix/cms/v/unstable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms)
