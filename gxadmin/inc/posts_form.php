@@ -21,7 +21,7 @@ if (isset($_GET['token'])
     $token = '';
 }
 ($_GET['act'] == "edit")? $pagetitle = "Edit": $pagetitle = "New";
-($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token={$_GET['token']}": $act = "add";
+($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token=".$token: $act = "add";
 if (isset($data['alertgreen'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
@@ -161,7 +161,7 @@ if(isset($data['post'])) {
                         </div>
                         <div class=\"form-group\">
                             <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$lang['content']}</textarea>
+                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content-$key\" rows=\"20\">{$lang['content']}</textarea>
                         </div>
                     </div>
 

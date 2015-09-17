@@ -22,7 +22,7 @@ if (isset($_GET['token'])
     $token = '';
 }
 ($_GET['act'] == "edit")? $pagetitle = 'Edit': $pagetitle = 'New';
-($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token={$_GET['token']}": $act = "add";
+($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token=".$token: $act = "add";
 
 if(isset($data['post']) ) {
     if (!isset($data['post']['error'])) {
