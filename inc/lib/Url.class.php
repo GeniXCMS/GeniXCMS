@@ -211,28 +211,35 @@ class Url
     public static function flag($vars) {
         switch (SMART_URL) {
             case true:
-                    $lang = !isset($_GET['lang'])? '?lang=' . $vars: '';
-                    $url = $_SERVER['REQUEST_URI'] . $lang;
+                $lang = '?lang=' . $vars;
+                if (isset($_GET['lang'])) {
+                    
+                    $uri = explode('?', $_SERVER['REQUEST_URI']);
+                    $uri = $uri[0];
+                }else{
+                    $uri = $_SERVER['REQUEST_URI'];
+                }
+                $url = $uri . $lang;
 
                 break;
             
             default:
-                    // print_r($_GET);
-                    if (!empty($_GET)) {
-                        
-                        $val = '';
-                        foreach ($_GET as $key => $value) {
-                            if ($key == 'lang') {
-                                $val .= '&lang='.$vars;
-                            }else{
-                                $val .= $key . '=' . $value;
-                            }
+                // print_r($_GET);
+                if (!empty($_GET)) {
+                    
+                    $val = '';
+                    foreach ($_GET as $key => $value) {
+                        if ($key == 'lang') {
+                            $val .= '&lang='.$vars;
+                        }else{
+                            $val .= $key . '=' . $value;
                         }
-                    }else{
-                        $val = "lang=".$vars;
                     }
-                    $lang = !isset($_GET['lang'])? '&lang=' . $vars: '';
-                    $url = Site::$url . '/?' . $val;
+                }else{
+                    $val = "lang=".$vars;
+                }
+                $lang = !isset($_GET['lang'])? '&lang=' . $vars: $val;
+                $url = Site::$url . '/?' . $lang;
                 break;
 
         }
