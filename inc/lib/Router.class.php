@@ -50,14 +50,7 @@ class Router
             '/paging/([0-9]+)' => array('default', 'paging' => '1'),
             '/error/([0-9]+)' => array('error' => '1'),
             '/(.*)/([0-9]+)' => array('post' => '2'),
-<<<<<<< HEAD
             '/ajax/(.*)' => array('ajax' => '1'),
-=======
-<<<<<<< HEAD
-            '/ajax/(.*)' => array('ajax' => '1'),
-=======
->>>>>>> master
->>>>>>> multilang
             '/error' => array('error'),
             '/' => array('default'),
         );
@@ -89,16 +82,26 @@ class Router
     public static function run () {
         
         $m = self::match();
-        $val = self::extract($m[0], $m[1]);
+        // print_r($m);
+        if (is_array($m)) {
+            # code...
         
-        if (isset($val) && $val != null ) {
+            $val = self::extract($m[0], $m[1]);
             
-            return $val;
-            
+            if (isset($val) && $val != null ) {
+                
+                return $val;
+                
+            }else{
+                
+                return ['error'];
+                
+            }
+
         }else{
-            
+
             return ['error'];
-            
+
         }
     }
     
@@ -242,8 +245,4 @@ class Router
         
         return $data;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> multilang

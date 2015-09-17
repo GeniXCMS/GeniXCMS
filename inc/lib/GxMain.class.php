@@ -51,7 +51,6 @@ class GxMain
     * @since 0.0.1
     */
     public function index() {
-        Session::start();
         System::gZip();
         Control::handler('frontend');
         System::Zipped();
@@ -66,10 +65,10 @@ class GxMain
     * @since 0.0.1
     */
     public function admin () {
-        Session::start();
         User::secure();
         System::gZip();
         if( User::access(2) ) {
+            System::versionCheck();
             Control::handler('backend');
         }else{
             Theme::admin('header');
@@ -87,7 +86,6 @@ class GxMain
     * @since 0.0.1
     */
     public function install () {
-        Session::start();
         System::gZip();
         Theme::install('header');
         Control::handler('install');

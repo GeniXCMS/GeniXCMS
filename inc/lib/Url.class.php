@@ -41,13 +41,22 @@ class Url
     public static function post($vars) {
         switch (SMART_URL) {
             case true:
-                # code...
-                $url = Site::$url."/".self::slug($vars)."/{$vars}";
+                if (Options::get('multilang_enable') === 'on') {
+                    $lang = Language::isActive() . '/';
+                    $url = Site::$url."/". $lang .self::slug($vars)."/{$vars}";
+                }else{
+                    $url = Site::$url."/".self::slug($vars)."/{$vars}";
+                }
+                
                 break;
             
             default:
-                # code...
-                $url = Site::$url."/index.php?post={$vars}";
+                if (Options::get('multilang_enable') === 'on') {
+                    $lang = '&lang=' . Language::isActive();
+                    $url = Site::$url."/?post={$vars}{$lang}";
+                }else{
+                    $url = Site::$url."/?post={$vars}";
+                }
                 break;
 
         }
@@ -66,13 +75,22 @@ class Url
     public static function page($vars) {
         switch (SMART_URL) {
             case true:
-                # code...
-                $url = Site::$url."/".self::slug($vars).GX_URL_PREFIX;
+                if (Options::get('multilang_enable') === 'on') {
+                    $lang = Language::isActive() . '/';
+                    $url = Site::$url."/". $lang .self::slug($vars).GX_URL_PREFIX;
+                }else{
+                    $url = Site::$url."/".self::slug($vars).GX_URL_PREFIX;
+                }
                 break;
             
             default:
-                # code...
-                $url = Site::$url."/index.php?page={$vars}";
+                if (Options::get('multilang_enable') === 'on') {
+                    $lang = '&lang=' . Language::isActive();
+                    $url = Site::$url."/?page={$vars}{$lang}";
+                }else{
+                    $url = Site::$url."/?page={$vars}";
+                }
+                
                 break;
 
         }
@@ -98,7 +116,7 @@ class Url
             
             default:
                 # code...
-                $url = Site::$url."/index.php?cat={$vars}";
+                $url = Site::$url."/?cat={$vars}";
                 break;
 
         }
@@ -179,6 +197,47 @@ class Url
         $s = Db::result("SELECT `slug` FROM `posts` WHERE `id` = '{$vars}' LIMIT 1");
         $s = $s[0]->slug;
         return $s;
+    }
+
+
+    /**
+    * FLag URL Function.
+    * This will create the flag url automatically based on the SMART_URL 
+    * will formatted as friendly url if SMART_URL is set to true.
+    * 
+    * @author Puguh Wijayanto (www.metalgenix.com)
+    * @since 0.0.7
+    */
+    public static function flag($vars) {
+        switch (SMART_URL) {
+            case true:
+                    $lang = !isset($_GET['lang'])? '?lang=' . $vars: '';
+                    $url = $_SERVER['REQUEST_URI'] . $lang;
+
+                break;
+            
+            default:
+                    // print_r($_GET);
+                    if (!empty($_GET)) {
+                        
+                        $val = '';
+                        foreach ($_GET as $key => $value) {
+                            if ($key == 'lang') {
+                                $val .= '&lang='.$vars;
+                            }else{
+                                $val .= $key . '=' . $value;
+                            }
+                        }
+                    }else{
+                        $val = "lang=".$vars;
+                    }
+                    $lang = !isset($_GET['lang'])? '&lang=' . $vars: '';
+                    $url = Site::$url . '/?' . $val;
+                break;
+
+        }
+
+        return $url;
     }
     
 }

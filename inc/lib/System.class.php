@@ -38,10 +38,12 @@ class System
     * @since 0.0.1
     */
     public function __construct () {
+        Session::start();
         self::config('config');
         new Db();
         new Hooks();
         self::lang(Options::get('system_lang'));
+        new Language();
         new Site();
         new Router();
         Vendor::autoload();

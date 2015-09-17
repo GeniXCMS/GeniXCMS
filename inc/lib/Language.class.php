@@ -18,7 +18,7 @@
 class Language
 {
     public function __construct () {
-
+        self::setActive();
     }
 
     public static function getList () {
@@ -74,6 +74,65 @@ class Language
                 }
             }
         }
+    }
+
+    public static function setActive() {
+        if (isset($_GET['lang']) && $_GET['lang'] != '') {
+            Session::set(array('lang' => $_GET['lang'] ) );
+        }
+    }
+
+    public static function isActive () {
+        switch (SMART_URL) {
+            case true:
+                if (Options::get('multilang_enable') === 'on') {
+                    $langs = Session::val('lang');
+                    if($langs != '') {
+                        $lang = Session::val('lang');
+                    }else{
+                        $lang = '';
+                    }
+                    
+                }else{
+                    $lang = '';
+                }
+                
+                break;
+            
+            default:
+                if (Options::get('multilang_enable') === 'on') {
+                    $langs = Session::val('lang');
+                    if($langs != '') {
+                        $lang = Session::val('lang');
+                    }else{
+                        $lang = isset($_GET['lang'])? $_GET['lang']: '' ;
+                    }
+                }else{
+                    $lang = '';
+                }
+                break;
+
+        }
+        return $lang;
+    }
+
+    public static function flagList () {
+        $lang = json_decode(Options::get('multilang_country'), true);
+        // print_r($lang);
+        $html = "<ul class=\"nav nav-pills\">";
+        foreach ($lang as $key => $value) {
+            $flag = strtolower($value['flag']);
+            $html .= "
+            <li class=\"\"><a href=\"".Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
+            ";
+        }
+        $html .= "</ul>";
+        Hooks::attach('footer_load_lib', array('Language', 'flagLib'));
+        return $html;
+    }
+
+    public static function flagLib () {
+        return "<link href=\"".Site::$url."/assets/css/flag-icon.min.css\" rel=\"stylesheet\">";
     }
 }
 /* End of file Language.class.php */

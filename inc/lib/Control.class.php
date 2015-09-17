@@ -188,39 +188,45 @@ class Control
     public static function route($arr) {
         $var = Router::run();
         // print_r($var);
-        foreach ((array)$var[0] as $k => $v){
+        if ($var[0] == 'error') {
 
-            if ( $k == '0' && $v != 'error' && $v != 'ajax' ) {
+            self::error('404');
+            
+        }else{
+            foreach ((array)$var[0] as $k => $v){
 
-                self::incFront($v, $var);
+                if ( $k == '0' && $v != 'error' && $v != 'ajax' ) {
 
-            } elseif ( !SMART_URL && isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0 ) {
+                    self::incFront($v, $var);
 
-                self::get($arr);
+                } elseif ( !SMART_URL && isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0 ) {
 
-            } elseif ( $v == 'error' || $k == 'error' ) {
+                    self::get($arr);
 
-                $error = ( $k == 'error') ? $v: '404'; 
-                self::error($error, $var);
+                } elseif ( $v == 'error' || $k == 'error' ) {
 
-            } elseif ( $k == 'ajax' ) {
-                // print_r($k);
-                self::ajax($v);
+                    $error = ( $k == 'error') ? $v: '404'; 
+                    self::error($error, $var);
 
-            } else {
-
-                if (in_array($k, $arr)) {
-
-                    self::incFront($k, $var);
+                } elseif ( $k == 'ajax' ) {
+                    // print_r($k);
+                    self::ajax($v);
 
                 } else {
 
-                    self::error('404');
+                    if (in_array($k, $arr)) {
+
+                        self::incFront($k, $var);
+
+                    } else {
+
+                        self::error('404');
+
+                    }
 
                 }
 
             }
-
         }
     }
     

@@ -153,7 +153,7 @@ class Categories
                     }
                     // print_r($catparent);
                     
-                    $drop .= "<div class=\"panel panel-default\">
+                    $drop .= "<div class=\"panel panel-gxmarket\">
                     <div id=\"{$collapseHeading}\" class=\"panel-heading\" role=\"tab\" >
                     <a href=\"{$href}\" data-toggle=\"{$data_toggle}\"  aria-expanded=\"false\" 
                     aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>
