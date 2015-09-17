@@ -80,7 +80,7 @@ switch ($act) {
                             $multilang[] = array(
                                                 $key => array(
                                                         'title' => $_POST['title'][$key],
-                                                        'content' => $_POST['content'][$key]
+                                                        'content' => Typo::cleanX($_POST['content'][$key])
                                                     )
                                             );
                         }
@@ -157,12 +157,16 @@ switch ($act) {
                             $multilang[] = array(
                                                 $key => array(
                                                         'title' => $_POST['title'][$key],
-                                                        'content' => $_POST['content'][$key]
+                                                        'content' => Typo::cleanX($_POST['content'][$key])
                                                     )
                                             );
                         }
                         $multilang = json_encode($multilang);
-                        Posts::editParam('multilang', $multilang, $_GET['id']);
+                        if (!Posts::existParam('multilang', $_GET['id'])) {
+                            Posts::addParam('multilang', $multilang, $_GET['id']);
+                        }else{
+                            Posts::editParam('multilang', $multilang, $_GET['id']);
+                        }
                         // print_r($multilang);
                     }
                     $data['alertgreen'][] = POST." {$title} ".MSG_POST_UPDATED;

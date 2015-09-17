@@ -138,8 +138,10 @@ if(isset($data['post'])) {
                     ";
                     unset($listlang[Options::get('multilang_default')]);
                     foreach ($listlang as $key => $value) {
+                        // print_r($key);
                         if (isset($_GET['act']) && $_GET['act'] == 'edit') {
                             $lang = Language::getLangParam($key, $_GET['id']);
+                            // print_r($lang);
                             if ($lang == '' || !Posts::existParam('multilang', $_GET['id'])) {
                                 $lang['title'] = $title;
                                 $lang['content'] = $content; 
