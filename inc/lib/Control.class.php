@@ -131,7 +131,8 @@ class Control
             if (in_array($k,$arr )
                 || $k == 'paging'
                 || $k == 'error'
-                || $k == 'ajax') {
+                || $k == 'ajax'
+                || $k == 'lang') {
                 
                 $get = $get+1;
                 
@@ -159,6 +160,10 @@ class Control
                         
                     }
                     
+                }elseif ($k == 'lang') {
+                        
+                    self::incFront('default');
+                        
                 }elseif($k == "error"){
                     
                     self::error($v);
@@ -183,7 +188,6 @@ class Control
     public static function route($arr) {
         $var = Router::run();
         // print_r($var);
-
         foreach ((array)$var[0] as $k => $v){
 
             if ( $k == '0' && $v != 'error' && $v != 'ajax' ) {
@@ -206,7 +210,7 @@ class Control
             } else {
 
                 if (in_array($k, $arr)) {
-                    // print_r($k);
+
                     self::incFront($k, $var);
 
                 } else {
