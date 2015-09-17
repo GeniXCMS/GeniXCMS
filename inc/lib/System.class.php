@@ -146,6 +146,52 @@ class System
         return self::$version." ".self::$v_release;
     }
 
+    public static function versionCheck() {
+        $v = self::latestVersion();
+
+        // print_r($v);
+        if ($v > self::$version) {
+            Hooks::attach("admin_page_notif_action", array('System', 'versionReport'));
+        }
+
+    }
+
+    public static function latestVersion () {
+        $check = json_decode(Options::get('system_check'), true);
+        $now = strtotime(date("Y-m-d H:i:s"));
+        
+        if (isset($check['last_check']) ) {
+            $limit = $now - $check['last_check'];
+            if ($limit < 86400) {
+                 $v = $check['version'];
+            }
+
+           
+        }else{
+            $v = file_get_contents("https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION");
+            $arr = array(
+                    'version' => $v,
+                    'last_check' => $now
+                );
+            $arr = json_encode($arr);
+            Options::update('system_check', $arr);
+        }
+
+        return $v;
+    }
+
+    public static function versionReport() {
+        $v = self::latestVersion();
+        $html = "
+        <div class=\"alert alert-warning\">
+            <span class=\"fa fa-warning\"></span> Warning: Your CMS version is different with our latest version (<strong>$v</strong>). 
+            Please upgrade your system.
+        </div>
+        ";
+
+        return $html;
+    }
+
 
 }
 

@@ -313,6 +313,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'multilang_enable', 'off'),
             (null, 'multilang_default', ''),
             (null, 'multilang_country', ''),
+            (null, 'system_check', '{}')
             ";
         $db->query($options);
     }
