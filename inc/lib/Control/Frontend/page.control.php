@@ -39,18 +39,17 @@ switch ($page) {
 
         $num_rows = Db::$num_rows;
         if(Options::get('multilang_enable') === 'on') {
-            if (isset($_GET['lang'])) {
+            $langs = Language::isActive();
+            if (isset($langs)) {
                 foreach ($data['posts'] as $p) {
                     if (Posts::existParam('multilang', $p->id) 
-                        && Options::get('multilang_default') !== $_GET['lang']) {
+                        && Options::get('multilang_default') !== $langs) {
                         # code...
-                        $lang = Language::getLangParam($_GET['lang'], $p->id);
+                        $lang = Language::getLangParam($langs, $p->id);
                         $posts = get_object_vars($p);
                         $posts = array_merge($posts,$lang);
-                        
                     }else{
                         $posts = $p;
-                        
                     }
                     $posts_arr = array();
                     $posts_arr = json_decode(json_encode($posts), FALSE);
