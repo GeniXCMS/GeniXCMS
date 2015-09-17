@@ -145,6 +145,8 @@ define('EMAIL', 'Email');
 define('GROUP', 'Kelompok');
 define('JOIN_DATE', 'Tanggal Gabung');
 define('ADMINISTRATOR', 'Administrator');
+define('SUPERVISOR', 'Supervisor');
+define('EDITOR', 'Editor');
 define('AUTHOR', 'Penulis');
 define('GENERAL_MEMBER', 'Anggota Biasa');
 

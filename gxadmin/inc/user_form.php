@@ -94,8 +94,22 @@ if (isset($data['alertgreen'])) {
             <?php 
             if(User::group($_GET['id']) == 0){
                 $adm = "SELECTED";
+                $edt = "";
+                $spv = "";
                 $mem = "";
                 $aut = "";
+            }elseif(User::group($_GET['id']) == 1){
+                $aut = "";
+                $edt = "";
+                $spv = "SELECTED";
+                $adm = "";
+                $mem = "";
+            }elseif(User::group($_GET['id']) == 2){
+                $aut = "";
+                $edt = "SELECTED";
+                $spv = "";
+                $adm = "";
+                $mem = "";
             }elseif(User::group($_GET['id']) == 3){
                 $aut = "SELECTED";
                 $adm = "";
@@ -109,6 +123,8 @@ if (isset($data['alertgreen'])) {
             ?>
             <select name="group" class="form-control">
                 <option value="0" <?=$adm;?>>Administrator</option>
+                <option value="1" <?=$spv;?>>Supervisor</option>
+                <option value="2" <?=$edt;?>>Editor</option>
                 <option value="3" <?=$aut;?>>Author</option>
                 <option value="4" <?=$mem;?>>General Members</option>
             </select> 

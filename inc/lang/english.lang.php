@@ -146,6 +146,8 @@ define('EMAIL', 'Email');
 define('GROUP', 'Group');
 define('JOIN_DATE', 'Join Date');
 define('ADMINISTRATOR', 'Administrator');
+define('SUPERVISOR', 'Supervisor');
+define('EDITOR', 'Editor');
 define('AUTHOR', 'Author');
 define('GENERAL_MEMBER', 'General Member');
 

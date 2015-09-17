@@ -218,6 +218,8 @@
                     <label><?=GROUP;?></label>
                     <select name="group" class="form-control">
                         <option value="0"><?=ADMINISTRATOR;?></option>
+                        <option value="1"><?=SUPERVISOR;?></option>
+                        <option value="2"><?=EDITOR;?></option>
                         <option value="3"><?=AUTHOR;?></option>
                         <option value="4" selected="on"><?=GENERAL_MEMBER;?></option>
                     </select> 
