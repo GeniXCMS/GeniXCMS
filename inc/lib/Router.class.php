@@ -46,9 +46,11 @@ class Router
         self::$_route = array (
             '/category/([0-9]+)/(.*)/paging/([0-9]+)' => array('cat' => '1', 'paging' => '3'),
             '/category/([0-9]+)/(.+)' => array('cat' => '1'),
+            '/(.+)/(.+)'.GX_URL_PREFIX => array('page' => '2'),
             '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
             '/paging/([0-9]+)' => array('default', 'paging' => '1'),
             '/error/([0-9]+)' => array('error' => '1'),
+            '/(.+)/(.*)/([0-9]+)' => array('post' => '3'),
             '/(.*)/([0-9]+)' => array('post' => '2'),
             '/ajax/(.*)' => array('ajax' => '1'),
             '/error' => array('error'),
