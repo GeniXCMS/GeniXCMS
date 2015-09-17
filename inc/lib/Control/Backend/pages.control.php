@@ -77,13 +77,13 @@ switch ($act) {
                             $multilang[] = array(
                                                 $key => array(
                                                         'title' => $_POST['title'][$key],
-                                                        'content' => $_POST['content'][$key]
+                                                        'content' => Typo::cleanX($_POST['content'][$key])
                                                     )
                                             );
                         }
                         $multilang = json_encode($multilang);
                         Posts::addParam('multilang', $multilang, $post_id);
-                        print_r($multilang);
+                        // print_r($multilang);
                     }
                     $data['alertgreen'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
                     Hooks::run('post_submit_add_action', $_POST);
@@ -157,7 +157,7 @@ switch ($act) {
                             $multilang[] = array(
                                                 $key => array(
                                                         'title' => $_POST['title'][$key],
-                                                        'content' => $_POST['content'][$key]
+                                                        'content' => Typo::cleanX($_POST['content'][$key])
                                                     )
                                             );
                         }
@@ -168,7 +168,7 @@ switch ($act) {
                             Posts::addParam('multilang', $multilang, $_GET['id']);
                         }
                         
-                        print_r($multilang);
+                        // print_r($multilang);
                     }
                     $data['alertgreen'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
                     Token::remove($_POST['token']);
