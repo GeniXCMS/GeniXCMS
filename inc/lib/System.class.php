@@ -22,13 +22,13 @@ class System
     * GeniXCMS Version Variable
     * @return double
     */
-    static $version          = "0.0.6";
+    static $version          = "0.0.7";
 
     /**
     * GeniXCMS Version Release
     * @return string
     */
-    static $v_release        = "";
+    static $v_release        = "alpha";
 
     /**
     * System Constructor.
@@ -166,19 +166,26 @@ class System
             $limit = $now - $check['last_check'];
             if ($limit < 86400) {
                  $v = $check['version'];
+            }else{
+                $v = self::getLatestVersion($now);
             }
 
            
         }else{
-            $v = file_get_contents("https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION");
-            $arr = array(
-                    'version' => $v,
-                    'last_check' => $now
-                );
-            $arr = json_encode($arr);
-            Options::update('system_check', $arr);
+            $v = self::getLatestVersion($now);
         }
 
+        return $v;
+    }
+
+    public static function getLatestVersion ($now) {
+        $v = file_get_contents("https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION");
+        $arr = array(
+                'version' => $v,
+                'last_check' => $now
+            );
+        $arr = json_encode($arr);
+        Options::update('system_check', $arr);
         return $v;
     }
 
