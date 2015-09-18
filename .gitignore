@@ -1,10 +1,5 @@
 inc/config/*
 docs
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-.travis.yml
->>>>>>> master
->>>>>>> multilang
 mkdocs.yml
+assets/.tmb
+assets/.quarantine

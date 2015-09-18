@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.6
+* @version 0.0.7-alpha
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -47,7 +47,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.6
+* @version 0.0.7-alpha
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -261,7 +261,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'siteslogan', '{$slogan}'),
             (null, 'sitedesc', 'Descriptions'),
             (null, 'sitekeywords', 'keywords'),
-            (null, 'siteicon', 'favicon.ico'),
+            (null, 'siteicon', '{$url}/favicon.ico'),
             (null, 'siteaddress', ''),
             (null, 'siteemail', ''),
             (null, 'fbacc', ''),
