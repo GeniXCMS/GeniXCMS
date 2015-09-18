@@ -42,7 +42,8 @@ class Url
         switch (SMART_URL) {
             case true:
                 if (Options::get('multilang_enable') === 'on') {
-                    $lang = Language::isActive() . '/';
+                    $lang = Language::isActive();
+                    $lang = !empty($lang)? $lang . '/': '';
                     $url = Site::$url."/". $lang .self::slug($vars)."/{$vars}";
                 }else{
                     $url = Site::$url."/".self::slug($vars)."/{$vars}";
@@ -52,7 +53,8 @@ class Url
             
             default:
                 if (Options::get('multilang_enable') === 'on') {
-                    $lang = '&lang=' . Language::isActive();
+                    $lang = Language::isActive();
+                    $lang = !empty($lang)? '&lang=' . $lang: '';
                     $url = Site::$url."/?post={$vars}{$lang}";
                 }else{
                     $url = Site::$url."/?post={$vars}";
@@ -76,7 +78,8 @@ class Url
         switch (SMART_URL) {
             case true:
                 if (Options::get('multilang_enable') === 'on') {
-                    $lang = Language::isActive() . '/';
+                    $lang = Language::isActive();
+                    $lang = !empty($lang)? $lang . '/': '';
                     $url = Site::$url."/". $lang .self::slug($vars).GX_URL_PREFIX;
                 }else{
                     $url = Site::$url."/".self::slug($vars).GX_URL_PREFIX;
@@ -85,7 +88,8 @@ class Url
             
             default:
                 if (Options::get('multilang_enable') === 'on') {
-                    $lang = '&lang=' . Language::isActive();
+                    $lang = Language::isActive();
+                    $lang = !empty($lang)? '&lang=' . $lang: '';
                     $url = Site::$url."/?page={$vars}{$lang}";
                 }else{
                     $url = Site::$url."/?page={$vars}";

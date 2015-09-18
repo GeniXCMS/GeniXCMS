@@ -40,7 +40,7 @@ switch ($page) {
         $num_rows = Db::$num_rows;
         if(Options::get('multilang_enable') === 'on') {
             $langs = Language::isActive();
-            if (isset($langs)) {
+            if (!empty($langs)) {
                 foreach ($data['posts'] as $p) {
                     if (Posts::existParam('multilang', $p->id) 
                         && Options::get('multilang_default') !== $langs) {
