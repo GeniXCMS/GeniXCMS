@@ -38,32 +38,7 @@ switch ($page) {
                             );
 
         $num_rows = Db::$num_rows;
-        if(Options::get('multilang_enable') === 'on') {
-            $langs = Language::isActive();
-            if (!empty($langs)) {
-                foreach ($data['posts'] as $p) {
-                    if (Posts::existParam('multilang', $p->id) 
-                        && Options::get('multilang_default') !== $langs) {
-                        # code...
-                        $lang = Language::getLangParam($langs, $p->id);
-                        $posts = get_object_vars($p);
-                        $posts = array_merge($posts,$lang);
-                    }else{
-                        $posts = $p;
-                    }
-                    $posts_arr = array();
-                    $posts_arr = json_decode(json_encode($posts), FALSE);
-                    // $posts[] = $posts;
-                    $post_arr[] = $posts_arr;
-                    $data['posts'] = $post_arr;
-                }
-            }else{
-                $data['posts'] = $data['posts'];
-            }
-
-        }else{
-            $data['posts'] = $data['posts'];
-        }
+        $data['posts'] = Posts::prepare($data['posts']);
 
         if($num_rows > 0) {
             Theme::theme('header',$data);

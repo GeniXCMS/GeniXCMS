@@ -52,36 +52,7 @@ $data['posts'] = Db::result(
                         );
 $data['num'] = Db::$num_rows;
 
-if(Options::get('multilang_enable') === 'on') {
-    
-    $langs = Language::isActive();
-    if (isset($langs)) {
-        foreach ($data['posts'] as $p) {
-            if (Posts::existParam('multilang', $p->id)
-                && Options::get('multilang_default') !== $langs) {
-                # code...
-                $lang = Language::getLangParam($langs, $p->id);
-                $posts = get_object_vars($p);
-                $posts = array_merge($posts,$lang);
-                
-                
-            }else{
-                $posts = $p;
-            }
-            $posts_arr = array();
-            $posts_arr = json_decode(json_encode($posts), FALSE);
-            // $posts[] = $posts;
-            $post_arr[] = $posts_arr;
-            $data['posts'] = $post_arr;
-        }
-    }else{
-        $data['posts'] = $data['posts'];
-    }
-    
-
-}else{
-    $data['posts'] = $data['posts'];
-}
+$data['posts'] = Posts::prepare($data['posts']);
 
 $url = (SMART_URL)? Site::$url: Site::$url.'/index.php?';
 $paging = array(

@@ -311,6 +311,37 @@ class Posts
         }
     }
 
+    public static function prepare($post) {
+        if(Options::get('multilang_enable') === 'on') {
+            $langs = Language::isActive();
+            if (!empty($langs)) {
+                foreach ($post as $p) {
+                    if (Posts::existParam('multilang', $p->id) 
+                        && Options::get('multilang_default') !== $langs) {
+                        # code...
+                        $lang = Language::getLangParam($langs, $p->id);
+                        $posts = get_object_vars($p);
+                        $posts = array_merge($posts,$lang);
+                    }else{
+                        $posts = $p;
+                    }
+                    $posts_arr = array();
+                    $posts_arr = json_decode(json_encode($posts), FALSE);
+                    // $posts[] = $posts;
+                    $post_arr[] = $posts_arr;
+                    $post = $post_arr;
+                }
+            }else{
+                $post = $post;
+            }
+
+        }else{
+            $post = $post;
+        }
+
+        return $post;
+    }
+
 }
 
 /* End of file Posts.class.php */
