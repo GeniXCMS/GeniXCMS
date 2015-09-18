@@ -86,6 +86,7 @@ class GxMain
     * @since 0.0.1
     */
     public function install () {
+        Session::start();
         System::gZip();
         Theme::install('header');
         Control::handler('install');
