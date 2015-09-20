@@ -31,7 +31,6 @@ try {
     echo $e->getMessage();
 }
 
-Session::start();
 System::gZip();
 
 if(isset($_POST['login']))

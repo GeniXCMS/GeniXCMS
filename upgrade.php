@@ -30,7 +30,7 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-Session::start();
+
 
 if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
@@ -76,6 +76,26 @@ if (isset($_POST['004-patch'])) {
 }elseif(isset($_POST['005'])){
     $sql = "ALTER TABLE `posts` ADD `views` int(11) NOT NULL DEFAULT '0'";
     $q = Db::query($sql);
+    $sql = "INSERT INTO `options` VALUES 
+            (null, 'multilang_enable', 'off'),
+            (null, 'multilang_default', ''),
+            (null, 'multilang_country', ''),
+            (null, 'system_check', '{}')
+            ";
+    $q = Db::query($sql);
+    if ($q) {
+        $alertgreen = 'Upgrade Success!';
+    }else{
+        $alertred[] = 'Upgrade Failed';
+    }
+}elseif(isset($_POST['006'])){
+    $sql = "INSERT INTO `options` VALUES 
+            (null, 'multilang_enable', 'off'),
+            (null, 'multilang_default', ''),
+            (null, 'multilang_country', ''),
+            (null, 'system_check', '{}')
+            ";
+    $q = Db::query($sql);
     if ($q) {
         $alertgreen = 'Upgrade Success!';
     }else{
@@ -115,6 +135,14 @@ echo "
 <form method=\"post\">
 <div class=\"form-group\">
 <button name=\"005\" class=\"btn btn-success\"><i class=\"fa fa-upload\"></i> Upgrade from v0.0.5</button>
+</div>
+</form>
+
+
+<h3>Upgrade from Version 0.0.6</h3>
+<form method=\"post\">
+<div class=\"form-group\">
+<button name=\"006\" class=\"btn btn-success\"><i class=\"fa fa-upload\"></i> Upgrade from v0.0.5</button>
 </div>
 </form>
 ";

@@ -21,7 +21,7 @@ define('GX_ASSET', GX_PATH.'/assets/');
 function __autoload($f) {
     require GX_LIB. $f . '.class.php';
 }
-Session::start();
+
 Session::destroy();
 
 header("Location: index.php");

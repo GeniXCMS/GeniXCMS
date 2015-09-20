@@ -29,7 +29,6 @@ try {
     echo $e->getMessage();
 }
 
-Session::start();;
 Hooks::run('user_logout_action');
 Session::destroy();
 header("Location: index.php");
