@@ -15,9 +15,9 @@ class DbTest extends PHPUnit_Framework_TestCase
 
         $result = Db::query('SELECT * FROM `test_table`');
         if ($result->num_rows > 0) {
-            $return = true;
-        }else{
             $return = false;
+        }else{
+            $return = true;
         }
         $this->assertTrue($return);
     }
