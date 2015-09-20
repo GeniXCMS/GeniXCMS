@@ -3,7 +3,7 @@
             <div class="sidebar-module sidebar-module-inset">
                 <h4>About</h4>
                 <h5><?=Site::logo('','40px');?> <?=Site::$name;?></h5>
-                <p><em><?=Options::get('siteslogan');?></em>
+                <p><em><?=Options::v('siteslogan');?></em>
                     <?=Site::$desc;?></p>
                 </div>
                 <div class="sidebar-module">

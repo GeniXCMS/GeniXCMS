@@ -74,7 +74,7 @@ class Mod
     }
 
     public static function ModMenu(){
-        $json = Options::get('modules');
+        $json = Options::v('modules');
         $mod = json_decode($json, true);
         //$mod = self::modList();
         //print_r($mod);
@@ -107,7 +107,7 @@ class Mod
     }
 
     public static function activate($mod){
-        $json = Options::get('modules');
+        $json = Options::v('modules');
         $mods = json_decode($json, true);
         //print_r($mods);
         if (!is_array($mods) || $mods == "") {
@@ -130,7 +130,7 @@ class Mod
     }
 
     public static function deactivate($mod){
-        $mods = Options::get('modules');
+        $mods = Options::v('modules');
         $mods = json_decode($mods, true);
         if (!is_array($mods) || $mods == "") {
             $mods = array();
@@ -158,7 +158,7 @@ class Mod
     }
 
     public static function isActive($mod){
-        $json = Options::get('modules');
+        $json = Options::v('modules');
         $mods = json_decode($json, true);
         //print_r($mods);
         if (!is_array($mods) || $mods == "") {
@@ -219,7 +219,7 @@ class Mod
             }
         }
 
-        $json = Options::get('modules');
+        $json = Options::v('modules');
         $mods = json_decode($json, true);
         if (!is_array($mods) || $mods == "") {
             $mods = array();

@@ -18,7 +18,7 @@
 class Date
 {
     public static function format($date, $format='') {
-        $timezone = Options::get('timezone');
+        $timezone = Options::v('timezone');
         $time = strtotime($date);
         (empty($format))? $format = "j F Y H:i A T" : $format = $format;
         $date = new DateTime($date);
@@ -28,9 +28,9 @@ class Date
     }
 
     public static function local($date, $format=''){
-        setlocale(LC_TIME, Options::get('country_id'));
+        setlocale(LC_TIME, Options::v('country_id'));
         (empty($format))? $format = "%#d %B %Y %H:%M %p" : $format = $format;
-        $timezone = Options::get('timezone');
+        $timezone = Options::v('timezone');
         $date = new DateTime($date);
         $date->setTimezone(new DateTimeZone($timezone));
         $newdate = $date->format("Y/m/j H:i:s");

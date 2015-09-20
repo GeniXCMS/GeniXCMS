@@ -80,7 +80,7 @@ if (isset($data['alertred'])) {
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label>Enable Multilanguage</label>
-                        <?php if(Options::get('multilang_enable') === 'on') { $multilang_enable = 'checked'; } 
+                        <?php if(Options::v('multilang_enable') === 'on') { $multilang_enable = 'checked'; } 
                         else{ $multilang_enable = 'off';} 
                         ?>
                         <div class="input-group">

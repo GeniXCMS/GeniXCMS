@@ -58,7 +58,7 @@ if (isset($data['alertred'])) {
     <div class="col-sm-12">
         <div class="row">
             <?php
-                $active = Options::get('themes');
+                $active = Options::v('themes');
                 $adata = Theme::data($active);
                 // print_r($adata);
                 echo "

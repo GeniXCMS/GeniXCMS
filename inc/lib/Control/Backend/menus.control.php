@@ -42,8 +42,8 @@ switch ($act) {
                 if(isset($alertred)){
                     $data['alertred'] = $alertred;
                 }else{
-                    $menus = Options::get('menus');
-                    $menus = json_decode(Options::get('menus'), true);
+                    $menus = Options::v('menus');
+                    $menus = json_decode(Options::v('menus'), true);
                    //echo "<pre>"; print_r($menus); echo "</pre>";
                     // $menu = array(
                     //                 $_POST['id']  =>  array(
@@ -189,7 +189,7 @@ switch ($act) {
         }else{
             $data['alertred'][] = 'No ID Selected.';
         }
-        $data['menus'] = Options::get('menus');
+        $data['menus'] = Options::v('menus');
         Theme::admin('header', $data);
         System::inc('menus', $data);
         Theme::admin('footer');
@@ -204,7 +204,7 @@ switch ($act) {
             if(isset($alertred)){
                 $data['alertred'] = $alertred;
             }else{
-                $menus = json_decode(Options::get('menus'), true);
+                $menus = json_decode(Options::v('menus'), true);
                 unset($menus[$_GET['menuid']]);
 
                 $sql = sprintf("DELETE FROM `menus` WHERE `menuid` = '%s' ", $_GET['menuid']);
@@ -217,7 +217,7 @@ switch ($act) {
         }else{
             $data['alertred'][] = 'No ID Selected.';
         }
-        $data['menus'] = Options::get('menus');
+        $data['menus'] = Options::v('menus');
         Theme::admin('header', $data);
         System::inc('menus', $data);
         Theme::admin('footer');
@@ -254,7 +254,7 @@ switch ($act) {
                                                 'menu' => array()
                                             )
                                     );
-                    $menus = json_decode(Options::get('menus'), true);
+                    $menus = json_decode(Options::v('menus'), true);
                     if(is_array($menus)){
                         $menu = array_merge($menus, $menu);
                     }
@@ -355,7 +355,7 @@ switch ($act) {
 
         // CHANGE ORDER END
 
-        $data['menus'] = Options::get('menus');
+        $data['menus'] = Options::v('menus');
         Theme::admin('header', $data);
         System::inc('menus', $data);
         Theme::admin('footer');

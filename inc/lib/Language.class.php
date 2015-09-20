@@ -54,8 +54,8 @@ class Language
     }
 
     public static function getDefaultLang() {
-        $def = Options::get('multilang_default');
-        $lang = json_decode(Options::get('multilang_country'), true);
+        $def = Options::v('multilang_default');
+        $lang = json_decode(Options::v('multilang_country'), true);
         $deflang = $lang[$def];
         return $deflang;
     }
@@ -85,7 +85,7 @@ class Language
     public static function isActive () {
         switch (SMART_URL) {
             case true:
-                if (Options::get('multilang_enable') === 'on') {
+                if (Options::v('multilang_enable') === 'on') {
                     $langs = Session::val('lang');
                     if($langs != '') {
                         $lang = Session::val('lang');
@@ -100,7 +100,7 @@ class Language
                 break;
             
             default:
-                if (Options::get('multilang_enable') === 'on') {
+                if (Options::v('multilang_enable') === 'on') {
                     $langs = Session::val('lang');
                     if($langs != '') {
                         $lang = Session::val('lang');
@@ -117,7 +117,7 @@ class Language
     }
 
     public static function flagList () {
-        $lang = json_decode(Options::get('multilang_country'), true);
+        $lang = json_decode(Options::v('multilang_country'), true);
         // print_r($lang);
         $html = "<ul class=\"nav nav-pills\">";
         foreach ($lang as $key => $value) {

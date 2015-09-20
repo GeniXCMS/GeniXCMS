@@ -61,7 +61,7 @@ class Typo
       $text = trim($text, '-');
 
       // transliterate
-      setlocale(LC_CTYPE, Options::get('country').'.utf8');
+      setlocale(LC_CTYPE, Options::v('country').'.utf8');
       $text = iconv('utf-8', 'ASCII//TRANSLIT', $text);
       // lowercase
       $text = strtolower($text);

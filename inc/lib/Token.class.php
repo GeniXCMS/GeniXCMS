@@ -58,7 +58,7 @@ class Token
     * $token = [{'time','ip','url',token'},]
     */
     public static function json() {
-        $token = Options::get('tokens');
+        $token = Options::v('tokens');
         $token = json_decode($token, true);
         $newtoken = array(
                         TOKEN => array(
@@ -76,7 +76,7 @@ class Token
     }
 
     public static function isExist($token){
-        $json = Options::get('tokens');
+        $json = Options::v('tokens');
         $tokens = json_decode($json, true);
         if(!is_array($tokens) || $tokens == ""){
             $tokens = array();
@@ -90,7 +90,7 @@ class Token
     }
 
     public static function remove($token){
-        $json = Options::get('tokens');
+        $json = Options::v('tokens');
         $tokens = json_decode($json, true);
         unset($tokens[$token]);
         $tokens = json_encode($tokens);

@@ -67,6 +67,7 @@ switch (isset($_POST['change'])) {
             unset($vars['change']);
             //print_r($vars);
             Options::update($vars);
+            new Options();
             $data['alertgreen'][] = MSG_SETTINGS_SAVED;
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
@@ -77,6 +78,7 @@ switch (isset($_POST['change'])) {
         //print_r($data);
         break;
 }
+
 Theme::admin('header', $data);
 System::inc('settings',$data);
 Theme::admin('footer');

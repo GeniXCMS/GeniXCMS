@@ -19,7 +19,14 @@
 class Options
 {
 
+    /**
+    * GeniXCMS Options variable
+    * @return object
+    */
+    public static $_data;
+
     public function __construct() {
+        self::$_data = self::load();
     }
 
     // $vars = array(
@@ -63,6 +70,28 @@ class Options
         }else{
             return false;
         }
+    }
+
+    public static function load() {
+        $op = Db::result("SELECT * FROM `options` ORDER BY `id` ASC");
+        if(Db::$num_rows > 0){
+            return $op;
+        }else{
+            return false;
+        }
+    }
+
+    public static function v($vars) {
+        $opt = self::$_data;
+        // echo "<pre>";
+        foreach ($opt as $k => $v) {
+
+            // echo $v->name;
+            if ($v->name == $vars) {
+                return $v->value;
+            }
+        }
+        // echo "</pre>";
     }
     
 }

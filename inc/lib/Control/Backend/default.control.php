@@ -14,7 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-
+    // echo(Options::v('sitename'));
     $data['sitetitle'] = DASHBOARD;
     Theme::admin('header', $data);
     System::inc('dashboard', $data);

@@ -30,6 +30,7 @@ class System
     */
     static $v_release        = "alpha";
 
+
     /**
     * System Constructor.
     * Initializing the system, check the config file
@@ -41,8 +42,11 @@ class System
         Session::start();
         self::config('config');
         new Db();
+        
         new Hooks();
-        self::lang(Options::get('system_lang'));
+        Hooks::run('init');
+        new Options();
+        self::lang(Options::v('system_lang'));
         new Language();
         new Site();
         new Router();
@@ -51,7 +55,7 @@ class System
         Mod::loader();
         Theme::loader();
 
-        Hooks::run('init');
+        
     }
 
     /**
@@ -159,7 +163,7 @@ class System
     }
 
     public static function latestVersion () {
-        $check = json_decode(Options::get('system_check'), true);
+        $check = json_decode(Options::v('system_check'), true);
         $now = strtotime(date("Y-m-d H:i:s"));
         
         if (isset($check['last_check']) ) {

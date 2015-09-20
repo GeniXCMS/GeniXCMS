@@ -26,9 +26,9 @@ class Pinger
 
 
     public function __construct () {
-        self::$myBlogName          = Options::get('sitename');
-        self::$myBlogUrl           = Options::get('siteurl');
-        self::$myBlogUpdateUrl     = Options::get('siteurl');
+        self::$myBlogName          = Options::v('sitename');
+        self::$myBlogUrl           = Options::v('siteurl');
+        self::$myBlogUpdateUrl     = Options::v('siteurl');
         self::$myBlogRSSFeedUrl    = Url::rss();
     }
 
@@ -63,7 +63,7 @@ class Pinger
             $pinger = str_replace("\r\n", "\n", $vars);
             $pinger = explode("\n", $pinger);
             $pinger = str_replace("\r\n", "", $pinger);
-            $pinger = str_replace("{{domain}}", Options::get('sitedomain'), $pinger);
+            $pinger = str_replace("{{domain}}", Options::v('sitedomain'), $pinger);
             foreach ($pinger as $p) {
                 # code...
                 self::rpc($p);

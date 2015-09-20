@@ -32,13 +32,13 @@ class Site
         global $GLOBALS, $data;
         self::$editors =& $GLOBALS;
         self::$data =& $data;
-        self::$url = Options::get('siteurl');
-        self::$domain = Options::get('sitedomain');
-        self::$name = Options::get('sitename');
-        self::$key = Options::get('sitekeywords');
-        self::$desc = Options::get('sitedesc');
-        self::$email = Options::get('siteemail');
-        self::$slogan = Options::get('siteslogan');
+        self::$url = Options::v('siteurl');
+        self::$domain = Options::v('sitedomain');
+        self::$name = Options::v('sitename');
+        self::$key = Options::v('sitekeywords');
+        self::$desc = Options::v('sitedesc');
+        self::$email = Options::v('siteemail');
+        self::$slogan = Options::v('siteslogan');
     }
 
     /* Call all Website Meta at Header
@@ -60,8 +60,8 @@ class Site
                 $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)),0,$limit);
                 $titlelength = strlen($data['posts'][0]->title);
             }else{
-                $cont_title = substr(Typo::Xclean(Typo::strip(Options::get('siteslogan'))),0,$limit);
-                $titlelength = strlen(Options::get('siteslogan'));
+                $cont_title = substr(Typo::Xclean(Typo::strip(Options::v('siteslogan'))),0,$limit);
+                $titlelength = strlen(Options::v('siteslogan'));
             }
             if($titlelength > $limit+3) { $dotted = "...";} else {$dotted = "";}
             $cont_title = "{$pre} {$cont_title}{$dotted} - ";
@@ -77,7 +77,7 @@ class Site
         $keyword = Hooks::filter('site_key_filter', self::$key);
         echo "
     <!--// Start Meta: Generated Automaticaly by GeniXCMS -->
-    <meta charset=\"".Options::get('charset')."\">";
+    <meta charset=\"".Options::v('charset')."\">";
         echo "
     <!-- SEO: Title stripped 70chars for SEO Purpose -->
     <title>{$cont_title}".self::$name."</title>
@@ -90,8 +90,8 @@ class Site
     }
         echo "
     <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
-    <meta name=\"robots\" content=\"".Options::get('robots')."\">
-    <link rel=\"shortcut icon\" href=\"".Options::get('siteicon')."\" />
+    <meta name=\"robots\" content=\"".Options::v('robots')."\">
+    <link rel=\"shortcut icon\" href=\"".Options::v('siteicon')."\" />
         ";
         echo Hooks::run('header_load_meta', $data);
         echo "
@@ -106,20 +106,20 @@ class Site
         global $data;
         //echo $GLOBALS['editor'].' one '. self::$editors;
         $foot ="";
-        $bs = Options::get('use_bootstrap');
+        $bs = Options::v('use_bootstrap');
         if($bs == 'on'){
             $foot .= "
     <link href=\"".self::$url."/assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
         }
 
-        $jquery = Options::get('use_jquery');
-        $jquery_v = Options::get('jquery_v');
+        $jquery = Options::v('use_jquery');
+        $jquery_v = Options::v('jquery_v');
         if($jquery == 'on'){
             $foot .= "
     <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/".$jquery_v."/jquery.min.js\"></script>";
         }
 
-        $bs = Options::get('use_bootstrap');
+        $bs = Options::v('use_bootstrap');
         if($bs == 'on'){
             $foot .= "
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
@@ -127,7 +127,7 @@ class Site
             <script src=\"".self::$url."/assets/js/ie10-viewport-bug-workaround.js\"></script>";
         }
 
-        $fa = Options::get('use_fontawesome');
+        $fa = Options::v('use_fontawesome');
         if($fa == 'on'){
             $foot .= "
             <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
@@ -232,11 +232,11 @@ class Site
 
     public static function logo ($width='', $height='') {
         // check which logo is used, logourl or uploaded files.
-        if( Options::get('is_logourl') == "on" && Options::get('logourl') != "" ) {
-            $logo = "<img src=\"".self::$url.Options::get('logourl')."\"
+        if( Options::v('is_logourl') == "on" && Options::v('logourl') != "" ) {
+            $logo = "<img src=\"".self::$url.Options::v('logourl')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
-        }elseif( Options::get('is_logourl') == "off" && Options::get('logo') != "" ){
-            $logo = "<img src=\"".self::$url.Options::get('logo')."\"
+        }elseif( Options::v('is_logourl') == "off" && Options::v('logo') != "" ){
+            $logo = "<img src=\"".self::$url.Options::v('logo')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         }else{
             $logo = "<span class=\"mg genixcms-logo\"></span>";

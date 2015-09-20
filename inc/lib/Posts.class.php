@@ -45,7 +45,7 @@ class Posts
             $post = Db::insert($ins);
             self::$last_id = Db::$last_id;
             Hooks::run('post_sqladd_action', $vars, self::$last_id);
-            $pinger = Options::get('pinger');
+            $pinger = Options::v('pinger');
             if ($pinger != "") {
                 Pinger::run($pinger);
             }
@@ -67,7 +67,7 @@ class Posts
                     );
             $post = Db::update($ins);
             Hooks::run('post_sqladd_action', $vars, $id);
-            $pinger = Options::get('pinger');
+            $pinger = Options::v('pinger');
             if ($pinger != "") {
                 Pinger::run($pinger);
             }
@@ -312,12 +312,12 @@ class Posts
     }
 
     public static function prepare($post) {
-        if(Options::get('multilang_enable') === 'on') {
+        if(Options::v('multilang_enable') === 'on') {
             $langs = Language::isActive();
             if (!empty($langs)) {
                 foreach ($post as $p) {
                     if (Posts::existParam('multilang', $p->id) 
-                        && Options::get('multilang_default') !== $langs) {
+                        && Options::v('multilang_default') !== $langs) {
                         # code...
                         $lang = Language::getLangParam($langs, $p->id);
                         $posts = get_object_vars($p);

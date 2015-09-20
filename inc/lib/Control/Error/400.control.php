@@ -22,7 +22,7 @@ if(Theme::exist('400')) {
         <h1>Ooops!!</h1>
         <h2 style=\"font-size: 20em\">400</h2>
         <h3>Bad Request</h3>
-        Back to <a href=\"".Options::get('siteurl')."\">".Options::get('sitename')."</a>
+        Back to <a href=\"".Options::v('siteurl')."\">".Options::v('sitename')."</a>
         </center>
         ";
     Site::footer();

@@ -17,7 +17,7 @@
 
 $data = Router::scrap($param);
 $post="";
-$data['max'] = Options::get('post_perpage');
+$data['max'] = Options::v('post_perpage');
 if (SMART_URL) {
     if ( isset($data['paging']) ) {
         $paging = $data['paging'];
@@ -61,7 +61,7 @@ $paging = array(
                 'where' => '`type` = \'post\'',
                 'max' => $data['max'],
                 'url' => $url,
-                'type' => Options::get('pagination')
+                'type' => Options::v('pagination')
             );
 $data['paging'] = Paging::create($paging, SMART_URL);
 Theme::theme('header',$data);

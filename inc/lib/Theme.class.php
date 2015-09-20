@@ -82,7 +82,7 @@ class Theme
     }
 
     public static function editor($mode = 'light'){
-        $editor = Options::get('use_editor');
+        $editor = Options::v('use_editor');
         if($editor == 'on'){
             $GLOBALS['editor'] = true;
         }else{
@@ -189,7 +189,7 @@ class Theme
     }
 
     public static function isActive($thm){
-        if(Options::get('themes') === $thm){
+        if(Options::v('themes') === $thm){
             return true;
         }else{
             return false;
@@ -197,13 +197,13 @@ class Theme
     }
 
     public static function loader(){
-        $theme = Options::get('themes');
+        $theme = Options::v('themes');
         define('THEME', $theme);
         self::incFunc($theme);
     }
 
     public static function thmMenu(){
-        $thm = Options::get('themes');
+        $thm = Options::v('themes');
         //$mod = self::modList();
         //print_r($mod);
         $list = '';

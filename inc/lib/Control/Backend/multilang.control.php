@@ -37,7 +37,7 @@ if (isset($_POST['addcountry'])) {
                         'flag' => $_POST['multilang_country_flag']
                     )
             );
-        $langs = json_decode(Options::get('multilang_country'), true);
+        $langs = json_decode(Options::v('multilang_country'), true);
         $langs = array_merge((array)$langs, $lang);
         $langs = json_encode($langs);
         Options::update('multilang_country', $langs);
@@ -53,12 +53,13 @@ if (isset($_GET['del']) && $_GET['del'] != '') {
         $alertred[] = TOKEN_NOT_EXIST;
     }
     if (!isset($alertred)) {
-        $langs = json_decode(Options::get('multilang_country'), true);
+        $langs = json_decode(Options::v('multilang_country'), true);
         if (array_key_exists($_GET['del'], $langs)) {
             unset($langs[$_GET['del']]);
             $langs = json_encode($langs);
             // print_r($langs);
             Options::update('multilang_country',$langs);
+            new Options();
             $data['alertgreen'][] = "Work";
             Token::remove($_GET['token']);
         }else{
@@ -111,8 +112,8 @@ if (isset($_POST['change'])) {
         $data['alertred'] = $alertred;
     }
 }
-$data['default_lang'] = Options::get('multilang_default');
-$data['list_lang'] = json_decode(Options::get('multilang_country'), true);
+$data['default_lang'] = Options::v('multilang_default');
+$data['list_lang'] = json_decode(Options::v('multilang_country'), true);
 
 Theme::admin('header', $data);
 System::inc('multilang', $data);

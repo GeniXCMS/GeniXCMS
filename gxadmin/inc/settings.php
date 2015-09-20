@@ -90,12 +90,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_NAME;?></label>
-                                <input type="text" name="sitename" value="<?=Site::$name;?>" class="form-control">
+                                <input type="text" name="sitename" value="<?=Options::v('sitename');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_NAME_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_SLOGAN;?></label>
-                                <input type="text" name="siteslogan" value="<?=Options::get('siteslogan');?>" class="form-control">
+                                <input type="text" name="siteslogan" value="<?=Options::v('siteslogan');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_SLOGAN_DESC;?></small>
                             </div>
                         </div>
@@ -106,12 +106,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_DOMAIN;?></label>
-                                <input type="text" name="sitedomain" value="<?=Site::$domain;?>" class="form-control">
+                                <input type="text" name="sitedomain" value="<?=Options::v('sitedomain');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_DOMAIN_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_URI;?></label>
-                                <input type="text" name="siteurl" value="<?=Site::$url;?>" class="form-control">
+                                <input type="text" name="siteurl" value="<?=Options::v('siteurl');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_URI_DESC;?></small>
                             </div>
                         </div>
@@ -122,12 +122,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_KEYWORDS;?></label>
-                                <input type="text" name="sitekeywords" value="<?=Site::$key;?>" class="form-control">
+                                <input type="text" name="sitekeywords" value="<?=Options::v('sitekey');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_KEYWORDS_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_DESCRIPTION;?></label>
-                                <textarea  name="sitedesc" class="form-control"><?=Site::$desc;?></textarea>
+                                <textarea  name="sitedesc" class="form-control"><?=Options::v('sitedesc');?></textarea>
                                 <small class="help-block"><?=WEBSITE_DESCRIPTION_DESC;?></small>
                             </div>
                         </div>
@@ -137,7 +137,7 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_EMAIL;?></label>
-                                <input type="text" name="siteemail" value="<?=Options::get('siteemail');?>" class="form-control">
+                                <input type="text" name="siteemail" value="<?=Options::v('siteemail');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_EMAIL_DESCR;?></small>
                             </div>
                             
@@ -162,14 +162,14 @@ if (isset($data['alertred'])) {
                                     <div class="col-sm-6">
                                         <label><?=COUNTRY;?></label>
                                         <select name="country_id" class="form-control">
-                                            <?=Date::optCountry(Options::get('country_id'));?>
+                                            <?=Date::optCountry(Options::v('country_id'));?>
                                         </select>
                                         <small class="help-block"><?=COUNTRY_DESC;?></small>
                                     </div>
                                     <div class="col-sm-6">
                                         <label><?=TIMEZONE;?></label>
                                         <select name="timezone" class="form-control">
-                                            <?=Date::optTimeZone(Options::get('timezone'));?>
+                                            <?=Date::optTimeZone(Options::v('timezone'));?>
                                         </select>
                                         <small class="help-block"><?=TIMEZONE_DESC;?></small>
                                     </div>
@@ -181,13 +181,13 @@ if (isset($data['alertred'])) {
                                     <div class="col-sm-6">
                                         <label><?=WEBSITE_LANG;?></label>
                                         <select name="system_lang" class="form-control">
-                                            <?=Language::optDropdown(Options::get('system_lang'));?>
+                                            <?=Language::optDropdown(Options::v('system_lang'));?>
                                         </select>
                                         <small class="help-block"><?=WEBSITE_LANG_DESC;?></small>
                                     </div>
                                     <div class="col-sm-6">
                                         <label><?=CHARSET;?></label>
-                                        <input name="charset" class="form-control" value="<?=Options::get('charset');?>">
+                                        <input name="charset" class="form-control" value="<?=Options::v('charset');?>">
                                         <small class="help-block"><?=CHARSET_DESC;?></small>
                                     </div>
 
@@ -209,8 +209,8 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_MAIL;?></label>
                                 <?php
-                                if(Options::get('mailtype') == 0){ $o = "selected"; $s = "";}
-                                elseif(Options::get('mailtype') == 1 ) {$s = "selected"; $o = "";}
+                                if(Options::v('mailtype') == 0){ $o = "selected"; $s = "";}
+                                elseif(Options::v('mailtype') == 1 ) {$s = "selected"; $o = "";}
                                 ?>
                                 <select name="mailtype" class="form-control">
                                     <option value="0" <?=$o;?>>Mail</option>
@@ -220,7 +220,7 @@ if (isset($data['alertred'])) {
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_SMTP;?></label>
-                                <input type="text" name="smtpport" value="<?=Options::get('smtpport');?>" class="form-control">
+                                <input type="text" name="smtpport" value="<?=Options::v('smtpport');?>" class="form-control">
 
                                 <small class="help-block"><?=SETTINGS_EMAIL_SMTP_DESCR;?></small>
                             </div>
@@ -232,12 +232,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_MAILSRV;?></label>
-                                <input type="text" name="smtphost" value="<?=Options::get('smtphost');?>" class="form-control">
+                                <input type="text" name="smtphost" value="<?=Options::v('smtphost');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_EMAIL_MAILSRV_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_SMTP_USR;?></label>
-                                <input type="text" name="smtpuser" value="<?=Options::get('smtpuser');?>" class="form-control">
+                                <input type="text" name="smtpuser" value="<?=Options::v('smtpuser');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_EMAIL_SMTP_USR_DESCR;?></small>
                             </div>
                         </div>
@@ -248,7 +248,7 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_SMTP_PWD;?></label>
-                                <input type="password" name="smtppass" value="<?=Options::get('smtppass');?>" class="form-control">
+                                <input type="password" name="smtppass" value="<?=Options::v('smtppass');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_EMAIL_SMTP_PWD_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
@@ -266,12 +266,12 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_SOCIAL_FBACC;?></label>
-                                <input type="text" name="fbacc" value="<?=Options::get('fbacc');?>" class="form-control">
+                                <input type="text" name="fbacc" value="<?=Options::v('fbacc');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_SOCIAL_FBACC_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_SOCIAL_FBPAGE;?></label>
-                                <input type="text" name="fbpage" value="<?=Options::get('fbpage');?>" class="form-control">
+                                <input type="text" name="fbpage" value="<?=Options::v('fbpage');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_SOCIAL_FBPAGE_DESCR;?></small>
                             </div>
                         </div>
@@ -284,13 +284,13 @@ if (isset($data['alertred'])) {
                                 <label><?=SETTINGS_SOCIAL_TWITTER;?></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">@</span>
-                                    <input type="text" name="twitter" value="<?=Options::get('twitter');?>" class="form-control">
+                                    <input type="text" name="twitter" value="<?=Options::v('twitter');?>" class="form-control">
                                 </div>
                                 <small class="help-block"><?=SETTINGS_SOCIAL_TWITTER_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_SOCIAL_LINKEDIN;?></label>
-                                <input type="text" name="linkedin" value="<?=Options::get('linkedin');?>" class="form-control">
+                                <input type="text" name="linkedin" value="<?=Options::v('linkedin');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_SOCIAL_LINKEDIN_DESCR;?></small>
                             </div>
                         </div>
@@ -307,13 +307,13 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LOGO_CURRENT;?></label>
                                 <?php
-                                $is_logourl = Options::get('is_logourl');
-                                $logourl = Options::get('logourl');
-                                $logo = Options::get('logo');
+                                $is_logourl = Options::v('is_logourl');
+                                $logourl = Options::v('logourl');
+                                $logo = Options::v('logo');
                                 if($is_logourl == 'on' && $logourl != ''){
-                                    $logoimg = "<img src=\"".Options::get('logourl')."\" class=\"clearfix\">";
+                                    $logoimg = "<img src=\"".Options::v('logourl')."\" class=\"clearfix\">";
                                 }elseif($is_logourl == 'off' && $logo != ''){
-                                    $logoimg = "<img src=\"".Site::$url.Options::get('logo')."\" class=\"clearfix\">";
+                                    $logoimg = "<img src=\"".Site::$url.Options::v('logo')."\" class=\"clearfix\">";
                                 }else{
                                     $logoimg = '';
                                 }
@@ -343,13 +343,13 @@ if (isset($data['alertred'])) {
                                 <div class="input-group">
 
                                     <span class="input-group-addon">
-                                        <?php if(Options::get('is_logourl') == 'on') { $is_logourl = 'checked'; } 
+                                        <?php if(Options::v('is_logourl') == 'on') { $is_logourl = 'checked'; } 
                                         else{ $is_logourl = 'off';} 
                                         ?>
                                         <input type="checkbox" name="is_logourl" rel="tooltip" 
                                         title="Check here if you want to use URL" <?=$is_logourl;?>>
                                     </span>
-                                    <input type="text" name="logourl" value="<?=Options::get('logourl');?>" class="form-control">
+                                    <input type="text" name="logourl" value="<?=Options::v('logourl');?>" class="form-control">
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LOGO_URL_DESCR;?></small>
                             </div>
@@ -360,7 +360,7 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LOGO_FAVICON;?></label>
-                                <input type="text" name="siteicon" value="<?=Options::get('siteicon');?>" class="form-control">
+                                <input type="text" name="siteicon" value="<?=Options::v('siteicon');?>" class="form-control">
                                 <small class="help-block"><?=SETTINGS_LOGO_FAVICON_DESCR;?></small>
                             </div>
                         </div>
@@ -375,7 +375,7 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
-                                <?php if(Options::get('use_jquery') == 'on') { $use_jquery = 'checked'; } 
+                                <?php if(Options::v('use_jquery') == 'on') { $use_jquery = 'checked'; } 
                                 else{ $use_jquery = 'off';} 
                                 ?>
                                 <div class="input-group">
@@ -385,7 +385,7 @@ if (isset($data['alertred'])) {
                                     </span>
                                     <input type="text" name="jquery_v" rel="tooltip" 
                                     class="form-control" placeholder="Jquery Version" 
-                                    value="<?=Options::get('jquery_v');?>">
+                                    value="<?=Options::v('jquery_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
@@ -398,7 +398,7 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
                                 <?php 
-                                if(Options::get('use_bootstrap') == 'on') { 
+                                if(Options::v('use_bootstrap') == 'on') { 
                                     $use_bootstrap = 'checked'; 
                                 }else{ 
                                     $use_bootstrap = 'off';
@@ -411,7 +411,7 @@ if (isset($data['alertred'])) {
                                     </span>
                                     <input type="text" name="bs_v" rel="tooltip" 
                                     class="form-control disable" placeholder="Bootstrap Version" 
-                                    readonly value="<?=Options::get('bs_v');?>">
+                                    readonly value="<?=Options::v('bs_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
@@ -424,7 +424,7 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_FAWESOME;?></label>
                                 <?php 
-                                if(Options::get('use_fontawesome') == 'on') { 
+                                if(Options::v('use_fontawesome') == 'on') { 
                                     $use_fontawesome = 'checked'; 
                                 }else{ 
                                     $use_fontawesome = 'off';
@@ -437,7 +437,7 @@ if (isset($data['alertred'])) {
                                     </span>
                                     <input type="text" name="fontawesome_v" rel="tooltip" 
                                     class="form-control disable" placeholder="Fontawesome Version" 
-                                    readonly value="<?=Options::get('fontawesome_v');?>">
+                                    readonly value="<?=Options::v('fontawesome_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
@@ -450,7 +450,7 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_EDITOR;?></label>
                                 <?php 
-                                if(Options::get('use_editor') == 'on') { 
+                                if(Options::v('use_editor') == 'on') { 
                                     $use_editor = 'checked'; 
                                 }else{ 
                                     $use_editor = 'off';
@@ -463,7 +463,7 @@ if (isset($data['alertred'])) {
                                     </span>
                                     <input type="text" name="editor_v" rel="tooltip" 
                                     class="form-control disable" placeholder="Editor Version" 
-                                    readonly value="<?=Options::get('editor_v');?>">
+                                    readonly value="<?=Options::v('editor_v');?>">
                                     <span class="input-group-btn">
                                         <select name="editor_type" rel="tooltip"
                                         title=""
@@ -477,7 +477,7 @@ if (isset($data['alertred'])) {
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BVALIDATOR;?></label>
                                 <?php 
-                                if(Options::get('use_bsvalidator') == 'on') { 
+                                if(Options::v('use_bsvalidator') == 'on') { 
                                     $use_bsvalidator = 'checked'; 
                                 }else{ 
                                     $use_bsvalidator = 'off';
@@ -490,7 +490,7 @@ if (isset($data['alertred'])) {
                                     </span>
                                     <input type="text" name="bsvalidator_v" rel="tooltip" 
                                     class="form-control disable" placeholder="Bootstrap Validator Version" 
-                                    readonly value="<?=Options::get('bsvalidator_v');?>">
+                                    readonly value="<?=Options::v('bsvalidator_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
@@ -512,17 +512,17 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_POSTS_PERPAGE;?></label>
-                                <input type="number" name="post_perpage" value="<?=Options::get('post_perpage');?>" class="form-control" min='1'>
+                                <input type="number" name="post_perpage" value="<?=Options::v('post_perpage');?>" class="form-control" min='1'>
                                 <small class="help-block"><?=SETTINGS_POSTS_PERPAGE_DESCR;?></small>
 
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_POSTS_PAGINATION;?></label>
                                 <?php
-                                if(Options::get('pagination')=='number'){
+                                if(Options::v('pagination')=='number'){
                                     $number = 'selected'; 
                                     $pager = '';
-                                }elseif(Options::get('pagination') == 'pager'){
+                                }elseif(Options::v('pagination') == 'pager'){
                                     $pager = 'selected';
                                     $number = '';
                                 }else{
@@ -540,7 +540,7 @@ if (isset($data['alertred'])) {
                                 <label><?=SETTINGS_POSTS_PINGER;?></label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><?=SETTINGS_POSTS_PINGER_HTTP?></span>
-                                    <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::get('pinger');?></textarea>
+                                    <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::v('pinger');?></textarea>
                                 </div>
 
                                 <small class="help-block"><?=SETTINGS_POSTS_PINGER_DESCR?></small>
@@ -552,7 +552,7 @@ if (isset($data['alertred'])) {
                 </div><!-- Posts Tab END -->
 
                 <?php
-                $curr = Options::get('currency');
+                $curr = Options::v('currency');
                 if ($curr == "USD") {
                     $usd = "SELECTED";
                     $euro = "";
@@ -592,7 +592,7 @@ if (isset($data['alertred'])) {
                                 <label for="ppsandbox"><?=SETTINGS_PAYMENT_SANDBOX?></label>
                                 <div class="form-group">
                                     <?php
-                                    $ppsandbox = Options::get('ppsandbox');
+                                    $ppsandbox = Options::v('ppsandbox');
                                     if($ppsandbox == 'on'){
                                         $sandbox = "checked";
                                         $sandval = 0;
@@ -610,19 +610,19 @@ if (isset($data['alertred'])) {
                             <div class="form-group  col-md-6 clearfix">
                                 <label for="ppemail"><?=SETTINGS_PAYMENT_PAYPALAPI_USR?></label>
                                 <input type="text" class="form-control" id="ppemail" placeholder="API Username"
-                                name="ppuser" value="<?=Options::get('ppuser');?>">
+                                name="ppuser" value="<?=Options::v('ppuser');?>">
                                 <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_USR_DESCR?></small>
                             </div>
                             <div class="form-group  col-md-6">
                                 <label for="ppsecurity"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD?></label>
                                 <input type="text" class="form-control" id="ppsecurity" placeholder="PayPal API Password"
-                                name="pppass" value="<?=Options::get('pppass');?>">
+                                name="pppass" value="<?=Options::v('pppass');?>">
                                 <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD_DESCR?></small>
                             </div>
                             <div class="form-group  col-md-6 clearfix">
                                 <label for="ppsecret"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN?></label>
                                 <input type="text" class="form-control" id="ppsecret" placeholder="PayPal Signature"
-                                name="ppsign" value="<?=Options::get('ppsign');?>">
+                                name="ppsign" value="<?=Options::v('ppsign');?>">
                                 <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR?></small>
                             </div>
                         </div>
@@ -648,7 +648,7 @@ if (isset($data['alertred'])) {
                     <div class="col-md-6">
                         <label><?=GOOGLE_RECAPTCHA?></label>
                         <?php
-                        $google_captcha_enable = Options::get('google_captcha_enable');
+                        $google_captcha_enable = Options::v('google_captcha_enable');
                         if($google_captcha_enable == 'on'){
                             $enable_captcha = "checked";
                         }else{
@@ -667,7 +667,7 @@ if (isset($data['alertred'])) {
                         <label><?=GOOGLE_RECAPTCHA_LANG?></label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="google_captcha_lang" 
-                            value="<?=Options::get('google_captcha_lang');?>">
+                            value="<?=Options::v('google_captcha_lang');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_LANG_DESCR?></small>
                         </div>
                     </div>
@@ -675,7 +675,7 @@ if (isset($data['alertred'])) {
                         <label><?=GOOGLE_RECAPTCHA_SITEKEY?></label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="google_captcha_sitekey" 
-                            value="<?=Options::get('google_captcha_sitekey');?>">
+                            value="<?=Options::v('google_captcha_sitekey');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_SITEKEY_DESCR?></small>
                         </div>
                     </div>
@@ -683,7 +683,7 @@ if (isset($data['alertred'])) {
                         <label><?=GOOGLE_RECAPTCHA_SECRET?></label>
                         <div class="form-group">
                             <input class="form-control" type="text" name="google_captcha_secret" 
-                            value="<?=Options::get('google_captcha_secret');?>">
+                            value="<?=Options::v('google_captcha_secret');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_SECRET_DESCR?></small>
                         </div>
                     </div>

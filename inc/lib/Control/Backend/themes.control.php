@@ -18,7 +18,7 @@
 if (isset($_GET['view']) && $_GET['view'] == 'options') {
     $data['sitetitle'] = THEMES;
     Theme::admin('header', $data);
-    Theme::options(Options::get('themes'));
+    Theme::options(Options::v('themes'));
     Theme::admin('footer');
 }else{
 

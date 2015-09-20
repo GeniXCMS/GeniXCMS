@@ -31,8 +31,8 @@ switch ($act) {
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
                 //clean up first
-                if(Options::get('multilang_enable') === 'on') {
-                    $def = Options::get('multilang_default');
+                if(Options::v('multilang_enable') === 'on') {
+                    $def = Options::v('multilang_default');
                     //cleanup first
                     $title = Typo::cleanX($_POST['title'][$def]);
                     $title = Hooks::filter('post_submit_title_filter', $title);
@@ -70,7 +70,7 @@ switch ($act) {
                     //print_r($vars);
                     Posts::insert($vars);
                     $post_id = Posts::$last_id;
-                    if(Options::get('multilang_enable') === 'on') {
+                    if(Options::v('multilang_enable') === 'on') {
                         // insert param multilang
                         unset($_POST['title'][$def]);
                         foreach ($_POST['title'] as $key => $value) {
@@ -112,8 +112,8 @@ switch ($act) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
                 }
-                if(Options::get('multilang_enable') === 'on') {
-                    $def = Options::get('multilang_default');
+                if(Options::v('multilang_enable') === 'on') {
+                    $def = Options::v('multilang_default');
                     //cleanup first
                     $title = Typo::cleanX($_POST['title'][$def]);
                     $title = Hooks::filter('post_submit_title_filter', $title);
@@ -150,7 +150,7 @@ switch ($act) {
                                 );
                     //print_r($vars);
                     Posts::update($vars);
-                    if(Options::get('multilang_enable') === 'on') {
+                    if(Options::v('multilang_enable') === 'on') {
                         // insert param multilang
                         unset($_POST['title'][$def]);
                         foreach ($_POST['title'] as $key => $value) {

@@ -103,17 +103,17 @@ if(isset($data['post'])) {
                 <div class="col-sm-8" id="myTab">
 
                 <?php
-                if(Options::get('multilang_enable') === 'on') {
-                    $def = Options::get('multilang_default');
+                if(Options::v('multilang_enable') === 'on') {
+                    $def = Options::v('multilang_default');
                     $deflang = Language::getDefaultLang();
-                    $listlang = json_decode(Options::get('multilang_country'), true);
+                    $listlang = json_decode(Options::v('multilang_country'), true);
                     $deflag = strtolower($listlang[$def]['flag']);
 
                     echo "
                     <ul class=\"nav nav-tabs\" role=\"tablist\">
                         <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
                     
-                    unset($listlang[Options::get('multilang_default')]);
+                    unset($listlang[Options::v('multilang_default')]);
                     foreach ($listlang as $key => $value) {
                         $flag = strtolower($value['flag']);
                         echo "
@@ -136,7 +136,7 @@ if(isset($data['post'])) {
                         </div>
                     </div>
                     ";
-                    unset($listlang[Options::get('multilang_default')]);
+                    unset($listlang[Options::v('multilang_default')]);
                     foreach ($listlang as $key => $value) {
                         // print_r($key);
                         if (isset($_GET['act']) && $_GET['act'] == 'edit') {

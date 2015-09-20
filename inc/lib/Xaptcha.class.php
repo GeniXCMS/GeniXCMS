@@ -23,9 +23,9 @@ class Xaptcha
     private static $lang = '';
 
     public function __construct() {
-        self::$key = Options::get('google_captcha_sitekey');
-        self::$secret = Options::get('google_captcha_secret');
-        self::$lang = Options::get('google_captcha_lang');
+        self::$key = Options::v('google_captcha_sitekey');
+        self::$secret = Options::v('google_captcha_secret');
+        self::$lang = Options::v('google_captcha_lang');
     }
 
     public static function verify($gresponse) {
@@ -54,7 +54,7 @@ class Xaptcha
     }
 
     public static function isEnable() {
-        if (Options::get('google_captcha_enable') === 'on') {
+        if (Options::v('google_captcha_enable') === 'on') {
             return true;
         }else{
             return false;

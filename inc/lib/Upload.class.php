@@ -50,7 +50,7 @@ class Upload
         $filename = str_replace(' ', '_', $filename);
         if(isset($_FILES[$input]) && $_FILES[$input]['error'] == 0){
             if($uniq == true){
-                $site = Typo::slugify(Options::get('sitename'));
+                $site = Typo::slugify(Options::v('sitename'));
                 $uniqfile = $site.'-'.sha1(microtime().$filename).'-';
             }else{
                 $uniqfile = '';

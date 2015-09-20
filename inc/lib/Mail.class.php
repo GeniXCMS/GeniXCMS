@@ -31,12 +31,12 @@ class Mail
     public function __construct()
     {
         # code...
-        self::$smtphost    = Options::get('smtphost');
-        self::$smtpuser    = Options::get('smtpuser');
-        self::$smtppass    = Options::get('smtppass');
-        self::$smtpport    = Options::get('smtpport');
-        self::$siteemail   = Options::get('siteemail');
-        self::$sitename    = Options::get('sitename');
+        self::$smtphost    = Options::v('smtphost');
+        self::$smtpuser    = Options::v('smtpuser');
+        self::$smtppass    = Options::v('smtppass');
+        self::$smtpport    = Options::v('smtpport');
+        self::$siteemail   = Options::v('siteemail');
+        self::$sitename    = Options::v('sitename');
     }
 
     ## SEND MAIL
@@ -49,12 +49,12 @@ class Mail
     //         );
 
     public static function send ($vars) {
-        self::$smtphost    = Options::get('smtphost');
-        self::$smtpuser    = Options::get('smtpuser');
-        self::$smtppass    = Options::get('smtppass');
-        self::$smtpport     = Options::get('smtpport');
-        self::$siteemail   = Options::get('siteemail');
-        self::$sitename    = Options::get('sitename');
+        self::$smtphost    = Options::v('smtphost');
+        self::$smtpuser    = Options::v('smtpuser');
+        self::$smtppass    = Options::v('smtppass');
+        self::$smtpport     = Options::v('smtpport');
+        self::$siteemail   = Options::v('siteemail');
+        self::$sitename    = Options::v('sitename');
 
         //print_r($vars);
         $to = $vars['to'];
@@ -64,7 +64,7 @@ class Mail
         (isset($vars['msgtype']))? $msgtype = $vars['msgtype']: $msgtype = 'html';
         //require_once GX_LIB.'/Vendor/PHPMailer/PHPMailerAutoload.php';
         // check if using plain mail or smtp
-        $type = Options::get('mailtype');
+        $type = Options::v('mailtype');
 
         if($type == 0) { // use php mail command
 

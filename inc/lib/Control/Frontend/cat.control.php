@@ -20,7 +20,7 @@ $post="";
 $data = Router::scrap($param);
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
-$data['max'] = Options::get('post_perpage');
+$data['max'] = Options::v('post_perpage');
 if (SMART_URL) {
     if ( isset($data['paging']) ) {
         $paging = $data['paging'];
@@ -57,11 +57,11 @@ $data['posts'] = Db::result(
                 );
 $data['num'] = Db::$num_rows;
 
-if(Options::get('multilang_enable') === 'on') {
+if(Options::v('multilang_enable') === 'on') {
     if (isset($_GET['lang'])) {
         foreach ($data['posts'] as $p) {
             if (Posts::existParam('multilang', $p->id)
-                && Options::get('multilang_default') !== $_GET['lang']) {
+                && Options::v('multilang_default') !== $_GET['lang']) {
                 # code...
                 $lang = Language::getLangParam($_GET['lang'], $p->id);
                 $posts = get_object_vars($p);
@@ -91,7 +91,7 @@ $paging = array(
                 'where' => '`type` = \'post\' AND `cat` = \''.$cat.'\'',
                 'max' => $data['max'],
                 'url' => $url,
-                'type' => Options::get('pagination')
+                'type' => Options::v('pagination')
             );
 $data['paging'] = Paging::create($paging, SMART_URL);
 Theme::theme('header',$data);

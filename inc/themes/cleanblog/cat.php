@@ -7,7 +7,7 @@
                     <div class="site-heading">
                         <h1><?=Categories::name($_GET['cat']);?></h1>
                         <hr class="small">
-                        <span class="subheading"><?=Options::get('siteslogan');?></span>
+                        <span class="subheading"><?=Options::v('siteslogan');?></span>
                     </div>
                 </div>
             </div>

@@ -22,7 +22,7 @@ if(Theme::exist('404')) {
         <h1>Ooops!!</h1>
         <h2 style=\"font-size: 20em\">404</h2>
         <h3>Page Not Found</h3>
-        Back to <a href=\"".Options::get('siteurl')."\">".Options::get('sitename')."</a>
+        Back to <a href=\"".Options::v('siteurl')."\">".Options::v('sitename')."</a>
         </center>
         ";
     Site::footer();
