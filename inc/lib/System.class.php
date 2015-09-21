@@ -28,7 +28,7 @@ class System
     * GeniXCMS Version Release
     * @return string
     */
-    static $v_release        = "alpha";
+    static $v_release        = "";
 
 
     /**
