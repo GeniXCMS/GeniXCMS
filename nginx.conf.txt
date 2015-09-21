@@ -5,7 +5,7 @@ server {
        index index.php;
 
         location / {
-                try_files $uri  $uri/ /index.php$args;
+                try_files $uri  $uri/ /index.php?$args;
 
         }
 
@@ -28,7 +28,7 @@ server {
                 rewrite ^/error/500$ /index.php?error=500 last;
         }
 	location ~ \.html$ {
-		try_files $uri $uri/ /index.php;
+		try_files $uri $uri/ /index.php?$args;
 	}
         location ~ \.php$ {
         #       try_files = $uri $uri/ @missing;
