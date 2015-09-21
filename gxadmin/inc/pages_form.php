@@ -6,7 +6,7 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150202
-* @version 0.0.7-alpha.1
+* @version 0.0.7
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -229,7 +229,7 @@ if (isset($data['alertred'])) {
                         </div>
                     </div>
 
-                    <div class="panel panel-default">
+                    <!-- <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><?=TAGS;?></h3>
                         </div>
@@ -237,7 +237,7 @@ if (isset($data['alertred'])) {
                             <textarea name="tags" class="form-control"><?=$tags;?></textarea>
                             <small><?=TAGS_DESC;?></small>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             
         </div>
