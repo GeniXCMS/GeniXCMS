@@ -269,7 +269,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'twitter', ''),
             (null, 'linkedin', ''),
             (null, 'gplus', ''),
-            (null, 'logo', '/assets/images/genixcms-logo-small.png'),
+            (null, 'logo', '/assets/images/genixcms-logo-sign-small.png'),
             (null, 'logourl', ''),
             (null, 'is_logourl', 'off'),
             (null, 'currency', 'USD'),
