@@ -13,13 +13,89 @@
             echo '<small>Page generated in '.$time_taken.' seconds.</small>';
         ?>
     </footer>
-    
+    <!--<link href="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">-->
+    <link href="<?=Site::$url;?>/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/font-awesome.min.css" rel="stylesheet">
+    <script src="<?=Site::$url;?>/assets/js/jquery.min.js"></script>
+    <!--<script src="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.js"></script>-->
+    <script src="<?=Site::$url;?>/assets/js/bootstrap.min.js"></script>
     <?php
-      
-      Site::footer();
+      if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
+            Hooks::attach('admin_footer_action', array('Files','elfinderLib'));
+            if ($GLOBALS['editor_mode'] == 'light') {
+                $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['view', ['fullscreen']]";
+            }elseif ($GLOBALS['editor_mode'] == 'full') {
+                $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['genixcms', ['elfinder']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]";
+            }
+
+            $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
+            $foot = "
+
+    <link href=\"".Site::$url."/assets/css/summernote.css\" rel=\"stylesheet\">
+    <script src=\"".Site::$url."/assets/js/summernote.min.js\"></script>
+    <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
+    <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
+    <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
+    <script>
+      $(document).ready(function() {
+        $('.editor').summernote({
+            height: 300,
+            toolbar: [
+                    ".$toolbar."
+                ],
+            onImageUpload: function(files, editor, welEditable) {
+                    sendFile(files[0],editor,welEditable);
+                }
+        });
+
+        function sendFile(file,editor,welEditable) {
+          data = new FormData();
+          data.append(\"file\", file);
+            $.ajax({
+                url: \"".$url."\",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(data){
+                //alert(data);
+                  $('.editor').summernote('editor.insertImage', data);
+                },
+               error: function(jqXHR, textStatus, errorThrown) {
+                 console.log(textStatus+\" \"+errorThrown);
+               }
+            });
+          }
+
+         $(\".alert\").alert();
+      });
+
+
+    </script>
+              ";
+              echo $foot;
+        }
       echo Hooks::run('admin_footer_action', $data);
     ?>
-    <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    
     <script>
          $("#selectall").change(function(){
             $('input:checkbox').not(this).prop('checked', this.checked);

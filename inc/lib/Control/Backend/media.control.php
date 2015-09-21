@@ -18,7 +18,7 @@
 
 
 $data['sitetitle'] = "Media";
-Hooks::attach('footer_load_lib', array('Files','elfinderLib'));
+Hooks::attach('admin_footer_action', array('Files','elfinderLib'));
 Theme::admin('header', $data);
 System::inc('media',$data);
 Theme::admin('footer');
