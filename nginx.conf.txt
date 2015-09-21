@@ -5,10 +5,9 @@ server {
        index index.php;
 
         location / {
-                try_files $uri  $uri/ /index.php;
+                try_files $uri  $uri/ /index.php$args;
 
         }
-
 
         error_page 404 /error/404;
         error_page 400 /error/400;
@@ -29,9 +28,10 @@ server {
                 rewrite ^/error/500$ /index.php?error=500 last;
         }
 	location ~ \.html$ {
-		try_files $uri $uri/ @rewrite;
+		try_files $uri $uri/ /index.php;
 	}
         location ~ \.php$ {
+        #       try_files = $uri $uri/ @missing;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
         #       # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
         #
@@ -44,7 +44,9 @@ server {
                 include fastcgi_params;
         }
 
-
+        #location @missing {
+        #       rewrite ^ $scheme://$host/index.php?$args permanent;
+        #}
 
         location /paging {
                 rewrite ^/paging/([0-9]+)$ /index.php?paging=$1 last;
