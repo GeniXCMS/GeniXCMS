@@ -17,6 +17,7 @@
 
 $data = Router::scrap($param);
 if (SMART_URL == true) {
+
     if ( isset($data['post']) ) {
         
         $post = $data['post'];
@@ -26,6 +27,11 @@ if (SMART_URL == true) {
         $post = Typo::int($_GET['post']);
         
     }
+
+    if (isset($data['lang']) && !isset($_GET['lang'])) {
+        Language::setActive($data['lang']);
+    }
+
 }elseif (isset($_GET['post'])){
     
     $post = Typo::int($_GET['post']);

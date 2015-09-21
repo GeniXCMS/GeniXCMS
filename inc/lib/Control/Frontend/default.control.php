@@ -18,6 +18,7 @@
 $data = Router::scrap($param);
 $post="";
 $data['max'] = Options::v('post_perpage');
+
 if (SMART_URL) {
     if ( isset($data['paging']) ) {
         $paging = $data['paging'];

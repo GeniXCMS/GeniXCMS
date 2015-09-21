@@ -15,7 +15,29 @@
 *
 */
 $data = Router::scrap($param);
-$page = (SMART_URL) ? $data['page'] : Typo::cleanX(Typo::strip($_GET['page']));
+
+if (SMART_URL == true) {
+
+    if ( isset($data['page']) ) {
+        
+        $page = $data['page'];
+        
+    }elseif (isset($_GET['page'])){
+        
+        $page = Typo::int($_GET['page']);
+        
+    }
+
+    if (isset($data['lang']) && !isset($_GET['lang'])) {
+        Language::setActive($data['lang']);
+    }
+
+}elseif (isset($_GET['page'])){
+    
+    $page = Typo::int($_GET['page']);
+    
+}
+
 switch ($page) {
     case 'sitemap':
         # code...

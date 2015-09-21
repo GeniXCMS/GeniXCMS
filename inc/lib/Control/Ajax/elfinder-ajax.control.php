@@ -63,3 +63,4 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
 	$connector->run();
 
 }
+// echo "TOKEN EXIST";
