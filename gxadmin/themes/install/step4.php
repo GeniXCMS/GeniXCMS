@@ -19,5 +19,6 @@
 <form action="?step=5" method="post">
 <h4>Config File Created</h4>
 Continue to Installation. 
-<input type="submit" name="step4" value="Install Now" class="btn btn-primary"> <a href="?step=2" class="btn btn-danger">Back Step</a>
+<input type="submit" name="step4" value="Install Now" class="btn btn-primary"> 
+<a href="?step=2" class="btn btn-danger">Back Step</a>
 </form>

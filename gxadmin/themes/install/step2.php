@@ -20,16 +20,35 @@
 <div class="table-responsive">
     <table class="table table-responsive">
         <tr>
-            <td>Administrator Name</td><td><input type="text" name="adminname" class="form-control"></td>
+            <td>Administrator Name</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="adminname" class="form-control">
+                    <span class="help-block">name of the administrator.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>Administrator Username</td><td><input type="text" name="adminuser" class="form-control"></td>
+            <td>Administrator Username</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="adminuser" class="form-control">
+                    <span class="help-block">username of the administrator.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>Administrator Password</td><td><input type="password" name="adminpass" class="form-control"></td>
+            <td>Administrator Password</td>
+            <td>
+                <div class="form-group">
+                    <input type="password" name="adminpass" class="form-control">
+                    <span class="help-block">password of the administrator.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td></td><td><input type="submit" name="step2" value="Next Step" class="btn btn-primary"> <a href="?step=1" class="btn btn-danger">Back Step</a></td>
+            <td></td><td><input type="submit" name="step2" value="Next Step" class="btn btn-primary"> 
+            <a href="?step=1" class="btn btn-danger">Back Step</a></td>
         </tr>
     </table>
 </div>

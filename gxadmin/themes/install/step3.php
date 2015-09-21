@@ -42,7 +42,8 @@
             <td>Administrator Password</td><td><?=Session::val('adminpass');?></td>
         </tr>
         <tr>
-            <td></td><td><input type="submit" name="step3" value="Create Config File" class="btn btn-primary"> <a href="?step=2" class="btn btn-danger">Back Step</a></td>
+            <td></td><td><input type="submit" name="step3" value="Create Config File" class="btn btn-primary"> 
+            <a href="?step=2" class="btn btn-danger">Back Step</a></td>
         </tr>
     </table>
 </div>

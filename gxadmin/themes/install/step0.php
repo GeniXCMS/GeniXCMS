@@ -20,19 +20,46 @@
 <div class="table-responsive">
     <table class="table table-responsive">
         <tr>
-            <td>Database Name</td><td><input type="text" name="dbname" class="form-control"></td>
+            <td>Database Name</td>
+            <td >
+                <div class="form-group">
+                    <input type="text" name="dbname" class="form-control">
+                    <span class="help-block">please create database first.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>Database Username</td><td><input type="text" name="dbuser" class="form-control"></td>
+            <td>Database Username</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="dbuser" class="form-control">
+                    <span class="help-block">please insert database username.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>Database Password</td><td><input type="text" name="dbpass" class="form-control"></td>
+            <td>Database Password</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="dbpass" class="form-control">
+                    <span class="help-block">please insert database password.</span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>Database Host</td><td><input type="text" name="dbhost" class="form-control" value="localhost"></td>
+            <td>Database Host</td>
+            <td>
+                <div class="form-group">
+                    <input type="text" name="dbhost" class="form-control" value="localhost">
+                    <span class="help-block">please insert database host. usually <kbd>localhost</kbd></span>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td></td><td><input type="submit" name="step1" value="Next Step" class="btn btn-primary"></td>
+            <td></td>
+            <td>
+                <input type="submit" name="step1" value="Next Step" class="btn btn-primary">
+            </td>
         </tr>
     </table>
 </div>
