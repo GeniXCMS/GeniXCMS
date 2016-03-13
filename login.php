@@ -1,16 +1,16 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140928
-* @version 0.0.7
+* @version 0.0.8
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2015 Puguh Wijayanto
+* @copyright 2014-2016 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
@@ -24,7 +24,7 @@ define('GX_ASSET', GX_PATH.'/assets/');
 require("autoload.php");
 
 try {
-	new System();   
+	new System();
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -38,7 +38,7 @@ if(isset($_POST['login']))
         $alertred[] = TOKEN_NOT_EXIST;
     }
     if (Xaptcha::isEnable()) {
-    	
+
 	    if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '' ) {
 	    	$alertred[] = "Please insert the Captcha";
 	    }
@@ -49,7 +49,7 @@ if(isset($_POST['login']))
 
     if (!isset($alertred)) {
     	# code...
-    
+
 		/*check if username is exist or not */
 		$username = Typo::cleanX(Typo::strip($_POST['username']));
 		$sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
@@ -59,7 +59,7 @@ if(isset($_POST['login']))
 		//print_r($usr);
 		if($c == "1"){
 			//$alertgreen = "";
-			// check if user is active 
+			// check if user is active
 			if($usr[0]->status == '1') {
 				/* get user password */
 				$pass = User::randpass($_POST['password']);

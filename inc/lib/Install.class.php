@@ -1,16 +1,16 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20150126
-* @version 0.0.7
+* @version 0.0.8
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2015 Puguh Wijayanto
+* @copyright 2014-2016 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
@@ -19,8 +19,8 @@
 * Installation Class
 *
 * This class will process the Installation Process.
-* 
-* 
+*
+*
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
@@ -34,7 +34,7 @@ class Install
     * Config File Creation Function.
     * This will create config file at inc/config/config.php during the installation
     * process. Data is gathered from the session.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -42,16 +42,16 @@ class Install
         $config = "<?php if(!defined('GX_LIB')) die(\"Direct Access Not Allowed!\");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.7
+* @version 0.0.8
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2015 Puguh Wijayanto
+* @copyright 2014-2016 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */error_reporting(0);
@@ -84,14 +84,14 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         }catch (Exception $e) {
             echo $e->getMessage();
         }
-        
+
         return $config;
     }
 
     /**
     * Create Initial SQL Table Function.
     * This will create the SQL table on the installation proccess.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -242,7 +242,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
     /**
     * Database Insertion Function.
     * This will insert value on the SQL Table during the installation.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -313,7 +313,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'multilang_enable', 'off'),
             (null, 'multilang_default', ''),
             (null, 'multilang_country', ''),
-            (null, 'system_check', '{}')
+            (null, 'system_check', '{}'),
+            (null, 'permalink_use_index_php', 'off')
             ";
         $db->query($options);
     }

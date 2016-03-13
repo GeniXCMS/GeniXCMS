@@ -6,11 +6,11 @@
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.7
+* @version 0.0.8
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2015 Puguh Wijayanto
+* @copyright 2014-2016 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
@@ -22,7 +22,7 @@ class System
     * GeniXCMS Version Variable
     * @return double
     */
-    static $version          = "0.0.7";
+    static $version          = "0.0.8";
 
     /**
     * GeniXCMS Version Release
@@ -34,7 +34,7 @@ class System
     /**
     * System Constructor.
     * Initializing the system, check the config file
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -42,7 +42,7 @@ class System
         Session::start();
         self::config('config');
         new Db();
-        
+
         new Hooks();
         Hooks::run('init');
         new Options();
@@ -55,7 +55,7 @@ class System
         Mod::loader();
         Theme::loader();
 
-        
+
     }
 
     /**
@@ -69,7 +69,7 @@ class System
         if (file_exists($file)) {
             include($file);
         }
-        
+
     }
 
 
@@ -79,7 +79,7 @@ class System
         if (file_exists($file)) {
             include($file);
         }
-        
+
     }
 
     public static function config($var) {
@@ -87,7 +87,7 @@ class System
         if (file_exists($file)) {
             include($file);
         }
-        
+
     }
 
     public static function existConf () {
@@ -144,7 +144,7 @@ class System
         if (file_exists($file)) {
             include($file);
         }
-        
+
     }
 
 
@@ -165,7 +165,7 @@ class System
     public static function latestVersion () {
         $check = json_decode(Options::v('system_check'), true);
         $now = strtotime(date("Y-m-d H:i:s"));
-        
+
         if (isset($check['last_check']) ) {
             $limit = $now - $check['last_check'];
             if ($limit < 86400) {
@@ -174,7 +174,7 @@ class System
                 $v = self::getLatestVersion($now);
             }
 
-           
+
         }else{
             $v = self::getLatestVersion($now);
         }
@@ -197,7 +197,7 @@ class System
         $v = self::latestVersion();
         $html = "
         <div class=\"alert alert-warning\">
-            <span class=\"fa fa-warning\"></span> Warning: Your CMS version is different with our latest version (<strong>$v</strong>). 
+            <span class=\"fa fa-warning\"></span> Warning: Your CMS version is different with our latest version (<strong>$v</strong>).
             Please upgrade your system.
         </div>
         ";
