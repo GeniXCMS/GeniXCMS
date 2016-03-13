@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -94,10 +94,10 @@ switch ($act) {
                 }
 
                 break;
-            
+
             default:
                 # code...
-                
+
                 break;
         }
         Theme::admin('header', $data);
@@ -153,6 +153,7 @@ switch ($act) {
                     if(Options::v('multilang_enable') === 'on') {
                         // insert param multilang
                         unset($_POST['title'][$def]);
+                        $multilang = array();
                         foreach ($_POST['title'] as $key => $value) {
                             $multilang[] = array(
                                                 $key => array(
@@ -175,7 +176,7 @@ switch ($act) {
                 }
 
                 break;
-            
+
             default:
 
                 break;
@@ -217,7 +218,7 @@ switch ($act) {
             }else{
                 $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
             }
-            
+
         }
         if(isset($_POST['action'])) {
             $action = $_POST['action'];
@@ -279,13 +280,13 @@ switch ($act) {
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
-            
+
             default:
                 # code...
                 break;
         }
 
-        // search query 
+        // search query
         $where = "";
         $qpage = "";
         if(isset($_GET['q']) && $_GET['q'] != ''){
@@ -310,7 +311,7 @@ switch ($act) {
             $where .= "AND `status` LIKE '%{$_GET['status']}%' ";
             $qpage .= "&status={$_GET['status']}";
         }
-        
+
 
         $max = "15";
         if(isset($_GET['paging'])){
@@ -322,10 +323,10 @@ switch ($act) {
         }
 
 
-        
+
         $data['posts'] = Db::result("SELECT * FROM `posts`
-                        WHERE `type` = 'post' {$where} 
-                        ORDER BY `date` DESC 
+                        WHERE `type` = 'post' {$where}
+                        ORDER BY `date` DESC
                         LIMIT {$offset},{$max}");
         $data['num'] = Db::$num_rows;
         $page = array(
@@ -342,7 +343,7 @@ switch ($act) {
         System::inc('posts', $data);
         Theme::admin('footer');
 
-        
+
         break;
 }
 

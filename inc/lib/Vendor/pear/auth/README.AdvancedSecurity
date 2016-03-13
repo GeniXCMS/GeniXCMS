@@ -1,0 +1,63 @@
+03 July 2004
+
+TODO 
+ * Session fixation attack (BUG #2021)
+ * Fix multiple open windows and challenge responce cookies (use a list of cookies which are allowed)
+
+Since Auth 1.3 new security functionality has been added.
+The main purpose for these advanced security checks is to avoid man-in-the-middle attacks and
+session hijacking.
+
+
+Session hijacking example 
+  - Login to an Auth protected page. Write down the session id (should be something like PHPSESSID=36916b0aa1180386010f304b6160e3e8)
+  - Open a different browser (FireFox <> IE), or a browser on a different computer
+  - Type down the address of the secure page and add ?PHPSESSID=36916b0aa1180386010f304b6160e3e8 where
+    PHPSESSID is the php session name and 36916b0aa1180386010f304b6160e3e8 is the valid session id which you wrote down earlier
+  - You should be logged in with the same creditentials
+  
+
+
+To enable the advanced scurity checks you have to call
+$auth->setAdvancedSecurity();
+
+If this has been enabled the following security checks will be performed
+
+  - Login screen will use md5 when submitting the password if java script is enabled in the browser
+  - If user ip address has been changed betwin requests the user will be logged out
+  - If user User-Agent string has been changed the user will be logged out
+  - If user does not provide a valid auth challenge cookied he will be logged out (read below for explanation)
+  
+Limitations
+ * Challenge responce cookies would not allow a user to open multiple windows of the same page (Open in new window/tab). If 
+ the user accesses the protected area from two browser windows he will be logged out. It can also create a problem if you
+ create dynamic images with php and that code passes through the auth layer. One way to avoid it is to disable advanced security for 
+ those pages only selectively.
+ * Password saving does not work with login screens which use challenge responce (md5 hashing) of password
+ * Challenge responce on login only works with DB container and plain or md5 hashing
+
+ 
+
+
+Challenge Responce cookies
+
+ 
+ The challenge responce cookies provide a way to avoid most of the session hijacking problems. Since User-Agent headers
+ and IP address can be spoofed, or in the case of IP a proxy can be used an extra security step has been added using a 
+ challenge cookie.
+ 
+ After the user is authenthicated by Auth he is presented with a challenge cookie. For his next request to be succesfull 
+ he must present that cookie on his next request. If that is successfull he will be presented with a new 
+ challenge cookie. This will be reapeated for each request the user makes.
+ 
+ While this method is not fool proof it does limit the possibilities for an attack.
+ First the attacker must must obtain the challenge cookie and use it before the user does.
+ If the user makes a request after the attacker the session will be logged out and both of them 
+ will need to login again.
+ 
+ A problem which this scheme does not address well is users leaving their sessions without preforming a logout
+ in this case the attacker is free to abuse the user session (provided he has met all the prerequisites). 
+ 
+ Ideas and sujestions for improvements are more than welcome.
+ send to yavo@siava.org
+ 

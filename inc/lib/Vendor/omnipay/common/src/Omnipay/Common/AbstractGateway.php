@@ -72,11 +72,22 @@ abstract class AbstractGateway implements GatewayInterface
         $this->initialize();
     }
 
+    /**
+     * Get the short name of the Gateway
+     *
+     * @return string
+     */
     public function getShortName()
     {
         return Helper::getGatewayShortName(get_class($this));
     }
 
+    /**
+     * Initialize this gateway with default parameters
+     *
+     * @param  array $parameters
+     * @return $this
+     */
     public function initialize(array $parameters = array())
     {
         $this->parameters = new ParameterBag;
@@ -95,43 +106,72 @@ abstract class AbstractGateway implements GatewayInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getDefaultParameters()
     {
         return array();
     }
 
+    /**
+     * @return array
+     */
     public function getParameters()
     {
         return $this->parameters->all();
     }
 
-    protected function getParameter($key)
+    /**
+     * @param  string $key
+     * @return mixed
+     */
+    public function getParameter($key)
     {
         return $this->parameters->get($key);
     }
 
-    protected function setParameter($key, $value)
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function setParameter($key, $value)
     {
         $this->parameters->set($key, $value);
 
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
     public function getTestMode()
     {
         return $this->getParameter('testMode');
     }
 
+    /**
+     * @param  boolean $value
+     * @return $this
+     */
     public function setTestMode($value)
     {
         return $this->setParameter('testMode', $value);
     }
 
+    /**
+     * @return string
+     */
     public function getCurrency()
     {
         return strtoupper($this->getParameter('currency'));
     }
 
+    /**
+     * @param  string $value
+     * @return $this
+     */
     public function setCurrency($value)
     {
         return $this->setParameter('currency', $value);
@@ -205,6 +245,16 @@ abstract class AbstractGateway implements GatewayInterface
     public function supportsVoid()
     {
         return method_exists($this, 'void');
+    }
+
+    /**
+     * Supports AcceptNotification
+     *
+     * @return boolean True if this gateway supports the acceptNotification() method
+     */
+    public function supportsAcceptNotification()
+    {
+        return method_exists($this, 'acceptNotification');
     }
 
     /**

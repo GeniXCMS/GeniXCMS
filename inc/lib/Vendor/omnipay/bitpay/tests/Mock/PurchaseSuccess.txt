@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Server: cloudflare-nginx
+Date: Wed, 22 Jan 2014 05:50:22 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+Set-Cookie: __cfduid=d9d05d8d3ebfb59fd01a5b242ff5370db1390369821317; expires=Mon, 23-Dec-2019 23:50:00 GMT; path=/; domain=.bitpay.com; HttpOnly, connect.sid=s%3ABG9aPcAcMbjCd9mU0sQ7xnFw.jA9fJ2UbKpHRr5h5qhQBKZoRFOkQsB%2Fvbiy3QKsobJ8; Path=/; HttpOnly
+X-Powered-By: Express
+CF-RAY: f09f757386504b6
+
+{"id":"3kTrcSY8gXaSKnYGcYJCcz","url":"https://bitpay.com/invoice?id=3kTrcSY8gXaSKnYGcYJCcz","status":"new","btcPrice":"0.0130","price":12,"currency":"AUD","invoiceTime":1390369822115,"expirationTime":1390370722115,"currentTime":1390369822186}

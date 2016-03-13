@@ -1,12 +1,12 @@
 <?php
-/**
- * Stripe Void Request
- */
 
+/**
+ * Stripe Void Request.
+ */
 namespace Omnipay\Stripe\Message;
 
 /**
- * Stripe Void Request
+ * Stripe Void Request.
  *
  * Stripe does not support voiding, per se, but
  * we treat it as a full refund.
@@ -40,10 +40,11 @@ class VoidRequest extends RefundRequest
     {
         $this->validate('transactionReference');
 
+        $data = array();
         if ($this->getRefundApplicationFee()) {
-            $data['refund_application_fee'] = "true";
+            $data['refund_application_fee'] = 'true';
         }
 
-        return null;
+        return $data;
     }
 }

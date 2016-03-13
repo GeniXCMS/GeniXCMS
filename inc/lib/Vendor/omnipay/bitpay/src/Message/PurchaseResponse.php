@@ -23,9 +23,7 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
     public function getMessage()
     {
         if (isset($this->data['error'])) {
-            $msgs = implode(', ', $this->data['error']['messages']);
-
-            return $this->data['error']['message']." ($msgs)";
+            return $this->data['error']['type'] . ': ' . $this->data['error']['message'];
         }
     }
 

@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -19,25 +19,24 @@
 
 class Files
 {
-    public static function delTree($dir) { 
-        $files = array_diff(scandir($dir), array('.','..')); 
-        foreach ($files as $file) { 
-            (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file"); 
-        } 
+    public static function delTree($dir) {
+        $files = array_diff(scandir($dir), array('.','..'));
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file");
+        }
         return rmdir($dir);
     }
 
     public static function elfinderLib() {
         $url = (SMART_URL)? Site::$url . '/ajax/elfinder?token=' . TOKEN : Site::$url . "/index.php?ajax=elfinder&token=" . TOKEN;
         $html = "
-    <script src=\"".Vendor::url()."/studio-42/elfinder/jquery/jquery-ui.min.js\" type=\"text/javascript\" charset=\"utf-8\"></script>
-    <link rel=\"stylesheet\" href=\"".Vendor::url()."/studio-42/elfinder/jquery/ui-themes/smoothness/jquery-ui.min.css\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">
-    <link rel=\"stylesheet\" href=\"".Vendor::url()."/studio-42/elfinder/css/elFinder.min.css\"      type=\"text/css\">
+    <script src=\"".Site::$url."/assets/js/jquery-ui/jquery-ui.min.js\" type=\"text/javascript\" charset=\"utf-8\"></script>
+    <link rel=\"stylesheet\" href=\"".Site::$url."/assets/js/jquery-ui/jquery-ui.structure.min.css\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">
+    <link rel=\"stylesheet\" href=\"".Site::$url."/assets/js/jquery-ui/jquery-ui.theme.min.css\" type=\"text/css\" media=\"screen\" title=\"no title\" charset=\"utf-8\">
+    <link rel=\"stylesheet\" href=\"".Vendor::url()."/studio-42/elfinder/css/elfinder.min.css\"      type=\"text/css\">
 
     <!-- elfinder core -->
-    <script src=\"".Vendor::url()."/studio-42/elfinder/js/elFinder.min.js\"></script>
-    <!-- elfinder languages -->
-    <script src=\"".Vendor::url()."/studio-42/elfinder/js/i18n/elfinder.en.js\"></script>
+    <script src=\"".Vendor::url()."/studio-42/elfinder/js/elfinder.min.js\"></script>
     <!-- elfinder 1.x connector API support -->
     <script src=\"".Vendor::url()."/studio-42/elfinder/js/proxy/elFinderSupportVer1.js\"></script>
 
@@ -50,12 +49,12 @@ class Files
                     select : function(event, elfinderInstance) {
                         var selected = event.data.selected;
                     },
-                    
+
                 },
-                
+
                 lang : 'en',
                 customData : {answer : 42},
-                
+
             });
         });
 
@@ -76,7 +75,7 @@ class Files
                         folders : false
                     }
                 }
-                
+
             }).dialogelfinder('instance');
         }
 

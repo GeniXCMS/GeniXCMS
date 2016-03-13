@@ -3,3 +3,4 @@ docs
 mkdocs.yml
 assets/.tmb
 assets/.quarantine
+.htaccess

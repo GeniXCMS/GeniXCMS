@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Server: cloudflare-nginx
+Date: Wed, 22 Jan 2014 05:51:41 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+Set-Cookie: __cfduid=d348c68db92d5d2687232670daf4c62891390369901287; expires=Mon, 23-Dec-2019 23:50:00 GMT; path=/; domain=.bitpay.com; HttpOnly, connect.sid=s%3Ad2AFFeEiSMlvMbAbYZ3I2BVc.3EUN0JFDu5iTQ8%2BszLDrun%2B%2FrGwtpRlrGA9oq5Y20eM; Path=/; HttpOnly
+X-Powered-By: Express
+CF-RAY: f09f94b08f104b6
+
+{"error":{"type":"limitExceeded","message":"Invoice not created due to account limits, please check your approval levels"}}

@@ -6,9 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
-    $vendorDir . '/guzzlehttp/promises/src/functions.php',
-    $vendorDir . '/guzzlehttp/psr7/src/functions.php',
-    $vendorDir . '/mtdowling/jmespath.php/src/JmesPath.php',
+    $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    $vendorDir . '/symfony/polyfill-php55/bootstrap.php',
+    $vendorDir . '/symfony/polyfill-php54/bootstrap.php',
+    $vendorDir . '/guzzlehttp/psr7/src/functions_include.php',
+    $vendorDir . '/guzzlehttp/promises/src/functions_include.php',
     $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
-    $vendorDir . '/aws/aws-sdk-php/src/functions.php',
 );

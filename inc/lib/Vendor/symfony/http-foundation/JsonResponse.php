@@ -26,7 +26,10 @@ class JsonResponse extends Response
 {
     protected $data;
     protected $callback;
-    protected $encodingOptions;
+
+    // Encode <, >, ', &, and " for RFC4627-compliant JSON, which may also be embedded into HTML.
+    // 15 === JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+    protected $encodingOptions = 15;
 
     /**
      * Constructor.
@@ -42,9 +45,6 @@ class JsonResponse extends Response
         if (null === $data) {
             $data = new \ArrayObject();
         }
-
-        // Encode <, >, ', &, and " for RFC4627-compliant JSON, which may also be embedded into HTML.
-        $this->encodingOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 
         $this->setData($data);
     }
@@ -95,33 +95,57 @@ class JsonResponse extends Response
      */
     public function setData($data = array())
     {
-        $errorHandler = null;
-        $errorHandler = set_error_handler(function () use (&$errorHandler) {
-            if (JSON_ERROR_NONE !== json_last_error()) {
-                return;
+        if (defined('HHVM_VERSION')) {
+            // HHVM does not trigger any warnings and let exceptions
+            // thrown from a JsonSerializable object pass through.
+            // If only PHP did the same...
+            $data = json_encode($data, $this->encodingOptions);
+        } else {
+            try {
+                if (PHP_VERSION_ID < 50400) {
+                    // PHP 5.3 triggers annoying warnings for some
+                    // types that can't be serialized as JSON (INF, resources, etc.)
+                    // but doesn't provide the JsonSerializable interface.
+                    set_error_handler(function () { return false; });
+                    $data = @json_encode($data, $this->encodingOptions);
+                } else {
+                    // PHP 5.4 and up wrap exceptions thrown by JsonSerializable
+                    // objects in a new exception that needs to be removed.
+                    // Fortunately, PHP 5.5 and up do not trigger any warning anymore.
+                    if (PHP_VERSION_ID < 50500) {
+                        // Clear json_last_error()
+                        json_encode(null);
+                        $errorHandler = set_error_handler('var_dump');
+                        restore_error_handler();
+                        set_error_handler(function () use ($errorHandler) {
+                            if (JSON_ERROR_NONE === json_last_error()) {
+                                return $errorHandler && false !== call_user_func_array($errorHandler, func_get_args());
+                            }
+                        });
+                    }
+
+                    $data = json_encode($data, $this->encodingOptions);
+                }
+
+                if (PHP_VERSION_ID < 50500) {
+                    restore_error_handler();
+                }
+            } catch (\Exception $e) {
+                if (PHP_VERSION_ID < 50500) {
+                    restore_error_handler();
+                }
+                if (PHP_VERSION_ID >= 50400 && 'Exception' === get_class($e) && 0 === strpos($e->getMessage(), 'Failed calling ')) {
+                    throw $e->getPrevious() ?: $e;
+                }
+                throw $e;
             }
-
-            if ($errorHandler) {
-                call_user_func_array($errorHandler, func_get_args());
-            }
-        });
-
-        try {
-            // Clear json_last_error()
-            json_encode(null);
-
-            $this->data = json_encode($data, $this->encodingOptions);
-
-            restore_error_handler();
-        } catch (\Exception $exception) {
-            restore_error_handler();
-
-            throw $exception;
         }
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new \InvalidArgumentException($this->transformJsonError());
+            throw new \InvalidArgumentException(json_last_error_msg());
         }
+
+        $this->data = $data;
 
         return $this->update();
     }
@@ -171,32 +195,5 @@ class JsonResponse extends Response
         }
 
         return $this->setContent($this->data);
-    }
-
-    private function transformJsonError()
-    {
-        if (function_exists('json_last_error_msg')) {
-            return json_last_error_msg();
-        }
-
-        switch (json_last_error()) {
-            case JSON_ERROR_DEPTH:
-                return 'Maximum stack depth exceeded.';
-
-            case JSON_ERROR_STATE_MISMATCH:
-                return 'Underflow or the modes mismatch.';
-
-            case JSON_ERROR_CTRL_CHAR:
-                return 'Unexpected control character found.';
-
-            case JSON_ERROR_SYNTAX:
-                return 'Syntax error, malformed JSON.';
-
-            case JSON_ERROR_UTF8:
-                return 'Malformed UTF-8 characters, possibly incorrectly encoded.';
-
-            default:
-                return 'Unknown error.';
-        }
     }
 }

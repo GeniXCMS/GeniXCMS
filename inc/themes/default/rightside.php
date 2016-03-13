@@ -10,11 +10,11 @@
                     <h4>Recent Post</h4>
                     <ol class="list-unstyled">
                         <?php
-                        $vars = array(
+                        $rcnt = array(
                             'num' => 10
                         );
-                        $recent = Posts::recent($vars);
-                        $num = Db::$num_rows;
+                        $recent = Posts::recent($rcnt);
+                        $num = count($recent);
                         if($num > 0) {
                             foreach ($recent as $r) {
                       # code...

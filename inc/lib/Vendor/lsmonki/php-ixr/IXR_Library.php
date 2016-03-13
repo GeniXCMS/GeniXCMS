@@ -626,13 +626,16 @@ class IXR_Client
     var $response;
     var $message = false;
     var $debug = false;
+    /** @var int Connection timeout in seconds */
     var $timeout;
+    /** @var null|int Timeout for actual data transfer; in seconds */
+    var $timeout_io = null;
     var $headers = array();
 
     // Storage place for an error message
     var $error = false;
 
-    function IXR_Client($server, $path = false, $port = 80, $timeout = 15)
+    function IXR_Client($server, $path = false, $port = 80, $timeout = 15, $timeout_io = null)
     {
         if (!$path) {
             // Assume we have been given a URL instead
@@ -656,6 +659,7 @@ class IXR_Client
         }
         $this->useragent = 'The Incutio XML-RPC PHP Library';
         $this->timeout = $timeout;
+        $this->timeout_io = $timeout_io;
     }
 
     function query()
@@ -694,6 +698,9 @@ class IXR_Client
         if (!$fp) {
             $this->error = new IXR_Error(-32300, 'transport error - could not open socket');
             return false;
+        }
+        if (null !== $this->timeout_io) {
+            stream_set_timeout($fp, $this->timeout_io);
         }
         fputs($fp, $request);
         $contents = '';
@@ -762,6 +769,25 @@ class IXR_Client
     function getErrorMessage()
     {
         return $this->error->message;
+    }
+
+    /**
+     * Gets the current timeout set for data transfer
+     * @return int|null
+     */
+    public function getTimeoutIo()
+    {
+        return $this->timeout_io;
+    }
+
+    /**
+     * Sets the timeout for data transfer
+     * @param int $timeout_io
+     * @return $this
+     */
+    public function setTimeoutIo($timeout_io)
+    {
+        $this->timeout_io = $timeout_io;
     }
 }
 
@@ -1136,9 +1162,9 @@ class IXR_ClientSSL extends IXR_Client
      * @param string $server URL of the Server to connect to
      * @since 0.1.0
      */
-    function IXR_ClientSSL($server, $path = false, $port = 443, $timeout = false)
+    function IXR_ClientSSL($server, $path = false, $port = 443, $timeout = false, $timeout_io = null)
     {
-        parent::IXR_Client($server, $path, $port, $timeout);
+        parent::IXR_Client($server, $path, $port, $timeout, $timeout_io);
         $this->useragent = 'The Incutio XML-RPC PHP Library for SSL';
 
         // Set class fields
@@ -1231,7 +1257,10 @@ class IXR_ClientSSL extends IXR_Client
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
         //Since 23Jun2004 (0.1.2) - Made timeout a class field
-        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout);
+        if (null !== $this->timeout_io) {
+            curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout_io);
+        }
 
         if ($this->debug) {
             curl_setopt($curl, CURLOPT_VERBOSE, 1);

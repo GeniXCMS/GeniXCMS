@@ -1,0 +1,116 @@
+{
+    "name": "pear/auth",
+    "description": "The PEAR Authentication package",
+    "type": "library",
+    "keywords": ["auth","authentication"],
+    "homepage": "https://github.com/hostnet/Auth",
+    "license": "PHP-3.01",
+    "authors": [
+        {
+            "email": "aashley@php.net",
+            "name": "Adam Ashley"
+        },
+        {
+            "email": "aharvey@php.net",
+            "name": "Adam Harvey"
+        },
+        {
+            "email": "alexmerz@php.net",
+            "name": "Alexander Merz"
+        },
+        {
+            "email": "nicos@php.net",
+            "name": "CHAILLAN Nicolas"
+        },
+        {
+            "email": "chregu@php.net",
+            "name": "Christian Stocker"
+        },
+        {
+            "email": "cweiske@php.net",
+            "name": "Christian Weiske"
+        },
+        {
+            "email": "moosh@php.net",
+            "name": "Christophe Gesche"
+        },
+        {
+            "email": "danielc@php.net",
+            "name": "Daniel Convissor"
+        },
+        {
+            "email": "clockwerx@php.net",
+            "name": "Daniel O'Connor"
+        },
+        {
+            "email": "gwynne@php.net",
+            "name": "Gwynne Raskind"
+        },
+        {
+            "email": "jflemer@php.net",
+            "name": "James E. Flemer"
+        },
+        {
+            "email": "jw@php.net",
+            "name": "Jan Wagner"
+        },
+        {
+            "email": "quipo@php.net",
+            "name": "Lorenzo Alberton"
+        },
+        {
+            "email": "lsmith@php.net",
+            "name": "Lukas Smith"
+        },
+        {
+            "email": "markonen@php.net",
+            "name": "Marko Karppinen"
+        },
+        {
+            "email": "mj@php.net",
+            "name": "Martin Jansen"
+        },
+        {
+            "email": "mbretter@php.net",
+            "name": "Michael Bretterklieber"
+        },
+        {
+            "email": "mike@php.net",
+            "name": "Michael Wallner"
+        },
+        {
+            "email": "tuupola@php.net",
+            "name": "Mika Tuupola"
+        },
+        {
+            "email": "rashid@php.net",
+            "name": "Robert Janeczek"
+        },
+        {
+            "email": "sebastian@php.net",
+            "name": "Sebastian Bergmann"
+        },
+        {
+            "email": "ssb@php.net",
+            "name": "Stig Bakken"
+        },
+        {
+            "email": "toby@php.net",
+            "name": "Tobias Schlitt"
+        },
+        {
+            "email": "yavo@php.net",
+            "name": "Yavor Shahpasov"
+        }
+    ],
+    "require": {
+        "php": ">=4.3.3"
+    },
+    "replace": {
+        "pear-pear/auth": "== 1.6.4.0"
+    },
+    "autoload": {
+        "classmap": ["Auth/", "Auth.php"]
+    },
+    "include-path": [""]
+}

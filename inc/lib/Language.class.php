@@ -120,9 +120,10 @@ class Language
 
     public static function flagList () {
         $lang = json_decode(Options::v('multilang_country'), true);
+        $multilang_enable = Options::v('multilang_enable');
         // print_r($lang);
         $html = "";
-        if (!empty($lang)) {
+        if (!empty($lang) && $multilang_enable == "on") {
             $html = "<ul class=\"nav nav-pills\">";
             foreach ($lang as $key => $value) {
                 $flag = strtolower($value['flag']);
@@ -131,9 +132,10 @@ class Language
                 ";
             }
             $html .= "</ul>";
+            Hooks::attach('footer_load_lib', array('Language', 'flagLib'));
         }
 
-        Hooks::attach('footer_load_lib', array('Language', 'flagLib'));
+
         return $html;
     }
 
