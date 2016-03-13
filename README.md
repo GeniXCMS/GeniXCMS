@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v0.0.7.
+> Update Notice: Please Update to version v0.0.8.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -12,20 +12,20 @@
 [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
 
-**GeniXCMS** is a PHP Based Content Management System and Framework (*CMSF*). It's a simple and lightweight of CMSF. Very suitable for **Intermediate PHP developer** to **Advanced Developer**. Some manual configurations are needed to make this application to work. 
+**GeniXCMS** is a PHP Based Content Management System and Framework (*CMSF*). It's a simple and lightweight of CMSF. Very suitable for **Intermediate PHP developer** to **Advanced Developer**. Some manual configurations are needed to make this application to work.
 
 ### Why GeniXCMS
-This CMSF is a starter point to build your own online applications. With already build User manager, Content manager (Post, Pages), Menu manager, etc made you easy to add your own code and build your own custom web applications. 
+This CMSF is a starter point to build your own online applications. With already build User manager, Content manager (Post, Pages), Menu manager, etc made you easy to add your own code and build your own custom web applications.
 
 ### Credits
 **GeniXCMS** is using some of **FOSS** (free and opensource software) like :
-- Twitter **Bootstrap**, 
-- **Summernote** Text Editor, 
-- **JQuery**, 
-- **PHP**, 
-- **MySQL**, 
+- Twitter **Bootstrap**,
+- **Summernote** Text Editor,
+- **JQuery**,
+- **PHP**,
+- **MySQL**,
 - **SB-Admin 2**,
-- etc. 
+- etc.
 
 ### Requirements
 * PHP >=5.4
@@ -38,7 +38,7 @@ This CMSF is a starter point to build your own online applications. With already
 
 #### Manual Upload
 
-Upload all files to your site. 
+Upload all files to your site.
 
 Set this directory permission to 777 (writable) :
 
@@ -54,7 +54,7 @@ After upload is done. Open your site at the browser. eg: http://yoursite.com
 
 The installation wizard will appear, just follow all the instructions.
 
-#### Using Composer 
+#### Using Composer
 
 We are now ready for composer installation. Run this command at your server.
 
@@ -62,19 +62,18 @@ We are now ready for composer installation. Run this command at your server.
 
 more detail about composer, please read the documentation at http://getcomposer.org
 
-more details of installation : 
+more details of installation :
 http://docs.genixcms.org/en/latest/user-guide/installation/
 
-### Upgrading 
+### Upgrading
 
-- Upload all files, except `inc/config/config.php`. 
+- Upload all files, except `inc/config/config.php`.
 - edit config.php, rename `SECURITY` become `SECURITY_KEY`
 - Run at your browser `http://yourwebsite.com/upgrade.php`.
 
 ### Showcase
-Showcase URL : 
+Showcase URL :
 - http://demo.genixcms.org
-- http://serieshop2.gxapp.top
 
 ### License
 **GeniXCMS** License : [**MIT License**](LICENSE)
@@ -82,7 +81,7 @@ Showcase URL :
 ### Website
 Link : http://www.genixcms.org
 
-### Funder 
+### Funder
 https://www.indiegogo.com/projects/genixcms/x/10970277
 
 ### Developer
