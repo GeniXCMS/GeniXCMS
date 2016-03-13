@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -26,7 +26,7 @@ require("autoload.php");
 
 try {
     new System();
-    
+
 } catch (Exception $e) {
     echo $e->getMessage();
 }
@@ -49,7 +49,7 @@ if (isset($_POST['004-patch'])) {
     $q = Db::query($sql);
     $sql = "ALTER TABLE `cat_param`
             ADD PRIMARY KEY (`id`)";
-    $q = Db::query($sql);       
+    $q = Db::query($sql);
     $sql = "ALTER TABLE `cat_param`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
     $q = Db::query($sql);
@@ -76,11 +76,12 @@ if (isset($_POST['004-patch'])) {
 }elseif(isset($_POST['005'])){
     $sql = "ALTER TABLE `posts` ADD `views` int(11) NOT NULL DEFAULT '0'";
     $q = Db::query($sql);
-    $sql = "INSERT INTO `options` VALUES 
+    $sql = "INSERT INTO `options` VALUES
             (null, 'multilang_enable', 'off'),
             (null, 'multilang_default', ''),
             (null, 'multilang_country', ''),
-            (null, 'system_check', '{}')
+            (null, 'system_check', '{}'),
+            (null, 'permalink_use_index_php', 'off')
             ";
     $q = Db::query($sql);
     if ($q) {
@@ -89,11 +90,22 @@ if (isset($_POST['004-patch'])) {
         $alertred[] = 'Upgrade Failed';
     }
 }elseif(isset($_POST['006'])){
-    $sql = "INSERT INTO `options` VALUES 
+    $sql = "INSERT INTO `options` VALUES
             (null, 'multilang_enable', 'off'),
             (null, 'multilang_default', ''),
             (null, 'multilang_country', ''),
-            (null, 'system_check', '{}')
+            (null, 'system_check', '{}'),
+            (null, 'permalink_use_index_php', 'off')
+            ";
+    $q = Db::query($sql);
+    if ($q) {
+        $alertgreen = 'Upgrade Success!';
+    }else{
+        $alertred[] = 'Upgrade Failed';
+    }
+}elseif(isset($_POST['007'])){
+    $sql = "INSERT INTO `options` VALUES
+            (null, 'permalink_use_index_php', 'off')
             ";
     $q = Db::query($sql);
     if ($q) {
@@ -142,7 +154,14 @@ echo "
 <h3>Upgrade from Version 0.0.6</h3>
 <form method=\"post\">
 <div class=\"form-group\">
-<button name=\"006\" class=\"btn btn-success\"><i class=\"fa fa-upload\"></i> Upgrade from v0.0.5</button>
+<button name=\"006\" class=\"btn btn-success\"><i class=\"fa fa-upload\"></i> Upgrade from v0.0.6</button>
+</div>
+</form>
+
+<h3>Upgrade from Version 0.0.7</h3>
+<form method=\"post\">
+<div class=\"form-group\">
+<button name=\"007\" class=\"btn btn-success\"><i class=\"fa fa-upload\"></i> Upgrade from v0.0.7</button>
 </div>
 </form>
 ";
