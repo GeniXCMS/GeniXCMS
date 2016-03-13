@@ -49,7 +49,7 @@ class Posts
             if ($pinger != "") {
                 Pinger::run($pinger);
             }
-            
+
         }
         return $post;
     }
@@ -134,7 +134,7 @@ class Posts
         $post = Typo::Xclean($vars);
 
         preg_match_all("[[\-\-readmore\-\-]]", $post, $more);
- 
+
         if (is_array($more[0])) {
             $post = str_replace('[[--readmore--]]', '', $post);
             // return $post;
@@ -161,10 +161,21 @@ class Posts
         return $post;
     }
 
-    public static function recent($vars, $type = 'post') {
+    // $vars = array(
+    //     'num' => '',
+    //     'cat' => '',
+    //     'type' => 'post'
+    // );
+
+
+    public static function recent($vars) {
+
+        $catW = isset($vars['cat'])? " AND `cat` = '".$vars['cat']:"";
+        $type = isset($vars['type'])? $vars['type']: "post";
+        $num = isset($vars['num'])? $vars['num']: "10";
         $sql = "SELECT * FROM `posts`
-                WHERE `type` = '{$type}' AND `status` = '1'
-                ORDER BY `date` DESC LIMIT {$vars}";
+                WHERE `type` = '{$type}' $catW AND `status` = '1'
+                ORDER BY `date` DESC LIMIT {$num}";
         $posts = Db::result($sql);
         if(isset($posts['error'])){
             $posts['error'] = "No Posts found.";
@@ -316,7 +327,7 @@ class Posts
             $langs = Language::isActive();
             if (!empty($langs)) {
                 foreach ($post as $p) {
-                    if (Posts::existParam('multilang', $p->id) 
+                    if (Posts::existParam('multilang', $p->id)
                         && Options::v('multilang_default') !== $langs) {
                         # code...
                         $lang = Language::getLangParam($langs, $p->id);
@@ -340,6 +351,52 @@ class Posts
         }
 
         return $post;
+    }
+
+    // $vars = array(
+    //     'num' => '',
+    //     'cat' => '',
+    //     'type' => 'post',
+    //     'excerpt' => 'true',
+    //     'title' => 'true',
+    //     'author' => 'true',
+    //     'date' => 'true',
+    //     'class' => array(
+    //                    'ul' => '',
+    //                    'li' => '',
+    //                    'p' => '',
+    //                    'h4' => '',
+    //                )
+    // );
+
+    public static function lists($vars){
+
+        $class = isset($vars['class'])? $vars['class']: "";
+
+        $ulClass = isset($class['ul'])? $class['ul']: "";
+        $liClass = isset($class['li'])? $class['li']: "";
+        $pClass = isset($class['p'])? $class['p']: "";
+        $h4Class = isset($class['h4'])? $class['h4']: "";
+
+        $pcat = self::recent($vars['num']);
+        if(isset($pcat['error'])){
+            $pcat['error'] = "No Post(s) found.";
+        }else{
+            $pcat= self::prepare($pcat);
+            echo "<ul class=\"".$ulClass."\">";
+            foreach($pcat as $p){
+                $content = ($vars['excerpt'])? substr(
+                    strip_tags(
+                        Typo::Xclean($p->content)
+                    ), 0, 200): "";
+
+                echo "<li class=\"".$liClass."\">
+                    <h4 class=\"".$h4Class."\"><a href=\"".Url::post($p->id)."\">{$p->title}</a></h4>
+                    <p class=\"".$pClass."\">".$content."</p>
+                </li>";
+            }
+            echo "</ul>";
+        }
     }
 
 }

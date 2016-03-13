@@ -10,7 +10,10 @@
                     <h4>Recent Post</h4>
                     <ol class="list-unstyled">
                         <?php
-                        $recent = Posts::recent(10);
+                        $vars = array(
+                            'num' => 10
+                        );
+                        $recent = Posts::recent($vars);
                         $num = Db::$num_rows;
                         if($num > 0) {
                             foreach ($recent as $r) {
@@ -21,6 +24,15 @@
                         }else{
                             echo "No Post to Show";
                         }
+                        $vars = array(
+                            'num' => 10,
+                            'excerpt' => true,
+                            'class' => array(
+                                'ul' => 'list-group',
+                                'li' => 'list-group-item'
+                            )
+                        );
+                        Posts::lists($vars);
                         ?>
                     </ol>
                 </div>

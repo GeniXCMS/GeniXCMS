@@ -43,69 +43,76 @@
                                 <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Posts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level" style="">
                                     <li>
-                                        <a href="index.php?page=posts" 
+                                        <a href="index.php?page=posts"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'posts')?"class=\"active\"":"";?>>
                                             <?=POSTS;?>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="index.php?page=categories" 
+                                        <a href="index.php?page=categories"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'categories')?"class=\"active\"":"";?>>
                                             <?=CATEGORIES;?>
                                         </a>
                                     </li>
                                 </ul>
-                                
+
                             </li>
                             <li>
-                                <a href="index.php?page=pages" 
+                                <a href="index.php?page=pages"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'pages')?"class=\"active\"":"";?>>
                                     <i class="fa fa-file-o"></i> <?=PAGES;?>
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=media" 
+                                <a href="index.php?page=media"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'media')?"class=\"active\"":"";?>>
                                     <i class="fa fa-list-alt"></i> Media
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=users" 
+                                <a href="index.php?page=users"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'users')?"class=\"active\"":"";?>>
                                     <i class="fa fa-users"></i> <?=USERS;?>
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=menus" 
+                                <a href="index.php?page=menus"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'menus')?"class=\"active\"":"";?>>
                                     <i class="fa fa-sitemap"></i> <?=MENUS;?>
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=themes" 
+                                <a href="index.php?page=themes"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'themes' && !isset($_GET['view']))?"class=\"active\"":"";?>>
                                     <i class="fa fa-paint-brush"></i> <?=THEMES;?>
                                 </a>
                             </li>
                             <li>
-                                <a href="index.php?page=modules" 
+                                <a href="index.php?page=modules"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'modules')?"class=\"active\"":"";?>>
                                     <i class="fa fa-plug"></i> <?=MODULES;?>
                                 </a>
                             </li>
-                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'))?"class=\"active\"":"";?> >
+                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'
+                                || $_GET['page'] == 'permalink' ))?"class=\"active\"":"";?> >
                                 <a href="#"><i class="fa fa-wrench fa-fw"></i> <?=SETTINGS;?><span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level" style="">
                                     <li>
-                                        <a href="index.php?page=settings" 
+                                        <a href="index.php?page=settings"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'settings')?"class=\"active\"":"";?>>
                                             <i class="fa fa-wrench"></i> Global Settings
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="index.php?page=multilang" 
+                                        <a href="index.php?page=multilang"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'multilang')?"class=\"active\"":"";?>>
                                             <i class="fa fa-flag"></i> Multilanguage
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="index.php?page=permalink"
+                                        <?=(isset($_GET['page']) && $_GET['page'] == 'permalink')?"class=\"active\"":"";?>>
+                                            <i class="fa fa-link"></i> Permalink
                                         </a>
                                     </li>
                                 </ul>

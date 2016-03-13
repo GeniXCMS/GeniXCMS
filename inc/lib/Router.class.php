@@ -17,32 +17,32 @@
 
 /**
  * Router Class
- * 
+ *
  * This class is for routing the smart url path
- * 
+ *
  * @author Puguh Wijayanto (www.metalgenix.com)
  * @since 0.0.7
  */
 class Router
 {
-    
+
     private static $_route;
-    
+
     public function __construct() {
-        
+
         self::map();
 
     }
-    
+
     /**
      * Router variable
-     * 
+     *
      * $router = array (
      *      '/url/' => 'control'
      * )
      */
     public static function map(){
-        
+
         self::$_route = array (
             '/category/([0-9]+)/(.*)/paging/([0-9]+)' => array('cat' => '1', 'paging' => '3'),
             '/category/([0-9]+)/(.+)' => array('cat' => '1'),
@@ -56,48 +56,48 @@ class Router
             '/error' => array('error'),
             '/' => array('default'),
         );
-        
+
         return self::$_route;
-        
+
     }
-    
+
     /**
      * Add router route
-     * 
+     *
      * @param arr $var
      */
     public static function add($var) {
-        
+
         $route = self::$_route;
-        
+
         self::$_route = array_merge($route, $var);
-        
+
         return self::$_route;
-        
+
     }
-    
+
     /**
      * Run the route
-     * 
+     *
      * @return array
      */
     public static function run () {
-        
+
         $m = self::match();
         // print_r($m);
         if (is_array($m)) {
             # code...
-        
+
             $val = self::extract($m[0], $m[1]);
-            
+
             if (isset($val) && $val != null ) {
-                
+
                 return $val;
-                
+
             }else{
-                
+
                 return ['error'];
-                
+
             }
 
         }else{
@@ -106,37 +106,37 @@ class Router
 
         }
     }
-    
+
     /**
      * Check if the requested uri match with available router map
-     * 
+     *
      * @return array
      */
     public static function match () {
         $uri = self::getURI();
-        
+
         foreach (self::$_route as $k => $v) {
-            
+
             $regx = str_replace('/','\/', $k);
-            
+
             if ( preg_match('/^'.$regx.'$/Usi', $uri, $m) ) {
-                
+
                 return [$v,$m];
-                
+
             }
-            
+
         }
     }
-    
+
     /**
      * Extract the router variable
-     * 
+     *
      * @param arr $var
      * @param arr $m
      * @return type
      */
     public static function extract ($var, $m) {
-        
+
         foreach ($var as $k2 => $v2) {
 
             if ($k2 != '0') {
@@ -144,107 +144,115 @@ class Router
                 $va[] = [$k2 => $m[$v2]];
 
             }elseif($k2 == ''){
-                
+
                 $va = ['default'];
-                
+
             }else{
-                
+
                 $va = array($k2) ;
-                
+
             }
         }
-        
+
         return $va;
-        
+
     }
-    
+
     /**
      * Get the requested smart URI
-     * 
+     *
      * @return string
      */
     public static function getURI () {
         $uri = $_SERVER['REQUEST_URI'];
-        
+
         // strip any $_REQUEST variable
         $uri = explode('?', $uri);
-        
+
         if (count($uri) > 0) {
-            
+
             unset($uri[1]);
-            
-        } 
-        
-        if (self::inFolder()) {
-            
-            $uri2 = explode('/', $uri[0]);
-            unset($uri2[0]);
-            unset($uri2[1]);
-            $uri = implode('/', $uri2);
-            
-        }else{
-            
-            $uri2 = explode('/', $uri[0]);
-            unset($uri2[0]);
-            $uri = implode('/', $uri2);
-            
+
         }
-        
+        //print_r($uri[0]);
+        if (self::inFolder()) {
+
+            $uri2 = self::stripFolder($uri[0]);
+
+            $uri = implode('/', $uri2);
+
+        }else{
+
+            $uri2 = explode('/', $uri[0]);
+            unset($uri2[0]);
+            $uri = implode('/', $uri2);
+
+        }
+
         return '/' . trim($uri, '/');
     }
-    
+
     /**
      * Check if it's in folder
      */
     public static function inFolder() {
-        
+
         $uri = explode('/', Site::$url);
-        
+
         if(count($uri) > 3) {
-            
+
             return true;
-            
+
         }else{
-            
+
             return false;
-            
+
         }
-        
+
     }
-    
+
     /**
      * Scrap the parameter into the array of data
-     * 
+     *
      * @param array $param
      * @return array
      */
     public static function scrap($param) {
         if ($param != '') {
-            
+
             foreach ($param as $k => $v) {
-                
+
                 if (is_array($v)) {
-                    
+
                     foreach ($v as $k2 => $v2) {
 
                         $data[$k2] = $v2;
-                        
+
                     }
-                    
+
                 }else{
-                    
+
                     $data = '';
-                    
+
                 }
-                
+
             }
-            
+
         } else {
-            
+
             $data = '';
-            
+
         }
-        
+
         return $data;
+    }
+
+    function stripFolder($uri) {
+        $uri2 = explode('/', $uri);
+        for($i=0;$i<count($uri2)+1; $i++){
+            unset($uri2[$i]);
+        }
+
+        return $uri2;
     }
 }

@@ -183,7 +183,7 @@ class System
     }
 
     public static function getLatestVersion ($now) {
-        $v = @file_get_contents("https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION");
+        $v = file_get_contents("https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION");
         $arr = array(
                 'version' => $v,
                 'last_check' => $now

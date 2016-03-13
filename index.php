@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -30,6 +30,6 @@ try {
     echo $e->getMessage();
 }
 
-
+print_r($_REQUEST);
 /* End of file index.php */
 /* Location: ./index.php */

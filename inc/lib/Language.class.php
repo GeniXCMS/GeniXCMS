@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -29,10 +29,10 @@ class Language
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
                 if(is_file($file) == true && $ext == 'php'){
                     $lang[] = $entry;
-                } 
+                }
             }
         }
-        
+
         $handle->close();
         return $lang;
     }
@@ -94,13 +94,13 @@ class Language
                     }else{
                         $lang = '';
                     }
-                    
+
                 }else{
                     $lang = '';
                 }
-                
+
                 break;
-            
+
             default:
                 if (Options::v('multilang_enable') === 'on') {
                     $langs = Session::val('lang');
@@ -121,14 +121,18 @@ class Language
     public static function flagList () {
         $lang = json_decode(Options::v('multilang_country'), true);
         // print_r($lang);
-        $html = "<ul class=\"nav nav-pills\">";
-        foreach ($lang as $key => $value) {
-            $flag = strtolower($value['flag']);
-            $html .= "
-            <li class=\"\"><a href=\"".Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
-            ";
+        $html = "";
+        if (!empty($lang)) {
+            $html = "<ul class=\"nav nav-pills\">";
+            foreach ($lang as $key => $value) {
+                $flag = strtolower($value['flag']);
+                $html .= "
+                <li class=\"\"><a href=\"".Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
+                ";
+            }
+            $html .= "</ul>";
         }
-        $html .= "</ul>";
+
         Hooks::attach('footer_load_lib', array('Language', 'flagLib'));
         return $html;
     }

@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -20,8 +20,8 @@
 *
 * This class will create all the URL format automatically for Posts, Categories,
 * pages, sitemap, rss.
-* 
-* 
+*
+*
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
@@ -32,25 +32,26 @@ class Url
 
     /**
     * Post URL Function.
-    * This will create the posts url automatically based on the SMART_URL 
+    * This will create the posts url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
     public static function post($vars) {
         switch (SMART_URL) {
             case true:
+                $inFold = (Options::v('permalink_use_index_php') == "on")? "/index.php/":"/";
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang)? $lang . '/': '';
-                    $url = Site::$url."/". $lang .self::slug($vars)."/{$vars}";
+                    $url = Site::$url.$inFold. $lang .self::slug($vars)."/{$vars}";
                 }else{
-                    $url = Site::$url."/".self::slug($vars)."/{$vars}";
+                    $url = Site::$url.$inFold.self::slug($vars)."/{$vars}";
                 }
-                
+
                 break;
-            
+
             default:
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
@@ -68,24 +69,25 @@ class Url
 
     /**
     * Page URL Function.
-    * This will create the pages url automatically based on the SMART_URL 
+    * This will create the pages url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
     public static function page($vars) {
         switch (SMART_URL) {
             case true:
+                $inFold = (Options::v('permalink_use_index_php') == "on")? "/index.php/":"/";
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang)? $lang . '/': '';
-                    $url = Site::$url."/". $lang .self::slug($vars).GX_URL_PREFIX;
+                    $url = Site::$url.$inFold. $lang .self::slug($vars).GX_URL_PREFIX;
                 }else{
-                    $url = Site::$url."/".self::slug($vars).GX_URL_PREFIX;
+                    $url = Site::$url.$inFold.self::slug($vars).GX_URL_PREFIX;
                 }
                 break;
-            
+
             default:
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
@@ -94,20 +96,20 @@ class Url
                 }else{
                     $url = Site::$url."/?page={$vars}";
                 }
-                
+
                 break;
 
         }
 
         return $url;
     }
-    
+
 
     /**
     * Categories URL Function.
-    * This will create the categories url automatically based on the SMART_URL 
+    * This will create the categories url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -115,9 +117,10 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Site::$url."/category/".$vars."/".Typo::slugify(Categories::name($vars));
+                $inFold = (Options::v('permalink_use_index_php') == "on")? "/index.php":"";
+                $url = Site::$url.$inFold."/category/".$vars."/".Typo::slugify(Categories::name($vars));
                 break;
-            
+
             default:
                 # code...
                 $url = Site::$url."/?cat={$vars}";
@@ -127,11 +130,11 @@ class Url
 
         return $url;
     }
-    
+
     /**
     * Custom URL Function.
     * This will create the custom url. It will result as is.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -142,9 +145,9 @@ class Url
 
     /**
     * Sitemap URL Function.
-    * This will create the sitemap url automatically based on the SMART_URL 
+    * This will create the sitemap url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -152,9 +155,10 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Site::$url."/sitemap".GX_URL_PREFIX;
+                $inFold = (Options::v('permalink_use_index_php') == "on")? "/index.php":"";
+                $url = Site::$url.$inFold."/sitemap".GX_URL_PREFIX;
                 break;
-            
+
             default:
                 # code...
                 $url = Site::$url."/index.php?page=sitemap";
@@ -167,9 +171,9 @@ class Url
 
     /**
     * RSS URL Function.
-    * This will create the rss url automatically based on the SMART_URL 
+    * This will create the rss url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -177,9 +181,10 @@ class Url
         switch (SMART_URL) {
             case true:
                 # code...
-                $url = Site::$url."/rss".GX_URL_PREFIX;
+                $inFold = (Options::v('permalink_use_index_php') == "on")? "/index.php":"";
+                $url = Site::$url.$inFold."/rss".GX_URL_PREFIX;
                 break;
-            
+
             default:
                 # code...
                 $url = Site::$url."/index.php?rss";
@@ -193,7 +198,7 @@ class Url
     /**
     * URL Slug Function.
     * This will load the url slug from the database according to the posts id.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -206,9 +211,9 @@ class Url
 
     /**
     * FLag URL Function.
-    * This will create the flag url automatically based on the SMART_URL 
+    * This will create the flag url automatically based on the SMART_URL
     * will formatted as friendly url if SMART_URL is set to true.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.7
     */
@@ -217,7 +222,7 @@ class Url
             case true:
                 $lang = '?lang=' . $vars;
                 if (isset($_GET['lang'])) {
-                    
+
                     $uri = explode('?', $_SERVER['REQUEST_URI']);
                     $uri = $uri[0];
                 }else{
@@ -226,11 +231,11 @@ class Url
                 $url = $uri . $lang;
 
                 break;
-            
+
             default:
                 // print_r($_GET);
                 if (!empty($_GET)) {
-                    
+
                     $val = '';
                     foreach ($_GET as $key => $value) {
                         if ($key == 'lang') {
@@ -250,7 +255,7 @@ class Url
 
         return $url;
     }
-    
+
 }
 
 /* End of file Url.class.php */

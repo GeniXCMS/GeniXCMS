@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -19,19 +19,19 @@
 * GxMain Class
 *
 * This class is the main class for call all the necessary controller.
-* 
-* 
+*
+*
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @since 0.0.1
 */
-class GxMain 
+class GxMain
 {
 
     /**
     * GxMain Initiation Function.
     * This will check the config file at inc/config/config.php exist or not
     * if not exist, run the installation proccess.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -46,7 +46,7 @@ class GxMain
     /**
     * GxMain Index Function.
     * This will load the frontpage controller.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -58,9 +58,9 @@ class GxMain
 
     /**
     * GxMain Admin Function.
-    * This will load the backend controller. Secured, so to access it must be 
+    * This will load the backend controller. Secured, so to access it must be
     * logged in with a current privilege. Default privilege is 2.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -81,7 +81,7 @@ class GxMain
     /**
     * GxMain Install Function.
     * This will load the install controller.
-    * 
+    *
     * @author Puguh Wijayanto (www.metalgenix.com)
     * @since 0.0.1
     */
@@ -94,7 +94,7 @@ class GxMain
         System::Zipped();
     }
 
-    
+
 }
 
 

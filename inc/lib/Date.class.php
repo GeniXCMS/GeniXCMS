@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -51,7 +51,7 @@ class Date
                  * Only get timezones explicitely not part of "Others".
                  * @see http://www.php.net/manual/en/timezones.others.php
                  */
-                if ( preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'] ) 
+                if ( preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'] )
                     && $zone['timezone_id']) {
                     $cities[$zone['timezone_id']][] = $key;
                 }
@@ -62,7 +62,7 @@ class Date
         foreach( $cities as $key => $value )
             $cities[$key] = join( ', ', $value);
 
-        // Only keep one city (the first and also most important) for each set of possibilities. 
+        // Only keep one city (the first and also most important) for each set of possibilities.
         $cities = array_unique( $cities );
 
         // Sort by area/city name.
