@@ -15,7 +15,7 @@
                         );
                         $recent = Posts::recent($rcnt);
                         $num = count($recent);
-                        if($num > 0) {
+                        if(!isset($recent['error'])) {
                             foreach ($recent as $r) {
                                 echo "<li><a href=\"".Url::post($r->id)."\">$r->title</a></li>
                                 ";
