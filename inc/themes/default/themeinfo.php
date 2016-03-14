@@ -2,7 +2,7 @@
 /*
 * Name: Default Themes
 * Desc: Default GeniXCMS Themes
-* Version: 0.0.1
+* Version: 0.0.2
 * Build: 0.0.1 pre
 * Developer: Puguh Wijayanto
 * URI: http://www.metalgenix.com
