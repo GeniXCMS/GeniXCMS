@@ -377,6 +377,7 @@ class Posts
         $liClass = isset($class['li'])? $class['li']: "";
         $pClass = isset($class['p'])? $class['p']: "";
         $h4Class = isset($class['h4'])? $class['h4']: "";
+        $excerptMax = isset($vars['excerpt_max'])? $vars['excerpt_max']: "200";
 
         $pcat = self::recent($vars['num']);
         if(isset($pcat['error'])){
@@ -388,7 +389,7 @@ class Posts
                 $content = ($vars['excerpt'])? substr(
                     strip_tags(
                         Typo::Xclean($p->content)
-                    ), 0, 200): "";
+                    ), 0, $excerptMax): "";
 
                 echo "<li class=\"".$liClass."\">
                     <h4 class=\"".$h4Class."\"><a href=\"".Url::post($p->id)."\">{$p->title}</a></h4>

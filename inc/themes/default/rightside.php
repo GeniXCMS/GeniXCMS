@@ -17,24 +17,28 @@
                         $num = count($recent);
                         if($num > 0) {
                             foreach ($recent as $r) {
-                      # code...
                                 echo "<li><a href=\"".Url::post($r->id)."\">$r->title</a></li>
                                 ";
                             }
                         }else{
                             echo "No Post to Show";
                         }
+
+                        ?>
+                    </ol>
+                    <h4>Post with Excerpts</h4>
+                    <?php
                         $vars = array(
-                            'num' => 10,
+                            'num' => 2,
                             'excerpt' => true,
+                            'excerpt_max' => 130,
                             'class' => array(
                                 'ul' => 'list-group',
                                 'li' => 'list-group-item'
                             )
                         );
                         Posts::lists($vars);
-                        ?>
-                    </ol>
+                    ?>
                 </div>
                 <div class="sidebar-module">
                     <h4>Elsewhere</h4>
