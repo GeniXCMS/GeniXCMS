@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -41,11 +41,12 @@ if (isset($_POST['addcountry'])) {
         $langs = array_merge((array)$langs, $lang);
         $langs = json_encode($langs);
         Options::update('multilang_country', $langs);
+        new Options();
         Token::remove($_POST['token']);
     }else{
         $data['alertred'] = $alertred;
     }
-    
+
 }
 
 if (isset($_GET['del']) && $_GET['del'] != '') {
@@ -68,8 +69,8 @@ if (isset($_GET['del']) && $_GET['del'] != '') {
     }else{
         $data['alertred'] = $alertred;
     }
-    
-    
+
+
 }
 
 if (isset($_POST['change'])) {
@@ -81,7 +82,7 @@ if (isset($_POST['change'])) {
         $vars = array();
         $flip = array_flip($_POST);
         // print_r($_POST);
-        $sql = "SELECT * FROM `options` WHERE `value` = 'on'";        
+        $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
         $q = Db::result($sql);
         $input = array('multilang_default', 'multilang_enable');
         foreach($q as $ob) {
@@ -95,7 +96,7 @@ if (isset($_POST['change'])) {
                         //echo $ob->name;
                     }
                 }
-            
+
         }
         unset($_POST['token']);
         unset($_POST['change']);
@@ -105,9 +106,10 @@ if (isset($_POST['change'])) {
             $vars[$key] = Typo::cleanX($val);
         }
         // print_r($vars);
-        
-        
+
+
         Options::update($vars);
+        new Options();
     }else{
         $data['alertred'] = $alertred;
     }

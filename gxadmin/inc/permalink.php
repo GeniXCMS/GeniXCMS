@@ -77,8 +77,8 @@ if (isset($data['alertred'])) {
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label>Use <code>index.php</code></label>
-                        <?php if(Options::v('permalink_use_index_php') === 'on') { $use_index = 'checked'; }
-                        else{ $use_index = 'off';}
+                        <?php if($data['permalink_use_index_php'] === 'on') { $use_index = 'checked'; }
+                        else{ $use_index = 'unchecked';}
                         ?>
                         <div class="input-group">
                             <input type="checkbox" name="permalink_use_index_php" rel="tooltip"

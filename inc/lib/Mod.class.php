@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -19,9 +19,9 @@
 class Mod
 {
     public function __construct() {
-        
+
     }
-    
+
     public static function mod($var) {
         self::load($var);
     }
@@ -41,10 +41,10 @@ class Mod
                     $dir = GX_MOD.$entry;
                     if(is_dir($dir) == true){
                         $mod[] = basename($dir);
-                    } 
+                    }
             }
         }
-        
+
         $handle->close();
         return $mod;
     }
@@ -117,12 +117,13 @@ class Mod
             # code...
             $mods = array_merge($mods, array($mod));
         }
-        
+
 
         $mods = json_encode($mods);
 
         $mods = Options::update('modules', $mods);
         if($mods){
+            new Options();
             return true;
         }else{
             return false;
@@ -144,13 +145,14 @@ class Mod
             }else{
                 $arr[] = $mods[$i];
             }
-            
+
         }
         //print_r($arr);
         //asort($mods);
         $mods = json_encode($arr);
         $mods = Options::update('modules', $mods);
         if($mods){
+            new Options();
             return true;
         }else{
             return false;
@@ -215,7 +217,7 @@ class Mod
                         $GLOBALS['alertred'] = $alertred;
                     }
                 }
-                
+
             }
         }
 
@@ -228,7 +230,7 @@ class Mod
             if (self::exist($m)) {
                 self::load($m);
             }
-            
+
         }
 
         return $data;

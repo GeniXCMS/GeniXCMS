@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -32,7 +32,7 @@ class Theme
         }else{
             Control::error('unknown','Theme file is missing.');
         }
-        
+
     }
 
     public static function exist ($vars) {
@@ -42,7 +42,7 @@ class Theme
             return false;
         }
     }
-    
+
     public static function admin($var, $data='') {
         if (isset($data)) {
             # code...
@@ -65,7 +65,7 @@ class Theme
         }else{
             self::theme('header');
         }
-        
+
     }
     public static function footer($vars=""){
         global $GLOBALS;
@@ -77,8 +77,8 @@ class Theme
             self::theme('footer');
         }
 
-        
-        
+
+
     }
 
     public static function editor($mode = 'light'){
@@ -93,7 +93,7 @@ class Theme
         }else{
             $GLOBALS['editor_mode'] = 'full';
         }
-        
+
         //return $editor;
     }
 
@@ -111,7 +111,7 @@ class Theme
         if (self::optionsExist($var)) {
             include(GX_THEME.$var.'/options.php');
         }
-        
+
     }
 
     public static function optionsExist($var) {
@@ -120,14 +120,14 @@ class Theme
         }else{
             return false;
         }
-        
+
     }
 
     public static function incFunc($var) {
         if (self::functionExist($var)) {
             include(GX_THEME.$var.'/function.php');
         }
-        
+
     }
 
     public static function functionExist($var) {
@@ -136,7 +136,7 @@ class Theme
         }else{
             return false;
         }
-        
+
     }
 
     public static function thmList(){
@@ -147,16 +147,17 @@ class Theme
                     $dir = GX_THEME.$entry;
                     if(is_dir($dir) == true){
                         $thm[] = basename($dir);
-                    } 
+                    }
             }
         }
-        
+
         $handle->close();
         return $thm;
     }
 
     public static function activate($thm) {
         if (Options::update('themes', $thm)) {
+            new Options();
             return true;
         }else{
             return false;
@@ -209,8 +210,8 @@ class Theme
         $list = '';
         # code...
         $data = self::data($thm);
-        if(isset($_GET['page']) 
-            && $_GET['page'] == 'themes' 
+        if(isset($_GET['page'])
+            && $_GET['page'] == 'themes'
             && isset($_GET['view'])
             && $_GET['view'] == 'options'){
             $class = 'class="active"';
@@ -218,9 +219,9 @@ class Theme
             $class = "";
         }
         if (self::optionsExist($thm)) {
-            $active = (isset($_GET['page']) 
-                && $_GET['page'] == 'themes' 
-                && isset($_GET['view']) 
+            $active = (isset($_GET['page'])
+                && $_GET['page'] == 'themes'
+                && isset($_GET['view'])
                 && $_GET['view']  == 'options')?"class=\"active\"":"";
             $list .= "
             <li $class>

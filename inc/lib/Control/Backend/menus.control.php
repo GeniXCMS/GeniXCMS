@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -57,7 +57,7 @@ switch ($act) {
                     //                                 )
                     //                         )
                     //                 );
-                    
+
                     // if(is_array($menus)){
                     //     $menu = array_merge($menus, $menu);
                     // }
@@ -76,7 +76,7 @@ switch ($act) {
                                     $_POST['id']  =>  array(
                                                 'name' => $menus[$_POST['id']]['name'],
                                                 'class' => $menus[$_POST['id']]['class'],
-                                                'menu' => $menu[$_POST['id']]['menu']    
+                                                'menu' => $menu[$_POST['id']]['menu']
                                             )
                                     );
                     if(is_array($menus)){
@@ -100,7 +100,7 @@ switch ($act) {
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
-            
+
             default:
                 # code...
 
@@ -155,7 +155,7 @@ switch ($act) {
                 }
 
                 break;
-            
+
             default:
                 # code...
 
@@ -211,6 +211,7 @@ switch ($act) {
                 Db::query($sql);
                 $menu = json_encode($menus);
                 Options::update('menus', $menu);
+                new Options();
                 $data['alertgreen'][] = 'Menu Deleted';
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
@@ -258,23 +259,24 @@ switch ($act) {
                     if(is_array($menus)){
                         $menu = array_merge($menus, $menu);
                     }
-                    
+
                     $menu = json_encode($menu);
                     Options::update('menus', $menu);
+                    new Options();
                     $data['alertgreen'][] = 'Menu Added';
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
-            
+
             default:
                 # code...
-                
+
                 break;
         }
 
 
         // ADD MENU ITEM START
-        
+
         if (isset($_POST['additem'])) {
             # code...
             $submit = true;
@@ -283,7 +285,7 @@ switch ($act) {
         }
         switch ($submit) {
             case true:
-                
+
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
                     $alertred[] = TOKEN_NOT_EXIST;
@@ -311,7 +313,7 @@ switch ($act) {
                 }
 
                 break;
-            
+
             default:
                 # code...
 
@@ -347,7 +349,7 @@ switch ($act) {
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
-            
+
             default:
                 # code...
                 break;
@@ -361,7 +363,7 @@ switch ($act) {
         Theme::admin('footer');
         break;
 }
-    
+
 
 
 /* End of file menus.control.php */

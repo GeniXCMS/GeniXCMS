@@ -31,19 +31,25 @@ if (isset($_POST['change'])) {
         $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
         $q = Db::result($sql);
         $input = array('permalink_use_index_php');
+
         foreach($q as $ob) {
 
-                if( in_array($ob->name, $input ) ) {
-                    if( isset( $flip[$ob->name] ) ) {
-                        $vars[$ob->name] = 'on';
-                        //echo $ob->name;
-                    }else{
-                        $vars[$ob->name] = 'off';
-                        //echo $ob->name;
-                    }
+            if( in_array($ob->name, $input ) ) {
+
+                if( isset( $flip[$ob->name] ) ) {
+
+                    $vars[$ob->name] = 'on';
+
+                }else{
+
+                    $vars[$ob->name] = 'off';
+
                 }
 
+            }
+
         }
+
         unset($_POST['token']);
         unset($_POST['change']);
         // print_r($vars);
@@ -55,6 +61,7 @@ if (isset($_POST['change'])) {
 
 
         Options::update($vars);
+        new Options();
     }else{
         $data['alertred'] = $alertred;
     }

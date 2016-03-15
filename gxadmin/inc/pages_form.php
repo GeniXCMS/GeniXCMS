@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,7 +15,7 @@
 *
 */
 
-if (isset($_GET['token']) 
+if (isset($_GET['token'])
     && Token::isExist($_GET['token'])) {
     $token = TOKEN;
 }else{
@@ -37,10 +37,10 @@ if(isset($data['post']) ) {
             $tags = @$p->tags;
         }
         if($status == 1) {
-            $pub = "SELECTED"; 
-            $unpub = ""; 
+            $pub = "SELECTED";
+            $unpub = "";
         }elseif ($status == 0) {
-            $pub = ""; 
+            $pub = "";
             $unpub = "SELECTED";
         }
     }else{
@@ -54,7 +54,7 @@ if(isset($data['post']) ) {
         $tags = "";
         $data['alertred'][] = $data['post']['error'];
     }
-    
+
 }else{
     $title = "";
     $content = "";
@@ -95,7 +95,7 @@ if (isset($data['alertred'])) {
     echo "</div>";
 }
 
-    
+
 ?>
 <form action="index.php?page=pages&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
 <div class="row">
@@ -103,7 +103,7 @@ if (isset($data['alertred'])) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-file-o"></i> <?=$pagetitle;?> <?=PAGE;?> 
+        <h1><i class="fa fa-file-o"></i> <?=$pagetitle;?> <?=PAGE;?>
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
@@ -120,7 +120,7 @@ if (isset($data['alertred'])) {
     </div>
     <div class="col-sm-12">
         <div class="row">
-            
+
                 <div class="col-sm-8" id="myTab">
                     <?php
                 if(Options::v('multilang_enable') === 'on') {
@@ -132,14 +132,14 @@ if (isset($data['alertred'])) {
                     echo "
                     <ul class=\"nav nav-tabs\" role=\"tablist\">
                         <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
-                    
+
                     unset($listlang[Options::v('multilang_default')]);
                     foreach ($listlang as $key => $value) {
                         $flag = strtolower($value['flag']);
                         echo "
                         <li><a href=\"#lang-{$key}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$flag}\"></span> {$value['country']}</a></li>";
                     }
-                    
+
                     echo "
                     </ul>
                     <div class=\"clearfix\">&nbsp;</div>
@@ -162,13 +162,13 @@ if (isset($data['alertred'])) {
                             $lang = Language::getLangParam($key, $_GET['id']);
                             if ($lang == '') {
                                 $lang['title'] = $title;
-                                $lang['content'] = $content; 
+                                $lang['content'] = $content;
                             }else{
                                 $lang = $lang;
                             }
                         }else{
                             $lang['title'] = '';
-                            $lang['content'] = ''; 
+                            $lang['content'] = '';
                         }
                         echo "
                     <div class=\"tab-pane\" id=\"lang-{$key}\">
@@ -223,7 +223,12 @@ if (isset($data['alertred'])) {
 
                             <div class="form-group">
                                 <label><?=POST_DATE;?></label>
-                                <input type="text" name="date" class="form-control" value="<?=$date;?>">
+                                <div class='input-group date' id='dateTime'>
+                                    <input type='text' class="form-control" name="date" value="<?=$date;?>" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                                 <small><?=LEFT_IT_BLANK_NOW_DATE;?></small>
                             </div>
                         </div>
@@ -239,11 +244,10 @@ if (isset($data['alertred'])) {
                         </div>
                     </div> -->
                 </div>
-            
+
         </div>
-        
+
     </div>
 </div>
 <input type="hidden" name="token" value="<?=$token;?>">
 </form>
-

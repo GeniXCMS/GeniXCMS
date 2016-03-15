@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -14,7 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-if (isset($_GET['token']) 
+if (isset($_GET['token'])
     && Token::isExist($_GET['token'])) {
     $token = TOKEN;
 }else{
@@ -60,10 +60,10 @@ if(isset($data['post'])) {
         $cat = $p->cat;
     }
     if($status == 1) {
-        $pub = "SELECTED"; 
-        $unpub = ""; 
+        $pub = "SELECTED";
+        $unpub = "";
     }elseif ($status == 0) {
-        $pub = ""; 
+        $pub = "";
         $unpub = "SELECTED";
     }
 }else{
@@ -99,7 +99,7 @@ if(isset($data['post'])) {
     </div>
     <div class="col-sm-12">
         <div class="row">
-            
+
                 <div class="col-sm-8" id="myTab">
 
                 <?php
@@ -112,14 +112,14 @@ if(isset($data['post'])) {
                     echo "
                     <ul class=\"nav nav-tabs\" role=\"tablist\">
                         <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
-                    
+
                     unset($listlang[Options::v('multilang_default')]);
                     foreach ($listlang as $key => $value) {
                         $flag = strtolower($value['flag']);
                         echo "
                         <li><a href=\"#lang-{$key}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$flag}\"></span> {$value['country']}</a></li>";
                     }
-                    
+
                     echo "
                     </ul>
                     <div class=\"clearfix\">&nbsp;</div>
@@ -144,13 +144,13 @@ if(isset($data['post'])) {
                             // print_r($lang);
                             if ($lang == '' || !Posts::existParam('multilang', $_GET['id'])) {
                                 $lang['title'] = $title;
-                                $lang['content'] = $content; 
+                                $lang['content'] = $content;
                             }else{
                                 $lang = $lang;
                             }
                         }else{
                             $lang['title'] = '';
-                            $lang['content'] = ''; 
+                            $lang['content'] = '';
                         }
                         echo "
                     <div class=\"tab-pane\" id=\"lang-{$key}\">
@@ -196,7 +196,7 @@ if(isset($data['post'])) {
                         <div class="panel-body">
                             <div class="form-group">
                                 <label><?=CATEGORY;?></label>
-                                <?php 
+                                <?php
                                     $vars = array(
                                                 'order_by'    =>    'name',
                                                 'name'    =>    'cat',
@@ -207,7 +207,7 @@ if(isset($data['post'])) {
                                         $vars = array_merge($vars, array('selected' => $cat));
                                     }
                                     //echo $cat;
-                                    echo Categories::dropdown($vars); 
+                                    echo Categories::dropdown($vars);
                                 ?>
                             </div>
 
@@ -222,17 +222,21 @@ if(isset($data['post'])) {
 
                             <div class="form-group">
                                 <label><?=POST_DATE;?></label>
-                                <input type="text" name="date" class="form-control" value="<?=$date;?>">
+                                <div class='input-group date' id='dateTime'>
+                                    <input type='text' class="form-control" name="date" value="<?=$date;?>" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                                 <small><?=LEFT_IT_BLANK_NOW_DATE;?></small>
                             </div>
                         </div>
                     </div>
                 </div>
-            
+
         </div>
-        
+
     </div>
 </div>
 <input type="hidden" name="token" value="<?=$token;?>">
 </form>
-

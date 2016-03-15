@@ -16,10 +16,14 @@
     <!--<link href="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">-->
     <link href="<?=Site::$url;?>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/font-awesome.min.css" rel="stylesheet">
+
     <script src="<?=Site::$url;?>/assets/js/jquery.min.js"></script>
     <!--<script src="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.js"></script>-->
     <script src="<?=Site::$url;?>/assets/js/bootstrap.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/moment-locales.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/bootstrap-datetimepicker.min.js"></script>
     <?php
       if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
             Hooks::attach('admin_footer_action', array('Files','elfinderLib'));
@@ -95,17 +99,37 @@
         }
       echo Hooks::run('admin_footer_action', $data);
     ?>
-    
+
     <script>
          $("#selectall").change(function(){
             $('input:checkbox').not(this).prop('checked', this.checked);
               //alert(cb.val());
-           
+
         });
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({
                     placement: 'top'
                 });
+        });
+
+        $(function () {
+            $('#dateFrom').datetimepicker({
+                format: 'YYYY/MM/DD'
+            });
+            $('#dateTo').datetimepicker({
+                format: 'YYYY/MM/DD',
+                useCurrent: false //Important! See issue #1075
+            });
+            $("#dateFrom").on("dp.change", function (e) {
+                $('#dateTo').data("DateTimePicker").minDate(e.date);
+            });
+            $("#dateTo").on("dp.change", function (e) {
+                $('#dateFrom').data("DateTimePicker").maxDate(e.date);
+            });
+            $('#dateTime').datetimepicker({
+                format: 'YYYY/MM/DD HH:mm:ss',
+                useCurrent: true
+            })
         });
     </script>
     <!-- Metis Menu Plugin JavaScript -->
@@ -124,4 +148,3 @@
     <link href="<?=Site::$url;?>/assets/css/flag-icon.min.css" rel="stylesheet">
   </body>
 </html>
-

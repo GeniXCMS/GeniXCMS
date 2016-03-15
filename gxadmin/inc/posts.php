@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -46,15 +46,15 @@
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-file-text-o"></i> <?=POSTS;?> 
-            <a href="index.php?page=posts&act=add&token=<?=TOKEN;?>" 
+        <h1><i class="fa fa-file-text-o"></i> <?=POSTS;?>
+            <a href="index.php?page=posts&act=add&token=<?=TOKEN;?>"
             class="btn btn-primary pull-right">
                 <i class="fa fa-plus"></i> <?=ADD_NEW_POST;?>
             </a>
         </h1>
         <hr />
     </div>
-    
+
     <div class="col-sm-12">
     <?=$data['paging'];?>
         <form action="index.php?page=posts" method="get">
@@ -67,27 +67,37 @@
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_POSTS;?>">
                     </div>
-                    
+
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
-                    <?php 
+                    <?php
                         $vars = array(
                                     'name' => 'cat',
 
-                                    ); 
+                                    );
                         echo Categories::dropdown($vars);
                     ?>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <input type="date" class="form-control" name="from">
+                        <div class='input-group date' id='dateFrom'>
+                            <input type='text' class="form-control" name="from" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <input type="date" class="form-control" name="to">
+                        <div class='input-group date' id='dateTo'>
+                            <input type='text' class="form-control" name="to" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -95,7 +105,7 @@
                         <select name="status" class="form-control">
                             <option value="1"><?=PUBLISHED;?></option>
                             <option value="0"><?=UNPUBLISHED;?></option>
-                            
+
                         </select>
                     </div>
                 </div>
@@ -147,8 +157,8 @@
                             <td>".Date::format($p->date)."</td>
                             <td>{$status}</td>
                             <td>
-                                <a href=\"index.php?page=posts&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a> 
-                                <a href=\"index.php?page=posts&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
+                                <a href=\"index.php?page=posts&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a>
+                                <a href=\"index.php?page=posts&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                                 onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
                             </td>
                             <td>
@@ -166,7 +176,7 @@
                     </tr>";
                 }
             ?>
-            
+
         </tbody>
         <tfoot>
             <th><?=ID;?></th>
@@ -192,5 +202,5 @@
     <?=$data['paging'];?>
     </div>
     </div>
-    
+
 </div>

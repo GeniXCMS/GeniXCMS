@@ -37,11 +37,11 @@
                                 ";
                         }
                     }else{
-                        //echo "Error, Post not found."; 
+                        //echo "Error, Post not found.";
                         Control::error('404');
                     }
-                    
-                    
+
+
                 ?>
                 </div>
             </div>
