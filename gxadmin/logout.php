@@ -15,13 +15,13 @@
 *
 */
 
-define('GX_PATH', realpath(__DIR__ . '/'));
+define('GX_PATH', realpath(__DIR__ . '/../'));
 define('GX_LIB', GX_PATH.'/inc/lib/');
 define('GX_MOD', GX_PATH.'/inc/mod/');
 define('GX_THEME', GX_PATH.'/inc/themes/');
 define('GX_ASSET', GX_PATH.'/assets/');
 
-require(GX_PATH."autoload.php");
+require(GX_PATH."/autoload.php");
 
 try {
     new System();

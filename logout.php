@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -21,10 +21,10 @@ define('GX_MOD', GX_PATH.'/inc/mod/');
 define('GX_THEME', GX_PATH.'/inc/themes/');
 define('GX_ASSET', GX_PATH.'/assets/');
 
-require(GX_PATH."autoload.php");
+require(GX_PATH."/autoload.php");
 
 try {
-    new System();   
+    new System();
 } catch (Exception $e) {
     echo $e->getMessage();
 }

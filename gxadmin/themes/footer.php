@@ -15,17 +15,38 @@
 
     </div>
 
-    <!--<link href="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">-->
+    <!-- LOAD CSS -->
     <link href="<?=Site::$url;?>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/font-awesome.min.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="<?=Site::$url;?>/assets/css/sb-admin-2.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/dashboard.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/flag-icon.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/jquery.tagsinput.min.css" rel="stylesheet">
+
+
+    <!-- LOAD Javascript -->
     <script src="<?=Site::$url;?>/assets/js/jquery.min.js"></script>
-    <!--<script src="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.js"></script>-->
     <script src="<?=Site::$url;?>/assets/js/bootstrap.min.js"></script>
     <script src="<?=Site::$url;?>/assets/js/moment-locales.min.js"></script>
     <script src="<?=Site::$url;?>/assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="<?=Site::$url;?>/assets/js/jquery.tagsinput.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="<?=Site::$url;?>/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="<?=Site::$url;?>/assets/js/sb-admin-2.js"></script>
+
+    <!-- MetisMenu CSS -->
+    <link href="<?=Site::$url;?>/assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+
+
     <?php
       if(isset($GLOBALS['editor']) && $GLOBALS['editor'] == true){
             Hooks::attach('admin_footer_action', array('Files','elfinderLib'));
@@ -133,21 +154,11 @@
                 useCurrent: true
             })
         });
+
+        $('#tags').tagsInput({
+            width: 'auto'
+        });
     </script>
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="<?=Site::$url;?>/assets/js/plugins/metisMenu/metisMenu.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="<?=Site::$url;?>/assets/js/sb-admin-2.js"></script>
-
-    <!-- MetisMenu CSS -->
-    <link href="<?=Site::$url;?>/assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="<?=Site::$url;?>/assets/css/sb-admin-2.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>/assets/css/dashboard.css" rel="stylesheet">
-
-    <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>/assets/css/flag-icon.min.css" rel="stylesheet">
   </body>
 </html>

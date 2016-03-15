@@ -95,14 +95,15 @@ class Router
                 return $val;
 
             }else{
-
-                return ['error'];
+                $val = ['error'];
+                return $val;
 
             }
 
         }else{
 
-            return ['error'];
+            $val = ['error'];
+            return $val;
 
         }
     }
