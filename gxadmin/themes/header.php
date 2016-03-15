@@ -43,7 +43,7 @@
                         <ul class="nav" id="side-menu">
 
                             <li>
-                                <a href="index.php" <?=(!isset($_GET['page']))?"":"";?>>
+                                <a href="index.php" <?=(!isset($_GET['page']))?"class=\"active\"":"";?>>
                                     <i class="fa fa-dashboard fa-fw"></i> <?=DASHBOARD;?>
                                 </a>
                             </li>

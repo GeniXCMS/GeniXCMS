@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -99,7 +99,7 @@ if (isset($data['alertred'])) {
                                 <small class="help-block"><?=WEBSITE_SLOGAN_DESC;?></small>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div class="col-sm-12">
@@ -115,7 +115,7 @@ if (isset($data['alertred'])) {
                                 <small class="help-block"><?=WEBSITE_URI_DESC;?></small>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div class="col-sm-12">
@@ -131,7 +131,7 @@ if (isset($data['alertred'])) {
                                 <small class="help-block"><?=WEBSITE_DESCRIPTION_DESC;?></small>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="col-sm-12">
                         <div class="row">
@@ -140,11 +140,11 @@ if (isset($data['alertred'])) {
                                 <input type="text" name="siteemail" value="<?=Options::v('siteemail');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_EMAIL_DESCR;?></small>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
-                    
+
 
                 </div><!-- Tab Pane General End -->
 
@@ -154,7 +154,7 @@ if (isset($data['alertred'])) {
                         <?=LOCALIZATION;?>
                         <hr />
                     </h3>
-                    
+
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
@@ -192,12 +192,12 @@ if (isset($data['alertred'])) {
                                     </div>
 
                                 </div>
-                                
+
                             </div>
                         </div>
-                        
+
                     </div>
-                    
+
 
                 </div><!-- Tab Pane Localization END -->
 
@@ -343,10 +343,10 @@ if (isset($data['alertred'])) {
                                 <div class="input-group">
 
                                     <span class="input-group-addon">
-                                        <?php if(Options::v('is_logourl') == 'on') { $is_logourl = 'checked'; } 
-                                        else{ $is_logourl = 'off';} 
+                                        <?php if(Options::v('is_logourl') == 'on') { $is_logourl = 'checked'; }
+                                        else{ $is_logourl = 'off';}
                                         ?>
-                                        <input type="checkbox" name="is_logourl" rel="tooltip" 
+                                        <input type="checkbox" name="is_logourl" rel="tooltip"
                                         title="Check here if you want to use URL" <?=$is_logourl;?>>
                                     </span>
                                     <input type="text" name="logourl" value="<?=Options::v('logourl');?>" class="form-control">
@@ -375,127 +375,127 @@ if (isset($data['alertred'])) {
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
-                                <?php if(Options::v('use_jquery') == 'on') { $use_jquery = 'checked'; } 
-                                else{ $use_jquery = 'off';} 
+                                <?php if(Options::v('use_jquery') == 'on') { $use_jquery = 'checked'; }
+                                else{ $use_jquery = 'off';}
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="checkbox" name="use_jquery" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_jquery;?>> 
+                                        title="Check here if you want to use URL" <?=$use_jquery;?>>
                                     </span>
-                                    <input type="text" name="jquery_v" rel="tooltip" 
-                                    class="form-control" placeholder="Jquery Version" 
+                                    <input type="text" name="jquery_v" rel="tooltip"
+                                    class="form-control" placeholder="Jquery Version"
                                     value="<?=Options::v('jquery_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
                                             <?=SETTINGS_LIBRARY_CDN;?>
-                                        </button> 
+                                        </button>
                                     </span>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_JQUERY_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
-                                <?php 
-                                if(Options::v('use_bootstrap') == 'on') { 
-                                    $use_bootstrap = 'checked'; 
-                                }else{ 
+                                <?php
+                                if(Options::v('use_bootstrap') == 'on') {
+                                    $use_bootstrap = 'checked';
+                                }else{
                                     $use_bootstrap = 'off';
-                                } 
+                                }
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="checkbox" name="use_bootstrap" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bootstrap;?>> 
+                                        title="Check here if you want to use URL" <?=$use_bootstrap;?>>
                                     </span>
-                                    <input type="text" name="bs_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Bootstrap Version" 
+                                    <input type="text" name="bs_v" rel="tooltip"
+                                    class="form-control disable" placeholder="Bootstrap Version"
                                     readonly value="<?=Options::v('bs_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
                                             <?=SETTINGS_LIBRARY_LOCAL;?>
-                                        </button> 
+                                        </button>
                                     </span>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_BOOTSTRAP_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_FAWESOME;?></label>
-                                <?php 
-                                if(Options::v('use_fontawesome') == 'on') { 
-                                    $use_fontawesome = 'checked'; 
-                                }else{ 
+                                <?php
+                                if(Options::v('use_fontawesome') == 'on') {
+                                    $use_fontawesome = 'checked';
+                                }else{
                                     $use_fontawesome = 'off';
-                                } 
+                                }
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="checkbox" name="use_fontawesome" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_fontawesome;?>> 
+                                        title="Check here if you want to use URL" <?=$use_fontawesome;?>>
                                     </span>
-                                    <input type="text" name="fontawesome_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Fontawesome Version" 
+                                    <input type="text" name="fontawesome_v" rel="tooltip"
+                                    class="form-control disable" placeholder="Fontawesome Version"
                                     readonly value="<?=Options::v('fontawesome_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
                                             <?=SETTINGS_LIBRARY_CDN;?>
-                                        </button> 
+                                        </button>
                                     </span>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_FAWESOME_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_EDITOR;?></label>
-                                <?php 
-                                if(Options::v('use_editor') == 'on') { 
-                                    $use_editor = 'checked'; 
-                                }else{ 
+                                <?php
+                                if(Options::v('use_editor') == 'on') {
+                                    $use_editor = 'checked';
+                                }else{
                                     $use_editor = 'off';
-                                } 
+                                }
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="checkbox" name="use_editor" rel="tooltip"
-                                        title="Check here if you want to use Editor" <?=$use_editor;?>> 
+                                        title="Check here if you want to use Editor" <?=$use_editor;?>>
                                     </span>
-                                    <input type="text" name="editor_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Editor Version" 
+                                    <input type="text" name="editor_v" rel="tooltip"
+                                    class="form-control disable" placeholder="Editor Version"
                                     readonly value="<?=Options::v('editor_v');?>">
                                     <span class="input-group-btn">
                                         <select name="editor_type" rel="tooltip"
                                         title=""
                                         class="btn btn-default">
                                             <option value="summernote"><?=SETTINGS_LIBRARY_SUMMERNOTE;?></option>
-                                        </select> 
+                                        </select>
                                     </span>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_EDITOR_DESCR;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BVALIDATOR;?></label>
-                                <?php 
-                                if(Options::v('use_bsvalidator') == 'on') { 
-                                    $use_bsvalidator = 'checked'; 
-                                }else{ 
+                                <?php
+                                if(Options::v('use_bsvalidator') == 'on') {
+                                    $use_bsvalidator = 'checked';
+                                }else{
                                     $use_bsvalidator = 'off';
-                                } 
+                                }
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="checkbox" name="use_bsvalidator" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bsvalidator;?>> 
+                                        title="Check here if you want to use URL" <?=$use_bsvalidator;?>>
                                     </span>
-                                    <input type="text" name="bsvalidator_v" rel="tooltip" 
-                                    class="form-control disable" placeholder="Bootstrap Validator Version" 
+                                    <input type="text" name="bsvalidator_v" rel="tooltip"
+                                    class="form-control disable" placeholder="Bootstrap Validator Version"
                                     readonly value="<?=Options::v('bsvalidator_v');?>">
                                     <span class="input-group-btn">
                                         <button type="" name="" rel="tooltip"
                                         title="" class="btn btn-default">
                                             <?=SETTINGS_LIBRARY_LOCAL;?>
-                                        </button> 
+                                        </button>
                                     </span>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_BVALIDATOR_DESCR;?></small>
@@ -520,7 +520,7 @@ if (isset($data['alertred'])) {
                                 <label><?=SETTINGS_POSTS_PAGINATION;?></label>
                                 <?php
                                 if(Options::v('pagination')=='number'){
-                                    $number = 'selected'; 
+                                    $number = 'selected';
                                     $pager = '';
                                 }elseif(Options::v('pagination') == 'pager'){
                                     $pager = 'selected';
@@ -644,7 +644,7 @@ if (isset($data['alertred'])) {
                     <div class="col-md-12">
                         <h4><?=GOOGLE_RECAPTCHA?></h4>
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label><?=GOOGLE_RECAPTCHA?></label>
                         <?php
@@ -661,12 +661,12 @@ if (isset($data['alertred'])) {
                             <?=GOOGLE_RECAPTCHA_ENABLE?>
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_ENABLE_DESCR?></small>
                         </div>
-                        
+
                     </div>
                     <div class="col-md-6">
                         <label><?=GOOGLE_RECAPTCHA_LANG?></label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_lang" 
+                            <input class="form-control" type="text" name="google_captcha_lang"
                             value="<?=Options::v('google_captcha_lang');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_LANG_DESCR?></small>
                         </div>
@@ -674,7 +674,7 @@ if (isset($data['alertred'])) {
                     <div class="col-md-6">
                         <label><?=GOOGLE_RECAPTCHA_SITEKEY?></label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_sitekey" 
+                            <input class="form-control" type="text" name="google_captcha_sitekey"
                             value="<?=Options::v('google_captcha_sitekey');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_SITEKEY_DESCR?></small>
                         </div>
@@ -682,7 +682,7 @@ if (isset($data['alertred'])) {
                     <div class="col-md-6">
                         <label><?=GOOGLE_RECAPTCHA_SECRET?></label>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_secret" 
+                            <input class="form-control" type="text" name="google_captcha_secret"
                             value="<?=Options::v('google_captcha_secret');?>">
                             <small class="help-block"><?=GOOGLE_RECAPTCHA_SECRET_DESCR?></small>
                         </div>
@@ -695,7 +695,7 @@ if (isset($data['alertred'])) {
                     </div>
                 </div><!-- Security Tab Stop -->
             </div>
-            
+
 
         </div> <!-- TAB PANE END -->
 
@@ -703,9 +703,10 @@ if (isset($data['alertred'])) {
 
 
     </div>
-</div>
+
 <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>
+<div class="clearfix"></div>
 <script>
     $('#myTab a').click(function (e) {
         e.preventDefault()

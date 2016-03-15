@@ -1,18 +1,20 @@
 
 
             <br />
+            <footer class="footer">
+                <hr />
+                <?php
+                    $end_time = microtime(TRUE);
+                    $time_taken = $end_time - $GLOBALS['start_time'];
+                    $time_taken = round($time_taken,5);
+                    echo '<small>Page generated in '.$time_taken.' seconds.</small> <br />';
+                ?>
+                <small>Copyright &copy; <?=date("Y");?> <a href="http://genixcms.org">GeniXCMS</a> <i><?=System::v();?></i></small>
+            </footer>
         </div>
 
     </div>
-    <footer class="footer">
-        <small>Copyright &copy; <?=date("Y");?> <a href="http://genixcms.org">GeniXCMS</a> <i><?=System::v();?></i></small><br />
-        <?php
-            $end_time = microtime(TRUE);
-            $time_taken = $end_time - $GLOBALS['start_time'];
-            $time_taken = round($time_taken,5);
-            echo '<small>Page generated in '.$time_taken.' seconds.</small>';
-        ?>
-    </footer>
+
     <!--<link href="<?=Site::$url;?>/assets/js/jquery-ui/jquery-ui.min.css" rel="stylesheet">-->
     <link href="<?=Site::$url;?>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -143,6 +145,7 @@
 
     <!-- Custom CSS -->
     <link href="<?=Site::$url;?>/assets/css/sb-admin-2.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/dashboard.css" rel="stylesheet">
 
     <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/flag-icon.min.css" rel="stylesheet">

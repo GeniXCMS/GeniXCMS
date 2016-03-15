@@ -26,6 +26,22 @@ body {
         border-left: 1px solid #e7e7e7;
     }
 }
+.footer {
+    text-align: center;
+    position: relative;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-brand {
+    padding: 2px!important;
+}
+.navbar-top-links {
+    margin-right: 0;
+}
 
 .navbar-top-links li {
     display: inline-block;
@@ -220,6 +236,11 @@ body {
     height: 100%;
 }
 
+.dataTables_wrapper {
+    position: relative;
+    clear: both;
+}
+
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
@@ -342,15 +363,4 @@ table.dataTable thead .sorting:after {
 
 .panel-yellow a:hover {
     color: #df8a13;
-}
-
-.footer {
-    text-align: center;
-    padding: 5px;
-}
-
-.navbar-brand {
-    padding-top: 0px!important; 
-    padding-bottom: 0px!important;
-    line-height: 50px;
 }
