@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -67,17 +67,27 @@
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_USER;?>">
                     </div>
-                    
+
                 </div>
-                
+
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <input type="date" class="form-control" name="from">
+                        <div class='input-group date' id='dateFrom'>
+                            <input type='text' class="form-control" name="from" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <input type="date" class="form-control" name="to">
+                        <div class='input-group date' id='dateTo'>
+                            <input type='text' class="form-control" name="to" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -85,7 +95,7 @@
                         <select name="status" class="form-control">
                             <option value="1"><?=ACTIVE;?></option>
                             <option value="0"><?=INACTIVE;?></option>
-                            
+
                         </select>
                     </div>
                 </div>
@@ -147,8 +157,8 @@
                         <td>{$grp}</td>
                         <td>".Date::format($p->join_date)."</td>
                         <td>
-                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a> 
-                            <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\" 
+                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a>
+                            <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                             onclick=\"return confirm('".DELETE_CONFIRM."');\">".DELETE."</a>
                         </td>
                         <td>
@@ -197,7 +207,7 @@
             <h4 class="modal-title" id="myModalLabel"><?=ADD_USER;?></h4>
           </div>
           <div class="modal-body">
-            
+
                 <div class="form-group">
                     <label><?=USERNAME;?></label>
                     <input type="text" name='userid' class="form-control">
@@ -222,9 +232,9 @@
                         <option value="2"><?=EDITOR;?></option>
                         <option value="3"><?=AUTHOR;?></option>
                         <option value="4" selected="on"><?=GENERAL_MEMBER;?></option>
-                    </select> 
+                    </select>
                 </div>
-            
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?=CLOSE;?></button>

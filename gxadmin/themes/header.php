@@ -23,9 +23,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">
-                    <?=Site::logo('','45px');?>
-                </a>
+                <div class="navbar-brand" >
+                    <a href="index.php">
+                        <?=Site::logo('','45px');?>
+                    </a>
+                    <span class="small">
+                        <a href="<?=Site::$url;?>" class="label label-default"
+                            target="_new">
+                            <i class="fa fa-globe"></i> preview site
+                        </a>
+                    </span>
+                </div>
             </div>
 
             <?php if( User::access(2) ) { ?>
