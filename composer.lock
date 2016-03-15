@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b80a33a10962d19278e0b6a5333ae90f",
-    "content-hash": "d36139e394f03663014bc8173c068e1f",
+    "hash": "d312367fe00fde7f2de43befa1bcdf83",
+    "content-hash": "e8d42fd05cd8029688e39807441e2ae7",
     "packages": [
         {
             "name": "angelleye/paypal-php-library",
@@ -683,16 +683,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.19",
+            "version": "1.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "635ee279a522233a567984756bf9da1db243d9bf"
+                "reference": "e87a786e3ae12a25cf78a71bb07b4b384bfaa83a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/635ee279a522233a567984756bf9da1db243d9bf",
-                "reference": "635ee279a522233a567984756bf9da1db243d9bf",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/e87a786e3ae12a25cf78a71bb07b4b384bfaa83a",
+                "reference": "e87a786e3ae12a25cf78a71bb07b4b384bfaa83a",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +762,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-03-12 19:04:33"
+            "time": "2016-03-14 21:54:11"
         },
         {
             "name": "league/oauth2-client",
@@ -2212,7 +2212,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0"
+        "php": ">=5.5.0"
     },
     "platform-dev": []
 }
