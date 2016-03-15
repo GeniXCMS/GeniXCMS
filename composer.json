@@ -17,7 +17,7 @@
         "vendor-dir": "inc/lib/Vendor"
     },
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.5.9",
         "phpmailer/phpmailer": "5.2.14",
         "angelleye/paypal-php-library": "2.0.4",
         "lsmonki/php-ixr": "1.7.6",

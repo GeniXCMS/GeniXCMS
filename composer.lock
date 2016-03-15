@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d312367fe00fde7f2de43befa1bcdf83",
-    "content-hash": "e8d42fd05cd8029688e39807441e2ae7",
+    "hash": "a1e461a214e0e2e2e0f961c80e505002",
+    "content-hash": "613319576004d1a49c39a7d9afb442d5",
     "packages": [
         {
             "name": "angelleye/paypal-php-library",
@@ -2212,7 +2212,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.0"
+        "php": ">=5.5.9"
     },
     "platform-dev": []
 }
