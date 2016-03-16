@@ -323,8 +323,10 @@ class Posts
     }
 
     public static function prepare($post) {
+
         if(Options::v('multilang_enable') === 'on') {
             $langs = Language::isActive();
+
             if (!empty($langs)) {
                 foreach ($post as $p) {
                     if (Posts::existParam('multilang', $p->id)

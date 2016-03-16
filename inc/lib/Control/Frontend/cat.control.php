@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -46,45 +46,20 @@ if(isset($paging)){
 }
 $data['sitetitle'] = "Category: ".Categories::name($cat).$pagingtitle;
 $data['posts'] = Db::result(
-                sprintf("SELECT * FROM `posts` 
-                    WHERE `type` = 'post' 
+                sprintf("SELECT * FROM `posts`
+                    WHERE `type` = 'post'
                     AND `cat` = '%d'
                     AND `status` = '1'
-                    ORDER BY `date` 
+                    ORDER BY `date`
                     DESC LIMIT %d, %d",
                     $cat, $offset, $data['max']
                     )
                 );
 $data['num'] = Db::$num_rows;
 
-if(Options::v('multilang_enable') === 'on') {
-    if (isset($_GET['lang'])) {
-        foreach ($data['posts'] as $p) {
-            if (Posts::existParam('multilang', $p->id)
-                && Options::v('multilang_default') !== $_GET['lang']) {
-                # code...
-                $lang = Language::getLangParam($_GET['lang'], $p->id);
-                $posts = get_object_vars($p);
-                $posts = array_merge($posts,$lang);
-                
-            }else{
-                $posts = $p;
-            }
-            $posts_arr = array();
-            $posts_arr = json_decode(json_encode($posts), FALSE);
-            // $posts[] = $posts;
-            $post_arr[] = $posts_arr;
-            $data['posts'] = $post_arr;
-        }
-    }else{
-        $data['posts'] = $data['posts'];
-    }
-
-}else{
-    $data['posts'] = $data['posts'];
-}
+$data['posts'] = Posts::prepare($data['posts']);
 // print_r($data['posts']);
-$url = Url::cat($_GET['cat']);
+$url = Url::cat($cat);
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',

@@ -75,8 +75,8 @@ define('LOGOUT', 'Log Out');
 define('ADD_NEW_POST', 'Add New Post');
 define('ADD_NEW_PAGE', 'Add New Page');
 
-/** 
-* Dashboard 
+/**
+* Dashboard
 *
 * @author Puguh Wijayanto
 * @since 0.0.1-pre
@@ -243,7 +243,7 @@ define('CHARSET_DESC', 'Your Website Charset/Encoding.');
 
 
 
-/** 
+/**
 * @author Vakho Daneila
 * @since 0.0.3-patch
 */
@@ -330,7 +330,7 @@ define('SETTINGS_PAYMENT_SANDBOX_EN', 'Enable Sandbox?');
 define('SETTINGS_PAYMENT_PAYPALAPI_USR', 'PayPal API Username');
 define('SETTINGS_PAYMENT_PAYPALAPI_PWD', 'PayPal API Password');
 define('SETTINGS_PAYMENT_PAYPALAPI_SIGN', 'PayPal Signature');
-define('SETTINGS_PAYMENT_ALERT', 'Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at  
+define('SETTINGS_PAYMENT_ALERT', 'Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at
                           <a href="https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/" target="_blank">
                               https://developer.paypal.com</a>');
 
@@ -370,13 +370,13 @@ define('MSG_PAGE_UPDATED', 'Updated Successfully');
 define('MSG_PAGE_REMOVED', 'Removed Successfully');        // Needs Some Space :) Please Check It
 define('MSG_PAGE_DELETE', 'Are you sure you want to delete this item?');
 
-define('MSG_USER_ADDED', 'Added Successfully');  
-define('MSG_USER_UPDATED', 'Updated Successfully');  
-define('MSG_USER_REMOVED', 'Removed Successfully');  
-define('MSG_USER_EXIST', 'User Exist! Choose Another Username'); 
-define('MSG_USER_EMAIL_EXIST', 'Email Already Used. Please Use Another E-Mail:'); 
-define('MSG_USER_ACTIVATED', 'Activated Successfully.'); 
-define('MSG_USER_DEACTIVATED', 'Deactivated Successfully.'); 
+define('MSG_USER_ADDED', 'Added Successfully');
+define('MSG_USER_UPDATED', 'Updated Successfully');
+define('MSG_USER_REMOVED', 'Removed Successfully');
+define('MSG_USER_EXIST', 'User Exist! Choose Another Username');
+define('MSG_USER_EMAIL_EXIST', 'Email Already Used. Please Use Another E-Mail:');
+define('MSG_USER_ACTIVATED', 'Activated Successfully.');
+define('MSG_USER_DEACTIVATED', 'Deactivated Successfully.');
 define('MSG_USER_ACTIVATION_FAIL', 'Activation fail.');
 define('MSG_USER_DEACTIVATION_FAIL', 'Deactivation fail.');
 define('MSG_USER_PWD_MISMATCH', 'Password Did Not Match, Retype Your Password Again');
@@ -419,9 +419,14 @@ define('GOOGLE_RECAPTCHA_SITEKEY', 'Google reCaptcha SiteKey');
 define('GOOGLE_RECAPTCHA_SITEKEY_DESCR', 'type the google recaptcha sitekey.');
 define('GOOGLE_RECAPTCHA_SECRET', 'Google reCaptcha Secret');
 define('GOOGLE_RECAPTCHA_SECRET_DESCR', 'type the google recaptcha secret.');
-define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i> 
-                        To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to 
+define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i>
+                        To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to
                         <a target="_new" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');
 
 define('GO', 'Go!');
 define('READ_MORE', 'Read More..');
+
+define('ADD_TAG', 'Add New Tag');
+define('TAG_NAME', 'Tag Name');
+define('TAG_CANNOT_EMPTY', 'Tag Name Cannot be Empty');
+define('MSG_TAG_ADDED', 'Tag Added');

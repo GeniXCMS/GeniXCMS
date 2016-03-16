@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,8 +15,8 @@
 *
 */
 
-$data = Router::scrap($param);
 $post="";
+$data = Router::scrap($param);
 $data['max'] = Options::v('post_perpage');
 
 if (SMART_URL) {
@@ -43,10 +43,10 @@ if(isset($paging)) {
 //echo $paging;
 $data['sitetitle'] = Site::$slogan.$pagingtitle;
 $data['posts'] = Db::result(
-                        sprintf("SELECT * FROM `posts` 
-                            WHERE `type` = 'post' 
+                        sprintf("SELECT * FROM `posts`
+                            WHERE `type` = 'post'
                             AND `status` = '1'
-                            ORDER BY `date` 
+                            ORDER BY `date`
                             DESC LIMIT %d, %d",
                             $offset, $data['max']
                             )

@@ -77,10 +77,16 @@ switch ($act) {
                         // insert param multilang
                         unset($_POST['title'][$def]);
                         foreach ($_POST['title'] as $key => $value) {
+                            $title = !empty($_POST['title'][$key])? Typo::cleanX($_POST['title'][$key]): $title;
+                            $title = Hooks::filter('post_submit_title_filter', $title);
+
+                            $content = !empty($_POST['content'][$key])? Typo::cleanX($_POST['content'][$key]): $content;
+                            $content = Hooks::filter('post_submit_content_filter', $content);
+
                             $multilang[] = array(
                                                 $key => array(
-                                                        'title' => $_POST['title'][$key],
-                                                        'content' => Typo::cleanX($_POST['content'][$key])
+                                                        'title' => $title,
+                                                        'content' => $content
                                                     )
                                             );
                         }
@@ -155,12 +161,22 @@ switch ($act) {
                         unset($_POST['title'][$def]);
                         $multilang = array();
                         foreach ($_POST['title'] as $key => $value) {
+
+                            $title = !empty($_POST['title'][$key])? Typo::cleanX($_POST['title'][$key]): $title;
+                            $title = Hooks::filter('post_submit_title_filter', $title);
+                            // $_POST['content'][$key] = str_replace("<br>","",$_POST['content'][$key]);
+                            $content = (!empty($_POST['content'][$key]) ||
+                                $_POST['content'][$key] != '' ||
+                                $_POST['content'][$key] == '<br>' )? Typo::cleanX($_POST['content'][$key]): $content;
+                            $content = Hooks::filter('post_submit_content_filter', $content);
+
                             $multilang[] = array(
                                                 $key => array(
-                                                        'title' => $_POST['title'][$key],
-                                                        'content' => Typo::cleanX($_POST['content'][$key])
+                                                        'title' => $title,
+                                                        'content' => $content
                                                     )
                                             );
+
                         }
                         $multilang = json_encode($multilang);
                         if (!Posts::existParam('multilang', $_GET['id'])) {

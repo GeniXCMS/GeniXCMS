@@ -45,7 +45,7 @@ class Router
 
         self::$_route = array (
             '/category/([0-9]+)/(.*)/paging/([0-9]+)' => array('cat' => '1', 'paging' => '3'),
-            '/category/([0-9]+)/(.+)' => array('cat' => '1'),
+            '/category/([0-9]+)/(.*)' => array('cat' => '1'),
             '/(.+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
             '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
             '/paging/([0-9]+)' => array('default', 'paging' => '1'),
@@ -121,8 +121,8 @@ class Router
             $regx = str_replace('/','\/', $k);
 
             if ( preg_match('/^'.$regx.'$/Usi', $uri, $m) ) {
-
-                return [$v,$m];
+                $result = [$v,$m];
+                return $result;
 
             }
 
@@ -166,7 +166,7 @@ class Router
      */
     public static function getURI () {
         $uri = $_SERVER['REQUEST_URI'];
-
+        // echo $uri;
         // strip any $_REQUEST variable
         $uri = explode('?', $uri);
 
@@ -175,12 +175,11 @@ class Router
             unset($uri[1]);
 
         }
-        //print_r($uri[0]);
+        // print_r($uri[0]);
         if (self::inFolder()) {
 
-            $uri2 = self::stripFolder($uri[0]);
+            $uri = self::stripFolder($uri[0]);
 
-            $uri = implode('/', $uri2);
 
         }else{
 
@@ -248,12 +247,36 @@ class Router
         return $data;
     }
 
-    function stripFolder($uri) {
-        $uri2 = explode('/', $uri);
-        for($i=0;$i<count($uri2)+1; $i++){
-            unset($uri2[$i]);
-        }
+    public static function stripFolder($req_uri) {
+        $uri = Site::$url;
+        $folder = self::getFolder();
 
+        $uri2 = str_replace($folder, "", $req_uri);
+        // print_r($uri2);
         return $uri2;
+    }
+
+    public static function getFolder() {
+        $uri = explode('/', Site::$url);
+
+        if(count($uri) > 3) {
+
+            unset($uri[0]);
+            unset($uri[1]);
+            unset($uri[2]);
+
+            $uri = array_values($uri);
+
+            $uris = "";
+            for($i=0; $i<count($uri); $i++){
+                $uris .= "/".$uri[$i];
+            }
+            return $uris;
+
+        }else{
+
+            return "/";
+
+        }
     }
 }

@@ -47,7 +47,7 @@
                                     <i class="fa fa-dashboard fa-fw"></i> <?=DASHBOARD;?>
                                 </a>
                             </li>
-                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'posts' || $_GET['page'] == 'categories'))?"class=\"active\"":"";?> >
+                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'posts' || $_GET['page'] == 'categories' || $_GET['page'] == 'tags'))?"class=\"active\"":"";?> >
                                 <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Posts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level" style="">
                                     <li>
@@ -60,6 +60,12 @@
                                         <a href="index.php?page=categories"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'categories')?"class=\"active\"":"";?>>
                                             <?=CATEGORIES;?>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="index.php?page=tags"
+                                        <?=(isset($_GET['page']) && $_GET['page'] == 'tags')?"class=\"active\"":"";?>>
+                                            <?=TAGS;?>
                                         </a>
                                     </li>
                                 </ul>
