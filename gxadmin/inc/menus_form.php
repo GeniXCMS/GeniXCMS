@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -60,9 +60,9 @@
                             }
                         }
                     }
-                    
+
                 }
-                
+
             ?>
             </select>
             <small><?=MENU_PARENT;?></small>
@@ -122,7 +122,8 @@
                         $vars = array(
                                     'name' => 'cat',
                                     'sort' => 'ASC',
-                                    'order_by' => 'name'
+                                    'order_by' => 'name',
+                                    'type' => 'post'
                                 );
                         echo Categories::dropdown($vars);
                     ?>
@@ -138,7 +139,7 @@
                         <input type="radio" name='type' class="" value="mod">
                     </span>
                     <select class="form-control">
-                        
+
                     </select>
                  </div>
                 <small><?=MENU_MODULES_DESCR;?></small>

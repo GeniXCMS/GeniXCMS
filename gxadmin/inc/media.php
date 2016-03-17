@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,27 +15,27 @@
 *
 */
 
-if (isset($data['alertgreen'])) {
+if (isset($data['alertSuccess'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">".CLOSE."</span>
     </button>";
-    foreach ($data['alertgreen'] as $alert) {
+    foreach ($data['alertSuccess'] as $alert) {
         # code...
         echo "$alert\n";
     }
     echo "</div>";
 }
-if (isset($data['alertred'])) {
+if (isset($data['alertDanger'])) {
     # code...
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">".CLOSE."</span>
     </button>";
-    foreach ($data['alertred'] as $alert) {
+    foreach ($data['alertDanger'] as $alert) {
         # code...
         echo "$alert\n";
     }
@@ -47,8 +47,8 @@ if (isset($data['alertred'])) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-list-alt"></i>  Media 
-            
+        <h1><i class="fa fa-list-alt"></i>  Media
+
         </h1>
         <hr />
     </div>
@@ -57,7 +57,7 @@ if (isset($data['alertred'])) {
         <div class="row">
             <div id="elfinder"></div>
         </div>
-        
+
 
 
     </div>

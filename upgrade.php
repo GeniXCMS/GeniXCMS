@@ -69,9 +69,9 @@ if (isset($_POST['004-patch'])) {
     $sql = "UPDATE `cat` SET `type` = 'post' WHERE `type` = '' ";
     $q = Db::query($sql);
     if ($q) {
-        $alertgreen = 'Upgrade Success!';
+        $alertSuccess = 'Upgrade Success!';
     }else{
-        $alertred[] = 'Upgrade Failed';
+        $alertDanger[] = 'Upgrade Failed';
     }
 }elseif(isset($_POST['005'])){
     $sql = "ALTER TABLE `posts` ADD `views` int(11) NOT NULL DEFAULT '0'";
@@ -85,9 +85,9 @@ if (isset($_POST['004-patch'])) {
             ";
     $q = Db::query($sql);
     if ($q) {
-        $alertgreen = 'Upgrade Success!';
+        $alertSuccess = 'Upgrade Success!';
     }else{
-        $alertred[] = 'Upgrade Failed';
+        $alertDanger[] = 'Upgrade Failed';
     }
 }elseif(isset($_POST['006'])){
     $sql = "INSERT INTO `options` VALUES
@@ -99,9 +99,9 @@ if (isset($_POST['004-patch'])) {
             ";
     $q = Db::query($sql);
     if ($q) {
-        $alertgreen = 'Upgrade Success!';
+        $alertSuccess = 'Upgrade Success!';
     }else{
-        $alertred[] = 'Upgrade Failed';
+        $alertDanger[] = 'Upgrade Failed';
     }
 }elseif(isset($_POST['007'])){
     $sql = "INSERT INTO `options` VALUES
@@ -109,28 +109,28 @@ if (isset($_POST['004-patch'])) {
             ";
     $q = Db::query($sql);
     if ($q) {
-        $alertgreen = 'Upgrade Success!';
+        $alertSuccess = 'Upgrade Success!';
     }else{
-        $alertred[] = 'Upgrade Failed';
+        $alertDanger[] = 'Upgrade Failed';
     }
 }
 Theme::theme('header');
 echo "<div class=\"container\">";
-if(isset($alertred)) {
+if(isset($alertDanger)) {
     echo "
     <div class=\"alert alert-danger\">
         ";
-        foreach($alertred as $alert)
+        foreach($alertDanger as $alert)
         {
             echo $alert;
         }
     echo"
     </div>";
 }
-if(isset($alertgreen)) {
+if(isset($alertSuccess)) {
     echo "
     <div class=\"alert alert-success\">
-        {$alertgreen}
+        {$alertSuccess}
     </div>";
 }
 echo "

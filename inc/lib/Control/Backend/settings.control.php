@@ -21,10 +21,10 @@ switch (isset($_POST['change'])) {
         # code...
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
-            $alertred[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = TOKEN_NOT_EXIST;
         }
-        if(isset($alertred)){
-            $data['alertred'] = $alertred;
+        if(isset($alertDanger)){
+            $data['alertDanger'] = $alertDanger;
         }else{
             $vars = array();
             if(isset($_FILES['logo']) && $_FILES['logo'] != ''){
@@ -68,7 +68,7 @@ switch (isset($_POST['change'])) {
             //print_r($vars);
             Options::update($vars);
             new Options();
-            $data['alertgreen'][] = MSG_SETTINGS_SAVED;
+            $data['alertSuccess'][] = MSG_SETTINGS_SAVED;
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;

@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,41 +15,15 @@
 *
 */
 
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
-if (isset($data['alertred'])) {
-    # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
 ?>
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-plug"></i>  <?=MODULES;?> 
+        <h1><i class="fa fa-plug"></i>  <?=MODULES;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_MODULES;?> 
+                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_MODULES;?>
             </button>
         </h1>
         <hr />
@@ -87,7 +61,7 @@ if (isset($data['alertred'])) {
                                     <small>author: <a href=\"{$m['url']}\">{$m['developer']}</a></small>
                                 </td>
                                 <td>
-                                    <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a> 
+                                    <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a>
                                     ";
                             if (!Mod::isActive($mod)) {
                                 echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."\" class=\"label label-danger\" disable>".REMOVE."</a>";
@@ -96,13 +70,13 @@ if (isset($data['alertred'])) {
                                 </td>
                             </tr>";
                             //echo $m;
-                            
+
                         }
                     }else{
                         echo "<div class=\"col-md-12\">".NO_MODULES_FOUND."</div>";
                     }
                 ?>
-                
+
             </tbody>
             <tfoot>
                 <td></td>
@@ -111,7 +85,7 @@ if (isset($data['alertred'])) {
 
             </tfoot>
         </table>
-            
+
     </div>
 </div>
 <!-- Modal -->
@@ -130,7 +104,7 @@ if (isset($data['alertred'])) {
                     <input type="file" name="module" class="form-control">
                     <small><?=BROWSE_MODULES_DESC;?></small>
                 </div>
-            
+
           </div>
           <div class="modal-footer">
             <input type="hidden" name="token" value="<?=TOKEN;?>">

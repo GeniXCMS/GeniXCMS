@@ -59,20 +59,20 @@ switch ($act) {
                 //check token first 
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 
 
                 // VALIDATE ALL
                 if(!User::is_exist($_POST['userid'])){
-                    $alertred[] = MSG_USER_EXIST;
+                    $alertDanger[] = MSG_USER_EXIST;
                 }
                 
                 if(!User::is_email($_POST['email'])){
-                    $alertred[] = MSG_USER_EMAIL_EXIST;
+                    $alertDanger[] = MSG_USER_EMAIL_EXIST;
                 }
 
-                if(!isset($alertred)){
+                if(!isset($alertDanger)){
 
                     $vars = array(
                                     'id' => sprintf('%d',$_GET['id']),
@@ -91,15 +91,15 @@ switch ($act) {
                         //print_r($vars);
                     }  
                     User::update($vars);
-                    $alertgreen[] = "User : ".User::userid($_GET['id'])." Updated";
+                    $alertSuccess[] = "User : ".User::userid($_GET['id'])." Updated";
                     
-                    if (isset($alertgreen)) {
+                    if (isset($alertSuccess)) {
                         # code...
-                        $data['alertgreen'] = $alertgreen;
+                        $data['alertSuccess'] = $alertSuccess;
                     }
                     Hooks::run('user_submit_edit_action', $_GET);
                 }else{
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }
                 
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
@@ -118,15 +118,15 @@ switch ($act) {
                 $user = User::userid($_GET['id']);
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
-                    $data['alertred'][] = TOKEN_NOT_EXIST;
+                    $data['alertDanger'][] = TOKEN_NOT_EXIST;
                 }else{
                     User::delete($_GET['id']);
                     Hooks::run('user_delete_action', $_GET);
-                    $data['alertgreen'][] = USER." ".$user." ".MSG_USER_REMOVED;
+                    $data['alertSuccess'][] = USER." ".$user." ".MSG_USER_REMOVED;
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
-                $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
+                $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
             }
             $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
             $data['num'] = Db::$num_rows;
@@ -146,12 +146,12 @@ switch ($act) {
     case 'active':
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $data['alertred'][] = TOKEN_NOT_EXIST;
+                $data['alertDanger'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::activate($_GET['id'])){
-                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATED;
+                    $data['alertSuccess'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATED;
                 }else{
-                    $data['alertred'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATION_FAIL;
+                    $data['alertDanger'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_ACTIVATION_FAIL;
                 }
 
             }
@@ -175,12 +175,12 @@ switch ($act) {
     case 'inactive':
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $data['alertred'][] = TOKEN_NOT_EXIST;
+                $data['alertDanger'][] = TOKEN_NOT_EXIST;
             }else{
                 if(User::deactivate($_GET['id'])){
-                    $data['alertgreen'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATED;
+                    $data['alertSuccess'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATED;
                 }else{
-                    $data['alertred'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATION_FAIL;
+                    $data['alertDanger'][] = USER." ".User::userid($_GET['id'])." ".MSG_USER_DEACTIVATION_FAIL;
                 }
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
@@ -211,7 +211,7 @@ switch ($act) {
                 //echo Token::isExist($_POST['token']);
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
 
                 $userid = Typo::cleanX($_POST['userid']);
@@ -220,28 +220,28 @@ switch ($act) {
 
                 if (!isset($userid) || $userid == "") {
                     // VALIDATE ALL
-                    $alertred[] = USERID_CANNOT_EMPTY;
+                    $alertDanger[] = USERID_CANNOT_EMPTY;
                 }
                 if (!isset($_POST['pass1']) || $_POST['pass1'] == "") {
                     // VALIDATE ALL
-                    $alertred[] = PASS1_CANNOT_EMPTY;
+                    $alertDanger[] = PASS1_CANNOT_EMPTY;
                 }
                 if (!isset($_POST['pass2']) || $_POST['pass2'] == "") {
                     // VALIDATE ALL
-                    $alertred[] = PASS2_CANNOT_EMPTY;
+                    $alertDanger[] = PASS2_CANNOT_EMPTY;
                 }
 
                 if(!User::is_exist($_POST['userid'])){
-                    $alertred[] = MSG_USER_EXIST;
+                    $alertDanger[] = MSG_USER_EXIST;
                 }
                 if(!User::is_same($_POST['pass1'], $_POST['pass2'])){
-                    $alertred[] = MSG_USER_PWD_MISMATCH;
+                    $alertDanger[] = MSG_USER_PWD_MISMATCH;
                 }
                 if(!User::is_email($_POST['email'])){
-                    $alertred[] = MSG_USER_EMAIL_EXIST;
+                    $alertDanger[] = MSG_USER_EMAIL_EXIST;
                 }
 
-                if(!isset($alertred)){
+                if(!isset($alertDanger)){
 
                     $vars = array(
                                     'user' => array(
@@ -257,9 +257,9 @@ switch ($act) {
                     User::create($vars);
                     Hooks::run('user_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
-                    $data['alertgreen'][] = USER." {$_POST['userid']}, ".MSG_USER_ADDED;
+                    $data['alertSuccess'][] = USER." {$_POST['userid']}, ".MSG_USER_ADDED;
                 }else{
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
@@ -281,11 +281,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($user_id as $id) {
                         # code...
@@ -298,11 +298,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($user_id as $id) {
                         # code...
@@ -315,11 +315,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($user_id as $id) {
                         # code...

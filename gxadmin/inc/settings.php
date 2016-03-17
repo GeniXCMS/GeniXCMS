@@ -14,33 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>
-    ";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
-if (isset($data['alertred'])) {
-    # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
+
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="row">

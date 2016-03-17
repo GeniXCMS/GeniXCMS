@@ -182,39 +182,39 @@ class Mod
                 if ($_GET['act'] == ACTIVATE) {
 
                     if(!Token::isExist($_GET['token'])){
-                        $alertred[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = TOKEN_NOT_EXIST;
                     }
 
-                    if(!isset($alertred)){
+                    if(!isset($alertDanger)){
                         self::activate($_GET['modules']);
-                        $GLOBALS['alertgreen'] = MODULES_ACTIVATED;
+                        $GLOBALS['alertSuccess'] = MODULES_ACTIVATED;
                     }else{
-                        $GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertDanger'] = $alertDanger;
                     }
                 }elseif($_GET['act'] == DEACTIVATE){
                     if(!Token::isExist($_GET['token'])){
-                        $alertred[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = TOKEN_NOT_EXIST;
                     }
 
-                    if(!isset($alertred)){
+                    if(!isset($alertDanger)){
                         self::deactivate($_GET['modules']);
-                        $GLOBALS['alertgreen'] = MODULES_DEACTIVATED;
+                        $GLOBALS['alertSuccess'] = MODULES_DEACTIVATED;
                     }else{
-                        $GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertDanger'] = $alertDanger;
                     }
                 }elseif ($_GET['act'] == 'remove') {
                     if(!Token::isExist($_GET['token'])){
-                        $alertred[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (Mod::isActive($_GET['modules'])) {
-                        $alertred[] = "Module is Active. Please deactivate first.";
+                        $alertDanger[] = "Module is Active. Please deactivate first.";
                     }
-                    if(!isset($alertred)){
+                    if(!isset($alertDanger)){
                         self::deactivate($_GET['modules']);
                         Files::delTree(GX_MOD."/".$_GET['modules']);
-                        $GLOBALS['alertgreen'] = MODULES_DELETED;
+                        $GLOBALS['alertSuccess'] = MODULES_DELETED;
                     }else{
-                        $GLOBALS['alertred'] = $alertred;
+                        $GLOBALS['alertDanger'] = $alertDanger;
                     }
                 }
 

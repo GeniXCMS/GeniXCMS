@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <h1><?=Categories::name($_GET['cat']);?></h1>
+                        <h1><?=Categories::name($data['cat']);?></h1>
                         <hr class="small">
                         <span class="subheading"><?=Options::v('siteslogan');?></span>
                     </div>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </header>
-    
+
     <!-- Main Content -->
     <div class="container">
         <div class="row">
@@ -25,7 +25,7 @@
                         echo "
                         <div class=\"post-preview\">
                             <h2 class=\"post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>
-                            
+
                             <p class=\"post-subtitle\">".Posts::format($p->content, $p->id)."</p>
                             <p class=\"post-meta\">".Date::format($p->date)." by <a href=\"#\">{$p->author}</a></p>
                         </div>

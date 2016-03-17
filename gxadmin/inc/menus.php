@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,34 +15,6 @@
 *
 */
 
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\"><?=CLOSE;?></span>
-    </button>
-    <ul>";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "<li>$alert</li>\n";
-    }
-    echo "</ul></div>";
-}elseif (isset($data['alertred'])) {
-    # code...
-    //print_r($data['alertred']);
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\"><?=CLOSE;?></span>
-    </button>
-    <ul>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "<li>$alert</li>\n";
-    }
-    echo "</ul></div>";
-}
 ?>
 <div class="row">
     <div class="col-md-12">

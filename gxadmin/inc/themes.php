@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -15,41 +15,16 @@
 *
 */
 
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">".CLOSE."</span>
-    </button>";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
-if (isset($data['alertred'])) {
-    # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">".CLOSE."</span>
-    </button>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
+
 ?>
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-paint-brush"></i>  <?=THEMES;?> 
+        <h1><i class="fa fa-paint-brush"></i>  <?=THEMES;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_THEMES;?> 
+                <span class="glyphicon glyphicon-plus"></span> <?=UPLOAD_THEMES;?>
             </button>
         </h1>
         <hr />
@@ -69,7 +44,7 @@ if (isset($data['alertred'])) {
                     <div class=\"col-sm-3\">
                         <div class=\"thumbnail\">";
                 if(file_exists(GX_THEME."/".$active."/screenshot.png")){
-                    echo "<img src=\"".Site::$url."/inc/themes/".$active."/screenshot.png\" 
+                    echo "<img src=\"".Site::$url."/inc/themes/".$active."/screenshot.png\"
                     class=\"img-responsive\">";
                 }else{
                     echo "<img src=\"".Site::$url."/assets/images/noimagetheme.png\">";
@@ -90,7 +65,7 @@ if (isset($data['alertred'])) {
                     </a>";
                 }
                 if(count($data['themes']) > 1 && !Theme::isActive($active)) {
-                    
+
                     echo "
                     <a href=\"index.php?page=themes&act=remove&themes={$active}&token=".TOKEN."\" class=\"label label-danger\">
                         Remove
@@ -100,7 +75,7 @@ if (isset($data['alertred'])) {
 
                 if($data['themes'] > 0) {
                     //print_r($data['themes']);
-                    for ($i=0; $i < count($data['themes']); $i++) { 
+                    for ($i=0; $i < count($data['themes']); $i++) {
                         if($data['themes'][$i] == $active){
                             unset($data['themes'][$i]);
                         }else{
@@ -114,7 +89,7 @@ if (isset($data['alertred'])) {
                             <div class=\"col-sm-3\">
                                 <div class=\"thumbnail\">";
                         if(file_exists(GX_THEME."/".$thm."/screenshot.png")){
-                            echo "<img src=\"".Site::$url."/inc/themes/".$thm."/screenshot.png\" 
+                            echo "<img src=\"".Site::$url."/inc/themes/".$thm."/screenshot.png\"
                             class=\"img-responsive\">";
                         }else{
                             echo "<img src=\"".Site::$url."/assets/images/noimagetheme.png\">";
@@ -132,7 +107,7 @@ if (isset($data['alertred'])) {
                             </a>";
                         }
                         if(count($data['themes']) > 1 && !Theme::isActive($thm)) {
-                            
+
                             echo "
                             <a href=\"index.php?page=themes&act=remove&themes={$thm}&token=".TOKEN."\" class=\"label label-danger\">
                                 Remove
@@ -146,7 +121,7 @@ if (isset($data['alertred'])) {
                 }
             ?>
         </div>
-        
+
 
 
     </div>
@@ -166,7 +141,7 @@ if (isset($data['alertred'])) {
                     <input type="file" name="theme" class="form-control">
                     <small><?=BROWSE_THEME_DESC;?></small>
                 </div>
-            
+
           </div>
           <div class="modal-footer">
             <input type="hidden" name="token" value="<?=TOKEN;?>">

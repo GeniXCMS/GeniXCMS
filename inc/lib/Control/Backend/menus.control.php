@@ -30,17 +30,17 @@ switch ($act) {
             case true:
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if (!isset($_POST['id']) || $_POST['id'] == "") {
-                    $alertred[] = MENUID_CANNOT_EMPTY;
+                    $alertDanger[] = MENUID_CANNOT_EMPTY;
                 }
                 if (!isset($_POST['name']) || $_POST['name'] == "") {
-                    $alertred[] = MENUNAME_CANNOT_EMPTY;
+                    $alertDanger[] = MENUNAME_CANNOT_EMPTY;
                 }
                 echo $_POST['name'];
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     $menus = Options::v('menus');
                     $menus = json_decode(Options::v('menus'), true);
@@ -96,7 +96,7 @@ switch ($act) {
                                 'value' => $_POST[$_POST['type']]
                             );
                     Menus::insert($vars);
-                    $data['alertgreen'][] = 'Menu Added';
+                    $data['alertSuccess'][] = 'Menu Added';
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
@@ -131,10 +131,10 @@ switch ($act) {
             case true:
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
 
                     $vars = array(
@@ -150,7 +150,7 @@ switch ($act) {
                                 'key' => $vars
                             );
                     Menus::update($vars);
-                    $data['alertgreen'][] = 'Menu Updated';
+                    $data['alertSuccess'][] = 'Menu Updated';
                     Token::remove($_POST['token']);
                 }
 
@@ -177,17 +177,17 @@ switch ($act) {
         if(isset($_GET['itemid'])){
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $alertred[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = TOKEN_NOT_EXIST;
             }
-            if(isset($alertred)){
-                $data['alertred'] = $alertred;
+            if(isset($alertDanger)){
+                $data['alertDanger'] = $alertDanger;
             }else{
                 Menus::delete($_GET['itemid']);
-                $data['alertgreen'][] = 'Menu Deleted';
+                $data['alertSuccess'][] = 'Menu Deleted';
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
         }else{
-            $data['alertred'][] = 'No ID Selected.';
+            $data['alertDanger'][] = 'No ID Selected.';
         }
         $data['menus'] = Options::v('menus');
         Theme::admin('header', $data);
@@ -199,10 +199,10 @@ switch ($act) {
         if(isset($_GET['menuid'])){
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
-                $alertred[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = TOKEN_NOT_EXIST;
             }
-            if(isset($alertred)){
-                $data['alertred'] = $alertred;
+            if(isset($alertDanger)){
+                $data['alertDanger'] = $alertDanger;
             }else{
                 $menus = json_decode(Options::v('menus'), true);
                 unset($menus[$_GET['menuid']]);
@@ -212,11 +212,11 @@ switch ($act) {
                 $menu = json_encode($menus);
                 Options::update('menus', $menu);
                 new Options();
-                $data['alertgreen'][] = 'Menu Deleted';
+                $data['alertSuccess'][] = 'Menu Deleted';
             }
             if(isset($_GET['token'])){ Token::remove($_GET['token']); }
         }else{
-            $data['alertred'][] = 'No ID Selected.';
+            $data['alertDanger'][] = 'No ID Selected.';
         }
         $data['menus'] = Options::v('menus');
         Theme::admin('header', $data);
@@ -237,16 +237,16 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if (!isset($_POST['id']) || $_POST['id'] == "") {
-                    $alertred[] = MENUID_CANNOT_EMPTY;
+                    $alertDanger[] = MENUID_CANNOT_EMPTY;
                 }
                 if (!isset($_POST['name']) || $_POST['name'] == "") {
-                    $alertred[] = MENUNAME_CANNOT_EMPTY;
+                    $alertDanger[] = MENUNAME_CANNOT_EMPTY;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     $menu = array(
                                     $_POST['id']  =>  array(
@@ -263,7 +263,7 @@ switch ($act) {
                     $menu = json_encode($menu);
                     Options::update('menus', $menu);
                     new Options();
-                    $data['alertgreen'][] = 'Menu Added';
+                    $data['alertSuccess'][] = 'Menu Added';
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;
@@ -288,16 +288,16 @@ switch ($act) {
 
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if (!isset($_POST['name']) || $_POST['name'] == '' ) {
-                    $alertred[] = MENU_NAME_CANNOT_EMPTY;
+                    $alertDanger[] = MENU_NAME_CANNOT_EMPTY;
                 }
                 if (!isset($_POST['type']) || $_POST['type'] == '' ) {
-                    $alertred[] = MENU_TYPE_CANNOT_EMPTY;
+                    $alertDanger[] = MENU_TYPE_CANNOT_EMPTY;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     $vars = array(
                                 'parent' => Typo::int($_POST['parent']),
@@ -308,7 +308,7 @@ switch ($act) {
                                 'value' => Typo::cleanX($_POST[$_POST['type']])
                             );
                     Menus::insert($vars);
-                    $data['alertgreen'][] = 'Menu Item Added';
+                    $data['alertSuccess'][] = 'Menu Item Added';
                     Token::remove($_POST['token']);
                 }
 
@@ -337,15 +337,15 @@ switch ($act) {
                 // echo "</pre>";
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     Menus::updateMenuOrder(
                         $_POST['order']
                     );
-                    $data['alertgreen'][] = 'Menu Order Changed';
+                    $data['alertSuccess'][] = 'Menu Order Changed';
                 }
                 if(isset($_POST['token'])){ Token::remove($_POST['token']); }
                 break;

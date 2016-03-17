@@ -21,10 +21,10 @@ $data['sitetitle'] = "Permalink";
 
 if (isset($_POST['change'])) {
     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
 
-    if (!isset($alertred)) {
+    if (!isset($alertDanger)) {
         $vars = array();
         $flip = array_flip($_POST);
         // print_r($_POST);
@@ -63,7 +63,7 @@ if (isset($_POST['change'])) {
         Options::update($vars);
         new Options();
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
 }
 

@@ -38,28 +38,28 @@ if(isset($_POST['register']))
 {
     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
         // VALIDATE ALL
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (Xaptcha::isEnable()) {
         
         if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '' ) {
-            $alertred[] = "Please insert the Captcha";
+            $alertDanger[] = "Please insert the Captcha";
         }
         if (!Xaptcha::verify($_POST['g-recaptcha-response'])) {
-            $alertred[] = "Your Captcha is not correct.";
+            $alertDanger[] = "Your Captcha is not correct.";
         }
     }
 	if(!User::is_exist($_POST['userid'])){
-        $alertred[] = MSG_USER_EXIST;
+        $alertDanger[] = MSG_USER_EXIST;
     }
     if(!User::is_same($_POST['pass1'], $_POST['pass1'])){
-        $alertred[] = MSG_USER_PWD_MISMATCH;
+        $alertDanger[] = MSG_USER_PWD_MISMATCH;
     }
     if(!User::is_email($_POST['email'])){
-        $alertred[] = MSG_USER_EMAIL_EXIST;
+        $alertDanger[] = MSG_USER_EMAIL_EXIST;
     }
 
-    if(!isset($alertred)){
+    if(!isset($alertDanger)){
         $activation = Typo::getToken(60);
         $vars = array(
              'user' => array(
@@ -77,9 +77,9 @@ if(isset($_POST['register']))
                         
                     );   
         if(User::create($vars) === true){
-            $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
+            $data['alertSuccess'][] = REG_ACTIVATE_ACCOUNT;
         }else{
-            $alertred[] = REG_CANT_CREATE_ACCOUNT;
+            $alertDanger[] = REG_CANT_CREATE_ACCOUNT;
         }
         
         
@@ -101,13 +101,13 @@ if(isset($_POST['register']))
         
 		$mailsend = Mail::send($vars);
         if($mailsend != ""){
-            $alertred[] = $mailsend;
+            $alertDanger[] = $mailsend;
         }else{
-            $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
+            $data['alertSuccess'][] = REG_ACTIVATE_ACCOUNT;
         }
 		echo Hooks::run('user_reg_action');
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
 
 	if(isset($_POST['token'])){ Token::remove($_POST['token']); }
@@ -119,7 +119,7 @@ if (isset($_GET['activation'])) {
     if(Db::$num_rows > 0){
         $act = Db::query(sprintf("UPDATE `user` SET `status` = '1',`activation` = NULL WHERE `id` = '%d' ", $usr[0]->id));
         if($act){
-            $data['alertgreen'][] = REG_ACCOUNT_ACTIVATED;
+            $data['alertSuccess'][] = REG_ACCOUNT_ACTIVATED;
             $vars = array(
                 'to'      => $usr[0]->email,
                 'to_name' => $usr[0]->userid,
@@ -138,17 +138,17 @@ if (isset($_GET['activation'])) {
         
             $mailsend = Mail::send($vars);
             if($mailsend != ""){
-                $alertred[] = $mailsend;
+                $alertDanger[] = $mailsend;
             }else{
-                $data['alertgreen'][] = REG_ACTIVATE_ACCOUNT;
+                $data['alertSuccess'][] = REG_ACTIVATE_ACCOUNT;
             }
             echo Hooks::run('user_activation_action');
         }else{
-            $data['alertred'][] = REG_ACTIVATION_FAILED;
+            $data['alertDanger'][] = REG_ACTIVATION_FAILED;
         }
         
     }else{
-        $data['alertred'][] = REG_ACTIVATION_FAILED_CODE;
+        $data['alertDanger'][] = REG_ACTIVATION_FAILED_CODE;
     }
 }
 Theme::header($data);
@@ -159,7 +159,7 @@ if(isset($loggedin)){
 ?>
 <div class="col-md-4 col-md-offset-4">
 <?php
-	if (isset($data['alertgreen'])) {
+	if (isset($data['alertSuccess'])) {
         # code...
         echo "<div class=\"alert alert-success\" >
         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
@@ -167,21 +167,21 @@ if(isset($loggedin)){
             <span class=\"sr-only\">".CLOSE."</span>
         </button>
         ";
-        foreach ($data['alertgreen'] as $alert) {
+        foreach ($data['alertSuccess'] as $alert) {
             # code...
             echo "$alert\n";
         }
         echo "</div>";
-    }elseif (isset($data['alertred'])) {
+    }elseif (isset($data['alertDanger'])) {
         # code...
-        //print_r($data['alertred']);
+        //print_r($data['alertDanger']);
         echo "<div class=\"alert alert-danger\" >
         <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
             <span aria-hidden=\"true\">&times;</span>
             <span class=\"sr-only\">".CLOSE."</span>
         </button>
         <ul>";
-        foreach ($data['alertred'] as $alert) {
+        foreach ($data['alertDanger'] as $alert) {
             # code...
             echo "<li>$alert</li>\n";
         }

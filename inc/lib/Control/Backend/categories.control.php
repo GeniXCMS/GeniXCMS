@@ -26,13 +26,13 @@ switch (isset($_POST['addcat'])) {
 
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
-            $alertred[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_POST['cat']) || $_POST['cat'] == "") {
-            $alertred[] = CATEGORY_CANNOT_EMPTY;
+            $alertDanger[] = CATEGORY_CANNOT_EMPTY;
         }
-        if(isset($alertred)){
-            $data['alertred'] = $alertred;
+        if(isset($alertDanger)){
+            $data['alertDanger'] = $alertDanger;
         }else{
             
             $cat = Db::insert(
@@ -41,7 +41,7 @@ switch (isset($_POST['addcat'])) {
                         )
                     );
             //print_r($cat);
-            $data['alertgreen'][] = MSG_CATEGORY_ADDED." ".$_POST['cat'];
+            $data['alertSuccess'][] = MSG_CATEGORY_ADDED." ".$_POST['cat'];
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
@@ -58,10 +58,10 @@ switch (isset($_POST['updatecat'])) {
         $cat = Typo::cleanX($_POST['cat']);
         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
             // VALIDATE ALL
-            $alertred[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = TOKEN_NOT_EXIST;
         }
-        if(isset($alertred)){
-            $data['alertred'] = $alertred;
+        if(isset($alertDanger)){
+            $data['alertDanger'] = $alertDanger;
         }else{
             $vars = array(
                         'table' => 'cat',
@@ -71,7 +71,7 @@ switch (isset($_POST['updatecat'])) {
                                 )
                     );
             $cat = Db::update($vars);
-            $data['alertgreen'][] = MSG_CATEGORY_UPDATED." ".$_POST['cat'];
+            $data['alertSuccess'][] = MSG_CATEGORY_UPDATED." ".$_POST['cat'];
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
         break;
@@ -84,13 +84,13 @@ switch (isset($_POST['updatecat'])) {
 if(isset($_GET['act']) == 'del'){
     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
         // VALIDATE ALL
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
-    if(isset($alertred)){
-        $data['alertred'] = $alertred;
+    if(isset($alertDanger)){
+        $data['alertDanger'] = $alertDanger;
     }else{
         Categories::delete($_GET['id']);
-        $data['alertgreen'][] = MSG_CATEGORY_REMOVED;
+        $data['alertSuccess'][] = MSG_CATEGORY_REMOVED;
     }
     if(isset($_GET['token'])){ Token::remove($_GET['token']); }
 }

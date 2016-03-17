@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -14,34 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>
-    <ul>";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "<li>$alert</li>\n";
-    }
-    echo "</ul></div>";
-}elseif (isset($data['alertred'])) {
-    # code...
-    //print_r($data['alertred']);
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>
-    <ul>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "<li>$alert</li>\n";
-    }
-    echo "</ul></div>";
-}
+
 ?>
 <form action="" method="post">
 <div class="row">
@@ -49,7 +22,7 @@ if (isset($data['alertgreen'])) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-group"></i> Edit User 
+        <h1><i class="fa fa-group"></i> Edit User
             <div class="pull-right">
                 <button  class="btn btn-success " type="submit" name="edituser">
                     <span class="glyphicon glyphicon-ok"></span>
@@ -59,7 +32,7 @@ if (isset($data['alertgreen'])) {
                     <span class="glyphicon glyphicon-remove"></span>
                     Cancel
                 </a>
-                
+
             </div>
         </h1>
         <hr />
@@ -91,7 +64,7 @@ if (isset($data['alertgreen'])) {
     <div class="col-sm-6">
         <div class="form-group">
             <label>Group Level</label>
-            <?php 
+            <?php
             if(User::group($_GET['id']) == 0){
                 $adm = "SELECTED";
                 $edt = "";
@@ -127,11 +100,11 @@ if (isset($data['alertgreen'])) {
                 <option value="2" <?=$edt;?>>Editor</option>
                 <option value="3" <?=$aut;?>>Author</option>
                 <option value="4" <?=$mem;?>>General Members</option>
-            </select> 
+            </select>
             <small>Group Level of the user.</small>
         </div>
     </div>
-        
+
 
     </div>
     </div>

@@ -124,7 +124,7 @@ class Language
         // print_r($lang);
         $html = "";
         if (!empty($lang) && $multilang_enable == "on") {
-            $html = "<ul class=\"nav nav-pills\">";
+            $html = "<ul class=\"nav nav-pills flaglist\">";
             foreach ($lang as $key => $value) {
                 $flag = strtolower($value['flag']);
                 $html .= "

@@ -25,13 +25,13 @@ if (isset($_GET['view']) && $_GET['view'] == 'options') {
 
     if (isset($_POST['upload'])) {
         if(!Token::isExist($_POST['token'])){
-            $alertred[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == "") {
-            $alertred[] = NOFILE_UPLOADED;
+            $alertDanger[] = NOFILE_UPLOADED;
         }
 
-        if(!isset($alertred)){
+        if(!isset($alertDanger)){
             //Mod::activate($_GET['themes']);
             $path = "/inc/themes/";
             $allowed = array('zip');
@@ -42,13 +42,13 @@ if (isset($_GET['view']) && $_GET['view'] == 'options') {
                 $zip->extractTo(GX_THEME);
                 $zip->close();
                 Hooks::run('theme_install_action', $theme);
-                $data['alertgreen'][] = MSG_THEME_INSTALLED;
+                $data['alertSuccess'][] = MSG_THEME_INSTALLED;
             } else {
-                $data['alertred'][] = MSG_THEME_CANT_EXTRACT;
+                $data['alertDanger'][] = MSG_THEME_CANT_EXTRACT;
             }
             unlink($theme['filepath']);
         }else{
-            $data['alertred'] = $alertred;
+            $data['alertDanger'] = $alertDanger;
         }
         if(isset($_POST['token'])){ Token::remove($_POST['token']); }
     }
@@ -58,31 +58,31 @@ if (isset($_GET['view']) && $_GET['view'] == 'options') {
         if ($_GET['act'] == 'activate') {
 
             if(!Token::isExist($_GET['token'])){
-                $alertred[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = TOKEN_NOT_EXIST;
             }
 
-            if(!isset($alertred)){
+            if(!isset($alertDanger)){
                 Theme::activate($_GET['themes']);
-                $data['alertgreen'][] = THEME_ACTIVATED;
+                $data['alertSuccess'][] = THEME_ACTIVATED;
             }else{
-                $data['alertred'] = $alertred;
+                $data['alertDanger'] = $alertDanger;
             }
         }elseif ($_GET['act'] == 'remove') {
             if(!Token::isExist($_GET['token'])){
-                $alertred[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = TOKEN_NOT_EXIST;
             }
             if (Theme::isActive($_GET['themes'])) {
-                $alertred[] = MSG_THEME_IS_ACTIVE;
+                $alertDanger[] = MSG_THEME_IS_ACTIVE;
             }
-            if(!isset($alertred)){
+            if(!isset($alertDanger)){
                 if(Files::delTree(GX_THEME."/".$_GET['themes'])){
-                    $data['alertgreen'][] = THEME_REMOVED;
+                    $data['alertSuccess'][] = THEME_REMOVED;
                 }else{
-                    $data['alertred'][] = MSG_THEME_NOT_REMOVED;
+                    $data['alertDanger'][] = MSG_THEME_NOT_REMOVED;
                 }
                 
             }else{
-                $data['alertred'] = $alertred;
+                $data['alertDanger'] = $alertDanger;
             }
         }
         

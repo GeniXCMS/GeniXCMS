@@ -28,7 +28,7 @@ switch ($act) {
 
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 //clean up first
                 if(Options::v('multilang_enable') === 'on') {
@@ -48,10 +48,10 @@ switch ($act) {
                     $content = Hooks::filter('post_submit_content_filter', $content);
                 }
                 if (!isset($_POST['title']) || $_POST['title'] == "") {
-                    $alertred[] = TITLE_CANNOT_EMPTY;
+                    $alertDanger[] = TITLE_CANNOT_EMPTY;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     if (!isset($_POST['date']) || $_POST['date'] == "") {
                         # code...
@@ -85,7 +85,7 @@ switch ($act) {
                         Posts::addParam('multilang', $multilang, $post_id);
                         // print_r($multilang);
                     }
-                    $data['alertgreen'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
+                    $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
                     Hooks::run('post_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
                 }
@@ -110,7 +110,7 @@ switch ($act) {
                 
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if(Options::v('multilang_enable') === 'on') {
                     $def = Options::v('multilang_default');
@@ -129,10 +129,10 @@ switch ($act) {
                     $content = Hooks::filter('post_submit_content_filter', $content);
                 }
                 if (!isset($_POST['title']) || $_POST['title'] == "") {
-                    $alertred[] = TITLE_CANNOT_EMPTY;
+                    $alertDanger[] = TITLE_CANNOT_EMPTY;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     if (!isset($_POST['date']) || $_POST['date'] == "") {
                         # code...
@@ -170,7 +170,7 @@ switch ($act) {
                         
                         // print_r($multilang);
                     }
-                    $data['alertgreen'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
+                    $data['alertSuccess'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
                     Token::remove($_POST['token']);
                 }
 
@@ -200,23 +200,23 @@ switch ($act) {
                 $title = Posts::title(Typo::int($_GET['id']));
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     $del = Posts::delete($_GET['id']);
                 }
                 //echo $title['error'];
                 if(isset($del['error'])){
-                    $data['alertred'][] = $del['error'];
+                    $data['alertDanger'][] = $del['error'];
                 }else{
-                    $data['alertgreen'][] = PAGE." {$title} ".MSG_PAGE_REMOVED;
+                    $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_REMOVED;
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
                 
             }else{
-                $data['alertred'][] = 'No ID Selected';
+                $data['alertDanger'][] = 'No ID Selected';
             }
             
         }
@@ -232,10 +232,10 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...
@@ -248,10 +248,10 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...
@@ -264,10 +264,10 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...

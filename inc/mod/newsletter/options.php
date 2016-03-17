@@ -1,13 +1,13 @@
 <?php
-
+Theme::editor();
 if(isset($_POST['sendmail'])){
     // check token first
     if ( !isset($_POST['token']) || !Token::isExist($_POST['token']) ) {
         # code...
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
-    if(isset($alertred)){
-        $data['alertred'] = $alertred;
+    if(isset($alertDanger)){
+        $data['alertDanger'] = $alertDanger;
     }else{
         $subject = Typo::cleanX($_POST['subject']);
         $msg = $_POST['message'];
@@ -64,36 +64,36 @@ if(isset($_POST['sendmail'])){
             }
         }
         if (isset($alertmailsend)) {
-            $data['alertred'] = $alertmailsend;
+            $data['alertDanger'] = $alertmailsend;
         }else{
-            $data['alertgreen'][] = "Success Sending Email";
+            $data['alertSuccess'][] = "Success Sending Email";
         }
-        
+
     }
 }
 
 
-if (isset($data['alertgreen'])) {
+if (isset($data['alertSuccess'])) {
     # code...
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">Close</span>
     </button>";
-    foreach ($data['alertgreen'] as $alert) {
+    foreach ($data['alertSuccess'] as $alert) {
         # code...
         echo "$alert\n";
     }
     echo "</div>";
 }
-if (isset($data['alertred'])) {
+if (isset($data['alertDanger'])) {
     # code...
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">Close</span>
     </button>";
-    foreach ($data['alertred'] as $alert) {
+    foreach ($data['alertDanger'] as $alert) {
         # code...
         echo "$alert\n";
     }
@@ -104,14 +104,14 @@ if (isset($data['alertred'])) {
 
 <div class="row">
     <div class="col-md-12">
-        <h1><i class="fa fa-envelope-o"></i> NewsLetter 
+        <h1><i class="fa fa-envelope-o"></i> NewsLetter
         <small class="pull-right">Send NewsLetter to All members</small>
         </h1>
         <hr />
     </div>
     <form action="" method="post">
     <div class="col-md-6">
-        
+
         <div class="form-group">
             <label>Subject</label>
             <input type="text" name="subject" class="form-control">
@@ -147,7 +147,7 @@ if (isset($data['alertred'])) {
                 <li class="list-group-item col-md-6"><strong>{{sitemail}}</strong> : Website Email</li>
             </ul>
         </div>
-        
+
     </div>
     <div class="col-md-6">
         <label>Message</label>

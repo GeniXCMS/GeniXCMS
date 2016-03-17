@@ -52,7 +52,7 @@ if(isset($data['post']) ) {
         $pub = "";
         $unpub = "";
         $tags = "";
-        $data['alertred'][] = $data['post']['error'];
+        $data['alertDanger'][] = $data['post']['error'];
     }
 
 }else{
@@ -64,35 +64,6 @@ if(isset($data['post']) ) {
     $pub = "";
     $unpub = "";
     $tags = "";
-}
-
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>
-    ";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
-
-if (isset($data['alertred'])) {
-    # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
 }
 
 

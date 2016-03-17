@@ -20,15 +20,15 @@ $data['sitetitle'] = "Multilanguage";
 
 if (isset($_POST['addcountry'])) {
     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (!isset($_POST['multilang_country_name']) || $_POST['multilang_country_name'] == '') {
-        $alertred[] = 'Please insert Country Name';
+        $alertDanger[] = 'Please insert Country Name';
     }
     if (!isset($_POST['multilang_country_code']) || $_POST['multilang_country_code'] == '') {
-        $alertred[] = "Please insert Country Code";
+        $alertDanger[] = "Please insert Country Code";
     }
-    if (!isset($alertred)) {
+    if (!isset($alertDanger)) {
         // print_r($_POST);
         $lang = array(
                 $_POST['multilang_country_code'] => array(
@@ -44,16 +44,16 @@ if (isset($_POST['addcountry'])) {
         new Options();
         Token::remove($_POST['token']);
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
 
 }
 
 if (isset($_GET['del']) && $_GET['del'] != '') {
     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
-    if (!isset($alertred)) {
+    if (!isset($alertDanger)) {
         $langs = json_decode(Options::v('multilang_country'), true);
         if (array_key_exists($_GET['del'], $langs)) {
             unset($langs[$_GET['del']]);
@@ -61,13 +61,13 @@ if (isset($_GET['del']) && $_GET['del'] != '') {
             // print_r($langs);
             Options::update('multilang_country',$langs);
             new Options();
-            $data['alertgreen'][] = "Work";
+            $data['alertSuccess'][] = "Work";
             Token::remove($_GET['token']);
         }else{
-            $data['alertred'][] = "Error!";
+            $data['alertDanger'][] = "Error!";
         }
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
 
 
@@ -75,10 +75,10 @@ if (isset($_GET['del']) && $_GET['del'] != '') {
 
 if (isset($_POST['change'])) {
     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
 
-    if (!isset($alertred)) {
+    if (!isset($alertDanger)) {
         $vars = array();
         $flip = array_flip($_POST);
         // print_r($_POST);
@@ -111,7 +111,7 @@ if (isset($_POST['change'])) {
         Options::update($vars);
         new Options();
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
 }
 $data['default_lang'] = Options::v('multilang_default');

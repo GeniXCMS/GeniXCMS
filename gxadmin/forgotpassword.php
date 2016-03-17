@@ -45,7 +45,7 @@ if(isset($_POST['forgotpass']))
 		//echo $c;
 		//print_r($usr);
 		if($c == "1"){
-			//$alertgreen = "";
+			//$alertSuccess = "";
 			// check if user is active 
 			if($usr[0]->status == '1') {
 				/* get user password */
@@ -86,40 +86,40 @@ if(isset($_POST['forgotpass']))
 						);
 				//echo "<pre>".$msg."</pre>";
 				if(Mail::send($vars)){
-					$alertgreen = PASSWORD_SENT_NOTIF;
+					$alertSuccess = PASSWORD_SENT_NOTIF;
 				}
 			}else{
 				if($usr[0]->activation != ''){
-					$alertred[] = ACOUNT_NOT_ACTIVE;
+					$alertDanger[] = ACOUNT_NOT_ACTIVE;
 				}else{
-					$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
+					$alertDanger[] = ACOUNT_NOT_ACTIVE_BLOCK;
 				}
 			}
 		}elseif($c == "0"){
-			$alertred[] = NO_USER;
+			$alertDanger[] = NO_USER;
 		}
 
 		Token::remove($_POST['token']);
 	}else{
-		$alertred[] = TOKEN_NOT_EXIST;
+		$alertDanger[] = TOKEN_NOT_EXIST;
 	}
 }
 Theme::admin('header');
-	if(isset($alertred)) {
+	if(isset($alertDanger)) {
 		echo "
 		<div class=\"alert alert-danger\">
 			";
-			foreach($alertred as $alert)
+			foreach($alertDanger as $alert)
 			{
 				echo $alert;
 			}
 		echo"
 		</div>";
 	}
-	if(isset($alertgreen)) {
+	if(isset($alertSuccess)) {
 		echo "
 		<div class=\"alert alert-success\">
-			{$alertgreen}
+			{$alertSuccess}
 		</div>";
 	}
 if(!User::is_loggedin()){

@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -19,13 +19,13 @@ $data = Router::scrap($param);
 if (SMART_URL == true) {
 
     if ( isset($data['post']) ) {
-        
+
         $post = $data['post'];
-        
+
     }elseif (isset($_GET['post'])){
-        
+
         $post = Typo::int($_GET['post']);
-        
+
     }
 
     if (isset($data['lang']) && !isset($_GET['lang'])) {
@@ -33,16 +33,16 @@ if (SMART_URL == true) {
     }
 
 }elseif (isset($_GET['post'])){
-    
+
     $post = Typo::int($_GET['post']);
-    
+
 }
 
 $data['posts'] = Db::result(
-                    sprintf("SELECT * FROM `posts` 
-                            WHERE `id` = '%d' 
+                    sprintf("SELECT * FROM `posts`
+                            WHERE `id` = '%d'
                             AND `type` = 'post'
-                            AND `status` = '1' 
+                            AND `status` = '1'
                             LIMIT 1",
                             $post
                             )

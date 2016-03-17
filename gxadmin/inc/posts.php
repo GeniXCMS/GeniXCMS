@@ -14,32 +14,7 @@
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */
-    if (isset($data['alertgreen'])) {
-        # code...
-        echo "<div class=\"alert alert-success\" >
-        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-            <span aria-hidden=\"true\">&times;</span>
-            <span class=\"sr-only\">Close</span>
-        </button>";
-        foreach ($data['alertgreen'] as $alert) {
-            # code...
-            echo "$alert\n";
-        }
-        echo "</div>";
-    }
-    if (isset($data['alertred'])) {
-        # code...
-        echo "<div class=\"alert alert-danger\" >
-        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-            <span aria-hidden=\"true\">&times;</span>
-            <span class=\"sr-only\">Close</span>
-        </button>";
-        foreach ($data['alertred'] as $alert) {
-            # code...
-            echo "$alert\n";
-        }
-        echo "</div>";
-    }
+    
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -74,7 +49,7 @@
                     <?php
                         $vars = array(
                                     'name' => 'cat',
-
+                                    'type' => 'post'
                                     );
                         echo Categories::dropdown($vars);
                     ?>
@@ -83,7 +58,7 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateFrom'>
-                            <input type='text' class="form-control" name="from" />
+                            <input type='text' class="form-control" name="from" placeholder="From" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -93,7 +68,7 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateTo'>
-                            <input type='text' class="form-control" name="to" />
+                            <input type='text' class="form-control" name="to" placeholder="To" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>

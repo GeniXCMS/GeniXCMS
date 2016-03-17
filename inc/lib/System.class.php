@@ -54,7 +54,7 @@ class System
         Token::create();
         Mod::loader();
         Theme::loader();
-
+        Hooks::attach('admin_page_notif_action', array('System', 'alert'));
 
     }
 
@@ -259,6 +259,74 @@ class System
         return $html;
     }
 
+    public static function alert($data) {
+        global $data;
+        if (isset($data['alertSuccess'])) {
+            # code...
+            echo "<div class=\"alert alert-success\" >
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+                <span aria-hidden=\"true\">&times;</span>
+                <span class=\"sr-only\">Close</span>
+            </button>";
+            foreach ($data['alertSuccess'] as $alert) {
+                # code...
+                echo "$alert\n";
+            }
+            echo "</div>";
+        }
+        if (isset($data['alertDanger'])) {
+            # code...
+            echo "<div class=\"alert alert-danger\" >
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+                <span aria-hidden=\"true\">&times;</span>
+                <span class=\"sr-only\">Close</span>
+            </button>";
+            foreach ($data['alertDanger'] as $alert) {
+                # code...
+                echo "$alert\n";
+            }
+            echo "</div>";
+        }
+        if (isset($data['alertInfo'])) {
+            # code...
+            echo "<div class=\"alert alert-info\" >
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+                <span aria-hidden=\"true\">&times;</span>
+                <span class=\"sr-only\">Close</span>
+            </button>";
+            foreach ($data['alertInfo'] as $alert) {
+                # code...
+                echo "$alert\n";
+            }
+            echo "</div>";
+        }
+        if (isset($data['alertWarning'])) {
+            # code...
+            echo "<div class=\"alert alert-warning\" >
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+                <span aria-hidden=\"true\">&times;</span>
+                <span class=\"sr-only\">Close</span>
+            </button>";
+            foreach ($data['alertWarning'] as $alert) {
+                # code...
+                echo "$alert\n";
+            }
+            echo "</div>";
+        }
+        if (isset($data['alertDefault'])) {
+            # code...
+            echo "<div class=\"alert alert-default\" >
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
+                <span aria-hidden=\"true\">&times;</span>
+                <span class=\"sr-only\">Close</span>
+            </button>";
+            foreach ($data['alertDefault'] as $alert) {
+                # code...
+                echo "$alert\n";
+            }
+            echo "</div>";
+        }
+    }
 
 }
 

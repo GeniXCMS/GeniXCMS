@@ -22,32 +22,7 @@ if (isset($_GET['token'])
 }
 ($_GET['act'] == "edit")? $pagetitle = "Edit": $pagetitle = "New";
 ($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token=".$token: $act = "add";
-if (isset($data['alertgreen'])) {
-    # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertgreen'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
-if (isset($data['alertred'])) {
-    # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
-    foreach ($data['alertred'] as $alert) {
-        # code...
-        echo "$alert\n";
-    }
-    echo "</div>";
-}
+
 
 if(isset($data['post'])) {
     foreach ($data['post'] as $p) {

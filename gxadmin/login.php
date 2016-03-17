@@ -37,19 +37,19 @@ if(isset($_POST['login']))
 {
 	if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
         // VALIDATE ALL
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (Xaptcha::isEnable()) {
     	
 	    if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '' ) {
-	    	$alertred[] = "Please insert the Captcha";
+	    	$alertDanger[] = "Please insert the Captcha";
 	    }
 	    if (!Xaptcha::verify($_POST['g-recaptcha-response'])) {
-	    	$alertred[] = "Your Captcha is not correct.";
+	    	$alertDanger[] = "Your Captcha is not correct.";
 	    }
 	}
 
-	if (!isset($alertred)) {
+	if (!isset($alertDanger)) {
 		/*check if username is exist or not */
 		$username = Typo::cleanX(Typo::strip($_POST['username']));
 		$sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
@@ -58,7 +58,7 @@ if(isset($_POST['login']))
 		//echo $c;
 		//print_r($usr);
 		if($c == "1"){
-			//$alertgreen = "";
+			//$alertSuccess = "";
 			// check if user is active 
 			if($usr[0]->status == '1') {
 				/* get user password */
@@ -89,39 +89,39 @@ if(isset($_POST['login']))
 					$_SESSION['group'] = $group;
 					*/
 					//print_r($_SESSION);
-					$alertgreen = "You are logged in now.";
+					$alertSuccess = "You are logged in now.";
 				}elseif($p != $pass){
-					$alertred[] = PASS_NOT_MATCH;
+					$alertDanger[] = PASS_NOT_MATCH;
 				}
 			}else{
 				if($usr[0]->activation != ''){
-					$alertred[] = ACOUNT_NOT_ACTIVE;
+					$alertDanger[] = ACOUNT_NOT_ACTIVE;
 				}else{
-					$alertred[] = ACOUNT_NOT_ACTIVE_BLOCK;
+					$alertDanger[] = ACOUNT_NOT_ACTIVE_BLOCK;
 				}
 			}
 		}elseif($c == "0"){
-			$alertred[] = NO_USER;
+			$alertDanger[] = NO_USER;
 		}
 	}
 }
 Theme::admin('header');
-	if(isset($alertred)) {
+	if(isset($alertDanger)) {
 		echo "
 		<div class=\"alert alert-danger\">
 			<ul>
 			";
-			foreach($alertred as $alert)
+			foreach($alertDanger as $alert)
 			{
 				echo "<li>".$alert."</li>";
 			}
 		echo"</ul>
 		</div>";
 	}
-	if(isset($alertgreen)) {
+	if(isset($alertSuccess)) {
 		echo "
 		<div class=\"alert alert-success\">
-			{$alertgreen}
+			{$alertSuccess}
 		</div>";
 	}
 

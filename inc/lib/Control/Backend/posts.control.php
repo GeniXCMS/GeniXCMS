@@ -29,7 +29,7 @@ switch ($act) {
                 // check token first
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if(Options::v('multilang_enable') === 'on') {
                     $def = Options::v('multilang_default');
@@ -49,10 +49,10 @@ switch ($act) {
                 }
 
                 if (!isset($title) || $title == "") {
-                    $alertred[] = TITLE_CANNOT_EMPTY;
+                    $alertDanger[] = TITLE_CANNOT_EMPTY;
                 }
-                if(isset($alertred)){
-                    $data['alertred'] = $alertred;
+                if(isset($alertDanger)){
+                    $data['alertDanger'] = $alertDanger;
                 }else{
 
                     if (!isset($_POST['date']) || $_POST['date'] == "") {
@@ -94,7 +94,7 @@ switch ($act) {
                         Posts::addParam('multilang', $multilang, $post_id);
                         // print_r($multilang);
                     }
-                    $data['alertgreen'][] = POST." {$title} ".MSG_POST_ADDED;
+                    $data['alertSuccess'][] = POST." {$title} ".MSG_POST_ADDED;
                     Hooks::run('post_submit_add_action', $_POST);
                     Token::remove($_POST['token']);
                 }
@@ -119,7 +119,7 @@ switch ($act) {
                 # code...
                 // check token first
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
 
                 if(Options::v('multilang_enable') === 'on') {
@@ -140,11 +140,11 @@ switch ($act) {
                 }
 
                 if (!isset($title) || $title == "") {
-                    $alertred[] = TITLE_CANNOT_EMPTY;
+                    $alertDanger[] = TITLE_CANNOT_EMPTY;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     $moddate = date("Y-m-d H:i:s");
                     $vars = array(
@@ -186,7 +186,7 @@ switch ($act) {
                         }
                         // print_r($multilang);
                     }
-                    $data['alertgreen'][] = POST." {$title} ".MSG_POST_UPDATED;
+                    $data['alertSuccess'][] = POST." {$title} ".MSG_POST_UPDATED;
                     Hooks::run('post_submit_edit_action', $_POST);
                     Token::remove($_POST['token']);
                 }
@@ -212,27 +212,27 @@ switch ($act) {
             if(isset($_GET['id'])){
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
 
                     $title = Posts::title($_GET['id']);
                     $del = Posts::delete($_GET['id']);
                     //echo $title['error'];
                     if(isset($del['error'])){
-                        $data['alertred'][] = $del['error'];
+                        $data['alertDanger'][] = $del['error'];
                     }else{
-                        $data['alertgreen'][] = POST." {$title} ".MSG_PAGE_REMOVED;
+                        $data['alertSuccess'][] = POST." {$title} ".MSG_PAGE_REMOVED;
                         Hooks::run('post_delete_action', $_GET);
                     }
 
                 }
                 if(isset($_GET['token'])){ Token::remove($_GET['token']); }
             }else{
-                $data['alertred'][] = MSG_USER_NO_ID_SELECTED;
+                $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
             }
 
         }
@@ -248,11 +248,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...
@@ -265,11 +265,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...
@@ -282,11 +282,11 @@ switch ($act) {
                 # code...
                 if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                     // VALIDATE ALL
-                    $alertred[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (isset($alertred)) {
+                if (isset($alertDanger)) {
                     # code...
-                    $data['alertred'] = $alertred;
+                    $data['alertDanger'] = $alertDanger;
                 }else{
                     foreach ($post_id as $id) {
                         # code...

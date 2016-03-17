@@ -15,20 +15,20 @@
 *
 */
 $data['sitetitle'] = MODULES;
-if(isset($GLOBALS['alertred']))
-    $data['alertred'] = $GLOBALS['alertred'];
-if(isset($GLOBALS['alertgreen']))
-    $data['alertgreen'][] = $GLOBALS['alertgreen'];
+if(isset($GLOBALS['alertDanger']))
+    $data['alertDanger'] = $GLOBALS['alertDanger'];
+if(isset($GLOBALS['alertSuccess']))
+    $data['alertSuccess'][] = $GLOBALS['alertSuccess'];
 
 if (isset($_POST['upload'])) {
     if(!Token::isExist($_POST['token'])){
-        $alertred[] = TOKEN_NOT_EXIST;
+        $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (!isset($_FILES['module']['name']) || $_FILES['module']['name'] == "") {
-        $alertred[] = NOFILE_UPLOADED;
+        $alertDanger[] = NOFILE_UPLOADED;
     }
 
-    if(!isset($alertred)){
+    if(!isset($alertDanger)){
         //Mod::activate($_GET['modules']);
         $path = "/inc/mod/";
         $allowed = array('zip');
@@ -39,13 +39,13 @@ if (isset($_POST['upload'])) {
             $zip->extractTo(GX_MOD);
             $zip->close();
             Hooks::run('module_install_action', $mod);
-            $data['alertgreen'][] = MSG_MOD_INSTALLED;
+            $data['alertSuccess'][] = MSG_MOD_INSTALLED;
         } else {
-            $data['alertred'][] = MSG_MOD_CANT_EXTRACT;
+            $data['alertDanger'][] = MSG_MOD_CANT_EXTRACT;
         }
         unlink($mod['filepath']);
     }else{
-        $data['alertred'] = $alertred;
+        $data['alertDanger'] = $alertDanger;
     }
     if(isset($_POST['token'])){ Token::remove($_POST['token']); }
 }
