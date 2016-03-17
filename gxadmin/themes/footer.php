@@ -155,9 +155,15 @@
             })
         });
 
+        <?php
+            $tagAjax = (SMART_URL)? Site::$url . '/ajax/tags?token=' . TOKEN : Site::$url . "/index.php?ajax=tags&token=" . TOKEN;
+         ?>
         $('#tags').tagsInput({
-            width: 'auto'
+            width: 'auto',
+            autocomplete_url: '<?=$tagAjax;?>',
+            autocomplete:{selectFirst:true,width:'100px',autoFill:true}
         });
+
     </script>
 
   </body>

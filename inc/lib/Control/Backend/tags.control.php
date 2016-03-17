@@ -37,7 +37,7 @@ switch (isset($_POST['addcat'])) {
 
             $cat = Db::insert(
                         sprintf("INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'tag' )",
-                            $cat, $slug, $_POST['parent']
+                            $cat, $slug, 0
                         )
                     );
             //print_r($cat);

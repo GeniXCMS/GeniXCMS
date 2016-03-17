@@ -60,29 +60,8 @@
                                     </form>
 
                                 </div>
-                                <div class=\"panel-body\">
-                                <ul class=\"list-group\">";
-                                foreach ($data['cat'] as $c2) {
-                                    if($c2->parent == $c->id){
-                                        echo "<li class=\"list-group-item\">
-                                        <form action=\"index.php?page=tags\" method=\"POST\" name=\"updatecat\">
-                                        <div class=\"input-group\">
-                                            <a href=\"?page=tags&act=del&id={$c2->id}&token=".TOKEN."\" class=\"input-group-addon\"
-                                            onclick=\"return confirm('Are you sure you want to delete this item?');\"
-                                            ><span class=\"glyphicon glyphicon-remove\"></span></a>
-                                            <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c2->name}\">
-                                            <input type=\"hidden\" name=\"id\" value=\"{$c2->id}\">
-                                            <input type=\"hidden\" name=\"token\" value=\"".TOKEN."\">
-                                            <span class=\"input-group-btn\">
-                                                <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
-                                            </span>
-                                        </div>
-                                        </form>
-                                         </li>";
-                                    }
-                                }
-                            echo "</ul></div>";
-                            echo "</div></div>";
+                            </div>";
+                            echo "</div>";
                         }
                     }
                 }else{
@@ -105,20 +84,6 @@
             <h4 class="modal-title" id="myModalLabel"><?=ADD_TAG;?></h4>
           </div>
           <div class="modal-body">
-
-                <div class="form-group">
-                    <label><?=PARENTS;?></label>
-                    <?php
-                        $vars = array(
-                                    'parent' => '0',
-                                    'name' => 'parent',
-                                    'sort' => 'ASC',
-                                    'order_by' => 'name',
-                                    'type' => 'tag'
-                                );
-                        echo Categories::dropdown($vars);
-                    ?>
-                </div>
                 <div class="form-group">
                     <label><?=TAG_NAME;?></label>
                     <input type="text" name="cat" class="form-control">

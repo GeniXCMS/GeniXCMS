@@ -297,6 +297,8 @@ class Control
 
                 include($file);
 
+            }else {
+                self::error('404');
             }
 
         }

@@ -92,6 +92,9 @@ switch ($act) {
                         }
                         $multilang = json_encode($multilang);
                         Posts::addParam('multilang', $multilang, $post_id);
+                        $tags = Typo::cleanX($_POST['tags']);
+                        Posts::addParam('tags', $tags, $post_id);
+                        Tags::add($tags);
                         // print_r($multilang);
                     }
                     $data['alertSuccess'][] = POST." {$title} ".MSG_POST_ADDED;
@@ -184,6 +187,16 @@ switch ($act) {
                         }else{
                             Posts::editParam('multilang', $multilang, $_GET['id']);
                         }
+
+                        $tags = Typo::cleanX($_POST['tags']);
+                        if (!Posts::existParam('tags', $_GET['id'])) {
+                            Posts::addParam('tags', $tags, $_GET['id']);
+                        }else{
+                            Posts::editParam('tags', $tags, $_GET['id']);
+                        }
+
+                        Tags::add($tags);
+
                         // print_r($multilang);
                     }
                     $data['alertSuccess'][] = POST." {$title} ".MSG_POST_UPDATED;

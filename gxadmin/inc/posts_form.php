@@ -33,8 +33,8 @@ if(isset($data['post'])) {
         $date = $p->date;
         $status = $p->status;
         $cat = $p->cat;
-        $tags = @$p->tags;
     }
+    $tags = Posts::getParam('tags', $p->id);
     if($status == 1) {
         $pub = "SELECTED";
         $unpub = "";
@@ -50,7 +50,7 @@ if(isset($data['post'])) {
     $cat = "";
     $pub = "";
     $unpub = "";
-    $tags = @$p->tags;
+    $tags = "";
 }
 ?>
 <form action="index.php?page=posts&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
@@ -217,6 +217,7 @@ if(isset($data['post'])) {
                         </div>
                         <div class="panel-body">
                             <textarea name="tags" id="tags" class="form-control"><?=$tags;?></textarea>
+                            <div id="suggesstion-box"></div>
                             <small><?=TAGS_DESC;?></small>
                         </div>
                     </div>

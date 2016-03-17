@@ -31,7 +31,7 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
 	// admin
 	if(User::access(0)){
 		$path = '/assets/';
-		$allowed = array('image', 'audio', 'video', 'text/plain',  
+		$allowed = array('image', 'audio', 'video', 'text/plain',
 			'text/javascript', 'text/css', 'text/html');
 	}elseif(User::access(2)){
 		$path = '/assets/';
