@@ -34,6 +34,10 @@ This CMSF is a starter point to build your own online applications. With already
 ### Recommended
 * MariaDB Server
 
+### Feature Request
+
+[![Feature Requests](http://feathub.com/semplon/GeniXCMS?format=svg)](http://feathub.com/semplon/GeniXCMS)
+
 ### Installation
 
 #### Manual Upload
