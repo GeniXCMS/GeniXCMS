@@ -59,7 +59,7 @@
                     ['view', ['fullscreen']]";
             }elseif ($GLOBALS['editor_mode'] == 'full') {
                 $toolbar = "['style', ['style']],
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'highlight']],
                     ['fontname', ['fontname']],
                     ['fontsize', ['fontsize']],
                     ['color', ['color']],
@@ -124,18 +124,15 @@
     ?>
 
     <script>
-         $("#selectall").change(function(){
+        $("#selectall").change(function(){
             $('input:checkbox').not(this).prop('checked', this.checked);
               //alert(cb.val());
-
         });
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({
                     placement: 'top'
                 });
-        });
 
-        $(function () {
             $('#dateFrom').datetimepicker({
                 format: 'YYYY/MM/DD'
             });

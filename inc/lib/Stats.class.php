@@ -1,7 +1,7 @@
 <?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -26,15 +26,15 @@ class Stats
         $npost = Db::$num_rows;
         return $npost;
     }
-	
+
 	public static function totalCat($vars) {
-        $posts = Db::result("SELECT `id` FROM `cat`");
+        $posts = Db::result("SELECT `id` FROM `cat` WHERE `type` = '{$vars}'");
         $npost = Db::$num_rows;
         return $npost;
     }
-	
-	public static function totalUser($vars) {
-        $posts = Db::result("SELECT `id` FROM `user`");
+
+	public static function totalUser() {
+        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' ");
         $npost = Db::$num_rows;
         return $npost;
     }
@@ -58,7 +58,7 @@ class Stats
 
 
     public static function botlist() {
-        $botlist = array(   
+        $botlist = array(
                 "Teoma",
                 "alexa",
                 "froogle",

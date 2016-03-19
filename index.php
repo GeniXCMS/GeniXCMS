@@ -30,6 +30,5 @@ try {
     echo $e->getMessage();
 }
 
-print_r($_REQUEST);
 /* End of file index.php */
 /* Location: ./index.php */

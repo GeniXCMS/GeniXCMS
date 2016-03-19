@@ -1,7 +1,7 @@
 <?php
 /**
 * GeniXCMS - Content Management System
-* 
+*
 * PHP Based Content Management System and Framework
 *
 * @package GeniXCMS
@@ -33,8 +33,8 @@
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
-                        <?php 
-                            $post = Posts::recent(5, 'post'); 
+                        <?php
+                            $post = Posts::recent(5, 'post');
 
                             //print_r($post);
                             if(isset($post['error'])){
@@ -45,14 +45,14 @@
                                     echo "
                                         <li class=\"list-group-item\">
                                             <a href=\"".Url::post($p->id)."\" target=\"_blank\">
-                                                $p->title 
+                                                $p->title
                                             </a>
                                             <small class=\"badge\">$p->author</small>
-                                            
+
                                         </li>";
                                 }
                             }
-                            
+
                         ?>
                         </ul>
                     </div>
@@ -65,11 +65,11 @@
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
-                        <?php 
+                        <?php
                             echo "<li class=\"list-group-item\">".TOTAL_POST.": ".Stats::totalPost('post')."</li>"
                                 ."<li class=\"list-group-item\">".TOTAL_PAGE.": ".Stats::totalPost('page')."</li>"
-                                ."<li class=\"list-group-item\">".TOTAL_CAT.": ".Stats::totalCat('cat')."</li>"
-                                ."<li class=\"list-group-item\">".TOTAL_USER.": ".Stats::totalUser('user')."</li>";
+                                ."<li class=\"list-group-item\">".TOTAL_CAT.": ".Stats::totalCat('post')."</li>"
+                                ."<li class=\"list-group-item\">".TOTAL_USER.": ".Stats::totalUser()."</li>";
                             echo Hooks::run('admin_page_dashboard_statslist_action', $data);
                         ?>
                         </ul>
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
-    
+
 </div>

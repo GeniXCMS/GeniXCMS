@@ -137,14 +137,14 @@ class Site
             Hooks::attach('footer_load_lib', array('Files','elfinderLib'));
             if ($GLOBALS['editor_mode'] == 'light') {
                 $toolbar = "['style', ['style']],
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'highlight']],
                     ['fontsize', ['fontsize']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
                     ['view', ['fullscreen']]";
             }elseif ($GLOBALS['editor_mode'] == 'full') {
                 $toolbar = "['style', ['style']],
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'highlight']],
                     ['fontname', ['fontname']],
                     ['fontsize', ['fontsize']],
                     ['color', ['color']],
@@ -165,6 +165,8 @@ class Site
     <script src=\"".self::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
     <script src=\"".self::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
     <script src=\"".self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
+
+    apaaja
     <script>
       $(document).ready(function() {
         $('.editor').summernote({

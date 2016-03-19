@@ -10,7 +10,7 @@
 * Icon: <i class="fa fa-cogs"></i>
 */
 
-function loadModLib($class_name) 
+function loadModLib($class_name)
 {
     Mod::inc($class_name.".lib",'',dirname(__FILE__)."/inc/");
 }

@@ -11,7 +11,15 @@
     </div>
 
     <?=Site::footer();?>
+
     <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/inc/themes/default/css/blog.css" rel="stylesheet">
+    <style>
+        #code {
+            bottom: 0;
+            top: 0;
+        }
+    </style>
+    
   </body>
 </html>
