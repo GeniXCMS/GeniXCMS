@@ -15,6 +15,7 @@ class DateTest extends PHPUnit_Framework_TestCase
         (1, 'timezone', 'Asia/Jakarta')";
         Db::query($options);
         new Options();
+        new Date();
     }
 
     public function testFormat () {
