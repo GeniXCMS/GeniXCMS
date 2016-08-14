@@ -26,7 +26,7 @@ class Date
     public function __construct()
     {   
         $timezone = Options::v('timezone');
-        self::$timezone = empty($timezone)? "UTC": $timezone ;
+        self::$timezone = ($timezone == "")? "UTC": $timezone ;
         date_default_timezone_set(self::$timezone);
     }
 
