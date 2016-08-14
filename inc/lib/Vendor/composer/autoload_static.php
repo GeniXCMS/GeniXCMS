@@ -17,8 +17,11 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\HttpKernel\\' => 29,
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\EventDispatcher\\' => 34,
+            'Symfony\\Component\\DependencyInjection\\' => 38,
+            'Symfony\\Component\\Debug\\' => 24,
         ),
         'R' => 
         array (
@@ -31,6 +34,10 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
         'O' => 
         array (
             'Omnipay\\PayPal\\' => 15,
+        ),
+        'L' => 
+        array (
+            'League\\OAuth2\\Client\\' => 21,
         ),
         'I' => 
         array (
@@ -49,6 +56,10 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
+        'Symfony\\Component\\HttpKernel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-kernel',
+        ),
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
@@ -56,6 +67,14 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
+        ),
+        'Symfony\\Component\\DependencyInjection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/dependency-injection',
+        ),
+        'Symfony\\Component\\Debug\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/debug',
         ),
         'ReCaptcha\\' => 
         array (
@@ -68,6 +87,11 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
         'Omnipay\\PayPal\\' => 
         array (
             0 => __DIR__ . '/..' . '/omnipay/paypal/src',
+        ),
+        'League\\OAuth2\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
+            1 => __DIR__ . '/..' . '/league/oauth2-google/src',
         ),
         'IXR\\' => 
         array (
@@ -88,6 +112,27 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
     );
 
     public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'SecurityLib' => 
+            array (
+                0 => __DIR__ . '/..' . '/ircmaxell/security-lib/lib',
+            ),
+        ),
+        'R' => 
+        array (
+            'RandomLib' => 
+            array (
+                0 => __DIR__ . '/..' . '/ircmaxell/random-lib/lib',
+            ),
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/psr/log',
+            ),
+        ),
         'O' => 
         array (
             'Omnipay\\Common\\' => 
