@@ -22,7 +22,7 @@ class DateTest extends PHPUnit_Framework_TestCase
 
         $date = "2015-09-16 02:29:30";
         $dformat = Date::format($date);
-        $this->assertEquals("16 September 2015 09:29 AM WIB", $dformat);
+        $this->assertEquals("16 September 2015 02:29 AM WIB", $dformat);
 
     }
 
@@ -30,7 +30,7 @@ class DateTest extends PHPUnit_Framework_TestCase
 
         $date = "2015-09-16 02:29:30";
         $dformat = Date::local($date);
-        $this->assertEquals("16 September 2015 09:29 AM WIB", $dformat);
+        $this->assertEquals("16 September 2015 02:29 AM WIB", $dformat);
     }
 
 }
