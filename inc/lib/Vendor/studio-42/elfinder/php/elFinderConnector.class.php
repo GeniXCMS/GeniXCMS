@@ -26,14 +26,15 @@ class elFinderConnector {
 	 * @var string
 	 **/
 	protected $header = 'Content-Type: application/json';
-	
-	
+
+
 	/**
 	 * Constructor
 	 *
-	 * @return void
+	 * @param $elFinder
+	 * @param bool $debug
 	 * @author Dmitry (dio) Levashov
-	 **/
+	 */
 	public function __construct($elFinder, $debug=false) {
 		
 		$this->elFinder = $elFinder;
@@ -93,23 +94,35 @@ class elFinderConnector {
 		}
 		
 		// collect required arguments to exec command
+		$hasFiles = false;
 		foreach ($this->elFinder->commandArgsList($cmd) as $name => $req) {
-			$arg = $name == 'FILES' 
-				? $_FILES 
-				: (isset($src[$name]) ? $src[$name] : '');
-				
-			if (!is_array($arg)) {
-				$arg = trim($arg);
+			if ($name === 'FILES') {
+				if (isset($_FILES)) {
+					$hasFiles = true;
+				} elseif ($req) {
+					$this->output(array('error' => $this->elFinder->error(elFinder::ERROR_INV_PARAMS, $cmd)));
+				}
+			} else {
+				$arg = isset($src[$name])? $src[$name] : '';
+			
+				if (!is_array($arg) && $req !== '') {
+					$arg = trim($arg);
+				}
+				if ($req && $arg === '') {
+					$this->output(array('error' => $this->elFinder->error(elFinder::ERROR_INV_PARAMS, $cmd)));
+				}
+				$args[$name] = $arg;
 			}
-			if ($req && (!isset($arg) || $arg === '')) {
-				$this->output(array('error' => $this->elFinder->error(elFinder::ERROR_INV_PARAMS, $cmd)));
-			}
-			$args[$name] = $arg;
 		}
 		
 		$args['debug'] = isset($src['debug']) ? !!$src['debug'] : false;
 		
-		$this->output($this->elFinder->exec($cmd, $this->input_filter($args)));
+		$args = $this->input_filter($args);
+		if ($hasFiles) {
+			$args['FILES'] = $_FILES;
+		}
+		
+		$this->output($this->elFinder->exec($cmd, $args));
 	}
 	
 	/**
@@ -121,7 +134,7 @@ class elFinderConnector {
 	 **/
 	protected function output(array $data) {
 		// clear output buffer
-		while(ob_get_level() && @ob_end_clean()){}
+		while(ob_get_level() && ob_end_clean()) {}
 		
 		$header = isset($data['header']) ? $data['header'] : $this->header;
 		unset($data['header']);
@@ -169,8 +182,8 @@ class elFinderConnector {
 						}
 					}
 				}
-				if (is_null($psize)){
-					rewind($fp);
+				if (is_null($psize)) {
+					elFinder::rewind($fp);
 				}
 			} else {
 				header('Accept-Ranges: none');
@@ -203,6 +216,9 @@ class elFinderConnector {
 			if (!empty($data['raw']) && !empty($data['error'])) {
 				echo $data['error'];
 			} else {
+				if (isset($data['debug']) && isset($data['debug']['phpErrors'])) {
+					$data['debug']['phpErrors'] = array_merge($data['debug']['phpErrors'], elFinder::$phpErrors);
+				}
 				echo json_encode($data);
 			}
 			flush();

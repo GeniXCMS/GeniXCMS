@@ -94,7 +94,7 @@ body {
 
 .navbar-top-links .dropdown-user {
     right: 0;
-    left: auto;
+    /*left: auto;*/
 }
 
 .sidebar .sidebar-nav.navbar-collapse {

@@ -1,47 +1,48 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 ?>
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-cubes"></i>  <?=CATEGORIES;?>
+        <h2><i class="fa fa-cubes"></i>  <?=CATEGORIES;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> <?=ADD_CATEGORY;?>
+                <span class="glyphicon glyphicon-plus"></span> 
+                <span class="hidden-xs hidden-sm"><?=ADD_CATEGORY;?></span>
             </button>
-        </h1>
+        </h2>
         <hr />
     </div>
 
     <div class="col-sm-12">
         <div class="row">
             <?php
-                if($data['num'] > 0) {
-                    foreach ($data['cat'] as $c) {
-                        # code...
-                        // echo "<td>".$c->id."</td>";
-                        // echo "<td>".$c->name."</td>";
-                        // echo "<td>".$c->parent."</td>";
-                        // echo "<td></td>";
+            if ($data['num'] > 0) {
+                foreach ($data['cat'] as $c) {
+                    # code...
+                    // echo "<td>".$c->id."</td>";
+                    // echo "<td>".$c->name."</td>";
+                    // echo "<td>".$c->parent."</td>";
+                    // echo "<td></td>";
 
-                        if($c->parent == "" || $c->parent == 0){
-                            echo "<div class=\"col-md-4 item\" >
+                    if ($c->parent == '' || $c->parent == 0) {
+                        echo "<div class=\"col-md-4 item\" >
                             <div class=\"panel panel-default\">
                                 <div class=\"panel-heading\">
                                     <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
@@ -51,19 +52,19 @@
                                         ><span class=\"glyphicon glyphicon-remove\"></span></a>
                                         <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c->name}\">
                                         <input type=\"hidden\" name=\"id\" value=\"{$c->id}\">
-                                        <input type=\"hidden\" name=\"token\" value=\"".TOKEN."\">
-                                        <span class=\"input-group-btn\">
-                                            <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
+                                        <input type=\"hidden\" name=\"token\" value=\"".TOKEN.'">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit" name="updatecat">Go!</button>
                                         </span>
                                     </div>
                                     </form>
 
                                 </div>
-                                <div class=\"panel-body\">
-                                <ul class=\"list-group\">";
-                                foreach ($data['cat'] as $c2) {
-                                    if($c2->parent == $c->id){
-                                        echo "<li class=\"list-group-item\">
+                                <div class="panel-body">
+                                <ul class="list-group">';
+                        foreach ($data['cat'] as $c2) {
+                            if ($c2->parent == $c->id) {
+                                echo "<li class=\"list-group-item\">
                                         <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
                                         <div class=\"input-group\">
                                             <a href=\"?page=categories&act=del&id={$c2->id}&token=".TOKEN."\" class=\"input-group-addon\"
@@ -71,22 +72,22 @@
                                             ><span class=\"glyphicon glyphicon-remove\"></span></a>
                                             <input type=\"text\" name=\"cat\" class=\"form-control\" value=\"{$c2->name}\">
                                             <input type=\"hidden\" name=\"id\" value=\"{$c2->id}\">
-                                            <input type=\"hidden\" name=\"token\" value=\"".TOKEN."\">
-                                            <span class=\"input-group-btn\">
-                                                <button class=\"btn btn-default\" type=\"submit\" name=\"updatecat\">Go!</button>
+                                            <input type=\"hidden\" name=\"token\" value=\"".TOKEN.'">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="submit" name="updatecat">Go!</button>
                                             </span>
                                         </div>
                                         </form>
-                                         </li>";
-                                    }
-                                }
-                            echo "</ul></div>";
-                            echo "</div></div>";
+                                         </li>';
+                            }
                         }
+                        echo '</ul></div>';
+                        echo '</div></div>';
                     }
-                }else{
-                    echo "<div class=\"col-md-12\">No Categories Found</div>";
                 }
+            } else {
+                echo '<div class="col-md-12">No Categories Found</div>';
+            }
             ?>
         </div>
 
@@ -113,7 +114,7 @@
                                     'name' => 'parent',
                                     'sort' => 'ASC',
                                     'order_by' => 'name',
-                                    'type' => 'post'
+                                    'type' => 'post',
                                 );
                         echo Categories::dropdown($vars);
                     ?>
@@ -133,3 +134,4 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+

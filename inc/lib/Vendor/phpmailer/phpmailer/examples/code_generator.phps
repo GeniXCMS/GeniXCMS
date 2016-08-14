@@ -66,7 +66,7 @@ try {
         }
 
         $example_code .= "\n\$to = '{$_POST['To_Email']}';";
-        $example_code .= "\nif(!PHPMailer::validateAddress(\$to)) {";
+        $example_code .= "\nif (!PHPMailer::validateAddress(\$to)) {";
         $example_code .= "\n  throw new phpmailerAppException(\"Email address \" . " .
             "\$to . \" is invalid -- aborting!\");";
         $example_code .= "\n}";

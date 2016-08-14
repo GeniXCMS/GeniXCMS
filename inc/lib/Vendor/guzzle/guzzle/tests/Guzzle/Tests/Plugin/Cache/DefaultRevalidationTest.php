@@ -239,7 +239,7 @@ class DefaultRevalidationTest extends \Guzzle\Tests\GuzzleTestCase
         ));
         $client = new Client($this->getServer()->getUrl());
         $client->addSubscriber(new CachePlugin());
-        $client->getEventDispatcher()->addListener('command.after_send', function(){});
+        $client->getEventDispatcher()->addListener('command.after_send', function() {});
         $this->assertEquals(200, $client->get()->send()->getStatusCode());
         $this->assertEquals(200, $client->get()->send()->getStatusCode());
         $this->assertEquals(200, $client->get()->send()->getStatusCode());

@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <?php
-                if($data['num'] > 0){
+                if ($data['num'] > 0) {
                     foreach ($data['posts'] as $p) {
                         # code...
                         echo "
@@ -33,7 +33,7 @@
                     }
 
                     echo $data['paging'];
-                }else{
+                } else {
                     echo "No Post to show";
                 }
             ?>

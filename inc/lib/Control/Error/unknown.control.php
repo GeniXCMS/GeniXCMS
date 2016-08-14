@@ -1,12 +1,13 @@
 <div class="col-sm-12">
-<h2><i class="fa fa-warning"></i> Unknown Error Occured</h2>
-<?php if(isset($val) && $val != '') {?>
+<h2><i class="fa fa-warning text-danger"></i> Unknown Error Occured</h2>
+<?php if (isset($val) && $val != '') {
+    ?>
 <div class="alert alert-danger">
-<?=$val;?>
+<?=$val; ?>
 </div>
 
 <?php
-    }
+}
     Site::footer();
 ?>
 

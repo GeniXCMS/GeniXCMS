@@ -1,42 +1,46 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/**
-* GeniXCMS - Content Management System
-* 
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150126
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+<?php
 
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
+/**
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150126
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 
 /**
-* 
-*/
+ *
+ */
 class Mail
 {
-    static $smtphost    = "";
-    static $smtpuser    = "";
-    static $smtppass    = "";
-    static $smtpport    = "";
-    static $siteemail   = "";
-    static $sitename    = "";
-    
+    public static $smtphost = '';
+    public static $smtpuser = '';
+    public static $smtppass = '';
+    public static $smtpport = '';
+    public static $siteemail = '';
+    public static $sitename = '';
+
     public function __construct()
     {
         # code...
-        self::$smtphost    = Options::v('smtphost');
-        self::$smtpuser    = Options::v('smtpuser');
-        self::$smtppass    = Options::v('smtppass');
-        self::$smtpport    = Options::v('smtpport');
-        self::$siteemail   = Options::v('siteemail');
-        self::$sitename    = Options::v('sitename');
+        self::$smtphost = Options::v('smtphost');
+        self::$smtpuser = Options::v('smtpuser');
+        self::$smtppass = Options::v('smtppass');
+        self::$smtpport = Options::v('smtpport');
+        self::$siteemail = Options::v('siteemail');
+        self::$sitename = Options::v('sitename');
     }
 
     ## SEND MAIL
@@ -48,25 +52,26 @@ class Mail
     //             'msgtype'    => $msgtype,
     //         );
 
-    public static function send ($vars) {
-        self::$smtphost    = Options::v('smtphost');
-        self::$smtpuser    = Options::v('smtpuser');
-        self::$smtppass    = Options::v('smtppass');
-        self::$smtpport     = Options::v('smtpport');
-        self::$siteemail   = Options::v('siteemail');
-        self::$sitename    = Options::v('sitename');
+    public static function send($vars)
+    {
+        self::$smtphost = Options::v('smtphost');
+        self::$smtpuser = Options::v('smtpuser');
+        self::$smtppass = Options::v('smtppass');
+        self::$smtpport = Options::v('smtpport');
+        self::$siteemail = Options::v('siteemail');
+        self::$sitename = Options::v('sitename');
 
         //print_r($vars);
         $to = $vars['to'];
         $to_name = $vars['to_name'];
         $subject = $vars['subject'];
         $message = $vars['message'];
-        (isset($vars['msgtype']))? $msgtype = $vars['msgtype']: $msgtype = 'html';
+        (isset($vars['msgtype'])) ? $msgtype = $vars['msgtype'] : $msgtype = 'html';
         //require_once GX_LIB.'/Vendor/PHPMailer/PHPMailerAutoload.php';
         // check if using plain mail or smtp
         $type = Options::v('mailtype');
 
-        if($type == 0) { // use php mail command
+        if ($type == 0) { // use php mail command
 
             //Create a new PHPMailer instance
             $mail = new PHPMailer(true);
@@ -82,14 +87,13 @@ class Mail
                 //Set the subject line
                 $mail->Subject = $subject;
                 //Replace the plain text body with one created manually
-                if($msgtype == 'text'){
-                    $mail->ContentType = 'text/plain'; 
+                if ($msgtype == 'text') {
+                    $mail->ContentType = 'text/plain';
                     $mail->IsHTML(false);
                     $mail->Body = $message;
-                }else{
+                } else {
                     $mail->msgHTML($message);
                 }
-                
 
                 $mail->send();
             } catch (phpmailerException $e) {
@@ -103,7 +107,7 @@ class Mail
             // } else {
             //     $mailer = "Message sent!";
             // }
-        }elseif ($type == 1) {
+        } elseif ($type == 1) {
             # code...
 
             //Create a new PHPMailer instance
@@ -122,7 +126,7 @@ class Mail
                 $mail->Host = self::$smtphost;
                 //Set the SMTP port number - likely to be 25, 465 or 587
                 $mail->Port = self::$smtpport;
-                
+
                 //Whether to use SMTP authentication
                 $mail->SMTPAuth = true;
                 //Username to use for SMTP authentication
@@ -138,11 +142,11 @@ class Mail
                 //Set the subject line
                 $mail->Subject = $subject;
                 //Replace the plain text body with one created manually
-                if($msgtype == 'text'){
-                    $mail->ContentType = 'text/plain'; 
+                if ($msgtype == 'text') {
+                    $mail->ContentType = 'text/plain';
                     $mail->IsHTML(false);
                     $mail->Body = $message;
-                }else{
+                } else {
                     $mail->msgHTML($message);
                 }
                 $mail->send();
@@ -160,9 +164,7 @@ class Mail
         }
 
         //return $mailer;
-
     }
-
 }
 
 /* End of file Mail.class.php */

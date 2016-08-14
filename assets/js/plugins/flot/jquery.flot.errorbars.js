@@ -73,7 +73,7 @@ shadowSize and lineWidth are derived as well from the points series.
         }
     };
 
-    function processRawData(plot, series, data, datapoints){
+    function processRawData(plot, series, data, datapoints) {
         if (!series.points.errorbars)
             return;
 
@@ -104,7 +104,7 @@ shadowSize and lineWidth are derived as well from the points series.
         datapoints.format = format;
     }
 
-    function parseErrors(series, i){
+    function parseErrors(series, i) {
 
         var points = series.datapoints.points;
 
@@ -123,7 +123,7 @@ shadowSize and lineWidth are derived as well from the points series.
                 exl = points[i + 2];
                 exu = points[i + 3];
                 if (eb == 'xy')
-                    if (yerr.asymmetric){
+                    if (yerr.asymmetric) {
                         eyl = points[i + 4];
                         eyu = points[i + 5];
                     } else eyl = points[i + 4];
@@ -148,18 +148,18 @@ shadowSize and lineWidth are derived as well from the points series.
 
         var errRanges = [exl, exu, eyl, eyu];
         // nullify if not showing
-        if (!xerr.show){
+        if (!xerr.show) {
             errRanges[0] = null;
             errRanges[1] = null;
         }
-        if (!yerr.show){
+        if (!yerr.show) {
             errRanges[2] = null;
             errRanges[3] = null;
         }
         return errRanges;
     }
 
-    function drawSeriesErrors(plot, ctx, s){
+    function drawSeriesErrors(plot, ctx, s) {
 
         var points = s.datapoints.points,
                 ps = s.datapoints.pointsize,
@@ -190,12 +190,12 @@ shadowSize and lineWidth are derived as well from the points series.
             var errRanges = parseErrors(s, i);
 
             //cycle xerr & yerr
-            for (var e = 0; e < err.length; e++){
+            for (var e = 0; e < err.length; e++) {
 
                 var minmax = [ax[e].min, ax[e].max];
 
                 //draw this error?
-                if (errRanges[e * err.length]){
+                if (errRanges[e * err.length]) {
 
                     //data coordinates
                     var x = points[i],
@@ -272,7 +272,7 @@ shadowSize and lineWidth are derived as well from the points series.
         }
     }
 
-    function drawError(ctx,err,x,y,upper,lower,drawUpper,drawLower,radius,offset,minmax){
+    function drawError(ctx,err,x,y,upper,lower,drawUpper,drawLower,radius,offset,minmax) {
 
         //shadow offset
         y += offset;
@@ -280,7 +280,7 @@ shadowSize and lineWidth are derived as well from the points series.
         lower += offset;
 
         // error bar - avoid plotting over circles
-        if (err.err == 'x'){
+        if (err.err == 'x') {
             if (upper > x + radius) drawPath(ctx, [[upper,y],[Math.max(x + radius,minmax[0]),y]]);
             else drawUpper = false;
             if (lower < x - radius) drawPath(ctx, [[Math.min(x - radius,minmax[1]),y],[lower,y]] );
@@ -299,27 +299,27 @@ shadowSize and lineWidth are derived as well from the points series.
 
         // upper cap
         if (drawUpper) {
-            if (err.upperCap == '-'){
+            if (err.upperCap == '-') {
                 if (err.err=='x') drawPath(ctx, [[upper,y - radius],[upper,y + radius]] );
                 else drawPath(ctx, [[x - radius,upper],[x + radius,upper]] );
-            } else if ($.isFunction(err.upperCap)){
+            } else if ($.isFunction(err.upperCap)) {
                 if (err.err=='x') err.upperCap(ctx, upper, y, radius);
                 else err.upperCap(ctx, x, upper, radius);
             }
         }
         // lower cap
         if (drawLower) {
-            if (err.lowerCap == '-'){
+            if (err.lowerCap == '-') {
                 if (err.err=='x') drawPath(ctx, [[lower,y - radius],[lower,y + radius]] );
                 else drawPath(ctx, [[x - radius,lower],[x + radius,lower]] );
-            } else if ($.isFunction(err.lowerCap)){
+            } else if ($.isFunction(err.lowerCap)) {
                 if (err.err=='x') err.lowerCap(ctx, lower, y, radius);
                 else err.lowerCap(ctx, x, lower, radius);
             }
         }
     }
 
-    function drawPath(ctx, pts){
+    function drawPath(ctx, pts) {
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
         for (var p=1; p < pts.length; p++)
@@ -327,7 +327,7 @@ shadowSize and lineWidth are derived as well from the points series.
         ctx.stroke();
     }
 
-    function draw(plot, ctx){
+    function draw(plot, ctx) {
         var plotOffset = plot.getPlotOffset();
 
         ctx.save();

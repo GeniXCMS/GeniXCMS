@@ -1,14 +1,14 @@
 <?php
-    if( isset($_POST['upload']) ){
+    if ( isset($_POST['upload']) ) {
         //echo "string";
         //print_r($_FILES);
-        if(isset($_FILES['images']) && $_FILES['images'] != ''){
+        if (isset($_FILES['images']) && $_FILES['images'] != '') {
             $path = "/assets/images/uploads/";
             $allowed = array('png', 'jpg', 'gif');
             $upload = Upload::go('images', $path, $allowed );
-            if(isset($upload['error']) != ''){
+            if (isset($upload['error']) != '') {
                 echo $upload['error'];
-            }else{
+            } else {
                 $im = $upload['filepath'];
                 $dst = GX_PATH."/assets/images/uploads/thumbs/".$upload['filename'];
                 Image::resize($im, $dst, "300", '300', 1);

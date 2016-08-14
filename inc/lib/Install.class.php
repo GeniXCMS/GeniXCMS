@@ -1,45 +1,54 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
+<?php
+
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150126
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150126
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 
 /**
-* Installation Class
-*
-* This class will process the Installation Process.
-*
-*
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @since 0.0.1
-*/
+ * Installation Class.
+ *
+ * This class will process the Installation Process.
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ *
+ * @since 0.0.1
+ */
 class Install
 {
-    function __construct () {
-
+    public function __construct()
+    {
     }
 
     /**
-    * Config File Creation Function.
-    * This will create config file at inc/config/config.php during the installation
-    * process. Data is gathered from the session.
-    *
-    * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1
-    */
-    public static function makeConfig ($file) {
-        $config = "<?php if(!defined('GX_LIB')) die(\"Direct Access Not Allowed!\");
+     * Config File Creation Function.
+     *
+     * This will create config file at inc/config/config.php
+     * during the installation process. Data is gathered
+     * from the session.
+     *
+     * @author Puguh Wijayanto <psw@metalgenix.com>
+     *
+     * @since 0.0.1
+     */
+    public static function makeConfig($file)
+    {
+        $config = "<?php if (defined('GX_LIB') === false) die(\"Direct Access Not Allowed!\");
 /**
 * GeniXCMS - Content Management System
 *
@@ -47,7 +56,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 0.0.8
+* @version 1.0.0
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -67,6 +76,12 @@ define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly
 define('GX_URL_PREFIX', '.html');
 
 
+define('SITE_ID', '".Typo::getToken(20)."');
+
+
+
+
+
 
 
 
@@ -77,11 +92,11 @@ define('GX_URL_PREFIX', '.html');
 define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
 
         ";
-        try{
-            $f = fopen($file, "w");
+        try {
+            $f = fopen($file, 'w');
             $c = fwrite($f, $config);
             fclose($f);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
         }
 
@@ -89,45 +104,48 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
     }
 
     /**
-    * Create Initial SQL Table Function.
-    * This will create the SQL table on the installation proccess.
-    *
-    * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1
-    */
-    public static function createTable () {
-        require_once(GX_PATH.'/inc/config/config.php');
+     * Create Initial SQL Table Function.
+     *
+     * This will create the SQL table on the
+     * installation proccess.
+     *
+     * @author Puguh Wijayanto <psw@metalgenix.com>
+     *
+     * @since 0.0.1
+     */
+    public static function createTable()
+    {
+        require_once GX_PATH.'/inc/config/config.php';
         $db = new Db();
-        $cat = "CREATE TABLE IF NOT EXISTS `cat` (
+        $cat = 'CREATE TABLE IF NOT EXISTS `cat` (
                 `id` int(11) NOT NULL,
                   `name` text NOT NULL,
                   `slug` text NOT NULL,
                   `parent` text DEFAULT NULL,
                   `desc` text DEFAULT  NULL,
                   `type` text NOT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ";
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ';
         $db->query($cat);
 
-        $pr = "ALTER TABLE `cat` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `cat` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `cat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `cat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
-        $cat_param = "CREATE TABLE IF NOT EXISTS `cat_param` (
+        $cat_param = 'CREATE TABLE IF NOT EXISTS `cat_param` (
                     `id` int(11) NOT NULL,
                       `cat_id` int(11) NOT NULL,
                       `param` text CHARACTER SET utf8 NOT NULL,
                       `value` text CHARACTER SET utf8 NOT NULL
-                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
         $db->query($cat_param);
 
-        $pr = "ALTER TABLE `cat_param` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `cat_param` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `cat_param` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `cat_param` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
-
 
         $menu = "CREATE TABLE IF NOT EXISTS `menus` (
                 `id` int(11) NOT NULL,
@@ -143,23 +161,23 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $db->query($menu);
 
-        $pr = "ALTER TABLE `menus` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `menus` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `menus` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `menus` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
-        $options = "CREATE TABLE IF NOT EXISTS `options` (
+        $options = 'CREATE TABLE IF NOT EXISTS `options` (
                     `id` int(11) NOT NULL,
                       `name` text CHARACTER SET utf8 NOT NULL,
                       `value` longtext CHARACTER SET utf8 NOT NULL
-                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
         $db->query($options);
 
-        $pr = "ALTER TABLE `options` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `options` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `options` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `options` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
         $posts = "CREATE TABLE IF NOT EXISTS `posts` (
@@ -177,24 +195,24 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($posts);
 
-        $pr = "ALTER TABLE `posts` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `posts` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `posts` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `posts` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
-        $post_param = "CREATE TABLE IF NOT EXISTS `posts_param` (
+        $post_param = 'CREATE TABLE IF NOT EXISTS `posts_param` (
                 `id` bigint(32) NOT NULL,
                   `post_id` bigint(32) NOT NULL,
                   `param` text NOT NULL,
                   `value` text NOT NULL
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8';
         $db->query($post_param);
 
-        $pr = "ALTER TABLE `posts_param` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `posts_param` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `posts_param` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `posts_param` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
         $user = "CREATE TABLE IF NOT EXISTS `user` (
@@ -210,13 +228,13 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($user);
 
-        $pr = "ALTER TABLE `user` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `user` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `user` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `user` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
-        $user_detail = "CREATE TABLE IF NOT EXISTS `user_detail` (
+        $user_detail = 'CREATE TABLE IF NOT EXISTS `user_detail` (
                 `id` bigint(20) NOT NULL,
                   `userid` varchar(32)  NOT NULL,
                   `fname` varchar(32)  DEFAULT NULL,
@@ -229,25 +247,28 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `state` varchar(255)  DEFAULT NULL,
                   `country` varchar(255)  DEFAULT NULL,
                   `postcode` varchar(32)  DEFAULT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
         $db->query($user_detail);
 
-        $pr = "ALTER TABLE `user_detail` ADD PRIMARY KEY (`id`)";
+        $pr = 'ALTER TABLE `user_detail` ADD PRIMARY KEY (`id`)';
         $db->query($pr);
 
-        $pr = "ALTER TABLE `user_detail` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT";
+        $pr = 'ALTER TABLE `user_detail` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
     }
 
     /**
-    * Database Insertion Function.
-    * This will insert value on the SQL Table during the installation.
-    *
-    * @author Puguh Wijayanto (www.metalgenix.com)
-    * @since 0.0.1
-    */
-    public static function insertData () {
-        require_once(GX_PATH.'/inc/config/config.php');
+     * Database Insertion Function.
+     *
+     * This will insert value on the SQL Table during the installation.
+     *
+     * @author Puguh Wijayanto <psw@metalgenix.com>
+     *
+     * @since 0.0.1
+     */
+    public static function insertData()
+    {
+        require_once GX_PATH.'/inc/config/config.php';
         $db = new Db();
         $url = Session::val('siteurl');
         $domain = Session::val('sitedomain');
@@ -286,7 +307,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'use_bootstrap', 'on'),
             (null, 'use_fontawesome', 'on'),
             (null, 'use_bsvalidator', 'on'),
-            (null, 'jquery_v', '1.11.1'),
+            (null, 'jquery_v', '1.12.0'),
             (null, 'bs_v', ''),
             (null, 'fontawesome_v', ''),
             (null, 'use_editor', 'on'),
@@ -295,7 +316,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'menus', '{\"mainmenu\":{\"name\":\"Main Menu\",\"class\":\"\",\"menu\":[]},\"footer\":{\"name\":\"Footer Menu\",\"class\":\"\",\"menu\":[{\"parent\":\"\",\"menuid\":\"footer\",\"type\":\"custom\",\"value\":\"{$url}\"},{\"parent\":\"\",\"menuid\":\"footer\",\"type\":\"cat\",\"value\":\"1\"}]}}'),
             (null, 'post_perpage', '3'),
             (null, 'pagination', 'pager'),
-            (null, 'pinger', 'rpc.pingomatic.com\r\nblogsearch.google.com/ping/RPC2\r\nhttp://feedburner.google.com/fb/a/pingSubmit?bloglink=http%3A%2F%2F{{domain}}'),
+            (null, 'pinger', 'rpc.pingomatic.com\r\nblogsearch.google.com/ping/RPC2\r\nfeedburner.google.com/fb/a/pingSubmit?bloglink=http%3A%2F%2F{{domain}}'),
             (null, 'bsvalidator_v', ''),
             (null, 'ppsandbox', 'off'),
             (null, 'ppuser', ''),
@@ -314,7 +335,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'multilang_default', ''),
             (null, 'multilang_country', ''),
             (null, 'system_check', '{}'),
-            (null, 'permalink_use_index_php', 'off')
+            (null, 'permalink_use_index_php', 'off'),
+            (null, 'pinger_enable', 'on')
             ";
         $db->query($options);
     }

@@ -726,7 +726,7 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
                 break;
         }
     }
-    if ($bSucces == FALSE){
+    if ($bSucces == FALSE) {
         return array(FALSE, strlen($body));
     }
 
@@ -801,11 +801,11 @@ function tln_body2div($attary, $trans_image_path)
     $text = '#000000';
     $has_bgc_stl = $has_txt_stl = false;
     $styledef = '';
-    if (is_array($attary) && sizeof($attary) > 0){
-        foreach ($attary as $attname=>$attvalue){
+    if (is_array($attary) && sizeof($attary) > 0) {
+        foreach ($attary as $attname=>$attvalue) {
             $quotchar = substr($attvalue, 0, 1);
             $attvalue = str_replace($quotchar, "", $attvalue);
-            switch ($attname){
+            switch ($attname) {
                 case 'background':
                     $styledef .= "background-image: url('$trans_image_path'); ";
                     break;
@@ -824,7 +824,7 @@ function tln_body2div($attary, $trans_image_path)
         if ($has_bgc_stl && !$has_txt_stl) {
             $styledef .= "color: $text; ";
         }
-        if (strlen($styledef) > 0){
+        if (strlen($styledef) > 0) {
             $divattary{"style"} = "\"$styledef\"";
         }
     }
@@ -885,10 +885,10 @@ function tln_sanitize(
         /**
          * Take care of <style>
          */
-        if ($tagname == "style" && $tagtype == 1){
+        if ($tagname == "style" && $tagtype == 1) {
             list($free_content, $curpos) =
                 tln_fixstyle($body, $gt+1, $trans_image_path, $block_external_images);
-            if ($free_content != FALSE){
+            if ($free_content != FALSE) {
                 if ( !empty($attary) ) {
                     $attary = tln_fixatts($tagname,
                                          $attary,
@@ -905,7 +905,7 @@ function tln_sanitize(
             }
             continue;
         }
-        if ($skip_content == false){
+        if ($skip_content == false) {
             $trusted .= $free_content;
         }
         if ($tagname != false) {
@@ -963,7 +963,7 @@ function tln_sanitize(
                             /**
                              * Convert body into div.
                              */
-                            if ($tagname == "body"){
+                            if ($tagname == "body") {
                                 $tagname = "div";
                                 $attary = tln_body2div($attary, $trans_image_path);
                             }

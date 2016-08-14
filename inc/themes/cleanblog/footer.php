@@ -9,7 +9,7 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
                       <?php
-                        if(null != Options::v('twitter')){
+                        if (null != Options::v('twitter')) {
                       ?>
                         <li>
                             <a href="https://twitter.com/<?=Options::v('twitter');?>">
@@ -20,7 +20,7 @@
                             </a>
                         </li>
                       <?php } 
-                        if(null != Options::v('fbacc')){
+                        if (null != Options::v('fbacc')) {
                       ?>
                         <li>
                             <a href="https://facebook.com/<?=Options::v('fbacc');?>">
@@ -31,7 +31,7 @@
                             </a>
                         </li>
                       <?php } 
-                        if(null != Options::v('linkedin')){
+                        if (null != Options::v('linkedin')) {
                       ?>
                         <li>
                             <a href="#">

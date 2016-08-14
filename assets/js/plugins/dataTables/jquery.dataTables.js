@@ -2960,7 +2960,7 @@
 	
 		/* Ensure that the table data is fully initialised */
 		if ( ! settings.bInitialised ) {
-			setTimeout( function(){ _fnInitialise( settings ); }, 200 );
+			setTimeout( function() { _fnInitialise( settings ); }, 200 );
 			return;
 		}
 	
@@ -4228,7 +4228,7 @@
 			/* Do the sort - here we want multi-column sorting based on a given data source (column)
 			 * and sorting function (from oSort) in a certain direction. It's reasonably complex to
 			 * follow on it's own, but this is what we want (example two column sorting):
-			 *  fnLocalSorting = function(a,b){
+			 *  fnLocalSorting = function(a,b) {
 			 *    var iTest;
 			 *    iTest = oSort['string-asc']('data11', 'data12');
 			 *      if (iTest !== 0)
@@ -4781,7 +4781,7 @@
 					n.blur(); // Remove focus outline for mouse users
 					fn(e);
 				} )
-			.bind( 'keypress.DT', oData, function (e){
+			.bind( 'keypress.DT', oData, function (e) {
 				if ( e.which === 13 ) {
 					fn(e);
 				} } )

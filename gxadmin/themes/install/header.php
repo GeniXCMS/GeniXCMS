@@ -21,9 +21,9 @@
   <body>
     <div id="wrapper">
     <div class="header col-md-12">
-      <h1><img src="assets/images/genixcms-logo-small.png" class="pull-left"> GeniXCMS <small><?=System::v();?></small><br/><small>Installer</small></h1>
+      <h1><img src="assets/images/genixcms-logo-sign-small.png" class="pull-left" width="120px"> GeniXCMS <small><?=System::v();?></small><br/><small>Installer</small></h1>
 
     </div>
 
 
-    <div id="page-wrapper">
+    <div id="page-wrapper" class="col-md-12 clearfix">

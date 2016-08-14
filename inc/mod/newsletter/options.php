@@ -1,14 +1,14 @@
 <?php
 Theme::editor();
-if(isset($_POST['sendmail'])){
+if (isset($_POST['sendmail'])) {
     // check token first
     if ( !isset($_POST['token']) || !Token::isExist($_POST['token']) ) {
         # code...
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
-    if(isset($alertDanger)){
+    if (isset($alertDanger)) {
         $data['alertDanger'] = $alertDanger;
-    }else{
+    } else {
         $subject = Typo::cleanX($_POST['subject']);
         $msg = $_POST['message'];
 
@@ -18,7 +18,7 @@ if(isset($_POST['sendmail'])){
             $msg = str_replace('</p><p>', "\r\n\r\n", $msg);
             $msg = str_replace('&nbsp;', " ", $msg);
             $msg = strip_tags($msg);
-        }else{
+        } else {
             $msg = $msg;
         }
 
@@ -26,7 +26,7 @@ if(isset($_POST['sendmail'])){
         $msg = str_replace('{{siteurl}}', Site::$url, $msg);
         $msg = str_replace('{{sitemail}}', Site::$email, $msg);
 
-        if($_POST['recipient'] == ''){
+        if ($_POST['recipient'] == '') {
             $usr = Db::result("SELECT * FROM `user`");
             foreach ($usr as $u) {
                 # code...
@@ -39,12 +39,12 @@ if(isset($_POST['sendmail'])){
                             'msgtype' => $_POST['type']
                         );
                 $mailsend = Mail::send($vars);
-                if($mailsend !== null){
+                if ($mailsend !== null) {
                     $alertmailsend[] = $mailsend;
                 }
                 sleep(3);
             }
-        }elseif($_POST['recipient'] != ''){
+        }elseif ($_POST['recipient'] != '') {
             $usr = Db::result("SELECT * FROM `user` WHERE `group` = '{$_POST['recipient']}'");
             foreach ($usr as $u) {
                 # code...
@@ -57,7 +57,7 @@ if(isset($_POST['sendmail'])){
                             'msgtype' => $_POST['type']
                         );
                 $mailsend = Mail::send($vars);
-                if($mailsend !== null){
+                if ($mailsend !== null) {
                     $alermailsend[] = $mailsend;
                 }
                 sleep(3);
@@ -65,7 +65,7 @@ if(isset($_POST['sendmail'])){
         }
         if (isset($alertmailsend)) {
             $data['alertDanger'] = $alertmailsend;
-        }else{
+        } else {
             $data['alertSuccess'][] = "Success Sending Email";
         }
 

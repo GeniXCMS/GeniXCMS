@@ -1,45 +1,45 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 if (isset($data['alertSuccess'])) {
     # code...
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">".CLOSE."</span>
-    </button>";
+    echo '<div class="alert alert-success" >
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">'.CLOSE.'</span>
+    </button>';
     foreach ($data['alertSuccess'] as $alert) {
         # code...
         echo "$alert\n";
     }
-    echo "</div>";
+    echo '</div>';
 }
 if (isset($data['alertDanger'])) {
     # code...
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">".CLOSE."</span>
-    </button>";
+    echo '<div class="alert alert-danger" >
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">'.CLOSE.'</span>
+    </button>';
     foreach ($data['alertDanger'] as $alert) {
         # code...
         echo "$alert\n";
     }
-    echo "</div>";
+    echo '</div>';
 }
 ?>
 <div class="row">

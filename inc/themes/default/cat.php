@@ -1,6 +1,9 @@
 <div class="col-sm-8 blog-main">
 <?php
-    if($data['num'] > 0){
+    if (mdoTheme::opt('mdo_adsense') != '') {
+        echo "<div class=\"row\"><div class=\"col-md-12\">".mdoTheme::opt('mdo_adsense')."</div></div><hr />";
+    }
+    if ($data['num'] > 0) {
         foreach ($data['posts'] as $p) {
             # code...
             echo "
@@ -12,7 +15,7 @@
                 ";
         }
         
-    }else{
+    } else {
         echo "No Post to show";
     }
     echo $data['paging'];

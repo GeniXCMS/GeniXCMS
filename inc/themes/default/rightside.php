@@ -6,46 +6,44 @@
                 <p><em><?=Options::v('siteslogan');?></em>
                     <?=Site::$desc;?></p>
                 </div>
-                <div class="sidebar-module">
-                    <h4>Recent Post</h4>
+                <div class="sidebar-module posts-list">
+                    <!-- <h4>Recent Post</h4>
                     <ol class="list-unstyled">
                         <?php
-                        $rcnt = array(
-                            'num' => 10
-                        );
-                        $recent = Posts::recent($rcnt);
-                        $num = count($recent);
-                        if(!isset($recent['error'])) {
-                            foreach ($recent as $r) {
-                                echo "<li><a href=\"".Url::post($r->id)."\">$r->title</a></li>
-                                ";
-                            }
-                        }else{
-                            echo "No Post to Show";
-                        }
+                        // $rcnt = array(
+                        //     'num' => 10
+                        // );
+                        // $recent = Posts::recent($rcnt);
+                        // $num = count($recent);
+                        // if (!isset($recent['error'])) {
+                        //     foreach ($recent as $r) {
+                        //         echo "<li><a href=\"".Url::post($r->id)."\">$r->title</a></li>
+                        //         ";
+                        //     }
+                        // } else {
+                        //     echo "No post(s) to show";
+                        // }
 
                         ?>
-                    </ol>
-                    <h4>Post with Excerpts</h4>
+                    </ol> -->
+                    <h4>Latest Post</h4>
                     <?php
                         $vars = array(
-                            'num' => 2,
+                            'num' => 5,
+                            'title' => true,
                             'excerpt' => true,
-                            'excerpt_max' => 130,
+                            'excerpt_max' => 50,
                             'class' => array(
-                                'ul' => 'list-group',
-                                'li' => 'list-group-item'
-                            )
+                                            'ul' => 'list-group posts-list',
+                                            'li' => 'list-group-item'
+                                        )
                         );
                         Posts::lists($vars);
                     ?>
                 </div>
-                <div class="sidebar-module">
-                    <h4>Elsewhere</h4>
-                    <ol class="list-unstyled">
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
-                    </ol>
-                </div>
+
+                    <?php if (mdoTheme::opt('mdo_adsense') != '') {
+                        echo mdoTheme::opt('mdo_adsense')."<hr />";
+                    } ?>
+
             </div><!-- /.blog-sidebar -->

@@ -1,20 +1,20 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -22,24 +22,25 @@
     </div>
     <div class="col-md-12">
 
-        <h1><i class="fa fa-sitemap"></i> <?=MENUS;?>
+        <h2><i class="fa fa-sitemap"></i> <?=MENUS;?>
             <div class="pull-right">
                 <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                    <span class="glyphicon glyphicon-plus"></span> <?=ADD_MENU;?>
+                    <span class="glyphicon glyphicon-plus"></span> 
+                    <span class="hidden-xs hidden-sm"><?=ADD_MENU;?></span>
                 </button>
             </div>
-        </h1>
+        </h2>
         <hr />
     </div>
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-12">
             <?php
-                if (isset($data['menus']) && $data['menus'] != '') {
+            if (isset($data['menus']) && $data['menus'] != '') {
+                # code...
+                foreach (json_decode($data['menus']) as $k => $m) {
                     # code...
-                     foreach (json_decode($data['menus']) as $k => $m) {
-                        # code...
-                        echo "
+                    echo "
                         <div class=\"panel-group\" id=\"accordion\">
                           <div class=\"panel panel-default\">
                             <div class=\"panel-heading\">
@@ -85,18 +86,18 @@
                                           <br />
                                               <div class=\"col-md-12\">
                                            ";
-                                            echo Menus::getMenuAdmin($k,'nav nav-pills nav-stacked');
+                    echo Menus::getMenuAdmin($k, 'nav nav-pills nav-stacked');
 
-                            echo "
+                    echo "
                                               </div>
                                           </div>
                                           <div class=\"tab-pane\" id=\"{$k}additem\">
                                           ";
-                                              $data['parent'] = Menus::isHadParent('', $k);
-                                              //print_r($data['parent']);
-                                              $data['menuid'] = $k;
-                                              System::inc('menus_form', $data);
-                            echo "
+                    $data['parent'] = Menus::isHadParent('', $k);
+                                     //print_r($data['parent']);
+                                     $data['menuid'] = $k;
+                    System::inc('menus_form', $data);
+                    echo '
                                           </div>
                                         </div>
 
@@ -107,9 +108,9 @@
                       </div>
 
 
-                    ";
-                    }
+                    ';
                 }
+            }
 
                     //echo "<pre>"; print_r(json_decode($data['menus'])); echo "</pre>";
                 ?>
@@ -162,3 +163,4 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+

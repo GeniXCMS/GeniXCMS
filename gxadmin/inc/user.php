@@ -1,31 +1,32 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-    
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 ?>
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-group"></i> <?=USERS;?>
+        <h2><i class="fa fa-group"></i> <?=USERS;?>
             <button class="btn btn-success pull-right" data-toggle="modal" data-target="#adduser">
-                <span class="glyphicon glyphicon-plus"></span> <?=ADD_USER;?>
+                <span class="glyphicon glyphicon-plus"></span> 
+                <span class="hidden-xs hidden-sm"><?=ADD_USER;?></span>
             </button>
-        </h1>
+        </h2>
         <hr />
     </div>
     <div class="col-sm-12">
@@ -102,24 +103,27 @@
         <tbody>
             <?php
                 //print_r($data);
-            if($data['num'] > 0){
+            if ($data['num'] > 0) {
                 foreach ($data['usr'] as $p) {
                     # code...
                     //echo $p->id;
 
-                    if($p->group == 0){
+                    if ($p->group == 0) {
                         $grp = ADMINISTRATOR;
-                    }elseif($p->group == 3){
+                    } elseif ($p->group == 1) {
+                        $grp = SUPERVISOR;
+                    } elseif ($p->group == 2) {
+                        $grp = EDITOR;
+                    } elseif ($p->group == 3) {
                         $grp = AUTHOR;
-                    }elseif($p->group == 4){
+                    } elseif ($p->group == 4) {
                         $grp = GENERAL_MEMBER;
                     }
-                    if($p->status == 0){
-                        $status = "<a href=\"index.php?page=users&act=active&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\">Inactive</a>";
-                    }elseif($p->status == 1){
-                        $status = "<a href=\"index.php?page=users&act=inactive&id={$p->id}&token=".TOKEN."\" class=\"label label-primary\">Active</a>";
+                    if ($p->status == 0) {
+                        $status = "<a href=\"index.php?page=users&act=active&id={$p->id}&token=".TOKEN.'" class="label label-danger">Inactive</a>';
+                    } elseif ($p->status == 1) {
+                        $status = "<a href=\"index.php?page=users&act=inactive&id={$p->id}&token=".TOKEN.'" class="label label-primary">Active</a>';
                     }
-
 
                     echo "
                     <tr>
@@ -130,7 +134,7 @@
                         <td>{$grp}</td>
                         <td>".Date::format($p->join_date)."</td>
                         <td>
-                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN."\" class=\"label label-success\">".EDIT."</a>
+                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success">'.EDIT."</a>
                             <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                             onclick=\"return confirm('".DELETE_CONFIRM."');\">".DELETE."</a>
                         </td>

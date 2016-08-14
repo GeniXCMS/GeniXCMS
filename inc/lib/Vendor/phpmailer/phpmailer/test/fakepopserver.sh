@@ -55,7 +55,7 @@ while [ ${BREAK} -eq 0 ] ; do
     write_log "RAW input: '`echo "${REPLY}" | tr -cd '[ -~]'`'"
 
     COMMAND="`echo "${REPLY}" | awk '{print $1}' | tr -cd '\40-\176' | tr 'a-z' 'A-Z'`"
-    ARGS="`echo "${REPLY}"    | tr -cd '\40-\176' | awk '{for(i=2;i<=NF;i++){printf "%s ", $i};printf "\n"}' | sed 's/ $//'`"
+    ARGS="`echo "${REPLY}"    | tr -cd '\40-\176' | awk '{for(i=2;i<=NF;i++) {printf "%s ", $i};printf "\n"}' | sed 's/ $//'`"
 
     write_log "Command: \"${COMMAND}\""
     write_log "Arguments: \"${ARGS}\""

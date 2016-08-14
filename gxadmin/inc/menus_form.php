@@ -1,40 +1,46 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 
-    if(isset($_GET['id'])){
-        $menuid = $_GET['id'];
-    }else{
-        $menuid = $data['menuid'];
-    }
+    # code...
+
+if (isset($_GET['id'])) {
+    $menuid = $_GET['id'];
+} else {
+    $menuid = $data['menuid'];
+}
 
 ?>
 <form action="" method="POST">
-<h1><i class="fa fa-sitemap"></i> <?=ADD_MENU;?>
+<h2><i class="fa fa-sitemap"></i> <span class="hidden-xs hidden-sm"><?=ADD_MENU;?></span>
 <div class="pull-right">
 <button type="submit" name="additem" class="btn btn-success">
     <span class="glyphicon glyphicon-ok"></span>
-    <?=SUBMIT;?>
+    <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
 </button>
 <a href="index.php?page=menus" class="btn btn-danger">
     <span class="glyphicon glyphicon-remove"></span>
-    <?=CANCEL;?>
+    <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
 </a>
+
 </div>
-</h1>
+<hr />
+</h2>
+
 <div class="col-sm-12">
     <div class="col-sm-4">
         <div class="form-group">
@@ -44,24 +50,23 @@
             <?php
                //echo($data['abc']);
                 //print_r($data['parent']);
-                foreach ($data['parent'] as $p) {
-                    # code...
-                    if($p->parent == '0'){
-                        echo "<option value=\"$p->id\">$p->name</option>";
-                        $parent2 = $data['parent'];
-                        foreach ( $parent2 as $p2) {
-                            if ($p2->parent == $p->id) {
-                                echo "<option value=\"$p2->id\">&nbsp;&nbsp;&nbsp;$p2->name</option>";
-                                foreach ($data['parent'] as $p3) {
-                                    if ($p3->parent == $p2->id) {
-                                        echo "<option value=\"$p3->id\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
-                                    }
+            foreach ($data['parent'] as $p) {
+                # code...
+                if ($p->parent == '0') {
+                    echo "<option value=\"$p->id\">$p->name</option>";
+                    $parent2 = $data['parent'];
+                    foreach ($parent2 as $p2) {
+                        if ($p2->parent == $p->id) {
+                            echo "<option value=\"$p2->id\">&nbsp;&nbsp;&nbsp;$p2->name</option>";
+                            foreach ($data['parent'] as $p3) {
+                                if ($p3->parent == $p2->id) {
+                                    echo "<option value=\"$p3->id\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
                                 }
                             }
                         }
                     }
-
                 }
+            }
 
             ?>
             </select>
@@ -72,7 +77,7 @@
         <div class="form-group">
             <label><?=MENU_ID;?></label>
             <input type="text" name='id' class="form-control" value="<?=$menuid;?>" readonly >
-            <small><?=MENU_ID_DESCR;?>, eg. <code>mainmenu</code></small>
+            <small><?=MENU_ID_DESCR;?></small>
         </div>
     </div>
     <div class="col-sm-4" >
@@ -103,7 +108,7 @@
                                     'name' => 'page',
                                     'type' => 'page',
                                     'sort' => 'ASC',
-                                    'order_by' => 'title'
+                                    'order_by' => 'title',
                                 );
                         echo Posts::dropdown($vars);
                     ?>
@@ -123,7 +128,7 @@
                                     'name' => 'cat',
                                     'sort' => 'ASC',
                                     'order_by' => 'name',
-                                    'type' => 'post'
+                                    'type' => 'post',
                                 );
                         echo Categories::dropdown($vars);
                     ?>
@@ -138,8 +143,8 @@
                     <span class="input-group-addon">
                         <input type="radio" name='type' class="" value="mod">
                     </span>
-                    <select class="form-control">
-
+                    <select name="mod" class="form-control">
+                    <?=Mod::menuList();?>
                     </select>
                  </div>
                 <small><?=MENU_MODULES_DESCR;?></small>

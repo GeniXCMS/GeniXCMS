@@ -1,30 +1,30 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 if (isset($_GET['token'])
     && Token::isExist($_GET['token'])) {
     $token = TOKEN;
-}else{
+} else {
     $token = '';
 }
-($_GET['act'] == "edit")? $pagetitle = 'Edit': $pagetitle = 'New';
-($_GET['act'] == "edit")? $act = "edit&id={$_GET['id']}&token=".$token: $act = "add";
+($_GET['act'] == 'edit') ? $pagetitle = 'Edit' : $pagetitle = 'New';
+($_GET['act'] == 'edit') ? $act = "edit&id={$_GET['id']}&token=".$token : $act = 'add';
 
-if(isset($data['post']) ) {
+if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
         //print_r($data['post']);
         foreach ($data['post'] as $p) {
@@ -36,36 +36,34 @@ if(isset($data['post']) ) {
             $cat = $p->cat;
             $tags = @$p->tags;
         }
-        if($status == 1) {
-            $pub = "SELECTED";
-            $unpub = "";
-        }elseif ($status == 0) {
-            $pub = "";
-            $unpub = "SELECTED";
+        if ($status == 1) {
+            $pub = 'SELECTED';
+            $unpub = '';
+        } elseif ($status == 0) {
+            $pub = '';
+            $unpub = 'SELECTED';
         }
-    }else{
-        $title = "";
-        $content = "";
-        $date = "";
-        $status = "";
-        $cat = "";
-        $pub = "";
-        $unpub = "";
-        $tags = "";
+    } else {
+        $title = '';
+        $content = '';
+        $date = '';
+        $status = '';
+        $cat = '';
+        $pub = '';
+        $unpub = '';
+        $tags = '';
         $data['alertDanger'][] = $data['post']['error'];
     }
-
-}else{
-    $title = "";
-    $content = "";
-    $date = "";
-    $status = "";
-    $cat = "";
-    $pub = "";
-    $unpub = "";
-    $tags = "";
+} else {
+    $title = '';
+    $content = '';
+    $date = '';
+    $status = '';
+    $cat = '';
+    $pub = '';
+    $unpub = '';
+    $tags = '';
 }
-
 
 ?>
 <form action="index.php?page=pages&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
@@ -74,19 +72,20 @@ if(isset($data['post']) ) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-file-o"></i> <?=$pagetitle;?> <?=PAGE;?>
+        <h2><i class="fa fa-file-o"></i> <?=$pagetitle;
+?> <?=PAGE;?>
             <div class="pull-right">
                 <button type="submit" name="submit" class="btn btn-success">
                     <span class="glyphicon glyphicon-ok"></span>
-                    <?=SUBMIT;?>
+                    <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
                 </button>
 
                 <a href="index.php?page=pages" class="btn btn-danger">
                     <span class="glyphicon glyphicon-remove"></span>
-                    <?=CANCEL;?>
+                    <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
                 </a>
             </div>
-        </h1>
+        </h2>
         <hr />
     </div>
     <div class="col-sm-12">
@@ -94,24 +93,24 @@ if(isset($data['post']) ) {
 
                 <div class="col-sm-8" id="myTab">
                     <?php
-                if(Options::v('multilang_enable') === 'on') {
-                    $def = Options::v('multilang_default');
-                    $deflang = Language::getDefaultLang();
-                    $listlang = json_decode(Options::v('multilang_country'), true);
-                    $deflag = strtolower($listlang[$def]['flag']);
+                    if (Options::v('multilang_enable') === 'on') {
+                        $def = Options::v('multilang_default');
+                        $deflang = Language::getDefaultLang();
+                        $listlang = json_decode(Options::v('multilang_country'), true);
+                        $deflag = strtolower($listlang[$def]['flag']);
 
-                    echo "
+                        echo "
                     <ul class=\"nav nav-tabs\" role=\"tablist\">
                         <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
 
-                    unset($listlang[Options::v('multilang_default')]);
-                    foreach ($listlang as $key => $value) {
-                        $flag = strtolower($value['flag']);
-                        echo "
+                        unset($listlang[Options::v('multilang_default')]);
+                        foreach ($listlang as $key => $value) {
+                            $flag = strtolower($value['flag']);
+                            echo "
                         <li><a href=\"#lang-{$key}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$flag}\"></span> {$value['country']}</a></li>";
-                    }
+                        }
 
-                    echo "
+                        echo "
                     </ul>
                     <div class=\"clearfix\">&nbsp;</div>
                     <div class=\"tab-content\">
@@ -127,21 +126,21 @@ if(isset($data['post']) ) {
                         </div>
                     </div>
                     ";
-                    unset($listlang[Options::v('multilang_default')]);
-                    foreach ($listlang as $key => $value) {
-                        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-                            $lang = Language::getLangParam($key, $_GET['id']);
-                            if ($lang == '') {
-                                $lang['title'] = $title;
-                                $lang['content'] = $content;
-                            }else{
-                                $lang = $lang;
+                        unset($listlang[Options::v('multilang_default')]);
+                        foreach ($listlang as $key => $value) {
+                            if (isset($_GET['act']) && $_GET['act'] == 'edit') {
+                                $lang = Language::getLangParam($key, $_GET['id']);
+                                if ($lang == '') {
+                                    $lang['title'] = $title;
+                                    $lang['content'] = $content;
+                                } else {
+                                    $lang = $lang;
+                                }
+                            } else {
+                                $lang['title'] = '';
+                                $lang['content'] = '';
                             }
-                        }else{
-                            $lang['title'] = '';
-                            $lang['content'] = '';
-                        }
-                        echo "
+                            echo "
                     <div class=\"tab-pane\" id=\"lang-{$key}\">
 
                         <div class=\"form-group\">
@@ -155,25 +154,22 @@ if(isset($data['post']) ) {
                     </div>
 
                         ";
-                        unset($lang);
+                            unset($lang);
+                        }
 
+                        echo '</div>';
+                    } else {
+                        ?>
+                        <div class="form-group">
+                        <label for="title"><?=TITLE; ?></label>
+                        <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title; ?>">
+                        </div>
+                        <div class="form-group">
+                        <label for="content"><?=CONTENT; ?></label>
+                        <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content; ?></textarea>
+                        </div>
+                        <?php
                     }
-
-                    echo "</div>";
-
-                }else{
-
-                ?>
-                    <div class="form-group">
-                        <label for="title"><?=TITLE;?></label>
-                        <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title;?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="content"><?=CONTENT;?></label>
-                        <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content;?></textarea>
-                    </div>
-                <?php
-                }
                 ?>
                 </div>
                 <div class="col-sm-4">
@@ -186,10 +182,13 @@ if(isset($data['post']) ) {
                             <div class="form-group">
                                 <label><?=STATUS;?></label>
                                 <select name="status" class="form-control">
-                                    <option value="1" <?=$pub;?>><?=PUBLISH;?></option>
-                                    <option value="0" <?=$unpub;?>><?=UNPUBLISH;?></option>
+                                    <option value="1" <?=$pub;
+?>><?=PUBLISH;?></option>
+                                    <option value="0" <?=$unpub;
+?>><?=UNPUBLISH;?></option>
                                 </select>
-                                <small><?=PUBLISHED;?> or <?=UNPUBLISHED;?></small>
+                                <small><?=PUBLISHED;
+?> or <?=UNPUBLISHED;?></small>
                             </div>
 
                             <div class="form-group">

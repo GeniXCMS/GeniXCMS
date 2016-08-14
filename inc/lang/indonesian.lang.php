@@ -1,25 +1,26 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
+<?php if (defined('GX_LIB') === false) die("Direct Access Not Allowed!");
 /*
-*    GeniXCMS - Content Management System
-*    ============================================================
-*    Build          : 20140925
-*    Version        : 0.0.1 pre
-*    Developed By   : Puguh Wijayanto (www.metalgenix.com)
-*    License        : MIT License
-*    ------------------------------------------------------------
-*    filename : english.lang.php
-*    version : 0.0.1 pre
-*    build : 20140928
+ * GeniXCMS - Content Management System
+ * ============================================================ 
+ * Build : 20140925
+ * Version : 0.0.1 pre 
+ * Developed By : Puguh Wijayanto (www.metalgenix.com)
+ * License : MIT License
+ * ------------------------------------------------------------ 
+ * filename : indonesian.lang.php 
+ * version : 0.0.1 pre 
+ * build : 20140928
 */
 
 /**
-* @author Puguh Wijayanto
-* @since 0.0.1-pre
+ *
+ * @author Puguh Wijayanto
+ * @since 0.0.1-pre
 */
 
 /**
-* USER Account RELATED Translations
-* @since 0.0.1-pre
+ * USER Account RELATED Translations
+ * @since 0.0.1-pre
 */
 define('SIGN_IN', 'Masuk');
 define('PASS_NOT_MATCH', 'Sandi tidak sesuai dengan data kami. Silahkan periksa kembali sandi anda dan coba lagi.');
@@ -76,13 +77,11 @@ define('ADD_NEW_POST', 'Tambah Pos');
 define('ADD_NEW_PAGE', 'Tambah Halaman');
 
 /**
-* Dashboard
-*
-* @author Puguh Wijayanto
-* @since 0.0.1-pre
-*
-* @author Vakho Daneila
-* @since 0.0.3-patch
+ * Dashboard
+ * @author Puguh Wijayanto
+ * @since 0.0.1-pre
+ * @author Vakho Daneila
+ * @since 0.0.3-patch
 */
 define('LATEST_POST', 'Pos Terbaru');
 define('STATISTIC', 'Statistik');
@@ -244,8 +243,9 @@ define('CHARSET_DESC', 'Charset/Encoding Website.');
 
 
 /**
-* @author Vakho Daneila
-* @since 0.0.3-patch
+ *
+ * @author Vakho Daneila
+ * @since 0.0.3-patch
 */
 // Settings E-Mail
 
@@ -300,7 +300,7 @@ define('SETTINGS_LIBRARY_BVALIDATOR', 'Enable Bootstrap Validator');
 define('SETTINGS_LIBRARY_CDN', 'CDN');
 define('SETTINGS_LIBRARY_LOCAL', 'LOCAL');
 
-define('SETTINGS_LIBRARY_JQUERY_DESCR', 'Check this if you want to use Jquery. Fill the version of Jquery. Default version is 1.11.11');
+define('SETTINGS_LIBRARY_JQUERY_DESCR', 'Check this if you want to use Jquery. Fill the version of Jquery. Default version is 1.12.0');
 define('SETTINGS_LIBRARY_BOOTSTRAP_DESCR', 'Check this if you want to use Bootstrap. Bootstrap Version is not available, left it blank');
 define('SETTINGS_LIBRARY_FAWESOME_DESCR', 'Check this if you want to use Fontawesome. Fontawesome Version is not available, left it blank');
 define('SETTINGS_LIBRARY_EDITOR_DESCR', 'Check this if you want to use Editor. Editor Version is not available, left it blank');
@@ -421,7 +421,7 @@ define('GOOGLE_RECAPTCHA_SECRET', 'Google reCaptcha Secret');
 define('GOOGLE_RECAPTCHA_SECRET_DESCR', 'type the google recaptcha secret.');
 define('GOOGLE_RECAPTCHA_INFO', '<i class="fa fa-warning"></i>
                         To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to
-                        <a target="_new" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');
+                        <a target="_blank" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha</a>');
 
 define('GO', 'Go!');
 define('READ_MORE', 'Read More..');
@@ -430,3 +430,5 @@ define('ADD_TAG', 'Tambah Tag');
 define('TAG_NAME', 'Nama Tag');
 define('TAG_CANNOT_EMPTY', 'Nama Tag tidak boleh kosong');
 define('MSG_TAG_ADDED', 'Tag Ditambahkan');
+define('MSG_TAG_REMOVED', 'Tag Dihapus');
+define('MSG_TAG_UPDATED', 'Tag Diubah');

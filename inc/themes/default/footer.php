@@ -10,7 +10,9 @@
 
     </div>
 
-    <?=Site::footer();?>
+    <?php 
+      echo Site::footer();
+    ?>
 
     <link href="<?=Site::$url;?>/assets/css/genixfont.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/inc/themes/default/css/blog.css" rel="stylesheet">
@@ -20,6 +22,6 @@
             top: 0;
         }
     </style>
-    
+    <?=mdoTheme::opt('mdo_analytics');?>
   </body>
 </html>

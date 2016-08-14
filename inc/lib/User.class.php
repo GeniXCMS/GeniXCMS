@@ -1,84 +1,92 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/**
-* GeniXCMS - Content Management System
-* 
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20140925
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+<?php
 
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
+/**
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20140925
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 class User
 {
-    public function __construct () {
+    public function __construct()
+    {
     }
 
     public static function secure()
     {
-        if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username']) ) {
+        if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username'])) {
             header('location: login.php');
         } else {
             return true;
         }
     }
 
-    public static function access ($grp='4') {
-        if ( isset($_SESSION['gxsess']['val']['group']) ) {
-            if($_SESSION['gxsess']['val']['group'] <= $grp) {
+    public static function access($grp = '4')
+    {
+        if (isset($_SESSION['gxsess']['val']['group'])) {
+            if ($_SESSION['gxsess']['val']['group'] <= $grp) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
     }
 
-    public static function is_loggedin () {
+    public static function is_loggedin()
+    {
         $username = Session::val('username');
-        if(isset($username)) {
+        if (isset($username)) {
             $v = true;
-        }else{
+        } else {
             $v = false;
         }
+
         return $v;
     }
 
     /**
-    * Create User Function
-    * This will insert certain value of user into the database.
-    * <code>
-    *    $vars = array(
-    *                'user' => array(
-    *                                'userid' => '',
-    *                                'passwd' => '',
-    *                                'email' => '',
-    *                                'group' => ''  
-    *                            ),
-    *                'detail' => array(
-    *                                'userid' => '',
-    *                                'fname' => '',
-    *                                'lname' => '',
-    *                                'sex' => '',
-    *                                'birthplace' => '',
-    *                                'birthdate' => '',
-    *                                'addr' => '',
-    *                                'city' => '',
-    *                                'state' => '',
-    *                                'country' => '',
-    *                                'postcode' => ''
-    *                            )
-    *            );
-    * </code>
-    */
-    public static function create($vars) {
-        if(is_array($vars)){
-            
+     * Create User Function
+     * This will insert certain value of user into the database.
+     * <code>
+     *    $vars = array(
+     *                'user' => array(
+     *                                'userid' => '',
+     *                                'passwd' => '',
+     *                                'email' => '',
+     *                                'group' => ''
+     *                            ),
+     *                'detail' => array(
+     *                                'userid' => '',
+     *                                'fname' => '',
+     *                                'lname' => '',
+     *                                'sex' => '',
+     *                                'birthplace' => '',
+     *                                'birthdate' => '',
+     *                                'addr' => '',
+     *                                'city' => '',
+     *                                'state' => '',
+     *                                'country' => '',
+     *                                'postcode' => ''
+     *                            )
+     *            );
+     * </code>.
+     */
+    public static function create($vars)
+    {
+        if (is_array($vars)) {
             //print_r($vars['user']);
             $u = $vars['user'];
             $sql = array(
@@ -87,9 +95,9 @@ class User
                         );
             $db = Db::insert($sql);
 
-            if(!isset($vars['detail']) || $vars['detail'] == ''){
+            if (!isset($vars['detail']) || $vars['detail'] == '') {
                 Db::insert("INSERT INTO `user_detail` (`userid`) VALUES ('{$vars['user']['userid']}')");
-            }else{
+            } else {
                 $u = $vars['detail'];
                 $sql = array(
                                 'table' => 'user_detail',
@@ -103,38 +111,37 @@ class User
         return $db;
     }
 
-
     /**
-    * Update User Function.
-    * This will insert certain value of user into the database.
-    * <code>
-    *    $vars = array(
-    *                'id' => '',
-    *                'user' => array(
-    *                                'userid' => '',
-    *                                'passwd' => '',
-    *                                'email' => '',
-    *                                'group' => ''  
-    *                            ),
-    *                'detail' => array(
-    *                                'userid' => '',
-    *                                'fname' => '',
-    *                                'lname' => '',
-    *                                'sex' => '',
-    *                                'birthplace' => '',
-    *                                'birthdate' => '',
-    *                                'addr' => '',
-    *                                'city' => '',
-    *                                'state' => '',
-    *                                'country' => '',
-    *                                'postcode' => ''
-    *                            )
-    *            );
-    * </code>
-    */
-    public static function update($vars) {
-        if(is_array($vars)){
-            
+     * Update User Function.
+     * This will insert certain value of user into the database.
+     * <code>
+     *    $vars = array(
+     *                'id' => '',
+     *                'user' => array(
+     *                                'userid' => '',
+     *                                'passwd' => '',
+     *                                'email' => '',
+     *                                'group' => ''
+     *                            ),
+     *                'detail' => array(
+     *                                'userid' => '',
+     *                                'fname' => '',
+     *                                'lname' => '',
+     *                                'sex' => '',
+     *                                'birthplace' => '',
+     *                                'birthdate' => '',
+     *                                'addr' => '',
+     *                                'city' => '',
+     *                                'state' => '',
+     *                                'country' => '',
+     *                                'postcode' => ''
+     *                            )
+     *            );
+     * </code>.
+     */
+    public static function update($vars)
+    {
+        if (is_array($vars)) {
             //print_r($vars);
             $u = $vars['user'];
             $sql = array(
@@ -143,8 +150,7 @@ class User
                             'key' => $u,
                         );
             Db::update($sql);
-            if(isset($vars['detail']) && $vars['detail'] != ''){
-                
+            if (isset($vars['detail']) && $vars['detail'] != '') {
                 $u = $vars['detail'];
                 $sql = array(
                                 'table' => 'user_detail',
@@ -154,24 +160,24 @@ class User
                 Db::update($sql);
             }
             Hooks::run('user_sqledit_action', $vars);
-            
         }
     }
 
-    public static function delete($id){
+    public static function delete($id)
+    {
         $vars = array(
                 'table' => 'user',
                 'where' => array(
-                            'id' => $id
-                            )
+                            'id' => $id,
+                            ),
             );
         Db::delete($vars);
 
         $vars = array(
                 'table' => 'user_detail',
                 'where' => array(
-                            'id' => $id
-                            )
+                            'id' => $id,
+                            ),
             );
         Db::delete($vars);
         Hooks::run('user_sqldel_action', $vars);
@@ -181,155 +187,180 @@ class User
     //                 'userid' => '',
     //                 'passwd' => ''
     //             );
-    public static function randpass($vars){
-        if(is_array($vars)){
+    public static function randpass($vars)
+    {
+        if (is_array($vars)) {
             $hash = sha1($vars['passwd'].SECURITY_KEY.$vars['userid']);
-        }else{
+        } else {
             $hash = sha1($vars.SECURITY_KEY);
         }
-        
+
         $hash = substr($hash, 5, 16);
         $pass = md5($hash);
+
         return $pass;
     }
 
-    public static function generatePass(){
+    public static function generatePass()
+    {
         $vars = microtime().Site::$name.rand();
-        $hash = sha1($vars.SECURITY_KEY);        
+        $hash = sha1($vars.SECURITY_KEY);
         $pass = substr($hash, 5, 8);
+
         return $pass;
     }
 
-    public static function is_exist($user) {
-
-        if(isset($_GET['act']) && $_GET['act'] == 'edit'){
+    public static function is_exist($user)
+    {
+        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
             $id = Typo::int($_GET['id']);
             $where = "AND `id` != '{$id}' ";
-        }else{
+        } else {
             $where = '';
         }
         $user = sprintf('%s', Typo::cleanX($user));
         $sql = sprintf("SELECT `userid` FROM `user` WHERE `userid` = '%s' %s ", $user, $where);
         $usr = Db::result($sql);
         $n = Db::$num_rows;
-        if($n > 0 ){
+        if ($n > 0) {
             return false;
-        }else{
+        } else {
             return true;
-        }
-
-    }
-
-    public static function is_same($p1, $p2){
-        if($p1 == $p2){
-            return true;
-        }else{
-            return false;
         }
     }
 
-    public static function is_email($vars){
-        
-        if(isset($_GET['act']) && $_GET['act'] == 'edit'){
+    public static function is_same($p1, $p2)
+    {
+        if ($p1 == $p2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function is_email($vars)
+    {
+        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
             $id = Typo::int($_GET['id']);
             $where = "AND `id` != '{$id}' ";
-        }else{
+        } else {
             $where = '';
         }
         $vars = sprintf('%s', Typo::cleanX($vars));
-        $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where );
+        $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where);
         $e = Db::result($sql);
-        if(Db::$num_rows > 0){
+        if (Db::$num_rows > 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
-    public static function id($userid){
+    public static function id($userid)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1", 
+            sprintf(
+                "SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1",
                 Typo::cleanX($userid)
-                )
-            );
+            )
+        );
+
         return $usr[0]->id;
     }
 
-    public static function userid($id){
+    public static function userid($id)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1", 
+            sprintf(
+                "SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1",
                 Typo::int($id)
-                )
-            );
+            )
+        );
+
         return $usr[0]->userid;
     }
 
-    public static function email($id){
+    public static function email($id)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
-                Typo::int($id), 
+            sprintf(
+                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                Typo::int($id),
                 Typo::cleanX($id)
-                )
-            );
+            )
+        );
+
         return $usr[0]->email;
     }
 
-    public static function group($id){
+    public static function group($id)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
-                Typo::int($id), 
+            sprintf(
+                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                Typo::int($id),
                 Typo::cleanX($id)
-                )
-            );
+            )
+        );
+
         return $usr[0]->group;
     }
 
-    public static function regdate($id){
+    public static function regdate($id)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
-                Typo::int($id), 
+            sprintf(
+                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                Typo::int($id),
                 Typo::cleanX($id)
-                )
-            );
+            )
+        );
+
         return $usr[0]->join_date;
     }
 
-    public static function avatar($id){
+    public static function avatar($id)
+    {
         $usr = Db::result(
-            sprintf("SELECT * FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1", 
-                Typo::int($id), 
+            sprintf(
+                "SELECT * FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                Typo::int($id),
                 Typo::cleanX($id)
-                )
-            );
+            )
+        );
+
         return $usr[0]->avatar;
     }
 
-    public static function activate($id){
+    public static function activate($id)
+    {
         $act = Db::query(
-            sprintf("UPDATE `user` SET `status` = '1' WHERE `id` = '%d'", 
+            sprintf(
+                "UPDATE `user` SET `status` = '1' WHERE `id` = '%d'",
                 Typo::int($id)
-                )
-            );
-        if($act){
+            )
+        );
+        if ($act) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public static function deactivate($id){
+    public static function deactivate($id)
+    {
         $act = Db::query(
-            sprintf("UPDATE `user` SET `status` = '0' WHERE `id` = '%d'", 
+            sprintf(
+                "UPDATE `user` SET `status` = '0' WHERE `id` = '%d'",
                 Typo::int($id)
-                )
-            );
-        if($act){
+            )
+        );
+        if ($act) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-       
 }
 
 /* End of file user.class.php */

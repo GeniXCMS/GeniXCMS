@@ -111,7 +111,7 @@ class CachingStreamTest extends \PHPUnit_Framework_TestCase
 
         $this->decorated->expects($this->exactly(2))
             ->method('read')
-            ->willReturnCallback(function($length) use ($stream){
+            ->willReturnCallback(function($length) use ($stream) {
                 return fread($stream, 2);
             });
 

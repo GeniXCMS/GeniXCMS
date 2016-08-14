@@ -6,32 +6,11 @@ server {
 
         location / {
                 try_files $uri  $uri/ /index.php?$args;
-
         }
 
-        error_page 404 /error/404;
-        error_page 400 /error/400;
-        error_page 403 /error/403;
-        error_page 500 /error/500;
 
-
-        location = /error/403 {
-                rewrite ^/error/403$ /index.php?error=403 last;
-        }
-        location = /error/404 {
-                rewrite ^/error/404$ /index.php?error=404 last;
-        }
-        location = /error/400 {
-                rewrite ^/error/400$ /index.php?error=400 last;
-        }
-        location = /error/500 {
-                rewrite ^/error/500$ /index.php?error=500 last;
-        }
-	location ~ \.html$ {
-		try_files $uri $uri/ /index.php?$args;
-	}
         location ~ \.php$ {
-        #       try_files = $uri $uri/ @missing;
+                try_files $uri =404;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
         #       # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
         #
@@ -40,25 +19,11 @@ server {
         #       # With php5-fpm:
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
                 fastcgi_index index.php;
-                fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+                fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
                 include fastcgi_params;
         }
 
-        #location @missing {
-        #       rewrite ^ $scheme://$host/index.php?$args permanent;
-        #}
 
-        location /paging {
-                rewrite ^/paging/([0-9]+)$ /index.php?paging=$1 last;
-        }
-
-
-        location = /sitemap {
-          rewrite ^(.*)$ /index.php?page=sitemap last;
-        }
-        location = /rss {
-                rewrite ^(.*)$ /index.php?rss last;
-        }
-        include /etc/nginx/cache_expires.conf;
+        # include /etc/nginx/cache_expires.conf;
 
 }

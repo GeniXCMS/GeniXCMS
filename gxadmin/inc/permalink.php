@@ -1,20 +1,20 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.8 build date 20160313
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.8 build date 20160313
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 ?>
 <form action="index.php?page=permalink" method="post">
 <div class="row">
@@ -23,21 +23,21 @@
         <?=Hooks::run('admin_page_top_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1 class="clearfix">
+        <h2 class="clearfix">
             <div class="pull-left">
                 <i class="fa fa-link"></i> Permalink
             </div>
             <div class="pull-right">
                 <button type="submit" name="change" class="btn btn-success" value="Change">
                     <span class="glyphicon glyphicon-ok"></span>
-                    <?=CHANGE;?>
+                    <span class="hidden-xs hidden-sm"><?=CHANGE;?></span>
                 </button>
                 <button type="reset" class="btn btn-danger" value="Cancel">
                     <span class="glyphicon glyphicon-remove"></span>
-                    <?=CANCEL;?>
+                    <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
                 </button>
             </div>
-        </h1>
+        </h2>
         <hr>
     </div>
 
@@ -51,8 +51,11 @@
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label>Use <code>index.php</code></label>
-                        <?php if($data['permalink_use_index_php'] === 'on') { $use_index = 'checked'; }
-                        else{ $use_index = 'unchecked';}
+                        <?php if ($data['permalink_use_index_php'] === 'on') {
+                            $use_index = 'checked';
+} else {
+    $use_index = 'unchecked';
+}
                         ?>
                         <div class="input-group">
                             <input type="checkbox" name="permalink_use_index_php" rel="tooltip"

@@ -1,20 +1,20 @@
 <?php
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20150202
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
-
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20150202
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="row">
@@ -22,21 +22,21 @@
             <?=Hooks::run('admin_page_notif_action', $data);?>
         </div>
         <div class="col-md-12">
-            <h1 class="clearfix">
+            <h2 class="clearfix">
                 <div class="pull-left">
                     <i class="fa fa-wrench"></i> <?=SETTINGS;?>
                 </div>
                 <div class="pull-right">
                     <button type="submit" name="change" class="btn btn-success" value="Change">
                         <span class="glyphicon glyphicon-ok"></span>
-                        <?=CHANGE;?>
+                        <span class="hidden-xs hidden-sm"><?=CHANGE;?></span>
                     </button>
                     <button type="reset" class="btn btn-danger" value="Cancel">
                         <span class="glyphicon glyphicon-remove"></span>
-                        <?=CANCEL;?>
+                        <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
                     </button>
                 </div>
-            </h1>
+            </h2>
             <hr />
         </div>
         <div class="col-sm-12" id="myTab">
@@ -96,7 +96,7 @@
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=WEBSITE_KEYWORDS;?></label>
-                                <input type="text" name="sitekeywords" value="<?=Options::v('sitekey');?>" class="form-control">
+                                <input type="text" name="sitekeywords" value="<?=Options::v('sitekeywords');?>" class="form-control">
                                 <small class="help-block"><?=WEBSITE_KEYWORDS_DESC;?></small>
                             </div>
                             <div class="col-sm-6 form-group">
@@ -183,8 +183,13 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_EMAIL_MAIL;?></label>
                                 <?php
-                                if(Options::v('mailtype') == 0){ $o = "selected"; $s = "";}
-                                elseif(Options::v('mailtype') == 1 ) {$s = "selected"; $o = "";}
+                                if (Options::v('mailtype') == 0) {
+                                    $o = 'selected';
+                                    $s = '';
+                                } elseif (Options::v('mailtype') == 1) {
+                                    $s = 'selected';
+                                    $o = '';
+                                }
                                 ?>
                                 <select name="mailtype" class="form-control">
                                     <option value="0" <?=$o;?>>Mail</option>
@@ -284,11 +289,11 @@
                                 $is_logourl = Options::v('is_logourl');
                                 $logourl = Options::v('logourl');
                                 $logo = Options::v('logo');
-                                if($is_logourl == 'on' && $logourl != ''){
-                                    $logoimg = "<img src=\"".Options::v('logourl')."\" class=\"clearfix\">";
-                                }elseif($is_logourl == 'off' && $logo != ''){
-                                    $logoimg = "<img src=\"".Site::$url.Options::v('logo')."\" class=\"clearfix\">";
-                                }else{
+                                if ($is_logourl == 'on' && $logourl != '') {
+                                    $logoimg = '<img src="'.Options::v('logourl').'" class="clearfix">';
+                                } elseif ($is_logourl == 'off' && $logo != '') {
+                                    $logoimg = '<img src="'.Site::$url.Options::v('logo').'" class="clearfix">';
+                                } else {
                                     $logoimg = '';
                                 }
                                 ?>
@@ -317,8 +322,11 @@
                                 <div class="input-group">
 
                                     <span class="input-group-addon">
-                                        <?php if(Options::v('is_logourl') == 'on') { $is_logourl = 'checked'; }
-                                        else{ $is_logourl = 'off';}
+                                        <?php if (Options::v('is_logourl') == 'on') {
+                                            $is_logourl = 'checked';
+} else {
+    $is_logourl = 'off';
+}
                                         ?>
                                         <input type="checkbox" name="is_logourl" rel="tooltip"
                                         title="Check here if you want to use URL" <?=$is_logourl;?>>
@@ -349,8 +357,11 @@
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
-                                <?php if(Options::v('use_jquery') == 'on') { $use_jquery = 'checked'; }
-                                else{ $use_jquery = 'off';}
+                                <?php if (Options::v('use_jquery') == 'on') {
+                                    $use_jquery = 'checked';
+} else {
+    $use_jquery = 'off';
+}
                                 ?>
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -372,9 +383,9 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
                                 <?php
-                                if(Options::v('use_bootstrap') == 'on') {
+                                if (Options::v('use_bootstrap') == 'on') {
                                     $use_bootstrap = 'checked';
-                                }else{
+                                } else {
                                     $use_bootstrap = 'off';
                                 }
                                 ?>
@@ -398,9 +409,9 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_FAWESOME;?></label>
                                 <?php
-                                if(Options::v('use_fontawesome') == 'on') {
+                                if (Options::v('use_fontawesome') == 'on') {
                                     $use_fontawesome = 'checked';
-                                }else{
+                                } else {
                                     $use_fontawesome = 'off';
                                 }
                                 ?>
@@ -424,9 +435,9 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_EDITOR;?></label>
                                 <?php
-                                if(Options::v('use_editor') == 'on') {
+                                if (Options::v('use_editor') == 'on') {
                                     $use_editor = 'checked';
-                                }else{
+                                } else {
                                     $use_editor = 'off';
                                 }
                                 ?>
@@ -451,9 +462,9 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BVALIDATOR;?></label>
                                 <?php
-                                if(Options::v('use_bsvalidator') == 'on') {
+                                if (Options::v('use_bsvalidator') == 'on') {
                                     $use_bsvalidator = 'checked';
-                                }else{
+                                } else {
                                     $use_bsvalidator = 'off';
                                 }
                                 ?>
@@ -493,25 +504,42 @@
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_POSTS_PAGINATION;?></label>
                                 <?php
-                                if(Options::v('pagination')=='number'){
+                                if (Options::v('pagination') == 'number') {
                                     $number = 'selected';
                                     $pager = '';
-                                }elseif(Options::v('pagination') == 'pager'){
+                                } elseif (Options::v('pagination') == 'pager') {
                                     $pager = 'selected';
                                     $number = '';
-                                }else{
+                                } else {
                                     $pager = '';
                                     $number = '';
                                 }
                                 ?>
                                 <select  name="pagination" class="form-control">
-                                    <option value="number" <?=$number;?>><?=SETTINGS_POSTS_PAGINATION_NUMBER;?></option>
-                                    <option value="pager" <?=$pager;?>><?=SETTINGS_POSTS_PAGINATION_PAGER;?></option>
+                                    <option value="number" <?=$number;
+?>><?=SETTINGS_POSTS_PAGINATION_NUMBER;?></option>
+                                    <option value="pager" <?=$pager;
+?>><?=SETTINGS_POSTS_PAGINATION_PAGER;?></option>
                                 </select>
                                 <small class="help-block"><?=SETTINGS_POSTS_PAGINATION_DESCR;?> Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code> </small>
                             </div>
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_POSTS_PINGER;?></label>
+                                <div class="input-group">
+                                    <?php
+                                    $pinger_enable = Options::v('pinger_enable');
+                                    if ($pinger_enable == 'on') {
+                                        $pinger_enable_val = 'checked';
+                                    } else {
+                                        $pinger_enable_val = 'off';
+                                    }
+                                    ?>
+                                    <div class="input-group-addon">
+                                        <input type="checkbox" name="pinger_enable"  <?=$pinger_enable_val;?>> 
+                                    </div>
+                                    <span class="form-control">Enable pinger ?</span>
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
                                 <div class="input-group">
                                     <span class="input-group-addon"><?=SETTINGS_POSTS_PINGER_HTTP?></span>
                                     <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::v('pinger');?></textarea>
@@ -527,22 +555,22 @@
 
                 <?php
                 $curr = Options::v('currency');
-                if ($curr == "USD") {
-                    $usd = "SELECTED";
-                    $euro = "";
-                    $pound = "";
-                } elseif ($curr == "EUR") {
-                    $euro = "SELECTED";
-                    $usd = "";
-                    $pound = "";
-                } elseif ($curr == "GBP") {
-                    $pound = "SELECTED";
-                    $usd = "";
-                    $euro = "";
+                if ($curr == 'USD') {
+                    $usd = 'SELECTED';
+                    $euro = '';
+                    $pound = '';
+                } elseif ($curr == 'EUR') {
+                    $euro = 'SELECTED';
+                    $usd = '';
+                    $pound = '';
+                } elseif ($curr == 'GBP') {
+                    $pound = 'SELECTED';
+                    $usd = '';
+                    $euro = '';
                 } else {
-                    $pound = "";
-                    $usd = "";
-                    $euro = "";
+                    $pound = '';
+                    $usd = '';
+                    $euro = '';
                 }
                 ?>
 
@@ -567,12 +595,12 @@
                                 <div class="form-group">
                                     <?php
                                     $ppsandbox = Options::v('ppsandbox');
-                                    if($ppsandbox == 'on'){
-                                        $sandbox = "checked";
+                                    if ($ppsandbox == 'on') {
+                                        $sandbox = 'checked';
                                         $sandval = 0;
-                                    }else{
-                                        $sandbox = "";
-                                        $sandval = "1";
+                                    } else {
+                                        $sandbox = '';
+                                        $sandval = '1';
                                     }
                                     ?>
 
@@ -623,10 +651,10 @@
                         <label><?=GOOGLE_RECAPTCHA?></label>
                         <?php
                         $google_captcha_enable = Options::v('google_captcha_enable');
-                        if($google_captcha_enable == 'on'){
-                            $enable_captcha = "checked";
-                        }else{
-                            $enable_captcha = "";
+                        if ($google_captcha_enable == 'on') {
+                            $enable_captcha = 'checked';
+                        } else {
+                            $enable_captcha = '';
                         }
                         ?>
                         <div class="form-group">

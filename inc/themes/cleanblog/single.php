@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <?php
-                    if(isset($data['posts'][0]->title)){
+                    if (isset($data['posts'][0]->title)) {
                         foreach ($data['posts'] as $p) {
                             # code...
                             echo "
@@ -36,7 +36,7 @@
                             </div>
                                 ";
                         }
-                    }else{
+                    } else {
                         //echo "Error, Post not found.";
                         Control::error('404');
                     }

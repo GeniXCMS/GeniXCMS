@@ -46,7 +46,10 @@ window.elFinderSupportVer1 = function(upload) {
 			xhr;
 			
 		dfrd.abort = function() {
-			xhr.state() == 'pending' && xhr.abort();
+			if (xhr.state() == 'pending') {
+				xhr.quiet = true;
+				xhr.abort();
+			}
 		}
 		
 		switch (cmd) {
@@ -109,6 +112,10 @@ window.elFinderSupportVer1 = function(upload) {
 				return dfrd.resolve({error : fm.res('error', 'cmdsupport')});
 				break;
 				
+			case 'file':
+				opts.data.cmd = 'open';
+				opts.data.current = fm.file(opts.data.target).phash;
+				break;
 		}
 		// cmd = opts.data.cmd
 		
@@ -119,14 +126,15 @@ window.elFinderSupportVer1 = function(upload) {
 			.done(function(raw) {
 				data = self.normalize(cmd, raw);
 				
-				// cmd != 'open' && self.fm.log(data);
-				
-				if (cmd == 'paste' && !data.error) {
-					fm.sync();
-					dfrd.resolve({});
-				} else {
-					dfrd.resolve(data);
+				if (cmd == 'paste') {
+					if (! data.error && ! data.added.length && ! data.removed.length && ! data.changed.length) {
+						data.error = [opts.data.cut? 'errMove' : 'errCopy', fm.i18n('items'), 'errExists', fm.file(opts.data.targets[0]).name];
+					}
+					if (! data.error) {
+						fm.sync();
+					}
 				}
+				dfrd.resolve(data);
 			})
 			
 		return dfrd;
@@ -150,9 +158,36 @@ window.elFinderSupportVer1 = function(upload) {
 	
 	this.normalize = function(cmd, data) {
 		var self = this,
+			fm   = this.fm,
 			files = {}, 
 			filter = function(file) { return file && file.hash && file.name && file.mime ? file : null; },
-			phash;
+			getDirs = function(items) {
+				return $.map(items, function(i) {
+					return i && i.mime && i.mime === 'directory'? i : null;
+				});
+			},
+			getTreeDiff = function(files) {
+				var dirs = getDirs(files);
+				treeDiff = fm.diff(dirs, null, ['date']);
+				if (treeDiff.added.length) {
+					treeDiff.added = getDirs(treeDiff.added);
+				}
+				if (treeDiff.changed.length) {
+					treeDiff.changed = getDirs(treeDiff.changed);
+				}
+				if (treeDiff.removed.length) {
+					var removed = [];
+					$.each(treeDiff.removed, function(i, h) {
+						var item;
+						if ((item = fm.file(h)) && item.mime === 'directory') {
+							removed.push(h);
+						}
+					});
+					treeDiff.removed = removed;
+				}
+				return treeDiff;
+			},
+			phash, diff, isCwd, treeDiff;
 
 		if ((cmd == 'tmb' || cmd == 'get')) {
 			return data;
@@ -178,11 +213,13 @@ window.elFinderSupportVer1 = function(upload) {
 		
 		if (cmd == 'put') {
 
-			phash = this.fm.file(data.target.hash).phash;
+			phash = fm.file(data.target.hash).phash;
 			return {changed : [this.normalizeFile(data.target, phash)]};
 		}
 		
 		phash = data.cwd.hash;
+
+		isCwd = (phash == fm.cwd().hash);
 		
 		if (data.tree) {
 			$.each(this.normalizeTree(data.tree), function(i, file) {
@@ -202,7 +239,7 @@ window.elFinderSupportVer1 = function(upload) {
 		});
 		
 		if (!data.tree) {
-			$.each(this.fm.files(), function(hash, file) {
+			$.each(fm.files(), function(hash, file) {
 				if (!files[hash] && file.phash != phash && file.mime == 'directory') {
 					files[hash] = file;
 				}
@@ -219,14 +256,26 @@ window.elFinderSupportVer1 = function(upload) {
 				};
 		}
 		
-		
+		if (isCwd) {
+			diff = fm.diff($.map(files, filter));
+		} else {
+			if (data.tree) {
+				diff = getTreeDiff(files);
+			} else {
+				diff = {
+					added   : [],
+					removed : [],
+					changed : []
+				};
+			}
+		}
 		
 		return $.extend({
 			current : data.cwd.hash,
 			error   : data.error,
 			warning : data.warning,
 			options : {tmb : !!data.tmb}
-		}, this.fm.diff($.map(files, filter)));
+		}, diff);
 		
 	}
 	
@@ -270,14 +319,14 @@ window.elFinderSupportVer1 = function(upload) {
 				phash  : phash,
 				name   : file.name,
 				mime   : mime,
-				date   : file.date || 'unknown',
+				date   : file.date || this.fm.formatDate(file),
 				size   : size,
 				read   : file.read,
 				write  : file.write,
 				locked : !phash ? true : file.rm === void(0) ? false : !file.rm
 			};
 		
-		if (file.mime == 'application/x-empty') {
+		if (file.mime == 'application/x-empty' || file.mime == 'inode/x-empty') {
 			info.mime = 'text/plain';
 		}
 		if (file.linkTo) {
@@ -310,7 +359,7 @@ window.elFinderSupportVer1 = function(upload) {
 	this.normalizeOptions = function(data) {
 		var opts = {
 				path          : data.cwd.rel,
-				disabled      : data.disabled || [],
+				disabled      : $.merge((data.disabled || []), [ 'search', 'netmount', 'zipdl' ]),
 				tmb           : !!data.tmb,
 				copyOverwrite : true
 			};
@@ -333,4 +382,4 @@ window.elFinderSupportVer1 = function(upload) {
 	}
 	
 	
-}
+};

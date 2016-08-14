@@ -50,7 +50,7 @@ class CurlHandle
 
         // Prepare url
         $url = (string)$request->getUrl();
-        if(($pos = strpos($url, '#')) !== false ){
+        if (($pos = strpos($url, '#')) !== false ) {
             // strip fragment from url
             $url = substr($url, 0, $pos);
         }

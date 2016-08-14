@@ -1,60 +1,70 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20141006
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+<?php
 
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
+/*
+ * GeniXCMS - Content Management System
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20141006
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 
-$post="";
+$post = '';
 $data = Router::scrap($param);
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
+$type = Categories::type($cat);
 $data['max'] = Options::v('post_perpage');
+
 if (SMART_URL) {
-    if ( isset($data['paging']) ) {
+    if (isset($data['paging'])) {
         $paging = $data['paging'];
     }
-}else{
+} else {
     if (isset($_GET['paging'])) {
-    $paging = Typo::int($_GET['paging']);
+        $paging = Typo::int($_GET['paging']);
     }
 }
 
 //$paging = (SMART_URL) ? $data['paging'] : Typo::int(is_int($_GET['paging']));
-if(isset($paging)){
-    if($paging > 0) {
-        $offset = ($paging-1)*$data['max'];
-    }else{
+if (isset($paging)) {
+    if ($paging > 0) {
+        $offset = ($paging - 1) * $data['max'];
+    } else {
         $offset = 0;
     }
     $pagingtitle = " - Page {$paging}";
-}else{
+} else {
     $offset = 0;
     $paging = 1;
-    $pagingtitle = "";
+    $pagingtitle = '';
 }
-$data['sitetitle'] = "Category: ".Categories::name($cat).$pagingtitle;
+$data['sitetitle'] = 'Post in : '.Categories::name($cat).$pagingtitle;
 $data['posts'] = Db::result(
-                sprintf("SELECT * FROM `posts`
-                    WHERE `type` = 'post'
+    sprintf(
+        "SELECT * FROM `posts`
+                    WHERE `type` = '%s'
                     AND `cat` = '%d'
                     AND `status` = '1'
                     ORDER BY `date`
                     DESC LIMIT %d, %d",
-                    $cat, $offset, $data['max']
-                    )
-                );
+        $type,
+        $cat,
+        $offset,
+        $data['max']
+    )
+);
 $data['num'] = Db::$num_rows;
 
 $data['posts'] = Posts::prepare($data['posts']);
@@ -63,17 +73,16 @@ $url = Url::cat($cat);
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',
-                'where' => '`type` = \'post\' AND `cat` = \''.$cat.'\'',
+                'where' => '`type` = \''.$type.'\' AND `cat` = \''.$cat.'\'',
                 'max' => $data['max'],
                 'url' => $url,
-                'type' => Options::v('pagination')
+                'type' => Options::v('pagination'),
             );
 $data['paging'] = Paging::create($paging, SMART_URL);
-Theme::theme('header',$data);
+Theme::theme('header', $data);
 Theme::theme('cat', $data);
 Theme::footer();
 exit;
-
 
 /* End of file cat.control.php */
 /* Location: ./inc/lib/Control/Frontend/cat.control.php */

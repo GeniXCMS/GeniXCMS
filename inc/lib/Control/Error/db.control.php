@@ -1,8 +1,22 @@
-<h2><i class="fa fa-database"></i> Database Error</h2>
+<h3><i class="fa fa-database text-danger"></i> Database Error</h3>
 Something went wrong with the database.<br />
-<div style="border-radius: 7px; border: 3px solid #cc0000; line-height: 35px; 
-height: 50px; background-color: #aa0000; color: #fff; padding: 5px;">
+<div class="alert alert-danger">
 <?php
-echo $val;
+if (is_array($val)) {
+    foreach ($val as $k => $v) {
+        if (is_array($val[$k])) {
+            echo '<ul class="list-unstyled">';
+            for ($i = 0; $i < count($val[$k]); ++$i) {
+                echo '<li>'.$val[$k][$i].'</li>';
+            }
+            echo '</ul>';
+        } else {
+            echo $val[$k];
+        }
+    }
+} else {
+    echo $val;
+}
+
 ?>
 </div>

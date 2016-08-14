@@ -89,6 +89,32 @@ class ExpressGatewayTest extends GatewayTestCase
         $this->assertSame('This transaction cannot be processed. The amount to be charged is zero.', $response->getMessage());
     }
 
+    public function testOrderSuccess()
+    {
+        $this->setMockHttpResponse('ExpressOrderSuccess.txt');
+
+        $response = $this->gateway->order($this->options)->send();
+
+        $this->assertInstanceOf('\Omnipay\PayPal\Message\ExpressAuthorizeResponse', $response);
+        $this->assertFalse($response->isPending());
+        $this->assertFalse($response->isSuccessful());
+        $this->assertTrue($response->isRedirect());
+        $this->assertEquals('https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&useraction=commit&token=EC-42721413K79637829', $response->getRedirectUrl());
+    }
+
+    public function testOrderFailure()
+    {
+        $this->setMockHttpResponse('ExpressOrderFailure.txt');
+
+        $response = $this->gateway->order($this->options)->send();
+
+        $this->assertFalse($response->isPending());
+        $this->assertFalse($response->isSuccessful());
+        $this->assertFalse($response->isRedirect());
+        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('This transaction cannot be processed. The amount to be charged is zero.', $response->getMessage());
+    }
+
     public function testVoidSuccess()
     {
         $this->setMockHttpResponse('ExpressVoidSuccess.txt');
@@ -122,7 +148,6 @@ class ExpressGatewayTest extends GatewayTestCase
 
     public function testCompletePurchaseHttpOptions()
     {
-
         $this->setMockHttpResponse('ExpressPurchaseSuccess.txt');
 
         $this->getHttpRequest()->query->replace(array(
@@ -132,20 +157,19 @@ class ExpressGatewayTest extends GatewayTestCase
 
         $response = $this->gateway->completePurchase(array(
             'amount' => '10.00',
-            'currency' => 'BYR'
+            'currency' => 'BYR',
         ))->send();
 
         $httpRequests = $this->getMockedRequests();
         $httpRequest = $httpRequests[0];
-        $queryArguments = $httpRequest->getQuery()->toArray();
-        $this->assertSame('GET_TOKEN', $queryArguments['TOKEN']);
-        $this->assertSame('GET_PAYERID', $queryArguments['PAYERID']);
+        parse_str((string)$httpRequest->getBody(), $postData);
+        $this->assertSame('GET_TOKEN', $postData['TOKEN']);
+        $this->assertSame('GET_PAYERID', $postData['PAYERID']);
 
     }
 
     public function testCompletePurchaseCustomOptions()
     {
-
         $this->setMockHttpResponse('ExpressPurchaseSuccess.txt');
 
         // Those values should not be used if custom token or payerid are passed
@@ -158,14 +182,14 @@ class ExpressGatewayTest extends GatewayTestCase
             'amount' => '10.00',
             'currency' => 'BYR',
             'token' => 'CUSTOM_TOKEN',
-            'payerid' => 'CUSTOM_PAYERID'
+            'payerid' => 'CUSTOM_PAYERID',
         ))->send();
 
         $httpRequests = $this->getMockedRequests();
         $httpRequest = $httpRequests[0];
-        $queryArguments = $httpRequest->getQuery()->toArray();
-        $this->assertSame('CUSTOM_TOKEN', $queryArguments['TOKEN']);
-        $this->assertSame('CUSTOM_PAYERID', $queryArguments['PAYERID']);
+        parse_str((string)$httpRequest->getBody(), $postData);
+        $this->assertSame('CUSTOM_TOKEN', $postData['TOKEN']);
+        $this->assertSame('CUSTOM_PAYERID', $postData['PAYERID']);
 
     }
 
@@ -173,7 +197,7 @@ class ExpressGatewayTest extends GatewayTestCase
     {
         $transactionSearch = $this->gateway->transactionSearch(array(
             'startDate' => '2015-01-01',
-            'endDate' => '2015-12-31'
+            'endDate' => '2015-12-31',
         ));
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\ExpressTransactionSearchRequest', $transactionSearch);

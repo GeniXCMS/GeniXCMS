@@ -1,67 +1,79 @@
-<?php if(!defined('GX_LIB')) die("Direct Access Not Allowed!");
-/**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20140925
-* @version 0.0.8
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
-*/
+<?php
 
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
+
+/**
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 0.0.1 build date 20140925
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 class Language
 {
-    public function __construct () {
+    public function __construct()
+    {
         self::setActive();
     }
 
-    public static function getList () {
+    public static function getList()
+    {
         $handle = dir(GX_PATH.'/inc/lang/');
         while (false !== ($entry = $handle->read())) {
-            if ($entry != "." && $entry != ".." ) {
+            if ($entry != '.' && $entry != '..') {
                 $file = GX_PATH.'/inc/lang/'.$entry;
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
-                if(is_file($file) == true && $ext == 'php'){
+                if (is_file($file) == true && $ext == 'php') {
                     $lang[] = $entry;
                 }
             }
         }
 
         $handle->close();
+
         return $lang;
     }
 
-    public static function optDropdown ($var) {
-        $langs =  self::getList();
+    public static function optDropdown($var = '')
+    {
+        $langs = self::getList();
         $opt = '';
         foreach ($langs as $lang) {
-
             $file = explode('.', $lang);
             if ($var == $file[0]) {
                 $sel = 'SELECTED';
-            }else{
+            } else {
                 $sel = '';
             }
             $opt .= "<option {$sel}>{$file[0]}</option>";
         }
+
         return $opt;
     }
 
-    public static function getDefaultLang() {
+    public static function getDefaultLang()
+    {
         $def = Options::v('multilang_default');
         $lang = json_decode(Options::v('multilang_country'), true);
         $deflang = $lang[$def];
+
         return $deflang;
     }
 
-    public static function getLangParam($lang, $post_id) {
-        if (Posts::existParam('multilang',$post_id)) {
+    public static function getLangParam($lang, $post_id)
+    {
+        if (Posts::existParam('multilang', $post_id)) {
             $multilang = json_decode(Posts::getParam('multilang', $post_id), true);
             // print_r($multilang);
             foreach ($multilang as $key => $value) {
@@ -70,32 +82,45 @@ class Language
                 // print_r($keys);
                 if ($keys[0] == $lang) {
                     $lang = $multilang[$key][$lang];
+
                     return $lang;
                 }
             }
         }
     }
 
-    public static function setActive($lang = '') {
+    public static function setActive($lang = '')
+    {
+        $lg = Options::v('multilang_country');
+        $lg = json_decode($lg, true);
+
         if (isset($_GET['lang']) && $_GET['lang'] != '' && $lang == '') {
-            Session::set(array('lang' => $_GET['lang'] ) );
-        }elseif ($lang != '') {
-            Session::set(array('lang' => $lang ) );
+            if (key_exists($_GET['lang'], $lg)) {
+                Session::set(array('lang' => $_GET['lang']));
+            } else {
+                Session::remove('lang');
+            }
+        } elseif ($lang != '') {
+            if (key_exists($lang, $lg)) {
+                Session::set(array('lang' => $lang));
+            } else {
+                Session::remove('lang');
+            }
         }
     }
 
-    public static function isActive () {
+    public static function isActive()
+    {
         switch (SMART_URL) {
             case true:
                 if (Options::v('multilang_enable') === 'on') {
                     $langs = Session::val('lang');
-                    if($langs != '') {
+                    if ($langs != '') {
                         $lang = Session::val('lang');
-                    }else{
+                    } else {
                         $lang = '';
                     }
-
-                }else{
+                } else {
                     $lang = '';
                 }
 
@@ -104,43 +129,44 @@ class Language
             default:
                 if (Options::v('multilang_enable') === 'on') {
                     $langs = Session::val('lang');
-                    if($langs != '') {
+                    if ($langs != '') {
                         $lang = Session::val('lang');
-                    }else{
-                        $lang = isset($_GET['lang'])? $_GET['lang']: '' ;
+                    } else {
+                        $lang = isset($_GET['lang']) ? $_GET['lang'] : '';
                     }
-                }else{
+                } else {
                     $lang = '';
                 }
                 break;
-
         }
+
         return $lang;
     }
 
-    public static function flagList () {
+    public static function flagList()
+    {
         $lang = json_decode(Options::v('multilang_country'), true);
         $multilang_enable = Options::v('multilang_enable');
         // print_r($lang);
-        $html = "";
-        if (!empty($lang) && $multilang_enable == "on") {
-            $html = "<ul class=\"nav nav-pills flaglist\">";
+        $html = '';
+        if (!empty($lang) && $multilang_enable == 'on') {
+            $html = '<ul class="nav nav-pills flaglist">';
             foreach ($lang as $key => $value) {
                 $flag = strtolower($value['flag']);
-                $html .= "
-                <li class=\"\"><a href=\"".Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
+                $html .= '
+                <li class=""><a href="'.Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
                 ";
             }
-            $html .= "</ul>";
+            $html .= '</ul>';
             Hooks::attach('footer_load_lib', array('Language', 'flagLib'));
         }
-
 
         return $html;
     }
 
-    public static function flagLib () {
-        return "<link href=\"".Site::$url."/assets/css/flag-icon.min.css\" rel=\"stylesheet\">";
+    public static function flagLib()
+    {
+        return '<link href="'.Site::$url.'/assets/css/flag-icon.min.css" rel="stylesheet">';
     }
 }
 /* End of file Language.class.php */

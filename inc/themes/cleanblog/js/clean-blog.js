@@ -87,7 +87,7 @@ $('#name').focus(function() {
  // * http://ReactiveRaven.github.com/jqBootstrapValidation/
  
 
-(function( $ ){
+(function( $ ) {
 
 	var createdElements = [];
 
@@ -157,7 +157,7 @@ $('#name').focus(function() {
           }
         });
 
-        return this.each(function(){
+        return this.each(function() {
 
           // Get references to everything we're interested in
           var $this = $(this),
