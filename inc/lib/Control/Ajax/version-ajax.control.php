@@ -26,7 +26,7 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
         // print_r($v);
         $v2 = str_replace('.', '', $v);
         $selfv = str_replace('.', '', System::$version);
-        if ($v2 < $selfv) {
+        if ($v2 < $selfv || $v2 == $selfv) {
             echo '{"status": "true"}';
         } else {
             echo '{"status": "false", "version":"'.$v.'"}';
