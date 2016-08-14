@@ -25,3 +25,5 @@ function loader($class)
     }
 }
 spl_autoload_register('loader');
+
+new System();
