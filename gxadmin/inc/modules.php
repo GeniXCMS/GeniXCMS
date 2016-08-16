@@ -43,7 +43,7 @@
                     foreach ($data['mods'] as $mod) {
                         $m = Mod::data($mod);
                         if (Mod::isActive($mod)) {
-                            # code...
+                            
                             $btnact = 'warning';
                             $act = DEACTIVATE;
                         } else {

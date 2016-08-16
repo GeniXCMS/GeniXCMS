@@ -93,7 +93,6 @@ class Categories
         $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
         if (Db::$num_rows > 0) {
             foreach ($cat as $c) {
-                # code...
                 if ($c->parent == null || $c->parent == '0') {
                     if (isset($vars['selected']) && $c->id == $vars['selected']) {
                         $sel = 'SELECTED';
@@ -102,7 +101,6 @@ class Categories
                     }
                     $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
                     foreach ($cat as $c2) {
-                        # code...
                         if ($c2->parent == $c->id) {
                             if (isset($vars['selected']) && $c2->id == $vars['selected']) {
                                 $sel = 'SELECTED';
@@ -152,7 +150,6 @@ class Categories
             ';
         if (Db::$num_rows > 0) {
             foreach ($cat as $c) {
-                # code...
                 if ($c->parent == null || $c->parent == '0') {
                     //if (isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
                     if (isset($_GET['cat'])) {
@@ -178,7 +175,6 @@ class Categories
                     <div class=\"panel-collapse collapse {$in}\" role=\"tabpanel\" id=\"collapse-{$c->id}\" aria-labelledby=\"collapseListGroupHeading{$c->id}\">
                     <ul class=\"nav nav-pills nav-stacked \" >";
                     foreach ($cat as $c2) {
-                        # code...
                         if ($c2->parent == $c->id) {
                             //if (isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
                             $drop .= '<li><a href="'.Url::cat($c2->id)."\">{$c2->name}</a></li>";

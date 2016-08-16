@@ -26,7 +26,7 @@ if (isset($_GET['token'])
 
 if (isset($data['post'])) {
     foreach ($data['post'] as $p) {
-        # code...
+        
         $title = "{$p->title}";
         // echo $title;
         $content = $p->content;
@@ -110,7 +110,7 @@ if (isset($data['post'])) {
                         </div>
                         <div class=\"form-group\">
                             <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$def}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$content}</textarea>
+                            <textarea name=\"content[{$def}]\" class=\"form-control hidden content editor\" id=\"content\" rows=\"\">{$content}</textarea>
                         </div>
                     </div>
                     ";
@@ -139,7 +139,7 @@ if (isset($data['post'])) {
                         </div>
                         <div class=\"form-group\">
                             <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content-$key\" rows=\"20\">{$lang['content']}</textarea>
+                            <textarea name=\"content[{$key}]\" class=\"form-control hidden content editor\" id=\"content-$key\" rows=\"\">{$lang['content']}</textarea>
                         </div>
                     </div>
 
@@ -157,7 +157,7 @@ if (isset($data['post'])) {
                     </div>
                     <div class="form-group">
                         <label for="content"><?=CONTENT; ?></label>
-                        <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content; ?></textarea>
+                        <textarea name="content" class="form-control hidden content editor" id="content" rows="" ><?=$content; ?></textarea>
                     </div>
                 <?php
                 }

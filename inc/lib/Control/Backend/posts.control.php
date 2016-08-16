@@ -21,7 +21,7 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(2)) {
-    # code...
+    
 
     $data['sitetitle'] = POSTS;
     Theme::editor('full');
@@ -32,11 +32,11 @@ if (User::access(2)) {
     }
     switch ($act) {
         case 'add':
-            # code...
+            
             $data[] = '';
             switch (isset($_POST['submit'])) {
                 case true:
-                    # code...
+                    
                     // print_r($_POST);
                     // check token first
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
@@ -67,7 +67,7 @@ if (User::access(2)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
-                            # code...
+                            
                             $date = date('Y-m-d H:i:s');
                         } else {
                             $date = $_POST['date'];
@@ -118,7 +118,7 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    # code...
+                    
 
                     break;
             }
@@ -132,7 +132,7 @@ if (User::access(2)) {
             //echo "edit";
             switch (isset($_POST['submit'])) {
                 case true:
-                    # code...
+                    
                     // check token first
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -159,7 +159,7 @@ if (User::access(2)) {
                         $alertDanger[] = TITLE_CANNOT_EMPTY;
                     }
                     if (isset($alertDanger)) {
-                        # code...
+                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $moddate = date('Y-m-d H:i:s');
@@ -240,7 +240,7 @@ if (User::access(2)) {
             break;
 
         default:
-            # code...
+            
             if (isset($_GET['act']) && $_GET['act'] == 'del') {
                 if (isset($_GET['id'])) {
                     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
@@ -248,7 +248,7 @@ if (User::access(2)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        # code...
+                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $title = Posts::title($_GET['id']);
@@ -280,18 +280,20 @@ if (User::access(2)) {
             }
             switch ($action) {
                 case 'publish':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        # code...
+                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::publish($id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                
+                                Posts::publish($id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -299,18 +301,20 @@ if (User::access(2)) {
                     }
                     break;
                 case 'unpublish':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        # code...
+                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::unpublish($id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                
+                                Posts::unpublish($id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -318,19 +322,21 @@ if (User::access(2)) {
                     }
                     break;
                 case 'delete':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        # code...
+                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::delete($id);
-                            Hooks::run('post_delete_action', $id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                
+                                Posts::delete($id);
+                                Hooks::run('post_delete_action', $id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -339,7 +345,7 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    # code...
+                    
                     break;
             }
 

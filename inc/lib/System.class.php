@@ -259,7 +259,7 @@ class System
         global $data;
         // print_r($data);
         if (isset($data['alertSuccess'])) {
-            # code...
+            
             echo '<div class="alert alert-success" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -267,13 +267,13 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertSuccess'] as $alert) {
-                # code...
+                
                 echo "<li>$alert</li>\n";
             }
             echo '</ul></div>';
         }
         if (isset($data['alertDanger'])) {
-            # code...
+            
             echo '<div class="alert alert-danger" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -281,13 +281,13 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDanger'] as $alert) {
-                # code...
+                
                 echo "<li>$alert</li>";
             }
             echo '</ul></div>';
         }
         if (isset($data['alertInfo'])) {
-            # code...
+            
             echo '<div class="alert alert-info" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -295,13 +295,13 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertInfo'] as $alert) {
-                # code...
+                
                 echo "$alert\n";
             }
             echo '</ul></div>';
         }
         if (isset($data['alertWarning'])) {
-            # code...
+            
             echo '<div class="alert alert-warning" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -309,13 +309,13 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertWarning'] as $alert) {
-                # code...
+                
                 echo "$alert\n";
             }
             echo '</ul></div>';
         }
         if (isset($data['alertDefault'])) {
-            # code...
+            
             echo '<div class="alert alert-default" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
@@ -323,7 +323,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDefault'] as $alert) {
-                # code...
+                
                 echo "$alert\n";
             }
             echo '</ul></div>';

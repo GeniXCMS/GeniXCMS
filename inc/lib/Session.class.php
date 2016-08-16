@@ -79,7 +79,7 @@ class Session
     {
         $val = $_SESSION['gxsess']['val'];
         foreach ($val as $k => $v) {
-            # code...
+            
             switch ($k) {
                 case $vars:
                     return $v;

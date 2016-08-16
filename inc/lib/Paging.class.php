@@ -64,10 +64,8 @@ class Paging
                 $maxpage = 7;
                 $curr = $vars['paging'];
                 if ($curr < $maxpage / 2) {
-                    # code...
                     $p = 1;
                     if ($maxpage > ceil($total / $vars['max'])) {
-                        # code...
                         $limit = ceil($total / $vars['max']);
                     } else {
                         $limit = $maxpage;
@@ -86,7 +84,6 @@ class Paging
                 }
 
                 for ($i = $p; $i <= $limit /*ceil($total/$vars['max'])+1*/; ++$i) {
-                    # code...
                     if ($smart == true) {
                         $url = $vars['url'].'/paging/'.$i;
                     } else {
@@ -118,7 +115,7 @@ class Paging
 
                 if ($vars['paging'] < $limit) {
                     $next = ($vars['paging']) + 1;
-                    # code...
+
                     if ($smart == true) {
                         $url = $vars['url'].'/paging/'.$next;
                     } else {

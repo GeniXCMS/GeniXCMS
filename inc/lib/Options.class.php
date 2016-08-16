@@ -102,7 +102,7 @@ class Options
         // echo "</pre>";
     }
 
-    public static function is_exist($vars)
+    public static function isExist($vars)
     {
         $opt = self::get($vars);
 

@@ -37,9 +37,9 @@
             <div class="col-sm-12">
             <?php
             if (isset($data['menus']) && $data['menus'] != '') {
-                # code...
+                
                 foreach (json_decode($data['menus']) as $k => $m) {
-                    # code...
+                    
                     echo "
                         <div class=\"panel-group\" id=\"accordion\">
                           <div class=\"panel panel-default\">

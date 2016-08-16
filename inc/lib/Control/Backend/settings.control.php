@@ -21,12 +21,12 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(0)) {
-    # code...
+    
 
     $data['sitetitle'] = SETTINGS;
     switch (isset($_POST['change'])) {
         case '1':
-            # code...
+            
             if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
@@ -72,7 +72,7 @@ if (User::access(0)) {
                 }
                 //print_r($ob);
                 foreach ($_POST as $key => $val) {
-                    # code...
+                    
                     $vars[$key] = Typo::cleanX($val);
                 }
                 unset($vars['change']);
@@ -87,7 +87,7 @@ if (User::access(0)) {
             break;
 
         default:
-            # code...
+            
             //print_r($data);
             break;
     }

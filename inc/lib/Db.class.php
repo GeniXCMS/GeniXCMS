@@ -242,7 +242,6 @@ class Db
             }
 
             $set = substr($set, 0, -1);
-            //echo $set;
             $sql = sprintf("UPDATE `%s` SET %s WHERE `id` = '%d' LIMIT 1", $vars['table'], $set, $vars['id']);
         } else {
             $sql = $vars;
@@ -283,9 +282,7 @@ class Db
         if (is_array($vars)) {
             $set = '';
             $k = '';
-            //print_r($vars['key']);
             foreach ($vars['key'] as $key => $val) {
-                //print_r($val);
                 $val = self::escape($val);
                 $set .= "'{$val}',";
                 $k .= "`{$key}`,";
@@ -305,12 +302,9 @@ class Db
         } elseif (DB_DRIVER == 'mysqli') {
             try {
                 if (!self::query($sql)) {
-                    // printf("<div class=\"alert alert-danger\">Errormessage: %s</div>\n", self::$mysqli->error);
-                    //Control::error('db',self::$mysqli->error);
                     return false;
                 } else {
                     self::$last_id = self::$mysqli->insert_id;
-
                     return true;
                 }
             } catch (exception $e) {

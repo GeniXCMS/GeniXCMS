@@ -4,7 +4,7 @@
         echo "<div class=\"row\"><div class=\"col-md-12\">".mdoTheme::opt('mdo_adsense')."</div></div><hr />";
     }
     foreach ($data['posts'] as $p) {
-        # code...
+        
         echo "
         <div class=\"blog-post\">
             <h2 class=\"blog-post-title\">$p->title</h2>

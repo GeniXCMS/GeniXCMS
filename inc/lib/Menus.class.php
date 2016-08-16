@@ -94,7 +94,7 @@ class Menus
         if ($n > 0) {
             $menu = "<ul class=\"menu-{$menuid} {$class}\">";
             foreach ($menus as $m) {
-                # code...
+                
                 if ($m->parent == '0') {
                     $parent = self::isHadParent($m->id, $menuid);
                     $n = Db::$num_rows;
@@ -206,7 +206,7 @@ class Menus
         if ($n > 0) {
             $menu = "<form action=\"\" method=\"post\"><ul class=\"menu-{$menuid} {$class} \">";
             foreach ($menus as $m) {
-                # code...
+                
                 if ($m->parent == '0') {
                     $menu .= '<li clas="form-inline"><div class="row">';
                     $menu .= '
@@ -354,7 +354,7 @@ class Menus
     public static function updateMenuOrder($vars)
     {
         foreach ($vars as $k => $v) {
-            # code...
+            
             // print_r($v);
             $sql = array(
                         'table' => 'menus',

@@ -46,13 +46,13 @@ if (isset($_POST['register'])) {
             $alertDanger[] = 'Your Captcha is not correct.';
         }
     }
-    if (!User::is_exist($_POST['userid'])) {
+    if (!User::isExist($_POST['userid'])) {
         $alertDanger[] = MSG_USER_EXIST;
     }
-    if (!User::is_same($_POST['pass1'], $_POST['pass1'])) {
+    if (!User::isSame($_POST['pass1'], $_POST['pass1'])) {
         $alertDanger[] = MSG_USER_PWD_MISMATCH;
     }
-    if (!User::is_email($_POST['email'])) {
+    if (!User::isEmail($_POST['email'])) {
         $alertDanger[] = MSG_USER_EMAIL_EXIST;
     }
 
@@ -111,7 +111,6 @@ if (isset($_POST['register'])) {
     }
 }
 if (isset($_GET['activation'])) {
-    # code...
     $activation = Typo::strip(Typo::cleanX($_GET['activation']));
     $usr = Db::result(sprintf("SELECT * FROM `user` WHERE `activation` = '%s' LIMIT 1", $activation));
     if (Db::$num_rows > 0) {
@@ -157,7 +156,6 @@ if (isset($loggedin)) {
 <div class="col-md-4 col-md-offset-4">
 <?php
 if (isset($data['alertSuccess'])) {
-    # code...
     echo '<div class="alert alert-success" >
         <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span>
@@ -165,12 +163,10 @@ if (isset($data['alertSuccess'])) {
         </button>
         ';
     foreach ($data['alertSuccess'] as $alert) {
-        # code...
         echo "$alert\n";
     }
     echo '</div>';
 } elseif (isset($data['alertDanger'])) {
-    # code...
     //print_r($data['alertDanger']);
     echo '<div class="alert alert-danger" >
         <button type="button" class="close" data-dismiss="alert">
@@ -179,7 +175,6 @@ if (isset($data['alertSuccess'])) {
         </button>
         <ul>';
     foreach ($data['alertDanger'] as $alert) {
-        # code...
         echo "<li>$alert</li>\n";
     }
     echo '</ul></div>';

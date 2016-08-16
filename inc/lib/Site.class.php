@@ -172,39 +172,45 @@ class Site
     <script src="'.self::$url.'/assets/js/summernote.min.js"></script>
     <script src="'.self::$url.'/assets/js/plugins/summernote-ext-hint.js"></script>
     <script src="'.self::$url.'/assets/js/plugins/summernote-ext-video.js"></script>
-    <script src="'.self::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
-
-    apaaja
+    <script src="'.self::$url.'/assets/js/plugins/summernote-ext-genixcms.js\"></script>
+    <script src="'.self::$url.'/assets/js/plugins/summernote-image-attributes.js\"></script>
+    <script src="'.self::$url.'/assets/js/plugins/summernote-floats-bs.min.js\"></script>
     <script>
       $(document).ready(function() {
-        $('.editor').summernote({
-            height: 300,
+        $(".editor").summernote({
+            minHeight: 300,
             toolbar: [
-                    ".$toolbar.'
+                    '.$toolbar.'
                 ],
-            onImageUpload: function(files, editor, welEditable) {
+            callbacks: {
+                onImageUpload: function(files, editor, welEditable) {
                     sendFile(files[0],editor,welEditable);
-                },
-            onblur: function(e) {
-                  var id = $(\'.editor\').attr(\'id\');
-                  var sHTML = $(\'.editor\').eq(id).code();
-                  //alert(sHTML);
                 }
+            },
+            popover: {
+                image: [
+                    [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
+                    // [\'float\', [\'floatLeft\', \'floatRight\', \'floatNone\']],
+                    [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
+                    [\'custom\', [\'imageAttributes\', \'imageShape\']],
+                    [\'remove\', [\'removeMedia\']]
+                ],
+            },
         });
 
         function sendFile(file,editor,welEditable) {
           data = new FormData();
           data.append("file", file);
             $.ajax({
-                url: "'.$url."\",
+                url: "'.$url.'",
                 data: data,
                 cache: false,
                 contentType: false,
                 processData: false,
-                type: 'POST',
+                type: \'POST\',
                 success: function(data) {
                 //alert(data);
-                  $('.editor').summernote('editor.insertImage', data);
+                  $(\'.editor\').summernote(\'editor.insertImage\', data);
                 },
                error: function(jqXHR, textStatus, errorThrown) {
                  console.log(textStatus+\" \"+errorThrown);
@@ -212,12 +218,12 @@ class Site
             });
           }
 
-         $(\".alert\").alert();
+         $(".alert").alert();
       });
 
 
     </script>
-              ";
+              ';
         }
 
         if (isset($GLOBALS['validator']) && $GLOBALS['validator'] == true) {

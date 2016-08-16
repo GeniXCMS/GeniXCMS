@@ -29,16 +29,16 @@ if (User::access(0)) {
     }
     switch ($act) {
         case 'add':
-            # code...
+            
             if (isset($_POST['submit'])) {
-                # code...
+                
                 $submit = true;
             } else {
                 $submit = false;
             }
             switch ($submit) {
                 case true:
-                    # code...
+                    
 
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -115,7 +115,7 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    # code...
+                    
 
                     break;
             }
@@ -133,9 +133,9 @@ if (User::access(0)) {
             break;
 
         case 'edit':
-            # code...
+            
             if (isset($_POST['edititem'])) {
-                # code...
+                
                 $submit = true;
             } else {
                 $submit = false;
@@ -169,7 +169,7 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    # code...
+                    
 
                     break;
             }
@@ -269,16 +269,16 @@ if (User::access(0)) {
             break;
 
         default:
-            # code...
+            
             if (isset($_POST['submit'])) {
-                # code...
+                
                 $submit = true;
             } else {
                 $submit = false;
             }
             switch ($submit) {
                 case true:
-                    # code...
+                    
 
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
@@ -316,14 +316,14 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    # code...
+                    
 
                     break;
             }
 
                 // ADD MENU ITEM START
             if (isset($_POST['additem'])) {
-                # code...
+                
                 $submit = true;
             } else {
                 $submit = false;
@@ -360,7 +360,7 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    # code...
+                    
 
                     break;
             }
@@ -375,7 +375,7 @@ if (User::access(0)) {
             }
             switch ($submit) {
                 case true:
-                    # code...
+                    
                     // echo "<pre>";
                     // print_r($_POST['order']);
                     // echo "</pre>";
@@ -397,7 +397,7 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    # code...
+                    
                     break;
             }
 

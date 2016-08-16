@@ -16,7 +16,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-    # code...
+    
 
 if (isset($_GET['id'])) {
     $menuid = $_GET['id'];
@@ -51,7 +51,7 @@ if (isset($_GET['id'])) {
                //echo($data['abc']);
                 //print_r($data['parent']);
             foreach ($data['parent'] as $p) {
-                # code...
+                
                 if ($p->parent == '0') {
                     echo "<option value=\"$p->id\">$p->name</option>";
                     $parent2 = $data['parent'];

@@ -28,7 +28,7 @@ if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
         //print_r($data['post']);
         foreach ($data['post'] as $p) {
-            # code...
+            
             $title = $p->title;
             $content = $p->content;
             $date = $p->date;

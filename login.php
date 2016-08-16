@@ -48,8 +48,6 @@ if (isset($_POST['login'])) {
     }
 
     if (!isset($alertDanger)) {
-        # code...
-
         /*check if username is exist or not */
         $username = Typo::cleanX(Typo::strip($_POST['username']));
         $sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
@@ -69,7 +67,6 @@ if (isset($_POST['login'])) {
                 $c = Db::$num_rows;
 
                 foreach ($l as $v) {
-                    # code...
                     //print_r($v);
                     $p = $v->pass;
                     $g = $v->group;
@@ -126,7 +123,7 @@ if (isset($alertSuccess)) {
 			{$alertSuccess}
 		</div>";
 }
-if (!User::is_loggedin()) {
+if (!User::isLoggedin()) {
     ?>
 
     <div style="max-width: 302px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 60px ">

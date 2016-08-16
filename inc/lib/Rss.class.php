@@ -44,18 +44,18 @@ class Rss
         <lastBuildDate>'.Date::format(date('Y-m-d H:i:s'), 'D, j M Y H:i:s O').'</lastBuildDate>
         <atom:link href="'.Site::$url.'/rss/" rel="self" type="application/rss+xml" />
             ';
-        foreach ($posts as $p) {
-            # code...
-            $xml .= '
+        if (!isset($posts['error'])) {
+            foreach ($posts as $p) {
+                $xml .= '
         <item>
             <title>'.strip_tags(Typo::Xclean($p->title)).'</title>
             <description>'.preg_replace('/&nbsp;/i', '', $p->content).'</description>
             <pubDate>'.Date::format($p->date, 'D, j M Y H:i:s O').'</pubDate>
             <link>'.$class::$url($p->id).'</link>
             <guid>'.$class::$url($p->id).'</guid>
-            
         </item>
                 ';
+            }
         }
 
         $xml .= '

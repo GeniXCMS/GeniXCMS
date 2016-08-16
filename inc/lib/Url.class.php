@@ -128,13 +128,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/category/'.$vars.'/'.Typo::slugify(Categories::name($vars));
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url."/?cat={$vars}";
                 break;
         }
@@ -172,13 +172,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/sitemap'.GX_URL_PREFIX;
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url.'/index.php?page=sitemap';
                 break;
         }
@@ -200,13 +200,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/rss'.GX_URL_PREFIX;
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url.'/index.php?rss';
                 break;
         }
@@ -292,13 +292,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/ajax/'.$vars.'?token='.TOKEN;
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url."/?ajax={$vars}&token=".TOKEN;
                 break;
         }
@@ -320,13 +320,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/tag/'.$vars.'/'.Categories::name($vars);
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url."/?tag={$vars}";
                 break;
         }
@@ -338,13 +338,13 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                # code...
+                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/mod/'.$vars.GX_URL_PREFIX;
                 break;
 
             default:
-                # code...
+                
                 $url = Site::$url."/?mod={$vars}";
                 break;
         }

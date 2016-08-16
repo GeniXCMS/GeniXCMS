@@ -118,7 +118,7 @@
                 //print_r($data);
             if ($data['num'] > 0) {
                 foreach ($data['posts'] as $p) {
-                    # code...
+                    
                     //print_r($p);
                     //echo $p->id;
                     if ($p->status == '0') {

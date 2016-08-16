@@ -21,8 +21,6 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username')) == $_GET['id'])) {
-    # code...
-
     $data['sitetitle'] = USERS;
     if (isset($_GET['act'])) {
         $act = $_GET['act'];
@@ -62,11 +60,9 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
 
     switch ($act) {
         case 'edit':
-            # code...
             $data[] = '';
             switch (isset($_POST['edituser'])) {
                 case true:
-                    # code...
                     //check token first
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
@@ -74,11 +70,11 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     }
 
                     // VALIDATE ALL
-                    if (!User::is_exist($_POST['userid'])) {
+                    if (!User::isExist($_POST['userid'])) {
                         $alertDanger[] = MSG_USER_EXIST;
                     }
 
-                    if (!User::is_email($_POST['email'])) {
+                    if (!User::isEmail($_POST['email'])) {
                         $alertDanger[] = MSG_USER_EMAIL_EXIST;
                     }
 
@@ -105,7 +101,6 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $alertSuccess[] = 'User : '.User::userid($_GET['id']).' Updated';
 
                         if (isset($alertSuccess)) {
-                            # code...
                             $data['alertSuccess'] = $alertSuccess;
                         }
                         Hooks::run('user_submit_edit_action', $_GET);
@@ -117,9 +112,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         Token::remove($_POST['token']);
                     }
                     break;
-
                 default:
-                    # code...
                     break;
             }
             Theme::admin('header', $data);
@@ -128,8 +121,6 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             break;
         case 'del':
             if (User::access(1)) {
-                # code...
-
                 if (isset($_GET['id'])) {
                     $user = User::userid($_GET['id']);
                     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
@@ -227,12 +218,10 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             break;
 
         default:
-            # code...
             $data[] = '';
             if (User::access(1)) {
                 switch (isset($_POST['adduser'])) {
                     case true:
-                        # code...
                         // CHECK TOKEN FIRST
                         //echo Token::isExist($_POST['token']);
                         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
@@ -257,13 +246,13 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             $alertDanger[] = PASS2_CANNOT_EMPTY;
                         }
 
-                        if (!User::is_exist($_POST['userid'])) {
+                        if (!User::isExist($_POST['userid'])) {
                             $alertDanger[] = MSG_USER_EXIST;
                         }
-                        if (!User::is_same($_POST['pass1'], $_POST['pass2'])) {
+                        if (!User::isSame($_POST['pass1'], $_POST['pass2'])) {
                             $alertDanger[] = MSG_USER_PWD_MISMATCH;
                         }
-                        if (!User::is_email($_POST['email'])) {
+                        if (!User::isEmail($_POST['email'])) {
                             $alertDanger[] = MSG_USER_EMAIL_EXIST;
                         }
 
@@ -292,7 +281,6 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
 
                     default:
-                        # code...
                         break;
                 }
 
@@ -308,17 +296,14 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 }
                 switch ($action) {
                     case 'activate':
-                        # code...
                         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
                         if (isset($alertDanger)) {
-                            # code...
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
-                                # code...
                                 User::activate($id);
                             }
                         }
@@ -327,17 +312,14 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         }
                         break;
                     case 'deactivate':
-                        # code...
                         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
                         if (isset($alertDanger)) {
-                            # code...
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
-                                # code...
                                 User::deactivate($id);
                             }
                         }
@@ -346,17 +328,14 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         }
                         break;
                     case 'delete':
-                        # code...
                         if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
                         if (isset($alertDanger)) {
-                            # code...
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
-                                # code...
                                 User::delete($id);
                             }
                         }
@@ -366,7 +345,6 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
 
                     default:
-                        # code...
                         break;
                 }
 

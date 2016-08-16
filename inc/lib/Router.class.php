@@ -97,7 +97,7 @@ class Router
         $m = self::match();
         // print_r($m);
         if (is_array($m)) {
-            # code...
+            
 
             $val = self::extract($m[0], $m[1]);
             // print_r($val);

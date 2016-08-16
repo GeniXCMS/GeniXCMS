@@ -16,27 +16,27 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($data['alertSuccess'])) {
-    # code...
+    
     echo '<div class="alert alert-success" >
     <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
         <span class="sr-only">'.CLOSE.'</span>
     </button>';
     foreach ($data['alertSuccess'] as $alert) {
-        # code...
+        
         echo "$alert\n";
     }
     echo '</div>';
 }
 if (isset($data['alertDanger'])) {
-    # code...
+    
     echo '<div class="alert alert-danger" >
     <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
         <span class="sr-only">'.CLOSE.'</span>
     </button>';
     foreach ($data['alertDanger'] as $alert) {
-        # code...
+        
         echo "$alert\n";
     }
     echo '</div>';

@@ -95,7 +95,6 @@ class Mod
             $list = '';
             asort($mod);
             foreach ($mod as $m) {
-                # code...
                 if (self::exist($m)) {
                     $data = self::data($m);
                     if (isset($_GET['mod']) && $_GET['mod'] == $m) {
@@ -130,7 +129,6 @@ class Mod
             $mods = array();
         }
         if (!in_array($mod, $mods)) {
-            # code...
             $mods = array_merge($mods, array($mod));
         }
 
@@ -156,7 +154,6 @@ class Mod
         //print_r($mods);
         $arr = '';
         for ($i = 0; $i < count($mods); ++$i) {
-            # code...
             if ($mods[$i] == $mod) {
                 //unset($mods[$i]);
             } else {
@@ -196,7 +193,6 @@ class Mod
     {
         $data = '';
         if (User::access(0)) {
-            # code...
             if (isset($_GET['page']) && $_GET['page'] == 'modules') {
                 if (isset($_GET['act'])) {
                     if ($_GET['act'] == ACTIVATE) {
@@ -238,8 +234,6 @@ class Mod
                     }
                 }
             }
-
-            
         }
         $json = Options::v('modules');
         $mods = json_decode($json, true);

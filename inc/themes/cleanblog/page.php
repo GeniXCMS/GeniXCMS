@@ -20,7 +20,7 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <?php
                 foreach ($data['posts'] as $p) {
-                    # code...
+                    
                     echo "
                     <div class=\"blog-post\">
                         <h2 class=\"blog-post-title\">$p->title</h2>

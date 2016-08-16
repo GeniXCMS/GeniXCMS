@@ -71,7 +71,7 @@ if (isset($_POST['login'])) {
                 $c = Db::$num_rows;
 
                 foreach ($l as $v) {
-                    # code...
+                    
                     //print_r($v);
                     $p = $v->pass;
                     $g = $v->group;
@@ -126,7 +126,7 @@ if (isset($alertSuccess)) {
 		</div>";
 }
 
-if (!User::is_loggedin()) {
+if (!User::isLoggedin()) {
     ?>
 <div class="row">
     <div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 50px;">

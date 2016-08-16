@@ -29,7 +29,7 @@ class Theme
     public static function theme($var, $data = '')
     {
         if (isset($data)) {
-            # code...
+            
             $GLOBALS['data'] = $data;
         }
         if (self::exist($var)) {
@@ -56,7 +56,7 @@ class Theme
     public static function admin($var, $data = '')
     {
         if (isset($data)) {
-            # code...
+            
             $GLOBALS['data'] = $data;
         }
         include GX_PATH.'/gxadmin/themes/'.$var.'.php';
@@ -71,7 +71,7 @@ class Theme
         header('Content-Type: text/html; charset=utf-8');
 
         if (isset($vars)) {
-            # code...
+            
             $GLOBALS['data'] = $vars;
             self::theme('header', $vars);
         } else {
@@ -82,7 +82,7 @@ class Theme
     {
         global $GLOBALS;
         if (isset($vars)) {
-            # code...
+            
             $GLOBALS['data'] = $vars;
             self::theme('footer', $vars);
         } else {
@@ -228,7 +228,7 @@ class Theme
         //$mod = self::modList();
         //print_r($mod);
         $list = '';
-        # code...
+        
         if (User::access(0)) {
             $data = self::data($thm);
             if (isset($_GET['page'])

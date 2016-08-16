@@ -51,7 +51,7 @@ class Posts
             self::$last_id = Db::$last_id;
             Hooks::run('post_sqladd_action', $vars, self::$last_id);
 
-            if (Pinger::is_on()) {
+            if (Pinger::isOn()) {
                 $pinger = Options::v('pinger');
                 Pinger::run($pinger);
             }
@@ -75,7 +75,7 @@ class Posts
             $post = Db::update($ins);
             Hooks::run('post_sqladd_action', $vars, $id);
 
-            if (Pinger::is_on()) {
+            if (Pinger::isOn()) {
                 $pinger = Options::v('pinger');
                 Pinger::run($pinger);
             }
@@ -259,7 +259,6 @@ class Posts
         $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
         if ($num > 0) {
             foreach ($cat as $c) {
-                # code...
                 // if ($c->parent == '') {
                 if (isset($vars['selected']) && $c->id == $vars['selected']) {
                     $sel = 'SELECTED';
@@ -268,7 +267,7 @@ class Posts
                 }
                 $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->title}</option>";
                     // foreach ($cat as $c2) {
-                    //     # code...
+                    //
                     //     if ($c2->parent == $c->id) {
                     //         if (isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
                     //         $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">&nbsp;&nbsp;&nbsp;{$c2->name}</option>";
@@ -352,7 +351,6 @@ class Posts
                 foreach ($post as $p) {
                     if (self::existParam('multilang', $p->id)
                         && Options::v('multilang_default') !== $langs) {
-                        # code...
                         $lang = Language::getLangParam($langs, $p->id);
                         $posts = get_object_vars($p);
                         $posts = array_merge($posts, $lang);

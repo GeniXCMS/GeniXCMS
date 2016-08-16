@@ -45,7 +45,7 @@ class User
         }
     }
 
-    public static function is_loggedin()
+    public static function isLoggedin()
     {
         $username = Session::val('username');
         if (isset($username)) {
@@ -210,7 +210,7 @@ class User
         return $pass;
     }
 
-    public static function is_exist($user)
+    public static function isExist($user)
     {
         if (isset($_GET['act']) && $_GET['act'] == 'edit') {
             $id = Typo::int($_GET['id']);
@@ -229,7 +229,7 @@ class User
         }
     }
 
-    public static function is_same($p1, $p2)
+    public static function isSame($p1, $p2)
     {
         if ($p1 == $p2) {
             return true;
@@ -238,7 +238,7 @@ class User
         }
     }
 
-    public static function is_email($vars)
+    public static function isEmail($vars)
     {
         if (isset($_GET['act']) && $_GET['act'] == 'edit') {
             $id = Typo::int($_GET['id']);

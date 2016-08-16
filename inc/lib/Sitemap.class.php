@@ -39,10 +39,10 @@ class Sitemap
             ';
             //print_r($posts);
         if (!isset($posts['error'])) {
-            # code...
+            
 
             foreach ($posts as $p) {
-                # code...
+                
                 $xml .= '
                     <url>
                         <loc>'.$class::$url($p->id).'</loc>

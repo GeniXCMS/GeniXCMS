@@ -18,7 +18,7 @@ if (defined('GX_LIB') === false) {
  */
 
 if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
-    # code...
+    
 
     if (User::access(2)) {
         // A list of permitted file extensions

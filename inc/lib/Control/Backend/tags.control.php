@@ -21,12 +21,12 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(1)) {
-    # code...
+    
 
     $data['sitetitle'] = TAGS;
     switch (isset($_POST['addcat'])) {
         case true:
-            # code...
+            
             // cleanup first
             $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
             $cat = Typo::cleanX($_POST['cat']);
@@ -58,13 +58,13 @@ if (User::access(1)) {
             break;
 
         default:
-            # code...
+            
             break;
     }
 
     switch (isset($_POST['updatecat'])) {
         case true:
-            # code...
+            
             // cleanup first
             $cat = Typo::cleanX($_POST['cat']);
             if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
@@ -90,7 +90,7 @@ if (User::access(1)) {
             break;
 
         default:
-            # code...
+            
             break;
     }
 

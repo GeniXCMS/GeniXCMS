@@ -129,7 +129,7 @@ if (isset($alertSuccess)) {
 			{$alertSuccess}
 		</div>";
 }
-if (!User::is_loggedin()) {
+if (!User::isLoggedin()) {
     ?>
 <div class="row">
     <div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 30px; margin-bottom: 60px ">

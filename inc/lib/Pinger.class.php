@@ -58,7 +58,6 @@ class Pinger
     {
         if (is_array($vars)) {
             foreach ($vars as $v) {
-                # code...
                 self::rpc($v);
             }
         } else {
@@ -67,14 +66,13 @@ class Pinger
             $pinger = str_replace("\r\n", '', $pinger);
             $pinger = str_replace('{{domain}}', Options::v('sitedomain'), $pinger);
             foreach ($pinger as $p) {
-                # code...
                 self::rpc($p);
                 //echo "'$p'<br>";
             }
         }
     }
 
-    public static function is_on()
+    public static function isOn()
     {
         $on = Options::v('pinger_enable');
         if ($on == 'on') {

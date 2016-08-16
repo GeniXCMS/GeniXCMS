@@ -5,7 +5,7 @@
     }
     if (isset($data['posts'][0]->title)) {
         foreach ($data['posts'] as $p) {
-            # code...
+            
             echo "
             <div class=\"blog-post\">
                 <h2 class=\"blog-post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>

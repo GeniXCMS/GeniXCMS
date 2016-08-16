@@ -21,7 +21,7 @@
             <?php
                 if ($data['num'] > 0) {
                     foreach ($data['posts'] as $p) {
-                        # code...
+                        
                         echo "
                         <div class=\"post-preview\">
                             <h2 class=\"post-title\"><a href=\"".Url::post($p->id)."\">$p->title</a></h2>

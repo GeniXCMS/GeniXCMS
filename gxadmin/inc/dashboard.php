@@ -28,6 +28,96 @@
     <div class="col-md-12">
         <div class="row">
             <?=Hooks::run('admin_page_dashboard_action', $data);?>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file-text-o fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"><?=Stats::totalPost('post');?></div>
+                                <div><?=TOTAL_POST;?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=posts">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Posts</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file-text fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"><?=Stats::totalPost('page');?></div>
+                                <div><?=TOTAL_PAGE;?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=pages">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Pages</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cubes fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"><?=Stats::totalCat('post');?></div>
+                                <div><?=TOTAL_CAT;?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=categories">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Categories</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-users fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"><?=Stats::totalUser();?></div>
+                                <div><?=TOTAL_USER;?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=users">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Users</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -36,14 +126,13 @@
                     <div class="panel-body">
                         <ul class="list-group">
                         <?php
-                            $vars = array('num' => 5, 'type' => 'post');
-                            $post = Posts::recent($vars);
+                        $vars = array('num' => 5, 'type' => 'post');
+                        $post = Posts::recent($vars);
 
                         if (isset($post['error'])) {
                             echo "<li class=\"list-group-item\">{$post['error']}</li>";
                         } else {
                             foreach ($post as $p) {
-                                # code...
                                 echo '
                                         <li class="list-group-item">
                                             <a href="'.Url::post($p->id)."\" target=\"_blank\">
@@ -68,11 +157,19 @@
                     <div class="panel-body">
                         <ul class="list-group">
                         <?php
-                            echo '<li class="list-group-item">'.TOTAL_POST.': '.Stats::totalPost('post').'</li>'
-                                .'<li class="list-group-item">'.TOTAL_PAGE.': '.Stats::totalPost('page').'</li>'
-                                .'<li class="list-group-item">'.TOTAL_CAT.': '.Stats::totalCat('post').'</li>'
-                                .'<li class="list-group-item">'.TOTAL_USER.': '.Stats::totalUser().'</li>';
-                            echo Hooks::run('admin_page_dashboard_statslist_action', $data);
+
+                        // print_r(Stats::mostViewed(5));
+                        $list = Stats::mostViewed(5);
+                        if (count($list) > 0) {
+                            echo "<ul class=\"list-group\">";
+                            foreach ($list as $p) {
+                                echo "<li class=\"list-group-item\"><a href=\"".Url::post($p->id)."\">".$p->title."</a><span class=\"badge pull-right\" data-toggle=\"tooltip\" title=\"views\">".$p->views."</span></li>";
+                            }
+                            echo "</ul>";
+                        }
+                        
+                        echo Hooks::run('admin_page_dashboard_statslist_action', $data);
+
                         ?>
                         </ul>
                     </div>

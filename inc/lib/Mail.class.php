@@ -34,7 +34,6 @@ class Mail
 
     public function __construct()
     {
-        # code...
         self::$smtphost = Options::v('smtphost');
         self::$smtpuser = Options::v('smtpuser');
         self::$smtppass = Options::v('smtppass');
@@ -108,8 +107,6 @@ class Mail
             //     $mailer = "Message sent!";
             // }
         } elseif ($type == 1) {
-            # code...
-
             //Create a new PHPMailer instance
             $mail = new PHPMailer(true);
             try {

@@ -49,6 +49,11 @@ class Stats
         return $npost;
     }
 
+    public static function mostViewed($count)
+    {
+        return Db::result(sprintf("SELECT * FROM `posts` ORDER BY `views` DESC LIMIT 0,%d", $count));
+    }
+
     public static function addViews($id)
     {
         $botlist = self::botlist();
@@ -61,7 +66,6 @@ class Stats
             }
         }
         if ($nom == 0) {
-            # code...
             $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = '{$id}' LIMIT 1";
             $q = Db::query($sql);
         }

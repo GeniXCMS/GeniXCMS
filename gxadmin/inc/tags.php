@@ -35,7 +35,7 @@
             <?php
             if ($data['num'] > 0) {
                 foreach ($data['cat'] as $c) {
-                    # code...
+                    
                     // echo "<td>".$c->id."</td>";
                     // echo "<td>".$c->name."</td>";
                     // echo "<td>".$c->parent."</td>";

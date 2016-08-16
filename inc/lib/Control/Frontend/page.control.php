@@ -38,13 +38,13 @@ if (SMART_URL == true) {
 
 switch ($page) {
     case 'sitemap':
-        # code...
+        
         Sitemap::create();
         exit;
         break;
 
     default:
-        # code...
+        
 
         $data['posts'] = Db::result(
             sprintf(

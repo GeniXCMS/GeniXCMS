@@ -86,7 +86,7 @@
                                 <ul class="list-group">
                                 <?php
                                 if (count($data['list_lang']) > 0) {
-                                    # code...
+                                    
                                     $list_lang = $data['list_lang'];
                                     foreach ($list_lang as $key => $value) {
                                         $flag = strtolower($value['flag']);

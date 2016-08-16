@@ -80,6 +80,9 @@
     <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-hint.js\"></script>
     <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-video.js\"></script>
     <script src=\"".Site::$url."/assets/js/plugins/summernote-ext-genixcms.js\"></script>
+    <script src=\"".Site::$url."/assets/js/plugins/summernote-image-attributes.js\"></script>
+    <script src=\"".Site::$url."/assets/js/plugins/summernote-floats-bs.min.js\"></script>
+
     <script>
       $(document).ready(function() {
         // $('.editor').summernote({
@@ -113,18 +116,25 @@
           }
 
         $('.editor').each(function(i, obj) { $(obj).summernote({
-            height: 300,
+            minHeight: 300,
             toolbar: [
                     ".$toolbar."
                 ],
-            onImageUpload: function(files, editor, welEditable) {
+            callbacks: {
+                onImageUpload: function(files, editor, welEditable) {
                     sendFile(files[0],editor,welEditable);
-                },
-            onclick: function(e) {
-                  var id = $(obj).attr('id');
-                  var sHTML = $(obj).code();
-                  alert(sHTML);
                 }
+            },
+            popover: {
+            image: [
+                ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                /*['float', ['floatLeft', 'floatRight', 'floatNone']],*/
+                ['floatBS', ['floatBSLeft', 'floatBSNone', 'floatBSRight']],
+                ['custom', ['imageAttributes', 'imageShape']],
+                ['remove', ['removeMedia']]
+            ],
+            dialogsInBody: true,
+        },
           });
         });
 

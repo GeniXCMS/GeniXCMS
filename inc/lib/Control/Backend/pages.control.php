@@ -21,7 +21,7 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(2)) {
-    # code...
+    
 
     $data['sitetitle'] = PAGES;
     Theme::editor('full');
@@ -32,12 +32,12 @@ if (User::access(2)) {
     }
     switch ($act) {
         case 'add':
-            # code...
+            
             $data[''] = '';
 
             switch (isset($_POST['submit'])) {
                 case true:
-                    # code...
+                    
 
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
@@ -67,7 +67,7 @@ if (User::access(2)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
-                            # code...
+                            
                             $date = date('Y-m-d H:i:s');
                         } else {
                             $date = $_POST['date'];
@@ -106,7 +106,7 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    # code...
+                    
                     //System::inc('pages_form', $data);
                     break;
             }
@@ -119,7 +119,7 @@ if (User::access(2)) {
             //echo "edit";
             switch (isset($_POST['submit'])) {
                 case true:
-                    # code...
+                    
 
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
@@ -148,7 +148,7 @@ if (User::access(2)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
-                            # code...
+                            
                             $date = date('Y-m-d H:i:s');
                         } else {
                             $date = $_POST['date'];
@@ -190,7 +190,7 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    # code...
+                    
                     //System::inc('posts_form', $data);
                     break;
             }
@@ -206,7 +206,7 @@ if (User::access(2)) {
             break;
 
         default:
-            # code...
+            
             if (isset($_GET['act']) && $_GET['act'] == 'del') {
                 if (isset($_GET['id'])) {
                     $title = Posts::title(Typo::int($_GET['id']));
@@ -238,13 +238,13 @@ if (User::access(2)) {
                 $action = '';
             }
             if (isset($_POST['post_id'])) {
-                $post_id = Typo::int($_POST['post_id']);
+                $post_id = $_POST['post_id'];
             } else {
                 $post_id = '';
             }
             switch ($action) {
                 case 'publish':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -252,9 +252,10 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::publish($id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                Posts::publish($id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -262,7 +263,7 @@ if (User::access(2)) {
                     }
                     break;
                 case 'unpublish':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -270,9 +271,11 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::unpublish($id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                
+                                Posts::unpublish($id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -280,7 +283,7 @@ if (User::access(2)) {
                     }
                     break;
                 case 'delete':
-                    # code...
+                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -288,9 +291,12 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        foreach ($post_id as $id) {
-                            # code...
-                            Posts::delete($id);
+                        if ($post_id != "") {
+                            foreach ($post_id as $id) {
+                                
+                                Posts::delete($id);
+                                Hooks::run('post_delete_action', $id);
+                            }
                         }
                     }
                     if (isset($_POST['token'])) {
@@ -299,7 +305,7 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    # code...
+                    
                     break;
             }
 

@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-<?php if (User::is_loggedin()) {
+<?php if (User::isLoggedin()) {
     ?>
             <ul class="nav navbar-top-links navbar-right">
 

@@ -67,7 +67,6 @@ class Control
         // echo $vars;
         $file = GX_PATH.'/inc/lib/Control/Frontend/'.$vars.'.control.php';
         if (file_exists($file)) {
-            # code...
             include $file;
         } else {
             // echo "error";
@@ -89,7 +88,6 @@ class Control
     {
         $file = GX_PATH.'/inc/lib/Control/Backend/'.$vars.'.control.php';
         if (file_exists($file)) {
-            # code...
             include $file;
         } else {
             self::error('404');

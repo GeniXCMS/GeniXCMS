@@ -21,7 +21,7 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(0)) {
-    # code...
+    
 
     if (isset($_GET['view']) && $_GET['view'] == 'options') {
         $data['sitetitle'] = THEMES;

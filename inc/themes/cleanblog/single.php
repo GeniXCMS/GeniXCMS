@@ -22,7 +22,7 @@
                 <?php
                     if (isset($data['posts'][0]->title)) {
                         foreach ($data['posts'] as $p) {
-                            # code...
+                            
                             echo "
                             <div class=\"\">
                                 ".Posts::content($p->content)."

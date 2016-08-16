@@ -328,6 +328,9 @@
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-icon:before{
     cursor:pointer
 }
+.dialogelfinder {
+    z-index: 20000;
+}
 .elfinder-dialog{
     padding:0;
     background:#eaeaea;
@@ -662,7 +665,7 @@
     width:14px;
     height:14px;
     vertical-align:middle;
-    text-decoration:none
+    text-decoration:none;
 }
 .ui-dialog-titlebar-close:hover,
 .dialogelfinder-drag-close:hover{

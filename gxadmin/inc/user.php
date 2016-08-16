@@ -105,7 +105,7 @@
                 //print_r($data);
             if ($data['num'] > 0) {
                 foreach ($data['usr'] as $p) {
-                    # code...
+                    
                     //echo $p->id;
 
                     if ($p->group == 0) {

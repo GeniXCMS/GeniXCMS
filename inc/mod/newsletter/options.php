@@ -3,7 +3,7 @@ Theme::editor();
 if (isset($_POST['sendmail'])) {
     // check token first
     if ( !isset($_POST['token']) || !Token::isExist($_POST['token']) ) {
-        # code...
+        
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (isset($alertDanger)) {
@@ -13,7 +13,7 @@ if (isset($_POST['sendmail'])) {
         $msg = $_POST['message'];
 
         if ($_POST['type'] == 'text') {
-            # code...
+            
             $msg = str_replace('<br>', "\r\n\r\n", $msg);
             $msg = str_replace('</p><p>', "\r\n\r\n", $msg);
             $msg = str_replace('&nbsp;', " ", $msg);
@@ -29,7 +29,7 @@ if (isset($_POST['sendmail'])) {
         if ($_POST['recipient'] == '') {
             $usr = Db::result("SELECT * FROM `user`");
             foreach ($usr as $u) {
-                # code...
+                
                 $msgs = str_replace('{{userid}}', $u->userid, $msg);
                 $vars = array(
                             'to' => $u->email,
@@ -47,7 +47,7 @@ if (isset($_POST['sendmail'])) {
         }elseif ($_POST['recipient'] != '') {
             $usr = Db::result("SELECT * FROM `user` WHERE `group` = '{$_POST['recipient']}'");
             foreach ($usr as $u) {
-                # code...
+                
                 $msgs = str_replace('{{userid}}', $u->userid, $msg);
                 $vars = array(
                             'to' => $u->email,
@@ -74,27 +74,27 @@ if (isset($_POST['sendmail'])) {
 
 
 if (isset($data['alertSuccess'])) {
-    # code...
+    
     echo "<div class=\"alert alert-success\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">Close</span>
     </button>";
     foreach ($data['alertSuccess'] as $alert) {
-        # code...
+        
         echo "$alert\n";
     }
     echo "</div>";
 }
 if (isset($data['alertDanger'])) {
-    # code...
+    
     echo "<div class=\"alert alert-danger\" >
     <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
         <span aria-hidden=\"true\">&times;</span>
         <span class=\"sr-only\">Close</span>
     </button>";
     foreach ($data['alertDanger'] as $alert) {
-        # code...
+        
         echo "$alert\n";
     }
     echo "</div>";
