@@ -21,8 +21,6 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(0)) {
-    
-
     $data['sitetitle'] = 'Permalink';
 
     if (isset($_POST['change'])) {
@@ -52,7 +50,6 @@ if (User::access(0)) {
             unset($_POST['change']);
         // print_r($vars);
             foreach ($_POST as $key => $val) {
-                
                 $vars[$key] = Typo::cleanX($val);
             }
         // print_r($vars);

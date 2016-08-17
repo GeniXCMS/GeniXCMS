@@ -18,8 +18,6 @@ if (defined('GX_LIB') === false) {
 */
 
 if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
-    
-
     if (User::access(2)) {
         $tags = Db::result(
             "SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '".$_GET['term']."%' ORDER BY `name` ASC"

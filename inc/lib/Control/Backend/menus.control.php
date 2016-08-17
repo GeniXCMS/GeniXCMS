@@ -29,17 +29,13 @@ if (User::access(0)) {
     }
     switch ($act) {
         case 'add':
-            
             if (isset($_POST['submit'])) {
-                
                 $submit = true;
             } else {
                 $submit = false;
             }
             switch ($submit) {
                 case true:
-                    
-
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -115,8 +111,6 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    
-
                     break;
             }
                 //$data['abc'] = "abc";
@@ -133,9 +127,7 @@ if (User::access(0)) {
             break;
 
         case 'edit':
-            
             if (isset($_POST['edititem'])) {
-                
                 $submit = true;
             } else {
                 $submit = false;
@@ -169,8 +161,6 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    
-
                     break;
             }
 
@@ -269,17 +259,13 @@ if (User::access(0)) {
             break;
 
         default:
-            
             if (isset($_POST['submit'])) {
-                
                 $submit = true;
             } else {
                 $submit = false;
             }
             switch ($submit) {
                 case true:
-                    
-
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -316,21 +302,17 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    
-
                     break;
             }
 
                 // ADD MENU ITEM START
             if (isset($_POST['additem'])) {
-                
                 $submit = true;
             } else {
                 $submit = false;
             }
             switch ($submit) {
                 case true:
-                    echo $_POST['token'];
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -360,8 +342,6 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    
-
                     break;
             }
 
@@ -375,7 +355,6 @@ if (User::access(0)) {
             }
             switch ($submit) {
                 case true:
-                    
                     // echo "<pre>";
                     // print_r($_POST['order']);
                     // echo "</pre>";
@@ -397,7 +376,6 @@ if (User::access(0)) {
                     break;
 
                 default:
-                    
                     break;
             }
 

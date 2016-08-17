@@ -10,7 +10,7 @@
 
     </div>
 
-    <?php 
+    <?php
       echo Site::footer();
     ?>
 

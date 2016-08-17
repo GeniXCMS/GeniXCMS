@@ -1,4 +1,8 @@
-<?php if (defined('GX_LIB') === false) die("Direct Access Not Allowed!");
+<?php
+
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
 /*
  * GeniXCMS - Content Management System
  * ============================================================ 
@@ -12,13 +16,13 @@
  * build : 20140928
 */
 
-/**
+/*
  *
  * @author Puguh Wijayanto
  * @since 0.0.1-pre
 */
 
-/**
+/*
  * USER Account RELATED Translations
  * @since 0.0.1-pre
 */
@@ -36,32 +40,31 @@ define('ACOUNT_NOT_ACTIVE', 'Akun anda belum aktif. Silahkan aktifkan terlebih d
 define('ACOUNT_NOT_ACTIVE_BLOCK', 'Akun anda Tidak aktif. Silahkan hubungi Pengelola website untuk informasi lebih lanjut.');
 define('PASSWORD_SENT_NOTIF', 'Sandi baru Anda telah kami kirimkan ke surel Anda. Silahkan periksa surel Anda.');
 define('REQUEST_PASS', 'Minta Sandi Baru');
-define('TITLE_CANNOT_EMPTY','Judul tidak boleh kosong.');
-define('CATEGORY_CANNOT_EMPTY','Kategori tidak boleh kosong.');
-define('USERID_CANNOT_EMPTY','Nama Pengguna tidak boleh kosong.');
-define('PASS1_CANNOT_EMPTY','Sandi 1 tidak boleh kosong.');
-define('PASS2_CANNOT_EMPTY','Sandi 2 tidak boleh kosong.');
+define('TITLE_CANNOT_EMPTY', 'Judul tidak boleh kosong.');
+define('CATEGORY_CANNOT_EMPTY', 'Kategori tidak boleh kosong.');
+define('USERID_CANNOT_EMPTY', 'Nama Pengguna tidak boleh kosong.');
+define('PASS1_CANNOT_EMPTY', 'Sandi 1 tidak boleh kosong.');
+define('PASS2_CANNOT_EMPTY', 'Sandi 2 tidak boleh kosong.');
 define('USER', 'User');
 
-/** Token */
+/* Token */
 define('TOKEN_NOT_EXIST', 'Token tidak ada atau tidak sesuai dengan database kami. Silahkan refresh atau ulangi tindakan Anda.');
 
-/** Themes & Modules Related */
+/* Themes & Modules Related */
 define('THEME_ACTIVATED', 'Tema telah diaktifkan.');
 define('THEME_DEACTIVATED', 'Tema telah dinonaktifkan.');
 define('THEME_REMOVED', 'Tema telah di hapus.');
-define('NOFILE_UPLOADED','Tidak ada berkas di unggah.');
-define('MODULES_DELETED','Modul telah di hapus.');
-define('MODULES_DEACTIVATED','Modul telah dinonaktifkan.');
-define('MODULES_ACTIVATED','Modul telah diaktifkan.');
+define('NOFILE_UPLOADED', 'Tidak ada berkas di unggah.');
+define('MODULES_DELETED', 'Modul telah di hapus.');
+define('MODULES_DEACTIVATED', 'Modul telah dinonaktifkan.');
+define('MODULES_ACTIVATED', 'Modul telah diaktifkan.');
 
-/** Menu Related */
-define('MENUID_CANNOT_EMPTY','MenuID tidak boleh kosong.');
-define('MENUNAME_CANNOT_EMPTY','Nama menu tidak boleh kosong.');
+/* Menu Related */
+define('MENUID_CANNOT_EMPTY', 'MenuID tidak boleh kosong.');
+define('MENUNAME_CANNOT_EMPTY', 'Nama menu tidak boleh kosong.');
 define('MENU', 'Menu');
 
-
-/** Admin Dashboard Related */
+/* Admin Dashboard Related */
 define('DASHBOARD', 'Panel Admin');
 define('POSTS', 'Pos');
 define('CATEGORIES', 'Kategori');
@@ -76,7 +79,7 @@ define('LOGOUT', 'Keluar');
 define('ADD_NEW_POST', 'Tambah Pos');
 define('ADD_NEW_PAGE', 'Tambah Halaman');
 
-/**
+/*
  * Dashboard
  * @author Puguh Wijayanto
  * @since 0.0.1-pre
@@ -132,7 +135,7 @@ define('PUBLISHED_LOWER', 'published');
 define('UNPUBLISHED_LOWER', 'unpublished');
 define('LEFT_IT_BLANK_NOW_DATE', 'biarkan kosong untuk tanggal saat ini');
 
-/** User Related */
+/* User Related */
 define('ADD_USER', 'Tambah Pengguna');
 define('FIND_USER', 'Cari pengguna');
 define('SEARCH_USER', 'Temukan pengguna');
@@ -151,10 +154,9 @@ define('GENERAL_MEMBER', 'Anggota Biasa');
 
 define('DELETE_CONFIRM', 'Yakin akan menghapus ini ?');
 
-/** Menu Related */
+/* Menu Related */
 define('MENU_NAME_CANNOT_EMPTY', 'Nama Menu tidak boleh Kosong');
 define('MENU_TYPE_CANNOT_EMPTY', 'Jenis Menu tidak boleh kosong');
-
 
 define('ADD_MENU', 'Tambah Menu');
 define('MENU_ID', 'ID Menu');
@@ -165,7 +167,6 @@ define('MENU_CLASS', 'CLass Menu');
 define('MENU_CLASS_DESC', 'Pengaya Class dari menu. <code>.class</code> means menu class is <em>class</em>');
 define('MENU_ITEMS', 'Item Menu');
 define('ADD_MENU_ITEM', 'Tambah Item Menu');
-
 
 define('MENU_PARENT', 'Menu Parent');
 define('MENU_TYPE', 'Jenis Menu');
@@ -182,8 +183,7 @@ define('MENU_MODULES_DESCR', 'Choose This if you want menu for Modules(Mod). Pic
 define('MENU_CUSTOM_LINK_DESCR', 'Choose This if you want menu with Custom Link Categories. Insert Custom Link');
 define('MENU_PARENT_DESCR', 'Choose Parent Menu');
 
-
-/** Themes Related */
+/* Themes Related */
 define('UPLOAD_THEMES', 'Unggah Tema');
 define('ACTIVE_THEME', 'Tema yang Aktif');
 define('AVAILABLE_THEME', 'Tema yang ada');
@@ -192,7 +192,7 @@ define('INSTALL_THEME', 'Instal Tema');
 define('BROWSE_THEMES', 'Ambil Tema');
 define('BROWSE_THEME_DESC', 'pilih berkas tema. dalam kompresi zip');
 
-/** Modules Related */
+/* Modules Related */
 define('UPLOAD_MODULES', 'Unggah Modul');
 define('ACTIVE_MODULE', 'Modul yang Aktif');
 define('NO_MODULES_FOUND', 'Tidak ada Modul');
@@ -206,7 +206,7 @@ define('DESC', 'Penjelasan');
 define('VERSION', 'Versi');
 define('LICENSE', 'Lisensi');
 
-/** Settings Related */
+/* Settings Related */
 define('CHANGE', 'Ubah');
 define('GENERAL', 'Umum');
 define('LOCALIZATION', 'Pelokalan');
@@ -240,9 +240,7 @@ define('WEBSITE_LANG_DESC', 'Bahasa dari Sistem Website.');
 define('CHARSET', 'Charset dari Website');
 define('CHARSET_DESC', 'Charset/Encoding Website.');
 
-
-
-/**
+/*
  *
  * @author Vakho Daneila
  * @since 0.0.3-patch
@@ -405,7 +403,6 @@ define('MSG_UNKNOWN_ERROR', 'Terjadi Kesalahan!');
 // Other Functions
 
 define('REMOVE', 'hapus');
-
 
 define('TAGS', 'Tags');
 define('TAGS_DESC', 'write tags separated by comma.');

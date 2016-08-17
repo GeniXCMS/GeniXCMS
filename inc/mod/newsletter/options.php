@@ -2,8 +2,7 @@
 Theme::editor();
 if (isset($_POST['sendmail'])) {
     // check token first
-    if ( !isset($_POST['token']) || !Token::isExist($_POST['token']) ) {
-        
+    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (isset($alertDanger)) {
@@ -13,10 +12,9 @@ if (isset($_POST['sendmail'])) {
         $msg = $_POST['message'];
 
         if ($_POST['type'] == 'text') {
-            
             $msg = str_replace('<br>', "\r\n\r\n", $msg);
             $msg = str_replace('</p><p>', "\r\n\r\n", $msg);
-            $msg = str_replace('&nbsp;', " ", $msg);
+            $msg = str_replace('&nbsp;', ' ', $msg);
             $msg = strip_tags($msg);
         } else {
             $msg = $msg;
@@ -27,16 +25,15 @@ if (isset($_POST['sendmail'])) {
         $msg = str_replace('{{sitemail}}', Site::$email, $msg);
 
         if ($_POST['recipient'] == '') {
-            $usr = Db::result("SELECT * FROM `user`");
+            $usr = Db::result('SELECT * FROM `user`');
             foreach ($usr as $u) {
-                
                 $msgs = str_replace('{{userid}}', $u->userid, $msg);
                 $vars = array(
                             'to' => $u->email,
                             'to_name' => $u->userid,
                             'message' => $msgs,
                             'subject' => $subject,
-                            'msgtype' => $_POST['type']
+                            'msgtype' => $_POST['type'],
                         );
                 $mailsend = Mail::send($vars);
                 if ($mailsend !== null) {
@@ -44,17 +41,16 @@ if (isset($_POST['sendmail'])) {
                 }
                 sleep(3);
             }
-        }elseif ($_POST['recipient'] != '') {
+        } elseif ($_POST['recipient'] != '') {
             $usr = Db::result("SELECT * FROM `user` WHERE `group` = '{$_POST['recipient']}'");
             foreach ($usr as $u) {
-                
                 $msgs = str_replace('{{userid}}', $u->userid, $msg);
                 $vars = array(
                             'to' => $u->email,
                             'to_name' => $u->userid,
                             'message' => $msgs,
                             'subject' => $subject,
-                            'msgtype' => $_POST['type']
+                            'msgtype' => $_POST['type'],
                         );
                 $mailsend = Mail::send($vars);
                 if ($mailsend !== null) {
@@ -66,38 +62,32 @@ if (isset($_POST['sendmail'])) {
         if (isset($alertmailsend)) {
             $data['alertDanger'] = $alertmailsend;
         } else {
-            $data['alertSuccess'][] = "Success Sending Email";
+            $data['alertSuccess'][] = 'Success Sending Email';
         }
-
     }
 }
-
 
 if (isset($data['alertSuccess'])) {
-    
-    echo "<div class=\"alert alert-success\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
+    echo '<div class="alert alert-success" >
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>';
     foreach ($data['alertSuccess'] as $alert) {
-        
         echo "$alert\n";
     }
-    echo "</div>";
+    echo '</div>';
 }
 if (isset($data['alertDanger'])) {
-    
-    echo "<div class=\"alert alert-danger\" >
-    <button type=\"button\" class=\"close\" data-dismiss=\"alert\">
-        <span aria-hidden=\"true\">&times;</span>
-        <span class=\"sr-only\">Close</span>
-    </button>";
+    echo '<div class="alert alert-danger" >
+    <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>';
     foreach ($data['alertDanger'] as $alert) {
-        
         echo "$alert\n";
     }
-    echo "</div>";
+    echo '</div>';
 }
 
 ?>

@@ -2,15 +2,18 @@
 
 class Mods
 {
-    public function __construct() {
+    public function __construct()
+    {
         Hooks::attach('mod_control', array('Mods', 'page'));
         Mod::addMenuList('page', 'Mod Page');
     }
-    public static function show() {
-        echo "Mod Show";
+    public static function show()
+    {
+        echo 'Mod Show';
     }
 
-    public static function page($data) {
+    public static function page($data)
+    {
         // global $data;
         // if (SMART_URL) {
         //     $data = $data[0];
@@ -21,6 +24,5 @@ class Mods
         if ($data[0]['mod'] == 'page') {
             Mod::inc('frontpage', $data, realpath(__DIR__.'/../layout/'));
         }
-        
     }
 }

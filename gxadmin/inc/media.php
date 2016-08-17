@@ -47,7 +47,7 @@ if (isset($data['alertDanger'])) {
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
     <div class="col-md-12">
-        <h1><i class="fa fa-list-alt"></i>  Media
+        <h1><i class="fa fa-photo"></i>  Media
 
         </h1>
         <hr />

@@ -322,9 +322,7 @@
     width:14px;
     line-height:14px
 }
-.elfinder .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-filename{
-    border-radius:3px
-}
+
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-icon:before{
     cursor:pointer
 }
@@ -336,7 +334,6 @@
     background:#eaeaea;
     border:1px solid #b2b2b2;
     border-bottom-color:#999;
-    border-radius:3px;
     -webkit-box-shadow:0 0 3px rgba(0,0,0,.15);
     box-shadow:0 0 3px rgba(0,0,0,.15)
 }
@@ -368,7 +365,6 @@
     background:#fff;
     border:0;
     border-bottom:1px solid #888;
-    border-radius:0
 }
 .elfinder-dialog .ui-tabs-nav>li{
     float:left
@@ -377,7 +373,6 @@
     margin-right:2px;
     border:1px solid #ddd;
     border-bottom-color:#888;
-    border-radius:4px 4px 0 0
 }
 .elfinder-dialog .ui-tabs-nav>li>a:hover{
     background:#d4d4d4;
@@ -393,7 +388,6 @@
     outline:none;
     color:#ccc;
     border:1px solid #bfbfbf;
-    border-radius:3px 3px 0 0;
     background:#fff
 }
 .elfinder-dialog .ui-tabs-nav .ui-tabs-selected{
@@ -464,7 +458,6 @@
     cursor:pointer;
     border:1px solid #b6b6b6;
     border-bottom-color:#999;
-    border-radius:3px;
     background:#e4e4e4
 }
 .elfinder-dialog .ui-button:hover{
@@ -673,8 +666,8 @@
 }
 .ui-dialog .ui-dialog-titlebar-close{
     position:absolute;
-    right:.3em;
-    top:.3em;
+    right:.9em;
+    top:.9999em;
     width:14px;
     height:14px;
     margin:0;
@@ -695,17 +688,11 @@
     overflow:hidden;
     background-color:#fff;
     border:1px solid #ddd;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;
     -webkit-box-shadow:0 3px 30px rgba(0,0,0,.05);
     box-shadow:0 3px 30px rgba(0,0,0,.05)
 }
 
 .elfinder-quicklook-fullscreen{
-    border-radius:0;
-    -moz-border-radius:0;
-    -webkit-border-radius:0;
     -webkit-background-clip:padding-box;
     padding:0;
     background:#000;
@@ -754,7 +741,7 @@
     background:url(../images/libre/libre-close.svg);
     margin:0;
     padding:0;
-    right:2px;
+    right:6px;
     top:7px;
     left:auto;
     width:14px;
@@ -807,9 +794,6 @@
     margin:0 auto 0 -70px;
     background:#fff;
     border:1px solid #eee;
-    -moz-border-radius:19px;
-    -webkit-border-radius:19px;
-    border-radius:19px;
 }
 .elfinder-quicklook-fullscreen .elfinder-quicklook-navbar{
     width:156px;
@@ -829,3 +813,18 @@
 .elfinder-quicklook-navbar-icon-prev{background:url(../images/libre/libre-arrow-left.svg)}
 .elfinder-quicklook-navbar-icon-next{background:url(../images/libre/libre-arrow-right.svg)}
 .elfinder-quicklook-navbar-icon-close{background:url(../images/libre/libre-close.svg);display:none}
+
+
+* {
+  border-radius: 0px!important;
+  -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+          border-radius: 0 !important;
+}
+
+* {
+  border-top-left-radius: 0px!important;
+  border-top-right-radius: 0px!important;
+  border-bottom-left-radius: 0px!important;
+  border-bottom-right-radius: 0px!important;
+}

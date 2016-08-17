@@ -71,7 +71,6 @@ if (isset($_POST['login'])) {
                 $c = Db::$num_rows;
 
                 foreach ($l as $v) {
-                    
                     //print_r($v);
                     $p = $v->pass;
                     $g = $v->group;

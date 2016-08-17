@@ -126,7 +126,6 @@ switch ($step) {
 
     default:
         if (System::existConf()) {
-            
             echo 'Config File Already Exist';
         } else {
             Theme::install('step0');

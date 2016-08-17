@@ -21,8 +21,6 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(2)) {
-    
-
     $data['sitetitle'] = POSTS;
     Theme::editor('full');
     if (isset($_GET['act'])) {
@@ -32,11 +30,9 @@ if (User::access(2)) {
     }
     switch ($act) {
         case 'add':
-            
             $data[] = '';
             switch (isset($_POST['submit'])) {
                 case true:
-                    
                     // print_r($_POST);
                     // check token first
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
@@ -67,7 +63,6 @@ if (User::access(2)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
-                            
                             $date = date('Y-m-d H:i:s');
                         } else {
                             $date = $_POST['date'];
@@ -118,21 +113,16 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    
-
                     break;
             }
             Theme::admin('header', $data);
             System::inc('posts_form', $data);
             Theme::admin('footer');
-            //echo "add";
             break;
 
         case 'edit':
-            //echo "edit";
             switch (isset($_POST['submit'])) {
                 case true:
-                    
                     // check token first
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -159,7 +149,6 @@ if (User::access(2)) {
                         $alertDanger[] = TITLE_CANNOT_EMPTY;
                     }
                     if (isset($alertDanger)) {
-                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $moddate = date('Y-m-d H:i:s');
@@ -240,7 +229,6 @@ if (User::access(2)) {
             break;
 
         default:
-            
             if (isset($_GET['act']) && $_GET['act'] == 'del') {
                 if (isset($_GET['id'])) {
                     if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
@@ -248,7 +236,6 @@ if (User::access(2)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $title = Posts::title($_GET['id']);
@@ -280,18 +267,15 @@ if (User::access(2)) {
             }
             switch ($action) {
                 case 'publish':
-                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if ($post_id != "") {
                             foreach ($post_id as $id) {
-                                
                                 Posts::publish($id);
                             }
                         }
@@ -301,18 +285,15 @@ if (User::access(2)) {
                     }
                     break;
                 case 'unpublish':
-                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if ($post_id != "") {
                             foreach ($post_id as $id) {
-                                
                                 Posts::unpublish($id);
                             }
                         }
@@ -322,18 +303,15 @@ if (User::access(2)) {
                     }
                     break;
                 case 'delete':
-                    
                     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
-                        
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         if ($post_id != "") {
                             foreach ($post_id as $id) {
-                                
                                 Posts::delete($id);
                                 Hooks::run('post_delete_action', $id);
                             }
@@ -345,7 +323,6 @@ if (User::access(2)) {
                     break;
 
                 default:
-                    
                     break;
             }
 

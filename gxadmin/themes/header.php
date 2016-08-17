@@ -15,7 +15,7 @@
 
 <body>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-nav">
                     <span class="sr-only"><?=MENU;?></span>
@@ -115,7 +115,7 @@ if (User::access(1)) {
                             <li>
                                 <a href="index.php?page=media"
                                 <?=(isset($_GET['page']) && $_GET['page'] == 'media') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-list-alt"></i> Media
+                                    <i class="fa fa-photo"></i> Media
                                 </a>
                             </li>
 <?php if (User::access(1)) {

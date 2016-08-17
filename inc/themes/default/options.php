@@ -58,7 +58,6 @@ if (User::access(0)) {
         </div>
         </form>
         <?php
-
         } else {
             /* do installation */
                 echo '<div class="alert alert-warning"><i class="fa fa-warning"></i> Default Theme Options not installed yet, Please install it first to use the theme options. <form action="" method="post"><button class="btn btn-danger" name="install_mdo_options"><i class="fa fa-check-circle"></i> Install Options</button></form></div>';
@@ -68,7 +67,6 @@ if (User::access(0)) {
     
 </div>
 <?php
-
 } else {
     Control::error('noaccess');
 }

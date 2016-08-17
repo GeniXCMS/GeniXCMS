@@ -21,8 +21,6 @@ if (defined('GX_LIB') === false) {
  */
 
 if (User::access(0)) {
-    
-
     if (isset($_GET['view']) && $_GET['view'] == 'options') {
         $data['sitetitle'] = THEMES;
         Theme::admin('header', $data);

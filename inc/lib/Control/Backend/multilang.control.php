@@ -91,21 +91,16 @@ if (User::access(0)) {
                 if (in_array($ob->name, $input)) {
                     if (isset($flip[$ob->name])) {
                         $vars[$ob->name] = 'on';
-                        //echo $ob->name;
                     } else {
                         $vars[$ob->name] = 'off';
-                        //echo $ob->name;
                     }
                 }
             }
             unset($_POST['token']);
             unset($_POST['change']);
-        // print_r($vars);
             foreach ($_POST as $key => $val) {
-                
                 $vars[$key] = Typo::cleanX($val);
             }
-        // print_r($vars);
 
             Options::update($vars);
             new Options();

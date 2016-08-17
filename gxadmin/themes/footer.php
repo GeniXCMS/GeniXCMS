@@ -17,7 +17,7 @@
 
     <!-- LOAD CSS -->
     <link href="<?=Site::$url;?>/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>/assets/css/bootstrap-theme.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>/assets/css/font-awesome.min.css" rel="stylesheet">
 

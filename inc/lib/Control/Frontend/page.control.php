@@ -38,14 +38,11 @@ if (SMART_URL == true) {
 
 switch ($page) {
     case 'sitemap':
-        
         Sitemap::create();
         exit;
         break;
 
     default:
-        
-
         $data['posts'] = Db::result(
             sprintf(
                 "SELECT * FROM `posts` 

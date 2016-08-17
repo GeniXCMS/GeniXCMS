@@ -1,4 +1,8 @@
-<?php if (defined('GX_LIB') === false) die("Direct Access Not Allowed!");
+<?php
+
+if (defined('GX_LIB') === false) {
+    die('Direct Access Not Allowed!');
+}
 /*
  * GeniXCMS - Content Management System
  * ============================================================ 
@@ -12,13 +16,13 @@
  * build : 20140928
 */
 
-/**
+/*
  *
  * @author Puguh Wijayanto
  * @since 0.0.1-pre
 */
 
-/**
+/*
  * USER Account RELATED Translations
  * @since 0.0.1-pre
 */
@@ -36,32 +40,31 @@ define('ACOUNT_NOT_ACTIVE', 'Your Account is not active. Please activate it firs
 define('ACOUNT_NOT_ACTIVE_BLOCK', 'Your Account is not active. Please contact Support for this problems.');
 define('PASSWORD_SENT_NOTIF', 'Your new Password just sent to your email account. Please check your email.');
 define('REQUEST_PASS', 'Request Password');
-define('TITLE_CANNOT_EMPTY','Title cannot be empty.');
-define('CATEGORY_CANNOT_EMPTY','Category cannot be empty.');
-define('USERID_CANNOT_EMPTY','Username cannot be empty.');
-define('PASS1_CANNOT_EMPTY','Password 1 cannot be empty.');
-define('PASS2_CANNOT_EMPTY','Password 2 cannot be empty.');
+define('TITLE_CANNOT_EMPTY', 'Title cannot be empty.');
+define('CATEGORY_CANNOT_EMPTY', 'Category cannot be empty.');
+define('USERID_CANNOT_EMPTY', 'Username cannot be empty.');
+define('PASS1_CANNOT_EMPTY', 'Password 1 cannot be empty.');
+define('PASS2_CANNOT_EMPTY', 'Password 2 cannot be empty.');
 define('USER', 'User');
 
-/** Token */
+/* Token */
 define('TOKEN_NOT_EXIST', 'Token not exist, or your time has expired. Please refresh your browser to get a new token.');
 
-/** Themes & Modules Related */
+/* Themes & Modules Related */
 define('THEME_ACTIVATED', 'Themes activated.');
 define('THEME_DEACTIVATED', 'Themes deactivated.');
 define('THEME_REMOVED', 'Themes removed.');
-define('NOFILE_UPLOADED','No Files Uploaded.');
-define('MODULES_DELETED','Modules Deleted.');
-define('MODULES_DEACTIVATED','Modules deactivated.');
-define('MODULES_ACTIVATED','Modules activated.');
+define('NOFILE_UPLOADED', 'No Files Uploaded.');
+define('MODULES_DELETED', 'Modules Deleted.');
+define('MODULES_DEACTIVATED', 'Modules deactivated.');
+define('MODULES_ACTIVATED', 'Modules activated.');
 
-/** Menu Related */
-define('MENUID_CANNOT_EMPTY','MenuID cannot be empty.');
-define('MENUNAME_CANNOT_EMPTY','Menu Name cannot be empty.');
+/* Menu Related */
+define('MENUID_CANNOT_EMPTY', 'MenuID cannot be empty.');
+define('MENUNAME_CANNOT_EMPTY', 'Menu Name cannot be empty.');
 define('MENU', 'Menu');
 
-
-/** Admin Dashboard Related */
+/* Admin Dashboard Related */
 define('DASHBOARD', 'Dashboard');
 define('POSTS', 'Posts');
 define('CATEGORIES', 'Categories');
@@ -76,7 +79,7 @@ define('LOGOUT', 'Log Out');
 define('ADD_NEW_POST', 'Add New Post');
 define('ADD_NEW_PAGE', 'Add New Page');
 
-/**
+/*
  * Dashboard
  * @author Puguh Wijayanto
  * @since 0.0.1-pre
@@ -90,7 +93,7 @@ define('TOTAL_PAGE', 'Total Page');
 define('TOTAL_CAT', 'Total Categories');
 define('TOTAL_USER', 'Total Users');
 
-/** Posts & Pages Related */
+/* Posts & Pages Related */
 define('FIND_POSTS', 'Find Posts');
 define('FIND_PAGES', 'Find Pages');
 define('SEARCH_PAGES', 'Search Pages');
@@ -133,7 +136,7 @@ define('PUBLISHED_LOWER', 'published');
 define('UNPUBLISHED_LOWER', 'unpublished');
 define('LEFT_IT_BLANK_NOW_DATE', 'left it blank to make it now');
 
-/** User Related */
+/* User Related */
 define('ADD_USER', 'Add User');
 define('FIND_USER', 'Find user');
 define('SEARCH_USER', 'Search user');
@@ -152,7 +155,7 @@ define('GENERAL_MEMBER', 'General Member');
 
 define('DELETE_CONFIRM', 'Are you sure you want to delete this?');
 
-/** Menu Related */
+/* Menu Related */
 define('MENU_NAME_CANNOT_EMPTY', 'Menu Name Cannot be Empty');
 define('MENU_TYPE_CANNOT_EMPTY', 'Menu Type Cannot be Empty');
 
@@ -165,7 +168,6 @@ define('MENU_CLASS', 'Menu CLass');
 define('MENU_CLASS_DESC', 'Class Style of the menu. <code>.class</code> means menu class is <em>class</em>');
 define('MENU_ITEMS', 'Menu Items');
 define('ADD_MENU_ITEM', 'Add Menu Item');
-
 
 define('MENU_PARENT', 'Parent Menu');
 define('MENU_TYPE', 'Menu Type');
@@ -182,8 +184,7 @@ define('MENU_MODULES_DESCR', 'Choose This if you want menu for Modules(Mod). Pic
 define('MENU_CUSTOM_LINK_DESCR', 'Choose This if you want menu with Custom Link Categories. Insert Custom Link');
 define('MENU_PARENT_DESCR', 'Choose Parent Menu');
 
-
-/** Themes Related */
+/* Themes Related */
 define('UPLOAD_THEMES', 'Upload Themes');
 define('ACTIVE_THEME', 'Active Themes');
 define('AVAILABLE_THEME', 'Available Themes');
@@ -192,7 +193,7 @@ define('INSTALL_THEME', 'Install Themes');
 define('BROWSE_THEMES', 'Browse Themes');
 define('BROWSE_THEME_DESC', 'choose the theme file. in zip compression');
 
-/** Modules Related */
+/* Modules Related */
 define('UPLOAD_MODULES', 'Upload Modules');
 define('ACTIVE_MODULE', 'Active Modules');
 define('NO_MODULES_FOUND', 'No Modules Found');
@@ -206,7 +207,7 @@ define('DESC', 'Description');
 define('VERSION', 'Version');
 define('LICENSE', 'License');
 
-/** Settings Related */
+/* Settings Related */
 define('CHANGE', 'Change');
 define('GENERAL', 'General');
 define('LOCALIZATION', 'Localization');
@@ -240,9 +241,7 @@ define('WEBSITE_LANG_DESC', 'Your Website System Language.');
 define('CHARSET', 'Default Charset');
 define('CHARSET_DESC', 'Your Website Charset/Encoding.');
 
-
-
-/**
+/*
  *
  * @author Vakho Daneila
  * @since 0.0.3-patch
@@ -405,7 +404,6 @@ define('MSG_UNKNOWN_ERROR', 'Unknown Error Occurred!');
 // Other Functions
 
 define('REMOVE', 'remove');
-
 
 define('TAGS', 'Tags');
 define('TAGS_DESC', 'write tags separated by comma.');

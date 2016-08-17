@@ -160,13 +160,15 @@
 
                         // print_r(Stats::mostViewed(5));
                         $list = Stats::mostViewed(5);
-                        if (count($list) > 0) {
-                            echo "<ul class=\"list-group\">";
+                        echo "<ul class=\"list-group\">";
+                        if (!isset($list['error'])) {
                             foreach ($list as $p) {
                                 echo "<li class=\"list-group-item\"><a href=\"".Url::post($p->id)."\">".$p->title."</a><span class=\"badge pull-right\" data-toggle=\"tooltip\" title=\"views\">".$p->views."</span></li>";
                             }
-                            echo "</ul>";
+                        } else {
+                            echo "<li  class=\"list-group-item\">No Post to Show</li>";
                         }
+                        echo "</ul>";
                         
                         echo Hooks::run('admin_page_dashboard_statslist_action', $data);
 

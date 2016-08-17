@@ -6,9 +6,6 @@
     <?php
     Site::meta();
     ?>
-
-    
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -49,10 +46,9 @@
 
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <?php
-
-                  echo Menus::getMenu('mainmenu', 'nav navbar-nav navbar-right', true);
-                  ?>
+                <?php
+                    echo Menus::getMenu('mainmenu', 'nav navbar-nav navbar-right', true);
+                ?>
               </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
