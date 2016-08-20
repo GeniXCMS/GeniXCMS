@@ -316,7 +316,8 @@ class Categories
         $name = sprintf('%s', $name);
         if (isset($name)) {
             $cat = Db::result("SELECT `id` FROM `cat`
-                                WHERE `name` = '{$name}' LIMIT 1");
+                                WHERE `name` = '{$name}'
+                                OR `slug` = '{$name}' LIMIT 1");
             // print_r($cat);
             if (isset($cat['error'])) {
                 return '';

@@ -22,6 +22,7 @@ if (defined('GX_LIB') === false) {
 
 $post = '';
 $data = Router::scrap($param);
+$data['p_type'] = 'tag';
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $tag = (SMART_URL) ? Tags::id($data['tag']) : Tags::id(
     Db::escape(

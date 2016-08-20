@@ -22,6 +22,7 @@ if (defined('GX_LIB') === false) {
 
 $post = '';
 $data = Router::scrap($param);
+$data['p_type'] = 'index';
 $data['max'] = Options::v('post_perpage');
 
 if (SMART_URL) {

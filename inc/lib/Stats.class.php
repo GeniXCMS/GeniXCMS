@@ -51,7 +51,7 @@ class Stats
 
     public static function mostViewed($count)
     {
-        return Db::result(sprintf("SELECT * FROM `posts` ORDER BY `views` DESC LIMIT 0,%d", $count));
+        return Db::result(sprintf("SELECT * FROM `posts` WHERE `type` = 'post' ORDER BY `views` DESC LIMIT 0,%d", $count));
     }
 
     public static function addViews($id)

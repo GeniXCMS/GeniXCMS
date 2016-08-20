@@ -21,6 +21,7 @@ if (defined('GX_LIB') === false) {
  */
 
 $data = Router::scrap($param);
+$data['p_type'] = 'page';
 
 if (SMART_URL == true) {
     if (isset($data['page'])) {

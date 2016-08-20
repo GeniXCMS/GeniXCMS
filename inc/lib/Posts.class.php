@@ -55,6 +55,8 @@ class Posts
                 $pinger = Options::v('pinger');
                 Pinger::run($pinger);
             }
+        } else {
+            $post = false;
         }
 
         return $post;
@@ -79,6 +81,8 @@ class Posts
                 $pinger = Options::v('pinger');
                 Pinger::run($pinger);
             }
+        } else {
+            $post = false;
         }
 
         return $post;
@@ -158,6 +162,11 @@ class Posts
         return $post;
     }
 
+    /**
+     * @param $post
+     * @param $id
+     * @return array|mixed|string
+     */
     public static function format($post, $id)
     {
         // split post for readmore...

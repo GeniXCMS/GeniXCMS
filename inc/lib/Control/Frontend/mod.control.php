@@ -21,6 +21,7 @@ if (defined('GX_LIB') === false) {
  */
 
 $data = Router::scrap($param);
+$data['p_type'] = 'mod';
 
 Theme::theme('header', $data);
 

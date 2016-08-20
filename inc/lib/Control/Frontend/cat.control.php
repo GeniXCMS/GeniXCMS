@@ -22,6 +22,8 @@ if (defined('GX_LIB') === false) {
 
 $post = '';
 $data = Router::scrap($param);
+$data['p_type'] = 'cat';
+
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
 $type = Categories::type($cat);

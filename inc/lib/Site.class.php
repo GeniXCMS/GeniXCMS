@@ -73,6 +73,29 @@ class Site
                 $dotted = '';
             }
             $cont_title = "{$pre} {$cont_title}{$dotted} - ";
+            if (isset($data['p_type'])) {
+                $pg = $data['p_type'];
+                if ($pg == 'post') {
+                    $canonical = Url::post($data['posts'][0]->id);
+                } elseif ($pg == 'page'){
+                    $canonical = Url::page($data['posts'][0]->slug);
+                } elseif ($pg == 'cat'){
+                    $canonical = Url::cat($data['cat']);
+                } elseif ($pg == 'mod'){
+                    $canonical = Url::mod($data['mod']);
+                } elseif ($pg == 'tag'){
+                    $canonical = Url::tag($data['tag']);
+                } elseif ($pg == 'index'){
+                    $canonical = self::$url;
+                } elseif ($pg == 'index'){
+                    $canonical = self::$url;
+                } else {
+                    $canonical = '';//Url::$data['p_type']($data['id'])
+                }
+                
+            } else {
+                $canonical = '';
+            }
         } else {
             $cont_title = '';
         }
@@ -99,6 +122,7 @@ class Site
         echo '
     <meta name="Generator" content="GeniXCMS '.System::v().'">
     <meta name="robots" content="'.Options::v('robots').'">
+    <link rel="canonical" href="'.$canonical.'" />
     <link rel="shortcut icon" href="'.Options::v('siteicon').'" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for '.self::$name.'" href="'.self::$url.'/rss/" />
         ';

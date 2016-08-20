@@ -322,7 +322,7 @@ class Url
             case true:
                 
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/tag/'.$vars.'/'.Categories::name($vars);
+                $url = Site::$url.$inFold.'/tag/'.Typo::slugify($vars);
                 break;
 
             default:
