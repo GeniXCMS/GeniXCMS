@@ -365,18 +365,4 @@ table.dataTable thead .sorting:after {
     color: #df8a13;
 }
 
-a, #side-menu a, .navbar-inverse a:hover {
-    color: #333;
-}
 
-a:hover, #side-menu a:hover {
-    color: #000;
-}
-
-.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
-    color: #999;
-}
-
-.navbar-inverse a {
-    color: #eee;
-}

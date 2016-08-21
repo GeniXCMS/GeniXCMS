@@ -1,8 +1,6 @@
 <?php
 
-if (defined('GX_LIB') === false) {
-    die('Direct Access Not Allowed!');
-}
+defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * GeniXCMS - Content Management System.
  *
@@ -44,7 +42,7 @@ class Session
         }
         session_regenerate_id();
         $path = isset($uri['path'])? $uri['path']: '';
-        setcookie(session_name(), session_id(), time() + 3600, $path);
+        setcookie(session_name(), session_id(), time() + 3600, $path, '', '', true);
         $GLOBALS['start_time'] = microtime(true);
     }
 

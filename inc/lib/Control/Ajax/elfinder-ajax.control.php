@@ -1,8 +1,6 @@
 <?php
 
-if (defined('GX_LIB') === false) {
-    die('Direct Access Not Allowed!');
-}
+defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
     include_once Vendor::path('studio-42/elfinder').'php/elFinderConnector.class.php';
