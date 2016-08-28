@@ -161,7 +161,7 @@ class Tags
     public static function exist($tag)
     {
         $tag = Typo::cleanX($tag);
-        $sql = "SELECT `name` FROM `cat` WHERE `name` = '{$tag}' AND `type` = 'tag'";
+        $sql = "SELECT `name` FROM `cat` WHERE `name` = '{$tag}' OR `slug` = '{$tag}' AND `type` = 'tag'";
         $q = Db::result($sql);
         // echo Db::$num_rows;
         if (Db::$num_rows > 0) {
@@ -174,6 +174,11 @@ class Tags
     public static function id($name)
     {
         return Categories::id($name);
+    }
+
+    public static function slug($id)
+    {
+        return Categories::slug($id);
     }
 }
 

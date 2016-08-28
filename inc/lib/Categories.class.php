@@ -305,8 +305,6 @@ class Categories
         } else {
             echo 'No ID Selected';
         }
-
-        //print_r($cat);
     }
 
     public static function id($name)
@@ -321,6 +319,36 @@ class Categories
                 return '';
             } else {
                 return $cat[0]->id;
+            }
+        } else {
+            echo 'No Name Selected';
+        }
+    }
+
+    public static function exist($cat)
+    {
+        $cat = Typo::int($cat);
+        $sql = "SELECT `id` FROM `cat` WHERE `id` = '{$cat}' AND `type` = 'post'";
+        $q = Db::result($sql);
+        // echo Db::$num_rows;
+        if (Db::$num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function slug($id)
+    {
+        $id = sprintf('%d', $id);
+        if (isset($id)) {
+            $cat = Db::result("SELECT `slug` FROM `cat`
+                                WHERE `id` = '{$id}' LIMIT 1");
+            //print_r($cat);
+            if (isset($cat['error'])) {
+                return '';
+            } else {
+                return $cat[0]->slug;
             }
         } else {
             echo 'No ID Selected';

@@ -19,13 +19,18 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 $data = Router::scrap($param);
+$data['mod'] = Typo::cleanX($data['mod']);
 $data['p_type'] = 'mod';
 
-Theme::theme('header', $data);
-
-Hooks::run('mod_control', $data);
-
-Theme::footer();
+if (Hooks::exist($data['mod'], 'mod_control')) {
+    Theme::theme('header', $data);
+    Hooks::run('mod_control', $data);
+    Theme::footer();
+    exit();
+} else {
+    Control::error('404');
+    exit();
+}
 
 /* End of file mod.control.php */
 /* Location: ./inc/lib/Control/Frontend/mod.control.php */

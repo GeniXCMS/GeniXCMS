@@ -75,27 +75,27 @@ class Site
                 $pg = $data['p_type'];
                 if ($pg == 'post') {
                     $canonical = Url::post($data['posts'][0]->id);
-                } elseif ($pg == 'page'){
-                    $canonical = Url::page($data['posts'][0]->slug);
-                } elseif ($pg == 'cat'){
+                } elseif ($pg == 'page') {
+                    $canonical = Url::page($data['posts'][0]->id);
+                } elseif ($pg == 'cat') {
                     $canonical = Url::cat($data['cat']);
-                } elseif ($pg == 'mod'){
+                } elseif ($pg == 'mod') {
                     $canonical = Url::mod($data['mod']);
-                } elseif ($pg == 'tag'){
+                } elseif ($pg == 'tag') {
                     $canonical = Url::tag($data['tag']);
-                } elseif ($pg == 'index'){
+                } elseif ($pg == 'index') {
                     $canonical = self::$url;
-                } elseif ($pg == 'index'){
+                } elseif ($pg == 'index') {
                     $canonical = self::$url;
                 } else {
                     $canonical = '';//Url::$data['p_type']($data['id'])
                 }
-                
             } else {
                 $canonical = '';
             }
         } else {
             $cont_title = '';
+            $canonical = '';
         }
         if (is_array($data)  && isset($data['posts'][0]->content)) {
             $desc = Typo::strip($data['posts'][0]->content);
@@ -260,7 +260,6 @@ class Site
         echo $foot;
         echo Hooks::run('footer_load_lib', $data);
         // print_r(Hooks::$hooks);
-        
     }
 
     public static function desc($vars)

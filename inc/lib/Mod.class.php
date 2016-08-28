@@ -47,7 +47,7 @@ class Mod
             if ($entry != '.' && $entry != '..') {
                 $dir = GX_MOD.$entry;
                 if (is_dir($dir) == true) {
-                    $mod[] = basename($dir);
+                    (file_exists($dir.'/index.php'))? $mod[] = basename($dir): '';
                 }
             }
         }
@@ -60,25 +60,30 @@ class Mod
     public static function data($vars)
     {
         $file = GX_MOD.'/'.$vars.'/index.php';
-        $handle = fopen($file, 'r');
-        $data = fread($handle, filesize($file));
-        fclose($handle);
-        preg_match('/\* Name: (.*)\s\*/Us', $data, $matches);
-        $d['name'] = $matches[1];
-        preg_match('/\* Desc: (.*)\s\*/Us', $data, $matches);
-        $d['desc'] = $matches[1];
-        preg_match('/\* Version: (.*)\s\*/Us', $data, $matches);
-        $d['version'] = $matches[1];
-        preg_match('/\* Build: (.*)\s\*/Us', $data, $matches);
-        $d['build'] = $matches[1];
-        preg_match('/\* Developer: (.*)\s\*/Us', $data, $matches);
-        $d['developer'] = $matches[1];
-        preg_match('/\* URI: (.*)\s\*/Us', $data, $matches);
-        $d['url'] = $matches[1];
-        preg_match('/\* License: (.*)\s\*/Us', $data, $matches);
-        $d['license'] = $matches[1];
-        preg_match('/\* Icon: (.*)\s\*/Us', $data, $matches);
-        $d['icon'] = $matches[1];
+        if (file_exists($file)) {
+            $handle = fopen($file, 'r');
+            $data = fread($handle, filesize($file));
+            fclose($handle);
+            preg_match('/\* Name: (.*)\s\*/Us', $data, $matches);
+            $d['name'] = $matches[1];
+            preg_match('/\* Desc: (.*)\s\*/Us', $data, $matches);
+            $d['desc'] = $matches[1];
+            preg_match('/\* Version: (.*)\s\*/Us', $data, $matches);
+            $d['version'] = $matches[1];
+            preg_match('/\* Build: (.*)\s\*/Us', $data, $matches);
+            $d['build'] = $matches[1];
+            preg_match('/\* Developer: (.*)\s\*/Us', $data, $matches);
+            $d['developer'] = $matches[1];
+            preg_match('/\* URI: (.*)\s\*/Us', $data, $matches);
+            $d['url'] = $matches[1];
+            preg_match('/\* License: (.*)\s\*/Us', $data, $matches);
+            $d['license'] = $matches[1];
+            preg_match('/\* Icon: (.*)\s\*/Us', $data, $matches);
+            $d['icon'] = $matches[1];
+        } else {
+            $d = "";
+        }
+        
 
         return $d;
     }
@@ -224,8 +229,12 @@ class Mod
                         }
                         if (!isset($alertDanger)) {
                             self::deactivate($_GET['modules']);
-                            Files::delTree(GX_MOD.'/'.$_GET['modules']);
-                            $GLOBALS['alertSuccess'] = MODULES_DELETED;
+                            if( false != Files::delTree(GX_MOD.$_GET['modules']) ) {
+                                $GLOBALS['alertSuccess'] = MODULES_DELETED;
+                            } else {
+                                $GLOBALS['alertDanger'][] = "Can't delete module files";
+                            }
+                            
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }

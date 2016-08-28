@@ -52,9 +52,9 @@ class Url
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang) ? $lang.'/' : '';
-                    $url = Site::$url.$inFold.$lang.self::slug($vars)."/{$vars}";
+                    $url = Site::$url.$inFold.$lang.self::slug($vars).GX_URL_PREFIX;
                 } else {
-                    $url = Site::$url.$inFold.self::slug($vars)."/{$vars}";
+                    $url = Site::$url.$inFold.self::slug($vars).GX_URL_PREFIX;
                 }
 
                 break;
@@ -126,13 +126,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/category/'.$vars.'/'.Typo::slugify(Categories::name($vars));
+                $url = Site::$url.$inFold.'/category/'.$vars.'/'.Typo::slugify(Categories::name($vars)).'/';
                 break;
 
             default:
-                
                 $url = Site::$url."/?cat={$vars}";
                 break;
         }
@@ -170,13 +168,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/sitemap'.GX_URL_PREFIX;
                 break;
 
             default:
-                
                 $url = Site::$url.'/index.php?page=sitemap';
                 break;
         }
@@ -198,13 +194,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/rss'.GX_URL_PREFIX;
                 break;
 
             default:
-                
                 $url = Site::$url.'/index.php?rss';
                 break;
         }
@@ -290,13 +284,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/ajax/'.$vars.'?token='.TOKEN;
+                $url = Site::$url.$inFold.'/ajax/'.$vars.'/?token='.TOKEN;
                 break;
 
             default:
-                
                 $url = Site::$url."/?ajax={$vars}&token=".TOKEN;
                 break;
         }
@@ -318,13 +310,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/tag/'.Typo::slugify($vars);
+                $url = Site::$url.$inFold.'/tag/'.Typo::slugify($vars).'/';
                 break;
 
             default:
-                
                 $url = Site::$url."/?tag={$vars}";
                 break;
         }
@@ -336,13 +326,11 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
                 $url = Site::$url.$inFold.'/mod/'.$vars.GX_URL_PREFIX;
                 break;
 
             default:
-                
                 $url = Site::$url."/?mod={$vars}";
                 break;
         }

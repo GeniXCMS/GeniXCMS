@@ -163,6 +163,7 @@ class Posts
     /**
      * @param $post
      * @param $id
+     *
      * @return array|mixed|string
      */
     public static function format($post, $id)
@@ -506,6 +507,28 @@ class Posts
         }
 
         return $related;
+    }
+
+    public static function type($post_id)
+    {
+        $sql = "SELECT `type` FROM `posts` WHERE `id` = '{$post_id}' LIMIT 1";
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            return $q[0]->type;
+        } else {
+            return '';
+        }
+    }
+
+    public static function idSlug($slug)
+    {
+        $sql = "SELECT `id` FROM `posts` WHERE `slug` = '{$slug}' LIMIT 1";
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            return $q[0]->id;
+        } else {
+            return '';
+        }
     }
 }
 

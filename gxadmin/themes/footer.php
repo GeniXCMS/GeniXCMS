@@ -117,6 +117,7 @@
 
         $('.editor').each(function(i, obj) { $(obj).summernote({
             minHeight: 300,
+            maxHeight: 750,
             toolbar: [
                     ".$toolbar."
                 ],

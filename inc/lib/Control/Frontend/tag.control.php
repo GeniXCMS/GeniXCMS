@@ -22,64 +22,72 @@ $post = '';
 $data = Router::scrap($param);
 $data['p_type'] = 'tag';
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
-$tag = (SMART_URL) ? Tags::id($data['tag']) : Tags::id(
-    Db::escape(
-        Typo::cleanX(
+$tag = (SMART_URL) ?
+Tags::id(
+    Typo::cleanX(
+        Db::escape($data['tag'])
+    )
+) :
+Tags::id(
+    Typo::cleanX(
+        Db::escape(
             Typo::strip($_GET['tag'])
         )
     )
 );
-
 $type = Categories::type($tag);
 $name = Tags::name($tag);
-$data['max'] = Options::v('post_perpage');
+$slug = Tags::slug($tag);
+if (Tags::exist($name)) {
+    # code...
 
-if (SMART_URL) {
-    if (isset($data['paging'])) {
-        $paging = $data['paging'];
+    $data['max'] = Options::v('post_perpage');
+
+    if (SMART_URL) {
+        if (isset($data['paging'])) {
+            $paging = $data['paging'];
+        }
+    } else {
+        if (isset($_GET['paging'])) {
+            $paging = Typo::int($_GET['paging']);
+        }
     }
-} else {
-    if (isset($_GET['paging'])) {
-        $paging = Typo::int($_GET['paging']);
-    }
-}
 
 //$paging = (SMART_URL) ? $data['paging'] : Typo::int(is_int($_GET['paging']));
-if (isset($paging)) {
-    if ($paging > 0) {
-        $offset = ($paging - 1) * $data['max'];
+    if (isset($paging)) {
+        if ($paging > 0) {
+            $offset = ($paging - 1) * $data['max'];
+        } else {
+            $offset = 0;
+        }
+        $pagingtitle = " - Page {$paging}";
     } else {
         $offset = 0;
+        $paging = 1;
+        $pagingtitle = '';
     }
-    $pagingtitle = " - Page {$paging}";
-} else {
-    $offset = 0;
-    $paging = 1;
-    $pagingtitle = '';
-}
-$data['sitetitle'] = 'Post in : '.Tags::name($tag).$pagingtitle;
-$data['posts'] = Db::result(
-    sprintf(
-        "SELECT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
+    $data['sitetitle'] = 'Post in : '.$name.$pagingtitle;
+    $data['posts'] = Db::result(
+        sprintf(
+            "SELECT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
                     A.`author`, A.`cat` FROM `posts` AS A
                     JOIN `posts_param` AS B
                     ON A.`id` = B.`post_id`
-                    WHERE B.`param` LIKE 'tags' 
+                    WHERE B.`param` = 'tags' 
                     AND B.`value` LIKE '%%%s%%'
                     AND A.`status` = '1'
                     ORDER BY A.`date`
                     DESC LIMIT %d, %d",
-        $name,
-        $offset,
-        $data['max']
-    )
-);
-$data['num'] = Db::$num_rows;
+            $name,
+            $offset,
+            $data['max']
+        )
+    );
+    $data['num'] = Db::$num_rows;
+    $data['posts'] = Posts::prepare($data['posts']);
 
-$data['posts'] = Posts::prepare($data['posts']);
-
-$url = Url::tag($tag);
-$paging = array(
+    $url = Url::tag($tag);
+    $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',
                 'where' => '`type` = \''.$type.'\' ',
@@ -87,11 +95,14 @@ $paging = array(
                 'url' => $url,
                 'type' => Options::v('pagination'),
             );
-$data['paging'] = Paging::create($paging, SMART_URL);
-Theme::theme('header', $data);
-Theme::theme('tag', $data);
-Theme::footer();
-exit;
+    $data['paging'] = Paging::create($paging, SMART_URL);
+    Theme::theme('header', $data);
+    Theme::theme('tag', $data);
+    Theme::footer();
+    exit;
+} else {
+    Control::error('404');
+}
 
 /* End of file cat.control.php */
 /* Location: ./inc/lib/Control/Frontend/cat.control.php */

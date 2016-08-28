@@ -19,30 +19,33 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 $data = Router::scrap($param);
-$data['p_type'] = 'post';
 
 if (SMART_URL == true) {
     if (isset($data['post'])) {
-        $post = $data['post'];
-    } elseif (isset($_GET['post'])) {
-        $post = Typo::int($_GET['post']);
+        $post = Typo::cleanX($data['post']);
+        $post_id = Posts::idSlug($post);
     }
-
     if (isset($data['lang']) && !isset($_GET['lang'])) {
         Language::setActive($data['lang']);
     }
 } elseif (isset($_GET['post'])) {
     $post = Typo::int($_GET['post']);
+    $post_id = $post;
 }
+
+$data['p_type'] = Posts::type($post_id);
 
 $data['posts'] = Db::result(
     sprintf(
         "SELECT * FROM `posts`
                             WHERE `id` = '%d'
-                            AND `type` = 'post'
+                            OR `slug` = '%s'
+                            AND `type` = '%s'
                             AND `status` = '1'
                             LIMIT 1",
-        $post
+        $post,
+        $post,
+        $data['p_type']
     )
 );
 $num_rows = Db::$num_rows;
@@ -50,8 +53,9 @@ $num_rows = Db::$num_rows;
 $data['posts'] = Posts::prepare($data['posts']);
 // print_r($data['posts']);
 if ($num_rows > 0) {
+    $theme = ($data['p_type'] == 'post') ? 'single' : $data['p_type'];
     Theme::theme('header', $data);
-    Theme::theme('single', $data);
+    Theme::theme($theme, $data);
     Theme::footer();
     Stats::addViews($post);
     exit;
