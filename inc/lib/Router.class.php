@@ -181,8 +181,9 @@ class Router
         }
         $uri = (Options::v('permalink_use_index_php') == 'on') ?
             str_replace('/index.php', '', $uri) : $uri;
+        // echo $uri;
 
-        return $uri; // '/'.trim($uri, '/');
+        return empty($uri) ? '/' : $uri; // '/'.trim($uri, '/');
     }
 
     /**
