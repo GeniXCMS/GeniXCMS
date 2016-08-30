@@ -177,7 +177,7 @@ class Router
         } else {
             $uri2 = explode('/', $uri[0]);
             unset($uri2[0]);
-            $uri = implode('/', $uri2);
+            $uri = '/'.implode('/', $uri2);
         }
         $uri = (Options::v('permalink_use_index_php') == 'on') ?
             str_replace('/index.php', '', $uri) : $uri;
