@@ -42,7 +42,8 @@ if (isset($_POST['004-patch'])) {
             (null, 'multilang_country', ''),
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
-            (null, 'pinger_enable', 'off')";
+            (null, 'pinger_enable', 'off'),
+            (null, 'spamwords', ''),";
     $q = Db::query($sql);
 
     $sql = 'CREATE TABLE IF NOT EXISTS `cat_param` (
@@ -73,6 +74,31 @@ if (isset($_POST['004-patch'])) {
 
     $sql = "UPDATE `cat` SET `type` = 'post' WHERE `type` = '' ";
     $q = Db::query($sql);
+
+    $sql = "CREATE TABLE `comments` (
+              `id` bigint(22) NOT NULL,
+              `date` datetime NOT NULL,
+              `userid` text NOT NULL,
+              `name` text NOT NULL,
+              `email` text NOT NULL,
+              `url` text NOT NULL,
+              `comment` text NOT NULL,
+              `post_id` int(11) NOT NULL,
+              `parent` int(11) NOT NULL,
+              `status` enum('0','1','2') NOT NULL,
+              `type` text NOT NULL,
+              `ipaddress` text NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ";
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            ADD PRIMARY KEY (`id`)
+            ';
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
+            ';
+    $q = Db::query($sql);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -87,8 +113,34 @@ if (isset($_POST['004-patch'])) {
             (null, 'multilang_country', ''),
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
-            (null, 'pinger_enable', 'off')
+            (null, 'pinger_enable', 'off'),
+            (null, 'spamwords', ''),
             ";
+    $q = Db::query($sql);
+
+    $sql = "CREATE TABLE `comments` (
+              `id` bigint(22) NOT NULL,
+              `date` datetime NOT NULL,
+              `userid` text NOT NULL,
+              `name` text NOT NULL,
+              `email` text NOT NULL,
+              `url` text NOT NULL,
+              `comment` text NOT NULL,
+              `post_id` int(11) NOT NULL,
+              `parent` int(11) NOT NULL,
+              `status` enum('0','1','2') NOT NULL,
+              `type` text NOT NULL,
+              `ipaddress` text NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ";
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            ADD PRIMARY KEY (`id`)
+            ';
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
+            ';
     $q = Db::query($sql);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
@@ -102,8 +154,34 @@ if (isset($_POST['004-patch'])) {
             (null, 'multilang_country', ''),
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
-            (null, 'pinger_enable', 'off')
+            (null, 'pinger_enable', 'off'),
+            (null, 'spamwords', ''),
             ";
+    $q = Db::query($sql);
+
+    $sql = "CREATE TABLE `comments` (
+              `id` bigint(22) NOT NULL,
+              `date` datetime NOT NULL,
+              `userid` text NOT NULL,
+              `name` text NOT NULL,
+              `email` text NOT NULL,
+              `url` text NOT NULL,
+              `comment` text NOT NULL,
+              `post_id` int(11) NOT NULL,
+              `parent` int(11) NOT NULL,
+              `status` enum('0','1','2') NOT NULL,
+              `type` text NOT NULL,
+              `ipaddress` text NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ";
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            ADD PRIMARY KEY (`id`)
+            ';
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
+            ';
     $q = Db::query($sql);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
@@ -113,8 +191,34 @@ if (isset($_POST['004-patch'])) {
 } elseif (isset($_POST['007'])) {
     $sql = "INSERT INTO `options` VALUES
             (null, 'permalink_use_index_php', 'off'),
-            (null, 'pinger_enable', 'off')
+            (null, 'pinger_enable', 'off'),
+            (null, 'spamwords', ''),
             ";
+    $q = Db::query($sql);
+
+    $sql = "CREATE TABLE `comments` (
+              `id` bigint(22) NOT NULL,
+              `date` datetime NOT NULL,
+              `userid` text NOT NULL,
+              `name` text NOT NULL,
+              `email` text NOT NULL,
+              `url` text NOT NULL,
+              `comment` text NOT NULL,
+              `post_id` int(11) NOT NULL,
+              `parent` int(11) NOT NULL,
+              `status` enum('0','1','2') NOT NULL,
+              `type` text NOT NULL,
+              `ipaddress` text NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ";
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            ADD PRIMARY KEY (`id`)
+            ';
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
+            ';
     $q = Db::query($sql);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
@@ -126,6 +230,31 @@ if (isset($_POST['004-patch'])) {
             (null, 'pinger_enable', 'off'),
             (null, 'spamwords', ''),
             ";
+    $q = Db::query($sql);
+
+    $sql = "CREATE TABLE `comments` (
+              `id` bigint(22) NOT NULL,
+              `date` datetime NOT NULL,
+              `userid` text NOT NULL,
+              `name` text NOT NULL,
+              `email` text NOT NULL,
+              `url` text NOT NULL,
+              `comment` text NOT NULL,
+              `post_id` int(11) NOT NULL,
+              `parent` int(11) NOT NULL,
+              `status` enum('0','1','2') NOT NULL,
+              `type` text NOT NULL,
+              `ipaddress` text NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ";
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            ADD PRIMARY KEY (`id`)
+            ';
+    $q = Db::query($sql);
+    $sql = 'ALTER TABLE `comments`
+            MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
+            ';
     $q = Db::query($sql);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
