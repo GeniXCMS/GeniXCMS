@@ -46,30 +46,30 @@ class Router
     public static function map()
     {
         self::$_route = array(
-            'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => '1', 'paging' => '3'),
-            'category/([0-9]+)/(.*)/' => array('cat' => '1'),
-            'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
-            'tag/(.*)/' => array('tag' => '1'),
-            '(.*)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
-            // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
-            'mod/(.*)'.GX_URL_PREFIX => array('mod' => '1'),
-            // '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
-            'paging/([0-9]+)/' => array('default', 'paging' => '1'),
-            'error/([0-9]+)/' => array('error' => '1'),
-            '(.[a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
-            '(.*)'.GX_URL_PREFIX => array('post' => '1'),
-            'ajax/(.*)/' => array('ajax' => '1'),
-            'thumb/type/(.*)/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '4', 'type' => '1', 'size' => '2', 'align' => '3'),
-            'thumb/type/(.*)/size/([0-9]+)/(.*)' => array('thumb' => '3', 'type' => '1', 'size' => '2'),
-            'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '3', 'size' => '1', 'align' => '2'),
-            'thumb/size/([0-9]+)/(.*)' => array('thumb' => '2', 'size' => '1'),
-            'thumb/type/(.*)/(.*)' => array('thumb' => '2', 'type' => '1'),
-            'thumb/align/(.*)/(.*)' => array('thumb' => '2', 'align' => '1'),
-            'thumb/(.*)' => array('thumb' => '1'),
-            'error/' => array('error'),
-            'sitemap/' => array('sitemap'),
-            'rss/' => array('rss'),
-            '/' => array('default'),
+        'thumb/type/(.*)/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '4', 'type' => '1', 'size' => '2', 'align' => '3'),
+        'thumb/type/(.*)/size/([0-9]+)/(.*)' => array('thumb' => '3', 'type' => '1', 'size' => '2'),
+        'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '3', 'size' => '1', 'align' => '2'),
+        'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => '1', 'paging' => '3'),
+        'category/([0-9]+)/(.*)/' => array('cat' => '1'),
+        'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
+        'tag/(.*)/' => array('tag' => '1'),
+        '(.*)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
+        // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
+        'mod/(.*)'.GX_URL_PREFIX => array('mod' => '1'),
+        // '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
+        'paging/([0-9]+)/' => array('default', 'paging' => '1'),
+        'error/([0-9]+)/' => array('error' => '1'),
+        '(.[a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
+        '(.*)'.GX_URL_PREFIX => array('post' => '1'),
+        'ajax/(.*)/' => array('ajax' => '1'),
+        'thumb/size/([0-9]+)/(.*)' => array('thumb' => '2', 'size' => '1'),
+        'thumb/type/(.*)/(.*)' => array('thumb' => '2', 'type' => '1'),
+        'thumb/align/(.*)/(.*)' => array('thumb' => '2', 'align' => '1'),
+        'thumb/(.*)' => array('thumb' => '1'),
+        'error/' => array('error'),
+        'sitemap/' => array('sitemap'),
+        'rss/' => array('rss'),
+        '/' => array('default'),
         );
 
         return self::$_route;
@@ -181,13 +181,17 @@ class Router
         // print_r($uri[0]);
         if (self::inFolder()) {
             $uri = self::stripFolder($uri[0]);
+            // echo $uri;
         } else {
             $uri2 = explode('/', $uri[0]);
             unset($uri2[0]);
-            $uri = '/'.implode('/', $uri2);
+            $uri = implode('/', $uri2);
+            // echo $uri;
         }
+        // echo $uri;
+
         $uri = (Options::v('permalink_use_index_php') == 'on') ?
-            str_replace('/index.php', '', $uri) : $uri;
+            str_replace('index.php/', '', $uri) : $uri;
         // echo $uri;
 
         return empty($uri) ? '/' : $uri; // '/'.trim($uri, '/');
@@ -199,8 +203,8 @@ class Router
     public static function inFolder()
     {
         $uri = explode('/', Site::$url);
-
-        if (count($uri) > 3) {
+        // print_r($uri);
+        if (count($uri) > 4) {
             return true;
         } else {
             return false;
@@ -249,7 +253,7 @@ class Router
     {
         $uri = explode('/', Site::$url);
 
-        if (count($uri) > 3) {
+        if (count($uri) > 4) {
             unset($uri[0]);
             unset($uri[1]);
             unset($uri[2]);

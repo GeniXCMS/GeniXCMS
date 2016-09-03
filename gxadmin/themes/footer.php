@@ -100,7 +100,7 @@
           data = new FormData();
           data.append("file", file);
             $.ajax({
-                url: "'.$url.'",
+                url: \''.$url.'\',
                 data: data,
                 cache: false,
                 contentType: false,
@@ -111,7 +111,7 @@
                   $(\'.editor\').summernote(\'editor.insertImage\', data);
                 },
                error: function(jqXHR, textStatus, errorThrown) {
-                 console.log(textStatus+" "+errorThrown);
+                 console.log(textStatus+\' \'+errorThrown);
                }
             });
           }
@@ -120,7 +120,7 @@
             minHeight: 300,
             maxHeight: 750,
             toolbar: [
-                    ".$toolbar."
+                    '.$toolbar.'
                 ],
             callbacks: {
                 onImageUpload: function(files, editor, welEditable) {
