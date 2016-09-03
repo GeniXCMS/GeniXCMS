@@ -27,6 +27,10 @@
                 <span class="hidden-xs hidden-sm"><?=ADD_USER;?></span>
             </button>
         </h2>
+        <small class="label label-default pull-left"><?=Stats::totalUser();?> total</small>
+        <small class="label label-success pull-left"><?=Stats::activeUser();?> active</small>
+        <small class="label label-warning pull-left"><?=Stats::pendingUser();?> pending</small>
+        <small class="label label-danger pull-left"><?=Stats::inactiveUser();?> inactive</small>
         <hr />
     </div>
     <div class="col-sm-12">
@@ -105,7 +109,6 @@
                 //print_r($data);
             if ($data['num'] > 0) {
                 foreach ($data['usr'] as $p) {
-                    
                     //echo $p->id;
 
                     if ($p->group == 0) {

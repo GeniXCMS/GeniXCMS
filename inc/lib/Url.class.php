@@ -48,7 +48,7 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php/' : '/';
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang) ? $lang.'/' : '';
@@ -63,9 +63,9 @@ class Url
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang) ? '&lang='.$lang : '';
-                    $url = Site::$url."/?post={$vars}{$lang}";
+                    $url = Site::$url."?post={$vars}{$lang}";
                 } else {
-                    $url = Site::$url."/?post={$vars}";
+                    $url = Site::$url."?post={$vars}";
                 }
                 break;
         }
@@ -87,7 +87,7 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php/' : '/';
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang) ? $lang.'/' : '';
@@ -101,9 +101,9 @@ class Url
                 if (Options::v('multilang_enable') === 'on') {
                     $lang = Language::isActive();
                     $lang = !empty($lang) ? '&lang='.$lang : '';
-                    $url = Site::$url."/?page={$vars}{$lang}";
+                    $url = Site::$url."?page={$vars}{$lang}";
                 } else {
-                    $url = Site::$url."/?page={$vars}";
+                    $url = Site::$url."?page={$vars}";
                 }
 
                 break;
@@ -126,12 +126,12 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/category/'.$vars.'/'.Typo::slugify(Categories::name($vars)).'/';
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'category/'.$vars.'/'.Typo::slugify(Categories::name($vars)).'/';
                 break;
 
             default:
-                $url = Site::$url."/?cat={$vars}";
+                $url = Site::$url."?cat={$vars}";
                 break;
         }
 
@@ -168,12 +168,12 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/sitemap'.GX_URL_PREFIX;
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'sitemap'.GX_URL_PREFIX;
                 break;
 
             default:
-                $url = Site::$url.'/index.php?page=sitemap';
+                $url = Site::$url.'index.php?page=sitemap';
                 break;
         }
 
@@ -194,12 +194,12 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/rss'.GX_URL_PREFIX;
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'rss'.GX_URL_PREFIX;
                 break;
 
             default:
-                $url = Site::$url.'/index.php?rss';
+                $url = Site::$url.'index.php?rss';
                 break;
         }
 
@@ -218,7 +218,7 @@ class Url
     public static function slug($vars)
     {
         $s = Db::result("SELECT `slug` FROM `posts` WHERE `id` = '{$vars}' LIMIT 1");
-        $s = $s[0]->slug;
+        $s = (Db::$num_rows > 0) ? $s[0]->slug : '';
 
         return $s;
     }
@@ -263,7 +263,7 @@ class Url
                     $val = 'lang='.$vars;
                 }
                 $lang = !isset($_GET['lang']) ? '&lang='.$vars : $val;
-                $url = Site::$url.'/?'.$lang;
+                $url = Site::$url.'?'.$lang;
                 break;
         }
 
@@ -284,12 +284,12 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/ajax/'.$vars.'/?token='.TOKEN;
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'ajax/'.$vars.'/?token='.TOKEN;
                 break;
 
             default:
-                $url = Site::$url."/?ajax={$vars}&token=".TOKEN;
+                $url = Site::$url."?ajax={$vars}&token=".TOKEN;
                 break;
         }
 
@@ -310,12 +310,12 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/tag/'.Typo::slugify($vars).'/';
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'tag/'.Typo::slugify($vars).'/';
                 break;
 
             default:
-                $url = Site::$url."/?tag={$vars}";
+                $url = Site::$url."?tag={$vars}";
                 break;
         }
 
@@ -326,16 +326,44 @@ class Url
     {
         switch (SMART_URL) {
             case true:
-                $inFold = (Options::v('permalink_use_index_php') == 'on') ? '/index.php' : '';
-                $url = Site::$url.$inFold.'/mod/'.$vars.GX_URL_PREFIX;
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'mod/'.$vars.GX_URL_PREFIX;
                 break;
 
             default:
-                $url = Site::$url."/?mod={$vars}";
+                $url = Site::$url."?mod={$vars}";
                 break;
         }
 
         return $url;
+    }
+
+    public static function thumb($vars, $type = '', $size = '', $align = '')
+    {
+        // $vars = urlencode($vars);
+        $vars = str_replace(Site::$url, '', $vars);
+        $type = ($type != '') ? 'type/'.$type.'/' : '';
+        $size = ($size != '') ? 'size/'.$size.'/' : '';
+        $align = ($align != '') ? 'align/'.$align.'/' : '';
+        switch (SMART_URL) {
+            case true:
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'thumb/'.$type.$size.$align.$vars;
+                break;
+
+            default:
+                $url = Site::$url."?thumb={$vars}&type={$type}&size={$size}&align={$align}";
+                break;
+        }
+
+        return $url;
+    }
+
+    public static function theme()
+    {
+        $theme = Options::v('theme');
+
+        return Site::$url.'inc/themes/'.$theme.'/';
     }
 }
 

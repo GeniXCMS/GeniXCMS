@@ -82,7 +82,7 @@ class System
         new Mod();
 
         /* Load themes configuration */
-        Theme::loader();
+        new Theme();
 
         /* Run Hooks : init */
         Hooks::run('init');
@@ -138,6 +138,7 @@ class System
 
         #ob_start(ob_gzhandler);
         // ob_start('Site::minifyHTML');
+        // ob_start('Site::minifIed');
         ob_start();
         ob_implicit_flush(0);
     }
@@ -255,77 +256,70 @@ class System
     public static function alert()
     {
         global $data;
+        $html = '';
         // print_r($data);
         if (isset($data['alertSuccess'])) {
-            
-            echo '<div class="alert alert-success" >
+            $html .= '<div class="alert alert-success" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertSuccess'] as $alert) {
-                
-                echo "<li>$alert</li>\n";
+                $html .= "<li>$alert</li>\n";
             }
-            echo '</ul></div>';
+            $html .= '</ul></div>';
         }
         if (isset($data['alertDanger'])) {
-            
-            echo '<div class="alert alert-danger" >
+            $html .= '<div class="alert alert-danger" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDanger'] as $alert) {
-                
-                echo "<li>$alert</li>";
+                $html .= "<li>$alert</li>";
             }
-            echo '</ul></div>';
+            $html .= '</ul></div>';
         }
         if (isset($data['alertInfo'])) {
-            
-            echo '<div class="alert alert-info" >
+            $html .= '<div class="alert alert-info" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertInfo'] as $alert) {
-                
-                echo "$alert\n";
+                $html .= "$alert\n";
             }
-            echo '</ul></div>';
+            $html .= '</ul></div>';
         }
         if (isset($data['alertWarning'])) {
-            
-            echo '<div class="alert alert-warning" >
+            $html .= '<div class="alert alert-warning" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertWarning'] as $alert) {
-                
-                echo "$alert\n";
+                $html .= "$alert\n";
             }
-            echo '</ul></div>';
+            $html .= '</ul></div>';
         }
         if (isset($data['alertDefault'])) {
-            
-            echo '<div class="alert alert-default" >
+            $html .= '<div class="alert alert-default" >
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDefault'] as $alert) {
-                
-                echo "$alert\n";
+                $html .= "$alert\n";
             }
-            echo '</ul></div>';
+            $html .= '</ul></div>';
         }
+
+        return $html;
     }
 }
 

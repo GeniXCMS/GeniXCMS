@@ -67,14 +67,14 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
     // set path for specific access
     // admin
     if (User::access(0)) {
-        $path = '/assets/';
+        $path = 'assets/';
         $allowed = array('image', 'audio', 'video', 'text/plain',
             'text/javascript', 'text/css', 'text/html', );
     } elseif (User::access(1)) {
-        $path = '/assets/';
+        $path = 'assets/';
         $allowed = array('image', 'audio', 'video');
     } else {
-        $path = '/assets/media/';
+        $path = 'assets/media/';
         $allowed = array('image', 'audio', 'video');
     }
     // Documentation for connector options:
@@ -87,7 +87,7 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
         'roots' => array(
             array(
                 'driver' => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-                'path' => GX_PATH.$path,         // path to files (REQUIRED)
+                'path' => GX_PATH.'/'.$path,         // path to files (REQUIRED)
                 'URL' => Site::$url.$path, // URL to files (REQUIRED)
                 'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
                 'uploadAllow' => $allowed,

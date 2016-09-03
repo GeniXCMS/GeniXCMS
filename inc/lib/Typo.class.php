@@ -221,11 +221,43 @@ class Typo
         // The Regular Expression filter
         $reg_exUrl = preg_replace(
             '@((https?://)(www\.|[-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@',
-            '<a href="$1" target="_blank">$1</a>',
+            '<a href="$1" target="_blank" rel="nofollow">$1</a>',
             $text
         );
 
         return $reg_exUrl;
+    }
+
+    public static function p2nl($string)
+    {
+        $string = str_replace(array('<p>', '<br>', '<br />'), '', $string);
+        $string = str_replace('</p>', "\n", $string);
+
+        return $string;
+    }
+
+    public static function jsonFormat($var)
+    {
+        $var = str_replace("\r\n", "\n", $var);
+        $var = str_replace("\r", "\n", $var);
+
+        // JSON requires new line characters be escaped
+        $var = str_replace("\n", '\\n', $var);
+
+        // $var = addcslashes($var, '\n');
+        // $var = addslashes($var);
+        // $var = urlencode($var);
+
+        return $var;
+    }
+
+    public static function jsonDeFormat($var)
+    {
+        $var = urldecode($var);
+
+        // $var = stripslashes($var);
+
+        return $var;
     }
 }
 

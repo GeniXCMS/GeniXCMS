@@ -31,6 +31,22 @@ class Stats
         return $npost;
     }
 
+    public static function activePost($vars)
+    {
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}' AND `status` = '1' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
+    public static function inactivePost($vars)
+    {
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}' AND `status` = '0' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
     public static function totalCat($vars)
     {
         $posts = Db::result("SELECT `id` FROM `cat` WHERE `type` = '{$vars}'");
@@ -47,6 +63,38 @@ class Stats
         return $npost;
     }
 
+    public static function totalAdmin()
+    {
+        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` = '0' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
+    public static function activeUser()
+    {
+        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '1' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
+    public static function inactiveUser()
+    {
+        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '0' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
+    public static function pendingUser()
+    {
+        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '0' AND `activation` != '' ");
+        $npost = Db::$num_rows;
+
+        return $npost;
+    }
+
     public static function mostViewed($count)
     {
         return Db::result(sprintf("SELECT * FROM `posts` WHERE `type` = 'post' ORDER BY `views` DESC LIMIT 0,%d", $count));
@@ -54,7 +102,7 @@ class Stats
 
     public static function addViews($id)
     {
-        $botlist = self::botlist();
+        $botlist = self::botList();
         $nom = 0;
         foreach ($botlist as $bot) {
             if (preg_match("/{$bot}/", $_SERVER['HTTP_USER_AGENT'])) {
@@ -69,7 +117,7 @@ class Stats
         }
     }
 
-    public static function botlist()
+    public static function botList()
     {
         $botlist = array(
                 'Teoma',
@@ -105,6 +153,38 @@ class Stats
                         );
 
         return $botlist;
+    }
+
+    public static function pendingComments()
+    {
+        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '2'");
+        Db::result($sql);
+
+        return Db::$num_rows;
+    }
+
+    public static function totalComments()
+    {
+        $sql = sprintf('SELECT * FROM `comments`');
+        Db::result($sql);
+
+        return Db::$num_rows;
+    }
+
+    public static function activeComments()
+    {
+        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '1'");
+        Db::result($sql);
+
+        return Db::$num_rows;
+    }
+
+    public static function inactiveComments()
+    {
+        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '0'");
+        Db::result($sql);
+
+        return Db::$num_rows;
     }
 }
 

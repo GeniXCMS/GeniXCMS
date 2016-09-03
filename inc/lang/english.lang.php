@@ -428,3 +428,10 @@ define('TAG_CANNOT_EMPTY', 'Tag Name Cannot be Empty');
 define('MSG_TAG_ADDED', 'Tag Added');
 define('MSG_TAG_REMOVED', 'Tag Removed');
 define('MSG_TAG_UPDATED', 'Tag Updated');
+
+define('COMMENTS', 'Comments');
+define('FIND_COMMENTS', 'Find Comments');
+define('SEARCH_COMMENTS', 'Search Comments');
+
+define('PENDING', 'Pending');
+define('PENDING_COMMENTS', 'Pending Comments');

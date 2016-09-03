@@ -253,6 +253,28 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $pr = 'ALTER TABLE `user_detail` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
+
+        $comments = 'CREATE TABLE `comments` (
+                  `id` bigint(22) NOT NULL,
+                  `date` datetime NOT NULL,
+                  `userid` text NOT NULL,
+                  `name` text NOT NULL,
+                  `email` text NOT NULL,
+                  `url` text NOT NULL,
+                  `comment` text NOT NULL,
+                  `post_id` int(11) NOT NULL,
+                  `parent` int(11) NOT NULL,
+                  `status` enum("0","1","2") NOT NULL,
+                  `type` text NOT NULL,
+                  `ipaddress` text NOT NULL
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
+        $db->query($comments);
+
+        $pr = 'ALTER TABLE `comments` ADD PRIMARY KEY (`id`)';
+        $db->query($pr);
+
+        $pr = 'ALTER TABLE `comments` MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT';
+        $db->query($pr);
     }
 
     /**
@@ -334,7 +356,9 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'multilang_country', ''),
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
-            (null, 'pinger_enable', 'on')
+            (null, 'pinger_enable', 'on'),
+            (null, 'spamwords', ''),
+
             ";
         $db->query($options);
     }

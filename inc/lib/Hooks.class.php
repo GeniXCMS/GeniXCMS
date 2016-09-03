@@ -70,6 +70,7 @@ class Hooks
                 'admin_page_bottom_action' => array(),
                 'admin_page_dashboard_action' => array(),
                 'admin_page_dashboard_statslist_action' => array(),
+                'admin_footer_action' => array(),
                 'module_install_action' => array(),
                 'theme_install_action' => array(),
                 'mod_control' => array(),

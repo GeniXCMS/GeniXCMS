@@ -24,7 +24,7 @@ $data['p_type'] = 'mod';
 
 if (Hooks::exist($data['mod'], 'mod_control')) {
     Theme::theme('header', $data);
-    Hooks::run('mod_control', $data);
+    Theme::theme('mod', $data);
     Theme::footer();
     exit();
 } else {

@@ -83,7 +83,7 @@ class Paging
 
                 for ($i = $p; $i <= $limit /*ceil($total/$vars['max'])+1*/; ++$i) {
                     if ($smart == true) {
-                        $url = $vars['url'].'/paging/'.$i;
+                        $url = $vars['url'].'paging/'.$i.'/';
                     } else {
                         $url = $vars['url'].'&paging='.$i;
                     }
@@ -104,7 +104,7 @@ class Paging
                 } elseif ($vars['paging'] < $limit  || $vars['paging'] = $limit) {
                     $prev = ($vars['paging']) - 1;
                     if ($smart == true) {
-                        $url = $vars['url'].'/paging/'.$prev;
+                        $url = $vars['url'].'paging/'.$prev.'/';
                     } else {
                         $url = $vars['url'].'&paging='.$prev;
                     }
@@ -115,7 +115,7 @@ class Paging
                     $next = ($vars['paging']) + 1;
 
                     if ($smart == true) {
-                        $url = $vars['url'].'/paging/'.$next;
+                        $url = $vars['url'].'paging/'.$next.'/';
                     } else {
                         $url = $vars['url'].'&paging='.$next;
                     }

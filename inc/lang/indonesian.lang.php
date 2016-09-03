@@ -427,3 +427,11 @@ define('TAG_CANNOT_EMPTY', 'Nama Tag tidak boleh kosong');
 define('MSG_TAG_ADDED', 'Tag Ditambahkan');
 define('MSG_TAG_REMOVED', 'Tag Dihapus');
 define('MSG_TAG_UPDATED', 'Tag Diubah');
+
+define('COMMENTS', 'Komentar');
+define('FIND_COMMENTS', 'Cari Komentar');
+define('SEARCH_COMMENTS', 'Temukan Komentar');
+
+define('PENDING', 'Ditangguhkan');
+
+define('PENDING_COMMENTS', 'Komentar Ditangguhkan');

@@ -196,7 +196,7 @@ class Db
                 $where .= "`$key` = '$val' AND ";
             }
             $where = $where.' 1';
-            $sql = sprintf('DELETE FROM `%s` WHERE %s LIMIT 1', $vars['table'], $where);
+            $sql = sprintf('DELETE FROM `%s` WHERE %s ', $vars['table'], $where);
         } else {
             $sql = $vars;
         }
@@ -303,6 +303,7 @@ class Db
                     return false;
                 } else {
                     self::$last_id = self::$mysqli->insert_id;
+
                     return true;
                 }
             } catch (exception $e) {

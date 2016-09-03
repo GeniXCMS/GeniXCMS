@@ -123,7 +123,8 @@ if (isset($_POST['004-patch'])) {
     }
 } elseif (isset($_POST['008'])) {
     $sql = "INSERT INTO `options` VALUES
-            (null, 'pinger_enable', 'off')
+            (null, 'pinger_enable', 'off'),
+            (null, 'spamwords', ''),
             ";
     $q = Db::query($sql);
     if ($q) {

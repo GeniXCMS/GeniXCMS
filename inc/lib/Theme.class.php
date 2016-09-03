@@ -19,15 +19,20 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 class Theme
 {
+    public static $url;
+    public static $active;
+
     public function __construct()
     {
         global $GLOBALS;
+        self::$url = Url::theme();
+        self::$active = Options::v('theme');
+        self::loader();
     }
 
     public static function theme($var, $data = '')
     {
         if (isset($data)) {
-            
             $GLOBALS['data'] = $data;
         }
         if (self::exist($var)) {
@@ -54,7 +59,6 @@ class Theme
     public static function admin($var, $data = '')
     {
         if (isset($data)) {
-            
             $GLOBALS['data'] = $data;
         }
         include GX_PATH.'/gxadmin/themes/'.$var.'.php';
@@ -69,7 +73,6 @@ class Theme
         header('Content-Type: text/html; charset=utf-8');
 
         if (isset($vars)) {
-            
             $GLOBALS['data'] = $vars;
             self::theme('header', $vars);
         } else {
@@ -80,7 +83,6 @@ class Theme
     {
         global $GLOBALS;
         if (isset($vars)) {
-            
             $GLOBALS['data'] = $vars;
             self::theme('footer', $vars);
         } else {
@@ -88,7 +90,7 @@ class Theme
         }
     }
 
-    public static function editor($mode = 'light')
+    public static function editor($mode = 'light', $height = '300')
     {
         $editor = Options::v('use_editor');
         if ($editor == 'on') {
@@ -96,12 +98,8 @@ class Theme
         } else {
             $GLOBALS['editor'] = false;
         }
-        if ($mode == 'light') {
-            $GLOBALS['editor_mode'] = 'light';
-        } else {
-            $GLOBALS['editor_mode'] = 'full';
-        }
-
+        $GLOBALS['editor_mode'] = $mode;
+        $GLOBALS['editor_height'] = $height;
         //return $editor;
     }
 
@@ -226,7 +224,7 @@ class Theme
         //$mod = self::modList();
         //print_r($mod);
         $list = '';
-        
+
         if (User::access(0)) {
             $data = self::data($thm);
             if (isset($_GET['page'])

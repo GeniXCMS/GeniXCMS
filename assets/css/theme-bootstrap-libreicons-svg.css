@@ -815,16 +815,3 @@
 .elfinder-quicklook-navbar-icon-close{background:url(../images/libre/libre-close.svg);display:none}
 
 
-* {
-  border-radius: 0px!important;
-  -webkit-border-radius: 0 !important;
-     -moz-border-radius: 0 !important;
-          border-radius: 0 !important;
-}
-
-* {
-  border-top-left-radius: 0px!important;
-  border-top-right-radius: 0px!important;
-  border-bottom-left-radius: 0px!important;
-  border-bottom-right-radius: 0px!important;
-}

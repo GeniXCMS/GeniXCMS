@@ -28,6 +28,9 @@
                 <span class="hidden-xs hidden-sm"><?=ADD_NEW_POST;?></span>
             </a>
         </h2>
+        <small class="label label-default pull-left"><?=Stats::totalPost('post');?> total</small>
+        <small class="label label-success pull-left"><?=Stats::activePost('post');?> active</small>
+        <small class="label label-danger pull-left"><?=Stats::inactivePost('post');?> inactive</small>
         <hr />
     </div>
 
@@ -118,7 +121,6 @@
                 //print_r($data);
             if ($data['num'] > 0) {
                 foreach ($data['posts'] as $p) {
-                    
                     //print_r($p);
                     //echo $p->id;
                     if ($p->status == '0') {

@@ -1,0 +1,28 @@
+<?php
+
+defined('GX_LIB') or die('Direct Access Not Allowed!');
+/*
+ * GeniXCMS - Content Management System
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @since 1.0.0 build date 20160902
+ *
+ * @version 1.0.0
+ *
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genixcms.org
+ *
+ * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @copyright 2014-2016 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
+$data = Router::scrap($param);
+// print_r($data);
+if (isset($data['thumb'])) {
+    $thumb = $data['thumb'];
+    $type = isset($data['type']) ? $data['type'] : '';
+    $size = isset($data['size']) ? $data['size'] : '';
+    $align = isset($data['align']) ? $data['align'] : '';
+    Image::thumbFly($thumb, $type, $size, $align);
+}

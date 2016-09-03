@@ -41,7 +41,7 @@ class Session
                                 );
         }
         session_regenerate_id();
-        $path = isset($uri['path'])? $uri['path']: '';
+        $path = isset($uri['path']) ? $uri['path'] : '';
         setcookie(session_name(), session_id(), time() + 3600, $path, '', '', true);
         $GLOBALS['start_time'] = microtime(true);
     }
@@ -77,7 +77,6 @@ class Session
     {
         $val = $_SESSION['gxsess']['val'];
         foreach ($val as $k => $v) {
-            
             switch ($k) {
                 case $vars:
                     return $v;
@@ -90,14 +89,14 @@ class Session
         }
     }
 
-    public static function set_session($vars)
+    public static function set_session($vars, $val = '')
     {
         if (is_array($vars)) {
             if (is_array($_SESSION['gxsess']['val'])) {
                 $arr = array_merge($_SESSION['gxsess']['val'], $vars);
                 $_SESSION['gxsess']['val'] = $arr;
             } else {
-                $_SESSION['gxsess']['val'] = $vars;
+                $_SESSION['gxsess']['val'][$vars] = $val;
             }
         }
 

@@ -110,6 +110,12 @@ if (User::access(1)) {
                                     <i class="fa fa-file-o"></i> <?=PAGES; ?>
                                 </a>
                             </li>
+                            <li>
+                                <a href="index.php?page=comments"
+                                <?=(isset($_GET['page']) && $_GET['page'] == 'comments') ? 'class="active"' : ''; ?>>
+                                    <i class="fa fa-comments fa-fw"></i> <?=COMMENTS; ?>
+                                </a>
+                            </li>
 <?php
 } ?>
                             <li>

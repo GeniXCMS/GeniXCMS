@@ -164,7 +164,11 @@ class Site
 
         if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
             Hooks::attach('footer_load_lib', array('Files', 'elfinderLib'));
-            if ($GLOBALS['editor_mode'] == 'light') {
+            if ($GLOBALS['editor_mode'] == 'mini') {
+                $toolbar = "
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    ['para', ['ul', 'ol']]";
+            } elseif ($GLOBALS['editor_mode'] == 'light') {
                 $toolbar = "['style', ['style']],
                     ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                     ['fontsize', ['fontsize']],
@@ -185,6 +189,7 @@ class Site
                     ['view', ['fullscreen', 'codeview']],
                     ['help', ['help']]";
             }
+            $height = $GLOBALS['editor_height'];
 
             // $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
             $url = Url::ajax('saveimage');
@@ -200,7 +205,7 @@ class Site
     <script>
       $(document).ready(function() {
         $(".editor").summernote({
-            minHeight: 300,
+            minHeight: '.$height.',
             toolbar: [
                     '.$toolbar.'
                 ],
@@ -235,7 +240,7 @@ class Site
                   $(\'.editor\').summernote(\'editor.insertImage\', data);
                 },
                error: function(jqXHR, textStatus, errorThrown) {
-                 console.log(textStatus+\" \"+errorThrown);
+                 console.log(textStatus+" "+errorThrown);
                }
             });
           }
@@ -424,6 +429,15 @@ class Site
             ),
             $input
         );
+    }
+
+    public static function minifIed($input)
+    {
+        // $input = self::minifyJS($input);
+        // $input = self::minifyCSS($input);
+        $input = self::minifyHTML($input);
+
+        return $input;
     }
 }
 

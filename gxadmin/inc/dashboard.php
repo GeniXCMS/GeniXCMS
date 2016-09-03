@@ -78,17 +78,17 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-cubes fa-5x"></i>
+                                <i class="fa fa-comments fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge"><?=Stats::totalCat('post');?></div>
-                                <div><?=TOTAL_CAT;?></div>
+                                <div class="huge"><?=Stats::pendingComments();?></div>
+                                <div><?=PENDING.' '.COMMENTS;?></div>
                             </div>
                         </div>
                     </div>
-                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=categories">
+                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=comments">
                         <div class="panel-footer">
-                            <span class="pull-left">View Categories</span>
+                            <span class="pull-left">View Comments</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -160,16 +160,16 @@
 
                         // print_r(Stats::mostViewed(5));
                         $list = Stats::mostViewed(5);
-                        echo "<ul class=\"list-group\">";
+                        echo '<ul class="list-group">';
                         if (!isset($list['error'])) {
                             foreach ($list as $p) {
-                                echo "<li class=\"list-group-item\"><a href=\"".Url::post($p->id)."\" target=\"_blank\">".$p->title."</a><span class=\"badge pull-right\" data-toggle=\"tooltip\" title=\"views\">".$p->views."</span></li>";
+                                echo '<li class="list-group-item"><a href="'.Url::post($p->id).'" target="_blank">'.$p->title.'</a><span class="badge pull-right" data-toggle="tooltip" title="views">'.$p->views.'</span></li>';
                             }
                         } else {
-                            echo "<li  class=\"list-group-item\">No Post to Show</li>";
+                            echo '<li  class="list-group-item">No Post to Show</li>';
                         }
-                        echo "</ul>";
-                        
+                        echo '</ul>';
+
                         echo Hooks::run('admin_page_dashboard_statslist_action', $data);
 
                         ?>

@@ -49,8 +49,8 @@
             <td>
                 <div class="form-group">
                     <input type="text" name="siteurl" class="form-control">
-                    <span class="help-block">please insert the website url. eg: <code>http://genixcms.com</code> 
-                    please don't use trailing slash at the end of the url.</span>
+                    <span class="help-block">please insert the website url. eg: <code>http://genixcms.com/</code> 
+                    please use trailing slash at the end of the url.</span>
                 </div>
             </td>
         </tr>

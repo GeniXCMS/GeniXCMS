@@ -57,7 +57,7 @@ if ($num_rows > 0) {
     Theme::theme('header', $data);
     Theme::theme($theme, $data);
     Theme::footer();
-    Stats::addViews($post);
+    Stats::addViews($post_id);
     exit;
 } else {
     Control::error('404');

@@ -27,6 +27,8 @@
                 <span class="hidden-xs hidden-sm"><?=ADD_TAG;?></span>
             </button>
         </h2>
+        <small class="label label-default pull-left"><?=Stats::totalCat('tag');?> total</small>
+
         <hr />
     </div>
 
@@ -35,7 +37,6 @@
             <?php
             if ($data['num'] > 0) {
                 foreach ($data['cat'] as $c) {
-                    
                     // echo "<td>".$c->id."</td>";
                     // echo "<td>".$c->name."</td>";
                     // echo "<td>".$c->parent."</td>";

@@ -105,7 +105,7 @@ class Control
     public static function frontend()
     {
         $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
-                    'account', 'search', 'author', 'tag', );
+                    'account', 'search', 'author', 'tag', 'thumb', );
 
         if (SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {

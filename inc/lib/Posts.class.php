@@ -136,6 +136,9 @@ class Posts
                         );
             $d = Db::delete($vars2);
             Hooks::run('post_sqldel_action', $id);
+            if (Comments::postExist($id)) {
+                Comments::deleteWithPost($id);
+            }
 
             return true;
         } catch (Exception $e) {
@@ -173,8 +176,8 @@ class Posts
         $more = explode('[[--readmore--]]', $post);
         //print_r($more);
         if (count($more) > 1) {
-            $post = explode('[[--readmore--]]', $post);
-            $post = $post[0].' <a href="'.Url::post($id).'">'.READ_MORE.'</a>';
+            // $post = explode('[[--readmore--]]', $post);
+            $post = $more[0].' <a href="'.Url::post($id).'">'.READ_MORE.'</a>';
         } else {
             $post = $post;
         }
@@ -390,6 +393,7 @@ class Posts
     //     'title' => 'true',
     //     'author' => 'true',
     //     'date' => 'true',
+    //     'image' => 'true',
     //     'class' => array(
     //                    'ul' => '',
     //                    'li' => '',
@@ -402,8 +406,9 @@ class Posts
     {
         $class = isset($vars['class']) ? $vars['class'] : '';
 
-        $ulClass = isset($class['ul']) ? $class['ul'] : '';
-        $liClass = isset($class['li']) ? $class['li'] : '';
+        $imgClass = isset($class['img']) ? $class['img'] : '';
+        $ulClass = isset($class['row']) ? $class['row'] : '';
+        $liClass = isset($class['list']) ? $class['list'] : '';
         $pClass = isset($class['p']) ? $class['p'] : '';
         $h4Class = isset($class['h4']) ? $class['h4'] : '';
         $excerptMax = isset($vars['excerpt_max']) ? $vars['excerpt_max'] : '200';
@@ -413,24 +418,37 @@ class Posts
             echo 'No Post(s) found.';
         } else {
             $pcat = self::prepare($pcat);
-            echo '<ul class="'.$ulClass.'">';
+
             foreach ($pcat as $p) {
-                $content = ($vars['excerpt'] === true) ? substr(
+                echo '<div class="media '.$ulClass.'">';
+                $content = (isset($vars['excerpt']) && $vars['excerpt'] === true) ? substr(
                     strip_tags(
                         Typo::Xclean($p->content)
                     ),
                     0,
                     $excerptMax
                 ) : '';
-
-                echo '<li class="'.$liClass.'">';
-                echo (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="'.$h4Class.'"><a href="'.Url::post($p->id)."\">{$p->title}</a></h4>" : '';
+                if (isset($vars['image']) && $vars['image'] == true) {
+                    $img = self::getImage(Typo::Xclean($p->content));
+                    if ($img != '') {
+                        $img = Url::thumb($img, 'square', 60);
+                    } else {
+                        $img = Url::thumb('assets/images/noimage.png', '', 60);
+                    }
+                    echo '<div class="media-left">
+                        <a href="'.Url::post($p->id).'">
+                          <img class="media-object '.$imgClass.'" src="'.$img.'" alt="'.$p->title.'">
+                        </a>
+                      </div>';
+                }
+                echo '<div class="media-body '.$liClass.'">';
+                echo (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading '.$h4Class.'"><a href="'.Url::post($p->id)."\">{$p->title}</a></h4>" : '';
                 echo (isset($vars['date']) && $vars['date'] === true) ? '<small>posted on : '.Date::local($p->date).' </small> ' : '';
                 echo (isset($vars['author']) && $vars['author'] === true) ? '<small>by : '.$p->author.'</small>' : '';
                 echo (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="'.$pClass.'">'.$content.'</p>' : '';
-                echo '</li>';
+                echo '</div>';
+                echo '</div>';
             }
-            echo '</ul>';
         }
     }
 
@@ -528,6 +546,32 @@ class Posts
             return $q[0]->id;
         } else {
             return '';
+        }
+    }
+
+    public static function getPostCat($id, $max)
+    {
+        $sql = sprintf("SELECT * FROM `posts` WHERE `cat` = '%d' ORDER BY `date` DESC LIMIT 0, %d", $id, $max);
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            $r = $q;
+        } else {
+            $r['error'] = 'Error: No Post to Show';
+        }
+
+        return $r;
+    }
+
+    public static function getImage($post)
+    {
+        preg_match_all('/<img .*?src=[\'"]([^\'"]+)[\'"].*?>/Ui', $post, $im);
+        if (count($im) >= 1) {
+            for ($i = 1; $i <= count($im); $i += 2) {
+                if (isset($im[$i][0])) {
+                    return $im[$i][0];
+                    break;
+                }
+            }
         }
     }
 }

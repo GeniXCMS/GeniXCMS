@@ -26,6 +26,9 @@
                 <i class="fa fa-plus"></i> <span class="hidden-xs hidden-sm"><?=ADD_NEW_PAGE;?></span>
             </a>
         </h2>
+        <small class="label label-default pull-left"><?=Stats::totalPost('page');?> total</small>
+        <small class="label label-success pull-left"><?=Stats::activePost('page');?> active</small>
+        <small class="label label-danger pull-left"><?=Stats::inactivePost('page');?> inactive</small>
         <hr />
     </div>
     <div class="col-sm-12">
@@ -102,7 +105,6 @@
                             // print_r($data);
                         if ($data['num'] > 0) {
                             foreach ($data['posts'] as $p) {
-                                
                                 //echo $p->id;
                                 if ($p->status == '0') {
                                     $status = UNPUBLISHED;
