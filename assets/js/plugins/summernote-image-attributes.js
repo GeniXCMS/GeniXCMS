@@ -12,7 +12,7 @@
             imageAttributes:{
                 tooltip:'Image Attributes',
                 tooltipShape:'Image Shape',
-                tooltipShapeOptions: [ 'Rounded', 'Circle', 'Thumbnail', 'None' ],
+                tooltipShapeOptions: [ 'Rounded', 'Circle', 'Thumbnail', 'Responsive', 'None' ],
                 pluginImageTitle:'Image Attributes',
                 pluginLinkTitle:'Link Attributes',
                 title:'Title',
@@ -43,7 +43,7 @@
             imageAttributes:{
                 tooltip:'Propiedades de la Imagen',
                 tooltipShape:'Forma de la Imagen',
-                tooltipShapeOptions: [ 'Borde Redondeado', 'Formato Circular', 'Marco de foto', 'Normal' ],
+                tooltipShapeOptions: [ 'Borde Redondeado', 'Formato Circular', 'Marco de foto', 'Responsive', 'Normal' ],
                 pluginImageTitle:'Atributos de la Imagen',
                 pluginLinkTitle:'Atributos del Enlace',
                 title:'Titulo',
@@ -74,7 +74,7 @@
             imageAttributes:{
                 tooltip:'Attributs de l\'image',
                 tooltipShape:'Forme de l\'image',
-                tooltipShapeOptions: [ 'Arrondi', 'Cercle', 'Vignette', 'Aucune' ],
+                tooltipShapeOptions: [ 'Arrondi', 'Cercle', 'Vignette', 'Responsive', 'Aucune' ],
                 pluginImageTitle:'Attributs de l\'image',
                 pluginLinkTitle:'Attributs du lien',
                 title:'Titre',
@@ -105,7 +105,7 @@
             imageAttributes:{
                 tooltip:'Atribut Gambar',
                 tooltipShape:'Bentuk Gambar',
-                tooltipShapeOptions: [ 'Bulat', 'Lingkaran', 'Gambar Mini', 'Tanpa bentuk' ],
+                tooltipShapeOptions: [ 'Bulat', 'Lingkaran', 'Gambar Mini', 'Responsive', 'Tanpa bentuk' ],
                 pluginImageTitle:'Atribut Gambar',
                 pluginLinkTitle:'Atribut Tautan',
                 title:'Judul',
@@ -136,7 +136,7 @@
             imageAttributes:{
                 tooltip:'圖片提示',
                 tooltipShape:'圖片形狀',
-                tooltipShapeOptions: [ '圓角', '圓形', '縮圖', '無' ],
+                tooltipShapeOptions: [ '圓角', '圓形', '縮圖', 'Responsive', '無' ],
                 pluginImageTitle:'圖片屬性',
                 pluginLinkTitle:'連結屬性',
                 title:'標題',
@@ -174,7 +174,7 @@
         imageShape: {
             icon: '<i class="note-icon-picture"/>',
             /* Must keep the same order as in lang.imageAttributes.tooltipShapeOptions */
-            shapes: [ 'img-rounded', 'img-circle', 'img-thumbnail', '' ]
+            shapes: [ 'img-rounded', 'img-circle', 'img-thumbnail', 'img-responsive', '' ]
         }
     })
     $.extend($.summernote.plugins,{

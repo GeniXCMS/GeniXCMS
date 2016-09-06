@@ -46,7 +46,7 @@ class Site
     /* Call all Website Meta at Header
     *
     */
-    public static function meta($cont_title = '', $cont_desc = '', $pre = '')
+    public static function meta($location = '', $cont_desc = '', $pre = '')
     {
         global $data;
         //print_r($data);
@@ -124,7 +124,17 @@ class Site
     <link rel="shortcut icon" href="'.Options::v('siteicon').'" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for '.self::$name.'" href="'.self::$url.'rss/" />
         ';
-        echo Hooks::run('header_load_meta', $data);
+        $bs = Options::v('use_bootstrap');
+        if ($bs == 'on') {
+            echo '
+    <link href="'.self::$url."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+        }
+        $fa = Options::v('use_fontawesome');
+        if ($fa == 'on') {
+            echo "
+            <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
+        }
+        echo ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
         echo '
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->';
         // echo $meta;
@@ -135,11 +145,6 @@ class Site
         global $data;
         //echo $GLOBALS['editor'].' one '. self::$editors;
         $foot = '';
-        $bs = Options::v('use_bootstrap');
-        if ($bs == 'on') {
-            $foot .= '
-    <link href="'.self::$url."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
-        }
 
         $jquery = Options::v('use_jquery');
         $jquery_v = Options::v('jquery_v');
@@ -156,24 +161,19 @@ class Site
             <script src="'.self::$url.'assets/js/ie10-viewport-bug-workaround.js"></script>';
         }
 
-        $fa = Options::v('use_fontawesome');
-        if ($fa == 'on') {
-            $foot .= "
-            <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
-        }
-
         if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
             Hooks::attach('footer_load_lib', array('Files', 'elfinderLib'));
             if ($GLOBALS['editor_mode'] == 'mini') {
                 $toolbar = "
                     ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-                    ['para', ['ul', 'ol']]";
+                    ['para', ['ul', 'ol']],
+                    ['genixcms', ['gxcode']]";
             } elseif ($GLOBALS['editor_mode'] == 'light') {
                 $toolbar = "['style', ['style']],
                     ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                     ['fontsize', ['fontsize']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
                     ['view', ['fullscreen']]";
             } elseif ($GLOBALS['editor_mode'] == 'full') {
                 $toolbar = "['style', ['style']],
@@ -184,7 +184,7 @@ class Site
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
                     ['genixcms', ['elfinder']],
                     ['view', ['fullscreen', 'codeview']],
                     ['help', ['help']]";
@@ -197,21 +197,25 @@ class Site
 
     <link href="'.self::$url.'assets/css/summernote.css" rel="stylesheet">
     <script src="'.self::$url.'assets/js/summernote.min.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-ext-hint.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-ext-video.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-ext-genixcms.js\"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-image-attributes.js\"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-floats-bs.min.js\"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-ext-genixcms.js"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-image-attributes.js"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-floats-bs.min.js"></script>
     <script>
       $(document).ready(function() {
         $(".editor").summernote({
             minHeight: '.$height.',
+            maxHeight: ($(window).height() - 150),
             toolbar: [
                     '.$toolbar.'
                 ],
             callbacks: {
                 onImageUpload: function(files, editor, welEditable) {
                     sendFile(files[0],editor,welEditable);
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
+                    e.preventDefault();
+                    document.execCommand(\'insertText\', false, bufferText);
                 }
             },
             popover: {

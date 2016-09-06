@@ -201,6 +201,24 @@ class Image
         $large = ($size != '') ? Typo::int($size) : 200;
         $small = ($size != '') ? Typo::int($size) : 100;
 
+        // check whether files exist on remote or local
+        if (Files::isRemote($img)) {
+            $imgSrc = $img;
+            // var_dump(Files::isClean($imgSrc));
+            if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
+                $exist = true;
+            } else {
+                $exist = false;
+            }
+        } else {
+            $imgSrc = GX_PATH.'/'.$img;
+            if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
+                $exist = true;
+            } else {
+                $exist = false;
+            }
+        }
+        // echo $imgSrc;
         ////////////////////////////////////////////////////////////////////////////////// square
         if (isset($type) && ($type == 'square' || $type == '')) {
             // thumb size
@@ -211,10 +229,11 @@ class Image
             $align = isset($align) ? $align : '';
 
         // image source
-            $imgSrc = GX_PATH.'/'.$img;
+            // $imgSrc = GX_PATH.'/'.$img;
+
             $imgExt = substr($imgSrc, -3);
 
-            if (file_exists($imgSrc)) {
+            if ($exist) {
                 // image extension
                 if ($imgExt == 'jpg') {
                     $myImage = imagecreatefromjpeg($imgSrc);
@@ -279,6 +298,8 @@ class Image
                 if ($imgExt == 'png') {
                     imagepng($thumb, null, 9);
                 }
+            } else {
+                self::thumbFly('assets/images/noimage.png', '', $size, $align);
             }
         }
 
@@ -292,9 +313,10 @@ class Image
             }
 
         // image source
-            $imgSrc = GX_PATH.'/'.$img;
+            // $imgSrc = GX_PATH.'/'.$img;
+            // $imgSrc = $img;
             $imgExt = substr($imgSrc, -3);
-            if (file_exists($imgSrc)) {
+            if ($exist) {
                 // image extension
                 if ($imgExt == 'jpg') {
                     $myImage = imagecreatefromjpeg($imgSrc);
@@ -337,6 +359,8 @@ class Image
                 if ($imgExt == 'png') {
                     imagepng($thumb, null, 9);
                 }
+            } else {
+                self::thumbFly('assets/images/noimage.png', 'large', $size, $align);
             }
         }
     }

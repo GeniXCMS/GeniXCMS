@@ -90,7 +90,7 @@ if (User::access(2)) {
                                 $multilang[] = array(
                                                     $key => array(
                                                             'title' => $title,
-                                                            'content' => $content,
+                                                            'content' => Typo::jsonFormat($content),
                                                         ),
                                                 );
                             }
@@ -185,7 +185,7 @@ if (User::access(2)) {
                                 $multilang[] = array(
                                                     $key => array(
                                                             'title' => $title,
-                                                            'content' => $content,
+                                                            'content' => Typo::jsonFormat($content),
                                                         ),
                                                 );
                             }
@@ -272,7 +272,7 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        if ($post_id != "") {
+                        if ($post_id != '') {
                             foreach ($post_id as $id) {
                                 Posts::publish($id);
                             }
@@ -290,7 +290,7 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        if ($post_id != "") {
+                        if ($post_id != '') {
                             foreach ($post_id as $id) {
                                 Posts::unpublish($id);
                             }
@@ -308,7 +308,7 @@ if (User::access(2)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        if ($post_id != "") {
+                        if ($post_id != '') {
                             foreach ($post_id as $id) {
                                 Posts::delete($id);
                                 Hooks::run('post_delete_action', $id);
@@ -338,16 +338,19 @@ if (User::access(2)) {
                 $qpage .= "&cat={$cat}";
             }
             if (isset($_GET['from']) && $_GET['from'] != '') {
-                $where .= "AND `date` >= '{$_GET['from']}' ";
-                $qpage .= "&from={$_GET['from']}";
+                $from = Typo::cleanX($_GET['from']);
+                $where .= "AND `date` >= '{$from}' ";
+                $qpage .= "&from={$from}";
             }
             if (isset($_GET['to']) && $_GET['to'] != '') {
-                $where .= "AND `date` <= '{$_GET['to']}' ";
-                $qpage .= "&to={$_GET['to']}";
+                $to = Typo::cleanX($_GET['to']);
+                $where .= "AND `date` <= '{$to}' ";
+                $qpage .= "&to={$to}";
             }
             if (isset($_GET['status']) && $_GET['status'] != '') {
-                $where .= "AND `status` LIKE '%{$_GET['status']}%' ";
-                $qpage .= "&status={$_GET['status']}";
+                $status = Typo::int($_GET['status']);
+                $where .= "AND `status` LIKE '%{$status}%' ";
+                $qpage .= "&status={$status}";
             }
 
             $max = '15';

@@ -41,7 +41,7 @@ if (User::access(1)) {
                         "INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'post' )",
                         $cat,
                         $slug,
-                        $_POST['parent']
+                        Typo::int($_POST['parent'])
                     )
                 );
                 //print_r($cat);
@@ -94,7 +94,7 @@ if (User::access(1)) {
         if (isset($alertDanger)) {
             $data['alertDanger'] = $alertDanger;
         } else {
-            Categories::delete($_GET['id']);
+            Categories::delete(Typo::int($_GET['id']));
             $data['alertSuccess'][] = MSG_CATEGORY_REMOVED;
         }
         if (isset($_GET['token'])) {

@@ -4,8 +4,8 @@
  * Desc: Default GeniXCMS Themes
  * Version: 1.0.0
  * Build: 1.0.0
- * Developer: Puguh Wijayanto
- * URI: http://www.metalgenix.com
+ * Developer: GeniXCMS
+ * URI: http://genixcms.org
  * License: MIT License
- * Icon: <i class="fa fa-cogs"></i>
+ * Icon: <i class="fa fa-desktop"></i>
  */

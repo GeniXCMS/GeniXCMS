@@ -502,7 +502,9 @@ article img.pull-right {
 }
 
 
-
+pre {
+    white-space: pre-wrap;
+}
 
 
 

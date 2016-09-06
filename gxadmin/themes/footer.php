@@ -21,6 +21,7 @@
     <link href="<?=Site::$url;?>assets/css/bootstrap-theme.css" rel="stylesheet">
     <link href="<?=Site::$url;?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<?=Site::$url;?>assets/css/grideditor.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="<?=Site::$url;?>assets/css/sb-admin-2.css" rel="stylesheet">
@@ -36,6 +37,8 @@
     <script src="<?=Site::$url;?>assets/js/moment-locales.min.js"></script>
     <script src="<?=Site::$url;?>assets/js/bootstrap-datetimepicker.min.js"></script>
     <script src="<?=Site::$url;?>assets/js/jquery.tagsinput.min.js"></script>
+    <script src="<?=Site::$url;?>assets/js/jquery.grideditor.js"></script>
+    <script src="<?=Site::$url;?>assets/js/jquery.grideditor.summernote.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?=Site::$url;?>assets/js/plugins/metisMenu/metisMenu.min.js"></script>
@@ -56,7 +59,7 @@
                     ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                     ['fontsize', ['fontsize']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
                     ['view', ['fullscreen']]";
         } elseif ($GLOBALS['editor_mode'] == 'full') {
             $toolbar = "['style', ['style']],
@@ -67,8 +70,9 @@
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
                     ['genixcms', ['elfinder']],
+                    ['bootstrap', ['bootstrapGrid']], 
                     ['view', ['fullscreen', 'codeview']],
                     ['help', ['help']]";
         }
@@ -78,11 +82,11 @@
 
     <link href="'.Site::$url.'assets/css/summernote.css" rel="stylesheet">
     <script src="'.Site::$url.'assets/js/summernote.min.js"></script>
-    <script src="'.Site::$url.'assets/js/plugins/summernote-ext-hint.js"></script>
-    <script src="'.Site::$url.'assets/js/plugins/summernote-ext-video.js"></script>
     <script src="'.Site::$url.'assets/js/plugins/summernote-ext-genixcms.js"></script>
     <script src="'.Site::$url.'assets/js/plugins/summernote-image-attributes.js"></script>
     <script src="'.Site::$url.'assets/js/plugins/summernote-floats-bs.min.js"></script>
+    <script src="'.Site::$url.'assets/js/genixcms.js"></script>
+
 
     <script>
       $(document).ready(function() {
@@ -118,13 +122,18 @@
 
         $(\'.editor\').each(function(i, obj) { $(obj).summernote({
             minHeight: 300,
-            maxHeight: 750,
+            maxHeight: ($(window).height() - 150),
             toolbar: [
                     '.$toolbar.'
                 ],
             callbacks: {
                 onImageUpload: function(files, editor, welEditable) {
                     sendFile(files[0],editor,welEditable);
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
+                    e.preventDefault();
+                    document.execCommand(\'insertText\', false, bufferText);
                 }
             },
             popover: {
@@ -140,9 +149,9 @@
           });
         });
 
-         $(\'.alert\').alert();
-      });
 
+        
+    });
 
     </script>
               ';

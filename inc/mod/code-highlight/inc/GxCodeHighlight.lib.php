@@ -7,7 +7,7 @@ class GxCodeHighlight
     {
         Hooks::attach('footer_load_lib', array('GxCodeHighlight', 'show'));
     }
-    
+
     public static function show()
     {
         echo "

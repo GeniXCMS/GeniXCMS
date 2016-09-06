@@ -17,7 +17,7 @@ class Gneex
                 Hooks::attach('footer_load_lib', array('Gneex', 'loadAnalytics'));
             }
 
-            Hooks::attach('footer_load_lib', array('Gneex', 'loadCSS'));
+            Hooks::attach('header_load_meta', array('Gneex', 'loadCSS'));
             Hooks::attach('admin_footer_action', array('Gneex', 'loadAdminAsset'));
         }
     }
@@ -40,7 +40,7 @@ class Gneex
         $o = [];
         if (is_array($opt)) {
             foreach ($opt as $k => $v) {
-                $o[$k] = urldecode($v);
+                $o[$k] = Typo::jsonDeFormat($v);
             }
         }
 
@@ -95,9 +95,9 @@ class Gneex
         $opt = self::$opt;
         if (key_exists($var, $opt)) {
             if ($var == 'adsense') {
-                return self::isAdsense(Typo::jsonDeFormat($opt[$var]));
+                return self::isAdsense($opt[$var]);
             } else {
-                return Typo::jsonDeFormat($opt[$var]);
+                return $opt[$var];
             }
         }
     }
@@ -124,6 +124,7 @@ class Gneex
     {
         $opt = self::$opt;
         $css = '
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.2/flexslider.min.css" rel="stylesheet">
         <link href="'.Site::$url.'inc/themes/gneex/css/style.css" rel="stylesheet">
         <style>';
         $css .= '

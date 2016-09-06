@@ -23,11 +23,9 @@
 
     <!-- LIBRARY -->
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.2/flexslider.min.css" rel="stylesheet">
+    
     <?=Site::footer();?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.2/jquery.flexslider.min.js" type="text/javascript"></script>
-    
-    
     <script type="text/javascript">
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();

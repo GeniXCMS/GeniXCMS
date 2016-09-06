@@ -28,7 +28,6 @@ if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
         //print_r($data['post']);
         foreach ($data['post'] as $p) {
-            
             $title = $p->title;
             $content = $p->content;
             $date = $p->date;
@@ -121,8 +120,10 @@ if (isset($data['post'])) {
                             <input type=\"title\" name=\"title[{$def}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$title}\">
                         </div>
                         <div class=\"form-group\">
-                            <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$def}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$content}</textarea>
+                            <label for=\"content\">".CONTENT." </label> <a href=\"#\" id=\"toggleEditor\" class=\"btn btn-danger btn-xs pull-right\"><i class=\"fa fa-desktop\"></i> Editor</a>
+                            
+                            <textarea name=\"content[{$def}]\" class=\"form-control content editor ge-html-output\" id=\"content\" rows=\"20\">{$content}</textarea>
+                            
                         </div>
                     </div>
                     ";
@@ -142,17 +143,17 @@ if (isset($data['post'])) {
                             }
                             echo "
                     <div class=\"tab-pane\" id=\"lang-{$key}\">
-
+                    
                         <div class=\"form-group\">
                             <label for=\"title\">".TITLE." ({$key}) </label>
                             <input type=\"title\" name=\"title[{$key}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$lang['title']}\">
                         </div>
                         <div class=\"form-group\">
                             <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content\" rows=\"20\">{$lang['content']}</textarea>
+                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content-{$key}\" rows=\"20\">{$lang['content']}</textarea>
                         </div>
                     </div>
-
+                    <div id=\"myGrid\">{$content}</div>
                         ";
                             unset($lang);
                         }
@@ -165,8 +166,9 @@ if (isset($data['post'])) {
                         <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title; ?>">
                         </div>
                         <div class="form-group">
-                        <label for="content"><?=CONTENT; ?></label>
+                        <label for="content"><?=CONTENT; ?></label> <a href="#" id="toggleEditor" class="btn btn-danger btn-xs pull-right"><i class="fa fa-desktop"></i> Editor</a>
                         <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content; ?></textarea>
+                        <div id="myGrid"><?=$content; ?></div>
                         </div>
                         <?php
                     }

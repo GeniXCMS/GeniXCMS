@@ -27,12 +27,12 @@
                                     
                                     <span class=\"meta\">posted in <a href=\"".Url::cat($p->cat).'">'.Categories::name($p->cat).'</a>, at '.Date::format($p->date).' by '.$p->author.'</span>
                                     <hr />
-                                    '.Posts::content($p->content, $p->id);
+                                    '.Posts::content($p->content, $p->id).'<hr />';
                             if (Gneex::opt('adsense') != '') {
                                 echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                             }
                             echo '
-                                    <hr />
+                                    
                                     <h3>Related :</h3>
                                     '.Posts::related($p->id, 5, $p->cat, 'list').'
                                 </article>

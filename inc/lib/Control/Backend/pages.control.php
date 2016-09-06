@@ -182,9 +182,9 @@ if (User::access(2)) {
             }
             $id = Typo::int($_GET['id']);
             $data['post'] = Db::result("SELECT * FROM `posts` AS A 
-            LEFT JOIN `posts_param` AS B
-            ON A.`id` = B.`post_id` 
-            WHERE A.`id` = '{$id}' ");
+                                        LEFT JOIN `posts_param` AS B
+                                        ON A.`id` = B.`post_id` 
+                                        WHERE A.`id` = '{$id}' ");
             Theme::admin('header', $data);
             System::inc('pages_form', $data);
             Theme::admin('footer');
@@ -302,12 +302,14 @@ if (User::access(2)) {
                 $qpage .= "&cat={$cat}";
             }
             if (isset($_GET['from']) && $_GET['from'] != '') {
-                $where .= "AND `date` >= '{$_GET['from']}' ";
-                $qpage .= "&from={$_GET['from']}";
+                $from = Typo::cleanX($_GET['from']);
+                $where .= "AND `date` >= '{$from}' ";
+                $qpage .= "&from={$from}";
             }
             if (isset($_GET['to']) && $_GET['to'] != '') {
-                $where .= "AND `date` <= '{$_GET['to']}' ";
-                $qpage .= "&to={$_GET['to']}";
+                $to = Typo::cleanX($_GET['to']);
+                $where .= "AND `date` <= '{$to}' ";
+                $qpage .= "&to={$to}";
             }
             if (isset($_GET['status']) && $_GET['status'] != '') {
                 $status = Typo::int($_GET['status']);
@@ -324,10 +326,12 @@ if (User::access(2)) {
                 $offset = 0;
             }
 
-                $data['posts'] = Db::result("SELECT * FROM `posts` 
-            WHERE `type` = 'page' {$where} 
-            ORDER BY `date` DESC 
-            LIMIT {$offset},{$max}");
+                $data['posts'] = Db::result(
+                    sprintf("SELECT * FROM `posts` 
+                                            WHERE `type` = 'page' %s
+                                            ORDER BY `date` DESC 
+                                            LIMIT %d,%d", $where, $offset, $max)
+                );
                 $data['num'] = Db::$num_rows;
 
                 $page = array(

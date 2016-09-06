@@ -14,9 +14,9 @@
 
                 <div class="col-md-7 ">
                 <div class="front-textbox">
-                    <h2><span><?=nl2br(Typo::jsonDeFormat($gneex['intro_title'])); ?></span></h2>
+                    <h2><span><?=nl2br($gneex['intro_title']); ?></span></h2>
                     <hr />
-                    <p><span><?=nl2br(Typo::jsonDeFormat($gneex['intro_text'])); ?></span>
+                    <p><span><?=nl2br($gneex['intro_text']); ?></span>
                     </p>
                 </div>
                     
@@ -279,7 +279,7 @@ if (Gneex::featuredExist()) {
                         }
 
                         echo '<li class="col-sm-3">
-                                    <a href="'.Url::post($post[0]->id)."\">
+                                    <a href="'.Url::post($p->id)."\">
                                     {$im}
                                     <div class=\"featured-text\">
                                         <h4 >{$title}</h4>

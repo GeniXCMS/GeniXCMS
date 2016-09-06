@@ -35,16 +35,19 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
         $qpage .= "&q={$_GET['q']}";
     }
     if (isset($_GET['from']) && $_GET['from'] != '') {
-        $where .= "AND `join_date` >= '{$_GET['from']}' ";
-        $qpage .= "&from={$_GET['from']}";
+        $from = Typo::cleanX($_GET['from']);
+        $where .= "AND `join_date` >= '{$from}' ";
+        $qpage .= "&from={$from}";
     }
     if (isset($_GET['to']) && $_GET['to'] != '') {
-        $where .= "AND `join_date` <= '{$_GET['to']}' ";
-        $qpage .= "&to={$_GET['to']}";
+        $to = Typo::cleanX($_GET['to']);
+        $where .= "AND `join_date` <= '{$to}' ";
+        $qpage .= "&to={$to}";
     }
     if (isset($_GET['status']) && $_GET['status'] != '') {
-        $where .= "AND `status` LIKE '%%{$_GET['status']}%%' ";
-        $qpage .= "&status={$_GET['status']}";
+        $status = Typo::int($_GET['status']);
+        $where .= "AND `status` = '{$status}' ";
+        $qpage .= "&status={$status}";
     }
 
     $max = '10';
@@ -283,12 +286,12 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 }
 
                 if (isset($_POST['action'])) {
-                    $action = $_POST['action'];
+                    $action = Typo::cleanX($_POST['action']);
                 } else {
                     $action = '';
                 }
                 if (isset($_POST['user_id'])) {
-                    $user_id = $_POST['user_id'];
+                    $user_id = Typo::cleanX($_POST['user_id']);
                 } else {
                     $user_id = '';
                 }

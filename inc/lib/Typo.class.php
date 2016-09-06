@@ -236,28 +236,46 @@ class Typo
         return $string;
     }
 
+    public static function p2br($string)
+    {
+        $string = str_replace(array('<p>'), '', $string);
+        $string = str_replace('</p>', '<br />', $string);
+
+        return $string;
+    }
+
     public static function jsonFormat($var)
     {
         $var = str_replace("\r\n", "\n", $var);
         $var = str_replace("\r", "\n", $var);
 
-        // JSON requires new line characters be escaped
+        // // // JSON requires new line characters be escaped
         $var = str_replace("\n", '\\n', $var);
+        $var = str_replace("'", '\\u0027', $var);
+        $var = preg_replace_callback(
+            '/<([^<>]+)>/',
+            function ($matches) {
+                return str_replace('"', '\"', $matches[0]);
+            },
+            $var
+        );
+        // $var = preg_replace_callback(
+        //     '/([^<>]+)/',
+        //     function ($matches) {
+        //         return str_replace("'", '&apos;', $matches[0]);
+        //     },
+        //     $var
+        // );
 
-        // $var = addcslashes($var, '\n');
-        // $var = addslashes($var);
-        // $var = urlencode($var);
+        $var = str_replace('/>', ' />', $var);
+        $var = str_replace('</', '<\/', $var);
 
         return $var;
     }
 
     public static function jsonDeFormat($var)
     {
-        $var = urldecode($var);
-
-        // $var = stripslashes($var);
-
-        return $var;
+        return html_entity_decode($var);
     }
 }
 

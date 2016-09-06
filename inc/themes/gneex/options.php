@@ -41,10 +41,13 @@ if (isset($_POST['gneex_options_update'])) {
     unset($_POST['gneex_options_update']);
     $opt = array();
     foreach ($_POST as $k => $v) {
-        $opt[$k] = urlencode($v);
+        // $opt[$k] = urlencode($v);
+        $opt[$k] = Typo::jsonFormat($v);
+        // echo $opt[$k];
     }
 
-    $opt = json_encode($opt);
+    $opt = json_encode($opt, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS);
+    // echo $opt;
     Options::update('gneex_options', $opt);
 }
 
@@ -67,12 +70,15 @@ if (isset($_POST['gneex_options_update'])) {
 if (Gneex::checkDB()) {
     $opt = Options::get('gneex_options');
     // $opt = utf8_encode($opt);
+    // var_dump($opt);
+
     $opt = json_decode($opt, true);
 
     if (is_array($opt)) {
         $o = [];
         foreach ($opt as $k => $v) {
-            $o[$k] = urldecode($v);
+            // $o[$k] = urldecode($v);
+            $o[$k] = $v;
         }
     } ?>
     <div class="col-md-2">

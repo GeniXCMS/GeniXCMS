@@ -35,9 +35,9 @@ if (User::access(0)) {
             // print_r($_POST);
             $lang = array(
                 $_POST['multilang_country_code'] => array(
-                        'country' => $_POST['multilang_country_name'],
-                        'system_lang' => $_POST['multilang_system_lang'],
-                        'flag' => $_POST['multilang_country_flag'],
+                        'country' => Typo::jsonFormat($_POST['multilang_country_name']),
+                        'system_lang' => Typo::jsonFormat($_POST['multilang_system_lang']),
+                        'flag' => Typo::jsonFormat($_POST['multilang_country_flag']),
                     ),
             );
             $langs = json_decode(Options::v('multilang_country'), true);

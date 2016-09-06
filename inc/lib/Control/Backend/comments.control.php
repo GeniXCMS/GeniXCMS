@@ -29,6 +29,7 @@ if (User::access(2)) {
 
     if (isset($_GET['act']) && $_GET['act'] == 'del') {
         if (isset($_GET['id'])) {
+            $id = Typo::int($_GET['id']);
             if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
@@ -36,7 +37,7 @@ if (User::access(2)) {
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
-                $del = Comments::delete($_GET['id']);
+                $del = Comments::delete($id);
                 //echo $title['error'];
                 if (isset($del['error'])) {
                     $data['alertDanger'][] = $del['error'];
@@ -53,12 +54,12 @@ if (User::access(2)) {
         }
     }
     if (isset($_POST['action'])) {
-        $action = $_POST['action'];
+        $action = Typo::cleanX($_POST['action']);
     } else {
         $action = '';
     }
     if (isset($_POST['post_id'])) {
-        $post_id = $_POST['post_id'];
+        $post_id = Typo::int($_POST['post_id']);
     } else {
         $post_id = '';
     }
@@ -156,10 +157,12 @@ if (User::access(2)) {
         $offset = 0;
     }
 
-    $data['posts'] = Db::result("SELECT * FROM `comments`
-                    WHERE `type` = 'post' {$where}
+    $data['posts'] = Db::result(
+        sprintf("SELECT * FROM `comments`
+                    WHERE `type` = 'post' %s
                     ORDER BY `date` DESC
-                    LIMIT {$offset},{$max}");
+                    LIMIT %d, %d", $where, $offset, $max)
+    );
     $data['num'] = Db::$num_rows;
     $page = array(
                 'paging' => $paging,

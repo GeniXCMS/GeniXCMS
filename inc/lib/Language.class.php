@@ -73,7 +73,7 @@ class Language
     {
         if (Posts::existParam('multilang', $post_id)) {
             $multilang = json_decode(Posts::getParam('multilang', $post_id), true);
-            print_r($multilang);
+            // print_r($multilang);
             foreach ($multilang as $key => $value) {
                 // print_r($value);
                 $keys = array_keys($value);

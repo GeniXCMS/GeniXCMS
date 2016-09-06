@@ -133,13 +133,17 @@ class System
     }
 
     // At the beginning of each page call these functions
-    public static function gZip()
+    public static function gZip($minify = false)
     {
-
+        if ($minify) {
+            ob_start('Site::minifIed');
+        } else {
+            ob_start();
+        }
         #ob_start(ob_gzhandler);
         // ob_start('Site::minifyHTML');
         // ob_start('Site::minifIed');
-        ob_start();
+
         ob_implicit_flush(0);
     }
 

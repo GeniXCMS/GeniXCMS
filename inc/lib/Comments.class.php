@@ -124,7 +124,8 @@ class Comments
             $email = (null !== Session::val('username')) ? User::email(User::id(Session::val('username'))) : Typo::cleanX($vars['comments-email']);
             $url = (null !== Session::val('username')) ? '' : Typo::cleanX($vars['comments-url']);
             $name = (null !== Session::val('username')) ? Session::val('username') : Typo::cleanX($vars['comments-name']);
-            $comment = nl2br(Typo::url2link(Typo::p2nl(Typo::strip($vars['comments-msg'], '<p><pre><code><b><i><ul><li><ol><u><s>'))));
+            // $comment = nl2br(Typo::url2link(Typo::p2nl(Typo::strip($vars['comments-msg'], '<p><pre><code><b><i><ul><li><ol><u><s>'))));
+            $comment = Typo::url2link(Typo::p2br(Typo::strip($vars['comments-msg'], '<br><p><pre><code><b><i><ul><li><ol><u><s>')));
             $post_id = Typo::int($data['posts'][0]->id);
             $parent = Typo::int($vars['comments-parent']);
             $status = (null !== Session::val('username')) ? '1' : '2';
@@ -445,9 +446,7 @@ class Comments
             'Auto email removal',
             'Best price',
             'Big bucks',
-            'Billion',
             'Billion dollars',
-            'Bonus',
             'Brand new pager',
             'Call free',
             'Call now',
@@ -458,8 +457,6 @@ class Comments
             'Casino',
             'Cents on the dollar',
             'Check or money order',
-            'Claims',
-            'Clearance',
             'Click here',
             'Click to remove',
             'Confidentially on all orders',
@@ -471,7 +468,6 @@ class Comments
             'Credit bureaus',
             'Credit card offers',
             'Cures baldness',
-            'Dear ',
             'Diagnostics',
             'Dig up dirt on friends',
             'Direct email',
@@ -479,7 +475,6 @@ class Comments
             'Do it today',
             'Don’t delete',
             'Don’t hesitate',
-            'Dormant',
             'Double your',
             'Drastically reduced',
             'Earn $',
@@ -502,8 +497,6 @@ class Comments
             'For just $',
             'For Only',
             'For you',
-            'Freedom',
-            'Friend',
             'Full refund',
             'Get it now',
             'Get out of debt',
@@ -517,7 +510,6 @@ class Comments
             'Hidden charges',
             'Home based',
             'Homebased business',
-            'Important information regarding',
             'Income from home',
             'Incredible deal',
             'Info you requested',
