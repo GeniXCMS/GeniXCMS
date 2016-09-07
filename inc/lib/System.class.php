@@ -33,6 +33,11 @@ class System
      */
     public static $v_release = '';
 
+    public static $admin_asset = '';
+
+    public static $toolbar = '';
+    public static $toolbar_mode = '';
+
     /**
      * System Constructor.
      * Initializing the system, check the config file.
@@ -89,6 +94,10 @@ class System
 
         /* Attach Hooks : admin_page_notif_action */
         Hooks::attach('admin_page_notif_action', array('System', 'alert'));
+
+        Hooks::attach('admin_footer_action', array('System', 'loadAdminAsset'));
+
+        self::$toolbar = self::toolbar(self::$toolbar_mode);
     }
 
     /**
@@ -140,11 +149,11 @@ class System
         } else {
             ob_start();
         }
-        #ob_start(ob_gzhandler);
-        // ob_start('Site::minifyHTML');
-        // ob_start('Site::minifIed');
+            #ob_start(ob_gzhandler);
+            // ob_start('Site::minifyHTML');
+            // ob_start('Site::minifIed');
 
-        ob_implicit_flush(0);
+            ob_implicit_flush(0);
     }
 
     // Call this function to output everything as gzipped content.
@@ -200,7 +209,7 @@ class System
     {
         $v = trim(self::latestVersion());
 
-        // print_r($v);
+    // print_r($v);
         $v = str_replace('.', '', $v);
         $selfv = str_replace('.', '', self::$version);
         if ($v > $selfv) {
@@ -233,9 +242,9 @@ class System
         $v = file_get_contents('https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION');
 
         $arr = array(
-                'version' => trim($v),
-                'last_check' => $now,
-            );
+        'version' => trim($v),
+        'last_check' => $now,
+        );
         $arr = json_encode($arr);
 
         Options::update('system_check', $arr);
@@ -261,7 +270,7 @@ class System
     {
         global $data;
         $html = '';
-        // print_r($data);
+    // print_r($data);
         if (isset($data['alertSuccess'])) {
             $html .= '<div class="alert alert-success" >
             <button type="button" class="close" data-dismiss="alert">
@@ -324,6 +333,60 @@ class System
         }
 
         return $html;
+    }
+
+    public static function loadAdminAsset()
+    {
+        return self::$admin_asset;
+    }
+
+    public static function adminAsset($asset)
+    {
+        $admin_asset = self::$admin_asset;
+        $admin_asset .= $asset;
+        self::$admin_asset = $admin_asset;
+    }
+
+    public static function toolbar($mode = 'mini')
+    {
+        if ($mode == 'mini') {
+            $toolbar = "
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    ['para', ['ul', 'ol']],
+                    ['genixcms', ['gxcode']]";
+        } elseif ($mode == 'light') {
+            $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
+                    ['view', ['fullscreen']]";
+        } elseif ($mode == 'full') {
+            $toolbar = "['style', ['style']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear', 'highlight']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
+                    ['genixcms', ['elfinder']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]";
+        } else {
+            $toolbar = self::toolbar('mini');
+        }
+        self::$toolbar = $toolbar;
+
+        return $toolbar;
+    }
+
+    public static function toolbarMode($mode)
+    {
+        self::$toolbar_mode = $mode;
+
+        return self::$toolbar_mode;
     }
 }
 

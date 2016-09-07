@@ -81,6 +81,7 @@ class Hooks
 
     public static function attach($hooks_name, $func)
     {
+        global $data;
         $hooks = self::$hooks;
         $hooks[$hooks_name][] = $func;
         self::$hooks = $hooks;

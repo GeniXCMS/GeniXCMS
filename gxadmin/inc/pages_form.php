@@ -123,7 +123,7 @@ if (isset($data['post'])) {
                             <label for=\"content\">".CONTENT." </label> <a href=\"#\" id=\"toggleEditor\" class=\"btn btn-danger btn-xs pull-right\"><i class=\"fa fa-desktop\"></i> Editor</a>
                             
                             <textarea name=\"content[{$def}]\" class=\"form-control content editor ge-html-output\" id=\"content\" rows=\"20\">{$content}</textarea>
-                            
+                            <div id=\"myGrid\">{$content}</div>
                         </div>
                     </div>
                     ";
@@ -149,12 +149,63 @@ if (isset($data['post'])) {
                             <input type=\"title\" name=\"title[{$key}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$lang['title']}\">
                         </div>
                         <div class=\"form-group\">
-                            <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content-{$key}\" rows=\"20\">{$lang['content']}</textarea>
+                            <label for=\"content\">".CONTENT."</label> 
+                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content_{$key}\" rows=\"20\">{$lang['content']}</textarea>
                         </div>
                     </div>
-                    <div id=\"myGrid\">{$content}</div>
+                    
                         ";
+                            $asset = '<script>
+                                $(document).ready(function(){
+                                    // $(\'.tab-content\').each(function(){
+                                    //     $(\'#myGrid_'.$key.'\').gridEditor({
+                                    //         content_types: [\'summernote\'],
+                                    //         source_textarea: \'#content_'.$key.'\'
+                                    //     });
+                                    // });
+                                    // $(\'#myGrid_'.$key.'\').hide();
+                                    // $(".ge-mainControls").hide();
+                                    // $(\'#toggleEditor_'.$key.'\').click(
+                                    //     function(){
+                                    //         $(\'#myGrid_'.$key.'\').toggle();
+                                    //         $(".note-editor").toggle();
+                                    //         $(".ge-mainControls").toggle();
+                                    //     }
+                                    // );
+
+                                    $(\'#content_'.$key.'\').each(function(i, obj) { $(obj).summernote({
+                                        minHeight: 300,
+                                        maxHeight: ($(window).height() - 150),
+                                        toolbar: [
+                                                '.System::$toolbar.'
+                                            ],
+                                        callbacks: {
+                                            onImageUpload: function(files, editor, welEditable) {
+                                                sendFile(files[0],editor,welEditable);
+                                            },
+                                            onPaste: function (e) {
+                                                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
+                                                e.preventDefault();
+                                                document.execCommand(\'insertText\', false, bufferText);
+                                            }
+                                        },
+                                        popover: {
+                                        image: [
+                                            [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
+                                            [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
+                                            [\'custom\', [\'imageAttributes\',\'imageShape\']],
+                                            [\'remove\', [\'removeMedia\']]
+                                        ],
+                                        dialogsInBody: true,
+                                    },
+                                      });
+                                    });
+                                    
+                                });
+                                </script>
+                                ';
+                            System::adminAsset($asset);
+
                             unset($lang);
                         }
 

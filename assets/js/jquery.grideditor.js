@@ -84,6 +84,8 @@ $.fn.gridEditor = function( options ) {
                     htmlTextArea = sourceEl;
                     
                 if (sourceEl.val()) {
+                    // self.html(sourceEl.val());
+                    // var source = sourceEl.val();
                     self.html(sourceEl.val());
                 }
             }

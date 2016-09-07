@@ -98,7 +98,8 @@ class Theme
         } else {
             $GLOBALS['editor'] = false;
         }
-        $GLOBALS['editor_mode'] = $mode;
+        System::toolbarMode($mode);
+        System::toolbar($mode);
         $GLOBALS['editor_height'] = $height;
         //return $editor;
     }
