@@ -59,7 +59,7 @@ if (User::access(2)) {
         $action = '';
     }
     if (isset($_POST['post_id'])) {
-        $post_id = Typo::int($_POST['post_id']);
+        $post_id = $_POST['post_id'];
     } else {
         $post_id = '';
     }

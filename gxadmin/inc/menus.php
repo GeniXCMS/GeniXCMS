@@ -37,9 +37,7 @@
             <div class="col-sm-12">
             <?php
             if (isset($data['menus']) && $data['menus'] != '') {
-                
                 foreach (json_decode($data['menus']) as $k => $m) {
-                    
                     echo "
                         <div class=\"panel-group\" id=\"accordion\">
                           <div class=\"panel panel-default\">
@@ -69,7 +67,7 @@
                                     </div>
                                 </div>
                                 <div class=\"col-md-1\">
-                                    <h5><a href=\"index.php?page=menus&act=remove&menuid={$k}&token=".TOKEN."\"><i class=\"fa fa-remove\"></i></a></h5>
+                                    <h5 ><a href=\"index.php?page=menus&act=remove&menuid={$k}&token=".TOKEN."\"><i class=\"fa fa-remove\"></i> del</a></h5>
                                 </div>
                               </div>
                             </div>

@@ -136,7 +136,7 @@ define('LEFT_IT_BLANK_NOW_DATE', 'left it blank to make it now');
 
 /* User Related */
 define('ADD_USER', 'Add User');
-define('FIND_USER', 'Find user');
+define('FIND_USER', 'Find User');
 define('SEARCH_USER', 'Search user');
 define('ACTIVE', 'Active');
 define('INACTIVE', 'Inactive');
@@ -149,6 +149,8 @@ define('ADMINISTRATOR', 'Administrator');
 define('SUPERVISOR', 'Supervisor');
 define('EDITOR', 'Editor');
 define('AUTHOR', 'Author');
+define('CONTRIBUTOR', 'Contributor');
+define('VIP_MEMBER', 'VIP Member');
 define('GENERAL_MEMBER', 'General Member');
 
 define('DELETE_CONFIRM', 'Are you sure you want to delete this?');

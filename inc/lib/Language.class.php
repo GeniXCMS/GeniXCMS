@@ -164,7 +164,7 @@ class Language
 
     public static function flagLib()
     {
-        return '<link href="'.Site::$url.'/assets/css/flag-icon.min.css" rel="stylesheet">';
+        echo '<link href="'.Site::$url.'assets/css/flag-icon.min.css" rel="stylesheet">';
     }
 }
 /* End of file Language.class.php */

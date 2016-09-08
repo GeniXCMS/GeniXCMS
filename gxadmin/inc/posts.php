@@ -108,12 +108,12 @@
             <tr>
                 <th><?=ID;?></th>
                 <th><?=TITLE;?></th>
-                <th><?=CATEGORY;?></th>
-                <th><?=DATE;?></th>
-                <th><?=STATUS;?></th>
-                <th><?=AUTHOR;?></th>
-                <th><?=ACTION;?></th>
-                <th><?=ALL;?> <input type="checkbox" id="selectall"></th>
+                <th  class="text-center"><?=CATEGORY;?></th>
+                <th class="text-center"><?=DATE;?></th>
+                <th class="text-center"><?=STATUS;?></th>
+                <th class="text-center"><?=AUTHOR;?></th>
+                <th class="text-center col-md-1"><?=ACTION;?></th>
+                <th class="text-center"><?=ALL;?> <input type="checkbox" id="selectall"></th>
             </tr>
         </thead>
         <tbody>
@@ -125,24 +125,26 @@
                     //echo $p->id;
                     if ($p->status == '0') {
                         $status = UNPUBLISHED;
+                        $trclass = 'bg-warning';
                     } else {
+                        $trclass = '';
                         $status = PUBLISHED;
                     }
                     $title = (strlen($p->title) > 60) ? substr($p->title, 0, 58).'...' : $p->title;
-                    echo "
-                        <tr>
+                    echo '
+                        <tr class="'.$trclass."\">
                             <td>{$p->id}</td>
                             <td><a href=\"".Url::post($p->id)."\" target=\"_new\">{$title}</a></td>
-                            <td>".Categories::name($p->cat).'</td>
-                            <td>'.Date::format($p->date)."</td>
-                            <td>{$status}</td>
-                            <td>{$p->author}</td>
-                            <td>
+                            <td  class=\"text-center\">".Categories::name($p->cat).'</td>
+                            <td class="text-center">'.Date::format($p->date, 'd M Y').'<br /><small>'.Date::format($p->date, 'H:i A')."</small></td>
+                            <td  class=\"text-center\">{$status}</td>
+                            <td  class=\"text-center\">{$p->author}</td>
+                            <td class=\"text-center\">
                                 <a href=\"index.php?page=posts&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success">'.EDIT."</a>
                                 <a href=\"index.php?page=posts&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                                 onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
                             </td>
-                            <td>
+                            <td class=\"text-center\">
                                 <input type=\"checkbox\" name=\"post_id[]\" value=\"{$p->id}\" id=\"select\">
                             </td>
                         </tr>
@@ -162,11 +164,10 @@
         <tfoot>
             <th><?=ID;?></th>
             <th><?=TITLE;?></th>
-            <th><?=CATEGORY;?></th>
-            <th><?=DATE;?></th>
-            <th><?=STATUS;?></th>
-            <th><?=AUTHOR;?></th>
-            <th >
+            <th class="text-center"><?=CATEGORY;?></th>
+            <th class="text-center"><?=DATE;?></th>
+            <th class="text-center"><?=STATUS;?></th>
+            <th colspan="2">
             <select name="action" class="form-control">
                 <option value="publish"><?=PUBLISH;?></option>
                 <option value="unpublish"><?=UNPUBLISH;?></option>

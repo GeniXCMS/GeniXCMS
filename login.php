@@ -49,7 +49,7 @@ if (isset($_POST['login'])) {
 
     if (!isset($alertDanger)) {
         /*check if username is exist or not */
-        $username = Typo::cleanX(Typo::strip($_POST['username']));
+        $username = Typo::cleanX(Typo::strip(trim($_POST['username'])));
         $sql = sprintf("SELECT `userid`,`status`,`activation` FROM `user` WHERE `userid` = '%s'", $username);
         $usr = Db::result($sql);
         $c = Db::$num_rows;

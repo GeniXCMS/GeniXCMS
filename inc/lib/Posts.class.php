@@ -486,6 +486,7 @@ class Posts
                         ON A.`id` = B.`post_id`
                         WHERE A.`cat` = '%d'
                         AND A.`id` != '%d'
+                        AND `status` = '1'
                         ".$where_tag."
                         AND A.`status` = '1'
                         ORDER BY
@@ -551,7 +552,7 @@ class Posts
 
     public static function getPostCat($id, $max)
     {
-        $sql = sprintf("SELECT * FROM `posts` WHERE `cat` = '%d' ORDER BY `date` DESC LIMIT 0, %d", $id, $max);
+        $sql = sprintf("SELECT * FROM `posts` WHERE `cat` = '%d' AND `status` = '1' ORDER BY `date` DESC LIMIT 0, %d", $id, $max);
         $q = Db::result($sql);
         if (Db::$num_rows > 0) {
             $r = $q;

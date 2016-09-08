@@ -26,7 +26,6 @@ if (isset($_GET['token'])
 
 if (isset($data['post'])) {
     foreach ($data['post'] as $p) {
-        
         $title = "{$p->title}";
         // echo $title;
         $content = $p->content;
@@ -78,7 +77,7 @@ if (isset($data['post'])) {
     <div class="col-sm-12">
         <div class="row">
 
-                <div class="col-sm-8" id="myTab">
+                <div class="col-md-8" id="myTab">
 
                 <?php
                 if (Options::v('multilang_enable') === 'on') {
@@ -139,11 +138,48 @@ if (isset($data['post'])) {
                         </div>
                         <div class=\"form-group\">
                             <label for=\"content\">".CONTENT."</label>
-                            <textarea name=\"content[{$key}]\" class=\"form-control hidden content editor\" id=\"content-$key\" rows=\"\">{$lang['content']}</textarea>
+                            <textarea name=\"content[{$key}]\" class=\"form-control hidden content editor\" id=\"content_{$key}\" rows=\"\">{$lang['content']}</textarea>
                         </div>
                     </div>
 
+
                         ";
+
+                        $asset = '<script>
+                            $(document).ready(function(){
+
+                                $(\'#content_'.$key.'\').each(function(i, obj) { $(obj).summernote({
+                                    minHeight: 300,
+                                    maxHeight: ($(window).height() - 150),
+                                    toolbar: [
+                                            '.System::$toolbar.'
+                                        ],
+                                    callbacks: {
+                                        onImageUpload: function(files, editor, welEditable) {
+                                            sendFile(files[0],editor,welEditable);
+                                        },
+                                        onPaste: function (e) {
+                                            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
+                                            e.preventDefault();
+                                            document.execCommand(\'insertText\', false, bufferText);
+                                        }
+                                    },
+                                    popover: {
+                                    image: [
+                                        [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
+                                        [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
+                                        [\'custom\', [\'imageAttributes\',\'imageShape\']],
+                                        [\'remove\', [\'removeMedia\']]
+                                    ],
+                                    dialogsInBody: true,
+                                },
+                                  });
+                                });
+                                
+                            });
+                            </script>
+                            ';
+                        System::adminAsset($asset);
                         unset($lang);
                     }
 
@@ -163,7 +199,7 @@ if (isset($data['post'])) {
                 }
                 ?>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><?=OPTIONS;?></h3>

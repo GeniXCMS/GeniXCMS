@@ -19,6 +19,15 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 class User
 {
+    public static $group = array(
+        '0' => ADMINISTRATOR,
+        '1' => SUPERVISOR,
+        '2' => EDITOR,
+        '3' => AUTHOR,
+        '4' => CONTRIBUTOR,
+        '5' => VIP_MEMBER,
+        '6' => GENERAL_MEMBER, );
+
     public function __construct()
     {
     }
@@ -32,7 +41,7 @@ class User
         }
     }
 
-    public static function access($grp = '4')
+    public static function access($grp = '6')
     {
         if (isset($_SESSION['gxsess']['val']['group'])) {
             if ($_SESSION['gxsess']['val']['group'] <= $grp) {
@@ -358,6 +367,29 @@ class User
         } else {
             return false;
         }
+    }
+
+    // $vars = array(
+    //         'name' => '',
+    //         'selected' => '',
+    //         'update' => true
+    //     );
+    public static function dropdown($vars)
+    {
+        $html = '<select name="'.$vars['name'].'" class="form-control">';
+        $html .= (!isset($vars['selected']) && !isset($vars['update'])) ? '<option value="">All Group</option>' : '';
+        foreach (self::$group as $key => $value) {
+            $selected = (isset($vars['selected']) && $vars['selected'] == $key) ? 'selected' : '';
+            $ugroup = Session::val('group');
+            if ($ugroup <= $key && isset($vars['update']) && $vars['update'] == true) {
+                $html .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+            } else {
+                $html .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+            }
+        }
+        $html .= '</select>';
+
+        return $html;
     }
 }
 

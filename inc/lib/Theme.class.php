@@ -26,7 +26,7 @@ class Theme
     {
         global $GLOBALS;
         self::$url = Url::theme();
-        self::$active = Options::v('theme');
+        self::$active = Options::v('themes');
         self::loader();
     }
 

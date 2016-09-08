@@ -41,6 +41,9 @@ class Site
         self::$desc = Options::v('sitedesc');
         self::$email = Options::v('siteemail');
         self::$slogan = Options::v('siteslogan');
+
+        Hooks::attach('header_load_meta', array(__CLASS__, 'loadLibHeader'));
+        Hooks::attach('footer_load_lib', array(__CLASS__, 'loadLibFooter'));
     }
 
     /* Call all Website Meta at Header
@@ -124,17 +127,8 @@ class Site
     <link rel="shortcut icon" href="'.Options::v('siteicon').'" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for '.self::$name.'" href="'.self::$url.'rss/" />
         ';
-        $bs = Options::v('use_bootstrap');
-        if ($bs == 'on') {
-            echo '
-    <link href="'.self::$url."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
-        }
-        $fa = Options::v('use_fontawesome');
-        if ($fa == 'on') {
-            echo "
-            <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
-        }
-        echo ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
+
+        ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
         echo '
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->';
         // echo $meta;
@@ -143,132 +137,8 @@ class Site
     public static function footer()
     {
         global $data;
-        //echo $GLOBALS['editor'].' one '. self::$editors;
-        $foot = '';
 
-        $jquery = Options::v('use_jquery');
-        $jquery_v = Options::v('jquery_v');
-        if ($jquery == 'on') {
-            $foot .= '
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/'.$jquery_v.'/jquery.min.js"></script>';
-        }
-
-        $bs = Options::v('use_bootstrap');
-        if ($bs == 'on') {
-            $foot .= '
-            <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            <script src="'.self::$url.'assets/js/bootstrap.min.js"></script>
-            <script src="'.self::$url.'assets/js/ie10-viewport-bug-workaround.js"></script>';
-        }
-
-        if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
-            Hooks::attach('footer_load_lib', array('Files', 'elfinderLib'));
-            if ($GLOBALS['editor_mode'] == 'mini') {
-                $toolbar = "
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-                    ['para', ['ul', 'ol']],
-                    ['genixcms', ['gxcode']]";
-            } elseif ($GLOBALS['editor_mode'] == 'light') {
-                $toolbar = "['style', ['style']],
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                    ['fontsize', ['fontsize']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
-                    ['view', ['fullscreen']]";
-            } elseif ($GLOBALS['editor_mode'] == 'full') {
-                $toolbar = "['style', ['style']],
-                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['fontsize', ['fontsize']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
-                    ['genixcms', ['elfinder']],
-                    ['view', ['fullscreen', 'codeview']],
-                    ['help', ['help']]";
-            }
-            $height = $GLOBALS['editor_height'];
-
-            // $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
-            $url = Url::ajax('saveimage');
-            $foot .= '
-
-    <link href="'.self::$url.'assets/css/summernote.css" rel="stylesheet">
-    <script src="'.self::$url.'assets/js/summernote.min.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-ext-genixcms.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-image-attributes.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-floats-bs.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $(".editor").summernote({
-            minHeight: '.$height.',
-            maxHeight: ($(window).height() - 150),
-            toolbar: [
-                    '.$toolbar.'
-                ],
-            callbacks: {
-                onImageUpload: function(files, editor, welEditable) {
-                    sendFile(files[0],editor,welEditable);
-                },
-                onPaste: function (e) {
-                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
-                    e.preventDefault();
-                    document.execCommand(\'insertText\', false, bufferText);
-                }
-            },
-            popover: {
-                image: [
-                    [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
-                    // [\'float\', [\'floatLeft\', \'floatRight\', \'floatNone\']],
-                    [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
-                    [\'custom\', [\'imageAttributes\', \'imageShape\']],
-                    [\'remove\', [\'removeMedia\']]
-                ],
-            },
-        });
-
-        function sendFile(file,editor,welEditable) {
-          data = new FormData();
-          data.append("file", file);
-            $.ajax({
-                url: "'.$url.'",
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: \'POST\',
-                success: function(data) {
-                //alert(data);
-                  $(\'.editor\').summernote(\'editor.insertImage\', data);
-                },
-               error: function(jqXHR, textStatus, errorThrown) {
-                 console.log(textStatus+" "+errorThrown);
-               }
-            });
-          }
-
-         $(".alert").alert();
-      });
-
-
-    </script>
-              ';
-        }
-
-        if (isset($GLOBALS['validator']) && $GLOBALS['validator'] == true) {
-            $foot .= '
-            <link href="'.self::$url.'assets/css/bootstrapValidator.min.css" rel="stylesheet">
-            <script src="'.self::$url.'assets/js/bootstrapValidator.min.js"></script>
-            ';
-
-            $foot .= $GLOBALS['validator_js'];
-        }
-
-        echo $foot;
-        echo Hooks::run('footer_load_lib', $data);
-        // print_r(Hooks::$hooks);
+        Hooks::run('footer_load_lib', $data);
     }
 
     public static function desc($vars)
@@ -442,6 +312,125 @@ class Site
         $input = self::minifyHTML($input);
 
         return $input;
+    }
+
+    public static function loadLibHeader()
+    {
+        $lib = '';
+        $bs = Options::v('use_bootstrap');
+        if ($bs == 'on') {
+            $lib .= '
+    <link href="'.self::$url."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+        }
+        $fa = Options::v('use_fontawesome');
+        if ($fa == 'on') {
+            $lib .= "
+    <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
+        }
+
+        echo $lib;
+    }
+
+    public static function loadLibFooter()
+    {
+        $foot = '';
+
+        $jquery = Options::v('use_jquery');
+        $jquery_v = Options::v('jquery_v');
+        if ($jquery == 'on') {
+            $foot .= '
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/'.$jquery_v.'/jquery.min.js"></script>';
+        }
+
+        $bs = Options::v('use_bootstrap');
+        if ($bs == 'on') {
+            $foot .= '
+            <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
+            <script src="'.self::$url.'assets/js/bootstrap.min.js"></script>
+            <script src="'.self::$url.'assets/js/ie10-viewport-bug-workaround.js"></script>';
+        }
+
+        if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
+            Hooks::attach('footer_load_lib', array('Files', 'elfinderLib'));
+
+            $height = $GLOBALS['editor_height'];
+
+            // $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
+            $url = Url::ajax('saveimage');
+            $foot .= '
+
+    <link href="'.self::$url.'assets/css/summernote.css" rel="stylesheet">
+    <script src="'.self::$url.'assets/js/summernote.min.js"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-ext-genixcms.js"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-image-attributes.js"></script>
+    <script src="'.self::$url.'assets/js/plugins/summernote-floats-bs.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $(".editor").summernote({
+            minHeight: '.$height.',
+            maxHeight: ($(window).height() - 150),
+            toolbar: [
+                    '.System::$toolbar.'
+                ],
+            callbacks: {
+                onImageUpload: function(files, editor, welEditable) {
+                    sendFile(files[0],editor,welEditable);
+                },
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
+                    e.preventDefault();
+                    document.execCommand(\'insertText\', false, bufferText);
+                }
+            },
+            popover: {
+                image: [
+                    [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
+                    // [\'float\', [\'floatLeft\', \'floatRight\', \'floatNone\']],
+                    [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
+                    [\'custom\', [\'imageAttributes\', \'imageShape\']],
+                    [\'remove\', [\'removeMedia\']]
+                ],
+            },
+        });
+
+        function sendFile(file,editor,welEditable) {
+          data = new FormData();
+          data.append("file", file);
+            $.ajax({
+                url: "'.$url.'",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: \'POST\',
+                success: function(data) {
+                //alert(data);
+                  $(\'.editor\').summernote(\'editor.insertImage\', data);
+                },
+               error: function(jqXHR, textStatus, errorThrown) {
+                 console.log(textStatus+" "+errorThrown);
+               }
+            });
+          }
+
+         $(".alert").alert();
+      });
+
+
+    </script>
+              ';
+        }
+
+        if (isset($GLOBALS['validator']) && $GLOBALS['validator'] == true) {
+            $foot .= '
+            <link href="'.self::$url.'assets/css/bootstrapValidator.min.css" rel="stylesheet">
+            <script src="'.self::$url.'assets/js/bootstrapValidator.min.js"></script>
+            ';
+
+            $foot .= $GLOBALS['validator_js'];
+        }
+
+        echo $foot;
     }
 }
 

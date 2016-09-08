@@ -43,7 +43,7 @@
                     // echo "<td></td>";
 
                     if ($c->parent == '' || $c->parent == 0) {
-                        echo "<div class=\"col-md-4 item\" >
+                        echo "<div class=\"col-sm-6 col-md-4 item\" >
                             <div class=\"panel panel-default\">
                                 <div class=\"panel-heading\">
                                     <form action=\"index.php?page=tags\" method=\"POST\" name=\"updatecat\">

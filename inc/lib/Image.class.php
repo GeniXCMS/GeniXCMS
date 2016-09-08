@@ -176,7 +176,7 @@ class Image
         }
     }
 
-    public function getGravatar($email, $s = 60, $d = 'mm', $r = 'g', $img = false, $atts = array())
+    public static function getGravatar($email, $s = 60, $d = 'mm', $r = 'g', $img = false, $atts = array())
     {
         $url = 'https://www.gravatar.com/avatar/';
         $url .= md5(strtolower(trim($email)));
@@ -197,171 +197,207 @@ class Image
      */
     public static function thumbFly($img, $type = 'square', $size = '', $align = '')
     {
-        $square = ($size != '') ? Typo::int($size) : 150;
-        $large = ($size != '') ? Typo::int($size) : 200;
-        $small = ($size != '') ? Typo::int($size) : 100;
+        $noimage = 'assets/images/noimage.png';
+        $imgExt = substr($img, -3);
+        $ighash = ($noimage == $img) ? sha1('noimage'.$img) : sha1($img);
+        // $cacheFile = ($noimage == $img) ? $img : GX_ASSET.'cache/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
+        $cacheFile = GX_ASSET.'cache/thumbs/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
 
-        // check whether files exist on remote or local
-        if (Files::isRemote($img)) {
-            $imgSrc = $img;
-            // var_dump(Files::isClean($imgSrc));
-            if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
-                $exist = true;
-            } else {
-                $exist = false;
+        if (file_exists($cacheFile)) {
+            $imgSrc = $cacheFile;
+            list($width_orig, $height_orig) = getimagesize($imgSrc);
+            if ($imgExt == 'jpg') {
+                $myImage = imagecreatefromjpeg($imgSrc);
+            }
+            if ($imgExt == 'gif') {
+                $myImage = imagecreatefromgif($imgSrc);
+            }
+            if ($imgExt == 'png') {
+                $myImage = imagecreatefrompng($imgSrc);
+            }
+            if ($imgExt == 'jpg') {
+                imagejpeg($myImage, null, 100);
+            }
+            if ($imgExt == 'gif') {
+                imagegif($myImage);
+            }
+            if ($imgExt == 'png') {
+                imagepng($myImage, null, 9);
             }
         } else {
-            $imgSrc = GX_PATH.'/'.$img;
-            if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
-                $exist = true;
-            } else {
-                $exist = false;
-            }
-        }
-        // echo $imgSrc;
-        ////////////////////////////////////////////////////////////////////////////////// square
-        if (isset($type) && ($type == 'square' || $type == '')) {
-            // thumb size
-            $thumb_width = $square;
-            $thumb_height = $square;
+            $square = ($size != '') ? Typo::int($size) : 150;
+            $large = ($size != '') ? Typo::int($size) : 200;
+            $small = ($size != '') ? Typo::int($size) : 100;
 
-        // align
-            $align = isset($align) ? $align : '';
-
-        // image source
-            // $imgSrc = GX_PATH.'/'.$img;
-
-            $imgExt = substr($imgSrc, -3);
-
-            if ($exist) {
-                // image extension
-                if ($imgExt == 'jpg') {
-                    $myImage = imagecreatefromjpeg($imgSrc);
-                }
-                if ($imgExt == 'gif') {
-                    $myImage = imagecreatefromgif($imgSrc);
-                }
-                if ($imgExt == 'png') {
-                    $myImage = imagecreatefrompng($imgSrc);
-                }
-
-            // getting the image dimensions
-                list($width_orig, $height_orig) = getimagesize($imgSrc);
-
-            // ratio
-                $ratio_orig = $width_orig / $height_orig;
-
-            // landscape or portrait?
-                if ($thumb_width / $thumb_height > $ratio_orig) {
-                    $new_height = $thumb_width / $ratio_orig;
-                    $new_width = $thumb_width;
+            // check whether files exist on remote or local
+            if (Files::isRemote($img)) {
+                $imgSrc = $img;
+                // var_dump(Files::isClean($imgSrc));
+                if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
+                    $exist = true;
                 } else {
-                    $new_width = $thumb_height * $ratio_orig;
-                    $new_height = $thumb_height;
-                }
-
-            // middle
-                $x_mid = $new_width / 2;
-                $y_mid = $new_height / 2;
-
-            // create new image
-                $process = imagecreatetruecolor(round($new_width), round($new_height));
-                imagecopyresampled($process, $myImage, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
-                $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
-
-            // alignment
-                if ($align == '') {
-                    imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-                }
-                if ($align == 'top') {
-                    imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), 0, $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-                }
-                if ($align == 'bottom') {
-                    imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($new_height - $thumb_height), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-                }
-                if ($align == 'left') {
-                    imagecopyresampled($thumb, $process, 0, 0, 0, ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-                }
-                if ($align == 'right') {
-                    imagecopyresampled($thumb, $process, 0, 0, ($new_width - $thumb_width), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-                }
-
-                imagedestroy($process);
-                imagedestroy($myImage);
-
-                if ($imgExt == 'jpg') {
-                    imagejpeg($thumb, null, 100);
-                }
-                if ($imgExt == 'gif') {
-                    imagegif($thumb);
-                }
-                if ($imgExt == 'png') {
-                    imagepng($thumb, null, 9);
+                    $exist = false;
                 }
             } else {
-                self::thumbFly('assets/images/noimage.png', '', $size, $align);
+                $imgSrc = GX_PATH.'/'.$img;
+                if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
+                    $exist = true;
+                } else {
+                    $exist = false;
+                }
             }
-        }
+            // echo $imgSrc;
+            ////////////////////////////////////////////////////////////////////////////////// square
+            if (isset($type) && ($type == 'square' || $type == '')) {
+                // thumb size
+                $thumb_width = $square;
+                $thumb_height = $square;
 
-        ////////////////////////////////////////////////////////////////////////////////// normal
-        if (isset($type) && ($type == 'large' || $type == 'small')) {
-            if ($type == 'large') {
-                $thumb_width = $large;
+            // align
+                $align = isset($align) ? $align : '';
+
+            // image source
+                // $imgSrc = GX_PATH.'/'.$img;
+
+                if ($exist) {
+                    // image extension
+                    if ($imgExt == 'jpg') {
+                        $myImage = imagecreatefromjpeg($imgSrc);
+                    }
+                    if ($imgExt == 'gif') {
+                        $myImage = imagecreatefromgif($imgSrc);
+                    }
+                    if ($imgExt == 'png') {
+                        $myImage = imagecreatefrompng($imgSrc);
+                    }
+
+                // getting the image dimensions
+                    list($width_orig, $height_orig) = getimagesize($imgSrc);
+
+                // ratio
+                    $ratio_orig = $width_orig / $height_orig;
+
+                // landscape or portrait?
+                    if ($thumb_width / $thumb_height > $ratio_orig) {
+                        $new_height = $thumb_width / $ratio_orig;
+                        $new_width = $thumb_width;
+                    } else {
+                        $new_width = $thumb_height * $ratio_orig;
+                        $new_height = $thumb_height;
+                    }
+
+                // middle
+                    $x_mid = $new_width / 2;
+                    $y_mid = $new_height / 2;
+
+                // create new image
+                    $process = imagecreatetruecolor(round($new_width), round($new_height));
+                    imagecopyresampled($process, $myImage, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
+                    $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+
+                // alignment
+                    if ($align == '') {
+                        imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+                    }
+                    if ($align == 'top') {
+                        imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), 0, $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+                    }
+                    if ($align == 'bottom') {
+                        imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($new_height - $thumb_height), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+                    }
+                    if ($align == 'left') {
+                        imagecopyresampled($thumb, $process, 0, 0, 0, ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+                    }
+                    if ($align == 'right') {
+                        imagecopyresampled($thumb, $process, 0, 0, ($new_width - $thumb_width), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+                    }
+
+                    imagedestroy($process);
+                    imagedestroy($myImage);
+
+                    if ($imgExt == 'jpg') {
+                        if (!file_exists($cacheFile)) {
+                            $loc = $cacheFile;
+                            imagejpeg($thumb, $loc, 100);
+                            self::thumbFly($img);
+                        }
+                    }
+                    if ($imgExt == 'gif') {
+                        imagegif($thumb);
+                    }
+                    if ($imgExt == 'png') {
+                        if (!file_exists($cacheFile)) {
+                            $loc = $cacheFile;
+                            imagepng($thumb, $loc, 9);
+                            self::thumbFly($img);
+                        }
+                    }
+                } else {
+                    self::thumbFly($noimage, '', $size, $align);
+                }
             }
-            if ($type == 'small') {
-                $thumb_width = $small;
-            }
+
+            if (isset($type) && ($type == 'large' || $type == 'small')) {
+                if ($type == 'large') {
+                    $thumb_width = $large;
+                }
+                if ($type == 'small') {
+                    $thumb_width = $small;
+                }
 
         // image source
             // $imgSrc = GX_PATH.'/'.$img;
             // $imgSrc = $img;
-            $imgExt = substr($imgSrc, -3);
-            if ($exist) {
-                // image extension
-                if ($imgExt == 'jpg') {
-                    $myImage = imagecreatefromjpeg($imgSrc);
+
+                if ($exist) {
+                    // image extension
+                    if ($imgExt == 'jpg') {
+                        $myImage = imagecreatefromjpeg($imgSrc);
+                    }
+                    if ($imgExt == 'gif') {
+                        $myImage = imagecreatefromgif($imgSrc);
+                    }
+                    if ($imgExt == 'png') {
+                        $myImage = imagecreatefrompng($imgSrc);
+                    }
+
+                    //getting the image dimensions
+                    list($width_orig, $height_orig) = getimagesize($imgSrc);
+
+                    // ratio
+                    $ratio_orig = $width_orig / $height_orig;
+                    $thumb_height = $thumb_width / $ratio_orig;
+
+                    // new dimensions
+                    $new_width = $thumb_width;
+                    $new_height = $thumb_height;
+
+                    // middle
+                    $x_mid = $new_width / 2;
+                    $y_mid = $new_height / 2;
+
+                    // create new image
+                    $process = imagecreatetruecolor(round($new_width), round($new_height));
+
+                    imagecopyresampled($process, $myImage, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
+                    $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+                    imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
+
+                    if ($imgExt == 'jpg') {
+                        imagejpeg($thumb, null, 100);
+                    }
+                    if ($imgExt == 'gif') {
+                        imagegif($thumb);
+                    }
+                    if ($imgExt == 'png') {
+                        imagepng($thumb, null, 9);
+                    }
+                } else {
+                    self::thumbFly($noimage, 'large', $size, $align);
                 }
-                if ($imgExt == 'gif') {
-                    $myImage = imagecreatefromgif($imgSrc);
-                }
-                if ($imgExt == 'png') {
-                    $myImage = imagecreatefrompng($imgSrc);
-                }
-
-            //getting the image dimensions
-                list($width_orig, $height_orig) = getimagesize($imgSrc);
-
-            // ratio
-                $ratio_orig = $width_orig / $height_orig;
-                $thumb_height = $thumb_width / $ratio_orig;
-
-            // new dimensions
-                $new_width = $thumb_width;
-                $new_height = $thumb_height;
-
-            // middle
-                $x_mid = $new_width / 2;
-                $y_mid = $new_height / 2;
-
-            // create new image
-                $process = imagecreatetruecolor(round($new_width), round($new_height));
-
-                imagecopyresampled($process, $myImage, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
-                $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
-                imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
-
-                if ($imgExt == 'jpg') {
-                    imagejpeg($thumb, null, 100);
-                }
-                if ($imgExt == 'gif') {
-                    imagegif($thumb);
-                }
-                if ($imgExt == 'png') {
-                    imagepng($thumb, null, 9);
-                }
-            } else {
-                self::thumbFly('assets/images/noimage.png', 'large', $size, $align);
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////// normal
     }
 }

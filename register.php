@@ -63,7 +63,7 @@ if (isset($_POST['register'])) {
                     'userid' => Typo::cleanX(Typo::strip($_POST['userid'])),
                     'pass' => User::randpass($_POST['pass1']),
                     'email' => $_POST['email'],
-                    'group' => '4',
+                    'group' => '6',
                     'status' => '0',
                     'join_date' => date('Y-m-d H:i:s'),
                     'activation' => $activation,

@@ -35,6 +35,7 @@ $gneex = Gneex::$opt;
             <div class="col-md-2 text-center logo">
                 <a class="" href="<?=Site::$url;
 ?>"><?=Site::logo('', '65px');?></a>
+<?=Language::flagList();?>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-10">
                 <nav class="navbar" role="navigation">

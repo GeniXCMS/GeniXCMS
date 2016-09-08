@@ -148,6 +148,8 @@ define('ADMINISTRATOR', 'Administrator');
 define('SUPERVISOR', 'Supervisor');
 define('EDITOR', 'Editor');
 define('AUTHOR', 'Penulis');
+define('CONTRIBUTOR', 'Kontributor');
+define('VIP_MEMBER', 'Anggota Khusus');
 define('GENERAL_MEMBER', 'Anggota Biasa');
 
 define('DELETE_CONFIRM', 'Yakin akan menghapus ini ?');

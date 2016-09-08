@@ -1,12 +1,12 @@
 $(document).ready(function(){
     $('.alert').alert();
 
-    $('.tab-content').each(function(i, obj){
-        $('#myGrid').gridEditor({
-            content_types: ['summernote'],
-            source_textarea: '#content'
-        });
+
+    $('#myGrid').gridEditor({
+        content_types: ['summernote'],
+        source_textarea: '#content'
     });
+
     
 
 

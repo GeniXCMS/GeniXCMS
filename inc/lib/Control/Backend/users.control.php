@@ -44,6 +44,11 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
         $where .= "AND `join_date` <= '{$to}' ";
         $qpage .= "&to={$to}";
     }
+    if (isset($_GET['group']) && $_GET['group'] != '') {
+        $group = Typo::int($_GET['group']);
+        $where .= "AND `group` = '{$group}' ";
+        $qpage .= "&group={$group}";
+    }
     if (isset($_GET['status']) && $_GET['status'] != '') {
         $status = Typo::int($_GET['status']);
         $where .= "AND `status` = '{$status}' ";

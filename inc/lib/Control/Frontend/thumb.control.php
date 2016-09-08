@@ -19,7 +19,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 $data = Router::scrap($param);
 // print_r($data);
-if (isset($data['thumb'])) {
+if (isset($data['thumb']) && $data['thumb'] != '') {
     $thumb = $data['thumb'];
     $type = isset($data['type']) ? $data['type'] : '';
     $size = isset($data['size']) ? $data['size'] : '';

@@ -337,7 +337,7 @@ class System
 
     public static function loadAdminAsset()
     {
-        return self::$admin_asset;
+        echo self::$admin_asset;
     }
 
     public static function adminAsset($asset)

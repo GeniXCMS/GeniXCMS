@@ -47,7 +47,7 @@ class Mod
             if ($entry != '.' && $entry != '..') {
                 $dir = GX_MOD.$entry;
                 if (is_dir($dir) == true) {
-                    (file_exists($dir.'/index.php'))? $mod[] = basename($dir): '';
+                    (file_exists($dir.'/index.php')) ? $mod[] = basename($dir) : '';
                 }
             }
         }
@@ -81,9 +81,8 @@ class Mod
             preg_match('/\* Icon: (.*)\s\*/Us', $data, $matches);
             $d['icon'] = $matches[1];
         } else {
-            $d = "";
+            $d = '';
         }
-        
 
         return $d;
     }
@@ -105,7 +104,7 @@ class Mod
                     } else {
                         $class = '';
                     }
-                    $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\" >".$data['icon'].' '.$data['name'].'</a></li>';
+                    $list .= "<li><a href=\"index.php?page=mods&mod={$m}\" $class >".$data['icon'].' '.$data['name'].'</a></li>';
                 }
             }
         } else {
@@ -229,12 +228,11 @@ class Mod
                         }
                         if (!isset($alertDanger)) {
                             self::deactivate($_GET['modules']);
-                            if( false != Files::delTree(GX_MOD.$_GET['modules']) ) {
+                            if (false != Files::delTree(GX_MOD.$_GET['modules'])) {
                                 $GLOBALS['alertSuccess'] = MODULES_DELETED;
                             } else {
                                 $GLOBALS['alertDanger'][] = "Can't delete module files";
                             }
-                            
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }

@@ -41,7 +41,7 @@
                 <div class="col-sm-12">
                     <h5><?=FIND_USER;?></h5>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_USER;?>">
                     </div>
@@ -70,6 +70,14 @@
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
+                    <?php
+                    $var = array('name' => 'group');
+                    echo User::dropdown($var);
+                    ?>
+                </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
                         <select name="status" class="form-control">
                             <option value="1"><?=ACTIVE;?></option>
                             <option value="0"><?=INACTIVE;?></option>
@@ -77,7 +85,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-search"></span> <?=FIND_USER;?>
@@ -206,13 +214,10 @@
                 </div>
                 <div class="form-group">
                     <label><?=GROUP;?></label>
-                    <select name="group" class="form-control">
-                        <option value="0"><?=ADMINISTRATOR;?></option>
-                        <option value="1"><?=SUPERVISOR;?></option>
-                        <option value="2"><?=EDITOR;?></option>
-                        <option value="3"><?=AUTHOR;?></option>
-                        <option value="4" selected="on"><?=GENERAL_MEMBER;?></option>
-                    </select>
+                    <?php
+                    $var = array('name' => 'group', 'selected' => '6', 'update' => true);
+                    echo User::dropdown($var);
+                    ?>
                 </div>
 
           </div>

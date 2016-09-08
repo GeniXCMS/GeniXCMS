@@ -114,10 +114,11 @@ class Hooks
         // $args = (is_array($args))?$args[0]: $args;
         if (is_array($hooks[$hook_name])) {
             $val = '';
-            foreach ($hooks[$hook_name] as $func) {
-                if ($func != '') {
+            $func = $hooks[$hook_name];
+            for ($i = 0; $i < count($func); ++$i) {
+                if ($func[$i] != '') {
                     // $args = call_user_func_array($func, $args); //
-                    $val .= $func((array) $args);
+                    $val .= $func[$i]((array) $args);
                 } else {
                     $val .= $args;
                 }

@@ -233,7 +233,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         $db->query($pr);
 
         $user_detail = 'CREATE TABLE IF NOT EXISTS `user_detail` (
-                `id` bigint(20) NOT NULL,
+                  `id` bigint(20) NOT NULL,
                   `userid` varchar(32)  NOT NULL,
                   `fname` varchar(32)  DEFAULT NULL,
                   `lname` varchar(255)  DEFAULT NULL,
@@ -254,7 +254,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         $pr = 'ALTER TABLE `user_detail` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
 
-        $comments = 'CREATE TABLE `comments` (
+        $comments = "CREATE TABLE IF NOT EXISTS `comments` (
                   `id` bigint(22) NOT NULL,
                   `date` datetime NOT NULL,
                   `userid` text NOT NULL,
@@ -264,10 +264,10 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `comment` text NOT NULL,
                   `post_id` int(11) NOT NULL,
                   `parent` int(11) NOT NULL,
-                  `status` enum("0","1","2") NOT NULL,
+                  `status` enum('0','1','2') NOT NULL,
                   `type` text NOT NULL,
                   `ipaddress` text NOT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($comments);
 
         $pr = 'ALTER TABLE `comments` ADD PRIMARY KEY (`id`)';
@@ -294,14 +294,15 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         $domain = Session::val('sitedomain');
         $sitename = Session::val('sitename');
         $slogan = Session::val('siteslogan');
+        $logo = $url.'assets/images/genixcms-logo-sign-small.png';
 
         $options = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
             (null, 'sitename', '{$sitename}'),
             (null, 'siteurl', '{$url}'),
             (null, 'sitedomain', '{$domain}'),
             (null, 'siteslogan', '{$slogan}'),
-            (null, 'sitedesc', 'Descriptions'),
-            (null, 'sitekeywords', 'keywords'),
+            (null, 'sitedesc', ''),
+            (null, 'sitekeywords', ''),
             (null, 'siteicon', '{$url}/favicon.ico'),
             (null, 'siteaddress', ''),
             (null, 'siteemail', ''),
@@ -310,7 +311,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'twitter', ''),
             (null, 'linkedin', ''),
             (null, 'gplus', ''),
-            (null, 'logo', '/assets/images/genixcms-logo-sign-small.png'),
+            (null, 'logo', '{$logo}'),
             (null, 'logourl', ''),
             (null, 'is_logourl', 'off'),
             (null, 'currency', 'USD'),
@@ -344,7 +345,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'ppsign', ''),
             (null, 'tokens', ''),
             (null, 'modules', ''),
-            (null, 'themes', 'default'),
+            (null, 'themes', 'gneex'),
             (null, 'system_lang', 'english'),
             (null, 'charset', 'utf-8'),
             (null, 'google_captcha_sitekey', ''),
@@ -357,8 +358,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'on'),
-            (null, 'spamwords', ''),
-
+            (null, 'spamwords', '')
             ";
         $db->query($options);
     }

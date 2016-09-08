@@ -27,7 +27,7 @@
                 <span class="hidden-xs hidden-sm"><?=ADD_CATEGORY;?></span>
             </button>
         </h2>
-        <small class="label label-default pull-left"><?=Stats::totalCat('cat');?> total</small>
+        <small class="label label-default pull-left"><?=Stats::totalCat('post');?> total</small>
         <hr />
     </div>
 
@@ -42,7 +42,7 @@
                     // echo "<td></td>";
 
                     if ($c->parent == '' || $c->parent == 0) {
-                        echo "<div class=\"col-md-4 item\" >
+                        echo "<div class=\"col-sm-6 col-md-4 item\" >
                             <div class=\"panel panel-default\">
                                 <div class=\"panel-heading\">
                                     <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">

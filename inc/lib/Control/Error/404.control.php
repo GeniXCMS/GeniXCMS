@@ -22,6 +22,8 @@ header('HTTP/1.0 404 Not Found');
 if (Theme::exist('404')) {
     Theme::theme('404');
 } else {
+    Site::meta();
+
     echo '<center>
         <h1>Ooops!!</h1>
         <h2 style="font-size: 20em">404</h2>

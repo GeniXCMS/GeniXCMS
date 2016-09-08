@@ -361,7 +361,7 @@ class Url
 
     public static function theme()
     {
-        $theme = Options::v('theme');
+        $theme = Options::v('themes');
 
         return Site::$url.'inc/themes/'.$theme.'/';
     }

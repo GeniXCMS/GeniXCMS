@@ -73,44 +73,13 @@
         <div class="form-group">
             <label>Group Level</label>
             <?php
-            if (User::group($_GET['id']) == 0) {
-                $adm = 'SELECTED';
-                $edt = '';
-                $spv = '';
-                $mem = '';
-                $aut = '';
-            } elseif (User::group($_GET['id']) == 1) {
-                $aut = '';
-                $edt = '';
-                $spv = 'SELECTED';
-                $adm = '';
-                $mem = '';
-            } elseif (User::group($_GET['id']) == 2) {
-                $aut = '';
-                $edt = 'SELECTED';
-                $spv = '';
-                $adm = '';
-                $mem = '';
-            } elseif (User::group($_GET['id']) == 3) {
-                $aut = 'SELECTED';
-                $edt = '';
-                $spv = '';
-                $adm = '';
-                $mem = '';
-            } elseif (User::group($_GET['id']) == 4) {
-                $mem = 'SELECTED';
-                $edt = '';
-                $spv = '';
-                $adm = '';
-                $aut = '';
-            } ?>
-            <select name="group" class="form-control">
-                <?=(User::access(0)) ? '<option value="0" <?=$adm;?>Administrator</option>' : ''; ?>
-                <option value="1" <?=$spv; ?>>Supervisor</option>
-                <option value="2" <?=$edt; ?>>Editor</option>
-                <option value="3" <?=$aut; ?>>Author</option>
-                <option value="4" <?=$mem; ?>>General Members</option>
-            </select>
+            $var = array(
+                    'name' => 'group',
+                    'selected' => User::group($_GET['id']),
+                    'update' => true,
+                );
+        echo User::dropdown($var); ?>
+            
             <small>Group Level of the user.</small>
         </div>
     <?php

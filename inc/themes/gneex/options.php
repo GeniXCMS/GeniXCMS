@@ -81,7 +81,7 @@ if (Gneex::checkDB()) {
             $o[$k] = $v;
         }
     } ?>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked" id="myTabs">
             <li role="presentation" class="active"><a href="#home"><i class="fa fa-home"></i> Home</a></li>
             <li role="presentation"><a href="#intro"><i class="fa fa-asterisk"></i> Intro</a></li>
@@ -92,7 +92,7 @@ if (Gneex::checkDB()) {
         </ul>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-9">
         <div class="row">
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">

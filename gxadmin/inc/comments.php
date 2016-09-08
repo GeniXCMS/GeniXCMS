@@ -94,14 +94,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
         <form action="" method="post">
         <thead>
             <tr>
-                <th><?=ID;?></th>
-                <th><?=COMMENTS;?></th>
-                <th><?=EMAIL;?></th>
-                <th><?=DATE;?></th>
-                <th><?=STATUS;?></th>
-                <th><?=AUTHOR;?></th>
-                <th><?=ACTION;?></th>
-                <th><?=ALL;?> <input type="checkbox" id="selectall"></th>
+                <th class="text-center"><?=ID;?></th>
+                <th class="text-center col-md-5"><?=COMMENTS;?></th>
+                <th class="text-center col-md-1"><?=EMAIL;?></th>
+                <th class="text-center col-md-1"><?=DATE;?></th>
+                <th class="text-center col-md-1"><?=STATUS;?></th>
+                <th class="text-center col-md-1"><?=AUTHOR;?></th>
+                <th class="text-center col-md-1"><?=ACTION;?></th>
+                <th class="text-center col-md-1"><?=ALL;?> <input type="checkbox" id="selectall"></th>
             </tr>
         </thead>
         <tbody>
@@ -113,25 +113,28 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                     //echo $p->id;
                     if ($p->status == '0') {
                         $status = UNPUBLISHED;
+                        $trclass = 'bg-warning';
                     } elseif ($p->status == '1') {
                         $status = PUBLISHED;
+                        $trclass = '';
                     } elseif ($p->status == '2') {
                         $status = PENDING;
+                        $trclass = 'bg-danger';
                     }
                     $comment = (strlen($p->comment) > 60) ? substr($p->comment, 0, 58).'...' : $p->comment;
                     echo "
-                        <tr>
-                            <td>{$p->id}</td>
+                        <tr class=\"$trclass\">
+                            <td class=\"text-center\">{$p->id}</td>
                             <td><a href=\"".Url::post($p->post_id).'" target="_new" data-toggle="tooltip" data-html="true" title="'.Typo::strip($p->comment).'">'.Typo::strip($comment).'</a><br /><small>IP: '.$p->ipaddress.'</small></td>
-                            <td>'.$p->email.'</td>
-                            <td>'.Date::format($p->date, 'd M Y')."</td>
-                            <td>{$status}</td>
-                            <td>{$p->userid}</td>
-                            <td>
+                            <td class="text-center">'.$p->email.'</td>
+                            <td class="text-center">'.Date::format($p->date, 'd M Y').'<br /><small>'.Date::format($p->date, 'H:i A')."</small></td>
+                            <td class=\"text-center\">{$status}</td>
+                            <td class=\"text-center\">{$p->userid}</td>
+                            <td class=\"text-center\">
                                 <a href=\"index.php?page=comments&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                                 onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
                             </td>
-                            <td>
+                            <td class=\"text-center\">
                                 <input type=\"checkbox\" name=\"post_id[]\" value=\"{$p->id}\" id=\"select\">
                             </td>
                         </tr>
