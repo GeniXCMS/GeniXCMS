@@ -94,7 +94,7 @@ if (User::access(2)) {
                                                         ),
                                                 );
                             }
-                            $multilang = json_encode($multilang);
+                            $multilang = json_encode($multilang, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                             Posts::addParam('multilang', $multilang, $post_id);
 
                             // print_r($multilang);
