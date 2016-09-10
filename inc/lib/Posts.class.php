@@ -364,7 +364,7 @@ class Posts
                         && Options::v('multilang_default') !== $langs) {
                         $lang = Language::getLangParam($langs, $p->id);
                         $posts = get_object_vars($p);
-                        $posts = array_merge($posts, $lang);
+                        $posts = is_array($lang) ? array_merge($posts, $lang) : $posts;
                     } else {
                         $posts = $p;
                     }

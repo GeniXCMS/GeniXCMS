@@ -270,12 +270,15 @@ class Typo
         $var = str_replace('/>', ' />', $var);
         $var = str_replace('</', '<\/', $var);
 
+        $var = self::cleanX($var);
+        $var = str_replace('\&', '&', $var);
+
         return $var;
     }
 
     public static function jsonDeFormat($var)
     {
-        return html_entity_decode($var);
+        return utf8_decode($var);
     }
 }
 

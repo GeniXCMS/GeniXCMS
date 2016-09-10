@@ -175,7 +175,7 @@ if (User::access(2)) {
                                     ) {
                                         $content = $content;
                                     } else {
-                                        $content = Typo::cleanX($_POST['content'][$key]);
+                                        $content = $_POST['content'][$key];
                                     }
                                 } else {
                                     $content = $content;
@@ -189,7 +189,7 @@ if (User::access(2)) {
                                                         ),
                                                 );
                             }
-                            $multilang = json_encode($multilang);
+                            $multilang = json_encode($multilang, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                             if (!Posts::existParam('multilang', $_GET['id'])) {
                                 Posts::addParam('multilang', $multilang, $_GET['id']);
                             } else {

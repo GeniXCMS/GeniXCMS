@@ -384,13 +384,21 @@ class Image
                     imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
 
                     if ($imgExt == 'jpg') {
-                        imagejpeg($thumb, null, 100);
+                        if (!file_exists($cacheFile)) {
+                            $loc = $cacheFile;
+                            imagejpeg($thumb, $loc, 100);
+                            self::thumbFly($img);
+                        }
                     }
                     if ($imgExt == 'gif') {
                         imagegif($thumb);
                     }
                     if ($imgExt == 'png') {
-                        imagepng($thumb, null, 9);
+                        if (!file_exists($cacheFile)) {
+                            $loc = $cacheFile;
+                            imagepng($thumb, $loc, 9);
+                            self::thumbFly($img);
+                        }
                     }
                 } else {
                     self::thumbFly($noimage, 'large', $size, $align);
