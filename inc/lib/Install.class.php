@@ -358,6 +358,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'on'),
+            (null, 'cdn_url', '{$url}'),
             (null, 'spamwords', '')
             ";
         $db->query($options);

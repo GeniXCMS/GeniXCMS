@@ -356,6 +356,19 @@
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-6 form-group">
+                                <label><?=SETTINGS_LIBRARY_CDNURL;?></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-link"></i>
+                                    </span>
+                                    <input type="text" name="cdn_url" rel="tooltip"
+                                    class="form-control" placeholder="CDN Url"
+                                    value="<?=Options::v('cdn_url');?>">
+                                </div>
+                                <small class="help-block"><?=SETTINGS_LIBRARY_CDNURL_DESCR;?></small>
+                            </div>
+
+                            <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
                                 <?php if (Options::v('use_jquery') == 'on') {
                                     $use_jquery = 'checked';
@@ -380,6 +393,7 @@
                                 </div>
                                 <small class="help-block"><?=SETTINGS_LIBRARY_JQUERY_DESCR;?></small>
                             </div>
+                            
                             <div class="col-sm-6 form-group">
                                 <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
                                 <?php
@@ -605,7 +619,7 @@
                                     ?>
 
                                     <input type="checkbox" class="" id="ppsandbox"
-                                    name="ppsandbox"  <?=$sandbox;?>><?=SETTINGS_PAYMENT_SANDBOX_EN?>
+                                    name="ppsandbox"  <?=$sandbox;?>> <?=SETTINGS_PAYMENT_SANDBOX_EN?>
                                 </div>
                                 <small class="help-block"><?=SETTINGS_PAYMENT_SANDBOX_EN_DESCR?></small>
                             </div>

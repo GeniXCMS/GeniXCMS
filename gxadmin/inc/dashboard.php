@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=posts">
+                    <a href="<?=Site::$url;?>gxadmin/index.php?page=posts">
                         <div class="panel-footer">
                             <span class="pull-left">View Posts</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=pages">
+                    <a href="<?=Site::$url;?>gxadmin/index.php?page=pages">
                         <div class="panel-footer">
                             <span class="pull-left">View Pages</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=comments">
+                    <a href="<?=Site::$url;?>gxadmin/index.php?page=comments">
                         <div class="panel-footer">
                             <span class="pull-left">View Comments</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="<?=Site::$url;?>/gxadmin/index.php?page=users">
+                    <a href="<?=Site::$url;?>gxadmin/index.php?page=users">
                         <div class="panel-footer">
                             <span class="pull-left">View Users</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

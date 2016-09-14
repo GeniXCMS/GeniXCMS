@@ -289,7 +289,7 @@ define('SETTINGS_LOGO_FAVICON_DESCR', 'Your Website Favicon URL');
 
 // Settings Library
 
-define('SETTINGS_LIBRARY', 'Enable or Disable Library');
+define('SETTINGS_LIBRARY', 'Assets Library');
 define('SETTINGS_LIBRARY_JQUERY', 'Enable JQuery');
 define('SETTINGS_LIBRARY_BOOTSTRAP', 'Enable Bootstrap');
 define('SETTINGS_LIBRARY_FAWESOME', 'Enable Fontawesome');
@@ -304,6 +304,8 @@ define('SETTINGS_LIBRARY_BOOTSTRAP_DESCR', 'Check this if you want to use Bootst
 define('SETTINGS_LIBRARY_FAWESOME_DESCR', 'Check this if you want to use Fontawesome. Fontawesome Version is not available, left it blank');
 define('SETTINGS_LIBRARY_EDITOR_DESCR', 'Check this if you want to use Editor. Editor Version is not available, left it blank');
 define('SETTINGS_LIBRARY_BVALIDATOR_DESCR', 'Check this if you want to use Bootstrap Validator. Bootstrap Validator Version is not available, left it blank');
+define('SETTINGS_LIBRARY_CDNURL', 'CDN Url');
+define('SETTINGS_LIBRARY_CDNURL_DESCR', 'write down the url of the CDN, if you don\'t use cdn, just write the site url.');
 
 // Settings Posts
 

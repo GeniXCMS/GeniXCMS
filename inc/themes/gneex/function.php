@@ -95,9 +95,9 @@ class Gneex
         $opt = self::$opt;
         if (key_exists($var, $opt)) {
             if ($var == 'adsense') {
-                return self::isAdsense($opt[$var]);
+                return self::isAdsense(Typo::Xclean($opt[$var]));
             } else {
-                return $opt[$var];
+                return Typo::Xclean($opt[$var]);
             }
         }
     }

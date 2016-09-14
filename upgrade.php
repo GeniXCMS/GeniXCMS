@@ -31,6 +31,8 @@ try {
     echo $e->getMessage();
 }
 
+$url = Site::$url;
+
 if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
             (null, 'google_captcha_sitekey', ''),
@@ -43,7 +45,8 @@ if (isset($_POST['004-patch'])) {
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
-            (null, 'spamwords', ''),";
+            (null, 'cdn_url', '{$url}'),
+            (null, 'spamwords', '')";
     $q = Db::query($sql);
 
     $sql = 'CREATE TABLE IF NOT EXISTS `cat_param` (
@@ -75,7 +78,7 @@ if (isset($_POST['004-patch'])) {
     $sql = "UPDATE `cat` SET `type` = 'post' WHERE `type` = '' ";
     $q = Db::query($sql);
 
-    $sql = "CREATE TABLE `comments` (
+    $sql = "CREATE TABLE IF NOT EXISTS `comments` (
               `id` bigint(22) NOT NULL,
               `date` datetime NOT NULL,
               `userid` text NOT NULL,
@@ -114,11 +117,12 @@ if (isset($_POST['004-patch'])) {
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
-            (null, 'spamwords', ''),
+            (null, 'cdn_url', '{$url}'),
+            (null, 'spamwords', '')
             ";
     $q = Db::query($sql);
 
-    $sql = "CREATE TABLE `comments` (
+    $sql = "CREATE TABLE IF NOT EXISTS `comments` (
               `id` bigint(22) NOT NULL,
               `date` datetime NOT NULL,
               `userid` text NOT NULL,
@@ -155,11 +159,12 @@ if (isset($_POST['004-patch'])) {
             (null, 'system_check', '{}'),
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
-            (null, 'spamwords', ''),
+            (null, 'cdn_url', '{$url}'),
+            (null, 'spamwords', '')
             ";
     $q = Db::query($sql);
 
-    $sql = "CREATE TABLE `comments` (
+    $sql = "CREATE TABLE IF NOT EXISTS `comments` (
               `id` bigint(22) NOT NULL,
               `date` datetime NOT NULL,
               `userid` text NOT NULL,
@@ -192,11 +197,12 @@ if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` VALUES
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
-            (null, 'spamwords', ''),
+            (null, 'cdn_url', '{$url}'),
+            (null, 'spamwords', '')
             ";
     $q = Db::query($sql);
 
-    $sql = "CREATE TABLE `comments` (
+    $sql = "CREATE TABLE IF NOT EXISTS `comments` (
               `id` bigint(22) NOT NULL,
               `date` datetime NOT NULL,
               `userid` text NOT NULL,
@@ -228,11 +234,12 @@ if (isset($_POST['004-patch'])) {
 } elseif (isset($_POST['008'])) {
     $sql = "INSERT INTO `options` VALUES
             (null, 'pinger_enable', 'off'),
-            (null, 'spamwords', ''),
+            (null, 'cdn_url', '{$url}'),
+            (null, 'spamwords', '')
             ";
     $q = Db::query($sql);
 
-    $sql = "CREATE TABLE `comments` (
+    $sql = "CREATE TABLE IF NOT EXISTS `comments` (
               `id` bigint(22) NOT NULL,
               `date` datetime NOT NULL,
               `userid` text NOT NULL,

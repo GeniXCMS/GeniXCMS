@@ -22,6 +22,7 @@ class Site
     public static $editors;
     public static $data;
     public static $url;
+    public static $cdn;
     public static $domain;
     public static $name;
     public static $key;
@@ -35,6 +36,7 @@ class Site
         self::$editors = &$GLOBALS;
         self::$data = &$data;
         self::$url = Options::v('siteurl');
+        self::$cdn = Options::v('cdn_url');
         self::$domain = Options::v('sitedomain');
         self::$name = Options::v('sitename');
         self::$key = Options::v('sitekeywords');
@@ -320,7 +322,7 @@ class Site
         $bs = Options::v('use_bootstrap');
         if ($bs == 'on') {
             $lib .= '
-    <link href="'.self::$url."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+    <link href="'.self::$cdn."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
         }
         $fa = Options::v('use_fontawesome');
         if ($fa == 'on') {
@@ -346,8 +348,8 @@ class Site
         if ($bs == 'on') {
             $foot .= '
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            <script src="'.self::$url.'assets/js/bootstrap.min.js"></script>
-            <script src="'.self::$url.'assets/js/ie10-viewport-bug-workaround.js"></script>';
+            <script src="'.self::$cdn.'assets/js/bootstrap.min.js"></script>
+            <script src="'.self::$cdn.'assets/js/ie10-viewport-bug-workaround.js"></script>';
         }
 
         if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
@@ -355,15 +357,15 @@ class Site
 
             $height = $GLOBALS['editor_height'];
 
-            // $url = (SMART_URL)? Site::$url . '/ajax/saveimage?token=' . TOKEN : Site::$url . "/index.php?ajax=saveimage&token=" . TOKEN;
+            // $url = (SMART_URL)? Site::$cdn . '/ajax/saveimage?token=' . TOKEN : Site::$cdn . "/index.php?ajax=saveimage&token=" . TOKEN;
             $url = Url::ajax('saveimage');
             $foot .= '
 
-    <link href="'.self::$url.'assets/css/summernote.css" rel="stylesheet">
-    <script src="'.self::$url.'assets/js/summernote.min.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-ext-genixcms.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-image-attributes.js"></script>
-    <script src="'.self::$url.'assets/js/plugins/summernote-floats-bs.min.js"></script>
+    <link href="'.self::$cdn.'assets/css/summernote.css" rel="stylesheet">
+    <script src="'.self::$cdn.'assets/js/summernote.min.js"></script>
+    <script src="'.self::$cdn.'assets/js/plugins/summernote-ext-genixcms.js"></script>
+    <script src="'.self::$cdn.'assets/js/plugins/summernote-image-attributes.js"></script>
+    <script src="'.self::$cdn.'assets/js/plugins/summernote-floats-bs.min.js"></script>
     <script>
       $(document).ready(function() {
         $(".editor").summernote({
@@ -423,8 +425,8 @@ class Site
 
         if (isset($GLOBALS['validator']) && $GLOBALS['validator'] == true) {
             $foot .= '
-            <link href="'.self::$url.'assets/css/bootstrapValidator.min.css" rel="stylesheet">
-            <script src="'.self::$url.'assets/js/bootstrapValidator.min.js"></script>
+            <link href="'.self::$cdn.'assets/css/bootstrapValidator.min.css" rel="stylesheet">
+            <script src="'.self::$cdn.'assets/js/bootstrapValidator.min.js"></script>
             ';
 
             $foot .= $GLOBALS['validator_js'];
