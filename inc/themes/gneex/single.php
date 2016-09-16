@@ -34,7 +34,7 @@
                             echo '
                                     
                                     <h3>Related :</h3>
-                                    '.Posts::related($p->id, 5, $p->cat, 'list').'
+                                    '.Posts::related($p->id, 4, $p->cat, 'box').'
                                 </article>';
                             if (Comments::isEnable()) {
                                 echo '

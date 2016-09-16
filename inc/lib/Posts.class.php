@@ -467,6 +467,7 @@ class Posts
 
     public static function related($id, $num, $cat, $type = 'list')
     {
+        $id = Typo::int($id);
         if (self::existParam('tags', $id)) {
             $tag = self::getParam('tags', $id);
             $tag = explode(',', $tag);
@@ -477,21 +478,22 @@ class Posts
         } else {
             $where_tag = '';
         }
+        $post_type = self::type($id);
         $post = Db::result(
             sprintf(
                 "SELECT DISTINCT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
-                        A.`author`, A.`cat`
+                        A.`author`, A.`cat`, A.`type`
                         FROM `posts` AS A
                         JOIN `posts_param` AS B
                         ON A.`id` = B.`post_id`
-                        WHERE A.`cat` = '%d'
+                        WHERE (A.`cat` = '%d' %s)
                         AND A.`id` != '%d'
-                        AND `status` = '1'
-                        ".$where_tag."
                         AND A.`status` = '1'
+                        AND A.`type` = 'post'
                         ORDER BY
                         RAND() LIMIT %d, %d",
                 $cat,
+                $where_tag,
                 $id,
                 0,
                 $num
@@ -516,7 +518,14 @@ class Posts
                 foreach ($post as $p) {
                     if ($p->id != $id) {
                         $title = (strlen($p->title) > 40) ? substr($p->title, 0, 38).'...' : $p->title;
-                        $related .= '<li class="list-group-item col-md-4"><a href="'.Url::post($p->id).'">'.$title.'</a></li>';
+                        $img = self::getImage(Typo::Xclean($p->content));
+                        if ($img != '') {
+                            $img = Url::thumb($img, 'square', 200);
+                        } else {
+                            $img = Url::thumb('assets/images/noimage.png', '', 200);
+                        }
+                        $related .= '<li class="list-unstyled col-md-3 clearfix"><a href="'.Url::post($p->id).'">
+                        <img src="'.$img.'" class="img-responsive">'.$title.'</a></li>';
                     } else {
                         $related .= '';
                     }
