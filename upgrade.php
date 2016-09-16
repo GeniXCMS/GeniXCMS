@@ -46,7 +46,9 @@ if (isset($_POST['004-patch'])) {
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
             (null, 'cdn_url', '{$url}'),
-            (null, 'spamwords', '')";
+            (null, 'spamwords', ''),
+            (null, 'comments_perpage', '5'),
+            (null, 'comments_enable', 'on')";
     $q = Db::query($sql);
 
     $sql = 'CREATE TABLE IF NOT EXISTS `cat_param` (
@@ -118,7 +120,9 @@ if (isset($_POST['004-patch'])) {
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
             (null, 'cdn_url', '{$url}'),
-            (null, 'spamwords', '')
+            (null, 'spamwords', ''),
+            (null, 'comments_perpage', '5'),
+            (null, 'comments_enable', 'on')
             ";
     $q = Db::query($sql);
 
@@ -160,7 +164,9 @@ if (isset($_POST['004-patch'])) {
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
             (null, 'cdn_url', '{$url}'),
-            (null, 'spamwords', '')
+            (null, 'spamwords', ''),
+            (null, 'comments_perpage', '5'),
+            (null, 'comments_enable', 'on')
             ";
     $q = Db::query($sql);
 
@@ -198,7 +204,9 @@ if (isset($_POST['004-patch'])) {
             (null, 'permalink_use_index_php', 'off'),
             (null, 'pinger_enable', 'off'),
             (null, 'cdn_url', '{$url}'),
-            (null, 'spamwords', '')
+            (null, 'spamwords', ''),
+            (null, 'comments_perpage', '5'),
+            (null, 'comments_enable', 'on')
             ";
     $q = Db::query($sql);
 
@@ -235,7 +243,9 @@ if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` VALUES
             (null, 'pinger_enable', 'off'),
             (null, 'cdn_url', '{$url}'),
-            (null, 'spamwords', '')
+            (null, 'spamwords', ''),
+            (null, 'comments_perpage', '5'),
+            (null, 'comments_enable', 'on')
             ";
     $q = Db::query($sql);
 

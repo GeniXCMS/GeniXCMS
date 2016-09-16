@@ -194,7 +194,7 @@ if (User::access(1)) {
                                 </a>
                             </li>
                             <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'
-                                || $_GET['page'] == 'permalink')) ? 'class="active"' : ''; ?> >
+                                || $_GET['page'] == 'permalink' || $_GET['page'] == 'comments-settings')) ? 'class="active"' : ''; ?> >
                                 <a href="#"><i class="fa fa-wrench fa-fw"></i> <?=SETTINGS; ?><span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level" style="">
                                     <li>
@@ -213,6 +213,12 @@ if (User::access(1)) {
                                         <a href="index.php?page=permalink"
                                         <?=(isset($_GET['page']) && $_GET['page'] == 'permalink') ? 'class="active"' : ''; ?>>
                                             <i class="fa fa-link"></i> Permalink
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="index.php?page=comments-settings"
+                                        <?=(isset($_GET['page']) && $_GET['page'] == 'comments-settings') ? 'class="active"' : ''; ?>>
+                                            <i class="fa fa-comments"></i> Comments Settings
                                         </a>
                                     </li>
                                 </ul>

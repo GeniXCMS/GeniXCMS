@@ -61,6 +61,8 @@ class Db
                     Control::error('db', self::$mysqli->connect_error);
                     exit;
                 } else {
+                    self::query("SET SESSION `sql_mode` = 'STRICT_ALL_TABLES'");
+
                     return true;
                 }
             } catch (exception $e) {

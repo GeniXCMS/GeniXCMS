@@ -26,62 +26,66 @@ class Comments
 
     public static function form()
     {
-        Hooks::attach('footer_load_lib', array(__CLASS__, 'validateJsComment'));
-        Theme::validator();
-        Theme::editor('mini', '200');
+        if (self::isEnable()) {
+            Hooks::attach('footer_load_lib', array(__CLASS__, 'validateJsComment'));
+            Theme::validator();
+            Theme::editor('mini', '200');
 
-        $html = '<a id="commentform"></a><div class="col-md-12 comments-wrapper clearfix">';
-        if (isset($_POST['addComment'])) {
-            $data = self::addComment($_POST);
-            $html .= System::alert();
-        }
+            $html = '<a id="commentform"></a><div class="col-md-12 comments-wrapper clearfix">';
+            if (isset($_POST['addComment'])) {
+                $data = self::addComment($_POST);
+                $html .= System::alert();
+            }
 
-        $html .= '
-        <form action="" method="POST" id="commentForm">
-        <div id="cancelreply" style="margin-bottom: 15px;"></div>
-    	<div class="row">';
-        if (null === Session::val('username')) {
             $html .= '
-        
-	        <div class="form-group col-md-6">
-	        	<label class="">Name</label>
-	        	<input type="text" id="name" name="comments-name" class="form-control" required>
-	        </div>
-	        <div class="form-group col-md-6">
-	        	<label class="">Email</label>
-	        	<input type="email" id="email" name="comments-email" class="form-control" required>
-	        </div>
-	        <div class="form-group col-md-6">
-	        	<label class="">Website</label>
-	        	<input type="text" id="url" name="comments-url" class="form-control">
-	        </div>';
-        } else {
-            $html .= '<div class="form-group col-md-12"><i class="fa fa-user"></i> '.Session::val('username').'</div>';
-        }
-        $html .= '
-	        <div class="form-group col-md-12">
-	        	<label>Comments</label>
-	        	<textarea class="form-control editor" name="comments-msg" id="message" required></textarea>
-	        	<small class="input-help">allowed html tag : <code>&lt;b&gt;&lt;i&gt;&lt;ul&gt;&lt;li&gt;&lt;ol&gt;&lt;u&gt;&lt;s&gt;</code></small>
-	        </div>
-	        ';
-        if (Options::v('google_captcha_enable') == 'on') {
-            $html .= '<div class="form-group col-md-12">';
-            $html .= Xaptcha::html();
-            $html .= '</div>';
-        }
-        $html .= '
-	        <div class="col-md-12">
-	        	<button class="btn btn-success" type="submit" name="addComment">
-	        	Send Comment
-	        	</button>
-	        	<input type="hidden" name="token" value="'.TOKEN.'">
-	        	<input type="hidden" name="comments-parent" id="parentComment" value="0">
-	        </div>
-        </div>
-        </form>
+            <form action="" method="POST" id="commentForm">
+            <div id="cancelreply" style="margin-bottom: 15px;"></div>
+            <div class="row">';
+            if (null === Session::val('username')) {
+                $html .= '
+            
+                <div class="form-group col-md-6">
+                    <label class="">Name</label>
+                    <input type="text" id="name" name="comments-name" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="">Email</label>
+                    <input type="email" id="email" name="comments-email" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="">Website</label>
+                    <input type="text" id="url" name="comments-url" class="form-control">
+                </div>';
+            } else {
+                $html .= '<div class="form-group col-md-12"><i class="fa fa-user"></i> '.Session::val('username').'</div>';
+            }
+            $html .= '
+                <div class="form-group col-md-12">
+                    <label>Comments</label>
+                    <textarea class="form-control editor" name="comments-msg" id="message" required></textarea>
+                    <small class="input-help">allowed html tag : <code>&lt;b&gt;&lt;i&gt;&lt;ul&gt;&lt;li&gt;&lt;ol&gt;&lt;u&gt;&lt;s&gt;</code></small>
+                </div>
+                ';
+            if (Options::v('google_captcha_enable') == 'on') {
+                $html .= '<div class="form-group col-md-12">';
+                $html .= Xaptcha::html();
+                $html .= '</div>';
+            }
+            $html .= '
+                <div class="col-md-12">
+                    <button class="btn btn-success" type="submit" name="addComment">
+                    Send Comment
+                    </button>
+                    <input type="hidden" name="token" value="'.TOKEN.'">
+                    <input type="hidden" name="comments-parent" id="parentComment" value="0">
+                </div>
+            </div>
+            </form>
 
-        </div>';
+            </div>';
+        } else {
+            $html = '';
+        }
 
         return $html;
     }
@@ -217,29 +221,33 @@ class Comments
 
     public static function showList($vars)
     {
-        global $data;
-        $html = '';
-        $max = $vars['max'];
-        if (isset($_GET['paging']) && isset($_GET['comments'])) {
-            $paging = Typo::int($_GET['paging']);
-            $offset = ($paging - 1) * $max;
+        if (self::isEnable()) {
+            global $data;
+            $html = '';
+            $max = $vars['max'];
+            if (isset($_GET['paging']) && isset($_GET['comments'])) {
+                $paging = Typo::int($_GET['paging']);
+                $offset = ($paging - 1) * $max;
+            } else {
+                $paging = 1;
+                $offset = 0;
+            }
+            $vars['offset'] = $offset;
+            $html .= self::listC($vars);
+            $post_id = $data['posts'][0]->id;
+            $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '0' ";
+            $page = array(
+                    'paging' => $paging,
+                    'table' => 'comments',
+                    'where' => "`type` = 'post' ".$where,
+                    'max' => $max,
+                    'url' => (SMART_URL) ? Url::post($post_id).'?comments=yes' : Url::post($post_id).'&comments=yes',
+                    'type' => 'number',
+                );
+            $html .= Paging::create($page);
         } else {
-            $paging = 1;
-            $offset = 0;
+            $html = '';
         }
-        $vars['offset'] = $offset;
-        $html .= self::listC($vars);
-        $post_id = $data['posts'][0]->id;
-        $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '0' ";
-        $page = array(
-                'paging' => $paging,
-                'table' => 'comments',
-                'where' => "`type` = 'post' ".$where,
-                'max' => $max,
-                'url' => (SMART_URL) ? Url::post($post_id).'?comments=yes' : Url::post($post_id).'&comments=yes',
-                'type' => 'number',
-            );
-        $html .= Paging::create($page);
 
         return $html;
     }
@@ -410,6 +418,16 @@ class Comments
             } else {
                 return true;
             }
+        } else {
+            return false;
+        }
+    }
+
+    public static function isEnable()
+    {
+        $enable = Options::v('comments_enable');
+        if ($enable == 'on') {
+            return true;
         } else {
             return false;
         }

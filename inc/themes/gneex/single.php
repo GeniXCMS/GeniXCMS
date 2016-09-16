@@ -18,7 +18,7 @@
                         foreach ($data['posts'] as $p) {
                             $comment = array(
                             'offset' => 0,
-                            'max' => 5,
+                            'max' => Options::v('comments_perpage'),
                             'parent' => 0,
                             );
                             echo '
@@ -35,12 +35,15 @@
                                     
                                     <h3>Related :</h3>
                                     '.Posts::related($p->id, 5, $p->cat, 'list').'
-                                </article>
+                                </article>';
+                            if (Comments::isEnable()) {
+                                echo '
                                 <div class="col-sm-12">
                                     <h3>Comments</h3>
                                     <div class="row">'.Comments::form().'<div class="clearfix">&nbsp;</div><hr />'.Comments::showList($comment).'</div>
                                 </div>
                                     ';
+                            }
                         }
                     } else {
                         Control::error('404');
