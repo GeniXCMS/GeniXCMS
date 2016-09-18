@@ -19,6 +19,8 @@ $gneex = Gneex::$opt;
                 <?php
                 if (Gneex::opt('adsense') != '') {
                     echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
+                } else {
+                    echo '<div class="col-md-12">&nbsp;</div>';
                 }
                 ?>
                 <?php
@@ -38,8 +40,8 @@ $gneex = Gneex::$opt;
                             '.$im.'
                             </div>
                             <div class="col-md-8">
-                                <h3><a href="'.Url::post($p->id).'\">'.$p->title.'</a></h3>
-                                <div class="blog-meta">published at '.Date::format($p->date, 'd M Y')." by <a href=\"#\">{$p->author}</a></div>
+                                <h3><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
+                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')." by <a href=\"#\">{$p->author}</a></small><br /><br /></div>
                                 ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
                                
                             </div>

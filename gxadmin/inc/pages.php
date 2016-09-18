@@ -119,9 +119,9 @@
                                     <td class=\"text-center\">{$status}</td>
                                     <td class=\"text-center\">{$p->author}</td>
                                     <td class=\"text-center\">
-                                        <a href=\"index.php?page=pages&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success">'.EDIT."</a>
-                                        <a href=\"index.php?page=pages&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
-                                        onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
+                                        <a href=\"index.php?page=pages&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success"><i class="fa fa-edit"></i></a>
+                                        <a href="index.php?page=pages&act=del&id='.$p->id.'&token='.TOKEN."\" class=\"label label-danger\"
+                                        onclick=\"return confirm('".DELETE_CONFIRM."');\"><i class=\"fa fa-remove\"></i></a>
                                     </td>
                                         <td  class=\"text-center\">
                                         <input type=\"checkbox\" name=\"post_id[]\" value=\"{$p->id}\" id=\"select\">

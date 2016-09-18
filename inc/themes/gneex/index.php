@@ -45,9 +45,9 @@ if (Gneex::featuredExist()) {
                     $title = Posts::title($id);
                     $img = Gneex::getImage($post);
                     if ($img != '') {
-                        $im = '<img src="'.Url::thumb($img, 'large', 300).'" class="img-responsive">';
+                        $im = '<img src="'.Url::thumb($img, 'large', 300).'" class="featuredimg">';
                     } else {
-                        $im = '<img src="'.Url::thumb('assets/images/noimage.png', 'large').'" class="img-responsive">';
+                        $im = '<img src="'.Url::thumb('assets/images/noimage.png', 'large').'" class="featuredimg">';
                     }
 
                                 echo '<li class="col-sm-3">

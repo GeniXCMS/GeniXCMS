@@ -242,6 +242,10 @@ ul.list-featured > li {
     max-height: 170px;
 }
 
+img.featuredimg {
+    height: 100%!important;
+    width: auto;
+}
 #blog {
     min-height: 200px;
     padding: 40px 0px 40px;

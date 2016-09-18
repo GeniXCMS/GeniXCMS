@@ -145,9 +145,9 @@
                         <td>{$grp}</td>
                         <td>".Date::format($p->join_date)."</td>
                         <td>
-                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success">'.EDIT."</a>
-                            <a href=\"index.php?page=users&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
-                            onclick=\"return confirm('".DELETE_CONFIRM."');\">".DELETE."</a>
+                            <a href=\"index.php?page=users&act=edit&id={$p->id}&token=".TOKEN.'" class="label label-success"><i class="fa fa-edit"></i></a>
+                            <a href="index.php?page=users&act=del&id='.$p->id.'&token='.TOKEN."\" class=\"label label-danger\"
+                            onclick=\"return confirm('".DELETE_CONFIRM."');\"><i class=\"fa fa-remove\"></i></a>
                         </td>
                         <td>
                             <input type=\"checkbox\" name=\"user_id[]\" value=\"{$p->id}\" id=\"select\">

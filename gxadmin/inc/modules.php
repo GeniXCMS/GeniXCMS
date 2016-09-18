@@ -43,12 +43,13 @@
                     foreach ($data['mods'] as $mod) {
                         $m = Mod::data($mod);
                         if (Mod::isActive($mod)) {
-                            
                             $btnact = 'warning';
-                            $act = DEACTIVATE;
+                            $act = '<i class="fa fa-toggle-off"></i> '.DEACTIVATE;
+                            $actUri = DEACTIVATE;
                         } else {
                             $btnact = 'success';
-                            $act = ACTIVATE;
+                            $act = '<i class="fa fa-toggle-on"></i> '.ACTIVATE;
+                            $actUri = ACTIVATE;
                         }
                         echo "
                             <tr>
@@ -61,10 +62,10 @@
                                     <small>author: <a href=\"{$m['url']}\">{$m['developer']}</a></small>
                                 </td>
                                 <td>
-                                    <a href=\"index.php?page=modules&act={$act}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a>
+                                    <a href=\"index.php?page=modules&act={$actUri}&modules={$mod}&token=".TOKEN."\" class=\"label label-{$btnact}\">{$act}</a>
                                     ";
                         if (!Mod::isActive($mod)) {
-                            echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN.'" class="label label-danger" disable>'.REMOVE.'</a>';
+                            echo "<a href=\"index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN.'" class="label label-danger" onclick="return confirm(\''.DELETE_CONFIRM.'\');" disable><i class="fa fa-remove"></i> '.REMOVE.'</a>';
                         }
                         echo'
                                 </td>

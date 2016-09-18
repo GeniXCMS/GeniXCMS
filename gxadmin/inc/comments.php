@@ -132,7 +132,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                             <td class=\"text-center\">{$p->userid}</td>
                             <td class=\"text-center\">
                                 <a href=\"index.php?page=comments&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
-                                onclick=\"return confirm('Are you sure you want to delete this item?');\">".DELETE."</a>
+                                onclick=\"return confirm('Are you sure you want to delete this item?');\"><i class=\"fa fa-remove\"></i></a>
                             </td>
                             <td class=\"text-center\">
                                 <input type=\"checkbox\" name=\"post_id[]\" value=\"{$p->id}\" id=\"select\">
@@ -157,8 +157,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
             <th><?=EMAIL;?></th>
             <th><?=DATE;?></th>
             <th><?=STATUS;?></th>
-            <th><?=AUTHOR;?></th>
-            <th >
+            <th colspan="2">
             <select name="action" class="form-control">
                 <option value="publish"><?=PUBLISH;?></option>
                 <option value="unpublish"><?=UNPUBLISH;?></option>

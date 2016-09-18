@@ -38,6 +38,12 @@ class Db
     /** Mysqli db driver variable */
     public static $mysqli = '';
 
+    /** PDO DB Driver variable */
+    public static $pdo = '';
+
+    /** Memcached var */
+    public static $mem = '';
+
     /**
      * Database Initiation.
      *
@@ -51,6 +57,8 @@ class Db
     public function __construct()
     {
         global $vars;
+        self::$mem = new Memcached();
+        self::cacheConnect('127.0.0.1', '11211');
         if (DB_DRIVER == 'mysql') {
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
@@ -70,6 +78,16 @@ class Db
             }
 
             //return self::$mysqli;
+        } elseif (DB_DRIVER == 'pdo') {
+            # code...
+
+            try {
+                self::$pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
+                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            } catch (PDOException $e) {
+                Control::error('db', $e->getMessage());
+            }
         }
     }
 
@@ -90,12 +108,24 @@ class Db
         $dbpass = DB_PASS,
         $dbname = DB_NAME
     ) {
-        self::$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+        if (DB_DRIVER == 'mysqli') {
+            self::$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
-        if (self::$mysqli->connect_error) {
-            return false;
-        } else {
-            return true;
+            if (self::$mysqli->connect_error) {
+                return false;
+            } else {
+                return true;
+            }
+        } elseif (DB_DRIVER == 'pdo') {
+            # code...
+
+            try {
+                self::$pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS);
+                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            } catch (PDOException $e) {
+                Control::error('db', $e->getMessage());
+            }
         }
     }
 
@@ -113,14 +143,19 @@ class Db
     public static function query($vars)
     {
         if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
+            mysql_query('SET CHARACTER SET utf8mb4');
             $q = mysql_query($vars)  or die(mysql_error());
         } elseif (DB_DRIVER == 'mysqli') {
-            self::$mysqli->set_charset('utf8');
+            self::$mysqli->set_charset('utf8mb4');
             $q = self::$mysqli->query($vars);
             if ($q === false) {
                 Control::error('db', 'Query failed: '.self::$mysqli->error."<br />\n");
             }
+        } elseif (DB_DRIVER == 'pdo') {
+            $q = self::$pdo->query($vars);
+                // if ($q === false) {
+                //     Control::error('db', 'Query failed: '.self::$pdo->error."<br />\n");
+                // }
         }
 
         return $q;
@@ -141,33 +176,48 @@ class Db
     public static function result($vars)
     {
         //print_r($vars);
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
-            $q = mysql_query($vars)  or die(mysql_error());
-            $n = mysql_num_rows($q);
-            if ($n > 0) {
-                for ($i = 0; $i < $n; ++$i) {
-                    $r[] = mysql_fetch_object($q);
+        $key = sha1($vars);
+        $key_n = 'num_'.sha1($vars);
+        // check memcached
+        // $keys = self::$mem->getAllKeys();
+        // var_dump($keys);
+        if ($r = self::$mem->get($key)) {
+            # code...
+        } else {
+            if (DB_DRIVER == 'mysql') {
+                mysql_query('SET CHARACTER SET utf8');
+                $q = mysql_query($vars)  or die(mysql_error());
+                $n = mysql_num_rows($q);
+                if ($n > 0) {
+                    for ($i = 0; $i < $n; ++$i) {
+                        $r[] = mysql_fetch_object($q);
+                    }
+                } else {
+                    $r['error'] = 'data not found';
                 }
-            } else {
-                $r['error'] = 'data not found';
-            }
-        } elseif (DB_DRIVER == 'mysqli') {
-            //echo $vars;
-            $q = self::query($vars);
-            $n = $q->num_rows;
-            if ($n > 0) {
-                for ($i = 0; $i < $n; ++$i) {
-                    $r[] = $q->fetch_object();
+            } elseif (DB_DRIVER == 'mysqli') {
+                //echo $vars;
+                $q = self::query($vars);
+                $n = $q->num_rows;
+                if ($n > 0) {
+                    for ($i = 0; $i < $n; ++$i) {
+                        $r[] = $q->fetch_object();
+                    }
+                } else {
+                    $r['error'] = 'data not found';
                 }
-            } else {
-                $r['error'] = 'data not found';
+
+                $q->close();
+            } elseif (DB_DRIVER == 'pdo') {
+                $stmt = self::query($vars);
+                $r = $stmt->fetchAll(PDO::FETCH_OBJ);
+                $n = $stmt->rowCount();
             }
 
-            $q->close();
+            self::$num_rows = $n;
+            self::$mem->add($key, $r, time() + 3600);
+            self::$mem->add($key_n, $n, time() + 3600);
         }
-
-        self::$num_rows = $n;
 
         return $r;
     }
@@ -207,6 +257,8 @@ class Db
             $q = mysql_query($sql) or die(mysql_error());
         } elseif (DB_DRIVER == 'mysqli') {
             $q = self::query($sql);
+        } elseif (DB_DRIVER == 'pdo') {
+            $q = self::$pdo->exec($sql);
         }
 
         return true;
@@ -251,6 +303,8 @@ class Db
             $q = mysql_query($sql) or die(mysql_error());
         } elseif (DB_DRIVER == 'mysqli') {
             $q = self::query($sql);
+        } elseif (DB_DRIVER == 'pdo') {
+            $q = self::$pdo->exec($sql);
         }
 
         return true;
@@ -311,6 +365,19 @@ class Db
             } catch (exception $e) {
                 echo $e->getMessage();
             }
+        } elseif (DB_DRIVER == 'pdo') {
+            $q = self::$pdo->exec($sql);
+            try {
+                if (!$q) {
+                    return false;
+                } else {
+                    self::$last_id = self::$pdo->lastInsertId();
+
+                    return true;
+                }
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
         }
 
         //return true;
@@ -322,11 +389,27 @@ class Db
             $vars = mysql_escape_string($vars);
         } elseif (DB_DRIVER == 'mysqli') {
             $vars = self::$mysqli->escape_string($vars);
+        } elseif (DB_DRIVER == 'pdo') {
+            $vars = self::$pdo->quote($vars);
         } else {
             $vars = $vars;
         }
 
         return $vars;
+    }
+
+    public static function cacheConnect($host, $port)
+    {
+        $servers = self::$mem->getServerList();
+        if (is_array($servers)) {
+            foreach ($servers as $server) {
+                if ($server['host'] == $host and $server['port'] == $port) {
+                    return true;
+                }
+            }
+        }
+
+        return self::$mem->addServer($host, $port);
     }
 }
 
