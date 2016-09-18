@@ -65,18 +65,18 @@ class Categories
             $name = $vars['name'];
             $where = 'WHERE ';
             if (isset($vars['parent'])) {
-                $where .= " `parent` = '{$vars['parent']}' ";
+                $where .= " `parent` = '".$vars['parent']."' ";
             } else {
                 $where .= '1 ';
             }
             if (isset($vars['type'])) {
-                $where .= " AND `type` = '{$vars['type']}' ";
+                $where .= " AND `type` = '".$vars['type']."' ";
             } else {
-                $where .= ' AND 1 ';
+                $where .= '';
             }
             $order_by = 'ORDER BY ';
             if (isset($vars['order_by'])) {
-                $order_by .= " {$vars['order_by']} ";
+                $order_by .= ' '.$vars['order_by'].' ';
             } else {
                 $order_by .= ' `name` ';
             }
@@ -86,8 +86,10 @@ class Categories
                 $sort = ' ASC';
             }
         }
-        $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
-        //print_r($cat);
+
+        // $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
+        $cat = Db::result('SELECT * FROM `cat` '.$where.' '.$order_by.' '.$sort);
+        // print_r($cat);
         $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
         if (Db::$num_rows > 0) {
             foreach ($cat as $c) {

@@ -58,7 +58,11 @@ class Db
     {
         global $vars;
         self::$mem = new Memcached();
-        self::cacheConnect('127.0.0.1', '11211');
+        // self::cacheConnect('127.0.0.1', '11211');
+        self::$mem->addServer('127.0.0.1', '11211');
+        // $servers = self::$mem->getServerList();
+        // var_dump($servers);
+
         if (DB_DRIVER == 'mysql') {
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
@@ -176,50 +180,71 @@ class Db
     public static function result($vars)
     {
         //print_r($vars);
-        $key = sha1($vars);
-        $key_n = 'num_'.sha1($vars);
+        $key = md5($vars).'-'.substr(SITE_ID, 0, 5);
+        $key_n = 'num_'.md5($vars).'-'.substr(SITE_ID, 0, 5);
         // check memcached
         // $keys = self::$mem->getAllKeys();
         // var_dump($keys);
-        if ($r = self::$mem->get($key)) {
+        $use_memcached = defined(USE_MEMCACHED) ? USE_MEMCACHED : false;
+        if ($use_memcached) {
             # code...
-        } else {
-            if (DB_DRIVER == 'mysql') {
-                mysql_query('SET CHARACTER SET utf8');
-                $q = mysql_query($vars)  or die(mysql_error());
-                $n = mysql_num_rows($q);
-                if ($n > 0) {
-                    for ($i = 0; $i < $n; ++$i) {
-                        $r[] = mysql_fetch_object($q);
-                    }
-                } else {
-                    $r['error'] = 'data not found';
-                }
-            } elseif (DB_DRIVER == 'mysqli') {
-                //echo $vars;
-                $q = self::query($vars);
-                $n = $q->num_rows;
-                if ($n > 0) {
-                    for ($i = 0; $i < $n; ++$i) {
-                        $r[] = $q->fetch_object();
-                    }
-                } else {
-                    $r['error'] = 'data not found';
-                }
-
-                $q->close();
-            } elseif (DB_DRIVER == 'pdo') {
-                $stmt = self::query($vars);
-                $r = $stmt->fetchAll(PDO::FETCH_OBJ);
-                $n = $stmt->rowCount();
+            if ($r = self::$mem->get($key)) {
+                # code...
+                $n = self::$mem->get($key_n);
+            } else {
+                $res = self::fetch($vars);
+                $r = $res['r'];
+                $n = $res['n'];
+                self::$mem->add($key, $r, time() + 300);
+                self::$mem->add($key_n, $n, time() + 300);
             }
-
-            self::$num_rows = $n;
-            self::$mem->add($key, $r, time() + 3600);
-            self::$mem->add($key_n, $n, time() + 3600);
+        } else {
+            $res = self::fetch($vars);
+            $r = $res['r'];
+            $n = $res['n'];
+            // print_r($r);
         }
 
+        self::$num_rows = $n;
+
         return $r;
+    }
+
+    public static function fetch($vars)
+    {
+        if (DB_DRIVER == 'mysql') {
+            mysql_query('SET CHARACTER SET utf8');
+            $q = mysql_query($vars)  or die(mysql_error());
+            $n = mysql_num_rows($q);
+            if ($n > 0) {
+                for ($i = 0; $i < $n; ++$i) {
+                    $r[] = mysql_fetch_object($q);
+                }
+            } else {
+                $r['error'] = 'data not found';
+            }
+        } elseif (DB_DRIVER == 'mysqli') {
+            //echo $vars;
+            $q = self::query($vars);
+            $n = $q->num_rows;
+            if ($n > 0) {
+                for ($i = 0; $i < $n; ++$i) {
+                    $r[] = $q->fetch_object();
+                }
+            } else {
+                $r['error'] = 'data not found';
+            }
+
+            $q->close();
+        } elseif (DB_DRIVER == 'pdo') {
+            $stmt = self::query($vars);
+            $r = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $n = $stmt->rowCount();
+        }
+        $res['n'] = $n;
+        $res['r'] = $r;
+
+        return $res;
     }
 
     /**
@@ -401,6 +426,7 @@ class Db
     public static function cacheConnect($host, $port)
     {
         $servers = self::$mem->getServerList();
+        var_dump($servers);
         if (is_array($servers)) {
             foreach ($servers as $server) {
                 if ($server['host'] == $host and $server['port'] == $port) {

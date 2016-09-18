@@ -79,7 +79,7 @@ class Options
 
     public static function load()
     {
-        $op = Db::result('SELECT * FROM `options` ORDER BY `id` ASC');
+        $op = Db::result('SELECT * FROM `options` ORDER BY `id` ASC ');
         if (Db::$num_rows > 0) {
             return $op;
         } else {
