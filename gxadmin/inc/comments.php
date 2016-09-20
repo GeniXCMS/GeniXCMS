@@ -40,13 +40,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                 <div class="col-sm-12">
                     <h5><?=FIND_COMMENTS;?></h5>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_COMMENTS;?>">
                     </div>
 
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateFrom'>
                             <input type='text' class="form-control" name="from" placeholder="From" />
@@ -56,7 +56,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateTo'>
                             <input type='text' class="form-control" name="to" placeholder="To" />
@@ -66,7 +66,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="status" class="form-control">
                             <option value="1"><?=PUBLISHED;?></option>
@@ -76,7 +76,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-search"></span> <?=FIND_COMMENTS;?>

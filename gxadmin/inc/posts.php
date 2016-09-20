@@ -39,16 +39,16 @@
         <form action="index.php?page=posts" method="get">
             <input type="hidden" name="page" value="posts">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <h5><?=FIND_POSTS;?></h5>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_POSTS;?>">
                     </div>
 
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                     <?php
                         $vars = array(
@@ -59,7 +59,7 @@
                     ?>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateFrom'>
                             <input type='text' class="form-control" name="from" placeholder="From" />
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateTo'>
                             <input type='text' class="form-control" name="to" placeholder="To" />
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="status" class="form-control">
                             <option value="1"><?=PUBLISHED;?></option>
@@ -88,7 +88,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-search"></span> <?=FIND_POSTS;?>

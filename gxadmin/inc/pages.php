@@ -31,21 +31,21 @@
         <small class="label label-danger pull-left"><?=Stats::inactivePost('page');?> inactive</small>
         <hr />
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12 clearfix">
         <form action="index.php?page=pages" method="get">
             <input type="hidden" name="page" value="pages">
             <div class="row">
                 <div class="col-sm-12">
                     <h5><?=FIND_PAGES;?></h5>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-md-4">
                     <div class="form-group">
                         <input type="text" name="q" class="form-control" placeholder="<?=SEARCH_PAGES;?> ">
                     </div>
 
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateFrom'>
                             <input type='text' class="form-control" name="from" placeholder="From" />
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6 col-md-2">
                     <div class="form-group">
                         <div class='input-group date' id='dateTo'>
                             <input type='text' class="form-control" name="to" placeholder="To" />
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-md-2">
                     <div class="form-group">
                         <select name="status" class="form-control">
                             <option value="1"><?=PUBLISHED;?></option>
@@ -85,10 +85,10 @@
             <input type="hidden" name="token" value="<?=TOKEN;?>">
         </form>
     </div>
-    <div class="col-md-12">
-        <form action="" method="post">
-            <div class="table-responsive">
-                <table class="table table-hover">
+    <div class="col-sm-12 clearfix">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <form action="" method="post">
                     <thead>
                         <tr>
                             <th class="text-center"><?=ID;?></th>
@@ -158,9 +158,8 @@
                             </button>
                         </th>
                     </tfoot>
-                </table>
-            </div>
-        </form>
-
+                </form>
+            </table>
+        </div>
     </div>
 </div>

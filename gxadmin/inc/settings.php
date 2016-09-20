@@ -131,7 +131,7 @@
 
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-12 col-md-6 form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label><?=COUNTRY;?></label>
@@ -150,7 +150,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-12 col-md-6 form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label><?=WEBSITE_LANG;?></label>

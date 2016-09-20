@@ -61,7 +61,8 @@ class Theme
         if (isset($data)) {
             $GLOBALS['data'] = $data;
         }
-        include GX_PATH.'/gxadmin/themes/'.$var.'.php';
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        include GX_PATH.'/'.$admin_dir.'/themes/'.$var.'.php';
     }
 
     public static function header($vars = '')

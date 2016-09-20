@@ -75,10 +75,12 @@
 
                     </div>
                     
-                    <div class="col-sm-6 form-group">
-                    <label>SpamWords</label>
-                    <textarea class="form-control" name="spamwords"><?=$data['spamwords'];?></textarea>
-                    <span class="help-block">one word per line. you can get spamwords blacklist from <code><a href="https://github.com/splorp/wordpress-comment-blacklist" target="_blank">here</a></code></span>
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                        <label>SpamWords</label>
+                        <textarea class="form-control" name="spamwords"><?=$data['spamwords'];?></textarea>
+                        <span class="help-block">one word per line. you can get spamwords blacklist from <code><a href="https://github.com/splorp/wordpress-comment-blacklist" target="_blank">here</a></code></span>
+                        </div>
                     </div>
 
                 </div>

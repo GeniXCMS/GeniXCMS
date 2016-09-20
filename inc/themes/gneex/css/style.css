@@ -30,6 +30,9 @@ h5 {
 article {
     text-align: justify;
 }
+article iframe {
+    max-width: 100%!important;
+}
 article h2 {
     font-family: 'Rasa', serif;
     font-size: 2.8em;

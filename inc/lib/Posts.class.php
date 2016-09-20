@@ -524,8 +524,8 @@ class Posts
                         } else {
                             $img = Url::thumb('assets/images/noimage.png', '', 200);
                         }
-                        $related .= '<li class="list-unstyled col-md-3 clearfix"><a href="'.Url::post($p->id).'">
-                        <img src="'.$img.'" class="img-responsive">'.$title.'</a></li>';
+                        $related .= '<li class="list-unstyled col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
+                        <img src="'.$img.'" class="img-responsive center-block">'.$title.'</a><br /><br /></li>';
                     } else {
                         $related .= '';
                     }

@@ -193,7 +193,8 @@ class System
 
     public static function inc($vars, $data = '')
     {
-        $file = GX_PATH.'/gxadmin/inc/'.$vars.'.php';
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        $file = GX_PATH.'/'.$admin_dir.'/inc/'.$vars.'.php';
 
         if (file_exists($file)) {
             include $file;

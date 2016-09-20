@@ -37,11 +37,11 @@
                 $adata = Theme::data($active);
                 // print_r($adata);
                 echo '
-                <div class="col-sm-12">
+                <div class="col-md-12">
                 <h3 class=""><i class="fa fa-check text-success"></i> '.ACTIVE_THEME.'</h3>
                     <div class="row">
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-6 col-md-3">
                         <div class="thumbnail">';
             if (file_exists(GX_THEME.'/'.$active.'/screenshot.png')) {
                 echo '<img src="'.Site::$url.'/inc/themes/'.$active.'/screenshot.png"
@@ -85,7 +85,7 @@
                 foreach ($data['themes'] as $thm) {
                     $t = Theme::data($thm);
                     echo '
-                            <div class="col-sm-3">
+                            <div class="col-sm-4 col-md-3">
                                 <div class="thumbnail">';
                     if (file_exists(GX_THEME.'/'.$thm.'/screenshot.png')) {
                         echo '<img src="'.Site::$url.'/inc/themes/'.$thm.'/screenshot.png"
