@@ -132,7 +132,7 @@ if (isset($alertSuccess)) {
 if (!User::isLoggedin()) {
     ?>
 <div class="container">
-    <div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 30px; margin-bottom: 60px ">
+    <div style="max-width: 300px;margin-left: auto;margin-right: auto;margin-top: 30px;margin-bottom: 60px">
         <form action="" class="form-signin" role="form" method="post">
             <h2 class="form-signin-heading"><?=FORGOT_PASS; ?></h2>
             <div class="form-group">

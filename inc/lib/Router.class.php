@@ -53,15 +53,15 @@ class Router
         'category/([0-9]+)/(.*)/' => array('cat' => '1'),
         'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
         'tag/(.*)/' => array('tag' => '1'),
-        '(.*)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
+        '([a-z]+)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
         // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
         'mod/(.*)'.GX_URL_PREFIX => array('mod' => '1'),
         // '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
         'paging/([0-9]+)/' => array('default', 'paging' => '1'),
         'error/([0-9]+)/' => array('error' => '1'),
-        '(.[a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
+        '([a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
         '(.*)'.GX_URL_PREFIX => array('post' => '1'),
-        'ajax/(.*)/' => array('ajax' => '1'),
+        'ajax/(.*)/(.*)' => array('ajax' => '1', 'token' => '2'),
         'thumb/size/([0-9]+)/(.*)' => array('thumb' => '2', 'size' => '1'),
         'thumb/type/(.*)/(.*)' => array('thumb' => '2', 'type' => '1'),
         'thumb/align/(.*)/(.*)' => array('thumb' => '2', 'align' => '1'),
@@ -78,7 +78,7 @@ class Router
     /**
      * Add router route.
      *
-     * @param arr $var
+     * @param array $var
      */
     public static function add($var)
     {
@@ -141,14 +141,15 @@ class Router
     /**
      * Extract the router variable.
      *
-     * @param arr $var
-     * @param arr $m
+     * @param array $var
+     * @param array $m
      *
-     * @return type
+     * @return array
      */
     public static function extract($var, $m)
     {
         // print_r($m);
+        $va = [];
         foreach ($var as $k2 => $v2) {
             // print_r($k2);
             if (!is_int($k2)) {

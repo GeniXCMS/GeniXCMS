@@ -60,7 +60,7 @@ class GxMain
     public function index()
     {
         System::gZip();
-        Control::handler('frontend');
+        Control::frontend();
         System::Zipped();
     }
 

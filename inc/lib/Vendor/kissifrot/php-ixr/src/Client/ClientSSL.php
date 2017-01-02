@@ -52,7 +52,7 @@ class ClientSSL extends Client
      * @param string $server URL of the Server to connect to
      * @since 0.1.0
      */
-    function __construct($server, $path = false, $port = 443, $timeout = false, $timeout_io = null)
+    public function __construct($server, $path = false, $port = 443, $timeout = false, $timeout_io = null)
     {
         parent::__construct($server, $path, $port, $timeout, $timeout_io);
         $this->useragent = 'The Incutio XML-RPC PHP Library for SSL';
@@ -73,7 +73,7 @@ class ClientSSL extends Client
      * @param string $keyPhrase       Passphrase to unlock the private key
      * @throws ClientException
      */
-    function setCertificate($certificateFile, $keyFile, $keyPhrase = '')
+    public function setCertificate($certificateFile, $keyFile, $keyPhrase = '')
     {
         // Check the files all exist
         if (is_file($certificateFile)) {
@@ -91,7 +91,7 @@ class ClientSSL extends Client
         $this->_passphrase = (string)$keyPhrase;
     }
 
-    function setCACertificate($caFile)
+    public function setCACertificate($caFile)
     {
         if (is_file($caFile)) {
             $this->_caFile = $caFile;
@@ -106,7 +106,7 @@ class ClientSSL extends Client
      * @returns void
      * @since 0.1.2
      */
-    function setTimeOut($newTimeOut)
+    public function setTimeOut($newTimeOut)
     {
         $this->timeout = (int)$newTimeOut;
     }
@@ -116,7 +116,7 @@ class ClientSSL extends Client
      * @returns int
      * @since 0.1.2
      */
-    function getTimeOut()
+    public function getTimeOut()
     {
         return $this->timeout;
     }
@@ -125,7 +125,7 @@ class ClientSSL extends Client
      * Set the query to send to the XML-RPC Server
      * @since 0.1.0
      */
-    function query()
+    public function query()
     {
         $args = func_get_args();
         $method = array_shift($args);
@@ -156,7 +156,7 @@ class ClientSSL extends Client
         curl_setopt($curl, CURLOPT_HEADER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
-        if ($this->port !== 443) {
+        if($this->port !== 443) {
             curl_setopt($curl, CURLOPT_PORT, $this->port);
         }
         curl_setopt($curl, CURLOPT_HTTPHEADER, [

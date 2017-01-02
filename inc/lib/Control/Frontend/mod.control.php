@@ -18,10 +18,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-$data = Router::scrap($param);
-$data['mod'] = Typo::cleanX($data['mod']);
+$route = Router::scrap($param);
+//echo $route['mod'];
+$data['mod'] = (SMART_URL) ? $route['mod'] : Typo::cleanX($_GET['mod']);
 $data['p_type'] = 'mod';
-
+//echo $data['mod'];
 if (Hooks::exist($data['mod'], 'mod_control')) {
     Theme::theme('header', $data);
     Theme::theme('mod', $data);

@@ -104,18 +104,20 @@ class Control
      */
     public static function frontend()
     {
-        $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
-                    'account', 'search', 'author', 'tag', 'thumb', );
-
+        $arr = ['ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
+                    'account', 'search', 'author', 'tag', 'thumb', 'default'];
         if (SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                 (SMART_URL && isset($_GET)) ? self::route($arr) : self::get($arr);
             } else {
                 self::route($arr);
             }
-        } elseif (!SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0) {
+
+//            self::route($arr);
+        } elseif (!SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0 ) {
             self::get($arr);
         } else {
+
             self::incFront('default');
         }
     }
@@ -161,14 +163,12 @@ class Control
     public static function route($arr)
     {
         $var = Router::run();
-        // print_r($var);
         if (isset($var['error']) || $var[0] == 'error') {
             self::error('404');
         } else {
             foreach ((array) $var[0] as $k => $v) {
-                // echo($k);
                 if ($k == '0' && $v != 'error' && $v != 'ajax') {
-                    // echo $k;
+                    /** Frontpage */
                     self::incFront($v, $var);
                 } elseif (!SMART_URL && isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                     self::get($arr);
@@ -176,11 +176,9 @@ class Control
                     $error = ($k == 'error') ? $v : '404';
                     self::error($error, $var);
                 } elseif ($k == 'ajax') {
-                    // print_r($k);
-                    self::ajax($v);
+                    self::ajax($v, $var);
                 } else {
                     if (in_array($k, $arr)) {
-                        // echo $k;
                         self::incFront($k, $var);
                     } else {
                         self::error('404');
@@ -242,7 +240,7 @@ class Control
         include GX_PATH.'/inc/lib/Control/Install/default.control.php';
     }
 
-    public static function ajax($vars = '', $val = '')
+    public static function ajax($vars = '', $param = '')
     {
         if (isset($vars) && $vars != '') {
             $file = GX_PATH.'/inc/lib/Control/Ajax/'.$vars.'-ajax.control.php';

@@ -234,6 +234,7 @@ class Image
                 $imgSrc = $img;
                 // var_dump(Files::isClean($imgSrc));
                 if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
+//                if (Files::remoteExist($imgSrc)) {
                     $exist = true;
                 } else {
                     $exist = false;
@@ -319,7 +320,7 @@ class Image
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagejpeg($thumb, $loc, 100);
-                            self::thumbFly($img);
+                            self::thumbFly($img,$type,$size,$align);
                         }
                     }
                     if ($imgExt == 'gif') {
@@ -329,7 +330,7 @@ class Image
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagepng($thumb, $loc, 9);
-                            self::thumbFly($img);
+                            self::thumbFly($img,$type,$size,$align);
                         }
                     }
                 } else {
@@ -387,7 +388,7 @@ class Image
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagejpeg($thumb, $loc, 100);
-                            self::thumbFly($img);
+                            self::thumbFly($img,$type,$size,$align);
                         }
                     }
                     if ($imgExt == 'gif') {
@@ -397,7 +398,7 @@ class Image
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagepng($thumb, $loc, 9);
-                            self::thumbFly($img);
+                            self::thumbFly($img,$type,$size,$align);
                         }
                     }
                 } else {

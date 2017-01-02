@@ -15,18 +15,12 @@
 
     </div>
     <span href="#" class="scrollup"><i class="fa fa-arrow-up fa-2x"></i></span>
-    
-
-
-    
-
-
 
     <?php
     if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
         Hooks::attach('admin_footer_action', array('Files', 'elfinderLib'));
 
-        $url = (SMART_URL) ? Site::$url.'/ajax/saveimage?token='.TOKEN : Site::$url.'/index.php?ajax=saveimage&token='.TOKEN;
+        $url = Url::ajax('saveimage');
         $foot = '
     <script>
       $(document).ready(function() {
@@ -135,8 +129,8 @@
         });
 
         <?php
-        $tagAjax = (SMART_URL) ? Site::$url.'ajax/tags?token='.TOKEN : Site::$url.'index.php?ajax=tags&token='.TOKEN;
-        $versionUrl = (SMART_URL) ? Site::$url.'ajax/version?token='.TOKEN : Site::$url.'index.php?ajax=version&token='.TOKEN;
+        $tagAjax = Url::ajax('tags');
+        $versionUrl = Url::ajax('version');
         ?>
         $('#tags').tagsInput({
             width: 'auto',
@@ -168,8 +162,6 @@
                 })
             },5000
         );
-
-        
 
     </script>
 

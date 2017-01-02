@@ -7,7 +7,7 @@ class Value
     private $data;
     private $type;
 
-    function __construct($data, $type = null)
+    public function __construct($data, $type = null)
     {
         $this->data = $data;
         if (!$type) {
@@ -27,7 +27,7 @@ class Value
         }
     }
 
-    function calculateType()
+    public function calculateType()
     {
         if ($this->data === true || $this->data === false) {
             return 'boolean';
@@ -64,7 +64,7 @@ class Value
         }
     }
 
-    function getXml()
+    public function getXml()
     {
         // Return XML for this value
         switch ($this->type) {
@@ -107,7 +107,7 @@ class Value
      * @param array $array
      * @return boolean
      */
-    function isStruct($array)
+    public function isStruct($array)
     {
         $expected = 0;
         foreach ($array as $key => $value) {

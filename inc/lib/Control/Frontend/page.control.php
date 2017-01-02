@@ -45,10 +45,10 @@ switch ($page) {
         $data['posts'] = Db::result(
             sprintf(
                 "SELECT * FROM `posts` 
-                                    WHERE (`id` = '%d' OR `slug` = '%s')
-                                    AND `type` = 'page'
-                                    AND `status` = '1'
-                                    LIMIT 1",
+                    WHERE (`id` = '%d' OR `slug` = '%s')
+                    AND `type` = 'page'
+                    AND `status` = '1'
+                    LIMIT 1",
                 $page,
                 $page
             )

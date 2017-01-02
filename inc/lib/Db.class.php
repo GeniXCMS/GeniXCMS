@@ -57,12 +57,15 @@ class Db
     public function __construct()
     {
         global $vars;
-        self::$mem = new Memcached();
-        // self::cacheConnect('127.0.0.1', '11211');
-        self::$mem->addServer('127.0.0.1', '11211');
-        // $servers = self::$mem->getServerList();
-        // var_dump($servers);
+        if (defined('USE_MEMCACHED') && USE_MEMCACHED == true) {
+            self::$mem = new Memcached();
+            // self::cacheConnect('127.0.0.1', '11211');
+            self::$mem->addServer('127.0.0.1', '11211');
+            // $servers = self::$mem->getServerList();
+            // var_dump($servers);
+        }
 
+        !defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
         if (DB_DRIVER == 'mysql') {
             mysql_connect(DB_HOST, DB_USER, DB_PASS);
             mysql_select_db(DB_NAME);
@@ -112,6 +115,7 @@ class Db
         $dbpass = DB_PASS,
         $dbname = DB_NAME
     ) {
+        !defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
         if (DB_DRIVER == 'mysqli') {
             self::$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 

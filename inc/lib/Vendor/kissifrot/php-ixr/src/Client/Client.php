@@ -35,12 +35,11 @@ class Client
      */
     private $error = null;
 
-    function __construct($server, $path = false, $port = 80, $timeout = 15, $timeout_io = null)
+    public function __construct($server, $path = false, $port = 80, $timeout = 15, $timeout_io = null)
     {
         if (!$path) {
             // Assume we have been given a URL instead
             $bits = parse_url($server);
-            // print_r($bits);
             $this->server = $bits['host'];
             $this->port = isset($bits['port']) ? $bits['port'] : 80;
             $this->path = isset($bits['path']) ? $bits['path'] : '/';
@@ -58,12 +57,12 @@ class Client
             $this->path = $path;
             $this->port = $port;
         }
-        $this->useragent = ' -- PingTool/1.0.0';
+        $this->useragent = 'The Incutio XML-RPC PHP Library';
         $this->timeout = $timeout;
         $this->timeout_io = $timeout_io;
     }
 
-    function query()
+    public function query()
     {
         $args = func_get_args();
         $method = array_shift($args);
@@ -155,35 +154,35 @@ class Client
         return true;
     }
 
-    function getResponse()
+    public function getResponse()
     {
         // methodResponses can only have one param - return that
         return $this->message->params[0];
     }
 
-    function isError()
+    public function isError()
     {
         return (is_object($this->error));
     }
 
-    function handleError($errorCode, $errorMessage)
+    protected function handleError($errorCode, $errorMessage)
     {
         $this->error = new Error($errorCode, $errorMessage);
 
         return false;
     }
 
-    function getError()
+    public function getError()
     {
         return $this->error;
     }
 
-    function getErrorCode()
+    public function getErrorCode()
     {
         return $this->error->code;
     }
 
-    function getErrorMessage()
+    public function getErrorMessage()
     {
         return $this->error->message;
     }
@@ -193,7 +192,7 @@ class Client
      * Gets the current timeout set for data transfer
      * @return int|null
      */
-    function getTimeoutIo()
+    public function getTimeoutIo()
     {
         return $this->timeout_io;
     }
@@ -203,7 +202,7 @@ class Client
      * @param int $timeout_io
      * @return $this
      */
-    function setTimeoutIo($timeout_io)
+    public function setTimeoutIo($timeout_io)
     {
         $this->timeout_io = $timeout_io;
     }

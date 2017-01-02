@@ -22,7 +22,7 @@ $post = '';
 $data = Router::scrap($param);
 $data['p_type'] = 'index';
 $data['max'] = Options::v('post_perpage');
-
+//print_r($_GET);
 if (SMART_URL) {
     if (isset($data['paging'])) {
         $paging = $data['paging'];

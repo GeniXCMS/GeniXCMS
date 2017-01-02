@@ -24,12 +24,12 @@ class Message
     // The XML parser
     private $_parser;
 
-    function __construct($message)
+    public function __construct($message)
     {
         $this->message =& $message;
     }
 
-    function parse()
+    public function parse()
     {
         // first remove the XML declaration
         // merged from WP #10698 - this method avoids the RAM usage of preg_replace on very large messages
@@ -99,7 +99,7 @@ class Message
      * @param $tag
      * @param $attr
      */
-    function tagOpen($parser, $tag, $attr)
+    public function tagOpen($parser, $tag, $attr)
     {
         $this->_currentTagContents = '';
         $this->currentTag = $tag;
@@ -126,7 +126,7 @@ class Message
      * @param $parser
      * @param $cdata
      */
-    function cdata($parser, $cdata)
+    public function cdata($parser, $cdata)
     {
         $this->_currentTagContents .= $cdata;
     }
@@ -136,7 +136,7 @@ class Message
      * @param $parser
      * @param $tag
      */
-    function tagClose($parser, $tag)
+    public function tagClose($parser, $tag)
     {
         $valueFlag = false;
         switch ($tag) {

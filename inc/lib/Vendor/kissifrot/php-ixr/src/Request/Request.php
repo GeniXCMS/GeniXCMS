@@ -16,7 +16,7 @@ class Request
     private $args;
     private $xml;
 
-    function __construct($method, $args)
+    public function __construct($method, $args)
     {
         $this->method = $method;
         $this->args = $args;
@@ -36,12 +36,12 @@ EOD;
         $this->xml .= '</params></methodCall>';
     }
 
-    function getLength()
+    public function getLength()
     {
         return strlen($this->xml);
     }
 
-    function getXml()
+    public function getXml()
     {
         return $this->xml;
     }

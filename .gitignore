@@ -1,4 +1,5 @@
 inc/config/*
+assets/cache/*
 docs
 mkdocs.yml
 assets/.tmb

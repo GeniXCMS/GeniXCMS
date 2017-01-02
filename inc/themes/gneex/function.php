@@ -276,8 +276,7 @@ class Gneex
             });
         </script>
         ';
-
-        echo Site::minifyJS($js);
+        System::adminAsset(Site::minifyJS($js));
     }
 }
 

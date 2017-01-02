@@ -86,16 +86,18 @@ class System
         /* Initiate Modules */
         new Mod();
 
-        /* Load themes configuration */
-        new Theme();
-
         /* Run Hooks : init */
         Hooks::run('init');
+
+        /* Load themes configuration */
+        new Theme();
 
         /* Attach Hooks : admin_page_notif_action */
         Hooks::attach('admin_page_notif_action', array('System', 'alert'));
 
         Hooks::attach('admin_footer_action', array('System', 'loadAdminAsset'));
+
+
 
         self::$toolbar = self::toolbar(self::$toolbar_mode);
     }

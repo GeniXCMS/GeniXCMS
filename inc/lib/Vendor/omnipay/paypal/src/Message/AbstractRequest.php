@@ -6,6 +6,7 @@
 namespace Omnipay\PayPal\Message;
 
 use Omnipay\Common\ItemBag;
+use Omnipay\PayPal\PayPalItem;
 use Omnipay\PayPal\PayPalItemBag;
 
 /**
@@ -305,7 +306,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
                 $data["L_PAYMENTREQUEST_0_DESC$n"] = $item->getDescription();
                 $data["L_PAYMENTREQUEST_0_QTY$n"] = $item->getQuantity();
                 $data["L_PAYMENTREQUEST_0_AMT$n"] = $this->formatCurrency($item->getPrice());
-                $data["L_PAYMENTREQUEST_0_NUMBER$n"] = $item->getCode();
+                if ($item instanceof PayPalItem) {
+                    $data["L_PAYMENTREQUEST_0_NUMBER$n"] = $item->getCode();
+                }
 
                 $data["PAYMENTREQUEST_0_ITEMAMT"] += $item->getQuantity() * $this->formatCurrency($item->getPrice());
             }
@@ -317,7 +320,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function sendData($data)
     {
-        $httpRequest = $this->httpClient->post($this->getEndpoint(), null, http_build_query($data));
+        $httpRequest = $this->httpClient->post($this->getEndpoint(), null, http_build_query($data, '', '&'));
         $httpRequest->getCurlOptions()->set(CURLOPT_SSLVERSION, 6); // CURL_SSLVERSION_TLSv1_2 for libcurl < 7.35
         $httpResponse = $httpRequest->send();
 

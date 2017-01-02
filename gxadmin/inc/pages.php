@@ -132,7 +132,7 @@
                         } else {
                             echo '
                                 <tr>
-                                    <td>
+                                    <td colspan="7">
                                         '.NO_PAGE_FOUND.'
                                     </td>
                                 </tr>';

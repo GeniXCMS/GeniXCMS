@@ -11,12 +11,12 @@ class Base64
 {
     private $data;
 
-    function __construct($data)
+    public function __construct($data)
     {
         $this->data = $data;
     }
 
-    function getXml()
+    public function getXml()
     {
         return '<base64>' . base64_encode($this->data) . '</base64>';
     }

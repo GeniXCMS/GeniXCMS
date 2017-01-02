@@ -19,7 +19,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 $data = Router::scrap($param);
-
+//print_r($_GET);
 if (SMART_URL == true) {
     if (isset($data['post'])) {
         $post = Typo::cleanX($data['post']);
@@ -38,14 +38,15 @@ $data['p_type'] = Posts::type($post_id);
 $data['posts'] = Db::result(
     sprintf(
         "SELECT * FROM `posts`
-                            WHERE `id` = '%d'
-                            OR `slug` = '%s'
-                            AND `type` = '%s'
-                            AND `status` = '1'
-                            LIMIT 1",
+            WHERE (`id` = '%d'
+            OR `slug` = '%s')
+            AND `type` = '%s'
+            AND `status` = '%d'
+            LIMIT 1",
         $post,
         $post,
-        $data['p_type']
+        $data['p_type'],
+        '1'
     )
 );
 $num_rows = Db::$num_rows;
@@ -58,7 +59,7 @@ if ($num_rows > 0) {
     Theme::theme($theme, $data);
     Theme::footer();
     Stats::addViews($post_id);
-    exit;
+
 } else {
     Control::error('404');
     exit;

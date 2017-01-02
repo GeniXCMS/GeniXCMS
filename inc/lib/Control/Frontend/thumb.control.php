@@ -19,10 +19,15 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 $data = Router::scrap($param);
 // print_r($data);
-if (isset($data['thumb']) && $data['thumb'] != '') {
-    $thumb = $data['thumb'];
+if (isset($data['thumb']) && $data['thumb'] != '' ) {
+    $thumb = isset($data['thumb']) ? $data['thumb']: '';
     $type = isset($data['type']) ? $data['type'] : '';
     $size = isset($data['size']) ? $data['size'] : '';
     $align = isset($data['align']) ? $data['align'] : '';
-    Image::thumbFly($thumb, $type, $size, $align);
+} elseif( isset($_GET['thumb']) && $_GET['thumb'] != '') {
+    $thumb = isset($_GET['thumb'])  ? $_GET['thumb']: '';
+    $type = isset($_GET['type'])  ? $_GET['type'] :'';
+    $size = isset($_GET['size'])  ? $_GET['size'] : '';
+    $align = isset($_GET['align'])  ? $_GET['align'] : '';
 }
+Image::thumbFly($thumb, $type, $size, $align);

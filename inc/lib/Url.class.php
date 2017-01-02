@@ -285,7 +285,7 @@ class Url
         switch (SMART_URL) {
             case true:
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
-                $url = Site::$url.$inFold.'ajax/'.$vars.'/?token='.TOKEN;
+                $url = Site::$url.$inFold.'ajax/'.$vars.'/'.TOKEN;
                 break;
 
             default:
@@ -342,11 +342,13 @@ class Url
     {
         // $vars = urlencode($vars);
         $vars = str_replace(Site::$url, '', $vars);
-        $type = ($type != '') ? 'type/'.$type.'/' : '';
-        $size = ($size != '') ? 'size/'.$size.'/' : '';
-        $align = ($align != '') ? 'align/'.$align.'/' : '';
+
         switch (SMART_URL) {
             case true:
+                $type = ($type != '') ? 'type/'.$type.'/' : '';
+                $size = ($size != '') ? 'size/'.$size.'/' : '';
+                $align = ($align != '') ? 'align/'.$align.'/' : '';
+
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 $url = Site::$url.$inFold.'thumb/'.$type.$size.$align.$vars;
                 break;

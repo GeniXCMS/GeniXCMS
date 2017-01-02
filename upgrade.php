@@ -334,15 +334,6 @@ echo '
 <button name="004-patch" class="btn btn-success"><i class="fa fa-upload"></i> Upgrade from v0.0.4-patch</button>
 </div>
 </form>
-
-
-
-
-
-
-
-
-
 ';
 
 echo '</div>';

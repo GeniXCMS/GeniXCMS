@@ -72,24 +72,26 @@ if (isset($_POST['login'])) {
                     $g = $v->group;
                 }
                 //echo $p;
-                if ($p == $pass) {
-                    // session_regenerate_id();
-                    $vars = array(
-                                'username' => $username,
-                                'loggedin' => true,
-                                'group' => $g,
-                            );
-                    Session::set_session($vars);
-                    /*
-                    $_SESSION['username'] = $_POST['username'];
-                    $_SESSION['login'] = "true";
-                    $_SESSION['group'] = $group;
-                    */
-                    //print_r($_SESSION);
-                    $alertSuccess = MSG_USER_LOGGED_IN;
-                    echo Hooks::run('user_login_action');
-                } elseif ($p != $pass) {
-                    $alertDanger[] = PASS_NOT_MATCH;
+                if (isset($p)) {
+                    if ($p == $pass) {
+                        // session_regenerate_id();
+                        $vars = array(
+                                    'username' => $username,
+                                    'loggedin' => true,
+                                    'group' => $g,
+                                );
+                        Session::set_session($vars);
+                        /*
+                        $_SESSION['username'] = $_POST['username'];
+                        $_SESSION['login'] = "true";
+                        $_SESSION['group'] = $group;
+                        */
+                        //print_r($_SESSION);
+                        $alertSuccess = MSG_USER_LOGGED_IN;
+                        echo Hooks::run('user_login_action');
+                    } elseif ($p != $pass) {
+                        $alertDanger[] = PASS_NOT_MATCH;
+                    }
                 }
             } else {
                 if ($usr[0]->activation != '') {

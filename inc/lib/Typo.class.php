@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * Typo Class.
  *
- * This class will proccess text modifier, including sanitizing, slug, strip
+ * This class will process text modifier, including sanitizing, slug, strip
  * tags, create random characters.
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>

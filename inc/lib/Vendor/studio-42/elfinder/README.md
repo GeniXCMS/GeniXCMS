@@ -13,7 +13,7 @@ elFinder is an open-source file manager for web, written in JavaScript using
 jQuery UI. Creation is inspired by simplicity and convenience of Finder program
 used in Mac OS X operating system.
 
-[![Download now!](http://studio-42.github.io/elFinder/images/download-icon.png)](https://github.com/Studio-42/elFinder/releases)
+[![Download now!](http://studio-42.github.io/elFinder/images/download-icon.png)](https://github.com/Studio-42/elFinder/releases/latest)
 [![Packagist License](https://poser.pugx.org/studio-42/elfinder/license.png)](http://choosealicense.com/licenses/bsd-3-clause/)
 [![Latest Stable Version](https://poser.pugx.org/studio-42/elfinder/version.png)](https://packagist.org/packages/studio-42/elfinder)
 [![Total Downloads](https://poser.pugx.org/studio-42/elfinder/d/total.png)](https://packagist.org/packages/studio-42/elfinder)
@@ -76,7 +76,7 @@ Features
      * [Normalizer](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Normalizer/plugin.php) : UTF-8 Normalizer of file-name and file-path etc.
      * [Sanitizer](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Sanitizer/plugin.php) : Sanitizer of file-name and file-path etc.
      * [Watermark](https://github.com/Studio-42/elFinder/blob/2.1-src/php/plugins/Watermark/plugin.php) : Print watermark on file upload.
- * Folder upload with Chrome
+ * Folder upload with Chrome, Firefox and Edge
  * Chunked file upload
  * Upload directly to the folder
  * Upload form URL (or list)
@@ -97,8 +97,8 @@ Requirements
 **However, we recommend newest version.**
 
 ### Client
- * Modern browser. elFinder was tested in Firefox 12, Internet Explorer 8+,
-   Safari 6, Opera 12 and Chrome 19
+ * Modern browser. elFinder was tested in Internet Explorer 8
+   and newest Firefox, Chrome, IE, Edge and Opera
 
 ### Server
  * Any web server
@@ -127,7 +127,7 @@ Installation
 Downloads
 ------------
 **Stable releases** ([Changelog](https://github.com/Studio-42/elFinder/blob/master/Changelog))
- + [elFinder 2.1.14](https://github.com/Studio-42/elFinder/archive/2.1.14.zip)
+ + [elFinder 2.1.19](https://github.com/Studio-42/elFinder/archive/2.1.19.zip)
  + [elFinder 2.0.7](https://github.com/Studio-42/elFinder/archive/2.0.7.zip)
 
 **Nightly builds**
@@ -137,12 +137,8 @@ Downloads
 Demo sites
 ------------
 **2.1.x Nightly**
- + http://studio-42.github.io/elFinder/ (with CORS)
- + http://hypweb.net/elFinder-nightly/demo/2.1/
-
-**2.0**
- + http://elfinder.org/ (rc1)
- + http://hypweb.net/elFinder-nightly/demo/2.0/ (2.0.x Nightly)
+ + https://studio-42.github.io/elFinder/ (with CORS)
+ + https://hypweb.net/elFinder-nightly/demo/2.1/
 
 FAQs
 ------------
@@ -183,6 +179,7 @@ You can create or modify the language file to use translation tool. Please refer
  * [lokothodida/elfinder-theme-moono](https://github.com/lokothodida/elfinder-theme-moono)
  * [lokothodida/elfinder-theme-windows-10](https://github.com/lokothodida/elfinder-theme-windows-10)
  * [StudioJunkyard/elfinder-boostrap-theme](https://github.com/StudioJunkyard/LibreICONS/tree/master/themes/elFinder)
+ * [RobiNN1/elFinder-Material-Theme](https://github.com/RobiNN1/elFinder-Material-Theme)
 
 Support
 -------
@@ -209,29 +206,4 @@ License
 
 elFinder is issued under a 3-clauses BSD license.
 
-<pre>
-Copyright (c) 2009-2016, Studio 42
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of the Studio 42 Ltd. nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL "STUDIO 42" BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</pre>
+ * [License terms](https://github.com/Studio-42/elFinder/blob/master/LICENSE.md)

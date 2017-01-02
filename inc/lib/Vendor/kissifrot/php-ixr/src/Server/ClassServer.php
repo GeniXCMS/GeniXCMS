@@ -23,19 +23,19 @@ class ClassServer extends Server
     private $_objects;
     private $_delim;
 
-    function __construct($delim = '.', $wait = false)
+    public function __construct($delim = '.', $wait = false)
     {
         parent::__construct([], false, $wait);
         $this->_delim = $delim;
         $this->_objects = [];
     }
 
-    function addMethod($rpcName, $functionName)
+    public function addMethod($rpcName, $functionName)
     {
         $this->callbacks[$rpcName] = $functionName;
     }
 
-    function registerObject($object, $methods, $prefix = null)
+    public function registerObject($object, $methods, $prefix = null)
     {
         if (is_null($prefix)) {
             $prefix = get_class($object);
@@ -54,7 +54,7 @@ class ClassServer extends Server
         }
     }
 
-    function call($methodname, $args)
+    public function call($methodname, $args)
     {
         if (!$this->hasMethod($methodname)) {
             return new Error(-32601, 'server error. requested method ' . $methodname . ' does not exist.');

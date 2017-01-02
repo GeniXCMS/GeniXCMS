@@ -23,7 +23,7 @@ $data = Router::scrap($param);
 $data['p_type'] = 'cat';
 
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
-$cat = (SMART_URL) ? $data['cat'] : Db::escape(Typo::cleanX(Typo::strip($_GET['cat'])));
+$cat = (SMART_URL) ? $data['cat'] : Typo::cleanX(Typo::strip($_GET['cat']));
 $type = Categories::type($cat);
 $data['max'] = Options::v('post_perpage');
 

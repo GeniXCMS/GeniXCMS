@@ -73,7 +73,8 @@ define('DB_DRIVER', 'mysqli');
 define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
 define('GX_URL_PREFIX', '.html');
 
-
+define('ADMIN_DIR', 'gxadmin');
+define('USE_MEMCACHED', false);
 define('SITE_ID', '".Typo::getToken(20)."');
 
 
@@ -294,7 +295,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
         $domain = Session::val('sitedomain');
         $sitename = Session::val('sitename');
         $slogan = Session::val('siteslogan');
-        $logo = $url.'assets/images/genixcms-logo-sign-small.png';
+        $logo = 'assets/images/genixcms-logo-sign-small.png';
 
         $options = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
             (null, 'sitename', '{$sitename}'),

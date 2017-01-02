@@ -57,13 +57,6 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	protected $tmp = '';
 	
 	/**
-	 * Net mount key
-	 *
-	 * @var string
-	 **/
-	public $netMountKey = '';
-	
-	/**
 	 * Dropbox.com uid
 	 *
 	 * @var string
@@ -196,7 +189,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 						}
 					}
 					if (strpos($options['url'], 'http') !== 0 ) {
-						$options['url'] = $this->getConnectorUrl();
+						$options['url'] = elFinder::getConnectorUrl();
 					}
 					$callback  = $options['url']
 					           . '?cmd=netmount&protocol=dropbox&host=dropbox.com&user=init&pass=return&node='.$options['id'].$cdata;
@@ -264,21 +257,6 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * Get script url
-	 * 
-	 * @return string full URL
-	 * @author Naoki Sawada
-	 */
-	private function getConnectorUrl() {
-		$url  = ((isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')? 'https://' : 'http://')
-		       . $_SERVER['SERVER_NAME']                                              // host
-		      . ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT'])  // port
-		       . $_SERVER['REQUEST_URI'];                                             // path & query
-		list($url) = explode('?', $url);
-		return $url;
 	}
 	
 	/*********************************************************************/
@@ -493,7 +471,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 * @return array dropbox metadata
 	 */
 	private function getDBdat($path) {
-		if ($res = $this->query('select dat from '.$this->DB_TableName.' where path='.$this->DB->quote(strtolower($this->_dirname($path))).' and fname='.$this->DB->quote(strtolower(basename($path))).' limit 1')) {
+		if ($res = $this->query('select dat from '.$this->DB_TableName.' where path='.$this->DB->quote(strtolower($this->_dirname($path))).' and fname='.$this->DB->quote(strtolower($this->_basename($path))).' limit 1')) {
 			return unserialize($res[0]);
 		} else {
 			return array();
@@ -510,7 +488,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	private function updateDBdat($path, $dat) {
 		return $this->query('update '.$this->DB_TableName.' set dat='.$this->DB->quote(serialize($dat))
 				. ', isdir=' . ($dat['is_dir']? 1 : 0)
-				. ' where path='.$this->DB->quote(strtolower($this->_dirname($path))).' and fname='.$this->DB->quote(strtolower(basename($path))));
+				. ' where path='.$this->DB->quote(strtolower($this->_dirname($path))).' and fname='.$this->DB->quote(strtolower($this->_basename($path))));
 	}
 	/*********************************************************************/
 	/*                               FS API                              */
@@ -576,7 +554,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 					$pkey = strtolower($this->_dirname($key));
 					
 					$path = $this->DB->quote($pkey);
-					$fname = $this->DB->quote(strtolower(basename($key)));
+					$fname = $this->DB->quote(strtolower($this->_basename($key)));
 					$where = 'where path='.$path.' and fname='.$fname;
 					
 					if (empty($entry[1])) {
@@ -610,7 +588,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 						$_update = true;
 					}
 					if ($_update) {
-						$pwhere = 'where path='.$this->DB->quote(strtolower($this->_dirname($_p))).' and fname='.$this->DB->quote(strtolower(basename($_p)));
+						$pwhere = 'where path='.$this->DB->quote(strtolower($this->_dirname($_p))).' and fname='.$this->DB->quote(strtolower($this->_basename($_p)));
 						$this->DB->exec('update '.$this->DB_TableName.' set dat='.$this->DB->quote(serialize($praw)).' '.$pwhere);
 					}
 				}
@@ -641,7 +619,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 		$stat = array();
 
 		$stat['rev']   = isset($raw['rev'])? $raw['rev'] : 'root';
-		$stat['name']  = basename($raw['path']);
+		$stat['name']  = $this->_basename($raw['path']);
 		$stat['mime']  = $raw['is_dir']? 'directory' : $raw['mime_type'];
 		$stat['size']  = $stat['mime'] == 'directory' ? 0 : $raw['bytes'];
 		$stat['ts']    = isset($raw['client_mtime'])? strtotime($raw['client_mtime']) :
@@ -671,6 +649,8 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 **/
 	protected function cacheDir($path) {
 		$this->dirsCache[$path] = array();
+		$hasDir = false;
+		
 		$res = $this->query('select dat from '.$this->DB_TableName.' where path='.$this->DB->quote(strtolower($path)));
 		
 		if ($res) {
@@ -679,11 +659,19 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 				if ($stat = $this->parseRaw($raw)) {
 					$stat = $this->updateCache($raw['path'], $stat);
 					if (empty($stat['hidden']) && $path !== $raw['path']) {
+						if (! $hasDir && $stat['mime'] === 'directory') {
+							$hasDir = true;
+						}
 						$this->dirsCache[$path][] = $raw['path'];
 					}
 				}
 			}
 		}
+		
+		if (isset($this->sessionCache['subdirs'])) {
+			$this->sessionCache['subdirs'][$path] = $hasDir;
+		}
+		
 		return $this->dirsCache[$path];
 	}
 
@@ -960,9 +948,9 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 					$res[] = $key . ': ' . $val;
 				}
 				$res = join("\r\n", $res);
-			} catch( HTTP_Request2_Exception $e ) {
+			} catch( HTTP_Request2_Exception $e ){
 				$res = '';
-			} catch (Exception $e) {
+			} catch (Exception $e){
 				$res = '';
 			}
 		
@@ -980,7 +968,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _dirname($path) {
-		return $this->_normpath(dirname($path));
+		return $this->_normpath(substr($path, 0, strrpos($path, '/')));
 	}
 
 	/**
@@ -991,7 +979,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _basename($path) {
-		return basename($path);
+		return substr($path, strrpos($path, '/') + 1);
 	}
 
 	/**
@@ -1168,7 +1156,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
  				fputs($fp, "GET {$url['path']} HTTP/1.0\r\n");
  				fputs($fp, "Host: {$url['host']}\r\n");
  				fputs($fp, "\r\n");
- 				while(trim(fgets($fp)) !== '') {};
+ 				while(trim(fgets($fp)) !== ''){};
  				return $fp;
 			} catch (Dropbox_Exception $e) {
 				return false;

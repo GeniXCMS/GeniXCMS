@@ -56,13 +56,6 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	protected $tmp = '';
 	
 	/**
-	 * Net mount key
-	 *
-	 * @var string
-	 **/
-	public $netMountKey = '';
-	
-	/**
 	 * FTP command `MLST` support
 	 * 
 	 * @var bool
@@ -440,8 +433,9 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	 * @return void
 	 * @author Dmitry Levashov
 	 **/
- 	protected function cacheDir($path) {
- 		$this->dirsCache[$path] = array();
+	protected function cacheDir($path) {
+		$this->dirsCache[$path] = array();
+		$hasDir = false;
 
 		$list = array();
 		$encPath = $this->convEncIn($path);
@@ -461,6 +455,9 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			} else {
 				$stat = $this->updateCache($p, $stat);
 				if (empty($stat['hidden'])) {
+					if (! $hasDir && $stat['mime'] === 'directory') {
+						$hasDir = true;
+					}
 					$this->dirsCache[$path][] = $p;
 				}
 			}
@@ -496,10 +493,16 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$this->cacheDirTarget = $cacheDirTarget;
 			$stat = $this->updateCache($p, $stat);
 			if (empty($stat['hidden'])) {
+				if (! $hasDir && $stat['mime'] === 'directory') {
+					$hasDir = true;
+				}
 				$this->dirsCache[$path][] = $p;
 			}
 		}
-
+		
+		if (isset($this->sessionCache['subdirs'])) {
+			$this->sessionCache['subdirs'][$path] = $hasDir;
+		}
 	}
 
 	/**
@@ -695,27 +698,46 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		} else {
 			$this->convEncIn();
 		}
-		if (!$this->MLSTsupprt) {
-			if ($path == $this->root && ($path === $this->systemRoot || ! $this->isMyReload())) {
+		if (! $this->MLSTsupprt) {
+			if ($path === $this->root) {
 				$res = array(
 					'name' => $this->root,
 					'mime' => 'directory',
 					'dirs' => $this->_subdirs($path)
 				);
 				if ($this->isMyReload()) {
-				 	$ts = 0;
+					$ts = 0;
 					foreach (ftp_rawlist($this->connect, $path) as $str) {
 						if (($stat = $this->parseRaw($str, $path))) {
 							$ts = max($ts, $stat['ts']);
 						}
-			 		}
+					}
 					if ($ts) {
 						$res['ts'] = $ts;
 					}
 				}
 				return $res;
 			}
-			$this->cacheDir($this->convEncOut($this->_dirname($path)));
+			// stat of system root
+			if ($path === $this->separator) {
+				$res = array(
+					'name' => $this->separator,
+					'mime' => 'directory',
+					'dirs' => 1
+				);
+				$this->cache[$outPath] = $res;
+				return $res;
+			}
+			$parentSubdirs = null;
+			$outParent = $this->convEncOut($this->_dirname($path));
+			if (isset($this->sessionCache['subdirs']) && isset($this->sessionCache['subdirs'][$outParent])) {
+				$parentSubdirs = $this->sessionCache['subdirs'][$outParent];
+			}
+			$this->cacheDir($outParent);
+			if ($parentSubdirs) {
+				$this->sessionCache['subdirs'][$outParent] = $parentSubdirs;
+			}
+			
 			$stat = $this->convEncIn(isset($this->cache[$outPath])? $this->cache[$outPath] : array());
 			if (! $this->mounted) {
 				// dispose incomplete cache made by calling `stat` by 'startPath' option
@@ -1327,7 +1349,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		}
 
 		//cleanup
-		if (!$this->rmdirRecursive($tmpDir)) {
+		if(!$this->rmdirRecursive($tmpDir)) {
 			return false;
 		}
 
@@ -1463,7 +1485,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$success = true;
 			foreach (array_reverse(elFinderVolumeFTP::listFilesInDirectory($dirPath, false)) as $path) {
 				$path = $dirPath . DIRECTORY_SEPARATOR . $path;
-				if (is_link($path)) {
+				if(is_link($path)) {
 					unlink($path);
 				} else if (is_dir($path)) {
 					$success = rmdir($path);
@@ -1474,11 +1496,11 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 					break;
 				}
 			}
-			if ($success) {
+			if($success) {
 				$success = rmdir($dirPath);
 			}
 		}
-		if (!$success) {
+		if(!$success) {
 			$this->setError(elFinder::ERROR_RM, $dirPath);
 			return false;
 		}
@@ -1505,22 +1527,22 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		$excludes = array(".","..");
 		$result = array();
 		$files = self::localScandir($dir);
-		if (!$files) {
+		if(!$files) {
 			return array();
 		}
 		foreach($files as $file) {
-			if (!in_array($file, $excludes)) {
+			if(!in_array($file, $excludes)) {
 				$path = $dir.DIRECTORY_SEPARATOR.$file;
-				if (is_link($path)) {
-					if ($omitSymlinks) {
+				if(is_link($path)) {
+					if($omitSymlinks) {
 						continue;
 					} else {
 						$result[] = $prefix.$file;
 					}
-				} else if (is_dir($path)) {
+				} else if(is_dir($path)) {
 					$result[] = $prefix.$file.DIRECTORY_SEPARATOR;
 					$subs = elFinderVolumeFTP::listFilesInDirectory($path, $omitSymlinks, $prefix.$file.DIRECTORY_SEPARATOR);
-					if ($subs) {
+					if($subs) {
 						$result = array_merge($result, $subs);
 					}
 					

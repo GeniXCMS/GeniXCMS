@@ -90,13 +90,11 @@ class Site
                     $canonical = Url::tag($data['tag']);
                 } elseif ($pg == 'index') {
                     $canonical = self::$url;
-                } elseif ($pg == 'index') {
-                    $canonical = self::$url;
                 } else {
-                    $canonical = '';//Url::$data['p_type']($data['id'])
+                    $canonical = '//'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];//Url::$data['p_type']($data['id'])
                 }
             } else {
-                $canonical = '';
+                $canonical = '//'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             }
         } else {
             $cont_title = '';
@@ -159,7 +157,7 @@ class Site
     {
         // check which logo is used, logourl or uploaded files.
         if (Options::v('is_logourl') == 'on' && Options::v('logourl') != '') {
-            $logo = '<img src="'.self::$url.Options::v('logourl')."\"
+            $logo = '<img src="'.Options::v('logourl')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         } elseif (Options::v('is_logourl') == 'off' && Options::v('logo') != '') {
             $logo = '<img src="'.self::$url.Options::v('logo')."\"

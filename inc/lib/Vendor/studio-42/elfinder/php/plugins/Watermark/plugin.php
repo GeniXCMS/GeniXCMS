@@ -89,7 +89,7 @@ class elFinderPluginWatermark {
 		}
 		
 		// check Animation Gif
-		if (elFinder::isAnimationGif ($src)) {
+		if (elFinder::isAnimationGif($src)) {
 			return false;
 		}
 		
@@ -120,7 +120,7 @@ class elFinderPluginWatermark {
 			IMAGETYPE_BMP  => IMG_WBMP,
 			IMAGETYPE_WBMP => IMG_WBMP
 		);
-		if (! ($opts['targetType'] & $imgTypes[$srcImgInfo[2]])) {
+		if (! isset($imgTypes[$srcImgInfo[2]]) || ! ($opts['targetType'] & $imgTypes[$srcImgInfo[2]])) {
 			return false;
 		}
 		
@@ -186,7 +186,7 @@ class elFinderPluginWatermark {
 		switch ($watermarkImgInfo['mime']) {
 			case 'image/gif':
 				if (imagetypes() & IMG_GIF) {
-					$oWatermarkImg = imagecreatefromgif ($watermark);
+					$oWatermarkImg = imagecreatefromgif($watermark);
 				} else {
 					$ermsg = 'GIF images are not supported';
 				}
@@ -222,7 +222,7 @@ class elFinderPluginWatermark {
 			switch ($srcImgInfo['mime']) {
 				case 'image/gif':
 					if (imagetypes() & IMG_GIF) {
-						$oSrcImg = imagecreatefromgif ($src);
+						$oSrcImg = imagecreatefromgif($src);
 					} else {
 						$ermsg = 'GIF images are not supported';
 					}
@@ -274,7 +274,7 @@ class elFinderPluginWatermark {
 		
 		switch ($srcImgInfo['mime']) {
 			case 'image/gif':
-				imagegif ($oSrcImg, $src);
+				imagegif($oSrcImg, $src);
 				break;
 			case 'image/jpeg':
 				imagejpeg($oSrcImg, $src, $quality);

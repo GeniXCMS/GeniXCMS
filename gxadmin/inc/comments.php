@@ -143,7 +143,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
             } else {
                 echo '
                     <tr>
-                        <td>
+                        <td colspan="8">
                         '.NO_POST_FOUND.'
                         </td>
                     </tr>';

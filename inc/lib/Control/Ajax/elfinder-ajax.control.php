@@ -1,16 +1,19 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-
-if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
-    include_once Vendor::path('studio-42/elfinder').'php/elFinderConnector.class.php';
-    include_once Vendor::path('studio-42/elfinder').'php/elFinder.class.php';
-    include_once Vendor::path('studio-42/elfinder').'php/elFinderVolumeDriver.class.php';
-    include_once Vendor::path('studio-42/elfinder').'php/elFinderVolumeLocalFileSystem.class.php';
+$data = Router::scrap($param);
+//print_r($data);
+$token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+if (isset($token) && Token::isExist($token) ) {
+    $vendorPath = Vendor::path('studio-42/elfinder');
+    include_once $vendorPath.'php/elFinderConnector.class.php';
+    include_once $vendorPath.'php/elFinder.class.php';
+    include_once $vendorPath.'php/elFinderVolumeDriver.class.php';
+    include_once $vendorPath.'php/elFinderVolumeLocalFileSystem.class.php';
     // Required for MySQL storage connector
-    // include_once Vendor::path('studio-42/elfinder').'php/elFinderVolumeMySQL.class.php';
+    // include_once $vendorPath.'php/elFinderVolumeMySQL.class.php';
     // Required for FTP connector support
-    // include_once Vendor::path('studio-42/elfinder').'php/elFinderVolumeFTP.class.php';
+    // include_once $vendorPath.'php/elFinderVolumeFTP.class.php';
 
     /**
      * Simple function to demonstrate how to control file access using "accessControl" callback.
@@ -101,5 +104,7 @@ if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
     // run elFinder
     $connector = new elFinderConnector(new elFinder($opts));
     $connector->run();
+}else{
+    echo "{error: ['Token Not Exist']}";
 }
 // echo "TOKEN EXIST";
