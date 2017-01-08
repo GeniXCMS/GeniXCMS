@@ -46,30 +46,34 @@ class Router
     public static function map()
     {
         self::$_route = array(
-        'thumb/type/(.*)/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '4', 'type' => '1', 'size' => '2', 'align' => '3'),
-        'thumb/type/(.*)/size/([0-9]+)/(.*)' => array('thumb' => '3', 'type' => '1', 'size' => '2'),
-        'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '3', 'size' => '1', 'align' => '2'),
-        'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => '1', 'paging' => '3'),
-        'category/([0-9]+)/(.*)/' => array('cat' => '1'),
-        'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
-        'tag/(.*)/' => array('tag' => '1'),
-        '([a-z]+)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
-        // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
-        'mod/(.*)'.GX_URL_PREFIX => array('mod' => '1'),
-        // '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
-        'paging/([0-9]+)/' => array('default', 'paging' => '1'),
-        'error/([0-9]+)/' => array('error' => '1'),
-        '([a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
-        '(.*)'.GX_URL_PREFIX => array('post' => '1'),
-        'ajax/(.*)/(.*)' => array('ajax' => '1', 'token' => '2'),
-        'thumb/size/([0-9]+)/(.*)' => array('thumb' => '2', 'size' => '1'),
-        'thumb/type/(.*)/(.*)' => array('thumb' => '2', 'type' => '1'),
-        'thumb/align/(.*)/(.*)' => array('thumb' => '2', 'align' => '1'),
-        'thumb/(.*)' => array('thumb' => '1'),
-        'error/' => array('error'),
-        'sitemap/' => array('sitemap'),
-        'rss/' => array('rss'),
-        '/' => array('default'),
+            'thumb/type/(.*)/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '4', 'type' => '1', 'size' => '2', 'align' => '3'),
+            'thumb/type/(.*)/size/([0-9]+)/(.*)' => array('thumb' => '3', 'type' => '1', 'size' => '2'),
+            'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '3', 'size' => '1', 'align' => '2'),
+            'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => '1', 'paging' => '3'),
+            'category/([0-9]+)/(.*)/' => array('cat' => '1'),
+            'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
+            'tag/(.*)/' => array('tag' => '1'),
+            '([a-z]+)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
+            // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
+            'mod/(.*)'.GX_URL_PREFIX => array('mod' => '1'),
+            // '/(.+)'.GX_URL_PREFIX => array('page' => '1'),
+            'paging/([0-9]+)/' => array('default', 'paging' => '1'),
+            'error/([0-9]+)/' => array('error' => '1'),
+            '([a-z]+)/(.*)'.GX_URL_PREFIX => array('post' => '2', 'lang' => '1'),
+            '(.*)'.GX_URL_PREFIX => array('post' => '1'),
+            'ajax/(.*)/(.*)' => array('ajax' => '1', 'token' => '2'),
+            'thumb/size/([0-9]+)/(.*)' => array('thumb' => '2', 'size' => '1'),
+            'thumb/type/(.*)/(.*)' => array('thumb' => '2', 'type' => '1'),
+            'thumb/align/(.*)/(.*)' => array('thumb' => '2', 'align' => '1'),
+            'thumb/(.*)' => array('thumb' => '1'),
+            'author/(.*)/(.*)/paging/([0-9]+)/' => array('author' => '1', 'type' => '2', 'paging' => '3'),
+            'author/(.*)/paging/([0-9]+)/' => array('author' => '1', 'paging' => '2'),
+            'author/(.*)/(.*)/' => array('author' => '1', 'type' => '2'),
+            'author/(.*)/' => array('author' => '1'),
+            'error/' => array('error'),
+            'sitemap/' => array('sitemap'),
+            'rss/' => array('rss'),
+            '/' => array('default'),
         );
 
         return self::$_route;
@@ -149,7 +153,7 @@ class Router
     public static function extract($var, $m)
     {
         // print_r($m);
-        $va = [];
+        $va = array();
         foreach ($var as $k2 => $v2) {
             // print_r($k2);
             if (!is_int($k2)) {

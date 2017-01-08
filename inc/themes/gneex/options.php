@@ -75,7 +75,7 @@ if (Gneex::checkDB()) {
     $opt = json_decode($opt, true);
 
     if (is_array($opt)) {
-        $o = [];
+        $o = array();
         foreach ($opt as $k => $v) {
             // $o[$k] = urldecode($v);
             $o[$k] = $v;
@@ -147,10 +147,18 @@ if (Gneex::checkDB()) {
                                         <select name="front_layout" class="form-control" id="frontpageSelector">
                                             <option value="blog" <?=($o['front_layout'] == 'blog') ? 'selected' : ''; ?>>Blog</option>
                                             <option value="magazine" <?=($o['front_layout'] == 'magazine') ? 'selected' : ''; ?>>Magazine</option>
+                                            <option value="fullwidth" <?=($o['front_layout'] == 'fullwidth') ? 'selected' : ''; ?>>Full Width</option>
                                         </select>
                                         <small>choose the layout style for the frontpage</small>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="fullwidth">
+                            <div class="col-md-12">
+                                <select name="fullwidth_page" class="form-control">
+                                    <?=Gneex::optionPost('page', $o['fullwidth_page']);?>
+                                </select>
                             </div>
                         </div>
                         <div id="magazine">

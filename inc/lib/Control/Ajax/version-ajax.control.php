@@ -15,7 +15,9 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */
 
-if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
+$data = Router::scrap($param);
+$token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+if (isset($token) && Token::isExist($token) ) {
     if (User::access(2)) {
         $v = trim(System::latestVersion());
 

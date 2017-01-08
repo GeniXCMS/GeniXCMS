@@ -29,7 +29,7 @@ if (User::access(0)) {
             // $opt = utf8_encode($opt);
             $opt = json_decode($opt, true);
             if (is_array($opt)) {
-                $o = [];
+                $o = array();
                 foreach ($opt as $k => $v) {
                     $o[$k] = urldecode($v);
                 }

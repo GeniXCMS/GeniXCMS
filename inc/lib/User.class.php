@@ -217,11 +217,11 @@ class User
         return $pass;
     }
 
-    public static function isExist($user)
+    public static function isExist($user, $except='')
     {
-        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-            $id = Typo::int($_GET['id']);
-            $where = "AND `id` != '{$id}' ";
+        if ($except != '') {
+            $id = Typo::int($except);
+            $where = "AND `userid` != '{$id}' ";
         } else {
             $where = '';
         }
@@ -230,9 +230,9 @@ class User
         $usr = Db::result($sql);
         $n = Db::$num_rows;
         if ($n > 0) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 

@@ -222,7 +222,9 @@ if (isset($data['post'])) {
                         <div id="myGrid"><?=$content; ?></div>
                         </div>
                         <?php
+
                     }
+                    Hooks::run('page_param_form', $data);
                 ?>
                 </div>
                 <div class="col-sm-4">

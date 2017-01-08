@@ -7,8 +7,11 @@
     </section>
     <section id="blog">
         <div class="container">
-            
-                <div class="col-md-8">
+            <?php
+            $bar = Posts::getParam('sidebar', $data['posts'][0]->id);
+            $cols = ($bar == 'yes'|| $bar == '') ? '8': '12';
+            ?>
+                <div class="col-md-<?=$cols;?>">
                     <div class=" blog-lists clearfix">
                     <?php
                     if (Gneex::opt('adsense') != '') {
@@ -25,9 +28,10 @@
                                 <article class="blog-post col-md-12">
                                     <h2><a href="'.Url::post($p->id)."\">$p->title</a></h2>
                                     
-                                    <span class=\"meta\">posted in <a href=\"".Url::cat($p->cat).'">'.Categories::name($p->cat).'</a>, at '.Date::format($p->date).' by '.$p->author.'</span>
+                                    <span class=\"meta\">posted in <a href=\"".Url::cat($p->cat).'">'.Categories::name($p->cat).'</a>, 
+                                    at '.Date::format($p->date).' by <a href="'.Url::author($p->author).'">'.$p->author.'</a></span>
                                     <hr />
-                                    '.Posts::content($p->content, $p->id).'<hr />';
+                                    <div class="content">'.Posts::content($p->content, $p->id).'</div><hr />';
                             if (Gneex::opt('adsense') != '') {
                                 echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                             }
@@ -52,7 +56,7 @@
                         
                     </div>
                 </div>
-                <?php Theme::theme('rightside', $data); ?>
+                <?php if($bar == 'yes'|| $bar == '') Theme::theme('rightside', $data); ?>
                 
 
         </div>

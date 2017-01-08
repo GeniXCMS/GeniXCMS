@@ -102,6 +102,12 @@ if (User::access(2)) {
                         $tags = Typo::cleanX($_POST['tags']);
                         Posts::addParam('tags', $tags, $post_id);
                         Tags::add($tags);
+                        if (isset($_POST['param'])){
+                            foreach ($_POST['param'] as $k => $v) {
+                                Posts::addParam($k, $v, $post_id);
+                            }
+                        }
+
 
                         $data['alertSuccess'][] = POST." {$title} ".MSG_POST_ADDED;
                         Hooks::run('post_submit_add_action', $_POST);
@@ -205,8 +211,17 @@ if (User::access(2)) {
                         } else {
                             Posts::editParam('tags', $tags, $_GET['id']);
                         }
-
                         Tags::add($tags);
+
+                        if (isset($_POST['param'])){
+                            foreach ($_POST['param'] as $k => $v) {
+                                if (!Posts::existParam($k, $_GET['id'])) {
+                                    Posts::addParam($k, $v, $_GET['id']);
+                                } else {
+                                    Posts::editParam($k, $v, $_GET['id']);
+                                }
+                            }
+                        }
 
                         $data['alertSuccess'][] = POST." {$title} ".MSG_POST_UPDATED;
                         Hooks::run('post_submit_edit_action', $_POST);

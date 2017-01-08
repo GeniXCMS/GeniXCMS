@@ -67,13 +67,19 @@ class Categories
             if (isset($vars['parent'])) {
                 $where .= " `parent` = '".$vars['parent']."' ";
             } else {
-                $where .= '1 ';
-            }
-            if (isset($vars['type'])) {
-                $where .= " AND `type` = '".$vars['type']."' ";
-            } else {
                 $where .= '';
             }
+            if (isset($vars['type'])) {
+                if ($vars['type'] == 'tag') {
+                    $where .= " `type` = '{$vars['type']}' AND ";
+                } else {
+                    $where .= " `type` = '{$vars['type']}' AND `type` != 'tag' AND ";
+                }
+
+            } else {
+                $where .= " `type` != 'tag' AND ";
+            }
+            $where .= '1 ';
             $order_by = 'ORDER BY ';
             if (isset($vars['order_by'])) {
                 $order_by .= ' '.$vars['order_by'].' ';
@@ -129,7 +135,14 @@ class Categories
                 $where .= " `parent` = '{$vars['parent']}' AND ";
             }
             if (isset($vars['type'])) {
-                $where .= " `type` = '{$vars['type']}' AND ";
+                if ($vars['type'] == 'tag') {
+                    $where .= " `type` = '{$vars['type']}' AND ";
+                } else {
+                    $where .= " `type` = '{$vars['type']}' AND `type` != 'tag' AND ";
+                }
+
+            } else {
+                $where .= " `type` != 'tag' AND ";
             }
             $where .= '1 ';
             $order_by = 'ORDER BY ';
@@ -330,7 +343,7 @@ class Categories
     public static function exist($cat)
     {
         $cat = Typo::int($cat);
-        $sql = "SELECT `id` FROM `cat` WHERE `id` = '{$cat}' AND `type` = 'post'";
+        $sql = "SELECT `id` FROM `cat` WHERE `id` = '{$cat}'";
         $q = Db::result($sql);
         // echo Db::$num_rows;
         if (Db::$num_rows > 0) {

@@ -367,6 +367,24 @@ class Url
 
         return Site::$url.'inc/themes/'.$theme.'/';
     }
+
+    public static function author($vars, $type='')
+    {
+        switch (SMART_URL) {
+            case true:
+                $type = ($type != '') ? $type.'/': '';
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'author/'.$vars.'/'.$type;
+                break;
+
+            default:
+                $type = ($type != '') ? '&type='.$type: '';
+                $url = Site::$url."?author={$vars}$type";
+                break;
+        }
+
+        return $url;
+    }
 }
 
 /* End of file Url.class.php */

@@ -19,6 +19,8 @@ class Gneex
 
             Hooks::attach('header_load_meta', array('Gneex', 'loadCSS'));
             Hooks::attach('admin_footer_action', array('Gneex', 'loadAdminAsset'));
+
+            Hooks::attach('post_param_form', array('Gneex', 'postParam'));
         }
     }
 
@@ -35,7 +37,7 @@ class Gneex
     {
         $opt = Options::get('gneex_options');
         $opt = json_decode($opt, true);
-        $o = [];
+        $o = array();
         if (is_array($opt)) {
             foreach ($opt as $k => $v) {
                 $o[$k] = Typo::jsonDeFormat($v);
@@ -64,6 +66,19 @@ class Gneex
         $q = Db::result($sql);
 
         return $q[0]->content;
+    }
+
+    public static function optionPost($type, $post='')
+    {
+        $sql = "SELECT * FROM `posts` WHERE `type` = '{$type}' ORDER BY `title` ASC";
+        $q = Db::result($sql);
+        $opt = '<option></option>';
+        foreach ($q as $k => $v) {
+            $sel = ($post != '' && $post == $v->id) ? 'selected': '';
+            $opt .= "<option value='{$v->id}' {$sel}>{$v->title}</option>";
+        }
+
+        return $opt;
     }
 
     public static function featuredExist()
@@ -252,6 +267,7 @@ class Gneex
             $.viewMap = {
                 \'blog\' : $([]),
                 \'magazine\' : $(\'#magazine\'),
+                \'fullwidth\' : $(\'#fullwidth\'),
             };
             $.each($.viewMap, function () {
                 this.hide();
@@ -277,6 +293,25 @@ class Gneex
         </script>
         ';
         System::adminAsset(Site::minifyJS($js));
+    }
+
+    public static function postParam($data)
+    {
+//        print_r($data);
+        $bar = Posts::getParam('sidebar', $data[0]['post'][0]->id);
+//        echo $bar;
+        $yes = ($bar == 'yes') ? 'selected': '';
+        $no = ($bar == 'no') ? 'selected': '';
+        $form = '<div class="row">
+                <div class="col-sm-4">
+                    <label>Show/Hide Sidebar</label>
+                    <select name="param[sidebar]" class="form-control">
+                        <option value="yes" '.$yes.'>Show Sidebar</option>
+                        <option value="no" '.$no.'>Hide Sidebar</option>
+                    </select>
+                </div>
+                </div>';
+        echo $form;
     }
 }
 

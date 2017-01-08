@@ -465,7 +465,7 @@ class Posts
         return $title.' : '.$tag;
     }
 
-    public static function related($id, $num, $cat, $type = 'list')
+    public static function related($id, $num, $cat, $mode = 'list')
     {
         $id = Typo::int($id);
         if (self::existParam('tags', $id)) {
@@ -489,12 +489,13 @@ class Posts
                         WHERE (A.`cat` = '%d' %s)
                         AND A.`id` != '%d'
                         AND A.`status` = '1'
-                        AND A.`type` = 'post'
+                        AND A.`type` = '%s'
                         ORDER BY
                         RAND() LIMIT %d, %d",
                 $cat,
                 $where_tag,
                 $id,
+                $post_type,
                 0,
                 $num
             )
@@ -503,7 +504,7 @@ class Posts
             $related = 'No Related Post(s)';
         } else {
             $related = '';
-            if ($type == 'list') {
+            if ($mode == 'list') {
                 $related .= '<ul class="list-group related">';
                 foreach ($post as $p) {
                     if ($p->id != $id) {
@@ -513,11 +514,11 @@ class Posts
                     }
                 }
                 $related .= '</ul>';
-            } elseif ($type == 'box') {
+            } elseif ($mode == 'box') {
                 $related .= '<ul class="list-group related clearfix">';
                 foreach ($post as $p) {
                     if ($p->id != $id) {
-                        $title = (strlen($p->title) > 40) ? substr($p->title, 0, 38).'...' : $p->title;
+                        $title = (strlen($p->title) > 34) ? substr($p->title, 0, 34).'...' : $p->title;
                         $img = self::getImage(Typo::Xclean($p->content));
                         if ($img != '') {
                             $img = Url::thumb($img, 'square', 200);
@@ -525,7 +526,7 @@ class Posts
                             $img = Url::thumb('assets/images/noimage.png', '', 200);
                         }
                         $related .= '<li class="list-unstyled col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
-                        <img src="'.$img.'" class="img-responsive center-block">'.$title.'</a><br /><br /></li>';
+                        <img src="'.$img.'" class="img-responsive center-block">'.$title.'</a></li>';
                     } else {
                         $related .= '';
                     }

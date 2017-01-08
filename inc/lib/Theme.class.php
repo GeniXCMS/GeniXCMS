@@ -253,6 +253,13 @@ class Theme
 
         return $list;
     }
+
+    public static function title($mod)
+    {
+        $data = self::data($mod);
+
+        return $data['name'];
+    }
 }
 
 /* End of file Theme.class.php */

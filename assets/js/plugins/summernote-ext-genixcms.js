@@ -57,7 +57,7 @@
                     contents: '<i class="fa fa-list-alt"/> File Manager',
                     tooltip: 'elfinder',
                     click: function () {
-                        elfinderDialog();
+                        elfinderDialog($(this).closest('.note-editor').parent().children('.summernote'));
                     }
                 });
                 

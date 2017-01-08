@@ -20,9 +20,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (User::access(0)) {
     if (isset($_GET['view']) && $_GET['view'] == 'options') {
-        $data['sitetitle'] = THEMES;
+        $theme = Options::v('themes');
+        $data['sitetitle'] = Theme::title($theme);
         Theme::admin('header', $data);
-        Theme::options(Options::v('themes'));
+        Theme::options($theme);
         Theme::admin('footer');
     } else {
         if (isset($_POST['upload'])) {

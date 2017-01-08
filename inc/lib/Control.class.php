@@ -104,8 +104,8 @@ class Control
      */
     public static function frontend()
     {
-        $arr = ['ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
-                    'account', 'search', 'author', 'tag', 'thumb', 'default'];
+        $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
+                    'account', 'search', 'author', 'tag', 'thumb', 'default');
         if (SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                 (SMART_URL && isset($_GET)) ? self::route($arr) : self::get($arr);

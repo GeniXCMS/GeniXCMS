@@ -54,10 +54,10 @@ $num_rows = Db::$num_rows;
 $data['posts'] = Posts::prepare($data['posts']);
 // print_r($data['posts']);
 if ($num_rows > 0) {
-    $theme = ($data['p_type'] == 'post') ? 'single' : $data['p_type'];
+    $theme = Theme::exist($data['p_type']) ? $data['p_type']: 'single';
     Theme::theme('header', $data);
     Theme::theme($theme, $data);
-    Theme::footer();
+    Theme::footer($data);
     Stats::addViews($post_id);
 
 } else {

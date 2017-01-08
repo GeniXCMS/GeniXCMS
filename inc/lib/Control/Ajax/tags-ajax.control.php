@@ -14,11 +14,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2014-2016 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */
-
-if (isset($_GET['token']) && Token::isExist($_GET['token'])) {
+$data = Router::scrap($param);
+$token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+if (isset($token) && Token::isExist($token) ) {
     if (User::access(2)) {
+        $term = Typo::cleanX($_GET['term']);
         $tags = Db::result(
-            "SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '".$_GET['term']."%' ORDER BY `name` ASC"
+            "SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '".$term."%' ORDER BY `name` ASC"
         );
         $tag = array();
         foreach ($tags as $t) {

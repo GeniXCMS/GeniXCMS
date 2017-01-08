@@ -18,9 +18,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-$data['sitetitle'] = MODULES;
+$mod = Typo::cleanX($_GET['mod']);
+$data['sitetitle'] = Mod::title($mod);
 Theme::admin('header', $data);
-Mod::options($_GET['mod']);
+Mod::options($mod);
 Theme::admin('footer');
 
 /* End of file mods.control.php */

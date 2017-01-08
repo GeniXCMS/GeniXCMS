@@ -178,11 +178,12 @@ class Comments
         $order = ($parent > 0) ? 'ASC' : 'DESC';
         $sql = sprintf('SELECT * FROM `comments` WHERE 1 %s ORDER BY `date` %s LIMIT %d, %d', $where, $order, $offset, $max);
         $cmn = Db::result($sql);
-        $url = isset($v->url) ? $v->url : '#';
+
         $html = '<div class="col-md-12">
         <ul class="media-list">';
         if (DB::$num_rows > 0) {
             foreach ($cmn as $c => $v) {
+                $url = isset($v->url) ? $v->url : '#';
                 $avatar = Image::getGravatar($v->email, 60);
                 $html .= '
 						  <li class="media">

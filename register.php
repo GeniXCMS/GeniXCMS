@@ -46,7 +46,7 @@ if (isset($_POST['register'])) {
             $alertDanger[] = 'Your Captcha is not correct.';
         }
     }
-    if (!User::isExist($_POST['userid'])) {
+    if (User::isExist($_POST['userid'])) {
         $alertDanger[] = MSG_USER_EXIST;
     }
     if (!User::isSame($_POST['pass1'], $_POST['pass1'])) {

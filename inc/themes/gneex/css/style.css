@@ -43,6 +43,9 @@ article .meta {
     font-family: 'Rasa', serif;
     font-size: 1.2em;
 }
+article .content img {
+    box-shadow: 1px 1px 3px rgba(0,0,0,.4);
+}
 .container {
     max-width: 1280px;
 }
@@ -164,10 +167,8 @@ article .meta {
     color: #fff;
     font-size: 1.4em;
     font-weight: bold;
-    text-transform: uppercase;
     line-height: 58px;
     letter-spacing: -.001em;
-    background-color: rgba(0,0,0,.7);
     font-family: 'Arial', sans-serif;
 }
 
@@ -514,7 +515,27 @@ pre {
 }
 
 
+.related {
+    text-align: left;
+    font-size: .9em;
+}
 
+.circle {
+    -webkit-border-radius: 50%!important;
+    -moz-border-radius: 50%!important;
+    border-radius: 50%!important;
+    text-align: center;
+    vertical-align: middle;
+    color: #fefefe;
+    padding: 11%;
+    background-color: #aaa;
+    width: 150px;
+    height: 150px;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 4em;
+}
 
 
 /* MEDIA QUERIES */

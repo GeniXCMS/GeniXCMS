@@ -29,5 +29,10 @@ if (isset($data['thumb']) && $data['thumb'] != '' ) {
     $type = isset($_GET['type'])  ? $_GET['type'] :'';
     $size = isset($_GET['size'])  ? $_GET['size'] : '';
     $align = isset($_GET['align'])  ? $_GET['align'] : '';
+} else {
+    $thumb = '';
+    $type = '';
+    $size = '';
+    $align = '';
 }
 Image::thumbFly($thumb, $type, $size, $align);

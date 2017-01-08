@@ -76,7 +76,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     }
 
                     // VALIDATE ALL
-                    if (!User::isExist($_POST['userid'])) {
+                    if (User::isExist($_POST['userid'])) {
                         $alertDanger[] = MSG_USER_EXIST;
                     }
 
@@ -252,7 +252,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             $alertDanger[] = PASS2_CANNOT_EMPTY;
                         }
 
-                        if (!User::isExist($_POST['userid'])) {
+                        if (User::isExist($_POST['userid'])) {
                             $alertDanger[] = MSG_USER_EXIST;
                         }
                         if (!User::isSame($_POST['pass1'], $_POST['pass2'])) {

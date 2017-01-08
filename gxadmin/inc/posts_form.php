@@ -196,7 +196,9 @@ if (isset($data['post'])) {
                         <textarea name="content" class="form-control hidden content editor" id="content" rows="" ><?=$content; ?></textarea>
                     </div>
                 <?php
+
                 }
+                Hooks::run('post_param_form', $data);
                 ?>
                 </div>
                 <div class="col-md-4">

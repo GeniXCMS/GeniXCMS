@@ -74,7 +74,7 @@ if (Categories::exist($cat)) {
     $paging = array(
                     'paging' => $paging,
                     'table' => 'posts',
-                    'where' => '`type` = \''.$type.'\' AND `cat` = \''.$cat.'\'',
+                    'where' => '`type` = \''.$type.'\' AND `cat` = \''.$cat.'\' AND `status` = \'1\' ',
                     'max' => $data['max'],
                     'url' => $url,
                     'type' => Options::v('pagination'),

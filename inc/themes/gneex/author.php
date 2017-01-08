@@ -13,7 +13,7 @@ $gneex = Gneex::$opt;
         <div class="container">
             
             <div class="col-md-8">
-                <h2 class="category-title"><?=Categories::name($data['cat']);?></h2>
+                <h2 class="category-title"><?=$data['author'];?></h2>
                 <hr />
                 <div class=" blog-lists clearfix">
                 <?php
@@ -41,8 +41,8 @@ $gneex = Gneex::$opt;
                             </div>
                             <div class="col-sm-8 col-md-8">
                                 <h3><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
-                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')." 
-                                in <a href=\"".Url::cat($p->cat)."\">".Categories::name($p->cat)."</a>
+                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')."
+                                 in <a href=\"".Url::cat($p->cat)."\">".Categories::name($p->cat)."</a>
                                 by <a href=\"".Url::author($p->author)."\">{$p->author}</a></small><br /><br /></div>
                                 ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
                             </div>

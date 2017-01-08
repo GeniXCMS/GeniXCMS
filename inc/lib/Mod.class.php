@@ -41,7 +41,7 @@ class Mod
 
     public static function modList()
     {
-        //$mod = '';
+        $mod = array();
         $handle = dir(GX_MOD);
         while (false !== ($entry = $handle->read())) {
             if ($entry != '.' && $entry != '..') {
@@ -277,6 +277,13 @@ class Mod
         } else {
             return false;
         }
+    }
+
+    public static function title($mod)
+    {
+        $data = self::data($mod);
+
+        return $data['name'];
     }
 
     /*

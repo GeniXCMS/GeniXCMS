@@ -20,92 +20,80 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 $post = '';
 $data = Router::scrap($param);
-$data['p_type'] = 'tag';
+$data['p_type'] = 'author';
+
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
-$tag = (SMART_URL) ?
-Tags::id(
-    Typo::cleanX(
-        Db::escape($data['tag'])
-    )
-) :
-Tags::id(
-    Typo::cleanX(
-        Db::escape(
-            Typo::strip($_GET['tag'])
-        )
-    )
-);
-$type = Categories::type($tag);
-$name = Tags::name($tag);
-$slug = Tags::slug($tag);
-$data['name'] = $name;
-$data['tag'] = $tag;
-
-if (Tags::exist($name)) {
-    # code...
-
-    $data['max'] = Options::v('post_perpage');
-
+$author = (SMART_URL) ? $data['author'] : Typo::cleanX(Typo::strip($_GET['author']));
+$data['max'] = Options::v('post_perpage');
+//echo User::isExist($author);
+if (User::isExist($author)) {
     if (SMART_URL) {
         if (isset($data['paging'])) {
             $paging = $data['paging'];
         }
+        $type = isset($data['type']) ? $data['type']: '';
     } else {
         if (isset($_GET['paging'])) {
             $paging = Typo::int($_GET['paging']);
         }
+        $type = isset($_GET['type']) ? $_GET['type']: '';
     }
 
-//$paging = (SMART_URL) ? $data['paging'] : Typo::int(is_int($_GET['paging']));
-    if (isset($paging)) {
+    if ($type != '') {
+        $where = " AND `type` = '{$type}' ";
+    } else {
+        $where = '';
+    }
+    //$paging = (SMART_URL) ? $data['paging'] : Typo::int(is_int($_GET['paging']));
+    if (isset($paging) && $paging != '') {
         if ($paging > 0) {
             $offset = ($paging - 1) * $data['max'];
         } else {
             $offset = 0;
         }
+//        echo $offset;
         $pagingtitle = " - Page {$paging}";
     } else {
         $offset = 0;
         $paging = 1;
         $pagingtitle = '';
     }
-    $data['sitetitle'] = 'Post in : '.$name.$pagingtitle;
+//    echo $paging;
+    $data['sitetitle'] = 'Post by : '.$author.$pagingtitle;
     $data['posts'] = Db::result(
         sprintf(
-            "SELECT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
-                    A.`author`, A.`cat` FROM `posts` AS A
-                    JOIN `posts_param` AS B
-                    ON A.`id` = B.`post_id`
-                    WHERE B.`param` = 'tags' 
-                    AND B.`value` LIKE '%%%s%%'
-                    AND A.`status` = '1'
-                    ORDER BY A.`date`
-                    DESC LIMIT %d, %d",
-            $name,
+            "SELECT * FROM `posts`
+                        WHERE `author` = '%s' %s
+                        AND `status` = '1'
+                        ORDER BY `date`
+                        DESC LIMIT %d, %d",
+            $author,
+            $where,
             $offset,
             $data['max']
         )
     );
     $data['num'] = Db::$num_rows;
+//    echo $data['num'];
     $data['posts'] = Posts::prepare($data['posts']);
-
-    $url = Url::tag($tag);
+    // print_r($data['posts']);
+    $url = Url::author($author, $type);
     $paging = array(
-                'paging' => $paging,
-                'table' => 'posts',
-                'where' => '`type` = \''.$type.'\' AND `status` = \'1\' ',
-                'max' => $data['max'],
-                'url' => $url,
-                'type' => Options::v('pagination'),
-            );
+                    'paging' => $paging,
+                    'table' => 'posts',
+                    'where' => '`author` = \''.$author.'\' AND `status` = \'1\' '.$where,
+                    'max' => $data['max'],
+                    'url' => $url,
+                    'type' => Options::v('pagination'),
+                );
     $data['paging'] = Paging::create($paging, SMART_URL);
     Theme::theme('header', $data);
-    Theme::theme('tag', $data);
+    Theme::theme('author', $data);
     Theme::footer($data);
     exit;
 } else {
     Control::error('404');
+    exit;
 }
-
 /* End of file cat.control.php */
 /* Location: ./inc/lib/Control/Frontend/cat.control.php */
