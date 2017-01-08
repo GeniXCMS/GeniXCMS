@@ -21,6 +21,7 @@ class Gneex
             Hooks::attach('admin_footer_action', array('Gneex', 'loadAdminAsset'));
 
             Hooks::attach('post_param_form', array('Gneex', 'postParam'));
+            Hooks::attach('page_param_form', array('Gneex', 'postParam'));
         }
     }
 
