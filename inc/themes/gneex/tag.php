@@ -13,7 +13,7 @@ $gneex = Gneex::$opt;
         <div class="container">
             
             <div class="col-md-8">
-                <h2 class="category-title"><?=Categories::name($data['cat']);?></h2>
+                <h2 class="category-title"><?=$data['name'];?></h2>
                 <hr />
                 <div class=" blog-lists clearfix">
                 <?php
@@ -23,6 +23,7 @@ $gneex = Gneex::$opt;
                     echo '<div class="col-md-12">&nbsp;</div>';
                 }
                 ?>
+                <div class="row">
                 <?php
                 if ($data['num'] > 0) {
                     foreach ($data['posts'] as $p) {
@@ -51,15 +52,41 @@ $gneex = Gneex::$opt;
                             </article>
                                 ';
                         } else {
-                            echo '
+//                            print_r($p);
+                            if ($p->type == 'products') {
+                                $img = Gneex::getImage(Typo::Xclean($p->content));
+//                                echo $p->content;
+                                if ($img != '') {
+                                    $im = '<img src="'.Url::thumb($img, 'square', 250).'" class="img-responsive" title="'.$p->title.'"
+                        alt="'.$title.'">';
+                                } else {
+                                    $im = '<img src="'.Url::thumb('assets/images/noimage.png', 'square', 250).'" class="img-responsive">';
+                                }
+                                $price = Products::getPrice($p->id);
+                                echo '
+                                <div class="col-sm-4">
+                                <div class="item-list-frontpage">
+                                <a href="'.Url::post($p->id)."\">
+                                <div class=\"\">
+                                    {$im}
+                                    <div class=\"price-badge\">{$price}</div>
+                                </div>
+                                <div class=\"\">
+                                    <h4 >".substr($p->title, 0, 23)."...</h4>
+                                </div>
+                                </a>
+                                </div>
+                                </div>";
+                            }else {
+                                echo '
                             <article class="blog-post col-md-12">
-                                <h2><a href="'.Url::post($p->id)."\">$p->title</a></h2>
+                                <h2><a href="' . Url::post($p->id) . "\">$p->title</a></h2>
                                 <hr />
-                                ".Posts::format($p->content, $p->id).'
-                                <div class="blog-footer">posted in '.Categories::name($p->cat).', 
-                                at '.Date::format($p->date)." by <a href=\"".Url::author($p->author)."\">{$p->author}</a></div>
+                                " . Posts::format($p->content, $p->id) . '
+                                <div class="blog-footer">posted in ' . Categories::name($p->cat) . ', at ' . Date::format($p->date) . " by <a href=\"#\">{$p->author}</a></div>
                             </article>
                                 ";
+                            }
                         }
                     }
                 } else {
@@ -71,6 +98,7 @@ $gneex = Gneex::$opt;
                     echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                 }
                 ?>
+                </div>
                 </div>
                 <?=$data['paging'];?>
             </div>

@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 if (User::access(0)) {
     if (isset($_GET['view']) && $_GET['view'] == 'options') {
         $theme = Options::v('themes');
-        $data['sitetitle'] = Theme::title($theme);
+        $data['sitetitle'] = Theme::name($theme);
         Theme::admin('header', $data);
         Theme::options($theme);
         Theme::admin('footer');

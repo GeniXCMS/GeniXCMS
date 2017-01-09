@@ -279,7 +279,7 @@ class Mod
         }
     }
 
-    public static function title($mod)
+    public static function name($mod)
     {
         $data = self::data($mod);
 
@@ -304,12 +304,18 @@ class Mod
         }
     }
 
-    public static function addMenuList($method, $title)
+    public static function addMenuList($menus)
     {
-        $new = array($method => $title);
-        self::$listMenu = array_merge(self::$listMenu, $new);
+        self::$listMenu = array_merge(self::$listMenu, $menus);
 
         return true;
+    }
+
+    public static function getTitle($mod)
+    {
+        $title = self::$listMenu;
+
+        return $title[$mod];
     }
 }
 

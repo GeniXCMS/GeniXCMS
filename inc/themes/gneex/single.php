@@ -31,7 +31,8 @@
                                     <span class=\"meta\">posted in <a href=\"".Url::cat($p->cat).'">'.Categories::name($p->cat).'</a>, 
                                     at '.Date::format($p->date).' by <a href="'.Url::author($p->author).'">'.$p->author.'</a></span>
                                     <hr />
-                                    <div class="content">'.Posts::content($p->content, $p->id).'</div><hr />';
+                                    <div class="content">'.Posts::content($p->content, $p->id).'</div>
+                                    <span>'.Posts::tags($p->id).'</span><hr />';
                             if (Gneex::opt('adsense') != '') {
                                 echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                             }

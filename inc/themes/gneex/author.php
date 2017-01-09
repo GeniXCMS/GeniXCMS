@@ -41,8 +41,11 @@ $gneex = Gneex::$opt;
                             </div>
                             <div class="col-sm-8 col-md-8">
                                 <h3><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
-                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')."
-                                 in <a href=\"".Url::cat($p->cat)."\">".Categories::name($p->cat)."</a>
+                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y');
+                            if ($p->type != 'page') {
+                                echo " in <a href=\"" . Url::cat($p->cat) . "\">" . Categories::name($p->cat) . "</a>";
+                            }
+                            echo "
                                 by <a href=\"".Url::author($p->author)."\">{$p->author}</a></small><br /><br /></div>
                                 ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
                             </div>

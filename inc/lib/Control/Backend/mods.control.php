@@ -19,10 +19,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 $mod = Typo::cleanX($_GET['mod']);
-$data['sitetitle'] = Mod::title($mod);
+$data['sitetitle'] = Mod::name($mod);
 Theme::admin('header', $data);
 Mod::options($mod);
-Theme::admin('footer');
+Theme::admin('footer', $data);
 
 /* End of file mods.control.php */
 /* Location: ./inc/lib/Control/Backend/mods.control.php */

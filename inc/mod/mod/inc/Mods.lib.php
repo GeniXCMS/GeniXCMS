@@ -4,8 +4,12 @@ class Mods
 {
     public function __construct()
     {
+
         Hooks::attach('mod_control', array('Mods', 'page'));
-        Mod::addMenuList('page', 'Mod Page');
+        $menulist = array(
+            'page' => 'Mod Page'
+        );
+        Mod::addMenuList($menulist);
     }
     public static function show()
     {
@@ -22,6 +26,7 @@ class Mods
         // }
         // print_r($data[0]);
         if ($data[0]['mod'] == 'page') {
+
             Mod::inc('frontpage', $data, realpath(__DIR__.'/../layout/'));
         }
     }

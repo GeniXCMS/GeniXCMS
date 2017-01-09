@@ -39,7 +39,6 @@ $type = Categories::type($tag);
 $name = Tags::name($tag);
 $slug = Tags::slug($tag);
 $data['name'] = $name;
-$data['tag'] = $tag;
 
 if (Tags::exist($name)) {
     # code...

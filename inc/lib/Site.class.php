@@ -54,48 +54,14 @@ class Site
     public static function meta($location = '', $cont_desc = '', $pre = '')
     {
         global $data;
-        //print_r($data);
+//        print_r($data);
         //if (empty($data['posts'][0]->title)) {
 
         if (is_array($data)) {
-            $sitenamelength = strlen(self::$name);
-            $limit = 70 - $sitenamelength - 6;
-            if (isset($data['sitetitle'])) {
-                $cont_title = substr(Typo::Xclean(Typo::strip($data['sitetitle'])), 0, $limit);
-                $titlelength = strlen($data['sitetitle']);
-            } elseif (isset($data['posts'][0]->title) && !isset($data['posts'][1]->title)) {
-                $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)), 0, $limit);
-                $titlelength = strlen($data['posts'][0]->title);
-            } else {
-                $cont_title = substr(Typo::Xclean(Typo::strip(Options::v('siteslogan'))), 0, $limit);
-                $titlelength = strlen(Options::v('siteslogan'));
-            }
-            if ($titlelength > $limit + 3) {
-                $dotted = '...';
-            } else {
-                $dotted = '';
-            }
-            $cont_title = "{$pre} {$cont_title}{$dotted} - ";
-            if (isset($data['p_type'])) {
-                $pg = $data['p_type'];
-                if ($pg == 'post') {
-                    $canonical = Url::post($data['posts'][0]->id);
-                } elseif ($pg == 'page') {
-                    $canonical = Url::page($data['posts'][0]->id);
-                } elseif ($pg == 'cat') {
-                    $canonical = Url::cat($data['cat']);
-                } elseif ($pg == 'mod') {
-                    $canonical = Url::mod($data['mod']);
-                } elseif ($pg == 'tag') {
-                    $canonical = Url::tag($data['tag']);
-                } elseif ($pg == 'index') {
-                    $canonical = self::$url;
-                } else {
-                    $canonical = '//'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];//Url::$data['p_type']($data['id'])
-                }
-            } else {
-                $canonical = '//'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            }
+
+            $cont_title = self::title($data);
+            $cont_title = "{$pre} {$cont_title} - ";
+            $canonical = self::canonical();
         } else {
             $cont_title = '';
             $canonical = '';
@@ -132,6 +98,30 @@ class Site
         echo '
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->';
         // echo $meta;
+    }
+
+    public static function title($data)
+    {
+//        print_r($data);
+        $sitenamelength = strlen(self::$name);
+        $limit = 70 - $sitenamelength - 6;
+        if (isset($data['sitetitle'])) {
+            $cont_title = substr(Typo::Xclean(Typo::strip($data['sitetitle'])), 0, $limit);
+            $titlelength = strlen($data['sitetitle']);
+        } elseif (isset($data['posts'][0]->title) && !isset($data['posts'][1]->title)) {
+            $cont_title = substr(Typo::Xclean(Typo::strip($data['posts'][0]->title)), 0, $limit);
+            $titlelength = strlen($data['posts'][0]->title);
+        } else {
+            $cont_title = substr(Typo::Xclean(Typo::strip(Options::v('siteslogan'))), 0, $limit);
+            $titlelength = strlen(Options::v('siteslogan'));
+        }
+        if ($titlelength > $limit + 3) {
+            $dotted = '...';
+        } else {
+            $dotted = '';
+        }
+
+        return $cont_title.$dotted;
     }
 
     public static function footer()
@@ -175,6 +165,13 @@ class Site
         $time_taken = $end_time - $GLOBALS['start_time'];
         $time_taken = round($time_taken, 5);
         echo '<center><small>Page generated in '.$time_taken.' seconds.</small></center>';
+    }
+
+    public static function canonical()
+    {
+        $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+
+        return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
 
     public static function minifyHTML($input)

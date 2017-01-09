@@ -254,7 +254,7 @@ class Theme
         return $list;
     }
 
-    public static function title($mod)
+    public static function name($mod)
     {
         $data = self::data($mod);
 

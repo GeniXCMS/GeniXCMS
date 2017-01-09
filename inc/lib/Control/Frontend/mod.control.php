@@ -23,10 +23,12 @@ $route = Router::scrap($param);
 $data['mod'] = (SMART_URL) ? $route['mod'] : Typo::cleanX($_GET['mod']);
 $data['p_type'] = 'mod';
 //echo $data['mod'];
-if (Hooks::exist($data['mod'], 'mod_control')) {
+$data['sitetitle'] = Mod::getTitle($data['mod']);
+
+if (Hooks::exist($data['mod'], 'mod_control')) { // check if mod exist at hooks mod_control
     Theme::theme('header', $data);
     Theme::theme('mod', $data);
-    Theme::footer();
+    Theme::footer($data);
     exit();
 } else {
     Control::error('404');
