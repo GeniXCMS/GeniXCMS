@@ -175,14 +175,16 @@ class Hooks
 
     public static function exist($val, $hooks)
     {
-        // print_r(self::getKey($hooks));
+//         print_r(self::getKey($hooks));
         $hooked = self::getKey($hooks);
+        $n = 0;
         for ($i = 0; $i < count($hooked); ++$i) {
             if (in_array($val, $hooked[$i])) {
-                return true;
-            } else {
-                return false;
+                $n = $n + 1;
             }
         }
+
+        if ($n > 0) return true;
+            else false;
     }
 }

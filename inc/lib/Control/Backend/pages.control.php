@@ -29,10 +29,10 @@ if (User::access(2)) {
     switch ($act) {
         case 'add':
             $data[''] = '';
-
             switch (isset($_POST['submit'])) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -62,7 +62,7 @@ if (User::access(2)) {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
                             $date = date('Y-m-d H:i:s');
                         } else {
-                            $date = $_POST['date'];
+                            $date = Typo::cleanX($_POST['date']);
                         }
                         $vars = array(
                                     'title' => $title,
@@ -81,7 +81,7 @@ if (User::access(2)) {
                             foreach ($_POST['title'] as $key => $value) {
                                 $multilang[] = array(
                                                 $key => array(
-                                                        'title' => $_POST['title'][$key],
+                                                        'title' => Typo::cleanX($_POST['title'][$key]),
                                                         'content' => Typo::cleanX($_POST['content'][$key]),
                                                     ),
                                             );
@@ -92,7 +92,7 @@ if (User::access(2)) {
                         }
                         $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
                         Hooks::run('post_submit_add_action', $_POST);
-                        Token::remove($_POST['token']);
+                        isset($_POST['token']) ? Token::remove($token): '';
                     }
 
                     break;
@@ -107,9 +107,11 @@ if (User::access(2)) {
 
         case 'edit':
             //echo "edit";
+            $id = isset($_GET['id']) ? Typo::int($_GET['id']): '';
             switch (isset($_POST['submit'])) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -138,7 +140,7 @@ if (User::access(2)) {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
                             $date = date('Y-m-d H:i:s');
                         } else {
-                            $date = $_POST['date'];
+                            $date = Typo::cleanX($_POST['date']);
                         }
                         $moddate = date('Y-m-d H:i:s');
                         $vars = array(
@@ -156,22 +158,22 @@ if (User::access(2)) {
                             foreach ($_POST['title'] as $key => $value) {
                                 $multilang[] = array(
                                                 $key => array(
-                                                        'title' => $_POST['title'][$key],
+                                                        'title' => Typo::cleanX($_POST['title'][$key]),
                                                         'content' => Typo::cleanX($_POST['content'][$key]),
                                                     ),
                                             );
                             }
                             $multilang = json_encode($multilang);
-                            if (Posts::existParam('multilang', $_GET['id'])) {
-                                Posts::editParam('multilang', $multilang, $_GET['id']);
+                            if (Posts::existParam('multilang', $id)) {
+                                Posts::editParam('multilang', $multilang, $id);
                             } else {
-                                Posts::addParam('multilang', $multilang, $_GET['id']);
+                                Posts::addParam('multilang', $multilang, $id);
                             }
 
                             // print_r($multilang);
                         }
                         $data['alertSuccess'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
 
                     break;
@@ -180,7 +182,7 @@ if (User::access(2)) {
                     //System::inc('posts_form', $data);
                     break;
             }
-            $id = Typo::int($_GET['id']);
+
             $data['post'] = Db::result("SELECT * FROM `posts` AS A 
                                         LEFT JOIN `posts_param` AS B
                                         ON A.`id` = B.`post_id` 
@@ -192,17 +194,20 @@ if (User::access(2)) {
             break;
 
         default:
-            if (isset($_GET['act']) && $_GET['act'] == 'del') {
+            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
+
                 if (isset($_GET['id'])) {
-                    $title = Posts::title(Typo::int($_GET['id']));
-                    if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    $id = Typo::int($_GET['id']);
+                    $title = Posts::title($id);
+                    $token = Typo::cleanX($_GET['token']);
+                    if (!isset($_GET['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        $del = Posts::delete($_GET['id']);
+                        $del = Posts::delete($id);
                     }
                     //echo $title['error'];
                     if (isset($del['error'])) {
@@ -211,7 +216,7 @@ if (User::access(2)) {
                         $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_REMOVED;
                     }
                     if (isset($_GET['token'])) {
-                        Token::remove($_GET['token']);
+                        Token::remove($token);
                     }
                 } else {
                     $data['alertDanger'][] = 'No ID Selected';
@@ -229,7 +234,8 @@ if (User::access(2)) {
             }
             switch ($action) {
                 case 'publish':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -238,16 +244,18 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::publish($id);
                             }
                         }
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
                 case 'unpublish':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -256,16 +264,18 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::unpublish($id);
                             }
                         }
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
                 case 'delete':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -274,13 +284,14 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::delete($id);
                                 Hooks::run('post_delete_action', $id);
                             }
                         }
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
 
@@ -326,27 +337,27 @@ if (User::access(2)) {
                 $offset = 0;
             }
 
-                $data['posts'] = Db::result(
-                    sprintf("SELECT * FROM `posts` 
-                                            WHERE `type` = 'page' %s
-                                            ORDER BY `date` DESC 
-                                            LIMIT %d,%d", $where, $offset, $max)
-                );
-                $data['num'] = Db::$num_rows;
+            $data['posts'] = Db::result(
+                sprintf("SELECT * FROM `posts` 
+                                        WHERE `type` = 'page' %s
+                                        ORDER BY `date` DESC 
+                                        LIMIT %d,%d", $where, $offset, $max)
+            );
+            $data['num'] = Db::$num_rows;
 
-                $page = array(
-                    'paging' => $paging,
-                    'table' => 'posts',
-                    'where' => "`type` = 'page'".$where,
-                    'max' => $max,
-                    'url' => 'index.php?page=pages'.$qpage,
-                    'type' => 'pager',
-                );
-                $data['paging'] = Paging::create($page);
+            $page = array(
+                'paging' => $paging,
+                'table' => 'posts',
+                'where' => "`type` = 'page' ".$where,
+                'max' => $max,
+                'url' => 'index.php?page=pages'.$qpage,
+                'type' => 'pager',
+            );
+            $data['paging'] = Paging::create($page);
 
-                Theme::admin('header', $data);
-                System::inc('pages', $data);
-                Theme::admin('footer');
+            Theme::admin('header', $data);
+            System::inc('pages', $data);
+            Theme::admin('footer');
 
             break;
     }

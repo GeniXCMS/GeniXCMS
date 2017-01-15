@@ -54,7 +54,8 @@ class Date
 
     public static function timeZone()
     {
-        $timezones = DateTimeZone::listAbbreviations(DateTimeZone::ALL);
+        $timezones = DateTimeZone::listAbbreviations();
+//        $timezones = DateTimeZone::listAbbreviations(DateTimeZone::ALL);
 
         $cities = array();
         foreach ($timezones as $key => $zones) {

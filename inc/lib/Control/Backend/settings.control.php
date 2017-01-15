@@ -22,7 +22,8 @@ if (User::access(0)) {
     $data['sitetitle'] = SETTINGS;
     switch (isset($_POST['change'])) {
         case '1':
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -76,7 +77,7 @@ if (User::access(0)) {
                 $data['alertSuccess'][] = MSG_SETTINGS_SAVED;
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
 

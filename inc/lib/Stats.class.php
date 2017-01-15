@@ -25,7 +25,8 @@ class Stats
 
     public static function totalPost($vars)
     {
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}'");
+        $type = Typo::cleanX($vars);
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}'");
         $npost = Db::$num_rows;
 
         return $npost;
@@ -33,7 +34,8 @@ class Stats
 
     public static function activePost($vars)
     {
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}' AND `status` = '1' ");
+        $type = Typo::cleanX($vars);
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}' AND `status` = '1' ");
         $npost = Db::$num_rows;
 
         return $npost;
@@ -41,7 +43,8 @@ class Stats
 
     public static function inactivePost($vars)
     {
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$vars}' AND `status` = '0' ");
+        $type = Typo::cleanX($vars);
+        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}' AND `status` = '0' ");
         $npost = Db::$num_rows;
 
         return $npost;
@@ -49,7 +52,8 @@ class Stats
 
     public static function totalCat($vars)
     {
-        $posts = Db::result("SELECT `id` FROM `cat` WHERE `type` = '{$vars}'");
+        $type = Typo::cleanX($vars);
+        $posts = Db::result("SELECT `id` FROM `cat` WHERE `type` = '{$type}'");
         $npost = Db::$num_rows;
 
         return $npost;
@@ -97,6 +101,7 @@ class Stats
 
     public static function mostViewed($count)
     {
+        $count = Typo::int($count);
         return Db::result(sprintf("SELECT * FROM `posts` WHERE `type` = 'post' ORDER BY `views` DESC LIMIT 0,%d", $count));
     }
 

@@ -97,6 +97,7 @@ class Files
      * A simple function to check file from bad codes.
      *
      * @param (string) $file - file path.
+     * @return  (boolean)
      *
      * @author Yousef Ismaeil - Cliprz[at]gmail[dot]com.
      */
@@ -111,7 +112,8 @@ class Files
         } else {
             if (file_exists($file)) {
                 // $contents = file_get_contents($file);
-                $contents = fread($handle, filesize($file));
+//                $contents = fread($handle, filesize($file));
+                $contents = fread($handle, 9064);
             }
         }
 
@@ -132,6 +134,8 @@ class Files
         } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $contents)) {
             return false;
         } elseif (preg_match('#</*(applet|link|style|script|iframe|frame|frameset|html|body|title|div|p|form)*>#i', $contents)) {
+            return false;
+        } elseif (preg_match('#<\?(.*)\?>#i', $contents)) {
             return false;
         } else {
             return true;

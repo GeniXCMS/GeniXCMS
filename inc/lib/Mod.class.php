@@ -31,11 +31,14 @@ class Mod
         self::load($var);
     }
 
+    /**
+     * @param $var
+     */
     public static function options($var)
     {
         $file = GX_MOD.$var.'/options.php';
         if (file_exists($file)) {
-            include $file;
+            include($file);
         }
     }
 

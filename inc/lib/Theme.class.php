@@ -169,7 +169,7 @@ class Theme
 
     public static function activate($thm)
     {
-        if (Options::update('themes', $thm)) {
+        if (Options::update('themes', Typo::cleanX($thm))) {
             new Options();
 
             return true;

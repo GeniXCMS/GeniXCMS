@@ -36,7 +36,7 @@ if (User::isExist($author)) {
         if (isset($_GET['paging'])) {
             $paging = Typo::int($_GET['paging']);
         }
-        $type = isset($_GET['type']) ? $_GET['type']: '';
+        $type = isset($_GET['type']) ? Typo::cleanX(Typo::strip($_GET['type'])): '';
     }
 
     if ($type != '') {

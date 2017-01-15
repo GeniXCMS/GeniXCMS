@@ -42,6 +42,7 @@ class Typo
             ENT_QUOTES | ENT_HTML5,
             'utf-8'
         );
+        $val = str_replace('\\', "\\\\", $val);
         // $val = htmlentities(
         //             $c,
         //             ENT_QUOTES | ENT_IGNORE, "UTF-8");
@@ -52,6 +53,7 @@ class Typo
     {
         $var = htmlspecialchars_decode($vars, ENT_QUOTES | ENT_HTML5);
         // $var = html_entity_decode($vars);
+        $var = str_replace('\\\\', '\\', $var);
         return $var;
     }
 

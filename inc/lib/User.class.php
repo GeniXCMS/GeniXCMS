@@ -95,7 +95,7 @@ class User
     {
         if (is_array($vars)) {
             //print_r($vars['user']);
-            $u = $vars['user'];
+            $u = Typo::cleanX(Typo::strip($vars['user']));
             $sql = array(
                             'table' => 'user',
                             'key' => $u,
@@ -150,7 +150,7 @@ class User
     {
         if (is_array($vars)) {
             //print_r($vars);
-            $u = $vars['user'];
+            $u = Typo::cleanX(Typo::strip($vars['user']));
             $sql = array(
                             'table' => 'user',
                             'id' => $vars['id'],
@@ -172,6 +172,7 @@ class User
 
     public static function delete($id)
     {
+        $id = Typo::int($id);
         $vars = array(
                 'table' => 'user',
                 'where' => array(
@@ -220,7 +221,7 @@ class User
     public static function isExist($user, $except='')
     {
         if ($except != '') {
-            $id = Typo::int($except);
+            $id = Typo::cleanX(Typo::strip($except));
             $where = "AND `userid` != '{$id}' ";
         } else {
             $where = '';

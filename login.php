@@ -32,9 +32,10 @@ try {
 }
 
 System::gZip();
-
+$data = '';
 if (isset($_POST['login'])) {
-    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+    $token = Typo::cleanX($_POST['token']);
+    if (!isset($_POST['token']) || !Token::isExist($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -87,44 +88,33 @@ if (isset($_POST['login'])) {
                         $_SESSION['group'] = $group;
                         */
                         //print_r($_SESSION);
-                        $alertSuccess = MSG_USER_LOGGED_IN;
+                        $data['alertSuccess'][] = MSG_USER_LOGGED_IN;
                         echo Hooks::run('user_login_action');
                     } elseif ($p != $pass) {
-                        $alertDanger[] = PASS_NOT_MATCH;
+                        $data['alertDanger'][] = PASS_NOT_MATCH;
                     }
                 }
             } else {
                 if ($usr[0]->activation != '') {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE;
                 } else {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE_BLOCK;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE_BLOCK;
                 }
             }
         } elseif ($c == '0') {
-            $alertDanger[] = NO_USER;
+            $data['alertDanger'][] = NO_USER;
         }
+    } else {
+        $data['alertDanger'] = $alertDanger;
+//        print_r($data['alertDanger']);
     }
+//    print_r($data);
 }
-Theme::theme('header');
-echo '<div class="container">';
 
-if (isset($alertDanger)) {
-    echo '
-		<div class="alert alert-danger">
-			<ul>
-			';
-    foreach ($alertDanger as $alert) {
-        echo '<li>'.$alert.'</li>';
-    }
-    echo'</ul>
-		</div>';
-}
-if (isset($alertSuccess)) {
-    echo "
-		<div class=\"alert alert-success\">
-			{$alertSuccess}
-		</div>";
-}
+Theme::theme('header', $data);
+echo '<div class="container">';
+//print_r($data);
+echo System::alert($data);
 if (!User::isLoggedin()) {
     ?>
 
@@ -159,6 +149,6 @@ if (!User::isLoggedin()) {
     echo'<div class="alert alert-info">'.MSG_USER_ALREADY_LOGGED.'<br /><a href="logout.php">'.LOGOUT.'</a></div>';
 }
 echo '</div>';
-Theme::theme('footer');
+Theme::theme('footer', $data);
 System::Zipped();
 ?>

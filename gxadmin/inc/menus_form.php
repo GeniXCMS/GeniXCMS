@@ -19,7 +19,7 @@
     
 
 if (isset($_GET['id'])) {
-    $menuid = $_GET['id'];
+    $menuid = Typo::cleanX($_GET['id']);
 } else {
     $menuid = $data['menuid'];
 }

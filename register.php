@@ -34,7 +34,8 @@ try {
 System::gZip();
 
 if (isset($_POST['register'])) {
-    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+    $token = Typo::cleanX($_POST['token']);
+    if (!isset($_POST['token']) || !Token::isExist($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -55,12 +56,17 @@ if (isset($_POST['register'])) {
     if (!User::isEmail($_POST['email'])) {
         $alertDanger[] = MSG_USER_EMAIL_EXIST;
     }
+    if (!Typo::validateEmail($_POST['email'])) {
+        $alertDanger[] = 'Your email is not Valid !!';
+    }
 
     if (!isset($alertDanger)) {
         $activation = Typo::getToken(60);
+        $userid = Typo::cleanX(Typo::strip($_POST['userid']));
+        $email = Typo::strip($_POST['email']);
         $vars = array(
              'user' => array(
-                    'userid' => Typo::cleanX(Typo::strip($_POST['userid'])),
+                    'userid' => $userid,
                     'pass' => User::randpass($_POST['pass1']),
                     'email' => $_POST['email'],
                     'group' => '6',
@@ -80,11 +86,11 @@ if (isset($_POST['register'])) {
         }
 
         $vars = array(
-                'to' => $_POST['email'],
-                'to_name' => $_POST['userid'],
+                'to' => $email,
+                'to_name' => $userid,
                 'subject' => 'Account Activation Needed at '.Site::$name,
                 'message' => '
-                            Hi '.$_POST['userid'].',
+                            Hi '.$userid.',
 
                             Thank You for Registering with Us. Please activate your account by clicking this link :
                             '.Site::$url.'/register.php?activation='.$activation.'
@@ -155,30 +161,8 @@ if (isset($loggedin)) {
     ?>
 <div class="col-md-4 col-md-offset-4">
 <?php
-if (isset($data['alertSuccess'])) {
-    echo '<div class="alert alert-success" >
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">'.CLOSE.'</span>
-        </button>
-        ';
-    foreach ($data['alertSuccess'] as $alert) {
-        echo "$alert\n";
-    }
-    echo '</div>';
-} elseif (isset($data['alertDanger'])) {
-    //print_r($data['alertDanger']);
-    echo '<div class="alert alert-danger" >
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">'.CLOSE.'</span>
-        </button>
-        <ul>';
-    foreach ($data['alertDanger'] as $alert) {
-        echo "<li>$alert</li>\n";
-    }
-    echo '</ul></div>';
-} ?>
+echo System::alert($data);
+?>
 <h2 class="text-center"><?=REG_FORM; ?></h2>
 <form action="" method="post" name="register" class="registerform">
     <div class="form-group">

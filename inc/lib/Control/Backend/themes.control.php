@@ -27,7 +27,8 @@ if (User::access(0)) {
         Theme::admin('footer');
     } else {
         if (isset($_POST['upload'])) {
-            if (!Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!Token::isExist($token)) {
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
             if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == '') {
@@ -54,27 +55,29 @@ if (User::access(0)) {
                 $data['alertDanger'] = $alertDanger;
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
         }
 
         if (isset($_GET['act'])) {
             if ($_GET['act'] == 'activate') {
-                if (!Token::isExist($_GET['token'])) {
+                $token = Typo::cleanX($_GET['token']);
+                if (!Token::isExist($token)) {
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
 
                 if (!isset($alertDanger)) {
-                    Theme::activate($_GET['themes']);
+                    Theme::activate(Typo::cleanX($_GET['themes']));
                     $data['alertSuccess'][] = THEME_ACTIVATED;
                 } else {
                     $data['alertDanger'] = $alertDanger;
                 }
             } elseif ($_GET['act'] == 'remove') {
+                $token = Typo::cleanX($_GET['token']);
                 if (!Token::isExist($_GET['token'])) {
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
-                if (Theme::isActive($_GET['themes'])) {
+                if (Theme::isActive(Typo::cleanX($_GET['themes']))) {
                     $alertDanger[] = MSG_THEME_IS_ACTIVE;
                 }
                 if (!isset($alertDanger)) {

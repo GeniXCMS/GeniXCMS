@@ -97,8 +97,6 @@ class System
 
         Hooks::attach('admin_footer_action', array('System', 'loadAdminAsset'));
 
-
-
         self::$toolbar = self::toolbar(self::$toolbar_mode);
     }
 
@@ -269,11 +267,12 @@ class System
         return $html;
     }
 
-    public static function alert()
+    public static function alert($data)
     {
-        global $data;
+//        global $data;
         $html = '';
-    // print_r($data);
+//     print_r($data);
+        $data = is_array($data[0]) ? $data[0]: $data;
         if (isset($data['alertSuccess'])) {
             $html .= '<div class="alert alert-success" >
             <button type="button" class="close" data-dismiss="alert">
@@ -282,7 +281,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertSuccess'] as $alert) {
-                $html .= "<li>$alert</li>\n";
+                $html .= "<li>".Typo::cleanX($alert)."</li>";
             }
             $html .= '</ul></div>';
         }
@@ -294,7 +293,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDanger'] as $alert) {
-                $html .= "<li>$alert</li>";
+                $html .= "<li>".Typo::cleanX($alert)."</li>";
             }
             $html .= '</ul></div>';
         }
@@ -306,7 +305,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertInfo'] as $alert) {
-                $html .= "$alert\n";
+                $html .= "<li>".Typo::cleanX($alert)."</li>";
             }
             $html .= '</ul></div>';
         }
@@ -318,7 +317,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertWarning'] as $alert) {
-                $html .= "$alert\n";
+                $html .= "<li>".Typo::cleanX($alert)."</li>";
             }
             $html .= '</ul></div>';
         }
@@ -330,7 +329,7 @@ class System
             </button>
             <ul class="list-unstyled">';
             foreach ($data['alertDefault'] as $alert) {
-                $html .= "$alert\n";
+                $html .= "<li>".Typo::cleanX($alert)."</li>";
             }
             $html .= '</ul></div>';
         }

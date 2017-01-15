@@ -22,7 +22,8 @@ if (User::access(0)) {
     $data['sitetitle'] = 'Multilanguage';
 
     if (isset($_POST['addcountry'])) {
-        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+        $token = Typo::cleanX($_POST['token']);
+        if (!isset($_POST['token']) || !Token::isExist($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_POST['multilang_country_name']) || $_POST['multilang_country_name'] == '') {
@@ -45,14 +46,15 @@ if (User::access(0)) {
             $langs = json_encode($langs);
             Options::update('multilang_country', $langs);
             new Options();
-            Token::remove($_POST['token']);
+            Token::remove($token);
         } else {
             $data['alertDanger'] = $alertDanger;
         }
     }
 
     if (isset($_GET['del']) && $_GET['del'] != '') {
-        if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+        $token = Typo::cleanX($_GET['token']);
+        if (!isset($_GET['token']) || !Token::isExist($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($alertDanger)) {
@@ -74,7 +76,8 @@ if (User::access(0)) {
     }
 
     if (isset($_POST['change'])) {
-        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+        $token = Typo::cleanX($_POST['token']);
+        if (!isset($_POST['token']) || !Token::isExist($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
 

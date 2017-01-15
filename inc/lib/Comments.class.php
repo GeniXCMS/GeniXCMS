@@ -27,14 +27,14 @@ class Comments
     public static function form()
     {
         if (self::isEnable()) {
-            Hooks::attach('footer_load_lib', array(__CLASS__, 'validateJsComment'));
+            Hooks::attach('footer_load_lib', array('Comments', 'validateJsComment'));
             Theme::validator();
             Theme::editor('mini', '200');
 
             $html = '<a id="commentform"></a><div class="col-md-12 comments-wrapper clearfix">';
             if (isset($_POST['addComment'])) {
                 $data = self::addComment($_POST);
-                $html .= System::alert();
+                $html .= System::alert($data);
             }
 
             $html .= '
@@ -95,7 +95,8 @@ class Comments
         global $data;
 
         unset($vars['addComment']);
-        if (!isset($vars['token']) || !Token::isExist($vars['token'])) {
+        $token = Typo::cleanX($vars['token']);
+        if (!isset($vars['token']) || !Token::isExist($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($vars['comments-msg']) || null == $vars['comments-msg'] || $vars['comments-msg'] == '<p><br></p>') {
@@ -170,9 +171,9 @@ class Comments
     public static function listC($vars)
     {
         global $data;
-        $offset = $vars['offset'];
-        $max = $vars['max'];
-        $parent = $vars['parent'];
+        $offset = Typo::int($vars['offset']);
+        $max = Typo::int($vars['max']);
+        $parent = Typo::int($vars['parent']);
         $post_id = $data['posts'][0]->id;
         $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '{$parent}' ";
         $order = ($parent > 0) ? 'ASC' : 'DESC';
@@ -225,7 +226,7 @@ class Comments
         if (self::isEnable()) {
             global $data;
             $html = '';
-            $max = $vars['max'];
+            $max = Typo::int($vars['max']);
             if (isset($_GET['paging']) && isset($_GET['comments'])) {
                 $paging = Typo::int($_GET['paging']);
                 $offset = ($paging - 1) * $max;
@@ -245,7 +246,7 @@ class Comments
                     'url' => (SMART_URL) ? Url::post($post_id).'?comments=yes' : Url::post($post_id).'&comments=yes',
                     'type' => 'number',
                 );
-            $html .= Paging::create($page);
+            $html .= "<div class='col-sm-12'>".Paging::create($page)."</div>";
         } else {
             $html = '';
         }
@@ -321,11 +322,12 @@ class Comments
         </script>
         ";
 
-        return $script;
+        echo Site::minifyJS($script);
     }
 
     public static function publish($id)
     {
+        $id = Typo::int($id);
         $var = array(
                 'table' => 'comments',
                 'id' => $id,
@@ -338,6 +340,7 @@ class Comments
 
     public static function unpublish($id)
     {
+        $id = Typo::int($id);
         $var = array(
                 'table' => 'comments',
                 'id' => $id,
@@ -350,6 +353,7 @@ class Comments
 
     public static function pending($id)
     {
+        $id = Typo::int($id);
         $var = array(
                 'table' => 'comments',
                 'id' => $id,
@@ -362,6 +366,7 @@ class Comments
 
     public static function delete($id)
     {
+        $id = Typo::int($id);
         $var = array(
                 'table' => 'comments',
                 'where' => array(
@@ -373,6 +378,7 @@ class Comments
 
     public static function deleteWithPost($post_id)
     {
+        $post_id = Typo::int($post_id);
         $var = array(
                 'table' => 'comments',
                 'where' => array(
@@ -384,6 +390,7 @@ class Comments
 
     public static function postExist($id)
     {
+        $id = Typo::int($id);
         $var = sprintf("SELECT * FROM `comments` WHERE `post_id` = '%d'", $id);
         Db::result($var);
         if (Db::$num_rows > 0) {

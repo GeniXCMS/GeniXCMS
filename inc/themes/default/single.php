@@ -25,7 +25,9 @@ if (isset($data['posts'][0]->title)) {
             );
         echo '
             <h3>Related :</h3>
+            <div class="row">
             '.Posts::related($p->id, 5, $p->cat, 'box').'
+            </div>
         </div>
         <hr />
         <div class="col-sm-12">

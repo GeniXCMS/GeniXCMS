@@ -23,10 +23,10 @@ if (User::access(1)) {
     switch (isset($_POST['addcat'])) {
         case true:
             // cleanup first
-            $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
+            $slug = Typo::slugify($_POST['cat']);
             $cat = Typo::cleanX($_POST['cat']);
-
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -48,7 +48,7 @@ if (User::access(1)) {
                 $data['alertSuccess'][] = MSG_CATEGORY_ADDED.' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
 
@@ -60,7 +60,8 @@ if (User::access(1)) {
         case true:
             // cleanup first
             $cat = Typo::cleanX($_POST['cat']);
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -78,7 +79,7 @@ if (User::access(1)) {
                 $data['alertSuccess'][] = MSG_CATEGORY_UPDATED.' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
 
@@ -87,7 +88,8 @@ if (User::access(1)) {
     }
 
     if (isset($_GET['act']) == 'del') {
-        if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+        $token = Typo::cleanX($_GET['token']);
+        if (!isset($_GET['token']) || !Token::isExist($token)) {
             // VALIDATE ALL
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
@@ -98,7 +100,7 @@ if (User::access(1)) {
             $data['alertSuccess'][] = MSG_CATEGORY_REMOVED;
         }
         if (isset($_GET['token'])) {
-            Token::remove($_GET['token']);
+            Token::remove($token);
         }
     }
     $data['cat'] = Db::result("SELECT * FROM `cat` WHERE `type` = 'post' ORDER BY `id` DESC");

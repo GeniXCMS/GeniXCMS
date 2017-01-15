@@ -22,7 +22,7 @@ if (isset($_GET['token'])
     $token = '';
 }
 ($_GET['act'] == 'edit') ? $pagetitle = 'Edit' : $pagetitle = 'New';
-($_GET['act'] == 'edit') ? $act = "edit&id={$_GET['id']}&token=".$token : $act = 'add';
+($_GET['act'] == 'edit') ? $act = "edit&id=".Typo::int($_GET['id'])."&token=".$token : $act = 'add';
 
 if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
@@ -42,6 +42,7 @@ if (isset($data['post'])) {
             $pub = '';
             $unpub = 'SELECTED';
         }
+        $id = Typo::int($_GET['id']);
     } else {
         $title = '';
         $content = '';
@@ -65,7 +66,7 @@ if (isset($data['post'])) {
 }
 
 ?>
-<form action="index.php?page=pages&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
+<form action="index.php?page=pages&act=<?=$act?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
@@ -130,8 +131,8 @@ if (isset($data['post'])) {
                         unset($listlang[Options::v('multilang_default')]);
                         foreach ($listlang as $key => $value) {
                             if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-                                $lang = Language::getLangParam($key, $_GET['id']);
-                                if ($lang == '') {
+                                $lang = Language::getLangParam($key, $id);
+                                if ($lang == '' || !Posts::existParam('multilang', $id)) {
                                     $lang['title'] = $title;
                                     $lang['content'] = $content;
                                 } else {

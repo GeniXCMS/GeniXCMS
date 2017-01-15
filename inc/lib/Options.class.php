@@ -41,8 +41,8 @@ class Options
                 $ins = array(
                         'table' => 'options',
                         'key' => array(
-                            'name' => $name,
-                            'value' => $value,
+                            'name' => Typo::cleanX($name),
+                            'value' => Typo::cleanX($value),
                             ),
                     );
                 $opt = Db::insert($ins);
@@ -58,9 +58,13 @@ class Options
     {
         if (is_array($key)) {
             foreach ($key as $k => $v) {
+                $k = Typo::cleanX($k);
+                $v = Typo::cleanX($v);
                 $post = Db::query("UPDATE `options` SET `value`='{$v}' WHERE `name` = '{$k}' LIMIT 1");
             }
         } else {
+            $key = Typo::cleanX($key);
+            $val = Typo::cleanX($val);
             $post = Db::query("UPDATE `options` SET `value`='{$val}' WHERE `name` = '{$key}' LIMIT 1");
         }
 
@@ -69,6 +73,7 @@ class Options
 
     public static function get($vars)
     {
+        $vars = Typo::cleanX($vars);
         $op = Db::result("SELECT `value` FROM `options` WHERE `name` = '{$vars}' LIMIT 1");
         if (Db::$num_rows > 0) {
             return $op[0]->value;
@@ -102,6 +107,7 @@ class Options
 
     public static function isExist($vars)
     {
+        $vars = Typo::cleanX($vars);
         $opt = self::get($vars);
 
         if (false !== $opt) {

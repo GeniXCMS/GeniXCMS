@@ -46,17 +46,40 @@ if (isset($token) && Token::isExist($token) ) {
                     foreach ($value as $file) {
                         $filepath = (isset($file['realpath']) ? $file['realpath'] : $elfinder->realpath($file['hash']));
                         // array_push($data, $filepath);
+
                         if (Image::isPng($filepath)) {
-                            Image::compressPng($filepath);
+                            if (Files::isClean($filepath)){
+                                $safe = true;
+                            } else {
+                                $safe = false;
+                            }
+                            if ($safe){
+                                Image::compressPng($filepath);
+                            } else {
+                                unlink($filepath);
+                            }
                         } elseif (Image::isJpg($filepath)) {
-                            Image::compressJpg($filepath);
+                            if (!Files::isClean($filepath)){
+                                unlink($filepath);
+                            } else {
+                                Image::compressJpg($filepath);
+                            }
                         }
                     }
                 } else { // other value (ex. header)
+
                     if (Image::isPng($value)) {
-                        Image::compressPng($value);
+                        if (!Files::isClean($value)){
+                            unlink($value);
+                        } else {
+                            Image::compressPng($value);
+                        }
                     } elseif (Image::isJpg($value)) {
-                        Image::compressJpg($value);
+                        if (!Files::isClean($value)){
+                            unlink($value);
+                        } else {
+                            Image::compressJpg($value);
+                        }
                     }
                     // array_push($data, $value);
                 }
@@ -64,7 +87,7 @@ if (isset($token) && Token::isExist($token) ) {
             // $log .= sprintf(' %s(%s)', $key, implode(', ', $data));
         }
 
-        return true;
+        
     }
 
     // set path for specific access

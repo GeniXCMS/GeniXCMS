@@ -71,9 +71,11 @@ class Language
 
     public static function getLangParam($lang, $post_id)
     {
+        $post_id = Typo::int($post_id);
         if (Posts::existParam('multilang', $post_id)) {
-            $multilang = json_decode(Posts::getParam('multilang', $post_id), true);
-            // print_r($multilang);
+            $langparam = Typo::Xclean(Posts::getParam('multilang', $post_id));
+            $multilang = json_decode($langparam, true);
+
             foreach ($multilang as $key => $value) {
                 // print_r($value);
                 $keys = array_keys($value);
@@ -93,8 +95,9 @@ class Language
         $lg = json_decode($lg, true);
 
         if (isset($_GET['lang']) && $_GET['lang'] != '' && $lang == '') {
-            if (key_exists($_GET['lang'], $lg)) {
-                Session::set(array('lang' => $_GET['lang']));
+            $getLang = Typo::cleanX($_GET['lang']);
+            if (key_exists($getLang, $lg)) {
+                Session::set(array('lang' => $getLang));
             } else {
                 Session::remove('lang');
             }
@@ -130,7 +133,7 @@ class Language
                     if ($langs != '') {
                         $lang = Session::val('lang');
                     } else {
-                        $lang = isset($_GET['lang']) ? $_GET['lang'] : '';
+                        $lang = isset($_GET['lang']) ? Typo::cleanX($_GET['lang']) : '';
                     }
                 } else {
                     $lang = '';

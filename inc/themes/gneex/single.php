@@ -8,7 +8,7 @@
     <section id="blog">
         <div class="container">
             <?php
-            $bar = Posts::getParam('sidebar', $data['posts'][0]->id);
+            $bar = $data['posts'][0]->sidebar;
             $cols = ($bar == 'yes'|| $bar == '') ? '8': '12';
             ?>
                 <div class="col-md-<?=$cols;?>">
@@ -17,7 +17,7 @@
                     if (Gneex::opt('adsense') != '') {
                         echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                     }
-                    if (isset($data['posts'][0]->title)) {
+                    if (!isset($data['posts']['error'])) {
                         foreach ($data['posts'] as $p) {
                             $comment = array(
                             'offset' => 0,

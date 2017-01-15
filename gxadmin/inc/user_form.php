@@ -90,5 +90,5 @@
     </div>
     </div>
 </div>
-<input type="hidden" name="token" value="<?=$_GET['token'];?>">
+<input type="hidden" name="token" value="<?=TOKEN?>">
 </form>

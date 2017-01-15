@@ -66,7 +66,7 @@ class Gneex
         $sql = "SELECT `content` FROM `posts` WHERE `id` = '{$id}'";
         $q = Db::result($sql);
 
-        return $q[0]->content;
+        return !isset($q['error']) ? $q[0]->content: '';
     }
 
     public static function optionPost($type, $post='')
@@ -118,12 +118,16 @@ class Gneex
 
     public static function introIg($url)
     {
-        $dom = explode('/', $url);
-        if (strpos($dom[2], 'youtube') || strpos($dom[2], 'youtu.be')) {
-            $hash = (strpos($dom[2], 'youtu.be')) ? $dom[3] : str_replace('watch?v=', '', $dom[3]);
-            $html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'.$hash.'?rel=0&amp;controls=0&amp;showinfo=0" class="center-block" frameborder="0" allowfullscreen></iframe>';
+        if ($url != '') {
+            $dom = explode('/', $url);
+            if (strpos($dom[2], 'youtube') || strpos($dom[2], 'youtu.be')) {
+                $hash = (strpos($dom[2], 'youtu.be')) ? $dom[3] : str_replace('watch?v=', '', $dom[3]);
+                $html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $hash . '?rel=0&amp;controls=0&amp;showinfo=0" class="center-block" frameborder="0" allowfullscreen></iframe>';
+            } else {
+                $html = '<img src="' . $url . '" class="img-responsive center-block">';
+            }
         } else {
-            $html = '<img src="'.$url.'" class="img-responsive center-block">';
+            $html = '';
         }
 
         return $html;
@@ -147,32 +151,35 @@ class Gneex
         }
         ';
         $css .= '
-        .bg-slide {
-            background-color: '.$opt['background_color_header'].';
-            background-image: url('.$opt['background_header'].');
+        .bg-slide {';
+        $css .= !empty($opt['background_color_header']) ? 'background-color: '.$opt['background_color_header'].';':'';
+        $css .= !empty($opt['background_header']) ? 'background-image: url('.$opt['background_header'].');
             background-size: cover;
             background-repeat: no-repeat;
-            background-position: center center;
-        }';
+            background-position: center center;':'';
+        $css .= '}';
         $css .= '
-        #header, #front-text, #front-text h2 span {
-            color: '.$opt['font_color_header'].';
-        }';
+        #header, #front-text, #front-text h2 span {';
+        $css .= !empty($opt['font_color_header']) ? 'color: '.$opt['font_color_header'].';': '';
+        $css .= '}';
         $css .= '
-        footer {
-            background-color: '.$opt['background_color_footer'].';
-            background-image: url('.$opt['background_footer'].');
-            color: '.$opt['font_color_footer'].';
-        }';
+        footer {';
+        $css .= !empty($opt['background_color_footer']) ? 'background-color: '.$opt['background_color_footer'].';': '';
+        $css .= !empty($opt['background_footer']) ? 'background-image: url('.$opt['background_footer'].');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;':'';
+        $css .= !empty($opt['font_color_footer']) ? 'color: '.$opt['font_color_footer'].';':'';
+        $css .= '}';
         $css .= '
-        footer a {
-            color: '.$opt['link_color_footer'].';
-        }';
+        footer a {';
+        $css .= !empty($opt['link_color_footer']) ? 'color: '.$opt['link_color_footer'].';':'';
+        $css .= '}';
         $css .= '
-        #featured {
-            background-color: '.$opt['background_color_featured'].';
-            background-image: url(\''.$opt['background_featured'].'\');
-        }';
+        #featured {';
+        $css .= !empty($opt['background_color_featured']) ? 'background-color: '.$opt['background_color_featured'].';':'';
+        $css .= !empty($opt['background_featured']) ? 'background-image: url(\''.$opt['background_featured'].'\');':'';
+        $css .= '}';
         $css .= '
         .panel.panel-one .panel-heading, .panel.panel-one .panel-body {
             background-color: '.$opt['panel_1_color'].';

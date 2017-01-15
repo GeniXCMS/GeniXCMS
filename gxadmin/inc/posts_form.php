@@ -16,13 +16,13 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($_GET['token'])
-    && Token::isExist($_GET['token'])) {
+    && Token::isExist(Typo::cleanX($_GET['token']))) {
     $token = TOKEN;
 } else {
     $token = '';
 }
 ($_GET['act'] == 'edit') ? $pagetitle = 'Edit' : $pagetitle = 'New';
-($_GET['act'] == 'edit') ? $act = "edit&id={$_GET['id']}&token=".$token : $act = 'add';
+($_GET['act'] == 'edit') ? $act = "edit&id=".Typo::int($_GET['id'])."&token=".$token : $act = 'add';
 
 if (isset($data['post'])) {
     foreach ($data['post'] as $p) {
@@ -32,8 +32,10 @@ if (isset($data['post'])) {
         $date = $p->date;
         $status = $p->status;
         $cat = $p->cat;
+        $tags = $p->tags;
+
     }
-    $tags = Posts::getParam('tags', $p->id);
+//    $tags = Posts::getParam('tags', $p->id);
     if ($status == 1) {
         $pub = 'SELECTED';
         $unpub = '';
@@ -41,6 +43,7 @@ if (isset($data['post'])) {
         $pub = '';
         $unpub = 'SELECTED';
     }
+    $id = Typo::int($_GET['id']);
 } else {
     $title = '';
     $content = '';
@@ -52,7 +55,7 @@ if (isset($data['post'])) {
     $tags = '';
 }
 ?>
-<form action="index.php?page=posts&act=<?=$act?>&token=<?=$_GET['token'];?>" method="post" role="form" class="">
+<form action="index.php?page=posts&act=<?=$act?>" method="post" role="form" class="">
 <div class="row">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
@@ -117,9 +120,9 @@ if (isset($data['post'])) {
                     foreach ($listlang as $key => $value) {
                         // print_r($key);
                         if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-                            $lang = Language::getLangParam($key, $_GET['id']);
+                            $lang = Language::getLangParam($key, $id);
                             // print_r($lang);
-                            if ($lang == '' || !Posts::existParam('multilang', $_GET['id'])) {
+                            if ($lang == '' || !Posts::existParam('multilang', $id)) {
                                 $lang['title'] = $title;
                                 $lang['content'] = $content;
                             } else {
@@ -227,13 +230,10 @@ if (isset($data['post'])) {
                             <div class="form-group">
                                 <label><?=STATUS;?></label>
                                 <select name="status" class="form-control">
-                                    <option value="1" <?=$pub;
-?>><?=PUBLISH;?></option>
-                                    <option value="0" <?=$unpub;
-?>><?=UNPUBLISH;?></option>
+                                    <option value="1" <?=$pub;?>><?=PUBLISH;?></option>
+                                    <option value="0" <?=$unpub;?>><?=UNPUBLISH;?></option>
                                 </select>
-                                <small><?=PUBLISHED_LOWER;
-?> or <?=UNPUBLISHED_LOWER;?></small>
+                                <small><?=PUBLISHED_LOWER;?> or <?=UNPUBLISHED_LOWER;?></small>
                             </div>
 
                             <div class="form-group">

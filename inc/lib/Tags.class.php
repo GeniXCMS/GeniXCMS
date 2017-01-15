@@ -144,7 +144,7 @@ class Tags
             if (!$exist) {
                 if ($tag_i != '') {
                     $slug = Typo::slugify($tag_i);
-                    $cat = $tag_i;
+                    $cat = Typo::cleanX($tag_i);
                     Db::insert(
                         sprintf(
                             "INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'tag' )",

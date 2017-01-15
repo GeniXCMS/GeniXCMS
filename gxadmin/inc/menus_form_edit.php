@@ -16,7 +16,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($_GET['id'])) {
-    $menuid = $_GET['id'];
+    $menuid = Typo::int($_GET['id']);
 } else {
     $menuid = $data['menuid'];
 }
@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     // print_r($data['menus']);
 
 if (isset($_GET['token'])
-    && Token::isExist($_GET['token'])) {
+    && Token::isExist(Typo::cleanX($_GET['token']))) {
     $token = TOKEN;
 } else {
     $token = '';

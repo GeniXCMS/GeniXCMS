@@ -55,7 +55,7 @@ if (isset($_POST['gneex_options_update'])) {
 <form action="" method="post">
 <div class="row">
     <div class="col-md-12">
-        <h2>GneeX Theme <small >v1.0.0</small>
+        <h2>GneeX Theme <small >v1.1.0</small>
             <button class="pull-right btn btn-success" type="submit" name="gneex_options_update">
                 Change
             </button>
@@ -134,7 +134,30 @@ if (Gneex::checkDB()) {
 
 
             <div role="tabpanel" class="tab-pane" id="frontpage">
-                <div class="col-md-6">
+                <div class="col-md-12">
+                    <h4>Featured Posts</h4>
+                    <hr />
+                    <div class="form-group">
+                        <label>Featured Posts</label>
+                        <input type="text" name="featured_posts" class="form-control" value="<?=$o['featured_posts']; ?>">
+                        <small>Type the ID of the posts to be featured. comma <kbd>,</kbd> separated.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured Background Image</label>
+                        <input type="text" name="background_featured" class="form-control" value="<?=$o['background_featured']; ?>">
+                        <small>url of the image for your featured background</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured Background Color</label>
+                        <div class="input-group colorpicker-component" id="background_color_featured">
+                            <input type="text" name="background_color_featured" class="form-control" value="<?=$o['background_color_featured']; ?>">
+                            <span class="input-group-addon"><i>&nbsp;&nbsp;&nbsp;</i></span>
+                        </div>
+                        <small>color of the featured background</small>
+                    </div>
+                    <hr />
+                </div>
+                <div class="col-md-12">
             
                 <h4>Frontpage</h4>
                 <hr />
@@ -270,37 +293,12 @@ if (Gneex::checkDB()) {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                <h4>Featured Posts</h4>
-                <hr />
-                    <div class="form-group">
-                        <label>Featured Posts</label>
-                        <input type="text" name="featured_posts" class="form-control" value="<?=$o['featured_posts']; ?>">
-                        <small>Type the ID of the posts to be featured. comma <kbd>,</kbd> separated.</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Featured Background Image</label>
-                        <input type="text" name="background_featured" class="form-control" value="<?=$o['background_featured']; ?>">
-                        <small>url of the image for your featured background</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Featured Background Color</label>
-                        <div class="input-group colorpicker-component" id="background_color_featured">
-                            <input type="text" name="background_color_featured" class="form-control" value="<?=$o['background_color_featured']; ?>">
-                            <span class="input-group-addon"><i>&nbsp;&nbsp;&nbsp;</i></span>
-                        </div>
-                        <small>color of the featured background</small>
-                    </div>
-                <hr />
-                </div>
+
             </div>
 
 
-
-
-            
             <div role="tabpanel" class="tab-pane" id="headerfooter">
-                <div class="col-md-6">
+                <div class="col-md-12">
                 <h4>Header</h4>
                 <hr />
                     <div class="form-group">
@@ -332,7 +330,7 @@ if (Gneex::checkDB()) {
                     </div>
                 <hr />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                 <h4>Footer</h4>
                 <hr />
                     <div class="form-group">
@@ -419,7 +417,7 @@ if (Gneex::checkDB()) {
                 <hr />
                     <div class="form-group">
                         <label>Adsense Code</label>
-                        <textarea name="adsense" class="form-control"><?=$o['adsense']; ?></textarea>
+                        <textarea name="adsense" class="form-control" rows="10"><?=$o['adsense']; ?></textarea>
                         <small>Your lovely adsense code.</small>
                     </div>
                 <hr />
@@ -429,7 +427,7 @@ if (Gneex::checkDB()) {
                 <hr />
                     <div class="form-group">
                         <label>Analytics Code</label>
-                        <textarea name="analytics" class="form-control"><?=$o['analytics']; ?></textarea>
+                        <textarea name="analytics" class="form-control" rows="10"><?=$o['analytics']; ?></textarea>
                         <small>Your analytics tracking code.</small>
                     </div>
 

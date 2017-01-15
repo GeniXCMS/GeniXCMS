@@ -34,7 +34,8 @@ if (User::access(0)) {
             }
             switch ($submit) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (!isset($_POST['id']) || $_POST['id'] == '') {
@@ -130,9 +131,11 @@ if (User::access(0)) {
             } else {
                 $submit = false;
             }
+            $itemid = Typo::int($_GET['itemid']);
             switch ($submit) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -144,16 +147,16 @@ if (User::access(0)) {
                             'menuid' => Typo::strip($_POST['id']),
                             'name' => Typo::cleanX($_POST['name']),
                             'class' => Typo::cleanX($_POST['class']),
-                            'type' => $_POST['type'],
+                            'type' => Typo::cleanX(['type']),
                             'value' => $_POST[$_POST['type']],
                         );
                         $vars = array(
-                            'id' => $_GET['itemid'],
+                            'id' => $itemid,
                             'key' => $vars,
                         );
                         Menus::update($vars);
                         $data['alertSuccess'][] = 'Menu Updated';
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
 
                     break;
@@ -163,11 +166,11 @@ if (User::access(0)) {
             }
 
             if (isset($_GET['id'])) {
-                $menuid = $_GET['id'];
+                $menuid = Typo::int($_GET['id']);
             } else {
                 $menuid = '';
             }
-                $data['menus'] = Menus::getId($_GET['itemid']);
+                $data['menus'] = Menus::getId($itemid);
                 $data['parent'] = Menus::isHadParent('', $menuid);
                 Theme::admin('header', $data);
                 System::inc('menus_form_edit', $data);
@@ -175,7 +178,8 @@ if (User::access(0)) {
             break;
         case 'del':
             if (isset($_POST['additem'])) {
-                if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                $token = Typo::cleanX($_POST['token']);
+                if (!isset($_POST['token']) || !Token::isExist($token)) {
                     // VALIDATE ALL
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
@@ -198,22 +202,24 @@ if (User::access(0)) {
                         );
                     Menus::insert($vars);
                     $data['alertSuccess'][] = 'Menu Item Added';
-                    Token::remove($_POST['token']);
+                    Token::remove($token);
                 }
             } else {
                 if (isset($_GET['itemid']) && !isset($_POST['additem'])) {
-                    if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    $token = Typo::cleanX($_GET['token']);
+                    $itemid = Typo::int($_GET['itemid']);
+                    if (!isset($_GET['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        Menus::delete($_GET['itemid']);
+                        Menus::delete($itemid);
                         $data['alertSuccess'][] = 'Menu Deleted';
                     }
                     if (isset($_GET['token'])) {
-                        Token::remove($_GET['token']);
+                        Token::remove($token);
                     }
                 } else {
                     $data['alertDanger'][] = 'No ID Selected.';
@@ -227,7 +233,8 @@ if (User::access(0)) {
 
         case 'remove':
             if (isset($_GET['menuid'])) {
-                if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                $token = Typo::cleanX($_GET['token']);
+                if (!isset($_GET['token']) || !Token::isExist($token)) {
                     // VALIDATE ALL
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
@@ -245,7 +252,7 @@ if (User::access(0)) {
                     $data['alertSuccess'][] = 'Menu Deleted';
                 }
                 if (isset($_GET['token'])) {
-                    Token::remove($_GET['token']);
+                    Token::remove($token);
                 }
             } else {
                 $data['alertDanger'][] = 'No ID Selected.';
@@ -264,7 +271,8 @@ if (User::access(0)) {
             }
             switch ($submit) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -295,7 +303,7 @@ if (User::access(0)) {
                         $data['alertSuccess'][] = 'Menu Added';
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
 
@@ -311,7 +319,8 @@ if (User::access(0)) {
             }
             switch ($submit) {
                 case true:
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -334,7 +343,7 @@ if (User::access(0)) {
                         );
                         Menus::insert($vars);
                         $data['alertSuccess'][] = 'Menu Item Added';
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
 
                     break;
@@ -356,7 +365,8 @@ if (User::access(0)) {
                     // echo "<pre>";
                     // print_r($_POST['order']);
                     // echo "</pre>";
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -369,7 +379,7 @@ if (User::access(0)) {
                         $data['alertSuccess'][] = 'Menu Order Changed';
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
 

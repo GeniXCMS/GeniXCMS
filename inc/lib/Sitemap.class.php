@@ -26,8 +26,8 @@ class Sitemap
     public static function create($count = 20, $url = 'post', $type = 'post', $class = 'Url')
     {
         $var = array(
-                'num' => $count,
-                'type' => $type,
+                'num' => Typo::int($count),
+                'type' => Typo::cleanX($type),
             );
         $posts = Posts::recent($var);
         header('Content-Type: text/xml');

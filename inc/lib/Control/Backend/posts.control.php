@@ -32,8 +32,9 @@ if (User::access(2)) {
             switch (isset($_POST['submit'])) {
                 case true:
                     // print_r($_POST);
+                    $token = Typo::cleanX($_POST['token']);
                     // check token first
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -63,7 +64,7 @@ if (User::access(2)) {
                         if (!isset($_POST['date']) || $_POST['date'] == '') {
                             $date = date('Y-m-d H:i:s');
                         } else {
-                            $date = $_POST['date'];
+                            $date = Typo::cleanX($_POST['date']);
                         }
                         $vars = array(
                                         'title' => $title,
@@ -125,10 +126,13 @@ if (User::access(2)) {
             break;
 
         case 'edit':
+            $id = Typo::int($_GET['id']);
+
             switch (isset($_POST['submit'])) {
                 case true:
                     // check token first
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
 
@@ -196,36 +200,36 @@ if (User::access(2)) {
                                                 );
                             }
                             $multilang = json_encode($multilang, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-                            if (!Posts::existParam('multilang', $_GET['id'])) {
-                                Posts::addParam('multilang', $multilang, $_GET['id']);
+                            if (!Posts::existParam('multilang', $id)) {
+                                Posts::addParam('multilang', $multilang, $id);
                             } else {
-                                Posts::editParam('multilang', $multilang, $_GET['id']);
+                                Posts::editParam('multilang', $multilang, $id);
                             }
 
                             // print_r($multilang);
                         }
 
                         $tags = Typo::cleanX($_POST['tags']);
-                        if (!Posts::existParam('tags', $_GET['id'])) {
-                            Posts::addParam('tags', $tags, $_GET['id']);
+                        if (!Posts::existParam('tags', $id)) {
+                            Posts::addParam('tags', $tags, $id);
                         } else {
-                            Posts::editParam('tags', $tags, $_GET['id']);
+                            Posts::editParam('tags', $tags, $id);
                         }
                         Tags::add($tags);
 
                         if (isset($_POST['param'])){
                             foreach ($_POST['param'] as $k => $v) {
-                                if (!Posts::existParam($k, $_GET['id'])) {
-                                    Posts::addParam($k, $v, $_GET['id']);
+                                if (!Posts::existParam($k, $id)) {
+                                    Posts::addParam($k, $v, $id);
                                 } else {
-                                    Posts::editParam($k, $v, $_GET['id']);
+                                    Posts::editParam($k, $v, $id);
                                 }
                             }
                         }
 
                         $data['alertSuccess'][] = POST." {$title} ".MSG_POST_UPDATED;
                         Hooks::run('post_submit_edit_action', $_POST);
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
 
                     break;
@@ -234,7 +238,11 @@ if (User::access(2)) {
                     break;
             }
 
-            $data['post'] = Db::result("SELECT * FROM `posts` WHERE `id` = '{$_GET['id']}' ");
+            $vars = array(
+                'id' => $id
+            );
+            $data['post'] = Posts::fetch($vars); //Db::result("SELECT * FROM `posts` WHERE `id` = '{$_GET['id']}' ");
+
             Theme::admin('header', $data);
             System::inc('posts_form', $data);
             Theme::admin('footer');
@@ -242,17 +250,19 @@ if (User::access(2)) {
             break;
 
         default:
-            if (isset($_GET['act']) && $_GET['act'] == 'del') {
+            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
                 if (isset($_GET['id'])) {
-                    if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    $id = Typo::int($_GET['id']);
+                    $token = Typo::cleanX($_GET['token']);
+                    if (!isset($_GET['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
-                        $title = Posts::title($_GET['id']);
-                        $del = Posts::delete($_GET['id']);
+                        $title = Posts::title($id);
+                        $del = Posts::delete($id);
                         //echo $title['error'];
                         if (isset($del['error'])) {
                             $data['alertDanger'][] = $del['error'];
@@ -262,7 +272,7 @@ if (User::access(2)) {
                         }
                     }
                     if (isset($_GET['token'])) {
-                        Token::remove($_GET['token']);
+                        Token::remove($token);
                     }
                 } else {
                     $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
@@ -280,7 +290,8 @@ if (User::access(2)) {
             }
             switch ($action) {
                 case 'publish':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -289,6 +300,7 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::publish($id);
                             }
                         }
@@ -298,7 +310,8 @@ if (User::access(2)) {
                     }
                     break;
                 case 'unpublish':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -307,16 +320,18 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::unpublish($id);
                             }
                         }
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
                 case 'delete':
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -325,13 +340,14 @@ if (User::access(2)) {
                     } else {
                         if ($post_id != '') {
                             foreach ($post_id as $id) {
+                                $id = Typo::int($id);
                                 Posts::delete($id);
                                 Hooks::run('post_delete_action', $id);
                             }
                         }
                     }
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
 
@@ -345,7 +361,7 @@ if (User::access(2)) {
             if (isset($_GET['q']) && $_GET['q'] != '') {
                 $q = Typo::cleanX($_GET['q']);
                 $where .= "AND (`title` LIKE '%{$q}%' OR `content` LIKE '%{$q}%') ";
-                $qpage .= "&q={$q}";
+                $qpage .= "&q={$_GET['q']}";
             }
             if (isset($_GET['cat']) && $_GET['cat'] != '') {
                 $cat = Typo::int($_GET['cat']);

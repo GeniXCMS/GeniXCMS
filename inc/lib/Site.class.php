@@ -86,13 +86,13 @@ class Site
             echo "
     <meta name=\"Author\" content=\"{$data['posts'][0]->author}\">";
         }
-        echo '
-    <meta name="Generator" content="GeniXCMS '.System::v().'">
-    <meta name="robots" content="'.Options::v('robots').'">
-    <link rel="canonical" href="'.$canonical.'" />
-    <link rel="shortcut icon" href="'.Options::v('siteicon').'" />
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed for '.self::$name.'" href="'.self::$url.'rss/" />
-        ';
+        echo "
+    <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
+    <meta name=\"robots\" content=\"".Options::v('robots')."\">
+    <link rel=\"canonical\" href=\"".$canonical."\" />
+    <link rel=\"shortcut icon\" href=\"".Options::v('siteicon')."\" />
+    <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed for ".self::$name."\" href=\"".self::$url."rss/\" />
+        ";
 
         ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
         echo '

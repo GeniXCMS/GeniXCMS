@@ -202,9 +202,9 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $post_param = 'CREATE TABLE IF NOT EXISTS `posts_param` (
                 `id` bigint(32) NOT NULL,
-                  `post_id` bigint(32) NOT NULL,
-                  `param` text NOT NULL,
-                  `value` text NOT NULL
+                  `post_id` BIGINT(32) NOT NULL,
+                  `param` TEXT NOT NULL,
+                  `value` LONGTEXT NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8';
         $db->query($post_param);
 
@@ -262,7 +262,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `name` text NOT NULL,
                   `email` text NOT NULL,
                   `url` text NOT NULL,
-                  `comment` text NOT NULL,
+                  `comment` longtext NOT NULL,
                   `post_id` int(11) NOT NULL,
                   `parent` int(11) NOT NULL,
                   `status` enum('0','1','2') NOT NULL,

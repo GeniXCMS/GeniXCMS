@@ -2,7 +2,8 @@
 Theme::editor();
 if (isset($_POST['sendmail'])) {
     // check token first
-    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+    $token = Typo::cleanX($_POST['token']);
+    if (!isset($_POST['token']) || !Token::isExist($token)) {
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (isset($alertDanger)) {
@@ -33,7 +34,7 @@ if (isset($_POST['sendmail'])) {
                             'to_name' => $u->userid,
                             'message' => $msgs,
                             'subject' => $subject,
-                            'msgtype' => $_POST['type'],
+                            'msgtype' => Typo::cleanX($_POST['type']),
                         );
                 $mailsend = Mail::send($vars);
                 if ($mailsend !== null) {
@@ -42,7 +43,8 @@ if (isset($_POST['sendmail'])) {
                 sleep(3);
             }
         } elseif ($_POST['recipient'] != '') {
-            $usr = Db::result("SELECT * FROM `user` WHERE `group` = '{$_POST['recipient']}'");
+            $recipient = Typo::cleanX($_POST['recipient']);
+            $usr = Db::result("SELECT * FROM `user` WHERE `group` = '{$recipient}'");
             foreach ($usr as $u) {
                 $msgs = str_replace('{{userid}}', $u->userid, $msg);
                 $vars = array(
@@ -50,7 +52,7 @@ if (isset($_POST['sendmail'])) {
                             'to_name' => $u->userid,
                             'message' => $msgs,
                             'subject' => $subject,
-                            'msgtype' => $_POST['type'],
+                            'msgtype' => Typo::cleanX($_POST['type']),
                         );
                 $mailsend = Mail::send($vars);
                 if ($mailsend !== null) {
@@ -67,32 +69,12 @@ if (isset($_POST['sendmail'])) {
     }
 }
 
-if (isset($data['alertSuccess'])) {
-    echo '<div class="alert alert-success" >
-    <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-        <span class="sr-only">Close</span>
-    </button>';
-    foreach ($data['alertSuccess'] as $alert) {
-        echo "$alert\n";
-    }
-    echo '</div>';
-}
-if (isset($data['alertDanger'])) {
-    echo '<div class="alert alert-danger" >
-    <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-        <span class="sr-only">Close</span>
-    </button>';
-    foreach ($data['alertDanger'] as $alert) {
-        echo "$alert\n";
-    }
-    echo '</div>';
-}
-
 ?>
 
 <div class="row">
+    <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
     <div class="col-md-12">
         <h1><i class="fa fa-envelope-o"></i> NewsLetter
         <small class="pull-right">Send NewsLetter to All members</small>

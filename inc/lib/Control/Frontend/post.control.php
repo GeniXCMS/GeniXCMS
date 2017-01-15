@@ -35,25 +35,16 @@ if (SMART_URL == true) {
 
 $data['p_type'] = Posts::type($post_id);
 
-$data['posts'] = Db::result(
-    sprintf(
-        "SELECT * FROM `posts`
-            WHERE (`id` = '%d'
-            OR `slug` = '%s')
-            AND `type` = '%s'
-            AND `status` = '%d'
-            LIMIT 1",
-        $post,
-        $post,
-        $data['p_type'],
-        '1'
-    )
+$vars = array(
+    'id'        => $post_id,
+    'type'      => $data['p_type'],
+    'status'    => '1'
 );
-$num_rows = Db::$num_rows;
+$posts = Posts::fetch($vars);
 
-$data['posts'] = Posts::prepare($data['posts']);
-// print_r($data['posts']);
-if ($num_rows > 0) {
+$data['posts'] = Posts::prepare($posts);
+
+if (!isset($posts['error'])) {
     $theme = Theme::exist($data['p_type']) ? $data['p_type']: 'single';
     Theme::theme('header', $data);
     Theme::theme($theme, $data);

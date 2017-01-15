@@ -41,7 +41,9 @@ if (Gneex::featuredExist()) {
                 <?php
                 $feat = explode(',', $gneex['featured_posts']);
                 foreach ($feat as $id) {
+
                     $post = Posts::content(Gneex::getPost($id));
+
                     $title = Posts::title($id);
                     $img = Gneex::getImage($post);
                     if ($img != '') {
@@ -49,15 +51,16 @@ if (Gneex::featuredExist()) {
                     } else {
                         $im = '<img src="'.Url::thumb('assets/images/noimage.png', 'large').'" class="featuredimg">';
                     }
-
-                                echo '<li class="col-sm-3">
-                                <a href="'.Url::post($id)."\">
-                                {$im}
-                                <div class=\"featured-text\">
-                                    <h4 >{$title}</h4>
-                                </div>
-                                </a>
-                            </li>";
+                    if ($post != '') {
+                        echo '<li class="col-sm-3">
+                            <a href="' . Url::post($id) . "\">
+                            {$im}
+                            <div class=\"featured-text\">
+                                <h4 >{$title}</h4>
+                            </div>
+                            </a>
+                        </li>";
+                    }
                 } ?>
                 
             </ul>

@@ -22,7 +22,8 @@ if (User::access(0)) {
     $data['sitetitle'] = 'Permalink';
 
     if (isset($_POST['change'])) {
-        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+        $token = Typo::cleanX($_POST['token']);
+        if (!isset($_POST['token']) || !Token::isExist($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
 

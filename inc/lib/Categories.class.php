@@ -62,65 +62,69 @@ class Categories
     {
         if (is_array($vars)) {
             //print_r($vars);
-            $name = $vars['name'];
-            $where = 'WHERE ';
+            $name = Typo::cleanX($vars['name']);
+            $where = 'WHERE 1 ';
             if (isset($vars['parent'])) {
-                $where .= " `parent` = '".$vars['parent']."' ";
+                $where .= " AND `parent` = '".Typo::int($vars['parent'])."' ";
             } else {
                 $where .= '';
             }
             if (isset($vars['type'])) {
-                if ($vars['type'] == 'tag') {
-                    $where .= " `type` = '{$vars['type']}' AND ";
+                $type = Typo::cleanX($vars['type']);
+                if ($type == 'tag') {
+                    $where .= " AND `type` = '".$type."' ";
                 } else {
-                    $where .= " `type` = '{$vars['type']}' AND `type` != 'tag' AND ";
+                    $where .= " AND `type` = '".$type."' AND `type` != 'tag' ";
                 }
 
             } else {
-                $where .= " `type` != 'tag' AND ";
+                $where .= " AND `type` != 'tag' ";
             }
-            $where .= '1 ';
+            $where .= ' ';
             $order_by = 'ORDER BY ';
             if (isset($vars['order_by'])) {
-                $order_by .= ' '.$vars['order_by'].' ';
+                $order_by .= ' '.Typo::cleanX($vars['order_by']).' ';
             } else {
                 $order_by .= ' `name` ';
             }
             if (isset($vars['sort'])) {
-                $sort = " {$vars['sort']}";
+                $sort = " ".Typo::cleanX($vars['sort'])." ";
             } else {
                 $sort = ' ASC';
             }
-        }
 
-        // $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
-        $cat = Db::result('SELECT * FROM `cat` '.$where.' '.$order_by.' '.$sort);
-        // print_r($cat);
-        $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
-        if (Db::$num_rows > 0) {
-            foreach ($cat as $c) {
-                if ($c->parent == null || $c->parent == '0') {
-                    if (isset($vars['selected']) && $c->id == $vars['selected']) {
-                        $sel = 'SELECTED';
-                    } else {
-                        $sel = '';
-                    }
-                    $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
-                    foreach ($cat as $c2) {
-                        if ($c2->parent == $c->id) {
-                            if (isset($vars['selected']) && $c2->id == $vars['selected']) {
-                                $sel = 'SELECTED';
-                            } else {
-                                $sel = '';
-                            }
-                            $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">
+            // $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
+            $cat = Db::result('SELECT * FROM `cat` '.$where.' '.$order_by.' '.$sort);
+            // print_r($cat);
+            $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
+            if (Db::$num_rows > 0) {
+                foreach ($cat as $c) {
+                    if ($c->parent == null || $c->parent == '0') {
+                        if (isset($vars['selected']) && $c->id == $vars['selected']) {
+                            $sel = 'SELECTED';
+                        } else {
+                            $sel = '';
+                        }
+                        $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
+                        foreach ($cat as $c2) {
+                            if ($c2->parent == $c->id) {
+                                if (isset($vars['selected']) && $c2->id == $vars['selected']) {
+                                    $sel = 'SELECTED';
+                                } else {
+                                    $sel = '';
+                                }
+                                $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">
                                     &nbsp;&nbsp;&nbsp;{$c2->name}</option>";
+                            }
                         }
                     }
                 }
             }
+            $drop .= '</select>';
+        } else {
+            $drop = 'Category config not in Array';
         }
-        $drop .= '</select>';
+
 
         return $drop;
     }
@@ -130,22 +134,25 @@ class Categories
         if (is_array($vars)) {
             //print_r($vars);
 
-            $where = 'WHERE ';
+            $where = 'WHERE 1';
             if (isset($vars['parent'])) {
-                $where .= " `parent` = '{$vars['parent']}' AND ";
+                $where .= " AND `parent` = '".Typo::int($vars['parent'])."' ";
+            } else {
+                $where .= '';
             }
             if (isset($vars['type'])) {
-                if ($vars['type'] == 'tag') {
-                    $where .= " `type` = '{$vars['type']}' AND ";
+                $type = Typo::cleanX($vars['type']);
+                if ($type == 'tag') {
+                    $where .= " AND `type` = '".$type."' ";
                 } else {
-                    $where .= " `type` = '{$vars['type']}' AND `type` != 'tag' AND ";
+                    $where .= " AND `type` = '".$type."' AND `type` != 'tag' ";
                 }
 
             } else {
-                $where .= " `type` != 'tag' AND ";
+                $where .= " AND `type` != 'tag' ";
             }
-            $where .= '1 ';
-            $order_by = 'ORDER BY ';
+
+            $order_by = ' ORDER BY ';
             if (isset($vars['order_by'])) {
                 $order_by .= " {$vars['order_by']} ";
             } else {

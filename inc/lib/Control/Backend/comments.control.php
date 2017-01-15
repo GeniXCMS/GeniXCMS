@@ -21,16 +21,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 if (User::access(2)) {
     $data['sitetitle'] = COMMENTS;
 
-    if (isset($_GET['act'])) {
-        $act = $_GET['act'];
-    } else {
-        $act = '';
-    }
-
-    if (isset($_GET['act']) && $_GET['act'] == 'del') {
+    if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
         if (isset($_GET['id'])) {
             $id = Typo::int($_GET['id']);
-            if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+            $token = Typo::cleanX($_GET['token']);
+            if (!isset($_GET['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -47,12 +42,15 @@ if (User::access(2)) {
                 }
             }
             if (isset($_GET['token'])) {
-                Token::remove($_GET['token']);
+                Token::remove($token);
             }
+
         } else {
             $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
         }
     }
+
+
     if (isset($_POST['action'])) {
         $action = Typo::cleanX($_POST['action']);
     } else {
@@ -65,7 +63,8 @@ if (User::access(2)) {
     }
     switch ($action) {
         case 'publish':
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -74,16 +73,18 @@ if (User::access(2)) {
             } else {
                 if ($post_id != '') {
                     foreach ($post_id as $id) {
+                        $id = Typo::int($id);
                         Comments::publish($id);
                     }
                 }
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
         case 'unpublish':
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -92,16 +93,18 @@ if (User::access(2)) {
             } else {
                 if ($post_id != '') {
                     foreach ($post_id as $id) {
+                        $id = Typo::int($id);
                         Comments::unpublish($id);
                     }
                 }
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
         case 'delete':
-            if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+            $token = Typo::cleanX($_POST['token']);
+            if (!isset($_POST['token']) || !Token::isExist($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -110,13 +113,14 @@ if (User::access(2)) {
             } else {
                 if ($post_id != '') {
                     foreach ($post_id as $id) {
+                        $id = Typo::int($id);
                         Comments::delete($id);
                         Hooks::run('post_delete_action', $id);
                     }
                 }
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
 
@@ -124,13 +128,21 @@ if (User::access(2)) {
             break;
     }
 
+    if (isset($_GET['act'])) {
+        $act = $_GET['act'];
+    } else {
+        $act = '';
+    }
+
+
+
     // search query
     $where = '';
     $qpage = '';
     if (isset($_GET['q']) && $_GET['q'] != '') {
         $q = Typo::cleanX($_GET['q']);
         $where .= "AND (`comment` LIKE '%{$q}%' OR `email` LIKE '%{$q}%') ";
-        $qpage .= "&q={$q}";
+        $qpage .= "&q={$_GET['q']}";
     }
     if (isset($_GET['from']) && $_GET['from'] != '') {
         $from = Typo::cleanX($_GET['from']);

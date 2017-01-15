@@ -55,6 +55,8 @@ class Menus
      */
     public static function isHadParent($parent = '', $menuid = '')
     {
+        $parent = Typo::cleanX($parent);
+        $menuid = Typo::cleanX($menuid);
         if (isset($menuid)) {
             $where = " AND `menuid` = '{$menuid}'";
         } else {
@@ -329,6 +331,7 @@ class Menus
 
     public static function getMenuRaw($menuid)
     {
+        $menuid = Typo::cleanX($menuid);
         $sql = sprintf("SELECT * FROM `menus` WHERE `menuid` = '%s' ORDER BY `order` ASC", $menuid);
         $menus = Db::result($sql);
         $n = Db::$num_rows;
@@ -339,6 +342,7 @@ class Menus
     public static function getId($id = '')
     {
         if (isset($id)) {
+            Typo::int($id);
             $sql = sprintf("SELECT * FROM `menus` WHERE `id` = '%d'", $id);
             $menus = Db::result($sql);
             $n = Db::$num_rows;
@@ -398,6 +402,7 @@ class Menus
 
     public static function delete($id)
     {
+        $id = Typo::int($id);
         $sql = array(
                     'table' => 'menus',
                     'where' => array(

@@ -195,13 +195,14 @@ class Posts
 
     public static function recent($vars)
     {
-        $catW = isset($vars['cat']) ? " AND `cat` = '".$vars['cat']."'" : '';
-        $type = isset($vars['type']) ? $vars['type'] : 'post';
-        $num = isset($vars['num']) ? $vars['num'] : '10';
+        $catW = isset($vars['cat']) ? " AND `cat` = '".Typo::int($vars['cat'])."'" : '';
+        $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
+        $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
         $sql = "SELECT * FROM `posts`
                 WHERE `type` = '{$type}' {$catW} AND `status` = '1'
                 ORDER BY `date` DESC LIMIT {$num}";
         $posts = Db::result($sql);
+
         if (isset($posts['error'])) {
             $posts['error'] = 'No Posts found.';
         } else {
@@ -248,19 +249,21 @@ class Posts
             $name = $vars['name'];
             $where = "WHERE `status` = '1' AND ";
             if (isset($vars['type'])) {
-                $where .= " `type` = '{$vars['type']}' AND ";
+                $type = Typo::cleanX($vars['type']);
+                $where .= " `type` = '{$type}' AND ";
             } else {
                 $where .= ' ';
             }
             $where .= " `status` = '1' ";
             $order_by = 'ORDER BY ';
             if (isset($vars['order_by'])) {
-                $order_by .= " {$vars['order_by']} ";
+                $orderBy = Typo::cleanX($vars['order_by']);
+                $order_by .= " {$order_by} ";
             } else {
                 $order_by .= ' `name` ';
             }
             if (isset($vars['sort'])) {
-                $sort = " {$vars['sort']}";
+                $sort = " ".Typo::cleanX($vars['sort']). " ";
             } else {
                 $sort = 'ASC';
             }
@@ -297,9 +300,9 @@ class Posts
         $sql = array(
                 'table' => 'posts_param',
                 'key' => array(
-                        'post_id' => $post_id,
-                        'param' => $param,
-                        'value' => $value,
+                        'post_id' => Typo::int($post_id),
+                        'param' => Typo::cleanX($param),
+                        'value' => Typo::cleanX($value),
                     ),
             );
         $q = Db::insert($sql);
@@ -312,6 +315,9 @@ class Posts
 
     public static function editParam($param, $value, $post_id)
     {
+        $post_id = Typo::int($post_id);
+        $param = Typo::cleanX($param);
+        $value = Typo::cleanX($value);
         $sql = "UPDATE `posts_param` SET `value` = '{$value}' WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' ";
         $q = Db::query($sql);
         if ($q) {
@@ -323,10 +329,12 @@ class Posts
 
     public static function getParam($param, $post_id)
     {
+        $post_id = Typo::int($post_id);
+        $param = Typo::cleanX($param);
         $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::result($sql);
         if (Db::$num_rows > 0) {
-            return $q[0]->value;
+            return Typo::Xclean($q[0]->value);
         } else {
             return '';
         }
@@ -334,6 +342,8 @@ class Posts
 
     public static function delParam($param, $post_id)
     {
+        $post_id = Typo::int($post_id);
+        $param = Typo::cleanX($param);
         $sql = "DELETE FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::query($sql);
         if ($q) {
@@ -345,6 +355,8 @@ class Posts
 
     public static function existParam($param, $post_id)
     {
+        $post_id = Typo::int($post_id);
+        $param = Typo::cleanX($param);
         $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::result($sql);
         if (Db::$num_rows > 0) {
@@ -501,7 +513,7 @@ class Posts
             )
         );
         if (isset($post['error'])) {
-            $related = 'No Related Post(s)';
+            $related = '<div class="col-sm-12">No Related Post(s)</div>';
         } else {
             $related = '';
             if ($mode == 'list') {
@@ -518,7 +530,7 @@ class Posts
                 $related .= '<ul class="list-group related clearfix">';
                 foreach ($post as $p) {
                     if ($p->id != $id) {
-                        $title = (strlen($p->title) > 34) ? substr($p->title, 0, 34).'...' : $p->title;
+                        $title = (strlen($p->title) > 20) ? substr($p->title, 0, 15).'...' : $p->title;
                         $img = self::getImage(Typo::Xclean($p->content));
                         if ($img != '') {
                             $img = Url::thumb($img, 'square', 200);
@@ -526,7 +538,7 @@ class Posts
                             $img = Url::thumb('assets/images/noimage.png', '', 200);
                         }
                         $related .= '<li class="list-unstyled col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
-                        <img src="'.$img.'" class="img-responsive center-block">'.$title.'</a></li>';
+                        <img src="'.$img.'" class="img-responsive center-block" alt="'.$p->title.'" title="'.$p->title.'">'.$title.'</a></li>';
                     } else {
                         $related .= '';
                     }
@@ -584,6 +596,69 @@ class Posts
                 }
             }
         }
+    }
+
+
+    /**
+     * $vars = [
+     *      'id'        => '',
+     *      'type'      => '',
+     *      'status'    => '',
+     *      'slug'      => '',
+     *      'where'     => ''
+     * ]
+     * @param $vars
+     * @return mixed
+     */
+    public static function fetch($vars)
+    {
+
+        $where = '1 ';
+        if (isset($vars['id'])) {
+            $where .= " AND `id` = '{$vars['id']}' ";
+        }
+//        if (isset($vars['slug']) && $vars['slug'] != '') {
+//            $where .= "OR `slug` = '{$vars['slug']}' ) ";
+//        } else {
+//            $where .= ") ";
+//        }
+        if (isset($vars['type'])) {
+            $where .= " AND `type` = '{$vars['type']}' ";
+        }
+        if (isset($vars['status'])) {
+            $where .= " AND `status` = '{$vars['status']}' ";
+        }
+        if (isset($vars['where']) && $vars['where'] != '') {
+            $where .= $vars['where'];
+        }
+
+        $sql = "SELECT * FROM `posts` WHERE {$where}";
+        $q = Db::result($sql);
+        if (!isset($q['error'])){
+            $arrA = array();
+            foreach ($q[0] as $a => $b) {
+                $arrA []= [ $a => $b ];
+            }
+            // get params
+            $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$vars['id']}'";
+            $r = Db::result($sql);
+            $arr = array();
+            foreach ($r as $k => $v) {
+                $arr[] = [ $v->param => $v->value ];
+            }
+
+            $arrM = array_merge($arrA, $arr);
+            $p = array();
+            foreach ($arrM as $i => $l) {
+                $p = array_merge($l, $p);
+            }
+            $res[0] = (object)$p;
+        } else {
+            $res['error'] = "data not found";
+        }
+
+
+        return $res;
     }
 }
 

@@ -18,6 +18,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
+use PHPMailer\PHPMailer;
 /**
  *
  */
@@ -69,9 +70,8 @@ class Mail
         $type = Options::v('mailtype');
 
         if ($type == 0) { // use php mail command
-
             //Create a new PHPMailer instance
-            $mail = new PHPMailer(true);
+            $mail = new PHPMailer\PHPMailer(true);
 
             try {
                 $mail->isMail();
@@ -106,7 +106,7 @@ class Mail
             // }
         } elseif ($type == 1) {
             //Create a new PHPMailer instance
-            $mail = new PHPMailer(true);
+            $mail = new PHPMailer\PHPMailer(true);
             try {
                 //Tell PHPMailer to use SMTP
                 $mail->isSMTP();

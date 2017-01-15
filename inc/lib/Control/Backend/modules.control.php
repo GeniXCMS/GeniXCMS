@@ -55,7 +55,7 @@ if (User::access(0)) {
             $data['alertDanger'] = $alertDanger;
         }
         if (isset($_POST['token'])) {
-            Token::remove($_POST['token']);
+            Token::remove(Typo::cleanX($_POST['token']));
         }
     }
 

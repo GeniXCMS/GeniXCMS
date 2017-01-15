@@ -70,7 +70,8 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             switch (isset($_POST['edituser'])) {
                 case true:
                     //check token first
-                    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                    $token = Typo::cleanX($_POST['token']);
+                    if (!isset($_POST['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -85,10 +86,11 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     }
 
                     if (!isset($alertDanger)) {
+                        $id = Typo::int($_GET['id']);
                         $group = (User::access(1)) ? Typo::int($_POST['group']) : Session::val('group');
-                        $userid = (User::access(0)) ? Typo::cleanX($_POST['userid']) : User::id($_GET['id']);
+                        $userid = (User::access(0)) ? Typo::cleanX($_POST['userid']) : User::id($id);
                         $vars = array(
-                                        'id' => sprintf('%d', $_GET['id']),
+                                        'id' => $id,
                                         'user' => array(
                                                         'userid' => $userid,
                                                         'email' => Typo::cleanX($_POST['email']),
@@ -104,7 +106,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             //print_r($vars);
                         }
                         User::update($vars);
-                        $alertSuccess[] = 'User : '.User::userid($_GET['id']).' Updated';
+                        $alertSuccess[] = 'User : '.User::userid($id).' Updated';
 
                         if (isset($alertSuccess)) {
                             $data['alertSuccess'] = $alertSuccess;
@@ -115,7 +117,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     }
 
                     if (isset($_POST['token'])) {
-                        Token::remove($_POST['token']);
+                        Token::remove($token);
                     }
                     break;
                 default:
@@ -128,17 +130,19 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
         case 'del':
             if (User::access(1)) {
                 if (isset($_GET['id'])) {
-                    $user = User::userid($_GET['id']);
-                    if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                    $id = Typo::int($_GET['id']);
+                    $user = User::userid($id);
+                    $token = Typo::cleanX($_GET['token']);
+                    if (!isset($_GET['token']) || !Token::isExist($token)) {
                         // VALIDATE ALL
                         $data['alertDanger'][] = TOKEN_NOT_EXIST;
                     } else {
-                        User::delete($_GET['id']);
+                        User::delete($id);
                         Hooks::run('user_delete_action', $_GET);
                         $data['alertSuccess'][] = USER.' '.$user.' '.MSG_USER_REMOVED;
                     }
                     if (isset($_GET['token'])) {
-                        Token::remove($_GET['token']);
+                        Token::remove($token);
                     }
                 } else {
                     $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
@@ -161,18 +165,20 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             break;
         case 'active':
             if (User::access(1)) {
+                $id = Typo::int($_GET['id']);
+                $token = Typo::cleanX($_GET['token']);
                 if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
                     // VALIDATE ALL
                     $data['alertDanger'][] = TOKEN_NOT_EXIST;
                 } else {
-                    if (User::activate($_GET['id'])) {
-                        $data['alertSuccess'][] = USER.' '.User::userid($_GET['id']).' '.MSG_USER_ACTIVATED;
+                    if (User::activate($id)) {
+                        $data['alertSuccess'][] = USER.' '.User::userid($id).' '.MSG_USER_ACTIVATED;
                     } else {
-                        $data['alertDanger'][] = USER.' '.User::userid($_GET['id']).' '.MSG_USER_ACTIVATION_FAIL;
+                        $data['alertDanger'][] = USER.' '.User::userid($id).' '.MSG_USER_ACTIVATION_FAIL;
                     }
                 }
                 if (isset($_GET['token'])) {
-                    Token::remove($_GET['token']);
+                    Token::remove($token);
                 }
                 $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
                 $data['num'] = Db::$num_rows;
@@ -193,18 +199,20 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
 
         case 'inactive':
             if (User::access(1)) {
-                if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                $token = Typo::cleanX($_GET['token']);
+                $id = Typo::int($_GET['id']);
+                if (!isset($_GET['token']) || !Token::isExist($token)) {
                     // VALIDATE ALL
                     $data['alertDanger'][] = TOKEN_NOT_EXIST;
                 } else {
-                    if (User::deactivate($_GET['id'])) {
-                        $data['alertSuccess'][] = USER.' '.User::userid($_GET['id']).' '.MSG_USER_DEACTIVATED;
+                    if (User::deactivate($id)) {
+                        $data['alertSuccess'][] = USER.' '.User::userid($id).' '.MSG_USER_DEACTIVATED;
                     } else {
-                        $data['alertDanger'][] = USER.' '.User::userid($_GET['id']).' '.MSG_USER_DEACTIVATION_FAIL;
+                        $data['alertDanger'][] = USER.' '.User::userid($id).' '.MSG_USER_DEACTIVATION_FAIL;
                     }
                 }
                 if (isset($_GET['token'])) {
-                    Token::remove($_GET['token']);
+                    Token::remove($token);
                 }
                 $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
                 $data['num'] = Db::$num_rows;
@@ -230,7 +238,8 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     case true:
                         // CHECK TOKEN FIRST
                         //echo Token::isExist($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                        $token = Typo::cleanX($_POST['token']);
+                        if (!isset($_POST['token']) || !Token::isExist($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -238,7 +247,8 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $userid = Typo::cleanX($_POST['userid']);
                         $email = Typo::cleanX($_POST['email']);
                         $group = Typo::int($_POST['group']);
-
+                        $pass1 = Typo::strip($_POST['pass1']);
+                        $pass2 = Typo::strip($_POST['pass2']);
                         if (!isset($userid) || $userid == '') {
                             // VALIDATE ALL
                             $alertDanger[] = USERID_CANNOT_EMPTY;
@@ -252,7 +262,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             $alertDanger[] = PASS2_CANNOT_EMPTY;
                         }
 
-                        if (User::isExist($_POST['userid'])) {
+                        if (User::isExist($userid)) {
                             $alertDanger[] = MSG_USER_EXIST;
                         }
                         if (!User::isSame($_POST['pass1'], $_POST['pass2'])) {
@@ -277,12 +287,12 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             User::create($vars);
                             Hooks::run('user_submit_add_action', $_POST);
                             Token::remove($_POST['token']);
-                            $data['alertSuccess'][] = USER." {$_POST['userid']}, ".MSG_USER_ADDED;
+                            $data['alertSuccess'][] = USER." {$userid}, ".MSG_USER_ADDED;
                         } else {
                             $data['alertDanger'] = $alertDanger;
                         }
                         if (isset($_POST['token'])) {
-                            Token::remove($_POST['token']);
+                            Token::remove($token);
                         }
                         break;
 
@@ -296,13 +306,14 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $action = '';
                 }
                 if (isset($_POST['user_id'])) {
-                    $user_id = Typo::cleanX($_POST['user_id']);
+                    $user_id = $_POST['user_id'];
                 } else {
                     $user_id = '';
                 }
                 switch ($action) {
                     case 'activate':
-                        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                        $token = Typo::cleanX($_POST['token']);
+                        if (!isset($_POST['token']) || !Token::isExist($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -314,11 +325,12 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             }
                         }
                         if (isset($_POST['token'])) {
-                            Token::remove($_POST['token']);
+                            Token::remove($token);
                         }
                         break;
                     case 'deactivate':
-                        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                        $token = Typo::cleanX($_POST['token']);
+                        if (!isset($_POST['token']) || !Token::isExist($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -330,11 +342,12 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             }
                         }
                         if (isset($_POST['token'])) {
-                            Token::remove($_POST['token']);
+                            Token::remove($token);
                         }
                         break;
                     case 'delete':
-                        if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+                        $token = Typo::cleanX($_POST['token']);
+                        if (!isset($_POST['token']) || !Token::isExist($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -346,7 +359,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             }
                         }
                         if (isset($_POST['token'])) {
-                            Token::remove($_POST['token']);
+                            Token::remove($token);
                         }
                         break;
 
