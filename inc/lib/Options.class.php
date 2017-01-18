@@ -76,7 +76,7 @@ class Options
         $vars = Typo::cleanX($vars);
         $op = Db::result("SELECT `value` FROM `options` WHERE `name` = '{$vars}' LIMIT 1");
         if (Db::$num_rows > 0) {
-            return $op[0]->value;
+            return Typo::Xclean($op[0]->value);
         } else {
             return false;
         }
@@ -99,7 +99,7 @@ class Options
         foreach ($opt as $k => $v) {
             // echo $v->name;
             if ($v->name == $vars) {
-                return $v->value;
+                return Typo::Xclean($v->value);
             }
         }
         // echo "</pre>";

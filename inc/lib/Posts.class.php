@@ -247,18 +247,18 @@ class Posts
         if (is_array($vars)) {
             //print_r($vars);
             $name = $vars['name'];
-            $where = "WHERE `status` = '1' AND ";
+            $where = "WHERE `status` = '1' ";
             if (isset($vars['type'])) {
                 $type = Typo::cleanX($vars['type']);
-                $where .= " `type` = '{$type}' AND ";
+                $where .= " AND `type` = '{$type}' ";
             } else {
                 $where .= ' ';
             }
-            $where .= " `status` = '1' ";
+
             $order_by = 'ORDER BY ';
             if (isset($vars['order_by'])) {
                 $orderBy = Typo::cleanX($vars['order_by']);
-                $order_by .= " {$order_by} ";
+                $order_by .= " `{$orderBy}` ";
             } else {
                 $order_by .= ' `name` ';
             }

@@ -11,6 +11,7 @@ return array(
     'elFinder' => $vendorDir . '/studio-42/elfinder/php/elFinder.class.php',
     'elFinderConnector' => $vendorDir . '/studio-42/elfinder/php/elFinderConnector.class.php',
     'elFinderLibGdBmp' => $vendorDir . '/studio-42/elfinder/php/libs/GdBmp.php',
+    'elFinderPlugin' => $vendorDir . '/studio-42/elfinder/php/elFinderPlugin.php',
     'elFinderPluginAutoResize' => $vendorDir . '/studio-42/elfinder/php/plugins/AutoResize/plugin.php',
     'elFinderPluginAutoRotate' => $vendorDir . '/studio-42/elfinder/php/plugins/AutoRotate/plugin.php',
     'elFinderPluginNormalizer' => $vendorDir . '/studio-42/elfinder/php/plugins/Normalizer/plugin.php',

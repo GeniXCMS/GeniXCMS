@@ -42,7 +42,8 @@ if (isset($_POST['gneex_options_update'])) {
     $opt = array();
     foreach ($_POST as $k => $v) {
         // $opt[$k] = urlencode($v);
-        $opt[$k] = Typo::jsonFormat($v);
+//        $opt[$k] = Typo::jsonFormat($v);
+        $opt[$k] = $v;
         // echo $opt[$k];
     }
 
@@ -70,16 +71,17 @@ if (isset($_POST['gneex_options_update'])) {
 if (Gneex::checkDB()) {
     $opt = Options::get('gneex_options');
     // $opt = utf8_encode($opt);
-    // var_dump($opt);
+//     var_dump($opt);
 
     $opt = json_decode($opt, true);
-
+//    var_dump($opt);
     if (is_array($opt)) {
         $o = array();
         foreach ($opt as $k => $v) {
             // $o[$k] = urldecode($v);
             $o[$k] = $v;
         }
+//        print_r($o);
     } ?>
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked" id="myTabs">

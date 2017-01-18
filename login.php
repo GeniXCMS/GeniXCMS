@@ -149,6 +149,7 @@ if (!User::isLoggedin()) {
     echo'<div class="alert alert-info">'.MSG_USER_ALREADY_LOGGED.'<br /><a href="logout.php">'.LOGOUT.'</a></div>';
 }
 echo '</div>';
+
 Theme::theme('footer', $data);
 System::Zipped();
 ?>

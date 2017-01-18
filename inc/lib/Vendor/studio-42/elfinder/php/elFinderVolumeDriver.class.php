@@ -669,11 +669,11 @@ abstract class elFinderVolumeDriver {
 	protected $rootModified = false;
 	
 	/**
-	 * Destracter
+	 * Is disable of command `url`
+	 * 
+	 * @var string
 	 */
-	public function __destruct() {
-		$this->session->set($this->id, $this->sessionCache);
-	}
+	protected $disabledGetUrl = false;
 	
 	/*********************************************************************/
 	/*                            INITIALIZATION                         */
@@ -788,6 +788,11 @@ abstract class elFinderVolumeDriver {
 		if (!is_array($this->options['mimeMap'])) {
 			$this->options['mimeMap'] = array();
 		}
+		
+		// check 'url' in disabled commands
+		if (in_array('url', $this->disabled)) {
+			$this->disabledGetUrl = true;
+		}
 	}
 	
 	/**
@@ -829,6 +834,16 @@ abstract class elFinderVolumeDriver {
 	 */
 	public function setSession($session) {
 		$this->session = $session;
+	}
+	
+	/**
+	 * Save session cache data
+	 * Calls this function before umount this volume on elFinder::exec()
+	 * 
+	 * @return void
+	 */
+	public function saveSessionCache() {
+		$this->session->set($this->id, $this->sessionCache);
 	}
 	
 	/**
@@ -5655,16 +5670,18 @@ abstract class elFinderVolumeDriver {
 			}
 		} else {
 			$cwd = getcwd();
-			chdir($dir);
-			
-			foreach($files as $i => $file) {
-				$files[$i] = '.'.DIRECTORY_SEPARATOR.$file;
+			if (chdir($dir)) {
+				foreach($files as $i => $file) {
+					$files[$i] = '.'.DIRECTORY_SEPARATOR.$file;
+				}
+				$files = array_map('escapeshellarg', $files);
+				
+				$cmd = $arc['cmd'].' '.$arc['argc'].' '.escapeshellarg($name).' '.implode(' ', $files);
+				$this->procExec($cmd, $o, $c);
+				chdir($cwd);
+			} else {
+				return false;
 			}
-			$files = array_map('escapeshellarg', $files);
-			
-			$cmd = $arc['cmd'].' '.$arc['argc'].' '.escapeshellarg($name).' '.implode(' ', $files);
-			$this->procExec($cmd, $o, $c);
-			chdir($cwd);
 		}
 		$path = $dir.DIRECTORY_SEPARATOR.$name;
 		return file_exists($path) ? $path : false;
@@ -5689,10 +5706,11 @@ abstract class elFinderVolumeDriver {
 			}
 		} else {
 			$cwd = getcwd();
-			chdir($dir);
-			$cmd = $arc['cmd'].' '.$arc['argc'].' '.escapeshellarg(basename($path));
-			$this->procExec($cmd, $o, $c);
-			chdir($cwd);
+			if (chdir($dir)) {
+				$cmd = $arc['cmd'].' '.$arc['argc'].' '.escapeshellarg(basename($path));
+				$this->procExec($cmd, $o, $c);
+				chdir($cwd);
+			}
 		}
 		$remove && unlink($path);
 	}

@@ -38,6 +38,7 @@ try {
 System::gZip();
 
 if (isset($_POST['login'])) {
+    $token = Typo::cleanX($_POST['token']);
     if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
@@ -166,6 +167,7 @@ if (!User::isLoggedin()) {
 </style>
 
 <?php
+
 Theme::admin('footer');
 System::Zipped();
 ?>

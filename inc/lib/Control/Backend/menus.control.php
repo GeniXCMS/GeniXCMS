@@ -390,6 +390,7 @@ if (User::access(0)) {
                 // CHANGE ORDER END
 
                 $data['menus'] = Options::get('menus');
+//                print_r($data['menus']);
                 Theme::admin('header', $data);
                 System::inc('menus', $data);
                 Theme::admin('footer');

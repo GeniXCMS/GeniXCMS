@@ -64,7 +64,7 @@ class Token
     public static function json()
     {
         $token = Options::v('tokens');
-        $token = json_decode($token, true);
+        $token = json_decode(Typo::Xclean($token), true);
         $newtoken = array(
                         TOKEN => array(
                             'time' => TOKEN_TIME,
@@ -84,7 +84,8 @@ class Token
     public static function isExist($token)
     {
         $json = Options::get('tokens');
-        $tokens = json_decode($json, true);
+        $tokens = json_decode(Typo::Xclean($json), true);
+//        print_r($tokens);
         if (!is_array($tokens) || $tokens == '') {
             $tokens = array();
         }
@@ -100,7 +101,7 @@ class Token
     public static function remove($token)
     {
         $json = Options::get('tokens');
-        $tokens = json_decode($json, true);
+        $tokens = json_decode(Typo::Xclean($json), true);
         unset($tokens[$token]);
         $tokens = json_encode($tokens);
         if (Options::update('tokens', $tokens)) {

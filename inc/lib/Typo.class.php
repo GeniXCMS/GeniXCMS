@@ -282,6 +282,16 @@ class Typo
     {
         return utf8_decode($var);
     }
+
+    public static function validateEmail($email)
+    {
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
 
 /* End of file Typo.class.php */
