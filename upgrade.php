@@ -31,7 +31,7 @@ try {
     echo $e->getMessage();
 }
 
-$url = Site::$url;
+$url = Site::$url.'/';
 
 if (isset($_POST['004-patch'])) {
     $sql = "INSERT INTO `options` (`id`, `name`, `value`) VALUES
@@ -104,6 +104,16 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
+
+    $options = Options::$_data;
+    $opt = [];
+    foreach ($options as $k => $v){
+        $opt[$k] = Typo::cleanX($v);
+    }
+    $q = Options::update($opt);
+
+    $q = Options::update('siteurl', $url);
+    
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -150,6 +160,16 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
+
+    $options = Options::$_data;
+    $opt = [];
+    foreach ($options as $k => $v){
+        $opt[$k] = Typo::cleanX($v);
+    }
+    $q = Options::update($opt);
+
+    $q = Options::update('siteurl', $url);
+
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -194,6 +214,16 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
+
+    $options = Options::$_data;
+    $opt = [];
+    foreach ($options as $k => $v){
+        $opt[$k] = Typo::cleanX($v);
+    }
+    $q = Options::update($opt);
+
+    $q = Options::update('siteurl', $url);
+
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -234,6 +264,16 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
+
+    $options = Options::$_data;
+    $opt = [];
+    foreach ($options as $k => $v){
+        $opt[$k] = Typo::cleanX($v);
+    }
+    $q = Options::update($opt);
+
+    $q = Options::update('siteurl', $url);
+
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -273,6 +313,15 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
+
+    $options = Options::$_data;
+    $opt = [];
+    foreach ($options as $k => $v){
+        $opt[$k] = Typo::cleanX($v);
+    }
+    $q = Options::update($opt);
+
+    $q = Options::update('siteurl', $url);
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -286,16 +335,16 @@ if (isset($alertDanger)) {
     <div class="alert alert-danger">
         ';
     foreach ($alertDanger as $alert) {
-        echo $alert;
+        echo Typo::cleanX($alert);
     }
     echo'
     </div>';
 }
 if (isset($alertSuccess)) {
     echo "
-    <div class=\"alert alert-success\">
-        {$alertSuccess}
-    </div>";
+    <div class=\"alert alert-success\">";
+        echo Typo::cleanX($alertSuccess);
+    echo"</div>";
 }
 echo '
 <h1>Upgrade v'.System::$version.'</h1>
