@@ -19,6 +19,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 date_default_timezone_set('UTC');
+//define('SITE_ID', Typo::getToken(20));
 
 echo '<h2>Install Page</h2>';
 if (isset($_GET['step'])) {
@@ -42,10 +43,10 @@ switch ($step) {
         } else {
             if (Db::connect($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
                 $vars = array(
-                        'dbhost' => (isset($_POST['dbhost']) ? $_POST['dbhost'] : ''),
-                        'dbname' => (isset($_POST['dbname']) ? $_POST['dbname'] : ''),
-                        'dbuser' => (isset($_POST['dbuser']) ? $_POST['dbuser'] : ''),
-                        'dbpass' => (isset($_POST['dbpass']) ? $_POST['dbpass'] : ''),
+                        'dbhost' => (isset($_POST['dbhost']) ? Typo::cleanX($_POST['dbhost']) : ''),
+                        'dbname' => (isset($_POST['dbname']) ? Typo::cleanX($_POST['dbname']) : ''),
+                        'dbuser' => (isset($_POST['dbuser']) ? Typo::strip(Typo::escape($_POST['dbuser'])) : ''),
+                        'dbpass' => (isset($_POST['dbpass']) ? Typo::strip(Typo::escape($_POST['dbpass'])) : ''),
                     );
                 Session::set_session($vars);
                 Theme::install('step1');
@@ -61,10 +62,10 @@ switch ($step) {
 
     case '2':
         $vars = array(
-                    'sitename' => (isset($_POST['sitename']) ? $_POST['sitename'] : ''),
-                    'siteslogan' => (isset($_POST['siteslogan']) ? $_POST['siteslogan'] : ''),
-                    'sitedomain' => (isset($_POST['sitedomain']) ? $_POST['sitedomain'] : ''),
-                    'siteurl' => (isset($_POST['siteurl']) ? $_POST['siteurl'] : ''),
+                    'sitename' => (isset($_POST['sitename']) ? Typo::cleanX($_POST['sitename']) : ''),
+                    'siteslogan' => (isset($_POST['siteslogan']) ? Typo::cleanX($_POST['siteslogan']) : ''),
+                    'sitedomain' => (isset($_POST['sitedomain']) ? Typo::cleanX($_POST['sitedomain']) : ''),
+                    'siteurl' => (isset($_POST['siteurl']) ? Typo::cleanX($_POST['siteurl']) : ''),
                 );
         Session::set_session($vars);
         Theme::install('step2');
@@ -72,9 +73,9 @@ switch ($step) {
 
     case '3':
         $vars = array(
-                    'adminname' => (isset($_POST['adminname']) ? $_POST['adminname'] : ''),
-                    'adminuser' => (isset($_POST['adminuser']) ? $_POST['adminuser'] : ''),
-                    'adminpass' => (isset($_POST['adminpass']) ? $_POST['adminpass'] : ''),
+                    'adminname' => (isset($_POST['adminname']) ? Typo::cleanX(Typo::strip($_POST['adminname'])) : ''),
+                    'adminuser' => (isset($_POST['adminuser']) ? Typo::cleanX(Typo::strip($_POST['adminuser'])) : ''),
+                    'adminpass' => (isset($_POST['adminpass']) ? Typo::strip(Typo::escape($_POST['adminpass'])) : ''),
                 );
         Session::set_session($vars);
         Theme::install('step3');
@@ -130,3 +131,7 @@ switch ($step) {
         }
         break;
 }
+
+echo "<pre>";
+print_r($_SESSION);
+echo "</pre>";

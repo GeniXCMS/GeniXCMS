@@ -95,7 +95,7 @@ class User
     {
         if (is_array($vars)) {
             //print_r($vars['user']);
-            $u = Typo::cleanX(Typo::strip($vars['user']));
+            $u = $vars['user'];
             $sql = array(
                             'table' => 'user',
                             'key' => $u,

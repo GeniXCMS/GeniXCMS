@@ -111,4 +111,50 @@ class Http
             }
         }
     }
+
+    /**
+     * $vars = [
+     *      'url' => '',
+     *      'curl' => 'true/false',
+     *      'curl_options' => [],
+     *      'curl_param' => []
+     * ]
+     */
+    public static function fetch($vars)
+    {
+        if (is_array($vars)){
+            $url = isset($vars['url']) ? $vars['url']: '';
+            $curl = isset($vars['curl']) ? $vars['curl']: '';
+            $c_options[] = isset($vars['curl_options']) ? $vars['curl_options']: [];
+        } else {
+            $url = $vars;
+            $curl = false;
+        }
+
+        if ($curl) {
+            $ch = curl_init();
+//            $opt = '';
+            $c_options[] = array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $url
+            );
+//            $options = array_merge($options, $c_options);
+//            print_r($c_options);
+            $options = [];
+            foreach ($c_options as $k => $v) {
+                foreach ($v as $k2 => $v2){
+                    $options[$k2] = $v2;
+                }
+
+            }
+//            print_r($options);
+            curl_setopt_array($ch, $options);
+            $fetch = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $fetch = file_get_contents($url);
+        }
+
+        return $fetch;
+    }
 }

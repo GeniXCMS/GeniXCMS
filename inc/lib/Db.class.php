@@ -367,6 +367,7 @@ class Db
             $k = '';
             foreach ($vars['key'] as $key => $val) {
                 $val = self::escape($val);
+                $key = self::escape($key);
                 $set .= "'{$val}',";
                 $k .= "`{$key}`,";
             }

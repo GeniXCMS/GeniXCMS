@@ -221,7 +221,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $user = "CREATE TABLE IF NOT EXISTS `user` (
                 `id` bigint(32) NOT NULL,
-                  `userid` varchar(16) NOT NULL,
+                  `userid` varchar(32) NOT NULL,
                   `pass` varchar(255) NOT NULL,
                   `confirm` varchar(255) DEFAULT NULL,
                   `group` enum('0','1','2','3','4','5') NOT NULL,
@@ -367,7 +367,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'cdn_url', '{$url}'),
             (null, 'spamwords', ''),
             (null, 'comments_perpage', '5'),
-            (null, 'comments_enable', 'on')
+            (null, 'comments_enable', 'on'),
+            (null, 'db_version', '1.0.0')
             ";
         $db->query($options);
     }
