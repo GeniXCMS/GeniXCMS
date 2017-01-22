@@ -104,13 +104,10 @@ if (isset($_POST['004-patch'])) {
             MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT
             ';
     $q = Db::query($sql);
-
+    
+    new Options();
     $options = Options::$_data;
-    $opt = [];
-    foreach ($options as $k => $v){
-        $opt[$k] = Typo::cleanX($v);
-    }
-    $q = Options::update($opt);
+    $q = Options::update($options);
 
     $q = Options::update('siteurl', $url);
 
