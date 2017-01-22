@@ -92,7 +92,7 @@ define('USE_MEMCACHED', false);
 
 ### Showcase
 Showcase URL :
-- https://demo.genixcms.org
+- http://demo.genixcms.org
 
 ### License
 **GeniXCMS** License : [**MIT License**](LICENSE)
