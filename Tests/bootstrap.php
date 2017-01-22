@@ -9,6 +9,13 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'db_test');
 
+define('SMART_URL', true); //set 'true' if you want use SMART URL (SEO Friendly URL)
+define('GX_URL_PREFIX', '.html');
+
+define('SITE_ID', 'GeniXCMSTestEngine201701');
+define('ADMIN_DIR', 'gxadmin');
+define('USE_MEMCACHED', false);
+
 function loadlib($f) {
     $file =  GX_LIB. $f . '.class.php';
     if (file_exists($file)) {
