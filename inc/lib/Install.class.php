@@ -14,7 +14,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @link http://genixcms.org
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2016 Puguh Wijayanto
+ * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -58,7 +58,7 @@ class Install
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2016 Puguh Wijayanto
+* @copyright 2014-2017 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
 *
 */error_reporting(0);
@@ -87,7 +87,12 @@ define('SITE_ID', '".Typo::getToken(20)."');
 
 
 
-// DON't REMOVE or EDIT THIS.
+##################################// 
+# DON't REMOVE or EDIT THIS. 
+# ==================================
+# YOU WON'T BE ABLE TO LOG IN 
+# IF IT CHANGED. PLEASE BE AWARE
+##################################//
 define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
 
         ";

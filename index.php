@@ -12,7 +12,7 @@
  * @link http://genixcms.org
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2016 Puguh Wijayanto
+ * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 date_default_timezone_set('UTC');

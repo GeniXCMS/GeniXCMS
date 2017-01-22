@@ -14,7 +14,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @link http://genixcms.org
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2016 Puguh Wijayanto
+ * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 $data = Router::scrap($param);

@@ -12,7 +12,7 @@
  * @link http://genixcms.org
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2016 Puguh Wijayanto
+ * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 define('GX_PATH', realpath(__DIR__.'/'));
@@ -28,9 +28,10 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-
+$data = '';
 if (isset($_POST['forgotpass'])) {
-    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+    $token = Typo::cleanX($_POST['token']);
+    if (!isset($_POST['token']) || !Token::isExist($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -94,41 +95,26 @@ if (isset($_POST['forgotpass'])) {
                         );
                 //echo "<pre>".$msg."</pre>";
                 if (Mail::send($vars)) {
-                    $alertSuccess = PASSWORD_SENT_NOTIF;
+                    $data['alertSuccess'][] = PASSWORD_SENT_NOTIF;
                 }
             } else {
                 if ($usr[0]->activation != '') {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE;
                 } else {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE_BLOCK;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE_BLOCK;
                 }
             }
         } elseif ($c == '0') {
-            $alertDanger[] = NO_USER;
+            $data['alertDanger'][] = NO_USER;
         }
 
-        Token::remove($_POST['token']);
+        Token::remove($token);
     } else {
-        $alertDanger[] = TOKEN_NOT_EXIST;
+        $data['alertDanger'][] = $alertDanger;
     }
 }
 Theme::theme('header');
-if (isset($alertDanger)) {
-    echo '
-		<div class="alert alert-danger">
-			';
-    foreach ($alertDanger as $alert) {
-        echo $alert;
-    }
-    echo'
-		</div>';
-}
-if (isset($alertSuccess)) {
-    echo "
-		<div class=\"alert alert-success\">
-			{$alertSuccess}
-		</div>";
-}
+echo System::alert($data);
 if (!User::isLoggedin()) {
     ?>
 <div class="container">
