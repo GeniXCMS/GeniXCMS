@@ -17,7 +17,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 $data = Router::scrap($param);
 $token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
-if (isset($token) && Token::isExist($token) ) {
+$url = Site::canonical();
+if (isset($token) && Token::isExist($token) && Http::validateUrl($url)) {
     if (User::access(2)) {
         $v = trim(System::latestVersion());
 

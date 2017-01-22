@@ -199,38 +199,41 @@ class Mod
         $data = '';
         if (User::access(0)) {
             if (isset($_GET['page']) && $_GET['page'] == 'modules') {
+                $token = isset($_GET['token']) ? Typo::cleanX($_GET['token']): '';
+                $modules = isset($_GET['modules']) ? Typo::cleanX($_GET['modules']): '';
                 if (isset($_GET['act'])) {
                     if ($_GET['act'] == ACTIVATE) {
-                        if (!Token::isExist($_GET['token'])) {
+
+                        if (!Token::isExist($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
                         if (!isset($alertDanger)) {
-                            self::activate($_GET['modules']);
+                            self::activate($modules);
                             $GLOBALS['alertSuccess'] = MODULES_ACTIVATED;
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == DEACTIVATE) {
-                        if (!Token::isExist($_GET['token'])) {
+                        if (!Token::isExist($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
                         if (!isset($alertDanger)) {
-                            self::deactivate($_GET['modules']);
+                            self::deactivate($modules);
                             $GLOBALS['alertSuccess'] = MODULES_DEACTIVATED;
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == 'remove') {
-                        if (!Token::isExist($_GET['token'])) {
+                        if (!Token::isExist($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
-                        if (self::isActive($_GET['modules'])) {
+                        if (self::isActive($modules)) {
                             $alertDanger[] = 'Module is Active. Please deactivate first.';
                         }
                         if (!isset($alertDanger)) {
-                            self::deactivate($_GET['modules']);
+                            self::deactivate($modules);
                             if (false != Files::delTree(GX_MOD.$_GET['modules'])) {
                                 $GLOBALS['alertSuccess'] = MODULES_DELETED;
                             } else {
