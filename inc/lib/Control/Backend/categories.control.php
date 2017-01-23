@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -87,7 +87,7 @@ if (User::access(1)) {
             break;
     }
 
-    if (isset($_GET['act']) == 'del') {
+    if (isset($_GET['act']) == 'del' && !isset($_POST['addcat'])) {
         $token = Typo::cleanX($_GET['token']);
         if (!isset($_GET['token']) || !Token::isExist($token)) {
             // VALIDATE ALL

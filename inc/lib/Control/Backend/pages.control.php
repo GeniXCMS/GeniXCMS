@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -194,7 +194,7 @@ if (User::access(2)) {
             break;
 
         default:
-            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
+            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST['action'])) {
 
                 if (isset($_GET['id'])) {
                     $id = Typo::int($_GET['id']);

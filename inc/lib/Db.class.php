@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -319,6 +319,7 @@ class Db
             $set = '';
             foreach ($vars['key'] as $key => $val) {
                 $val = self::escape($val);
+                $key = self::escape($key);
                 $set .= "`$key` = '$val',";
             }
 
@@ -336,7 +337,7 @@ class Db
             $q = self::$pdo->exec($sql);
         }
 
-        return true;
+        return $q;
     }
 
     /**

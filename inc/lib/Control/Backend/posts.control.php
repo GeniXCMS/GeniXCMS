@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -169,6 +169,7 @@ if (User::access(2)) {
                                         'status' => Typo::int($_POST['status']),
                                     );
                         Posts::update($vars);
+                        echo "<pre>{$content}</pre>";
                         if (Options::v('multilang_enable') === 'on') {
                             // insert param multilang
                             unset($_POST['title'][$def]);
@@ -230,6 +231,7 @@ if (User::access(2)) {
                         $data['alertSuccess'][] = POST." {$title} ".MSG_POST_UPDATED;
                         Hooks::run('post_submit_edit_action', $_POST);
                         Token::remove($token);
+
                     }
 
                     break;
@@ -250,7 +252,7 @@ if (User::access(2)) {
             break;
 
         default:
-            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
+            if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST['action'])) {
                 if (isset($_GET['id'])) {
                     $id = Typo::int($_GET['id']);
                     $token = Typo::cleanX($_GET['token']);

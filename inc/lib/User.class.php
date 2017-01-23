@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -150,7 +150,8 @@ class User
     {
         if (is_array($vars)) {
             //print_r($vars);
-            $u = Typo::cleanX(Typo::strip($vars['user']));
+            $u = $vars['user'];
+
             $sql = array(
                             'table' => 'user',
                             'id' => $vars['id'],

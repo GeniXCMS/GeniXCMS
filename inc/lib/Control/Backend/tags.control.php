@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -79,7 +79,7 @@ if (User::access(1)) {
                 $data['alertSuccess'][] = MSG_TAG_UPDATED.' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
-                Token::remove($_POST['token']);
+                Token::remove($token);
             }
             break;
 
@@ -87,7 +87,7 @@ if (User::access(1)) {
             break;
     }
 
-    if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
+    if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST['addcat'])) {
         $token = Typo::cleanX($_GET['token']);
         if (!isset($_GET['token']) || !Token::isExist($token)) {
             // VALIDATE ALL
@@ -96,6 +96,7 @@ if (User::access(1)) {
         if (isset($alertDanger)) {
             $data['alertDanger'] = $alertDanger;
         } else {
+            echo "Detel";
             Categories::delete(Typo::int($_GET['id']));
             $data['alertSuccess'][] = MSG_TAG_REMOVED;
         }

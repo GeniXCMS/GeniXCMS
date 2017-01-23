@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -21,34 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 if (User::access(2)) {
     $data['sitetitle'] = COMMENTS;
 
-    if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST)) {
-        if (isset($_GET['id'])) {
-            $id = Typo::int($_GET['id']);
-            $token = Typo::cleanX($_GET['token']);
-            if (!isset($_GET['token']) || !Token::isExist($token)) {
-                // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
-            }
-            if (isset($alertDanger)) {
-                $data['alertDanger'] = $alertDanger;
-            } else {
-                $del = Comments::delete($id);
-                //echo $title['error'];
-                if (isset($del['error'])) {
-                    $data['alertDanger'][] = $del['error'];
-                } else {
-                    $data['alertSuccess'][] = COMMENTS.'  '.MSG_PAGE_REMOVED;
-                    Hooks::run('post_delete_action', $_GET);
-                }
-            }
-            if (isset($_GET['token'])) {
-                Token::remove($token);
-            }
 
-        } else {
-            $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
-        }
-    }
 
 
     if (isset($_POST['action'])) {
@@ -128,13 +101,42 @@ if (User::access(2)) {
             break;
     }
 
+
+
+    if (isset($_GET['act']) && $_GET['act'] == 'del' && !isset($_POST['action'])) {
+        if (isset($_GET['id'])) {
+            $id = Typo::int($_GET['id']);
+            $token = Typo::cleanX($_GET['token']);
+            if (!isset($_GET['token']) || !Token::isExist($token)) {
+                // VALIDATE ALL
+                $alertDanger[] = TOKEN_NOT_EXIST;
+            }
+            if (isset($alertDanger)) {
+                $data['alertDanger'] = $alertDanger;
+            } else {
+                $del = Comments::delete($id);
+                //echo $title['error'];
+                if (isset($del['error'])) {
+                    $data['alertDanger'][] = $del['error'];
+                } else {
+                    $data['alertSuccess'][] = COMMENTS.'  '.MSG_PAGE_REMOVED;
+                    Hooks::run('post_delete_action', $_GET);
+                }
+            }
+            if (isset($_GET['token'])) {
+                Token::remove($token);
+            }
+
+        } else {
+            $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
+        }
+    }
+
     if (isset($_GET['act'])) {
         $act = $_GET['act'];
     } else {
         $act = '';
     }
-
-
 
     // search query
     $where = '';

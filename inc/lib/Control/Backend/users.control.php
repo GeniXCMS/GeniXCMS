@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -76,8 +76,10 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
 
-                    // VALIDATE ALL
-                    if (User::isExist($_POST['userid'])) {
+                    // VALIDATE ALL check if inputed userid is not same
+                    $userid = Typo::cleanX($_POST['userid']);
+                    $olduserid = Typo::cleanX($_POST['olduserid']);
+                    if (!User::isSame($olduserid, $userid) && User::isExist($userid)) {
                         $alertDanger[] = MSG_USER_EXIST;
                     }
 
@@ -86,9 +88,11 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     }
 
                     if (!isset($alertDanger)) {
+
                         $id = Typo::int($_GET['id']);
                         $group = (User::access(1)) ? Typo::int($_POST['group']) : Session::val('group');
                         $userid = (User::access(0)) ? Typo::cleanX($_POST['userid']) : User::id($id);
+
                         $vars = array(
                                         'id' => $id,
                                         'user' => array(

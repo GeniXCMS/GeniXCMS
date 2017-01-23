@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -37,6 +37,15 @@ class Typo
     public static function cleanX($c)
     {
         $val = self::strip_tags_content($c, '<script>', true);
+        $val = preg_replace_callback(
+            '#\<pre\>(.+?)\<\/pre\>#',
+            create_function(
+                '$matches',
+                'return "<pre>".str_replace(\'"\', \'&quot;\', $matches[1])."</pre>";'
+            ),
+            $val
+        );
+        $val = self::filterXss($val);
         $val = htmlspecialchars(
             $val,
             ENT_QUOTES | ENT_HTML5,
@@ -291,6 +300,16 @@ class Typo
         else {
             return false;
         }
+    }
+
+    public static function filterXss($str)
+    {
+//        $str = preg_replace('#on.*=["|\'](.*)["|\']#', '', $str);
+        $str = preg_replace('#(?!<pre>.*?)(onload|onerror|onblur|onchange|onscroll|oninput|
+        onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
+        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|href|background)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
+
+        return $str;
     }
 }
 

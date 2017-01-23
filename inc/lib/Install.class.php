@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -54,7 +54,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 1.0.0
+* @version 1.0.1
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genixcms.org
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -224,7 +224,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `userid` varchar(32) NOT NULL,
                   `pass` varchar(255) NOT NULL,
                   `confirm` varchar(255) DEFAULT NULL,
-                  `group` enum('0','1','2','3','4','5') NOT NULL,
+                  `group` enum('0','1','2','3','4','5','6') NOT NULL,
                   `email` varchar(255) NOT NULL,
                   `join_date` datetime NOT NULL,
                   `status` enum('0','1') NOT NULL,
@@ -368,7 +368,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'spamwords', ''),
             (null, 'comments_perpage', '5'),
             (null, 'comments_enable', 'on'),
-            (null, 'db_version', '1.0.0')
+            (null, 'db_version', '1.0.1')
             ";
         $db->query($options);
     }

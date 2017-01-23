@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -44,11 +44,14 @@
         <div class="form-group">
             <label>Userid</label>
             <?php if (User::access(0)) {
+                $id = isset($_GET['id']) ? Typo::int($_GET['id']): '';
+                $userid = User::userid($id);
     ?>
-            <input type="text" name="userid" class="form-control" value="<?=User::userid($_GET['id']); ?>">
+                <input type="text" name="userid" class="form-control" value="<?=$userid; ?>">
+                <input type="hidden" name="olduserid" class="form-control" value="<?=$userid; ?>">
             <?php
 } else {
-    echo '<div class="form-control">'.User::userid($_GET['id']).'</div>';
+    echo '<div class="form-control">'.$userid.'</div>';
 } ?>
             <small>Only Admin can edit userid</small>
         </div>
@@ -56,7 +59,7 @@
     <div class="col-sm-6">
         <div class="form-group">
             <label>Email</label>
-            <input type="text" name="email" class="form-control" value="<?=User::email($_GET['id']);?>">
+            <input type="text" name="email" class="form-control" value="<?=User::email($id);?>">
             <small>Email must be different with another.</small>
         </div>
     </div>
@@ -75,7 +78,7 @@
             <?php
             $var = array(
                     'name' => 'group',
-                    'selected' => User::group($_GET['id']),
+                    'selected' => User::group($id),
                     'update' => true,
                 );
         echo User::dropdown($var); ?>

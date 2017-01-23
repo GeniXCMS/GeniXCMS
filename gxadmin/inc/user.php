@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -128,6 +128,10 @@
                     } elseif ($p->group == 3) {
                         $grp = AUTHOR;
                     } elseif ($p->group == 4) {
+                        $grp = CONTRIBUTOR;
+                    } elseif ($p->group == 5) {
+                        $grp = VIP_MEMBER;
+                    } elseif ($p->group == 6) {
                         $grp = GENERAL_MEMBER;
                     }
                     if ($p->status == 0) {
