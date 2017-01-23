@@ -169,7 +169,7 @@ if (User::access(2)) {
                                         'status' => Typo::int($_POST['status']),
                                     );
                         Posts::update($vars);
-                        echo "<pre>{$content}</pre>";
+                        
                         if (Options::v('multilang_enable') === 'on') {
                             // insert param multilang
                             unset($_POST['title'][$def]);
