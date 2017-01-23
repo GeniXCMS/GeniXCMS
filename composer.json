@@ -2,7 +2,7 @@
     "name": "genix/cms",
     "type": "project",
     "description": "Simple and Free Opensource CMS and Framework",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "http://genixcms.org",
     "keywords": ["genixcms", "genix", "cms", "metalgenix"],
     "license": "MIT",
