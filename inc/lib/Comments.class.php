@@ -96,7 +96,7 @@ class Comments
 
         unset($vars['addComment']);
         $token = Typo::cleanX($vars['token']);
-        if (!isset($vars['token']) || !Token::isExist($token)) {
+        if (!isset($vars['token']) || !Token::validate($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($vars['comments-msg']) || null == $vars['comments-msg'] || $vars['comments-msg'] == '<p><br></p>') {

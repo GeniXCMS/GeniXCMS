@@ -24,7 +24,7 @@ class Contact
             switch ($_POST['sendMessage']){
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)){
+                    if (!isset($_POST['token']) || !Token::validate($token)){
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (Xaptcha::isEnable()) {

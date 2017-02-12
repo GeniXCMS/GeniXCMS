@@ -96,7 +96,6 @@ if (User::access(1)) {
         if (isset($alertDanger)) {
             $data['alertDanger'] = $alertDanger;
         } else {
-            echo "Detel";
             Categories::delete(Typo::int($_GET['id']));
             $data['alertSuccess'][] = MSG_TAG_REMOVED;
         }
