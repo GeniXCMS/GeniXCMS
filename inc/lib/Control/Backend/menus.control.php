@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -35,7 +35,7 @@ if (User::access(0)) {
             switch ($submit) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
                     if (!isset($_POST['id']) || $_POST['id'] == '') {
@@ -135,7 +135,7 @@ if (User::access(0)) {
             switch ($submit) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -179,7 +179,7 @@ if (User::access(0)) {
         case 'del':
             if (isset($_POST['additem'])) {
                 $token = Typo::cleanX($_POST['token']);
-                if (!isset($_POST['token']) || !Token::isExist($token)) {
+                if (!isset($_POST['token']) || !Token::validate($token)) {
                     // VALIDATE ALL
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
@@ -208,7 +208,7 @@ if (User::access(0)) {
                 if (isset($_GET['itemid']) && !isset($_POST['additem'])) {
                     $token = Typo::cleanX($_GET['token']);
                     $itemid = Typo::int($_GET['itemid']);
-                    if (!isset($_GET['token']) || !Token::isExist($token)) {
+                    if (!isset($_GET['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -234,7 +234,7 @@ if (User::access(0)) {
         case 'remove':
             if (isset($_GET['menuid'])) {
                 $token = Typo::cleanX($_GET['token']);
-                if (!isset($_GET['token']) || !Token::isExist($token)) {
+                if (!isset($_GET['token']) || !Token::validate($token)) {
                     // VALIDATE ALL
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
@@ -272,7 +272,7 @@ if (User::access(0)) {
             switch ($submit) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -320,7 +320,7 @@ if (User::access(0)) {
             switch ($submit) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -366,7 +366,7 @@ if (User::access(0)) {
                     // print_r($_POST['order']);
                     // echo "</pre>";
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }

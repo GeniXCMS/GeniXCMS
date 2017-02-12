@@ -3,9 +3,10 @@
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 $data = Router::scrap($param);
 //print_r($data);
-$token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+$gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+$token = (Token::isExist($gettoken)) ? TOKEN: '';
 $url = Site::canonical();
-if (isset($token) && Token::isExist($token) && Http::validateUrl($url)) {
+if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
     $vendorPath = Vendor::path('studio-42/elfinder');
     include_once $vendorPath.'php/elFinderConnector.class.php';
     include_once $vendorPath.'php/elFinder.class.php';

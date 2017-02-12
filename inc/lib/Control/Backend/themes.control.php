@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -28,7 +28,7 @@ if (User::access(0)) {
     } else {
         if (isset($_POST['upload'])) {
             $token = Typo::cleanX($_POST['token']);
-            if (!Token::isExist($token)) {
+            if (!Token::validate($token)) {
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
             if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == '') {
@@ -62,7 +62,7 @@ if (User::access(0)) {
         if (isset($_GET['act'])) {
             if ($_GET['act'] == 'activate') {
                 $token = Typo::cleanX($_GET['token']);
-                if (!Token::isExist($token)) {
+                if (!Token::validate($token)) {
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
 
@@ -74,7 +74,7 @@ if (User::access(0)) {
                 }
             } elseif ($_GET['act'] == 'remove') {
                 $token = Typo::cleanX($_GET['token']);
-                if (!Token::isExist($_GET['token'])) {
+                if (!Token::validate($_GET['token'])) {
                     $alertDanger[] = TOKEN_NOT_EXIST;
                 }
                 if (Theme::isActive(Typo::cleanX($_GET['themes']))) {

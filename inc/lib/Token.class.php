@@ -6,7 +6,7 @@
  *
  * @since 0.0.2 build date 20150309
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -122,5 +122,28 @@ class Token
         }
 
         return $tokens;
+    }
+
+    public static function validate($token)
+    {
+        if (!self::isExist($token) && !self::urlMatch($token)) {
+            $valid = false;
+        } else {
+            $valid = true;
+        }
+
+        return $valid;
+    }
+
+    public static function urlMatch($token)
+    {
+        $tokens = json_decode(Typo::Xclean(Options::v('tokens')), true);
+        $urlLive = $_SERVER['REQUEST_URI'];
+        $urlToken = $tokens[$token]['url'];
+        if ($urlToken == $urlLive) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

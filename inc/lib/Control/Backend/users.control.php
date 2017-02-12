@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -71,7 +71,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 case true:
                     //check token first
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -79,7 +79,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     // VALIDATE ALL check if inputed userid is not same
                     $userid = Typo::cleanX($_POST['userid']);
                     $olduserid = Typo::cleanX($_POST['olduserid']);
-                    if (!User::isSame($olduserid, $userid) && User::isExist($userid)) {
+                    if (!User::isSame($olduserid, $userid) && User::validate($userid)) {
                         $alertDanger[] = MSG_USER_EXIST;
                     }
 
@@ -137,7 +137,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $id = Typo::int($_GET['id']);
                     $user = User::userid($id);
                     $token = Typo::cleanX($_GET['token']);
-                    if (!isset($_GET['token']) || !Token::isExist($token)) {
+                    if (!isset($_GET['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $data['alertDanger'][] = TOKEN_NOT_EXIST;
                     } else {
@@ -171,7 +171,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             if (User::access(1)) {
                 $id = Typo::int($_GET['id']);
                 $token = Typo::cleanX($_GET['token']);
-                if (!isset($_GET['token']) || !Token::isExist($_GET['token'])) {
+                if (!isset($_GET['token']) || !Token::validate($_GET['token'])) {
                     // VALIDATE ALL
                     $data['alertDanger'][] = TOKEN_NOT_EXIST;
                 } else {
@@ -205,7 +205,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             if (User::access(1)) {
                 $token = Typo::cleanX($_GET['token']);
                 $id = Typo::int($_GET['id']);
-                if (!isset($_GET['token']) || !Token::isExist($token)) {
+                if (!isset($_GET['token']) || !Token::validate($token)) {
                     // VALIDATE ALL
                     $data['alertDanger'][] = TOKEN_NOT_EXIST;
                 } else {
@@ -241,9 +241,9 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 switch (isset($_POST['adduser'])) {
                     case true:
                         // CHECK TOKEN FIRST
-                        //echo Token::isExist($_POST['token']);
+                        //echo Token::validate($_POST['token']);
                         $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                        if (!isset($_POST['token']) || !Token::validate($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -266,7 +266,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             $alertDanger[] = PASS2_CANNOT_EMPTY;
                         }
 
-                        if (User::isExist($userid)) {
+                        if (User::validate($userid)) {
                             $alertDanger[] = MSG_USER_EXIST;
                         }
                         if (!User::isSame($_POST['pass1'], $_POST['pass2'])) {
@@ -317,7 +317,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 switch ($action) {
                     case 'activate':
                         $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                        if (!isset($_POST['token']) || !Token::validate($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -334,7 +334,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                     case 'deactivate':
                         $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                        if (!isset($_POST['token']) || !Token::validate($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
@@ -351,7 +351,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                     case 'delete':
                         $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                        if (!isset($_POST['token']) || !Token::validate($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -416,11 +416,11 @@ class Db
 
     public static function escape($vars)
     {
-        if (DB_DRIVER == 'mysql') {
+        if (DB_DRIVER === 'mysql') {
             $vars = mysql_escape_string($vars);
-        } elseif (DB_DRIVER == 'mysqli') {
+        } elseif (DB_DRIVER === 'mysqli') {
             $vars = self::$mysqli->escape_string($vars);
-        } elseif (DB_DRIVER == 'pdo') {
+        } elseif (DB_DRIVER === 'pdo') {
             $vars = self::$pdo->quote($vars);
         } else {
             $vars = $vars;

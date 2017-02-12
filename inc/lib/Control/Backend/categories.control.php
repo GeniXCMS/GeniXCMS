@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -26,7 +26,7 @@ if (User::access(1)) {
             $slug = Typo::slugify($_POST['cat']);
             $cat = Typo::cleanX($_POST['cat']);
             $token = Typo::cleanX($_POST['token']);
-            if (!isset($_POST['token']) || !Token::isExist($token)) {
+            if (!isset($_POST['token']) || !Token::validate($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -61,7 +61,7 @@ if (User::access(1)) {
             // cleanup first
             $cat = Typo::cleanX($_POST['cat']);
             $token = Typo::cleanX($_POST['token']);
-            if (!isset($_POST['token']) || !Token::isExist($token)) {
+            if (!isset($_POST['token']) || !Token::validate($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -89,7 +89,7 @@ if (User::access(1)) {
 
     if (isset($_GET['act']) == 'del' && !isset($_POST['addcat'])) {
         $token = Typo::cleanX($_GET['token']);
-        if (!isset($_GET['token']) || !Token::isExist($token)) {
+        if (!isset($_GET['token']) || !Token::validate($token)) {
             // VALIDATE ALL
             $alertDanger[] = TOKEN_NOT_EXIST;
         }

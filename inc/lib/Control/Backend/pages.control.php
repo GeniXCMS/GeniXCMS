@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -32,7 +32,7 @@ if (User::access(2)) {
             switch (isset($_POST['submit'])) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -111,7 +111,7 @@ if (User::access(2)) {
             switch (isset($_POST['submit'])) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -200,7 +200,7 @@ if (User::access(2)) {
                     $id = Typo::int($_GET['id']);
                     $title = Posts::title($id);
                     $token = Typo::cleanX($_GET['token']);
-                    if (!isset($_GET['token']) || !Token::isExist($token)) {
+                    if (!isset($_GET['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -235,7 +235,7 @@ if (User::access(2)) {
             switch ($action) {
                 case 'publish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -255,7 +255,7 @@ if (User::access(2)) {
                     break;
                 case 'unpublish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -275,7 +275,7 @@ if (User::access(2)) {
                     break;
                 case 'delete':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::isExist($token)) {
+                    if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }

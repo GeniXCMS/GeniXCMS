@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 0.0.1 build date 20141003
- * @version 1.0.1
+ * @version 1.0.2
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
  * @author Puguh Wijayanto <psw@metalgenix.com>
@@ -15,9 +15,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 $data = Router::scrap($param);
-$token = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+$gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
+$token = (Token::isExist($gettoken)) ? TOKEN: '';
 $url = Site::canonical();
-if (isset($token) && Token::isExist($token) && Http::validateUrl($url)) {
+if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
     if (User::access(2)) {
         // A list of permitted file extensions
         $allowed = array('png', 'jpg', 'jpeg', 'gif');

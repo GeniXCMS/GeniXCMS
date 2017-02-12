@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -25,8 +25,8 @@ $data['p_type'] = 'author';
 //$cat = Db::escape(Typo::Xclean($_GET['cat']));
 $author = (SMART_URL) ? $data['author'] : Typo::cleanX(Typo::strip($_GET['author']));
 $data['max'] = Options::v('post_perpage');
-//echo User::isExist($author);
-if (User::isExist($author)) {
+//echo User::validate($author);
+if (User::validate($author)) {
     if (SMART_URL) {
         if (isset($data['paging'])) {
             $paging = $data['paging'];

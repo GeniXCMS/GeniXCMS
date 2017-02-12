@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genixcms.org
@@ -28,7 +28,7 @@ if (User::access(0)) {
     }
 
     if (isset($_POST['upload'])) {
-        if (!Token::isExist($_POST['token'])) {
+        if (!Token::validate($_POST['token'])) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_FILES['module']['name']) || $_FILES['module']['name'] == '') {
