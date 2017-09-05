@@ -1,4 +1,3 @@
-# GeniXCMS
 > Update Notice: Please Update to version v1.1.0.
 
 ![](https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/16195650_667518436742758_1128161184265490528_n.png?oh=df09dadd56c1a329a177f19f591aed14&oe=59124708)
