@@ -307,7 +307,7 @@ class Typo
 //        $str = preg_replace('#on.*=["|\'](.*)["|\']#', '', $str);
         $str = preg_replace('#(?!<pre>.*?)(onload|onerror|onblur|onchange|onscroll|oninput|
         onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
-        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
+        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background|oncut)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
         $str = preg_replace('#(.*?)(javascript:.*)(.*?)#', '', $str);
         //$str = preg_replace('#&lt;(.*?)script&gt;#', '', $str);
         return $str;

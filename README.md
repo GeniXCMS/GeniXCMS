@@ -81,7 +81,7 @@ https://docs.genix.id/user-guide/installation/
 
 - Upload all files, except `inc/config/config.php`.
 - edit your site's config.php, 
-- add this new configuration 
+- add this new configuration if not exist
 ```php
 define('SITE_ID', 'type-random-chars');
 define('ADMIN_DIR', 'gxadmin');

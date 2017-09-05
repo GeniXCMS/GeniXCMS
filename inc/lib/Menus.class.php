@@ -358,7 +358,7 @@ class Menus
     {
         foreach ($vars as $k => $v) {
             
-            // print_r($v);
+            $v['order'] = Typo::int($v['order']);
             $sql = array(
                         'table' => 'menus',
                         'id' => Typo::int($k),
@@ -395,7 +395,7 @@ class Menus
             $sql = array(
                         'table' => 'menus',
                         'id' => $vars['id'],
-                        'key' => $vars['key'],
+                        'key' => $vars['key']
                     );
             $menu = Db::update($sql);
         }
@@ -407,7 +407,7 @@ class Menus
         $sql = array(
                     'table' => 'menus',
                     'where' => array(
-                                    'id' => $id,
+                                    'id' => $id
                                 ),
                 );
         $menu = Db::delete($sql);
