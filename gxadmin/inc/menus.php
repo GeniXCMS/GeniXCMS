@@ -6,48 +6,47 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
+    <section class="content-header">
 
-        <h2><i class="fa fa-sitemap"></i> <?=MENUS;?>
+        <h1><i class="fa fa-sitemap"></i> <?=MENUS;?>
             <div class="pull-right">
-                <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
+                <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
                     <span class="glyphicon glyphicon-plus"></span> 
                     <span class="hidden-xs hidden-sm"><?=ADD_MENU;?></span>
                 </button>
             </div>
-        </h2>
-        <hr />
-    </div>
-    <div class="col-sm-12">
+        </h1>
+    </section>
+    <section class="content">
         <div class="row">
             <div class="col-sm-12">
             <?php
             if (isset($data['menus']) && $data['menus'] != '') {
                 foreach (json_decode($data['menus']) as $k => $m) {
                     echo "
-                        <div class=\"panel-group\" id=\"accordion\">
-                          <div class=\"panel panel-default\">
-                            <div class=\"panel-heading\">
+                        <div class=\"box-group\" id=\"accordion\">
+                          <div class=\"panel box box-primary\">
+                            <div class=\"box-header with-border\">
                               <div class=\"panel-title clearfix\">
                                 <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#$k\">
                                     <div class=\"col-md-4\">
                                         <h4><strong>$m->name </strong></h4>
                                     </div>
-                                    <div class=\"col-md-4\">
+                                    <div class=\"col-md-4 box-title\">
                                         <h4>
                                         <small>
                                             <em>$k</em>
@@ -115,8 +114,8 @@
                 </div>
         </div>
 
-    </div>
-</div>
+    </section>
+
 
 <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

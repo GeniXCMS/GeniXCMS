@@ -71,59 +71,79 @@ if (isset($_POST['sendmail'])) {
 
 ?>
 
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
+    <section class="content-header">
         <h1><i class="fa fa-envelope-o"></i> NewsLetter
         <small class="pull-right">Send NewsLetter to All members</small>
         </h1>
-        <hr />
-    </div>
+    </section>
     <form action="" method="post">
-    <div class="col-md-6">
+        <section class="content">
+            <!-- Default box -->
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        Send Newsletter
+                    </h3>
 
-        <div class="form-group">
-            <label>Subject</label>
-            <input type="text" name="subject" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Recipients</label>
-            <select name="recipient" class="form-control">
-                <option value="">All Members</option>
-                <option value="0">Administrators</option>
-                <option value="4">General Members</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Mail Type</label>
-            <select name="type" class="form-control">
-                <option value="text">Plain Text</option>
-                <option value="html">HTML</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input type="hidden" name="token" value="<?=TOKEN;?>">
-            <button type="submit" name="sendmail" class="btn btn-primary">
-                <i class="fa fa-envelope"></i> Send Email
-            </button>
-        </div>
+                    <div class="box-tools pull-right">
+                        <?=$data['paging'];?>
+                    </div>
+                </div>
+                <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
 
-        <div class="form-group">
-            <label>eMail Tags</label>
-            <ul class="list-group clearfix">
-                <li class="list-group-item col-md-6"><strong>{{userid}}</strong> : Member Userid</li>
-                <li class="list-group-item col-md-6"><strong>{{sitename}}</strong> : Website Name</li>
-                <li class="list-group-item col-md-6"><strong>{{siteurl}}</strong> : Website URL</li>
-                <li class="list-group-item col-md-6"><strong>{{sitemail}}</strong> : Website Email</li>
-            </ul>
-        </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" name="subject" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Recipients</label>
+                        <select name="recipient" class="form-control">
+                            <option value="">All Members</option>
+                            <option value="0">Administrators</option>
+                            <option value="4">General Members</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mail Type</label>
+                        <select name="type" class="form-control">
+                            <option value="text">Plain Text</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="token" value="<?=TOKEN;?>">
+                        <button type="submit" name="sendmail" class="btn btn-primary">
+                            <i class="fa fa-envelope"></i> Send Email
+                        </button>
+                    </div>
 
-    </div>
-    <div class="col-md-6">
-        <label>Message</label>
-        <textarea name="message" class="form-control editor" id="editor"></textarea>
-    </div>
+                    <div class="form-group">
+                        <label>eMail Tags</label>
+                        <ul class="list-group clearfix">
+                            <li class="list-group-item col-md-6"><strong>{{userid}}</strong> : Member Userid</li>
+                            <li class="list-group-item col-md-6"><strong>{{sitename}}</strong> : Website Name</li>
+                            <li class="list-group-item col-md-6"><strong>{{siteurl}}</strong> : Website URL</li>
+                            <li class="list-group-item col-md-6"><strong>{{sitemail}}</strong> : Website Email</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <label>Message</label>
+                    <textarea name="message" class="form-control editor content" id="content"></textarea>
+                </div>
+            </div>
+                </div>
+                <!-- /.box-body -->
+
+                <!-- /.box-footer-->
+            </div>
+            <!-- /.box -->
+        </section>
     </form>
-</div>

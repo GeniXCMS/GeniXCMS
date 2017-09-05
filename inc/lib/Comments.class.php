@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -130,7 +130,13 @@ class Comments
             $url = (null !== Session::val('username')) ? '' : Typo::cleanX($vars['comments-url']);
             $name = (null !== Session::val('username')) ? Session::val('username') : Typo::cleanX($vars['comments-name']);
             // $comment = nl2br(Typo::url2link(Typo::p2nl(Typo::strip($vars['comments-msg'], '<p><pre><code><b><i><ul><li><ol><u><s>'))));
-            $comment = Typo::url2link(Typo::p2br(Typo::strip($vars['comments-msg'], '<br><p><pre><code><b><i><ul><li><ol><u><s>')));
+            $comment = Typo::filterXSS(
+                Typo::url2link(
+                    Typo::p2br(
+                        Typo::strip($vars['comments-msg'], '<br><p><pre><code><b><i><ul><li><ol><u><s>')
+                        )
+                    )
+                );
             $post_id = Typo::int($data['posts'][0]->id);
             $parent = Typo::int($vars['comments-parent']);
             $status = (null !== Session::val('username')) ? '1' : '2';

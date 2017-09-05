@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -79,7 +79,7 @@ class Typo
 
       // transliterate
         setlocale(LC_CTYPE, Options::v('country').'.utf8');
-        $text = iconv('utf-8', 'ASCII//TRANSLIT', $text);
+        $text = iconv('utf-8', 'utf-8//TRANSLIT', $text);
       // lowercase
         $text = strtolower($text);
 
@@ -191,7 +191,7 @@ class Typo
 
     public static function float($var)
     {
-        $var = sprintf('%2f', $var);
+        $var = number_format(sprintf('%2f', $var), 2);
 
         return $var;
     }
@@ -307,8 +307,9 @@ class Typo
 //        $str = preg_replace('#on.*=["|\'](.*)["|\']#', '', $str);
         $str = preg_replace('#(?!<pre>.*?)(onload|onerror|onblur|onchange|onscroll|oninput|
         onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
-        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|href|background)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
-
+        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
+        $str = preg_replace('#(.*?)(javascript:.*)(.*?)#', '', $str);
+        //$str = preg_replace('#&lt;(.*?)script&gt;#', '', $str);
         return $str;
     }
 }

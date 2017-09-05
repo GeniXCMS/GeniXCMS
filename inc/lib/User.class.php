@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -35,8 +35,10 @@ class User
     public static function secure()
     {
         if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username'])) {
-            header('location: login.php');
+            header('Location: '.Site::$url.'login.php');
+            exit;
         } else {
+
             return true;
         }
     }
@@ -95,21 +97,26 @@ class User
     {
         if (is_array($vars)) {
             //print_r($vars['user']);
+            $ip = [ 'ipaddress' => $_SERVER['REMOTE_ADDR'] ];
+            $ipCountry = (!Http::isLocal($ip)) ? Http::getIpCountry($ip): '';
             $u = $vars['user'];
+            $u = array_merge($ip, $u);
             $sql = array(
-                            'table' => 'user',
-                            'key' => $u,
-                        );
+                'table' => 'user',
+                'key' => $u,
+            );
             $db = Db::insert($sql);
 
             if (!isset($vars['detail']) || $vars['detail'] == '') {
-                Db::insert("INSERT INTO `user_detail` (`userid`) VALUES ('{$vars['user']['userid']}')");
+                Db::insert("INSERT INTO `user_detail` (`userid`, `country`) VALUES ('{$vars['user']['userid']}', '{$ipCountry}')");
             } else {
+
                 $u = $vars['detail'];
+                $u = array_merge($u, ['country' => $ipCountry]);
                 $sql = array(
-                                'table' => 'user_detail',
-                                'key' => $u,
-                            );
+                    'table' => 'user_detail',
+                    'key' => $u,
+                );
                 Db::insert($sql);
             }
             Hooks::run('user_sqladd_action', $vars);
@@ -153,18 +160,18 @@ class User
             $u = $vars['user'];
 
             $sql = array(
-                            'table' => 'user',
-                            'id' => $vars['id'],
-                            'key' => $u,
-                        );
+                'table' => 'user',
+                'id' => $vars['id'],
+                'key' => $u,
+            );
             Db::update($sql);
             if (isset($vars['detail']) && $vars['detail'] != '') {
                 $u = $vars['detail'];
                 $sql = array(
-                                'table' => 'user_detail',
-                                'id' => $vars['id'],
-                                'key' => $u,
-                            );
+                    'table' => 'user_detail',
+                    'id' => $vars['id'],
+                    'key' => $u,
+                );
                 Db::update($sql);
             }
             Hooks::run('user_sqledit_action', $vars);
@@ -175,19 +182,19 @@ class User
     {
         $id = Typo::int($id);
         $vars = array(
-                'table' => 'user',
-                'where' => array(
-                            'id' => $id,
-                            ),
-            );
+            'table' => 'user',
+            'where' => array(
+                'id' => $id,
+            ),
+        );
         Db::delete($vars);
 
         $vars = array(
-                'table' => 'user_detail',
-                'where' => array(
-                            'id' => $id,
-                            ),
-            );
+            'table' => 'user_detail',
+            'where' => array(
+                'id' => $id,
+            ),
+        );
         Db::delete($vars);
         Hooks::run('user_sqldel_action', $vars);
     }
@@ -219,7 +226,7 @@ class User
         return $pass;
     }
 
-    public static function isExist($user, $except='')
+    public static function validate($user, $except='')
     {
         if ($except != '') {
             $id = Typo::cleanX(Typo::strip($except));
@@ -227,8 +234,8 @@ class User
         } else {
             $where = '';
         }
-        $user = sprintf('%s', Typo::cleanX($user));
-        $sql = sprintf("SELECT `userid` FROM `user` WHERE `userid` = '%s' %s ", $user, $where);
+        $user = Typo::cleanX(Typo::strip($user));
+        $sql = sprintf("SELECT * FROM `user` WHERE `userid` = '%s' %s ", $user, $where);
         $usr = Db::result($sql);
         $n = Db::$num_rows;
         if ($n > 0) {
@@ -247,15 +254,15 @@ class User
         }
     }
 
-    public static function isEmail($vars)
+    public static function isEmail($vars, $id='')
     {
-        if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-            $id = Typo::int($_GET['id']);
+        if (isset($id)) {
+            $id = Typo::int($id);
             $where = "AND `id` != '{$id}' ";
         } else {
             $where = '';
         }
-        $vars = sprintf('%s', Typo::cleanX($vars));
+        $vars = Typo::cleanX($vars);
         $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where);
         $e = Db::result($sql);
         if (Db::$num_rows > 0) {
@@ -392,6 +399,37 @@ class User
         $html .= '</select>';
 
         return $html;
+    }
+
+    public static function listRecentBox($max=10)
+    {
+        $sql = "SELECT * FROM `user` ORDER BY `join_date` DESC LIMIT {$max}";
+        $q = Db::result($sql);
+        echo "<ul  class=\"users-list clearfix\">";
+        foreach ($q as $k => $v) {
+            echo "<li>
+                <img src='".Image::getGravatar($v->email)."'>
+                <a class=\"users-list-name\" href=\"#\">{$v->userid}</a>
+                <span class=\"users-list-date\">".Date::format($v->join_date)."</span>
+            </li>";
+        }
+        echo "</ul>";
+    }
+
+    public static function jsonUserLocation()
+    {
+        $sql = "SELECT DISTINCT `country` FROM `user_detail`";
+        $q = Db::result($sql);
+        $ctr = array();
+        foreach ($q as $k => $v) {
+            if ($v->country != '') {
+                $sql2 = "SELECT * FROM `user_detail` WHERE `country` = '{$v->country}'";
+                $q2 = Db::result($sql2);
+                $ctr[$v->country] = Db::$num_rows;
+            }
+        }
+//        print_r($ctr);
+        return json_encode($ctr);
     }
 }
 

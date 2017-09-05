@@ -6,43 +6,62 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2><i class="fa fa-cubes"></i>  <?=CATEGORIES;?>
-            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> 
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <i class="fa fa-cubes"></i>  <?=CATEGORIES;?>
+            <small>
+                Categories Manager
+            </small>
+            <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
+                <span class="glyphicon glyphicon-plus"></span>
                 <span class="hidden-xs hidden-sm"><?=ADD_CATEGORY;?></span>
             </button>
-        </h2>
-        <small class="label label-default pull-left"><?=Stats::totalCat('post');?> total</small>
-        <hr />
-    </div>
+        </h1>
 
-    <div class="col-sm-12">
-        <div class="row">
-            <?php
-            if ($data['num'] > 0) {
-                foreach ($data['cat'] as $c) {
-                    // echo "<td>".$c->id."</td>";
-                    // echo "<td>".$c->name."</td>";
-                    // echo "<td>".$c->parent."</td>";
-                    // echo "<td></td>";
+    </section>
 
-                    if ($c->parent == '' || $c->parent == 0) {
-                        echo "<div class=\"col-sm-6 col-md-4 item\" >
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <small class="label label-default pull-left"><?=Stats::totalCat('post');?> total</small>
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <?php
+                    if ($data['num'] > 0) {
+                        foreach ($data['cat'] as $c) {
+                            // echo "<td>".$c->id."</td>";
+                            // echo "<td>".$c->name."</td>";
+                            // echo "<td>".$c->parent."</td>";
+                            // echo "<td></td>";
+
+                            if ($c->parent == '' || $c->parent == 0) {
+                                echo "<div class=\"col-sm-6 col-md-4 item\" >
                             <div class=\"panel panel-default\">
                                 <div class=\"panel-heading\">
                                     <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
@@ -62,9 +81,9 @@
                                 </div>
                                 <div class="panel-body">
                                 <ul class="list-group">';
-                        foreach ($data['cat'] as $c2) {
-                            if ($c2->parent == $c->id) {
-                                echo "<li class=\"list-group-item\">
+                                foreach ($data['cat'] as $c2) {
+                                    if ($c2->parent == $c->id) {
+                                        echo "<li class=\"list-group-item\">
                                         <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
                                         <div class=\"input-group\">
                                             <a href=\"?page=categories&act=del&id={$c2->id}&token=".TOKEN."\" class=\"input-group-addon\"
@@ -79,22 +98,28 @@
                                         </div>
                                         </form>
                                          </li>';
+                                    }
+                                }
+                                echo '</ul></div>';
+                                echo '</div></div>';
                             }
                         }
-                        echo '</ul></div>';
-                        echo '</div></div>';
+                    } else {
+                        echo '<div class="col-md-12">No Categories Found</div>';
                     }
-                }
-            } else {
-                echo '<div class="col-md-12">No Categories Found</div>';
-            }
-            ?>
+                    ?>
+                </div>
+            </div>
+            <!-- /.box-body -->
+<!--            <div class="box-footer">-->
+<!---->
+<!--            </div>-->
+            <!-- /.box-footer-->
         </div>
+        <!-- /.box -->
 
+    </section>
 
-
-    </div>
-</div>
 <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

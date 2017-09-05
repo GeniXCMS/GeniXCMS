@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -54,9 +54,9 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 1.0.1
+* @version 1.1.0
 * @link https://github.com/semplon/GeniXCMS
-* @link http://genixcms.org
+* @link http://genix.id
 * @author Puguh Wijayanto (www.metalgenix.com)
 * @copyright 2014-2017 Puguh Wijayanto
 * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -228,7 +228,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `email` varchar(255) NOT NULL,
                   `join_date` datetime NOT NULL,
                   `status` enum('0','1') NOT NULL,
-                  `activation` text
+                  `activation` text,
+                  `ipaddress` text
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $db->query($user);
 
@@ -250,7 +251,9 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
                   `city` varchar(255)  DEFAULT NULL,
                   `state` varchar(255)  DEFAULT NULL,
                   `country` varchar(255)  DEFAULT NULL,
-                  `postcode` varchar(32)  DEFAULT NULL
+                  `postcode` varchar(32)  DEFAULT NULL,
+                  `avatar` text,
+                  `balance` float DEFAULT 0
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
         $db->query($user_detail);
 
@@ -281,6 +284,9 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
 
         $pr = 'ALTER TABLE `comments` MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT';
         $db->query($pr);
+
+        
+
     }
 
     /**
@@ -350,7 +356,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'pppass', ''),
             (null, 'ppsign', ''),
             (null, 'tokens', ''),
-            (null, 'modules', ''),
+            (null, 'modules', '[]'),
             (null, 'themes', 'gneex'),
             (null, 'system_lang', 'english'),
             (null, 'charset', 'utf-8'),
@@ -368,7 +374,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'spamwords', ''),
             (null, 'comments_perpage', '5'),
             (null, 'comments_enable', 'on'),
-            (null, 'db_version', '1.0.1')
+            (null, 'db_version', '1.1.0')
             ";
         $db->query($options);
     }

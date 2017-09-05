@@ -6,32 +6,43 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2><i class="fa fa-plug"></i>  <?=MODULES;?>
-            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
+    <section class="content-header">
+        <h1><i class="fa fa-plug"></i>  <?=MODULES;?>
+            <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-plus"></span> <span class="hidden-xs hidden-sm"><?=UPLOAD_MODULES;?></span>
             </button>
-        </h2>
-        <hr />
-    </div>
+        </h1>
+    </section>
 
-    <div class="col-sm-12">
+    <section class="content">
 
-        <table class="table table-responsive">
+        <!-- Default box -->
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Modules List
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body no-padding">
+        <table class="table">
             <thead>
                 <th><?=NAME;?></th>
                 <th><?=DESC;?></th>
@@ -85,9 +96,16 @@
 
             </tfoot>
         </table>
+            </div>
+            <!-- /.box-body -->
+<!--            <div class="box-footer">-->
+<!---->
+<!--            </div>-->
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </section>
 
-    </div>
-</div>
 <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

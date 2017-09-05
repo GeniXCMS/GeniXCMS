@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -90,6 +90,13 @@ if (User::access(2)) {
                             Posts::addParam('multilang', $multilang, $post_id);
                             // print_r($multilang);
                         }
+
+                        if (isset($_POST['param'])){
+                            foreach ($_POST['param'] as $k => $v) {
+                                Posts::addParam($k, $v, $post_id);
+                            }
+                        }
+
                         $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
                         Hooks::run('post_submit_add_action', $_POST);
                         isset($_POST['token']) ? Token::remove($token): '';
@@ -172,6 +179,17 @@ if (User::access(2)) {
 
                             // print_r($multilang);
                         }
+
+                        if (isset($_POST['param'])){
+                            foreach ($_POST['param'] as $k => $v) {
+                                if (!Posts::existParam($k, $id)) {
+                                    Posts::addParam($k, $v, $id);
+                                } else {
+                                    Posts::editParam($k, $v, $id);
+                                }
+                            }
+                        }
+
                         $data['alertSuccess'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
                         Token::remove($token);
                     }

@@ -6,33 +6,43 @@
  *
  * @since 0.0.8 build date 20160315
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2><i class="fa fa-tags"></i>  <?=TAGS;?>
-            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
+    <section class="content-header">
+        <h1><i class="fa fa-tags"></i>  <?=TAGS;?>
+            <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-plus"></span> 
                 <span class="hidden-xs hidden-sm"><?=ADD_TAG;?></span>
             </button>
-        </h2>
-        <small class="label label-default pull-left"><?=Stats::totalCat('tag');?> total</small>
+        </h1>
 
-        <hr />
-    </div>
+    </section>
 
-    <div class="col-sm-12">
+    <section class="content">
+        <!-- Default box -->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <small class="label label-default pull-left"><?=Stats::totalCat('tag');?> total</small>
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body">
         <div class="row">
             <?php
             if ($data['num'] > 0) {
@@ -71,10 +81,17 @@
             ?>
         </div>
 
+            </div>
+            <!-- /.box-body -->
+<!--            <div class="box-footer">-->
+<!--                Footer-->
+<!--            </div>-->
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
 
+    </section>
 
-    </div>
-</div>
 <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

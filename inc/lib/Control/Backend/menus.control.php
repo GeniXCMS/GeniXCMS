@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -134,6 +134,7 @@ if (User::access(0)) {
             $itemid = Typo::int($_GET['itemid']);
             switch ($submit) {
                 case true:
+
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
@@ -147,7 +148,7 @@ if (User::access(0)) {
                             'menuid' => Typo::strip($_POST['id']),
                             'name' => Typo::cleanX($_POST['name']),
                             'class' => Typo::cleanX($_POST['class']),
-                            'type' => Typo::cleanX(['type']),
+                            'type' => Typo::cleanX($_POST['type']),
                             'value' => $_POST[$_POST['type']],
                         );
                         $vars = array(
@@ -166,7 +167,7 @@ if (User::access(0)) {
             }
 
             if (isset($_GET['id'])) {
-                $menuid = Typo::int($_GET['id']);
+                $menuid = Typo::cleanX($_GET['id']);
             } else {
                 $menuid = '';
             }
@@ -243,8 +244,8 @@ if (User::access(0)) {
                 } else {
                     $menus = json_decode(Options::v('menus'), true);
                     unset($menus[$_GET['menuid']]);
-
-                    $sql = sprintf("DELETE FROM `menus` WHERE `menuid` = '%s' ", $_GET['menuid']);
+                    $menuid = Typo::cleanX($_GET['menuid']);
+                    $sql = sprintf("DELETE FROM `menus` WHERE `menuid` = '%s' ", $menuid);
                     Db::query($sql);
                     $menu = json_encode($menus);
                     Options::update('menus', $menu);

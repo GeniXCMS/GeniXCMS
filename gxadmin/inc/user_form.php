@@ -6,10 +6,10 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -17,27 +17,37 @@
  */
 ?>
 <form action="" method="post">
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
+    <section class="content-header">
         <h1><i class="fa fa-group"></i> Edit User
             <div class="pull-right">
-                <button  class="btn btn-success " type="submit" name="edituser">
+                <button  class="btn btn-success btn-sm" type="submit" name="edituser">
                     <span class="glyphicon glyphicon-ok"></span>
                     <span class="hidden-xs hidden-sm">Update</span>
                 </button>
-                <a class="btn btn-danger  " href="<?=(User::access(2)) ? 'index.php?page=users' : 'index.php';?>">
+                <a class="btn btn-danger  btn-sm" href="<?=(User::access(2)) ? 'index.php?page=users' : 'index.php';?>">
                     <span class="glyphicon glyphicon-remove"></span>
                     <span class="hidden-xs hidden-sm">Cancel</span>
                 </a>
-
             </div>
         </h1>
-        <hr />
-    </div>
-    <div class="col-sm-12">
+    </section>
+    <section class="content">
+        <!-- Default box -->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Modify User
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body">
     <div class="row">
 
     <div class="col-sm-6">
@@ -91,7 +101,16 @@
 
 
     </div>
-    </div>
-</div>
+
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                Footer
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </section>
+
 <input type="hidden" name="token" value="<?=TOKEN?>">
 </form>

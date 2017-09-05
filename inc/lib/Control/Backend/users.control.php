@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -31,27 +31,27 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
     $qpage = '';
     if (isset($_GET['q']) && $_GET['q'] != '') {
         $q = Typo::cleanX($_GET['q']);
-        $where .= "AND (`userid` LIKE '%%{$q}%%' OR `email` LIKE '%%{$q}%%') ";
+        $where .= "AND (A.`userid` LIKE '%%{$q}%%' OR A.`email` LIKE '%%{$q}%%') ";
         $qpage .= "&q={$_GET['q']}";
     }
     if (isset($_GET['from']) && $_GET['from'] != '') {
         $from = Typo::cleanX($_GET['from']);
-        $where .= "AND `join_date` >= '{$from}' ";
+        $where .= "AND A.`join_date` >= '{$from}' ";
         $qpage .= "&from={$from}";
     }
     if (isset($_GET['to']) && $_GET['to'] != '') {
         $to = Typo::cleanX($_GET['to']);
-        $where .= "AND `join_date` <= '{$to}' ";
+        $where .= "AND A.`join_date` <= '{$to}' ";
         $qpage .= "&to={$to}";
     }
     if (isset($_GET['group']) && $_GET['group'] != '') {
         $group = Typo::int($_GET['group']);
-        $where .= "AND `group` = '{$group}' ";
+        $where .= "AND A.`group` = '{$group}' ";
         $qpage .= "&group={$group}";
     }
     if (isset($_GET['status']) && $_GET['status'] != '') {
         $status = Typo::int($_GET['status']);
-        $where .= "AND `status` = '{$status}' ";
+        $where .= "AND A.`status` = '{$status}' ";
         $qpage .= "&status={$status}";
     }
 
@@ -79,17 +79,18 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     // VALIDATE ALL check if inputed userid is not same
                     $userid = Typo::cleanX($_POST['userid']);
                     $olduserid = Typo::cleanX($_POST['olduserid']);
+                    $id = Typo::int($_GET['id']);
                     if (!User::isSame($olduserid, $userid) && User::validate($userid)) {
                         $alertDanger[] = MSG_USER_EXIST;
                     }
 
-                    if (!User::isEmail($_POST['email'])) {
+                    if (!User::isEmail($_POST['email'], $id)) {
                         $alertDanger[] = MSG_USER_EMAIL_EXIST;
                     }
 
                     if (!isset($alertDanger)) {
 
-                        $id = Typo::int($_GET['id']);
+                        
                         $group = (User::access(1)) ? Typo::int($_POST['group']) : Session::val('group');
                         $userid = (User::access(0)) ? Typo::cleanX($_POST['userid']) : User::id($id);
 
@@ -242,17 +243,18 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     case true:
                         // CHECK TOKEN FIRST
                         //echo Token::validate($_POST['token']);
-                        $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::validate($token)) {
-                            // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
-                        }
-
                         $userid = Typo::cleanX($_POST['userid']);
                         $email = Typo::cleanX($_POST['email']);
                         $group = Typo::int($_POST['group']);
                         $pass1 = Typo::strip($_POST['pass1']);
                         $pass2 = Typo::strip($_POST['pass2']);
+
+                        $token = Typo::cleanX($_POST['token']);
+                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                            // VALIDATE ALL
+                            $alertDanger[] = TOKEN_NOT_EXIST;
+                        }
+
                         if (!isset($userid) || $userid == '') {
                             // VALIDATE ALL
                             $alertDanger[] = USERID_CANNOT_EMPTY;
@@ -290,7 +292,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                                         );
                             User::create($vars);
                             Hooks::run('user_submit_add_action', $_POST);
-                            Token::remove($_POST['token']);
+                            Token::remove($token);
                             $data['alertSuccess'][] = USER." {$userid}, ".MSG_USER_ADDED;
                         } else {
                             $data['alertDanger'] = $alertDanger;
@@ -371,11 +373,17 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                 }
 
-                $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
+                $data['usr'] = Db::result("SELECT * FROM `user` AS A 
+                        LEFT JOIN `user_detail` AS B 
+                        ON A.`userid` = B.`userid` 
+                        WHERE {$where} ORDER BY A.`userid` ASC LIMIT {$offset}, {$max}");
                 $data['num'] = Db::$num_rows;
                 $page = array(
                             'paging' => $paging,
-                            'table' => 'user',
+                            'table' => [
+                                'user' => ['A', 'LEFT JOIN', 'userid'],
+                                'user_detail' => ['B', 'LEFT JOIN', 'userid']
+                            ],
                             'where' => $where,
                             'max' => $max,
                             'url' => 'index.php?page=users'.$qpage,

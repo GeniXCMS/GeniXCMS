@@ -22,6 +22,7 @@ return array(
     'elFinderVolumeBox' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeBox.class.php',
     'elFinderVolumeDriver' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDriver.class.php',
     'elFinderVolumeDropbox' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDropbox.class.php',
+    'elFinderVolumeDropbox2' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDropbox2.class.php',
     'elFinderVolumeFTP' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeFTP.class.php',
     'elFinderVolumeFlysystemGoogleDriveCache' => $vendorDir . '/studio-42/elfinder/php/elFinderFlysystemGoogleDriveNetmount.php',
     'elFinderVolumeFlysystemGoogleDriveNetmount' => $vendorDir . '/studio-42/elfinder/php/elFinderFlysystemGoogleDriveNetmount.php',
@@ -30,4 +31,5 @@ return array(
     'elFinderVolumeLocalFileSystem' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeLocalFileSystem.class.php',
     'elFinderVolumeMySQL' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeMySQL.class.php',
     'elFinderVolumeOneDrive' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeOneDrive.class.php',
+    'elFinderVolumeTrash' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeTrash.class.php',
 );

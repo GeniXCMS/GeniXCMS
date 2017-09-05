@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.2 build date 20150313
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -37,9 +37,9 @@ class Files
         // $url = (SMART_URL)? Site::$url . '/ajax/elfinder?token=' . TOKEN : Site::$url . "/index.php?ajax=elfinder&token=" . TOKEN;
         $url = Url::ajax('elfinder');
         $html = '
-    <script src="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--<script src="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.structure.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.theme.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.theme.min.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
     <link rel="stylesheet" href="'.Vendor::url().'/studio-42/elfinder/css/elfinder.min.css"      type="text/css">
     <link rel="stylesheet" href="'.Site::$url.'/assets/css/theme-bootstrap-libreicons-svg.css"      type="text/css">
 

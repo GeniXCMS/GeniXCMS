@@ -6,39 +6,48 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2><i class="fa fa-paint-brush"></i>  <?=THEMES;?>
-            <button class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">
+    <section class="content-header">
+        <h1><i class="fa fa-paint-brush"></i>  <?=THEMES;?>
+            <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
                 <span class="glyphicon glyphicon-plus"></span> 
                 <span class="hidden-xs hidden-sm"><?=UPLOAD_THEMES;?></span>
             </button>
-        </h2>
-        <hr />
-    </div>
+        </h1>
 
-    <div class="col-sm-12">
-        <div class="row">
+    </section>
+
+    <section class="content">
+        <!-- Default box -->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Active Theme
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body">
             <?php
                 $active = Options::v('themes');
                 $adata = Theme::data($active);
                 // print_r($adata);
                 echo '
-                <div class="col-md-12">
-                <h3 class=""><i class="fa fa-check text-success"></i> '.ACTIVE_THEME.'</h3>
                     <div class="row">
 
                     <div class="col-sm-6 col-md-3">
@@ -70,7 +79,30 @@
                         Remove
                     </a>';
             }
-                echo '</div></div>';
+                echo '</div>
+
+            
+                </div>
+            <!-- /.box-body -->
+            <!--<div class="box-footer">
+                Footer
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+        <!-- Default box -->
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    '.AVAILABLE_THEME.'
+                </h3>
+
+                <div class="box-tools pull-right">
+                    
+                </div>
+            </div>
+            <div class="box-body">
+            ';
 
             if ($data['themes'] > 0) {
                 //print_r($data['themes']);
@@ -81,7 +113,7 @@
                         //$data['themes'][] = $data['themes'][$i];
                     }
                 }
-                echo '<div class="col-md-12"><h3><i class="fa fa-desktop text-warning"></i> '.AVAILABLE_THEME.'</h3><hr><div class="row">';
+                echo '<div class="row">';
                 foreach ($data['themes'] as $thm) {
                     $t = Theme::data($thm);
                     echo '
@@ -113,17 +145,23 @@
                     }
                     echo '</div>';
                 }
-                echo '</div></div>';
+                echo '</div>';
             } else {
                 echo '<div class="col-md-12">'.NO_THEMES_FOUND.'</div>';
             }
             ?>
+
+            </div>
+            <!-- /.box-body -->
+<!--            <div class="box-footer">-->
+<!--                Footer-->
+<!--            </div>-->
+            <!-- /.box-footer-->
         </div>
+        <!-- /.box -->
 
+    </section>
 
-
-    </div>
-</div>
 <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

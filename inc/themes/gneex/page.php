@@ -21,7 +21,7 @@
                         foreach ($data['posts'] as $p) {
                             echo "
                                 <article class=\"blog-post col-md-12\">
-                                    <h2>$p->title</h2>
+                                    <h2 class=\"title\">$p->title</h2>
                                     <hr />
                                     ".Posts::content($p->content, $p->id).'
                                 </article>

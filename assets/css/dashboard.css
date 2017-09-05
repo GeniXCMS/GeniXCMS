@@ -1,18 +1,18 @@
-a, #side-menu a, .navbar-inverse a:hover {
-    color: #333;
-}
+/*a, #side-menu a, .navbar-inverse a:hover {*/
+    /*color: #333;*/
+/*}*/
 
-a:hover, #side-menu a:hover {
-    color: #000;
-}
+/*a:hover, #side-menu a:hover {*/
+    /*color: #000;*/
+/*}*/
 
-.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
-    color: #999;
-}
+/*.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {*/
+    /*color: #999;*/
+/*}*/
 
-.navbar-inverse a {
-    color: #eee;
-}
+/*.navbar-inverse a {*/
+    /*color: #eee;*/
+/*}*/
 
 
 * {
@@ -33,15 +33,22 @@ a:hover, #side-menu a:hover {
     width: 40px;
     height: 40px;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 40px;
+    right: 40px;
     display: none;
     /*text-indent: -9999px;*/
-    background-color: #0C0C0C;
+    background-color: #222d32;
     border-radius: 4px;
     color: #efefef;
     text-align: center;
     vertical-align: middle;
     padding: 4px;
     cursor: pointer;
+}
+
+ul.users-list > li > img {
+    -webkit-border-radius: 50%!important;
+    -moz-border-radius:50%!important;
+    border-radius:50%!important;
+    opacity: .3;
 }

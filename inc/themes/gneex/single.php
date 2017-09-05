@@ -8,7 +8,7 @@
     <section id="blog">
         <div class="container">
             <?php
-            $bar = $data['posts'][0]->sidebar;
+            $bar = Posts::getParam('sidebar', $data['posts'][0]->id);
             $cols = ($bar == 'yes'|| $bar == '') ? '8': '12';
             ?>
                 <div class="col-md-<?=$cols;?>">
@@ -17,7 +17,7 @@
                     if (Gneex::opt('adsense') != '') {
                         echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
                     }
-                    if (!isset($data['posts']['error'])) {
+                    if (isset($data['posts'][0]->title)) {
                         foreach ($data['posts'] as $p) {
                             $comment = array(
                             'offset' => 0,
@@ -26,7 +26,7 @@
                             );
                             echo '
                                 <article class="blog-post col-md-12">
-                                    <h2><a href="'.Url::post($p->id)."\">$p->title</a></h2>
+                                    <h2 class="title"><a href="'.Url::post($p->id)."\">$p->title</a></h2>
                                     
                                     <span class=\"meta\">posted in <a href=\"".Url::cat($p->cat).'">'.Categories::name($p->cat).'</a>, 
                                     at '.Date::format($p->date).' by <a href="'.Url::author($p->author).'">'.$p->author.'</a></span>

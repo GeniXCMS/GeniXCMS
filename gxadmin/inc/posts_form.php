@@ -6,17 +6,17 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($_GET['token'])
-    && Token::isExist(Typo::cleanX($_GET['token']))) {
+    && Token::validate(Typo::cleanX($_GET['token']))) {
     $token = TOKEN;
 } else {
     $token = '';
@@ -56,28 +56,39 @@ if (isset($data['post'])) {
 }
 ?>
 <form action="index.php?page=posts&act=<?=$act?>" method="post" role="form" class="">
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2><i class="fa fa-file-text-o"></i> <?=$pagetitle;
+    <section class="content-header">
+        <h1><i class="fa fa-file-text-o"></i> <?=$pagetitle;
 ?> <?=POST;?>
             <div class="pull-right">
-                <button type="submit" name="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
-                </button>
 
-                <a href="index.php?page=posts" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
-                </a>
             </div>
-        </h2>
-        <hr />
-    </div>
-    <div class="col-sm-12">
+        </h1>
+    </section>
+    <section class="content">
+        <!-- Default box -->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Add Post
+                </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="submit" name="submit" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
+                    </button>
+
+                    <a href="index.php?page=posts" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
+                    </a>
+                </div>
+            </div>
+            <div class="box-body">
         <div class="row">
 
                 <div class="col-md-8" id="myTab">
@@ -89,7 +100,7 @@ if (isset($data['post'])) {
                     $listlang = json_decode(Options::v('multilang_country'), true);
                     $deflag = strtolower($listlang[$def]['flag']);
 
-                    echo "
+                    echo "<div class='nav-tabs-custom'>
                     <ul class=\"nav nav-tabs\" role=\"tablist\">
                         <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
 
@@ -186,7 +197,7 @@ if (isset($data['post'])) {
                         unset($lang);
                     }
 
-                    echo '</div>';
+                    echo '</div></div>';
                 } else {
                     ?>
 
@@ -263,8 +274,15 @@ if (isset($data['post'])) {
                 </div>
 
         </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
 
-    </div>
-</div>
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </section>
+
 <input type="hidden" name="token" value="<?=$token;?>">
 </form>

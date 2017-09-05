@@ -6,17 +6,15 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-
-    
 
 if (isset($_GET['id'])) {
     $menuid = Typo::cleanX($_GET['id']);
@@ -28,11 +26,11 @@ if (isset($_GET['id'])) {
 <form action="" method="POST">
 <h2><i class="fa fa-sitemap"></i> <span class="hidden-xs hidden-sm"><?=ADD_MENU;?></span>
 <div class="pull-right">
-<button type="submit" name="additem" class="btn btn-success">
+<button type="submit" name="additem" class="btn btn-success btn-sm">
     <span class="glyphicon glyphicon-ok"></span>
     <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
 </button>
-<a href="index.php?page=menus" class="btn btn-danger">
+<a href="index.php?page=menus" class="btn btn-danger btn-sm">
     <span class="glyphicon glyphicon-remove"></span>
     <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
 </a>
@@ -128,7 +126,6 @@ if (isset($_GET['id'])) {
                                     'name' => 'cat',
                                     'sort' => 'ASC',
                                     'order_by' => 'name',
-                                    'type' => 'post',
                                 );
                         echo Categories::dropdown($vars);
                     ?>

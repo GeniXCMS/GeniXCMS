@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -20,8 +20,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 class Http
 {
+    public static $agent;
+
+    public static $ipApi;
+
     public function __construct()
     {
+        self::$agent = self::varAgent();
+        self::$ipApi = self::varIPApi();
     }
 
     public static function validateUrl($url)
@@ -157,4 +163,82 @@ class Http
 
         return $fetch;
     }
+
+    public static function ipDetail($ip)
+    {
+
+        $ipApi = self::randIpApi();
+        $detail = self::fetch($ipApi.$ip);
+
+        return $detail;
+    }
+
+    public static function getIpCountry($ip)
+    {
+        $ip = json_decode(self::ipDetail($ip), true);
+
+        return $ip['country_code'];
+    }
+
+    public static function varAgent()
+    {
+        $agent = [
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+            'Opera/9.80 (Windows NT 6.2; Win64; x64) Presto/2.12 Version/12.16',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
+            'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)',
+            'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0',
+            'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
+            'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
+            'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)',
+            'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML like Gecko) Chrome/23.0.1271.95 Safari/537.11',
+            'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/36.0.1985.143 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/31.0.1650.63 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/35.0.1916.153 Safari/537.36'
+
+        ];
+
+        return $agent;
+    }
+
+    public static function randAgent()
+    {
+        $rnd = array_rand(self::$agent, 1);
+
+        return self::$agent[$rnd];
+    }
+
+    public static function addAgent($agent)
+    {
+        if (is_array($agent)) {
+            $newAgent = array_merge($agent, self::$agent);
+        } else {
+            $newAgent = array($agent);
+            $newAgent = array_merge($newAgent,self::$agent);
+        }
+
+        return $newAgent;
+    }
+
+    public static function varIpApi()
+    {
+        $ipApi = [
+            'http://163.172.167.135:8080/json/',
+            'http://geoipfree.com/json/'
+        ];
+
+        return $ipApi;
+    }
+
+    public static function randIpApi()
+    {
+        $rnd = array_rand(self::$ipApi, 1);
+
+        return self::$ipApi[$rnd];
+    }
+
 }

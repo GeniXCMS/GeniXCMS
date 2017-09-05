@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -38,7 +38,7 @@ class Posts
     public static function insert($vars)
     {
         if (is_array($vars)) {
-            $slug = Typo::slugify($vars['title']);
+            $slug = self::createSlug($vars['title']);
             $vars = array_merge($vars, array('slug' => $slug));
             //print_r($vars);
             $ins = array(
@@ -659,6 +659,42 @@ class Posts
 
 
         return $res;
+    }
+
+    public static function createSlug($str)
+    {
+        $slug = Typo::slugify($str);
+        // check if slug is exist
+        if (self::slugExist($slug)) {
+            $slnum = self::getLastSlug($slug)+1;
+            $slug = $slug.'-'.$slnum;
+        }
+
+        return $slug;
+    }
+
+    public static function slugExist($slug)
+    {
+        $slug = Typo::cleanX($slug);
+        $sql = "SELECT * FROM `posts` WHERE `slug` LIKE '%{$slug}%' ";
+        Db::result($sql);
+        if (Db::$num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getLastSlug($slug)
+    {
+        $sql = "SELECT * FROM `posts` WHERE `slug` LIKE '%{$slug}%' ORDER BY `id` DESC LIMIT 1";
+        $q = Db::result($sql);
+
+        $slnum = str_replace($slug, '', $q[0]->slug);
+        $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): '0';
+
+        return $slnum;
+
     }
 }
 

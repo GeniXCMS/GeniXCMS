@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -22,6 +22,7 @@ header('HTTP/1.0 400 Bad Request');
 if (Theme::exist('400')) {
     Theme::theme('400');
 } else {
+    Site::meta();
     echo '<center>
         <h1>Ooops!!</h1>
         <h2 style="font-size: 20em">400</h2>

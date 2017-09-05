@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -47,8 +47,24 @@ class Paging
                 $where = '';
             }
             if (isset($vars['table'])) {
-                $table = Typo::cleanX($vars['table']);
-                Db::result("SELECT * FROM `{$table}` {$where}");
+                if (is_array($vars['table'])) {
+                    $table = '';
+                    $on = " ON ";
+                    $total_table = count($vars['table']);
+                    $i = 0;
+                    foreach ($vars['table'] as $k => $v) {
+                        $i = $i + 1;
+                        $join = ($i < $total_table) ? $v[1]: '';
+                        $table .= "`{$k}` AS {$v[0]} {$join} ";
+                        $on .= " {$v[0]}.`{$v[2]}` =";
+                    }
+                    $on = substr($on, 0, -1);
+                    $table = $table.$on;
+                } else {
+                    $table = "`".Typo::cleanX($vars['table'])."`";
+                }
+//                echo $table;
+                Db::result("SELECT * FROM {$table} {$where}");
                 $dbtotal = Db::$num_rows;
             }
 
@@ -59,7 +75,7 @@ class Paging
             }
 
             if (isset($vars['type']) && $vars['type'] == 'number') { // NUMBER
-                $r = '<ul class="pagination">';
+                $r = '<ul class="pagination pagination-sm no-margin pull-right">';
                 $maxpage = 7;
                 $curr = Typo::int($vars['paging']);
                 $max = Typo::int($vars['max']);
@@ -98,7 +114,7 @@ class Paging
                 }
                 $r .= '</ul>';
             } elseif (isset($vars['type']) && $vars['type'] == 'pager') { // PAGER
-                $r = '<ul class="pager">';
+                $r = '<ul class="pagination-sm no-margin pager">';
                 $limit = ceil($total / $vars['max']);
                 $curr = Typo::int($vars['paging']);
                 $max = Typo::int($vars['max']);

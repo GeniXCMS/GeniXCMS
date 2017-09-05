@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.1.20 (2017-01-11)
+ * Version 2.1.24 (2017-05-19)
  * http://elfinder.org
  * 
  * Copyright 2009-2017, Studio 42
@@ -889,7 +889,7 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 /* file container */
 .elfinder-cwd-view-icons .elfinder-cwd-file {
 	width:120px;
-	height:80px;
+	height:90px;
 	padding-bottom:2px;
 	cursor:default;
 	border:none;
@@ -908,7 +908,7 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 }*/
 
 /* ltr/rtl enviroment */
-.elfinder-ltr .elfinder-cwd-view-icons .elfinder-cwd-file { float:left;  margin:0 3px 12px 0; }
+.elfinder-ltr .elfinder-cwd-view-icons .elfinder-cwd-file { float:left;  margin:0 3px 2px 0; }
 .elfinder-rtl .elfinder-cwd-view-icons .elfinder-cwd-file { float:right; margin:0 0 5px 3px; }
 
 /* remove ui hover class border */
@@ -971,6 +971,16 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 	background-size: contain;
 }
 .elfinder-cwd .elfinder-navbar-root-local.elfinder-droppable-active .elfinder-cwd-icon {
+	background-position:1px -1px;
+}
+.elfinder-navbar-root-trash .elfinder-cwd-icon,
+.elfinder-cwd .elfinder-navbar-root-trash.elfinder-droppable-active .elfinder-cwd-icon,
+.elfinder-cwd-view-list .elfinder-navbar-root-trash td .elfinder-cwd-icon {
+	background-image:url("../img/volume_icon_trash.png");
+	background-position:0 0;
+	background-size: contain;
+}
+.elfinder-cwd .elfinder-navbar-root-trash.elfinder-droppable-active .elfinder-cwd-icon {
 	background-position:1px -1px;
 }
 .elfinder-navbar-root-ftp .elfinder-cwd-icon,
@@ -1507,6 +1517,7 @@ tr.elfinder-cwd-file td .elfinder-cwd-select {
 .elfinder-cwd-wrapper-empty .elfinder-cwd-view-list.elfinder-cwd:after {
 	margin-top: 0;
 }
+
 /* File: /css/dialog.css */
 /*********************************************/
 /*                DIALOGS STYLES             */
@@ -1668,6 +1679,10 @@ tr.elfinder-cwd-file td .elfinder-cwd-select {
 	-moz-user-select:     text;
 	-khtml-user-select:   text;
 	user-select:          text;
+}
+
+.elfinder .std42-dialog .ui-dialog-content form label {
+	border: none;
 }
 
 /* buttons */
@@ -2042,7 +2057,7 @@ button.elfinder-info-button {
 .elfinder-ltr .elfinder-navbar-arrow {
 	left: 0;
 }
-.elfinder-ltr .elfinder-navbar-arrow {
+.elfinder-rtl .elfinder-navbar-arrow {
 	right:0;
 }
 .elfinder-touch .elfinder-navbar-arrow {
@@ -2064,6 +2079,8 @@ button.elfinder-info-button {
 
 /* collapsed/expanded arrow view */
 .elfinder-navbar-collapsed .elfinder-navbar-arrow { display:block; }
+
+.elfinder-subtree-chksubdir .elfinder-navbar-arrow { opacity: .25; filter:Alpha(Opacity=25); }
 
 /* arrow ltr/rtl enviroment */
 .elfinder-ltr .elfinder-navbar-collapsed .elfinder-navbar-arrow { background-position: 0 4px;}
@@ -2094,6 +2111,7 @@ button.elfinder-info-button {
 
 /* root icon of each volume */
 .elfinder-tree .elfinder-navbar-root-local   .elfinder-navbar-icon { background-image:url("../img/volume_icon_local.png"); background-position:0 0; }
+.elfinder-tree .elfinder-navbar-root-trash   .elfinder-navbar-icon { background-image:url("../img/volume_icon_trash.png"); background-position:0 0; }
 .elfinder-tree .elfinder-navbar-root-ftp     .elfinder-navbar-icon { background-image:url("../img/volume_icon_ftp.png"); background-position:0 0; }
 .elfinder-tree .elfinder-navbar-root-sql     .elfinder-navbar-icon { background-image:url("../img/volume_icon_sql.png"); background-position:0 0; }
 .elfinder-tree .elfinder-navbar-root-dropbox .elfinder-navbar-icon { background-image:url("../img/volume_icon_dropbox.png"); background-position:0 0; }
@@ -2155,6 +2173,18 @@ button.elfinder-info-button {
 	top:50%;
 	margin:-8px 2px 0 2px;
 	opacity: .5; filter:Alpha(Opacity=50);
+}
+
+/* pager button */
+.elfinder-navbar-pager {
+	width: 100%;
+	box-sizing: border-box;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.elfinder-touch .elfinder-navbar-pager {
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .elfinder-places {
@@ -2846,7 +2876,9 @@ embed.elfinder-quicklook-preview-audio {
 .elfinder-button-icon-open      { background-position: 0 -176px; } 
 .elfinder-button-icon-mkdir     { background-position: 0 -192px; }
 .elfinder-button-icon-mkfile    { background-position: 0 -208px; }
-.elfinder-button-icon-rm        { background-position: 0 -224px; }
+.elfinder-button-icon-rm        { background-position: 0 -832px; }
+.elfinder-button-icon-trash     { background-position: 0 -224px; }
+.elfinder-button-icon-restore   { background-position: 0 -816px; }
 .elfinder-button-icon-copy      { background-position: 0 -240px; }
 .elfinder-button-icon-cut       { background-position: 0 -256px; }
 .elfinder-button-icon-paste     { background-position: 0 -272px; }

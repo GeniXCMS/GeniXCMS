@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -109,7 +109,7 @@ class Menus
                     $menu .= "<li $class>";
                     $menu .= "<a href='".Url::$type($m->value)."' class=\"{$m->class} {$aclass}\">".$m->name.'</a>';
                     $parent = $m->id;
-                    //echo $parent;
+//                    echo $parent;
 
                     if ($n > 0) {
                         $class = 'dropdown-menu';
@@ -126,6 +126,7 @@ class Menus
                                     $aclass = '';
                                 }
                                 $type = $m2->type;
+//                                print_r($m2);
                                 $menu .= "<li $class>";
                                 $menu .= "<a href='".Url::$type($m2->value)."' class=\"{$m2->class} {$aclass}\">".$m2->name.'</a>';
 

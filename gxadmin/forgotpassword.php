@@ -6,10 +6,10 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -32,7 +32,7 @@ $data = '';
 
 if (isset($_POST['forgotpass'])) {
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::isExist($token)) {
+    if (!isset($_POST['token']) || !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -114,14 +114,23 @@ if (isset($_POST['forgotpass'])) {
         $data['alertDanger'][] = $alertDanger;
     }
 }
-Theme::admin('header');
+Theme::admin('headermini', $data);
+echo "<div class='container'>";
 echo System::alert($data);
+echo "</div>";
 if (!User::isLoggedin()) {
     ?>
-<div class="row">
-    <div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 30px; margin-bottom: 60px ">
+    <div class="login-box">
+    <div class="login-logo">
+        <a href="index.php">
+            <?=Site::logo('', '45px');?>
+        </a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+    <p class="login-box-msg"><?=FORGOT_PASS; ?></p>
+
         <form action="" class="form-signin" role="form" method="post">
-            <h2 class="form-signin-heading"><?=FORGOT_PASS; ?></h2>
             <div class="form-group">
                 <label><?=FILLIN_USERNAME; ?></label>
                 <input type="text" name="username" class="form-control" placeholder="<?=USERNAME; ?>" required autofocus>
@@ -130,8 +139,12 @@ if (!User::isLoggedin()) {
             <input type="hidden" name="token" value="<?=TOKEN; ?>">
             <button class="btn btn-lg btn-success btn-block" name="forgotpass" type="submit"><?=REQUEST_PASS; ?></button>
         </form>
+        <a href="login.php"><?=LOGIN_TITLE; ?></a><br>
     </div>
-</div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+
 <style>
     #page-wrapper {
         margin-left: 0px!important;
@@ -142,6 +155,6 @@ if (!User::isLoggedin()) {
     echo"<div class=\"alert alert-info\">You're already Logged In. <br /><a href=\"logout.php\">Logout</a></div>";
 }
 
-Theme::admin('footer');
+Theme::admin('footermini');
 System::Zipped();
 ?>

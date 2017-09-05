@@ -5,7 +5,7 @@
 
     </div>
     <footer class="footer">
-        <small>Copyright &copy; <?=date("Y");?> <a href="http://genixcms.org">GeniXCMS</a> <i><?=System::v();?></i></small><br />
+        <small>Copyright &copy; <?=date("Y");?> <a href="https://metalgenix.com">GeniXCMS</a> <i><?=System::v();?></i></small><br />
         <?php
             $end_time = microtime(TRUE);
             $time_taken = $end_time - $GLOBALS['start_time'];

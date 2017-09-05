@@ -2,9 +2,9 @@
     "name": "genix/cms",
     "type": "project",
     "description": "Simple and Free Opensource CMS and Framework",
-    "version": "1.0.0",
-    "homepage": "http://genixcms.org",
-    "keywords": ["genixcms", "genix", "cms", "metalgenix"],
+    "version": "1.0.2",
+    "homepage": "http://genix.id",
+    "keywords": ["genixcms", "genix", "cms", "metalgenix", "blog", "blog software", "bootstrap"],
     "license": "MIT",
     "authors": [
         {
@@ -18,16 +18,17 @@
     },
     "require": {
         "php": ">=5.5.9",
-        "phpmailer/phpmailer": "6.0.0rc3",
+        "phpmailer/phpmailer": "6.0.0rc5",
         "kissifrot/php-ixr": "1.8.3",
         "google/recaptcha": "~1.1",
         "omnipay/common": "2.5.2",
         "omnipay/paypal": "2.6.3",
-        "studio-42/elfinder": "2.1.20",
+        "studio-42/elfinder": "2.1.24",
         "league/oauth2-client": "1.4.2",
         "league/oauth2-google": "1.0.1",
         "symfony/dependency-injection": "v3.2.1",
         "symfony/http-kernel": "v3.2.1",
-        "guzzlehttp/guzzle": "6.2.2"
+        "guzzlehttp/guzzle": "6.2.2",
+        "angelleye/paypal-php-library": "2.0.*"
     }
 }

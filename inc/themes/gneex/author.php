@@ -40,7 +40,7 @@ $gneex = Gneex::$opt;
                             '.$im.'
                             </div>
                             <div class="col-sm-8 col-md-8">
-                                <h3><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
+                                <h3 class="title"><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
                                 <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y');
                             if ($p->type != 'page') {
                                 echo " in <a href=\"" . Url::cat($p->cat) . "\">" . Categories::name($p->cat) . "</a>";
@@ -57,7 +57,7 @@ $gneex = Gneex::$opt;
                         } else {
                             echo '
                             <article class="blog-post col-md-12">
-                                <h2><a href="'.Url::post($p->id)."\">$p->title</a></h2>
+                                <h2 class="title"><a href="'.Url::post($p->id)."\">$p->title</a></h2>
                                 <hr />
                                 ".Posts::format($p->content, $p->id).'
                                 <div class="blog-footer">posted in '.Categories::name($p->cat).', 

@@ -6,10 +6,10 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -17,29 +17,30 @@
  */
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
-    <div class="row">
+
         <div class="col-md-12">
             <?=Hooks::run('admin_page_notif_action', $data);?>
         </div>
-        <div class="col-md-12">
-            <h2 class="clearfix">
+        <section class="content-header">
+            <h1 class="clearfix">
                 <div class="pull-left">
                     <i class="fa fa-wrench"></i> <?=SETTINGS;?>
                 </div>
                 <div class="pull-right">
-                    <button type="submit" name="change" class="btn btn-success" value="Change">
+                    <button type="submit" name="change" class="btn btn-success btn-sm" value="Change">
                         <span class="glyphicon glyphicon-ok"></span>
                         <span class="hidden-xs hidden-sm"><?=CHANGE;?></span>
                     </button>
-                    <button type="reset" class="btn btn-danger" value="Cancel">
+                    <button type="reset" class="btn btn-danger btn-sm" value="Cancel">
                         <span class="glyphicon glyphicon-remove"></span>
                         <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
                     </button>
                 </div>
-            </h2>
-            <hr />
-        </div>
-        <div class="col-sm-12" id="myTab">
+            </h1>
+        </section>
+        <section class="content" id="myTab">
+
+                    <div class="nav-tabs-custom">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#general" role="tab" data-toggle="tab"><?=GENERAL;?></a></li>
                 <li><a href="#localization" role="tab" data-toggle="tab"><?=LOCALIZATION;?></a></li>
@@ -55,7 +56,7 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <!-- Tab Pane General -->
-                <div class="tab-pane active" id="general">
+                <div class="tab-pane active clearfix" id="general">
                     <h3>
                         <?=WEBSITE_DETAIL;?>
                         <hr />
@@ -123,7 +124,7 @@
                 </div><!-- Tab Pane General End -->
 
                 <!-- Tab Pane Localization -->
-                <div class="tab-pane" id="localization">
+                <div class="tab-pane clearfix" id="localization">
                     <h3>
                         <?=LOCALIZATION;?>
                         <hr />
@@ -176,7 +177,7 @@
                 </div><!-- Tab Pane Localization END -->
 
                 <!-- Tab Pane Email -->
-                <div class="tab-pane" id="email">
+                <div class="tab-pane clearfix" id="email">
                     <h3><?=SETTINGS_EMAIL_SETTINGS;?><hr /></h3>
                     <div class="col-sm-12">
                         <div class="row">
@@ -239,7 +240,7 @@
                 </div><!-- Tab Pane Email END -->
 
                 <!-- Tab Pane Social -->
-                <div class="tab-pane" id="social">
+                <div class="tab-pane clearfix" id="social">
                     <h3><?=SETTINGS_SOCIAL;?><hr /></h3>
                     <div class="col-sm-12">
                         <div class="row">
@@ -279,7 +280,7 @@
                 </div><!-- Tab Pane Social END -->
 
                 <!-- Tab Pane Logo -->
-                <div class="tab-pane" id="logo">
+                <div class="tab-pane clearfix" id="logo">
                     <h3><?=SETTINGS_LOGO;?><hr /></h3>
                     <div class="col-sm-12">
                         <div class="row">
@@ -351,7 +352,7 @@
                 </div><!-- Tab Pane Logo END -->
 
                 <!-- Tab Pane Library -->
-                <div class="tab-pane" id="library">
+                <div class="tab-pane clearfix" id="library">
                     <h3><?=SETTINGS_LIBRARY;?><hr /></h3>
                     <div class="col-sm-12">
                         <div class="row">
@@ -505,7 +506,7 @@
                 </div><!-- Tab Pane Library END -->
 
 
-                <div class="tab-pane" id="posts">
+                <div class="tab-pane clearfix" id="posts">
                     <h3><?=SETTINGS_POSTS;?><hr /></h3>
                     <div class="col-sm-12">
                         <div class="row">
@@ -589,7 +590,7 @@
                 ?>
 
                 <!-- Payment Tab Start -->
-                <div class="tab-pane" id="payment">
+                <div class="tab-pane clearfix" id="payment">
                     <h3><?=SETTINGS_PAYMENT?><hr /></h3>
                     <div class="col-sm-12">
                         <h4><?=SETTINGS_PAYMENT_PAYPAL_CONF?></h4>
@@ -652,7 +653,7 @@
                 </div><!-- Payment Tab Stop -->
 
                 <!-- Security Tab Start -->
-                <div class="tab-pane" id="security">
+                <div class="tab-pane clearfix" id="security">
                     <h3>Security
                     <hr />
                     </h3>
@@ -711,14 +712,10 @@
                     </div>
                 </div><!-- Security Tab Stop -->
             </div>
+                    </div>
 
+        </section> <!-- TAB PANE END -->
 
-        </div> <!-- TAB PANE END -->
-
-
-
-
-    </div>
 
 <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>

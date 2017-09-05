@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141001
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -105,7 +105,7 @@ class Options
         // echo "</pre>";
     }
 
-    public static function isExist($vars)
+    public static function validate($vars)
     {
         $vars = Typo::cleanX($vars);
         $opt = self::get($vars);
@@ -116,6 +116,8 @@ class Options
             return false;
         }
     }
+
+
 }
 
 /* End of file Options.class.php */

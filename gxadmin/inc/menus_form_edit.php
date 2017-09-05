@@ -6,51 +6,51 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($_GET['id'])) {
-    $menuid = Typo::int($_GET['id']);
+    $menuid = Typo::cleanX($_GET['id']);
 } else {
-    $menuid = $data['menuid'];
+    $menuid = $data['menus'][0]->menuid;
 }
 
-    // print_r($data['menus']);
+//     print_r($data);
 
 if (isset($_GET['token'])
-    && Token::isExist(Typo::cleanX($_GET['token']))) {
+    && Token::validate(Typo::cleanX($_GET['token']))) {
     $token = TOKEN;
 } else {
     $token = '';
 }
 ?>
 <form action="" method="POST">
-<div class="row">
+
     <div class="col-md-12">
-        <?=Hooks::run('admin_page_notif_action', $data);?>
+            <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <div class="col-md-12">
-<h2><i class="fa fa-sitemap"></i> <?=MENU_EDIT;?>
-<div class="pull-right">
-<button type="submit" name="edititem" class="btn btn-success">
-    <span class="glyphicon glyphicon-ok"></span>
-    <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
-</button>
-<a href="index.php?page=menus" class="btn btn-danger">
-    <span class="glyphicon glyphicon-remove"></span>
-    <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
-</a>
-</div>
-</h2>
-<hr />
-</div>
-<div class="col-sm-12">
+    <section class="content-header">
+        <h1><i class="fa fa-sitemap"></i> <?=MENU_EDIT;?>
+        <div class="pull-right">
+        <button type="submit" name="edititem" class="btn btn-success btn-sm">
+            <span class="glyphicon glyphicon-ok"></span>
+            <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
+        </button>
+        <a href="index.php?page=menus" class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-remove"></span>
+            <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
+        </a>
+        </div>
+        </h1>
+    </section>
+<section class="content">
+    <div class="row">
     <div class="col-sm-4">
         <div class="form-group">
             <label><?=MENU_PARENT;?></label>
@@ -221,7 +221,8 @@ if (isset($_GET['token'])
             </div>
         </div>
     </div>
-</div>
+    </div>
+</section>
 <input type="hidden" name="token" value="<?=$token;?>">
 </form>
-</div>
+

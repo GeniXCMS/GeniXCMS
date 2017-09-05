@@ -37,8 +37,8 @@
               <div class="panel-body">
                 <ol class="list-unstyled">
                   <li><a href="https://metalgenix.com">MetalGeniX</a></li>
-                  <li><a href="https://genixcms.org">GeniXCMS</a></li>
-                  <li><a href="https://docs.genixcms.org">GeniXCMS Docs</a></li>
+                  <li><a href="https://genix.id">GeniXCMS</a></li>
+                  <li><a href="https://docs.genix.id">GeniXCMS Docs</a></li>
                 </ol>
               </div>
               

@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -68,27 +68,27 @@ if (Tags::exist($name)) {
         $paging = 1;
         $pagingtitle = '';
     }
-    $data['sitetitle'] = 'Post in : '.$name.$pagingtitle;
+    $data['sitetitle'] = 'Post in : Tags - '.$name.$pagingtitle;
     $data['posts'] = Db::result(
-        sprintf(
-            "SELECT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
-                    A.`author`, A.`cat` FROM `posts` AS A
-                    JOIN `posts_param` AS B
+        sprintf("SELECT * FROM `posts` AS A
+                    LEFT JOIN `items` AS B
                     ON A.`id` = B.`post_id`
-                    WHERE B.`param` = 'tags' 
-                    AND B.`value` LIKE '%%%s%%'
+                    LEFT JOIN `posts_param` AS C
+                    ON A.`id` = C.`post_id`
+                    WHERE C.`param` = 'tags' 
+                    AND C.`value` LIKE '%%%s%%'
+                    AND A.`type` = 'gxmarket' 
                     AND A.`status` = '1'
-                    ORDER BY A.`date`
+                    ORDER BY A.`date` 
                     DESC LIMIT %d, %d",
-            $name,
-            $offset,
-            $data['max']
+            $name, $offset, $data['max']
         )
     );
+//    print_r($data['posts']);
     $data['num'] = Db::$num_rows;
     $data['posts'] = Posts::prepare($data['posts']);
 
-    $url = Url::tag($tag);
+    $url = Url::tag($name);
     $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',

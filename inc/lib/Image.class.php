@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150214
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -178,15 +178,22 @@ class Image
 
     public static function getGravatar($email, $s = 60, $d = 'mm', $r = 'g', $img = false, $atts = array())
     {
-        $url = 'https://www.gravatar.com/avatar/';
-        $url .= md5(strtolower(trim($email)));
-        $url .= "?s=$s&d=$d&r=$r";
+
+        if (false == Site::$isOffline){
+            $url = 'https://www.gravatar.com/avatar/';
+            $url .= md5(strtolower(trim($email)));
+            $url .= "?s=$s&d=$d&r=$r";
+        } else {
+            $url = Site::$cdn.'assets/images/user1-60x60.png';
+        }
         if ($img) {
-            $url = '<img src="'.$url.'"';
+            $url = '<img src="' . $url . '"';
             foreach ($atts as $key => $val) {
-                $url .= ' '.$key.'="'.$val.'"';
+                $url .= ' ' . $key . '="' . $val . '"';
             }
             $url .= ' />';
+        }else {
+            $url = $url;
         }
 
         return $url;

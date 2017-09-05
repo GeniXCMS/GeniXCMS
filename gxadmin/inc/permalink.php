@@ -6,10 +6,10 @@
  *
  * @since 0.0.8 build date 20160313
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -17,37 +17,44 @@
  */
 ?>
 <form action="index.php?page=permalink" method="post">
-<div class="row">
+
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
         <?=Hooks::run('admin_page_top_action', $data);?>
     </div>
-    <div class="col-md-12">
-        <h2 class="clearfix">
+    <section class="content-header">
+        <h1 class="clearfix">
             <div class="pull-left">
                 <i class="fa fa-link"></i> Permalink
             </div>
             <div class="pull-right">
-                <button type="submit" name="change" class="btn btn-success" value="Change">
+                <button type="submit" name="change" class="btn btn-success btn-sm" value="Change">
                     <span class="glyphicon glyphicon-ok"></span>
                     <span class="hidden-xs hidden-sm"><?=CHANGE;?></span>
                 </button>
-                <button type="reset" class="btn btn-danger" value="Cancel">
+                <button type="reset" class="btn btn-danger btn-sm" value="Cancel">
                     <span class="glyphicon glyphicon-remove"></span>
                     <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
                 </button>
             </div>
-        </h2>
-        <hr>
-    </div>
+        </h1>
 
-    <div class="col-md-12">
-        <!-- Tab Pane Library -->
-        <div class="tab-pane" id="library">
-            <h3>Settings Permalink
-            <hr />
-            </h3>
-            <div class="col-sm-12">
+    </section>
+
+    <section class="content">
+        <!-- Default box -->
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Settings Permalink
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                </div>
+            </div>
+            <div class="box-body">
+
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         <label>Use <code>index.php</code></label>
@@ -69,11 +76,16 @@
                     </div>
 
                 </div>
+
             </div>
+            <!-- /.box-body -->
+<!--            <div class="box-footer">-->
+<!--                Footer-->
+<!--            </div>-->
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </section>
 
-        </div><!-- Tab Pane Library END -->
-    </div>
-
-</div>
 <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>

@@ -50,12 +50,8 @@ if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
                         // array_push($data, $filepath);
 
                         if (Image::isPng($filepath)) {
+
                             if (Files::isClean($filepath)){
-                                $safe = true;
-                            } else {
-                                $safe = false;
-                            }
-                            if ($safe){
                                 Image::compressPng($filepath);
                             } else {
                                 unlink($filepath);
@@ -130,6 +126,6 @@ if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
     $connector = new elFinderConnector(new elFinder($opts));
     $connector->run();
 }else{
-    echo "{error: ['Token Not Exist']}";
+    echo json_encode(array( 'error' => $_SERVER['REQUEST_URI']));
 }
 // echo "TOKEN EXIST";

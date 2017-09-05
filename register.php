@@ -6,10 +6,10 @@
  *
  * @since 0.0.1 build date 20141003
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -35,7 +35,7 @@ System::gZip();
 
 if (isset($_POST['register'])) {
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::isExist($token)) {
+    if (!isset($_POST['token']) || !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -47,7 +47,7 @@ if (isset($_POST['register'])) {
             $alertDanger[] = 'Your Captcha is not correct.';
         }
     }
-    if (User::isExist($_POST['userid'])) {
+    if (User::validate($_POST['userid'])) {
         $alertDanger[] = MSG_USER_EXIST;
     }
     if (!User::isSame($_POST['pass1'], $_POST['pass1'])) {

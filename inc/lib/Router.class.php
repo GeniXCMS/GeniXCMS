@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.7 build date 20150711
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -51,7 +51,7 @@ class Router
             'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => '3', 'size' => '1', 'align' => '2'),
             'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => '1', 'paging' => '3'),
             'category/([0-9]+)/(.*)/' => array('cat' => '1'),
-            'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '3'),
+            'tag/(.*)/paging/([0-9]+)/' => array('tag' => '1', 'paging' => '2'),
             'tag/(.*)/' => array('tag' => '1'),
             '([a-z]+)/mod/(.*)'.GX_URL_PREFIX => array('mod' => '2', 'lang' => '1'),
             // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => '2', 'lang' => '1'),
@@ -70,8 +70,10 @@ class Router
             'author/(.*)/paging/([0-9]+)/' => array('author' => '1', 'paging' => '2'),
             'author/(.*)/(.*)/' => array('author' => '1', 'type' => '2'),
             'author/(.*)/' => array('author' => '1'),
-            'error/' => array('error'),
+            'sitemap.xml' => array('sitemap'),
+            'sitemap/(.*).xml' => array('sitemap' => '1'),
             'sitemap/' => array('sitemap'),
+            'error/' => array('error'),
             'rss/' => array('rss'),
             '/' => array('default'),
         );
@@ -92,7 +94,7 @@ class Router
         // new Router();
         $keys = array_map('strlen', array_keys(self::$_route));
         array_multisort($keys, SORT_DESC, self::$_route);
-        // print_r(self::$_route);
+//         print_r(self::$_route);
         return self::$_route;
     }
 
@@ -104,10 +106,10 @@ class Router
     public static function run()
     {
         $m = self::match();
-        // print_r($m);
+//         print_r($m);
         if (is_array($m)) {
             $val = self::extract($m[0], $m[1]);
-            // print_r($val);
+//             print_r($val);
             if (isset($val) && $val != null) {
                 return $val;
             } else {
@@ -130,14 +132,19 @@ class Router
     public static function match()
     {
         $uri = self::getURI();
-        // echo $uri;
-        foreach (self::$_route as $k => $v) {
-            $regx = str_replace('/', '\/', $k);
-            // echo $regx."\n";
-            if (preg_match('/^'.$regx.'$/Us', $uri, $m)) {
-                $result = [$v, $m];
 
-                return $result;
+        if (array_key_exists($uri, self::$_route)) {
+            $result = [self::$_route[$uri], $uri];
+
+            return $result;
+        } else {
+            foreach (self::$_route as $k => $v) {
+                $regx = str_replace('/', '\/', $k);
+                if (preg_match('/^'.$regx.'$/Us', $uri, $m)) {
+                    $result = [$v, $m];
+
+                    return $result;
+                }
             }
         }
     }

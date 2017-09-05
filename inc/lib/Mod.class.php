@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -107,7 +107,7 @@ class Mod
                     } else {
                         $class = '';
                     }
-                    $list .= "<li><a href=\"index.php?page=mods&mod={$m}\" $class >".$data['icon'].' '.$data['name'].'</a></li>';
+                    $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\"  >".$data['icon'].' <span>'.$data['name'].'</span></a></li>';
                 }
             }
         } else {
@@ -204,7 +204,7 @@ class Mod
                 if (isset($_GET['act'])) {
                     if ($_GET['act'] == ACTIVATE) {
 
-                        if (!Token::isExist($token)) {
+                        if (!Token::validate($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
@@ -215,7 +215,7 @@ class Mod
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == DEACTIVATE) {
-                        if (!Token::isExist($token)) {
+                        if (!Token::validate($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
@@ -226,7 +226,7 @@ class Mod
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == 'remove') {
-                        if (!Token::isExist($token)) {
+                        if (!Token::validate($token)) {
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
                         if (self::isActive($modules)) {
@@ -303,8 +303,10 @@ class Mod
         $list = self::$listMenu;
 
         foreach ($list as $k => $v) {
-            if (!empty($var) && $k == $var) {
+            if ($var != '' && $k == $var) {
                 $selected = 'selected';
+            } else {
+                $selected = '';
             }
             echo "<option value=\"{$k}\" {$selected}>{$v}</option>";
         }

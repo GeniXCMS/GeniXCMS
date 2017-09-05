@@ -1,22 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <?=Site::meta('backend');?>
     <!-- LOAD CSS -->
     <link href="<?=Site::$url;?>assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>assets/css/bootstrap-theme.css" rel="stylesheet">
+<!--    <link href="--><?//=Site::$url;?><!--assets/css/bootstrap-theme.css" rel="stylesheet">-->
     <link href="<?=Site::$url;?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>assets/css/grideditor.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="<?=Site::$url;?>assets/css/sb-admin-2.css" rel="stylesheet">
+<!--    <link href="--><?//=Site::$url;?><!--assets/css/sb-admin-2.css" rel="stylesheet">-->
     <link href="<?=Site::$url;?>assets/css/dashboard.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>assets/css/genixfont.css" rel="stylesheet">
+<!--    <link href="--><?//=Site::$url;?><!--assets/css/genixfont.css" rel="stylesheet">-->
     <link href="<?=Site::$url;?>assets/css/flag-icon.min.css" rel="stylesheet">
     <link href="<?=Site::$url;?>assets/css/jquery.tagsinput.min.css" rel="stylesheet">
+
+
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/iCheck/square/blue.css">
+    <!-- Morris chart -->
+<!--    <link rel="stylesheet" href="--><?//=Site::$url;?><!--assets/plugins/morris/morris.css">-->
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/datepicker/datepicker3.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- bootstrap slider -->
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-slider/slider.css">
 
     <!-- LOAD Javascript -->
     <script src="<?=Site::$url;?>assets/js/jquery.min.js"></script>
@@ -24,16 +50,20 @@
     <script src="<?=Site::$url;?>assets/js/moment-locales.min.js"></script>
     <script src="<?=Site::$url;?>assets/js/bootstrap-datetimepicker.min.js"></script>
     <script src="<?=Site::$url;?>assets/js/jquery.tagsinput.min.js"></script>
-    
 
+    <!-- jQuery UI 1.11.4 -->
+<!--    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
+    <script src="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.structure.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.theme.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="<?=Site::$url;?>assets/js/plugins/metisMenu/metisMenu.min.js"></script>
+<!--    <script src="--><?//=Site::$url;?><!--assets/js/plugins/metisMenu/metisMenu.min.js"></script>-->
 
     <!-- Custom Theme JavaScript -->
-    <script src="<?=Site::$url;?>assets/js/sb-admin-2.js"></script>
+    <!--    <script src="--><?//=Site::$url;?><!--assets/js/sb-admin-2.js"></script>-->
 
     <!-- MetisMenu CSS -->
-    <link href="<?=Site::$url;?>assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!--    <link href="--><?//=Site::$url;?><!--assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">-->
 
     <link href="<?=Site::$url;?>assets/css/summernote.css" rel="stylesheet">
     <script src="<?=Site::$url;?>assets/js/summernote.min.js"></script>
@@ -44,203 +74,204 @@
     <script src="<?=Site::$url;?>assets/js/jquery.grideditor.summernote.js"></script>
     <script src="<?=Site::$url;?>assets/js/genixcms.js"></script>
 
-    <!-- Custom styles for this template -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-      <![endif]-->
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
 
-<body>
-    <div id="wrapper">
-        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-nav">
-                    <span class="sr-only"><?=MENU;?></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <div class="navbar-brand" >
-                    <a href="index.php">
-                        <?=Site::logo('', '45px');?>
-                    </a>
-                    <span class="small">
-                        <a href="<?=Site::$url;?>" class="label label-warning"
-                            target="_blank">
-                            <i class="fa fa-globe"></i> preview site
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="index.php" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini img-responsive"><?=Site::logo('', '20px');?></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg img-responsive">
+                <?=Site::logo('', '22px');?>
+            </span>
+        </a>
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="<?=Site::$url;?>assets/images/user1-256x256.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs"><?=Session::val('username');?></span>
                         </a>
-                    </span>
-                </div>
-            </div>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="<?=Site::$url;?>assets/images/user1-256x256.png" class="img-circle" alt="User Image">
 
-<?php if (User::isLoggedin()) {
-    ?>
-            <ul class="nav navbar-top-links navbar-right">
-
-                <li class="dropdown">
-                    <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <?=Session::val('username'); ?> <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li> -->
-                        <li><a href="index.php?page=users&act=edit&id=<?=User::id(Session::val('username'));
-?>&token=<?=TOKEN; ?>"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-<?php
-} ?>
-
-<?php if (User::access(2)) {
-    ?>
-                <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-collapse">
-
-                        <ul class="nav" id="side-menu">
-
-                            <li>
-                                <a href="index.php" <?=(!isset($_GET['page'])) ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-dashboard fa-fw"></i> <?=DASHBOARD; ?>
-                                </a>
+                                <p>
+                                    <?=Session::val('username');?>
+                                    <small>Member since <?=Date::format(User::regdate(Session::val('username')));?></small>
+                                </p>
                             </li>
-                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'posts' || $_GET['page'] == 'categories' || $_GET['page'] == 'tags')) ? 'class="active"' : ''; ?> >
-                                <a href="#"><i class="fa fa-file-text-o fa-fw"></i> Posts<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level" style="">
-                                    <li>
-                                        <a href="index.php?page=posts"
-                                        <?=(isset($_GET['page']) && $_GET['page'] == 'posts') ? 'class="active"' : ''; ?>>
-                                            <i class="fa fa-pencil fa-fw"></i> <?=POSTS; ?>
-                                        </a>
-                                    </li>
-<?php
-if (User::access(1)) {
-    ?>
-                            <li>
-                                <a href="index.php?page=categories"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'categories') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-folder fa-fw"></i> <?=CATEGORIES; ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.php?page=tags"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'tags') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-tags fa-fw"></i> <?=TAGS; ?>
-                                </a>
-                            </li>
-<?php
-} ?>
-                                </ul>
-
-                            </li>
-<?php if (User::access(2)) {
-    ?>
-                            <li>
-                                <a href="index.php?page=pages"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'pages') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-file-o"></i> <?=PAGES; ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.php?page=comments"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'comments') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-comments fa-fw"></i> <?=COMMENTS; ?>
-                                </a>
-                            </li>
-<?php
-} ?>
-                            <li>
-                                <a href="index.php?page=media"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'media') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-photo"></i> Media
-                                </a>
-                            </li>
-<?php if (User::access(1)) {
-    ?>
-                            <li>
-                                <a href="index.php?page=users"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'users') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-users"></i> <?=USERS; ?>
-                                </a>
-                            </li>
-<?php
-} ?>
-<?php if (User::access(0)) {
-    ?>
-                            <li>
-                                <a href="index.php?page=menus"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'menus') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-sitemap"></i> <?=MENUS; ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.php?page=themes"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'themes' && !isset($_GET['view'])) ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-paint-brush"></i> <?=THEMES; ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="index.php?page=modules"
-                                <?=(isset($_GET['page']) && $_GET['page'] == 'modules') ? 'class="active"' : ''; ?>>
-                                    <i class="fa fa-plug"></i> <?=MODULES; ?>
-                                </a>
-                            </li>
-                            <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'
-                                || $_GET['page'] == 'permalink' || $_GET['page'] == 'comments-settings')) ? 'class="active"' : ''; ?> >
-                                <a href="#"><i class="fa fa-wrench fa-fw"></i> <?=SETTINGS; ?><span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level" style="">
-                                    <li>
-                                        <a href="index.php?page=settings"
-                                        <?=(isset($_GET['page']) && $_GET['page'] == 'settings') ? 'class="active"' : ''; ?>>
-                                            <i class="fa fa-wrench"></i> Global Settings
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="index.php?page=multilang"
-                                        <?=(isset($_GET['page']) && $_GET['page'] == 'multilang') ? 'class="active"' : ''; ?>>
-                                            <i class="fa fa-flag"></i> Multilanguage
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="index.php?page=permalink"
-                                        <?=(isset($_GET['page']) && $_GET['page'] == 'permalink') ? 'class="active"' : ''; ?>>
-                                            <i class="fa fa-link"></i> Permalink
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="index.php?page=comments-settings"
-                                        <?=(isset($_GET['page']) && $_GET['page'] == 'comments-settings') ? 'class="active"' : ''; ?>>
-                                            <i class="fa fa-comments"></i> Comments Settings
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-<?php
-} ?>
-                            <?php echo Theme::thmMenu(); ?>
-                            <?php echo Mod::modMenu(); ?>
-                            <li>
-                                <a href="logout.php">
-                                    <i class="fa fa-power-off"></i> <?=LOGOUT; ?>
-                                </a>
+                            <!-- Menu Body -->
+<!--                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Followers</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Sales</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Friends</a>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+<!--                            </li>
+                             Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="index.php?page=users&act=edit&id=<?=User::id(Session::val('username'));?>&token=<?=TOKEN;?>" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
                             </li>
                         </ul>
-
-                    </div>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="<?=Site::$url;?>" target="_blank"><i class="fa fa-globe"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="<?=Site::$url;?>assets/images/user1-256x256.png" class="img-circle" alt="User Image">
                 </div>
-                <?php
-} else {
-} ?>
-            </nav>
+                <div class="pull-left info">
+                    <p><?=Session::val('username');?></p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="<?=(!isset($_GET['page'])) ? 'active' : ''; ?>">
+                    <a href="index.php">
+                        <i class="fa fa-dashboard"></i> <span><?=DASHBOARD; ?></span>
+                    </a>
+                </li>
+                <li class="<?=(isset($_GET['page']) && ($_GET['page'] == 'posts' || $_GET['page'] == 'categories' || $_GET['page'] == 'tags')) ? 'active' : ''; ?> treeview">
+                    <a href="#">
+                        <i class="fa fa-files-o"></i>
+                        <span><?=POSTS; ?></span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'posts') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=posts"><i class="fa fa-pencil fa-fw"></i> <?=POSTS;?></a>
+                        </li>
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'categories') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=categories"><i class="fa fa-folder fa-fw"></i> <?=CATEGORIES; ?></a>
+                        </li>
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'tags') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=tags"><i class="fa fa-tags fa-fw"></i> <?=TAGS; ?></a>
+                        </li>
+                    </ul>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'pages') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=pages">
+                        <i class="fa fa-file-o"></i> <span><?=PAGES; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'comments') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=comments">
+                        <i class="fa fa-comments fa-fw"></i> <span><?=COMMENTS; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'media') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=media">
+                        <i class="fa fa-photo"></i> <span>Media</span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'users') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=users">
+                        <i class="fa fa-users"></i> <span><?=USERS; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'menus') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=menus">
+                        <i class="fa fa-sitemap"></i> <span><?=MENUS; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'themes' && !isset($_GET['view'])) ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=themes">
+                        <i class="fa fa-paint-brush"></i> <span><?=THEMES; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && $_GET['page'] == 'modules') ? 'class="active"' : ''; ?>>
+                    <a href="index.php?page=modules">
+                        <i class="fa fa-plug"></i> <span><?=MODULES; ?></span>
+                    </a>
+                </li>
+                <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'
+                        || $_GET['page'] == 'permalink' || $_GET['page'] == 'comments-settings')) ? 'class="active treeview"' : 'class="treeview"'; ?> >
+                    <a href="#"><i class="fa fa-wrench fa-fw"></i> <span><?=SETTINGS; ?></span>
 
-
-            <div id="page-wrapper">
-            <div id="notification"></div>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu" style="">
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'settings') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=settings">
+                                <i class="fa fa-wrench"></i> <span>Global Settings</span>
+                            </a>
+                        </li>
+                        <li  <?=(isset($_GET['page']) && $_GET['page'] == 'multilang') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=multilang">
+                                <i class="fa fa-flag"></i> <span>Multilanguage</span>
+                            </a>
+                        </li>
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'permalink') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=permalink">
+                                <i class="fa fa-link"></i> <span>Permalink</span>
+                            </a>
+                        </li>
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'comments-settings') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=comments-settings">
+                                <i class="fa fa-comments"></i> <span>Comments Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <?php echo Theme::thmMenu(); ?>
+                <?php echo Mod::modMenu(); ?>
+                <li>
+                    <a href="logout.php">
+                        <i class="fa fa-power-off"></i> <span><?=LOGOUT; ?></span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">

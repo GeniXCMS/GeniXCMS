@@ -6,10 +6,10 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -36,10 +36,10 @@ try {
 }
 
 System::gZip();
-
+$data = [];
 if (isset($_POST['login'])) {
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::isExist($_POST['token'])) {
+    if (!isset($_POST['token']) || !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
@@ -91,73 +91,90 @@ if (isset($_POST['login'])) {
                     // $_SESSION['group'] = $group;
 
                     // print_r($_COOKIE);
-                    $alertSuccess = 'You are logged in now.';
+                    $data['alertSuccess'][] = 'You are logged in now.';
                 } elseif ($p != $pass) {
-                    $alertDanger[] = PASS_NOT_MATCH;
+                    $data['alertDanger'][] = PASS_NOT_MATCH;
                 }
             } else {
                 if ($usr[0]->activation != '') {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE;
                 } else {
-                    $alertDanger[] = ACOUNT_NOT_ACTIVE_BLOCK;
+                    $data['alertDanger'][] = ACOUNT_NOT_ACTIVE_BLOCK;
                 }
             }
         } elseif ($c == '0') {
-            $alertDanger[] = NO_USER;
+            $data['alertDanger'][] = NO_USER;
         }
+    } else {
+        $data['alertDanger'] = $alertDanger;
     }
 }
-Theme::admin('header');
-if (isset($alertDanger)) {
-    echo '
-		<div class="alert alert-danger">
-			<ul>
-			';
-    foreach ($alertDanger as $alert) {
-        echo '<li>'.$alert.'</li>';
-    }
-    echo'</ul>
-		</div>';
-}
-if (isset($alertSuccess)) {
-    echo "
-		<div class=\"alert alert-success\">
-			{$alertSuccess}
-		</div>";
-}
+Theme::admin('headermini', $data);
+echo "<div class='container'>";
+echo System::alert($data);
+echo "</div>";
 
 if (!User::isLoggedin()) {
     ?>
-<div class="row">
-    <div style="max-width: 300px; margin-left: auto; margin-right: auto; margin-top: 50px;">
-        <form class="form-signin" role="form" method="post">
-            <h3 class="form-signin-heading"><?=LOGIN_TITLE; ?></h3>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" name="username" class="form-control" placeholder="<?=USERNAME; ?>" required autofocus>
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="index.php">
+                <?=Site::logo('', '45px');?>
+            </a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg"><?=LOGIN_TITLE; ?></p>
+
+            <form action="" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" name="username" placeholder="<?=USERNAME;?>" required autofocus>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                    <input type="password" name="password" class="form-control" placeholder="<?=PASSWORD; ?>" required>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" name="password" placeholder="<?=PASSWORD; ?>">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
-            </div>
-            <?=Xaptcha::html(); ?>
-            <label class="checkbox">
-                <a href="forgotpassword.php"><?=FORGOT_PASS; ?></a>
-            </label>
-            <input type="hidden" name="token" value="<?=TOKEN; ?>">
-            <button class="btn  btn-success center-block" name="login" type="submit"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;<?=SIGN_IN; ?></button>
-        </form>
+                <?=Xaptcha::html(); ?>
+                <div class="row">
+<!--                    <div class="col-xs-8">-->
+<!--                        <div class="checkbox icheck">-->
+<!--                            <label>-->
+<!--                                <input type="checkbox"> Remember Me-->
+<!--                            </label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" name="login"  class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <input type="hidden" name="token" value="<?=TOKEN; ?>">
+            </form>
+
+<!--            <div class="social-auth-links text-center">-->
+<!--                <p>- OR -</p>-->
+<!--                <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using-->
+<!--                    Facebook</a>-->
+<!--                <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using-->
+<!--                    Google+</a>-->
+<!--            </div>-->
+            <!-- /.social-auth-links -->
+
+            <a href="forgotpassword.php"><?=FORGOT_PASS; ?></a><br>
+            <a href="<?=Site::$url;?>register.php" class="text-center">Register a new membership</a>
+
+        </div>
+        <!-- /.login-box-body -->
     </div>
-</div>
+    <!-- /.login-box -->
 
 <?php
 } else {
     echo"<div class=\"alert alert-info\">You're already Logged In. <br /><a href=\"logout.php\">Logout</a></div>";
     header('location: index.php');
+    exit;
 }
 ?>
 <style>
@@ -168,7 +185,7 @@ if (!User::isLoggedin()) {
 
 <?php
 
-Theme::admin('footer');
+Theme::admin('footermini');
 System::Zipped();
 ?>
 

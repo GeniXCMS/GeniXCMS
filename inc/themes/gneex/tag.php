@@ -41,7 +41,7 @@ $gneex = Gneex::$opt;
                             '.$im.'
                             </div>
                             <div class="col-sm-8 col-md-8">
-                                <h3><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
+                                <h3 class="title"><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
                                 <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')." 
                                 by <a href=\"".Url::author($p->author)."\">{$p->author}</a></small><br /><br /></div>
                                 ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
@@ -52,41 +52,16 @@ $gneex = Gneex::$opt;
                             </article>
                                 ';
                         } else {
-//                            print_r($p);
-                            if ($p->type == 'products') {
-                                $img = Gneex::getImage(Typo::Xclean($p->content));
-//                                echo $p->content;
-                                if ($img != '') {
-                                    $im = '<img src="'.Url::thumb($img, 'square', 250).'" class="img-responsive" title="'.$p->title.'"
-                        alt="'.$title.'">';
-                                } else {
-                                    $im = '<img src="'.Url::thumb('assets/images/noimage.png', 'square', 250).'" class="img-responsive">';
-                                }
-                                $price = Products::getPrice($p->id);
-                                echo '
-                                <div class="col-sm-4">
-                                <div class="item-list-frontpage">
-                                <a href="'.Url::post($p->id)."\">
-                                <div class=\"\">
-                                    {$im}
-                                    <div class=\"price-badge\">{$price}</div>
-                                </div>
-                                <div class=\"\">
-                                    <h4 >".substr($p->title, 0, 23)."...</h4>
-                                </div>
-                                </a>
-                                </div>
-                                </div>";
-                            }else {
-                                echo '
-                            <article class="blog-post col-md-12">
-                                <h2><a href="' . Url::post($p->id) . "\">$p->title</a></h2>
-                                <hr />
-                                " . Posts::format($p->content, $p->id) . '
-                                <div class="blog-footer">posted in ' . Categories::name($p->cat) . ', at ' . Date::format($p->date) . " by <a href=\"#\">{$p->author}</a></div>
-                            </article>
-                                ";
-                            }
+//                            
+                            echo '
+                        <article class="blog-post col-md-12">
+                            <h2 class="title"><a href="' . Url::post($p->id) . "\">$p->title</a></h2>
+                            <hr />
+                            " . Posts::format($p->content, $p->id) . '
+                            <div class="blog-footer">posted in ' . Categories::name($p->cat) . ', at ' . Date::format($p->date) . " by <a href=\"#\">{$p->author}</a></div>
+                        </article>
+                            ";
+                            
                         }
                     }
                 } else {

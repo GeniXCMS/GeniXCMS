@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -98,15 +98,23 @@ class Session
             } else {
                 $_SESSION['gxsess']['val'][$vars] = $val;
             }
+        } else {
+            if (is_array($_SESSION['gxsess']['val'][$vars])) {
+                $arr = array_merge($_SESSION['gxsess']['val'][$vars], $val);
+                $_SESSION['gxsess']['val'][$vars] = $arr;
+            } else {
+                $_SESSION['gxsess']['val'][$vars] = $val;
+            }
+
         }
 
         // $uri = parse_url(Site::$url);
         // setcookie(session_name(),session_id(), time()+3600,$uri['path']);
     }
 
-    public static function set($vars)
+    public static function set($vars, $val ='')
     {
-        self::set_session($vars);
+        self::set_session($vars, $val);
     }
 
     public static function destroy()

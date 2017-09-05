@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -20,6 +20,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 date_default_timezone_set('UTC');
 //define('SITE_ID', Typo::getToken(20));
+!defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
 
 echo '<h2>Install Page</h2>';
 if (isset($_GET['step'])) {
@@ -75,7 +76,7 @@ switch ($step) {
         $vars = array(
                     'adminname' => (isset($_POST['adminname']) ? Typo::cleanX(Typo::strip($_POST['adminname'])) : ''),
                     'adminuser' => (isset($_POST['adminuser']) ? Typo::cleanX(Typo::strip($_POST['adminuser'])) : ''),
-                    'adminpass' => (isset($_POST['adminpass']) ? Typo::strip(Typo::escape($_POST['adminpass'])) : ''),
+                    'adminpass' => (isset($_POST['adminpass']) ? Typo::strip(Typo::strip($_POST['adminpass'])) : ''),
                 );
         Session::set_session($vars);
         Theme::install('step3');

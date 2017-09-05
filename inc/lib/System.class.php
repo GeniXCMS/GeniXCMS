@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.0.2';
+    public static $version = '1.1.0';
 
     /**
      * GeniXCMS Version Release.
@@ -69,6 +69,8 @@ class System
 
         /* Initiate Sites variables */
         new Site();
+        /* Initiate HTTP variables */
+        new Http();
 
         /* Start the session */
         Session::start();
@@ -82,6 +84,9 @@ class System
 
         /* Initiate Vendor */
         new Vendor();
+
+        /* Initiate Sitemap */
+        new Sitemap();
 
         /* Initiate Modules */
         new Mod();
@@ -272,9 +277,9 @@ class System
 //        global $data;
         $html = '';
 //     print_r($data);
-        $data = is_array($data[0]) ? $data[0]: $data;
+        $data = (isset($data[0]) && is_array($data[0])) ? $data[0]: $data;
         if (isset($data['alertSuccess'])) {
-            $html .= '<div class="alert alert-success" >
+            $html .= '<div class="alert alert-success" id="notification">
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
@@ -286,7 +291,7 @@ class System
             $html .= '</ul></div>';
         }
         if (isset($data['alertDanger'])) {
-            $html .= '<div class="alert alert-danger" >
+            $html .= '<div class="alert alert-danger" id="notification">
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
@@ -298,7 +303,7 @@ class System
             $html .= '</ul></div>';
         }
         if (isset($data['alertInfo'])) {
-            $html .= '<div class="alert alert-info" >
+            $html .= '<div class="alert alert-info" id="notification">
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
@@ -310,7 +315,7 @@ class System
             $html .= '</ul></div>';
         }
         if (isset($data['alertWarning'])) {
-            $html .= '<div class="alert alert-warning" >
+            $html .= '<div class="alert alert-warning" id="notification">
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
@@ -322,7 +327,7 @@ class System
             $html .= '</ul></div>';
         }
         if (isset($data['alertDefault'])) {
-            $html .= '<div class="alert alert-default" >
+            $html .= '<div class="alert alert-default" id="notification">
             <button type="button" class="close" data-dismiss="alert">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>

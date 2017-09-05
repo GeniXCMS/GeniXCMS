@@ -17,10 +17,7 @@
                             }
                             ?>
                             <?php
-                            echo "<div class=\"blog-main col-md-12\">
-                            <h2>".Mod::getTitle($data['mod'])."</h2><hr/>";
                             Hooks::run('mod_control', $data);
-                            echo "</div>";
                             ?>
                             <?php
                             if (Gneex::opt('adsense') != '') {

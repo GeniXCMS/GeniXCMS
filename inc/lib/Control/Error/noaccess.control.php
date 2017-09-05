@@ -6,21 +6,29 @@
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-?>
-<div class="row">
-    <div class="col-sm-12">
-        <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
-        <hr>
-        <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a href="<?=Options::v('siteurl');?>">frontpage</a> or just <a href="logout.php">Logout</a></div>
+header('HTTP/1.0 403 Forbidden');
+if (Theme::exist('noaccess')) {
+    Theme::theme('noaccess');
+} else {
+    ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
+            <hr>
+            <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
+                        href="<?= Options::v('siteurl'); ?>">frontpage</a> or just <a href="logout.php">Logout</a></div>
+        </div>
     </div>
-</div>
 
+    <?php
+}
+?>

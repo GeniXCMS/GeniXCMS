@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -47,8 +47,7 @@ if (isset($paging)) {
 //echo $paging;
 $data['sitetitle'] = Site::$slogan.$pagingtitle;
 $data['posts'] = Db::result(
-    sprintf(
-        "SELECT * FROM `posts`
+    sprintf("SELECT * FROM `posts`
                             WHERE `type` = 'post'
                             AND `status` = '1'
                             ORDER BY `date`

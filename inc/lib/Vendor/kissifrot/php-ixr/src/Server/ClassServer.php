@@ -13,7 +13,7 @@ use IXR\Message\Error;
  * you to "write once" in your existing model classes and present them.
  *
  * @author Jason Stirk <jstirk@gmm.com.au>
- * @version 1.0.2 19Apr2005 17:40 +0800
+ * @version 1.0.1 19Apr2005 17:40 +0800
  * @copyright Copyright (c) 2005 Jason Stirk
  * @package IXR
  */

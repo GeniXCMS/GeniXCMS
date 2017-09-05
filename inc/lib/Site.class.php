@@ -8,10 +8,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141004
  *
- * @version 1.0.2
+ * @version 1.1.0
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genixcms.org
+ * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
  * @copyright 2014-2017 Puguh Wijayanto
@@ -29,6 +29,7 @@ class Site
     public static $desc;
     public static $email;
     public static $slogan;
+    public static $isOffline;
 
     public function __construct()
     {
@@ -43,6 +44,11 @@ class Site
         self::$desc = Options::v('sitedesc');
         self::$email = Options::v('siteemail');
         self::$slogan = Options::v('siteslogan');
+        if(Http::isLocal(self::$url)) {
+            self::$isOffline = false;
+        } else {
+            self::$isOffline = true;
+        }
 
         Hooks::attach('header_load_meta', array(__CLASS__, 'loadLibHeader'));
         Hooks::attach('footer_load_lib', array(__CLASS__, 'loadLibFooter'));
@@ -150,7 +156,7 @@ class Site
             $logo = '<img src="'.Options::v('logourl')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         } elseif (Options::v('is_logourl') == 'off' && Options::v('logo') != '') {
-            $logo = '<img src="'.self::$url.Options::v('logo')."\"
+            $logo = '<img src="'.self::$cdn.Options::v('logo')."\"
                     style=\"width: $width; height: $height; margin: 1px;\">";
         } else {
             $logo = '<span class="mg genixcms-logo"></span>';
@@ -169,7 +175,7 @@ class Site
 
     public static function canonical()
     {
-        $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 
         return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
