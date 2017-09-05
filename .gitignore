@@ -1,7 +1,6 @@
 inc/config/*
+*/docs/*
 assets/cache/*
-docs
-mkdocs.yml
 assets/.tmb
 assets/.quarantine
 assets/media/*
