@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -227,8 +227,9 @@ class Http
     public static function varIpApi()
     {
         $ipApi = [
-            'http://163.172.167.135:8080/json/',
-            'http://geoipfree.com/json/'
+            'https://geoipfree.com/json/',
+            'https://freegeoip.net/json/',
+            'https://freegeoip.io/json/'
         ];
 
         return $ipApi;

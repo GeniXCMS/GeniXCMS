@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -196,7 +196,7 @@ class Mod
 
     public static function loader()
     {
-        $data = '';
+        $data = [];
         if (User::access(0)) {
             if (isset($_GET['page']) && $_GET['page'] == 'modules') {
                 $token = isset($_GET['token']) ? Typo::cleanX($_GET['token']): '';

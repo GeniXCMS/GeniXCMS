@@ -30,6 +30,29 @@ if (isset($_POST['installdb'])) {
             'font_color_header' => '#fff',
             'container_width' => '1280',
             'category_layout' => 'blog',
+            'body_background_color' => '',
+            'link_color' => '',
+            'link_color_hover' => '',
+            'background_footer' => '',
+            'link_color_footer' => '',
+            'sidebar_background_color_header' => '',
+            'sidebar_font_color_header' => '',
+            'sidebar_border_width' => '',
+            'sidebar_border_color' => '',
+            'sidebar_font_color_body' => '',
+            'content_border_width' => '',
+            'content_border_color' => '',
+            'content_background_color_body' => '',
+            'fullwidth_page' => '',
+            'background_footer' => '',
+            'link_color_footer' => '',
+            'content_font_color_body' => '',
+            'content_title_size' => '',
+            'content_title_cat_size' => '',
+            'content_title_color' => '',
+            'content_title_color_hover' => '',
+            'list_title_color' => '',
+            'list_title_size' => ''
         );
     $opt = array(
             'gneex_options' => json_encode($arr),
@@ -39,10 +62,11 @@ if (isset($_POST['installdb'])) {
 
 if (isset($_POST['gneex_options_update'])) {
     unset($_POST['gneex_options_update']);
-    $opt = array();
+    $opt = [];
     foreach ($_POST as $k => $v) {
         // $opt[$k] = urlencode($v);
-        $opt[$k] = Typo::jsonFormat($v);
+        // $opt[$k] = Typo::jsonFormat($v);
+        $opt[$k] = $v;
         // echo $opt[$k];
     }
 
@@ -85,18 +109,20 @@ if (isset($_POST['gneex_options_update'])) {
 
 if (Gneex::checkDB()) {
     $opt = Options::get('gneex_options');
-    // $opt = utf8_encode($opt);
+    $opt = Typo::Xclean($opt);
     // var_dump($opt);
 
     $opt = json_decode($opt, true);
-
+    // print_r($opt);
     if (is_array($opt)) {
-        $o = array();
+        $o = [];
         foreach ($opt as $k => $v) {
             // $o[$k] = urldecode($v);
             $o[$k] = $v;
         }
-    } ?>
+    } 
+
+?>
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked" id="myTabs">
             <li role="presentation" class="active"><a href="#home"><i class="fa fa-home"></i> Home</a></li>

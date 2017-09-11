@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -32,7 +32,7 @@ try {
 }
 
 System::gZip();
-$data = '';
+$data = [];
 if (isset($_POST['login'])) {
     $token = Typo::cleanX($_POST['token']);
     if (!isset($_POST['token']) || !Token::validate($token)) {

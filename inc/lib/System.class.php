@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.0';
+    public static $version = '1.1.1';
 
     /**
      * GeniXCMS Version Release.

@@ -1,7 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.0.
-
-![](https://scontent-sin6-1.xx.fbcdn.net/v/t1.0-9/16195650_667518436742758_1128161184265490528_n.png?oh=df09dadd56c1a329a177f19f591aed14&oe=59124708)
+> Update Notice: Please Update to version v1.1.1.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -39,10 +37,6 @@ This CMSF is a starter point to build your own online applications. With already
 
 ### Recommended
 * MariaDB Server
-
-### Feature Request
-
-[![Feature Requests](http://feathub.com/semplon/GeniXCMS?format=svg)](http://feathub.com/semplon/GeniXCMS)
 
 ### Installation
 
@@ -94,16 +88,16 @@ define('USE_MEMCACHED', false);
 
 ### Showcase
 Showcase URL :
-- http://demo.genix.id
+- [http://demo.genix.id](http://demo.genix.id)
 
 ### License
 **GeniXCMS** License : [**MIT License**](LICENSE)
 
 ### Website
-Link : http://genix.id
+Link : [http://genix.id](http://genix.id)
 
 ### Donate
-![Donate Us](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)
+Contact us for Donation. 
 
 ### Developer
-Developed by : Puguh Wijayanto - www.metalgenix.com
+Developed by : Puguh Wijayanto - [metalgenix.com](http://metalgenix.com)
