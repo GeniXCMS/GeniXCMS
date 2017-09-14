@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140805
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -26,9 +26,11 @@ $data['p_type'] = 'mod';
 $data['sitetitle'] = Mod::getTitle($data['mod']);
 
 if (Hooks::exist($data['mod'], 'mod_control')) { // check if mod exist at hooks mod_control
+    Cache::start();
     Theme::theme('header', $data);
     Theme::theme('mod', $data);
     Theme::footer($data);
+    Cache::end();
     exit();
 } else {
     Control::error('404');

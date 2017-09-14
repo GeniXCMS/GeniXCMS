@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -28,6 +28,7 @@ $data['author'] = $author;
 $data['max'] = Options::v('post_perpage');
 //echo User::validate($author);
 if (User::validate($author)) {
+    Cache::start();
     if (SMART_URL) {
         if (isset($data['paging'])) {
             $paging = $data['paging'];
@@ -91,6 +92,7 @@ if (User::validate($author)) {
     Theme::theme('header', $data);
     Theme::theme('author', $data);
     Theme::footer($data);
+    Cache::end();
     exit;
 } else {
     Control::error('404');

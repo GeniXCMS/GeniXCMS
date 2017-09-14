@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.1';
+    public static $version = '1.1.2';
 
     /**
      * GeniXCMS Version Release.
@@ -60,6 +60,9 @@ class System
 
         /* Initiate Options variables. */
         new Options();
+
+        /* Load cache configuration */
+        new Cache();
 
         /* Initate Token creation */
         new Token();
@@ -97,6 +100,7 @@ class System
         /* Load themes configuration */
         new Theme();
 
+        
         /* Attach Hooks : admin_page_notif_action */
         Hooks::attach('admin_page_notif_action', array('System', 'alert'));
 

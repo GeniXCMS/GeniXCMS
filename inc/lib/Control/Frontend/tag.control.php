@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -42,7 +42,7 @@ $data['name'] = $name;
 
 if (Tags::exist($name)) {
     # code...
-
+    Cache::start();
     $data['max'] = Options::v('post_perpage');
 
     if (SMART_URL) {
@@ -101,6 +101,8 @@ if (Tags::exist($name)) {
     Theme::theme('header', $data);
     Theme::theme('tag', $data);
     Theme::footer($data);
+
+    Cache::end();
     exit;
 } else {
     Control::error('404');

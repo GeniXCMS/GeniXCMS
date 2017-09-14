@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -430,6 +430,45 @@ class User
         }
 //        print_r($ctr);
         return json_encode($ctr);
+    }
+
+    public static function checkLastRequestPassword() 
+    {
+        $reqPass = Session::val('reqPass');
+        $lastReq = !empty($reqPass) ? $reqPass['time']: 0;
+
+        return $lastReq;
+    }
+
+    public static function setLastRequestPassword() 
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $time = time();
+        
+        $vars = array(
+            'reqPass' => array(
+                    'time' => $time,
+                    'ip'    => $ip
+                )
+            );
+        Session::set($vars);
+    }
+
+    public static function lastRequestPassword()
+    {
+        $limit = 1200;
+
+        $lastReq = self::checkLastRequestPassword();
+        $reqTime = time() - $lastReq;
+
+        if ($lastReq == 0 || $reqTime > $limit ) {
+            self::setLastRequestPassword();
+
+            return true;
+        } else {
+
+            return false;
+        }
     }
 }
 

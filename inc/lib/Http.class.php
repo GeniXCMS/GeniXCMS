@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -138,7 +138,7 @@ class Http
         }
 
         if ($curl) {
-            $ch = curl_init();
+            $ch = @curl_init();
 //            $opt = '';
             $c_options[] = array(
                 CURLOPT_RETURNTRANSFER => 1,
@@ -154,11 +154,11 @@ class Http
 
             }
 //            print_r($options);
-            curl_setopt_array($ch, $options);
+            @curl_setopt_array($ch, $options);
             $fetch = curl_exec($ch);
-            curl_close($ch);
+            @curl_close($ch);
         } else {
-            $fetch = file_get_contents($url);
+            $fetch = @file_get_contents($url);
         }
 
         return $fetch;

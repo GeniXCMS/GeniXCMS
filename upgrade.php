@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -110,7 +110,7 @@ if (isset($_POST['004-patch'])) {
     $q = Options::update($options);
 
     $q = Options::update('siteurl', $url);
-
+    $q = addCacheOptions();
     $q = alterUserGroup();
 
     if ($q) {
@@ -168,7 +168,7 @@ if (isset($_POST['004-patch'])) {
     $q = Options::update($opt);
 
     $q = Options::update('siteurl', $url);
-
+    $q = addCacheOptions();
     $q = alterUserGroup();
 
     if ($q) {
@@ -226,7 +226,7 @@ if (isset($_POST['004-patch'])) {
     $q = Options::update('siteurl', $url);
 
     $q = alterUserGroup();
-
+    $q = addCacheOptions();
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -276,7 +276,7 @@ if (isset($_POST['004-patch'])) {
     $q = Options::update($opt);
 
     $q = Options::update('siteurl', $url);
-
+    $q = addCacheOptions();
     $q = alterUserGroup();
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
@@ -326,6 +326,7 @@ if (isset($_POST['004-patch'])) {
     $q = Options::update($opt);
 
     $q = Options::update('siteurl', $url);
+    $q = addCacheOptions();
     $q = alterUserGroup();
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
@@ -333,8 +334,15 @@ if (isset($_POST['004-patch'])) {
         $alertDanger[] = 'Upgrade Failed';
     }
 } elseif (isset($_POST['100'])) {
-
+    $q = addCacheOptions();
     $q = alterUserGroup();
+    if ($q) {
+        $alertSuccess = 'Upgrade Success!';
+    } else {
+        $alertDanger[] = 'Upgrade Failed';
+    }
+} elseif (isset($_POST['111'])) {
+    $q = addCacheOptions();
     if ($q) {
         $alertSuccess = 'Upgrade Success!';
     } else {
@@ -345,6 +353,16 @@ if (isset($_POST['004-patch'])) {
 function alterUserGroup(){
     $sql = "ALTER TABLE `user` CHANGE `group` `group` ENUM('0','1','2','3','4','5','6') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
     $q = Db::query($sql);
+    return $q;
+}
+
+function addCacheOptions(){
+    $vars = array(
+        'cache_path' => '/assets/cache/pages/',
+        'cache_timeout' => '300',
+        'cache_enabled' => 'off'
+      );
+    $q = Options::insert($vars);
     return $q;
 }
 
@@ -369,6 +387,13 @@ if (isset($alertSuccess)) {
 echo '
 <h1>Upgrade v'.System::$version.'</h1>
 <hr />
+<h3>Upgrade from Version 1.0.1 - 1.1.1</h3>
+<form method="post">
+<div class="form-group">
+<button name="111" class="btn btn-success"><i class="fa fa-upload"></i> Upgrade from v1.0.0-v1.1.1</button>
+</div>
+</form>
+
 <h3>Upgrade from Version 1.0.0</h3>
 <form method="post">
 <div class="form-group">

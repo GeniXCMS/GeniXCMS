@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -45,10 +45,12 @@ $posts = Posts::fetch($vars);
 $data['posts'] = Posts::prepare($posts);
 
 if (!isset($posts['error'])) {
+    Cache::start();
     $theme = Theme::exist($data['p_type']) ? $data['p_type']: 'single';
     Theme::theme('header', $data);
     Theme::theme($theme, $data);
     Theme::footer($data);
+    Cache::end();
     Stats::addViews($post_id);
 
 } else {

@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -33,6 +33,12 @@ try {
     new System();
 } catch (Exception $e) {
     echo $e->getMessage();
+}
+
+if (!isset($_GET['backto']) && isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: '.Site::$url.'login.php?backto='.$_SERVER['HTTP_REFERER']);
+} elseif (!isset($_GET['backto']) && !isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: '.Site::$url.'login.php?backto='.Site::$url);
 }
 
 System::gZip();

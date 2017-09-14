@@ -232,7 +232,7 @@
                     </a>
                 </li>
                 <li <?=(isset($_GET['page']) && ($_GET['page'] == 'multilang' || $_GET['page'] == 'settings'
-                        || $_GET['page'] == 'permalink' || $_GET['page'] == 'comments-settings')) ? 'class="active treeview"' : 'class="treeview"'; ?> >
+                        || $_GET['page'] == 'permalink' || $_GET['page'] == 'comments-settings' || $_GET['page'] == 'cache' )) ? 'class="active treeview"' : 'class="treeview"'; ?> >
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> <span><?=SETTINGS; ?></span>
 
                         <span class="pull-right-container">
@@ -258,6 +258,11 @@
                         <li <?=(isset($_GET['page']) && $_GET['page'] == 'comments-settings') ? 'class="active"' : ''; ?>>
                             <a href="index.php?page=comments-settings">
                                 <i class="fa fa-comments"></i> <span>Comments Settings</span>
+                            </a>
+                        </li>
+                        <li <?=(isset($_GET['page']) && $_GET['page'] == 'cache') ? 'class="active"' : ''; ?>>
+                            <a href="index.php?page=cache">
+                                <i class="fa fa-archive"></i> <span>Cache Settings</span>
                             </a>
                         </li>
                     </ul>

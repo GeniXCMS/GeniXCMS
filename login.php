@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -31,7 +31,14 @@ try {
     echo $e->getMessage();
 }
 
+if (!isset($_GET['backto']) && isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: '.Site::$url.'login.php?backto='.$_SERVER['HTTP_REFERER']);
+} elseif (!isset($_GET['backto']) && !isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: '.Site::$url.'login.php?backto='.Site::$url);
+}
+
 System::gZip();
+
 $data = [];
 if (isset($_POST['login'])) {
     $token = Typo::cleanX($_POST['token']);
@@ -146,7 +153,8 @@ if (!User::isLoggedin()) {
 
 <?php
 } else {
-    echo'<div class="alert alert-info">'.MSG_USER_ALREADY_LOGGED.'<br /><a href="logout.php">'.LOGOUT.'</a></div>';
+    $backto = isset($_GET['backto']) ? $_GET['backto']: Site::$url; 
+    header("Location: ".$backto);
 }
 echo '</div>';
 

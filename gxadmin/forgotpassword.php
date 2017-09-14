@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -111,7 +111,7 @@ if (isset($_POST['forgotpass'])) {
 
         Token::remove($token);
     } else {
-        $data['alertDanger'][] = $alertDanger;
+        $data['alertDanger'] = $alertDanger;
     }
 }
 Theme::admin('headermini', $data);

@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -34,6 +34,11 @@ if (isset($_POST['forgotpass'])) {
     if (!isset($_POST['token']) || !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
+    }
+
+    // check last request 
+    if (!User::lastRequestPassword()) {
+        $alertDanger[] = 'You had reached request password Limit!';
     }
     if (Xaptcha::isEnable()) {
         if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '') {
@@ -110,11 +115,14 @@ if (isset($_POST['forgotpass'])) {
 
         Token::remove($token);
     } else {
-        $data['alertDanger'][] = $alertDanger;
+        $data['alertDanger'] = $alertDanger;
     }
 }
-Theme::theme('header');
+
+Theme::theme('header', $data);
+echo "<div class='container'>";
 echo System::alert($data);
+echo "</div>";
 if (!User::isLoggedin()) {
     ?>
 <div class="container">

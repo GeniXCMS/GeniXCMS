@@ -6,7 +6,7 @@
  *
  * @since 0.0.2 build date 20150309
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -139,7 +139,7 @@ class Token
     {
         $tokens = json_decode(Typo::Xclean(Options::v('tokens')), true);
         $urlLive = $_SERVER['REQUEST_URI'];
-        $urlToken = $tokens[$token]['url'];
+        $urlToken = in_array($token, $tokens) ? $tokens[$token]['url']: '';
         if ($urlToken == $urlLive) {
             return true;
         } else {

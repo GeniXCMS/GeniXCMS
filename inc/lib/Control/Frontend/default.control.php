@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -17,6 +17,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2014-2017 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+Cache::start();
 
 $post = '';
 $data = Router::scrap($param);
@@ -74,5 +75,6 @@ Theme::theme('header', $data);
 Theme::theme('index', $data);
 Theme::footer();
 
+Cache::end();
 /* End of file default.control.php */
 /* Location: ./inc/lib/Control/Frontend/default.control.php */

@@ -1,12 +1,12 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-/*
+/**
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
  *
- * @since 0.0.1 build date 20160313
+ * @since 1.1.2 build date 20170912
  *
  * @version 1.1.2
  *
@@ -18,8 +18,9 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-if (User::access(0)) {
-    $data['sitetitle'] = 'Comments Settings';
+
+if (User::access(1)) {
+    $data['sitetitle'] = "Cache Settings";
 
     if (isset($_POST['change'])) {
         $token = Typo::cleanX($_POST['token']);
@@ -33,7 +34,7 @@ if (User::access(0)) {
         // print_r($_POST);
             $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
             $q = Db::result($sql);
-            $input = array('comments_enable', 'spamwords', 'comments_perpage');
+            $input = array('cache_enabled', 'cache_path', 'cache_timeout');
 
             foreach ($q as $ob) {
                 if (in_array($ob->name, $input)) {
@@ -60,17 +61,16 @@ if (User::access(0)) {
         }
     }
 
-    $data['comments_enable'] = Options::v('comments_enable');
-    $data['comments_perpage'] = Options::v('comments_perpage');
-    $data['spamwords'] = Options::v('spamwords');
+    $data['cache_enabled'] = Options::v('cache_enabled');
+    $data['cache_path'] = Options::v('cache_path');
+    $data['cache_timeout'] = Options::v('cache_timeout');
 
     Theme::admin('header', $data);
-    System::inc('comments-settings', $data);
+    System::inc('cache', $data);
     Theme::admin('footer');
+
 } else {
     Theme::admin('header');
     Control::error('noaccess');
     Theme::admin('footer');
 }
-/* End of file default.control.php */
-/* Location: ./inc/lib/Control/Backend/default.control.php */

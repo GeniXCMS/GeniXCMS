@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -445,6 +445,41 @@ class Comments
         } else {
             return false;
         }
+    }
+
+    /**
+     * $vars = array(
+     *     'type'    => '',
+     *     'num'     => '',
+     *     'post_id' => ''
+     * );
+     *
+     */
+
+    public static function recent($vars='')
+    {
+        $postID = isset($vars['post_id']) ? " AND `post_id` = '".Typo::int($vars['post_id'])."'" : '';
+        $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
+        $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
+        $sql = "SELECT * FROM `comments`
+                WHERE `type` = '{$type}' {$postID} AND `status` = '1'
+                ORDER BY `date` DESC LIMIT {$num}";
+        $comments = Db::result($sql);
+
+        if (isset($comments['error'])) {
+            $comments['error'] = 'No Comments found.';
+        } else {
+            $html = "<ol class='list-unstyled'>";
+            foreach ($comments as $key => $value) {
+                $comment = substr($value->comment, 0, 30);
+                $author = !empty($value->userid) ? $value->userid: $value->name;
+                $date = Date::format($value->date);
+                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$value->comment}</a><small>by {$author} on {$date}</small></li>";
+            }
+            $html .= "</ol>";
+        }
+
+        return $html;
     }
 
     public static function spamWord()

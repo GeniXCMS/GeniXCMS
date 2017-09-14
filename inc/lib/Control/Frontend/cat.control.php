@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -30,6 +30,7 @@ $type = Categories::type($cat);
 $data['max'] = Options::v('post_perpage');
 
 if (Categories::exist($cat)) {
+    Cache::start();
     if (SMART_URL) {
         if (isset($data['paging'])) {
             $paging = $data['paging'];
@@ -84,6 +85,7 @@ if (Categories::exist($cat)) {
     Theme::theme('header', $data);
     Theme::theme('cat', $data);
     Theme::footer();
+    Cache::end();
     exit;
 } else {
     Control::error('404');
