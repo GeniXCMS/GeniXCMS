@@ -81,8 +81,8 @@ if (Tags::exist($name)) {
             $name, $offset, $data['max']
         )
     );
-    echo $type;
-    print_r($data['posts']);
+    // echo $type;
+    // print_r($data['posts']);
     $data['num'] = Db::$num_rows;
     $data['posts'] = Posts::prepare($data['posts']);
 
