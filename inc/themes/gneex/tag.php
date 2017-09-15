@@ -41,7 +41,7 @@ $gneex = Gneex::$opt;
                             '.$im.'
                             </div>
                             <div class="col-sm-8 col-md-8">
-                                <h3 class="title"><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
+                                <h3 class="title"><a href="'.Url::post($p->post_id).'">'.$p->title.'</a></h3>
                                 <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y')." 
                                 by <a href=\"".Url::author($p->author)."\">{$p->author}</a></small><br /><br /></div>
                                 ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
