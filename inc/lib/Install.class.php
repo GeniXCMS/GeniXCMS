@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.2
+ * @version 1.1.3
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -54,7 +54,7 @@ class Install
 *
 * @package GeniXCMS
 * @since 0.0.1 build date 20140925
-* @version 1.1.2
+* @version 1.1.3
 * @link https://github.com/semplon/GeniXCMS
 * @link http://genix.id
 * @author Puguh Wijayanto (www.metalgenix.com)
@@ -374,7 +374,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'spamwords', ''),
             (null, 'comments_perpage', '5'),
             (null, 'comments_enable', 'on'),
-            (null, 'db_version', '1.1.2'),
+            (null, 'db_version', '1.1.3'),
             (null, 'cache_enabled', 'off'),
             (null, 'cache_path', '/assets/cache/pages/'),
             (null, 'cache_timeout', '300')

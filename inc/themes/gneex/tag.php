@@ -65,7 +65,7 @@ $gneex = Gneex::$opt;
                         }
                     }
                 } else {
-                    echo 'No Post to Show';
+                    echo '<article class="blog-post col-md-12">No Post to Show</article>';
                 }
                 ?>
                 <?php

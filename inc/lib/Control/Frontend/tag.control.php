@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.2
+ * @version 1.1.3
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -34,7 +34,7 @@ Tags::id(
             Typo::strip($_GET['tag'])
         )
     )
-);
+); 
 $type = Categories::type($tag);
 $name = Tags::name($tag);
 $slug = Tags::slug($tag);
@@ -71,20 +71,18 @@ if (Tags::exist($name)) {
     $data['sitetitle'] = 'Post in : Tags - '.$name.$pagingtitle;
     $data['posts'] = Db::result(
         sprintf("SELECT * FROM `posts` AS A
-                    LEFT JOIN `items` AS B
+                    LEFT JOIN `posts_param` AS B
                     ON A.`id` = B.`post_id`
-                    LEFT JOIN `posts_param` AS C
-                    ON A.`id` = C.`post_id`
-                    WHERE C.`param` = 'tags' 
-                    AND C.`value` LIKE '%%%s%%'
-                    AND A.`type` = 'gxmarket' 
+                    WHERE B.`param` = 'tags' 
+                    AND B.`value` LIKE '%%%s%%'
                     AND A.`status` = '1'
                     ORDER BY A.`date` 
                     DESC LIMIT %d, %d",
             $name, $offset, $data['max']
         )
     );
-//    print_r($data['posts']);
+    echo $type;
+    print_r($data['posts']);
     $data['num'] = Db::$num_rows;
     $data['posts'] = Posts::prepare($data['posts']);
 
