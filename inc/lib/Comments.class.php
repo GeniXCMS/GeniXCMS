@@ -1,14 +1,14 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-/*
+/**
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.3
+ * @version 1.1.4
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -474,7 +474,7 @@ class Comments
                 $comment = substr($value->comment, 0, 30);
                 $author = !empty($value->userid) ? $value->userid: $value->name;
                 $date = Date::format($value->date);
-                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$value->comment}</a><small>by {$author} on {$date}</small></li>";
+                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a><small>by {$author} on {$date}</small></li>";
             }
             $html .= "</ol>";
         }

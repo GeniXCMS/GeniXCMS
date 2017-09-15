@@ -1,7 +1,7 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-/*
+/**
  * GeniXCMS - Content Management System
  * ============================================================ 
  * Build : 20140925

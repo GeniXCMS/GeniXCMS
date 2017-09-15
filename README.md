@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.3.
+> Update Notice: Please Update to version v1.1.4.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -69,7 +69,7 @@ We are now ready for composer installation. Run this command at your server.
 more detail about composer, please read the documentation at http://getcomposer.org
 
 more details of installation :
-https://docs.genix.id/user-guide/installation/
+http://docs.genix.id/user-guide/installation/
 
 ### Upgrading
 
