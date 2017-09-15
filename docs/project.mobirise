@@ -37,8 +37,8 @@
     "index.html": {
       "settings": {
         "main": true,
-        "title": "Home",
-        "meta_descr": "",
+        "title": "GeniXCMS - Free and Opensource CMS",
+        "meta_descr": "GeniXCMS is a Free and Opensource Lightweight CMS. It's built with PHP and MySQL. ",
         "header_custom": "",
         "footer_custom": "",
         "html_before": ""
