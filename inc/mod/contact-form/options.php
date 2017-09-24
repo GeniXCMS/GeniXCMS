@@ -11,7 +11,7 @@
                 </h3>
 
                 <div class="box-tools pull-right">
-                    <?=$data['paging'];?>
+                    
                 </div>
             </div>
             <div class="box-body">
