@@ -49,7 +49,7 @@ if (User::access(0)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $menus = Options::v('menus');
-                        $menus = json_decode(Options::v('menus'), true);
+                        $menus = json_decode($menus, true);
                        //echo "<pre>"; print_r($menus); echo "</pre>";
                         // $menu = array(
                         //                 $_POST['id']  =>  array(
@@ -73,6 +73,7 @@ if (User::access(0)) {
                         $menuid = Typo::cleanX(Typo::filterXSS($_POST['id']));
                         $name = Typo::cleanX(Typo::filterXSS($_POST['name']));
                         $type = Typo::cleanX(Typo::filterXSS($_POST['type']));
+                        $class = Typo::cleanX(Typo::filterXSS($_POST['class']));
                         $menu[$menuid]['menu'] = $menus[$menuid]['menu'];
                         $menu[$menuid]['menu'][] = array(
                                                     'parent' => $parent,
@@ -101,7 +102,7 @@ if (User::access(0)) {
                             'parent' => $parent,
                             'menuid' => $menuid,
                             'name' => $name,
-                            'class' => Typo::cleanX($_POST['class']),
+                            'class' => $class,
                             'type' => $type,
                             'value' => $_POST[$type],
                         );
@@ -147,13 +148,18 @@ if (User::access(0)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
+                        $parent = Typo::int(Typo::filterXSS($_POST['parent']));
+                        $menuid = Typo::cleanX(Typo::filterXSS($_POST['id']));
+                        $name = Typo::cleanX(Typo::filterXSS($_POST['name']));
+                        $type = Typo::cleanX(Typo::filterXSS($_POST['type']));
+                        $class = Typo::cleanX(Typo::filterXSS($_POST['class']));
                         $vars = array(
-                            'parent' => Typo::int($parent),
-                            'menuid' => Typo::strip($_POST['id']),
-                            'name' => Typo::cleanX($_POST['name']),
-                            'class' => Typo::cleanX($_POST['class']),
-                            'type' => Typo::cleanX($_POST['type']),
-                            'value' => Typo::cleanX($_POST[$_POST['type']]),
+                            'parent' => $parent,
+                            'menuid' => $menuid,
+                            'name' => $name,
+                            'class' => $class,
+                            'type' => $type,
+                            'value' => $_POST[$type],
                         );
                         $vars = array(
                             'id' => $itemid,
@@ -171,7 +177,7 @@ if (User::access(0)) {
             }
 
             if (isset($_GET['id'])) {
-                $menuid = Typo::cleanX($_GET['id']);
+                $menuid = Typo::cleanX(Typo::filterXSS($_GET['id']));
             } else {
                 $menuid = '';
             }
