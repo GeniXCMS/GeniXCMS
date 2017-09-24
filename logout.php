@@ -31,4 +31,4 @@ try {
 
 Hooks::run('user_logout_action');
 Session::destroy();
-header('Location: index.php');
+header('Location: '.Site::$url);

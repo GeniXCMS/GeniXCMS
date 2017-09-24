@@ -1,13 +1,6 @@
 <?php
 $gneex = Gneex::$opt;
 ?>
-    <section id="innerslide">
-        
-        <div class="bg-slide">
-            
-        </div>
-
-    </section>
 
     <section id="blog">
         <div class="container">

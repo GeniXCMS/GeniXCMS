@@ -1,37 +1,6 @@
-    <?php $gneex = Gneex::$opt;?>
-    <section id="frontslide">
-        
-        <div class="bg-slide">
-            
-        </div>
-        <?php
-        if (($gneex['intro_title'] || $gneex['intro_text']) != '') {
-            # code...
-
-        ?>
-        <div class="container" id="front-text">
+<?php $gneex = Gneex::$opt;
 
 
-                <div class="col-md-7 ">
-                <div class="front-textbox">
-                    <h2><span><?=nl2br($gneex['intro_title']); ?></span></h2>
-                    <hr />
-                    <p><span><?=nl2br($gneex['intro_text']); ?></span>
-                    </p>
-                </div>
-                    
-                </div>
-                <div class="col-md-5 front-image">
-                    <?=Gneex::introIg($gneex['intro_image']); ?>
-                </div>
-
-        </div>
-        <?php
-        }
-        ?>
-
-    </section>
-<?php
 if (Gneex::featuredExist()) {
     ?>
     <section id="featured">

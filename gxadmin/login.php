@@ -36,7 +36,8 @@ try {
 }
 
 if (!isset($_GET['backto']) && isset($_SERVER['HTTP_REFERER'])) {
-    header('Location: '.Site::$url.'login.php?backto='.$_SERVER['HTTP_REFERER']);
+    $url = str_replace(Site::$url.'login.php?backto=', '', $_SERVER['HTTP_REFERER']);
+    header('Location: '.Site::$url.'login.php?backto='.$url);   
 } elseif (!isset($_GET['backto']) && !isset($_SERVER['HTTP_REFERER'])) {
     header('Location: '.Site::$url.'login.php?backto='.Site::$url);
 }
