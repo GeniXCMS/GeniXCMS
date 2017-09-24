@@ -88,10 +88,10 @@
         <!-- Logo -->
         <a href="index.php" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini img-responsive"><?=Site::logo('', '20px');?></span>
+            <span class="logo-mini img-responsive"><?=Site::logo('', '28px');?></span>
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg img-responsive">
-                <?=Site::logo('', '22px');?>
+                <?=Site::logo('', '33px');?>
             </span>
         </a>
 

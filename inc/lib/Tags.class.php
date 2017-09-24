@@ -180,6 +180,34 @@ class Tags
     {
         return Categories::slug($id);
     }
+
+    public static function count($tag)
+    {
+        $tag = Typo::cleanX($tag);
+        $sql = "SELECT * FROM `posts_param` WHERE `param` = 'tags' AND `value` LIKE '%%{$tag}%%' ";
+        $q = Db::result($sql);
+
+        return Db::$num_rows;
+    }
+
+    public static function cloud()
+    {
+        // get all tags first
+        $sql = "SELECT * FROM `cat` WHERE `type` = 'tag'";
+        $q = Db::result($sql);
+        $tags = [];
+        foreach ($q as $key => $value) {
+            $tags[$value->name] = self::count($value->name);
+        }
+        arsort($tags);
+        $cloud = "";
+        foreach ($tags as $key => $value) {
+            $cloud .= "<a class='tag-cloud' href='".Url::tag($key)."'>{$key} <span class='tag-count'>{$value}</span></a> ";
+        }
+        
+
+        return $cloud;
+    }
 }
 
 /* End of file Categories.class.php */

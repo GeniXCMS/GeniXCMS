@@ -118,10 +118,23 @@ class Gneex
 
     public static function introIg($url)
     {
-        $dom = explode('/', $url);
-        if (strpos($dom[2], 'youtube') || strpos($dom[2], 'youtu.be')) {
-            $hash = (strpos($dom[2], 'youtu.be')) ? $dom[3] : str_replace('watch?v=', '', $dom[3]);
+        
+        if (strpos($url, 'youtube') || strpos($url, 'youtu.be')) {
+            if (strpos($url, 'youtube')) {
+                parse_str( parse_url( $url, PHP_URL_QUERY ), $dom );
+            } else {
+                $dom = explode('/', $url);
+            }
+
+            $hash = (strpos($url, 'youtu.be')) ? $dom[3] : $dom['v'];
             $html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'.$hash.'?rel=0&amp;controls=0&amp;showinfo=0" class="center-block" frameborder="0" allowfullscreen></iframe>';
+        } elseif(strpos($url, 'vimeo')) {
+            $dom = explode('/', $url);
+            $html = '<iframe src="https://player.vimeo.com/video/'.$dom[3].'?byline=0&portrait=0" width="640" height="267" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+        } elseif(strpos($url, 'dailymotion') || strpos($url, 'dai.ly')) {
+            $dom = explode('/', $url);
+            $hash = (strpos($url, 'dai.ly')) ? $dom[3]: $dom[4];
+            $html = '<iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/'.$hash.'" allowfullscreen></iframe>';
         } else {
             $html = '<img src="'.$url.'" class="img-responsive center-block">';
         }

@@ -155,7 +155,7 @@ class Http
             }
 //            print_r($options);
             @curl_setopt_array($ch, $options);
-            $fetch = curl_exec($ch);
+            $fetch = @curl_exec($ch);
             @curl_close($ch);
         } else {
             $fetch = @file_get_contents($url);

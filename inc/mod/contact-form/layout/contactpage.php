@@ -1,4 +1,8 @@
+
 <?=Hooks::run('contact_page_notification', $data);?>
+<h2 class="blog-post-title">Contact Us
+<hr>
+</h2>
 <form action="" method="post">
 <div class="form-group">
     <label>Name</label>

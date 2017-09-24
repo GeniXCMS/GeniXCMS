@@ -383,6 +383,17 @@ class Site
                     var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
                     e.preventDefault();
                     document.execCommand(\'insertText\', false, bufferText);
+                },
+                onChange: function(e) {
+                    var characteres = $(".note-editable").text();
+                    var wordCount = characteres.trim().split(\' \').length;
+                    if (characteres.length == 0) {
+                        $(\'.note-statusbar\').html(\'&nbsp; 0 word <div class="note-resizebar">    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>  </div>\');
+                        return;
+                    }
+                    //Update value
+                    $(".note-statusbar").html(\'&nbsp; \'+wordCount+\' words <div class="note-resizebar">    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>  </div>\');
+     
                 }
             },
             popover: {

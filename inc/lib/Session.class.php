@@ -76,16 +76,21 @@ class Session
     public static function val($vars)
     {
         $val = $_SESSION['gxsess']['val'];
-        foreach ($val as $k => $v) {
-            switch ($k) {
-                case $vars:
-                    return $v;
-                    break;
+        if (is_array($val)) {
+            # code...
+            foreach ($val as $k => $v) {
+                switch ($k) {
+                    case $vars:
+                        return $v;
+                        break;
 
-                default:
-                    //echo "no value";
-                    break;
+                    default:
+                        //echo "no value";
+                        break;
+                }
             }
+        } else {
+            return null;
         }
     }
 

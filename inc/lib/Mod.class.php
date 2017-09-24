@@ -157,7 +157,7 @@ class Mod
             $mods = array();
         }
         //print_r($mods);
-        $arr = '';
+        $arr = [];
         for ($i = 0; $i < count($mods); ++$i) {
             if ($mods[$i] == $mod) {
                 //unset($mods[$i]);

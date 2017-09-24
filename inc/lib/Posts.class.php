@@ -470,7 +470,7 @@ class Posts
         $tags_x = explode(',', $tags);
         $tag = [];
         foreach ($tags_x as $t) {
-            $tag[] = '<a href="'.Url::tag($t)."\">{$t}</a>";
+            $tag[] = '<a href="'.Url::tag($t)."\">{$t} (".Tags::count($t).")</a>";
         }
         $tag = implode(', ', $tag);
 

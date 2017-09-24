@@ -69,20 +69,24 @@ if (User::access(0)) {
                         // }
                         // echo "<pre>"; print_r($menu); echo "</pre>";
                         //$menu = $menus;
-                        $menu[$_POST['id']]['menu'] = $menus[$_POST['id']]['menu'];
-                        $menu[$_POST['id']]['menu'][] = array(
-                                                    'parent' => $_POST['parent'],
-                                                    'menuid' => Typo::strip($_POST['id']),
-                                                    'name' => Typo::cleanX($_POST['name']),
-                                                    'type' => $_POST['type'],
-                                                    'value' => $_POST[$_POST['type']],
+                        $parent = Typo::int(Typo::filterXSS($_POST['parent']));
+                        $menuid = Typo::cleanX(Typo::filterXSS($_POST['id']));
+                        $name = Typo::cleanX(Typo::filterXSS($_POST['name']));
+                        $type = Typo::cleanX(Typo::filterXSS($_POST['type']));
+                        $menu[$menuid]['menu'] = $menus[$menuid]['menu'];
+                        $menu[$menuid]['menu'][] = array(
+                                                    'parent' => $parent,
+                                                    'menuid' => $menuid,
+                                                    'name' => $name,
+                                                    'type' => $type,
+                                                    'value' => Typo::cleanX($_POST[$type]),
                                                     'sub' => '',
                                                 );
                         $menu = array(
-                                $_POST['id'] => array(
-                                            'name' => $menus[$_POST['id']]['name'],
-                                            'class' => $menus[$_POST['id']]['class'],
-                                            'menu' => $menu[$_POST['id']]['menu'],
+                                $menuid => array(
+                                            'name' => $menus[$menuid]['name'],
+                                            'class' => $menus[$menuid]['class'],
+                                            'menu' => $menu[$menuid]['menu'],
                                         ),
                                 );
                         if (is_array($menus)) {
@@ -94,12 +98,12 @@ if (User::access(0)) {
                         //Options::update('menus', $menu);
 
                         $vars = array(
-                            'parent' => $_POST['parent'],
-                            'menuid' => $_POST['id'],
-                            'name' => Typo::cleanX($_POST['name']),
+                            'parent' => $parent,
+                            'menuid' => $menuid,
+                            'name' => $name,
                             'class' => Typo::cleanX($_POST['class']),
-                            'type' => $_POST['type'],
-                            'value' => $_POST[$_POST['type']],
+                            'type' => $type,
+                            'value' => $_POST[$type],
                         );
                         Menus::insert($vars);
                         $data['alertSuccess'][] = 'Menu Added';
@@ -114,7 +118,7 @@ if (User::access(0)) {
             }
                 //$data['abc'] = "abc";
             if (isset($_GET['id'])) {
-                $menuid = $_GET['id'];
+                $menuid = Typo::cleanX(Typo::filterXSS($_POST['id']));
             } else {
                 $menuid = '';
             }
@@ -144,12 +148,12 @@ if (User::access(0)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         $vars = array(
-                            'parent' => Typo::int($_POST['parent']),
+                            'parent' => Typo::int($parent),
                             'menuid' => Typo::strip($_POST['id']),
                             'name' => Typo::cleanX($_POST['name']),
                             'class' => Typo::cleanX($_POST['class']),
                             'type' => Typo::cleanX($_POST['type']),
-                            'value' => $_POST[$_POST['type']],
+                            'value' => Typo::cleanX($_POST[$_POST['type']]),
                         );
                         $vars = array(
                             'id' => $itemid,

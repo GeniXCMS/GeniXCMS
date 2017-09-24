@@ -47,6 +47,21 @@
           <div class="col-sm-6 col-md-12">
             <div class="panel panel-red ">
               <div class="panel-heading">
+                <h3 class="panel-title">Tags</h3>
+              </div>
+              <div class="panel-body">
+              <?php
+                echo Tags::cloud();
+              ?>
+              </div>
+              
+            </div>
+          </div>
+
+
+          <div class="col-sm-6 col-md-12">
+            <div class="panel panel-red ">
+              <div class="panel-heading">
                 <h3 class="panel-title">Related Site</h3>
               </div>
               <div class="panel-body">

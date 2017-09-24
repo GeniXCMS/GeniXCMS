@@ -351,11 +351,11 @@ class Url
                 $align = ($align != '') ? 'align/'.$align.'/' : '';
 
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
-                $url = Site::$url.$inFold.'thumb/'.$type.$size.$align.$vars;
+                $url = Site::$cdn.$inFold.'thumb/'.$type.$size.$align.$vars;
                 break;
 
             default:
-                $url = Site::$url."?thumb={$vars}&type={$type}&size={$size}&align={$align}";
+                $url = Site::$cdn."?thumb={$vars}&type={$type}&size={$size}&align={$align}";
                 break;
         }
 
@@ -366,7 +366,7 @@ class Url
     {
         $theme = Options::v('themes');
 
-        return Site::$url.'inc/themes/'.$theme.'/';
+        return Site::$cdn.'inc/themes/'.$theme.'/';
     }
 
     public static function author($vars, $type='')

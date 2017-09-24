@@ -21,7 +21,8 @@ class Contact
     {
 
         if ($data[0]['mod'] == 'contactPage') {/* this is to filter only appear when the mod is the same*/
-            switch ($_POST['sendMessage']){
+            $sendMessage = isset($_POST['sendMessage']) ?  $_POST['sendMessage']: '';
+            switch ($sendMessage){
                 case true:
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) || !Token::validate($token)){

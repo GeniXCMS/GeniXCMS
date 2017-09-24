@@ -49,7 +49,7 @@ class Files
     <script src="'.Vendor::url()."/studio-42/elfinder/js/proxy/elFinderSupportVer1.js\"></script>
 
     <script>
-        $(document).ready(function() {
+        
             $('#elfinder').elfinder({
                 url : '".$url."',
                 height : '500',
@@ -64,7 +64,7 @@ class Files
                 customData : {answer : 42},
 
             });
-        });
+        
 
         function elfinderDialog() {
             var fm = $('<div/>').dialogelfinder({
