@@ -471,10 +471,10 @@ class Comments
         } else {
             $html = "<ol class='list-unstyled'>";
             foreach ($comments as $key => $value) {
-                $comment = substr($value->comment, 0, 30);
+                $comment = substr(Typo::strip($value->comment), 0, 30);
                 $author = !empty($value->userid) ? $value->userid: $value->name;
                 $date = Date::format($value->date);
-                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a><small>by {$author} on {$date}</small></li>";
+                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a> <br/><small>by {$author} on {$date}</small></li>";
             }
             $html .= "</ol>";
         }

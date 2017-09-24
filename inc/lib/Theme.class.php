@@ -156,7 +156,7 @@ class Theme
         while (false !== ($entry = $handle->read())) {
             if ($entry != '.' && $entry != '..') {
                 $dir = GX_THEME.$entry;
-                if (is_dir($dir) == true) {
+                if (is_dir($dir) == true && file_exists($dir.'/themeinfo.php')) {
                     $thm[] = basename($dir);
                 }
             }

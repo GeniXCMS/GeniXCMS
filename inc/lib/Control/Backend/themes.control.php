@@ -43,10 +43,38 @@ if (User::access(0)) {
                 //print_r($theme);
                 $zip = new ZipArchive();
                 if ($zip->open($theme['filepath']) === true) {
-                    $zip->extractTo(GX_THEME);
-                    $zip->close();
+                    $dir = explode('/', $zip->statIndex(0)['name']);
+                    // print_r($dir);
+                    if (count($dir) == 1) {
+                        $zip->close();
+                        @unlink($mod['filepath']);
+                        $data['alertDanger'][] = 'Failed to Install your theme';
+                    } else {
+                        $zip->extractTo(GX_THEME);
+                        $entry = [];
+                        for($i = 0; $i < $zip->numFiles; $i++) {
+                            $entry[] = $zip->getNameIndex($i);
+                        }
+                        $zip->close();
+                        foreach ($entry as $key => $value) {
+                            // echo $value;
+                            $handle = fopen(GX_THEME.$value, 'r');
+                            $file = fread($handle, filesize(GX_THEME.$value));
+                            fclose($handle);
+                            preg_match('/(.*)(phpinfo|system|php_uname|chmod|fopen|flclose|readfile|base64_decode|passthru)(.*)/Us', $file, $matches);
+                            if (count($matches) > 0) {
+                                @unlink(GX_THEME.$value);
+                                Files::delTree(GX_THEME.$dir[0]);
+                                @unlink($mod['filepath']);
+                                $data['alertDanger'][] = 'Failed to Install your theme';
+                            } else {
+                                $data['alertSuccess'][] = MSG_THEME_INSTALLED;
+                            }
+                        }
+                    }
+
                     Hooks::run('theme_install_action', $theme);
-                    $data['alertSuccess'][] = MSG_THEME_INSTALLED;
+                    
                 } else {
                     $data['alertDanger'][] = MSG_THEME_CANT_EXTRACT;
                 }

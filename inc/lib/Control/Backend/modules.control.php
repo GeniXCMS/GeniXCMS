@@ -43,8 +43,36 @@ if (User::access(0)) {
         //print_r($mod);
             $zip = new ZipArchive();
             if ($zip->open($mod['filepath']) === true) {
-                $zip->extractTo(GX_MOD);
-                $zip->close();
+                $dir = explode('/', $zip->statIndex(0)['name']);
+                // print_r($dir);
+                if (count($dir) == 1) {
+                    $zip->close();
+                    @unlink($mod['filepath']);
+                    $data['alertDanger'][] = 'Failed to Install your module';
+                } else {
+                    $zip->extractTo(GX_MOD);
+                    $entry = [];
+                    for($i = 0; $i < $zip->numFiles; $i++) {
+                        $entry[] = $zip->getNameIndex($i);
+                    }
+                    $zip->close();
+                    foreach ($entry as $key => $value) {
+                        // echo $value;
+                        $handle = fopen(GX_MOD.$value, 'r');
+                        $file = fread($handle, filesize(GX_MOD.$value));
+                        fclose($handle);
+                        preg_match('/(.*)(phpinfo|system|php_uname|chmod|fopen|flclose|readfile|base64_decode|passthru)(.*)/Us', $file, $matches);
+                        if (count($matches) > 0) {
+                            @unlink(GX_MOD.$value);
+                            Files::delTree(GX_MOD.$dir[0]);
+                            @unlink($mod['filepath']);
+                            $data['alertDanger'][] = 'Failed to Install your module';
+                        } else {
+                            $data['alertSuccess'][] = MSG_MOD_INSTALLED;
+                        }
+                    }
+                }
+
                 Hooks::run('module_install_action', $mod);
                 $data['alertSuccess'][] = MSG_MOD_INSTALLED;
             } else {
