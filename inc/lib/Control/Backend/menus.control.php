@@ -290,10 +290,14 @@ if (User::access(0)) {
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
+
+                        $menuid = Typo::cleanX(Typo::strip(Typo::filterXSS($_POST['id'])));
+                        $name = Typo::cleanX(Typo::strip(Typo::filterXSS($_POST['name'])));
+                        $class = Typo::cleanX(Typo::filterXSS($_POST['class']));
                         $menu = array(
-                                $_POST['id'] => array(
-                                            'name' => Typo::cleanX($_POST['name']),
-                                            'class' => Typo::cleanX($_POST['class']),
+                                $menuid => array(
+                                            'name' => $name,
+                                            'class' => $class,
                                             'menu' => array(),
                                         ),
                                 );
