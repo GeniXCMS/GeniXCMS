@@ -80,7 +80,7 @@ if (isset($_POST['gneex_options_update'])) {
  <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <i class="fa fa-brush"></i>  GneeX Theme <small >v1.1.1</small>
+            <i class="fa fa-brush"></i>  GneeX Theme <small >v1.1.2</small>
 
             <button class="pull-right btn btn-success" type="submit" name="gneex_options_update">
                 Change

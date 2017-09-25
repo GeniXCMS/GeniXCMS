@@ -6,7 +6,7 @@
  *
  * @since 0.0.8 build date 20160313
  *
- * @version 1.1.4
+ * @version 1.1.5
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id

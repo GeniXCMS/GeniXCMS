@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.8 build date 20160317
  *
- * @version 1.1.4
+ * @version 1.1.5
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -195,17 +195,22 @@ class Tags
         // get all tags first
         $sql = "SELECT * FROM `cat` WHERE `type` = 'tag'";
         $q = Db::result($sql);
-        $tags = [];
-        foreach ($q as $key => $value) {
-            $tags[$value->name] = self::count($value->name);
-        }
-        arsort($tags);
-        $cloud = "";
-        foreach ($tags as $key => $value) {
-            $cloud .= "<a class='tag-cloud' href='".Url::tag($key)."'>{$key} <span class='tag-count'>{$value}</span></a> ";
-        }
+        if (!isset($q['error'])) {
+            # code...
         
-
+            $tags = [];
+            foreach ($q as $key => $value) {
+                $tags[$value->name] = self::count($value->name);
+            }
+            arsort($tags);
+            $cloud = "";
+            foreach ($tags as $key => $value) {
+                $cloud .= "<a class='tag-cloud' href='".Url::tag($key)."'>{$key} <span class='tag-count'>{$value}</span></a> ";
+            }
+            
+        } else {
+            $cloud = '';
+        }
         return $cloud;
     }
 }

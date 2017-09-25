@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.4.
+> Update Notice: Please Update to version v1.1.5.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -15,9 +15,11 @@
 **GeniXCMS** is a PHP Based Content Management System and Framework (*CMSF*). It's a simple and lightweight of CMSF. Very suitable for **Intermediate PHP developer** to **Advanced Developer**. Some manual configurations are needed to make this application to work.
 
 ### Why GeniXCMS
+
 This CMSF is a starter point to build your own online applications. With already build User manager, Content manager (Post, Pages), Menu manager, etc made you easy to add your own code and build your own custom web applications.
 
 ### Credits
+
 **GeniXCMS** is using some of **FOSS** (free and opensource software) like :
 - Twitter **Bootstrap**,
 - **Summernote** Text Editor,
@@ -29,16 +31,25 @@ This CMSF is a starter point to build your own online applications. With already
 - etc.
 
 ### Requirements
-* PHP >=5.5.9
+
+* Webserver - Apache/Nginx
+* PHP >=5.6.x / PHP >=7.0
     - PHP-GD
     - PHP-cURL
     - PHP-OpenSSL
+    - PHP-imagick
 * MySQL 4
 
 ### Recommended
-* MariaDB Server
+
+* Nginx Server - for webserver
+* MariaDB Server - for database
+* PngQuant - for image compression
 
 ### Installation
+
+GeniXCMS can be installed on Custom Server like VPS/Dedicated Server or on Shared Hosting.
+
 
 #### Manual Upload
 
@@ -54,11 +65,13 @@ Set this directory permission to **777** (writable) :
 - assets/images/uploads/thumbs
 - assets/cache
 - assets/cache/thumbs
+- assets/cache/pages
 
 
 After upload is done. Open your site at the browser. eg: http://yoursite.com
 
 The installation wizard will appear, just follow all the instructions.
+
 
 #### Using Composer
 
@@ -70,6 +83,7 @@ more detail about composer, please read the documentation at http://getcomposer.
 
 more details of installation :
 http://docs.genix.id/user-guide/installation/
+
 
 ### Upgrading
 
@@ -88,18 +102,28 @@ define('USE_MEMCACHED', false);
 
 - Don't forget to create Cache directory if want to use Cache System
 
+
 ### Showcase
+
 Showcase URL :
 - [http://demo.genix.id](http://demo.genix.id)
 
+
 ### License
+
 **GeniXCMS** License : [**MIT License**](LICENSE)
 
+
 ### Website
+
 Link : [http://genix.id](http://genix.id)
 
+
 ### Donate
+
 Contact us for Donation. 
 
+
 ### Developer
+
 Developed by : Puguh Wijayanto - [metalgenix.com](http://metalgenix.com)
