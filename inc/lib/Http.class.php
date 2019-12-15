@@ -227,9 +227,9 @@ class Http
     public static function varIpApi()
     {
         $ipApi = [
-            'https://geoipfree.com/json/',
-            'https://freegeoip.net/json/',
-            'https://freegeoip.io/json/'
+            'https://freegeoip.app/json/',
+            'https://freegeoip.live/json/',
+            'https://freegeoip.lwan.ws/json/',
         ];
 
         return $ipApi;
