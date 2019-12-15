@@ -48,19 +48,19 @@ class Install
     {
         $config = "<?php if (defined('GX_LIB') === false) die(\"Direct Access Not Allowed!\");
 /**
-* GeniXCMS - Content Management System
-*
-* PHP Based Content Management System and Framework
-*
-* @package GeniXCMS
-* @since 0.0.1 build date 20140925
+ * GeniXCMS - Content Management System
+ *
+ * PHP Based Content Management System and Framework
+ *
+ * @package GeniXCMS
+ * @since 0.0.1 build date 20140925
  * @version 1.1.6
-* @link https://github.com/semplon/GeniXCMS
-* @link http://genix.id
-* @author Puguh Wijayanto (www.metalgenix.com)
-* @copyright 2014-2017 Puguh Wijayanto
-* @license http://www.opensource.org/licenses/mit-license.php MIT
-*
+ * @link https://github.com/semplon/GeniXCMS
+ * @link http://genix.id
+ * @author Puguh Wijayanto (www.metalgenix.com)
+ * @copyright 2014-2019 Puguh Wijayanto
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ *
 */error_reporting(0);
 
 // DB CONFIG
@@ -377,7 +377,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             (null, 'db_version', '1.1.4'),
             (null, 'cache_enabled', 'off'),
             (null, 'cache_path', '/assets/cache/pages/'),
-            (null, 'cache_timeout', '300')
+            (null, 'cache_timeout', '300'),
+            (null, 'gneex_options', '{&quot;intro_title&quot;:&quot;Welcome to GenixCMS 1.1.6&quot;,&quot;intro_text&quot;:&quot;Create magnificent Website with GenixCMS&quot;,&quot;intro_image&quot;:&quot;https:\\/\\/www.youtube.com\\/watch?v=M_oeub8YhXA&quot;,&quot;featured_posts&quot;:&quot;1,1,1,1,1,1,1,1&quot;,&quot;background_featured&quot;:&quot;http:\\/\\/localhost\\/genixcms\\/inc\\/themes\\/gneex\\/images\\/pattern-13.jpg&quot;,&quot;background_color_featured&quot;:&quot;#050505&quot;,&quot;front_layout&quot;:&quot;magazine&quot;,&quot;fullwidth_page&quot;:&quot;&quot;,&quot;panel_1&quot;:&quot;1&quot;,&quot;panel_1_color&quot;:&quot;&quot;,&quot;panel_1_font_color&quot;:&quot;&quot;,&quot;panel_2&quot;:&quot;1&quot;,&quot;panel_2_color&quot;:&quot;&quot;,&quot;panel_2_font_color&quot;:&quot;&quot;,&quot;panel_3&quot;:&quot;1&quot;,&quot;panel_3_color&quot;:&quot;&quot;,&quot;panel_3_font_color&quot;:&quot;&quot;,&quot;panel_4&quot;:&quot;1&quot;,&quot;panel_5&quot;:&quot;1&quot;,&quot;panel_5_color&quot;:&quot;&quot;,&quot;panel_5_font_color&quot;:&quot;&quot;,&quot;background_header&quot;:&quot;&quot;,&quot;background_color_header&quot;:&quot;#3d3c3f&quot;,&quot;font_color_header&quot;:&quot;#ffffff&quot;,&quot;background_footer&quot;:&quot;&quot;,&quot;background_color_footer&quot;:&quot;#2465b0&quot;,&quot;font_color_footer&quot;:&quot;#ffffff&quot;,&quot;link_color_footer&quot;:&quot;&quot;,&quot;body_background_color&quot;:&quot;&quot;,&quot;link_color&quot;:&quot;&quot;,&quot;link_color_hover&quot;:&quot;&quot;,&quot;sidebar_background_color_header&quot;:&quot;#d13d7b&quot;,&quot;sidebar_font_color_header&quot;:&quot;#ffffff&quot;,&quot;sidebar_background_color_body&quot;:&quot;#d13d7b&quot;,&quot;sidebar_font_color_body&quot;:&quot;#ffffff&quot;,&quot;sidebar_border_width&quot;:&quot;0&quot;,&quot;sidebar_border_color&quot;:&quot;&quot;,&quot;content_border_width&quot;:&quot;0&quot;,&quot;content_border_color&quot;:&quot;&quot;,&quot;content_background_color_body&quot;:&quot;#f5f5f5&quot;,&quot;content_font_color_body&quot;:&quot;#757575&quot;,&quot;content_title_size&quot;:&quot;33&quot;,&quot;content_title_cat_size&quot;:&quot;30&quot;,&quot;content_title_color&quot;:&quot;#212121&quot;,&quot;content_title_color_hover&quot;:&quot;#2b2b2b&quot;,&quot;list_title_color&quot;:&quot;#1569cc&quot;,&quot;list_title_size&quot;:&quot;23&quot;,&quot;container_width&quot;:&quot;1280&quot;,&quot;category_layout&quot;:&quot;blog&quot;,&quot;adsense&quot;:&quot;&quot;,&quot;analytics&quot;:&quot;&quot;}')
             ";
         $db->query($options);
     }
