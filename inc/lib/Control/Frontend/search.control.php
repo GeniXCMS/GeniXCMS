@@ -6,7 +6,7 @@
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20141006
- * @version 1.1.5
+ * @version 1.1.6
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  * @author Puguh Wijayanto (www.metalgenix.com)
@@ -14,6 +14,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  *
  */
+System::gZip(true);
 
 $data = Router::scrap($param);
 if (isset($_GET['q'])) {
@@ -84,5 +85,6 @@ Theme::theme('header',$data);
 Theme::theme('search', $data);
 Theme::footer($data);
 
+System::Zipped();
 /* End of file default.control.php */
 /* Location: ./inc/lib/Control/Frontend/default.control.php */

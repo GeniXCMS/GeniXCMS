@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Posts
@@ -537,7 +537,7 @@ class Posts
                         } else {
                             $img = Url::thumb('assets/images/noimage.png', '', 200);
                         }
-                        $related .= '<li class="list-unstyled col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
+                        $related .= '<li class="list-unstyled col-xs-6 col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
                         <img src="'.$img.'" class="img-responsive center-block" alt="'.$p->title.'" title="'.$p->title.'">'.$title.'</a></li>';
                     } else {
                         $related .= '';

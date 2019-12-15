@@ -11,8 +11,12 @@
 
 namespace Symfony\Component\HttpFoundation;
 
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.4, use "%s" instead.', ApacheRequest::class, Request::class), E_USER_DEPRECATED);
+
 /**
  * Request represents an HTTP request from an Apache server.
+ *
+ * @deprecated since Symfony 4.4. Use the Request class instead.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -35,7 +39,7 @@ class ApacheRequest extends Request
 
         if (false === strpos($this->server->get('REQUEST_URI'), $baseUrl)) {
             // assume mod_rewrite
-            return rtrim(dirname($baseUrl), '/\\');
+            return rtrim(\dirname($baseUrl), '/\\');
         }
 
         return $baseUrl;

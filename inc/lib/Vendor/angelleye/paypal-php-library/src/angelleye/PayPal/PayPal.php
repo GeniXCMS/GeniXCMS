@@ -24,7 +24,7 @@
  * @link			https://github.com/angelleye/paypal-php-library/
  * @website			http://www.angelleye.com
  * @support         http://www.angelleye.com/product/premium-support/
- * @version			v2.0.4
+ * @version			v3.0.4
  * @filesource
 */
 
@@ -73,9 +73,9 @@ class PayPal
 			$this->Sandbox = true;
 		}
 			
-		$this->APIVersion = isset($DataArray['APIVersion']) ? $DataArray['APIVersion'] : '119.0';
+		$this->APIVersion = isset($DataArray['APIVersion']) ? $DataArray['APIVersion'] : '204.0';
 		$this->APIMode = isset($DataArray['APIMode']) ? $DataArray['APIMode'] : 'Signature';
-		$this->APIButtonSource = 'AngellEYE_PHPClass';
+		$this->APIButtonSource = '';
 		$this->PathToCertKeyPEM = '/path/to/cert/pem.txt';
 		$this->SSL = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? true : false;
 		$this->APISubject = isset($DataArray['APISubject']) ? $DataArray['APISubject'] : '';
@@ -962,34 +962,23 @@ class PayPal
 	function MaskAPIResult($api_result)
 	{
 		$api_result_array = $this->NVPToArray($api_result);
-		
+		$api_result='';
 		if(isset($api_result_array['SIGNATURE']))
 		{
 			$api_result_array['USER'] = '*****';
 			$api_result_array['PWD'] = '*****';
 			$api_result_array['SIGNATURE'] = '*****';	
 		}
-
-        if(isset($api_result_array['ACCT']))
-        {
-            $api_result_array['ACCT'] = '*****'.substr($api_result_array['ACCT'],-4);
-        }
-
-        if(isset($api_result_array['CVV2']))
-        {
-            $api_result_array['CVV2'] = '*****';
-        }
-		
-		$api_result = '';
-		foreach($api_result_array as $var => $val)
-		{
-			$api_result .= $var.'='.$val.'&';	
-		}
-		
-		$api_result_length = strlen($api_result);
-		$api_result = substr($api_result,0,$api_result_length-1);
-		
-		return $api_result;
+                if(isset($api_result_array['ACCT']))
+                {
+                    $api_result_array['ACCT'] = '*****'.substr($api_result_array['ACCT'],-4);
+                }
+                if(isset($api_result_array['CVV2']))
+                {
+                    $api_result_array['CVV2'] = '*****';
+                }
+                $api_result=urldecode(http_build_query($api_result_array));
+                return $api_result;
 	}
 	
     /**
@@ -1786,6 +1775,7 @@ class PayPal
 		}
 		
 		$NVPRequest = $this->NVPCredentials . $DECPFieldsNVP . $PaymentsNVP . $UserSelectedOptionsNVP;
+                $this->MaskAPIResult($NVPRequest);
 		$NVPResponse = $this->CURLRequest($NVPRequest);
 		$NVPRequestArray = $this->NVPToArray($NVPRequest);
 		$NVPResponseArray = $this->NVPToArray($NVPResponse);

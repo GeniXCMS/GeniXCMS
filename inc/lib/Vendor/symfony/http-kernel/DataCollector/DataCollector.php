@@ -11,10 +11,8 @@
 
 namespace Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
-use Symfony\Component\VarDumper\Caster\ClassStub;
-use Symfony\Component\VarDumper\Caster\LinkStub;
-use Symfony\Component\VarDumper\Caster\StubCaster;
+use Symfony\Component\VarDumper\Caster\CutStub;
+use Symfony\Component\VarDumper\Caster\ReflectionCaster;
 use Symfony\Component\VarDumper\Cloner\ClonerInterface;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Cloner\Stub;
@@ -28,31 +26,17 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bernhard Schussek <bschussek@symfony.com>
  */
-abstract class DataCollector implements DataCollectorInterface, \Serializable
+abstract class DataCollector implements DataCollectorInterface
 {
-    protected $data = array();
-
     /**
-     * @var ValueExporter
+     * @var array|Data
      */
-    private $valueExporter;
+    protected $data = [];
 
     /**
      * @var ClonerInterface
      */
     private $cloner;
-
-    private static $stubsCache = array();
-
-    public function serialize()
-    {
-        return serialize($this->data);
-    }
-
-    public function unserialize($data)
-    {
-        $this->data = unserialize($data);
-    }
 
     /**
      * Converts the variable into a serializable Data instance.
@@ -66,80 +50,63 @@ abstract class DataCollector implements DataCollectorInterface, \Serializable
      */
     protected function cloneVar($var)
     {
+        if ($var instanceof Data) {
+            return $var;
+        }
         if (null === $this->cloner) {
-            if (class_exists(ClassStub::class)) {
-                $this->cloner = new VarCloner();
-                $this->cloner->setMaxItems(250);
-                $this->cloner->addCasters(array(
-                    Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
-                        return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
-                    },
-                ));
-            } else {
-                @trigger_error(sprintf('Using the %s() method without the VarDumper component is deprecated since version 3.2 and won\'t be supported in 4.0. Install symfony/var-dumper version 3.2 or above.', __METHOD__), E_USER_DEPRECATED);
-                $this->cloner = false;
-            }
-        }
-        if (false === $this->cloner) {
-            if (null === $this->valueExporter) {
-                $this->valueExporter = new ValueExporter();
-            }
-
-            return $this->valueExporter->exportValue($var);
+            $this->cloner = new VarCloner();
+            $this->cloner->setMaxItems(-1);
+            $this->cloner->addCasters($this->getCasters());
         }
 
-        return $this->cloner->cloneVar($this->decorateVar($var));
+        return $this->cloner->cloneVar($var);
     }
 
     /**
-     * Converts a PHP variable to a string.
-     *
-     * @param mixed $var A PHP variable
-     *
-     * @return string The string representation of the variable
-     *
-     * @deprecated Deprecated since version 3.2, to be removed in 4.0. Use cloneVar() instead.
+     * @return callable[] The casters to add to the cloner
      */
-    protected function varToString($var)
+    protected function getCasters()
     {
-        @trigger_error(sprintf('The %() method is deprecated since version 3.2 and will be removed in 4.0. Use cloneVar() instead.', __METHOD__), E_USER_DEPRECATED);
+        $casters = [
+            '*' => function ($v, array $a, Stub $s, $isNested) {
+                if (!$v instanceof Stub) {
+                    foreach ($a as $k => $v) {
+                        if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof Stub) {
+                            $a[$k] = new CutStub($v);
+                        }
+                    }
+                }
 
-        if (null === $this->valueExporter) {
-            $this->valueExporter = new ValueExporter();
-        }
+                return $a;
+            },
+        ] + ReflectionCaster::UNSET_CLOSURE_FILE_INFO;
 
-        return $this->valueExporter->exportValue($var);
+        return $casters;
     }
 
-    private function decorateVar($var)
+    /**
+     * @return array
+     */
+    public function __sleep()
     {
-        if (is_array($var)) {
-            if (isset($var[0], $var[1]) && is_callable($var)) {
-                return ClassStub::wrapCallable($var);
-            }
-            foreach ($var as $k => $v) {
-                if ($v !== $d = $this->decorateVar($v)) {
-                    $var[$k] = $d;
-                }
-            }
+        return ['data'];
+    }
 
-            return $var;
-        }
-        if (is_string($var)) {
-            if (isset(self::$stubsCache[$var])) {
-                return self::$stubsCache[$var];
-            }
-            if (false !== strpos($var, '\\')) {
-                $c = (false !== $i = strpos($var, '::')) ? substr($var, 0, $i) : $var;
-                if (class_exists($c, false) || interface_exists($c, false) || trait_exists($c, false)) {
-                    return self::$stubsCache[$var] = new ClassStub($var);
-                }
-            }
-            if (false !== strpos($var, DIRECTORY_SEPARATOR) && false === strpos($var, '://') && false === strpos($var, "\0") && @is_file($var)) {
-                return self::$stubsCache[$var] = new LinkStub($var);
-            }
-        }
+    public function __wakeup()
+    {
+    }
 
-        return $var;
+    /**
+     * @internal to prevent implementing \Serializable
+     */
+    final protected function serialize()
+    {
+    }
+
+    /**
+     * @internal to prevent implementing \Serializable
+     */
+    final protected function unserialize($data)
+    {
     }
 }

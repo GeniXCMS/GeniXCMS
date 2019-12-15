@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -66,10 +66,7 @@ class Db
         }
 
         !defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
-        if (DB_DRIVER == 'mysql') {
-            mysql_connect(DB_HOST, DB_USER, DB_PASS);
-            mysql_select_db(DB_NAME);
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             try {
                 self::$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
                 if (self::$mysqli->connect_error) {
@@ -150,10 +147,7 @@ class Db
      */
     public static function query($vars)
     {
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8mb4');
-            $q = mysql_query($vars)  or die(mysql_error());
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             self::$mysqli->set_charset('utf8mb4');
             $q = self::$mysqli->query($vars);
             if ($q === false) {
@@ -216,18 +210,7 @@ class Db
 
     public static function fetch($vars)
     {
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
-            $q = mysql_query($vars)  or die(mysql_error());
-            $n = mysql_num_rows($q);
-            if ($n > 0) {
-                for ($i = 0; $i < $n; ++$i) {
-                    $r[] = mysql_fetch_object($q);
-                }
-            } else {
-                $r['error'] = 'data not found';
-            }
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             //echo $vars;
             $q = self::query($vars);
             $n = $q->num_rows;
@@ -281,10 +264,7 @@ class Db
         } else {
             $sql = $vars;
         }
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
-            $q = mysql_query($sql) or die(mysql_error());
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             $q = self::query($sql);
         } elseif (DB_DRIVER == 'pdo') {
             $q = self::$pdo->exec($sql);
@@ -323,15 +303,25 @@ class Db
                 $set .= "`$key` = '$val',";
             }
 
+            $where = '1 ';
+            if (isset($vars['where'])) {
+                foreach ($vars['where'] as $key => $val) {
+                    $val = self::escape($val);
+                    $key = self::escape($key);
+                    $where .= "AND `{$key}` = '{$val}' ";
+                }
+            }
+
+            if (isset($vars['id'])) {
+                $where .= "AND `id` = '{$vars['id']}' ";
+            }
+
             $set = substr($set, 0, -1);
-            $sql = sprintf("UPDATE `%s` SET %s WHERE `id` = '%d' LIMIT 1", $vars['table'], $set, $vars['id']);
+            $sql = sprintf("UPDATE `%s` SET %s WHERE %s LIMIT 1", $vars['table'], $set, $where);
         } else {
             $sql = $vars;
         }
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
-            $q = mysql_query($sql) or die(mysql_error());
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             $q = self::query($sql);
         } elseif (DB_DRIVER == 'pdo') {
             $q = self::$pdo->exec($sql);
@@ -380,11 +370,7 @@ class Db
         } else {
             $sql = $vars;
         }
-        if (DB_DRIVER == 'mysql') {
-            mysql_query('SET CHARACTER SET utf8');
-            $q = mysql_query($sql) or die(mysql_error());
-            self::$last_id = mysql_insert_id();
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             try {
                 if (!self::query($sql)) {
                     return false;
@@ -416,9 +402,7 @@ class Db
 
     public static function escape($vars)
     {
-        if (DB_DRIVER == 'mysql') {
-            $vars = mysql_escape_string($vars);
-        } elseif (DB_DRIVER == 'mysqli') {
+        if (DB_DRIVER == 'mysqli') {
             $vars = self::$mysqli->escape_string($vars);
         } elseif (DB_DRIVER == 'pdo') {
             $vars = self::$pdo->quote($vars);

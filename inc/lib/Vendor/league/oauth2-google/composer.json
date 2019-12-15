@@ -17,14 +17,15 @@
         "authentication",
         "google"
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "require": {
-        "league/oauth2-client": "~1.0"
+        "league/oauth2-client": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "~0.9",
-        "squizlabs/php_codesniffer": "~2.0"
+        "eloquent/phony-phpunit": "^2.0",
+        "phpunit/phpunit": "^6.0",
+        "php-coveralls/php-coveralls": "^2.1",
+        "squizlabs/php_codesniffer": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,5 +36,9 @@
         "psr-4": {
             "League\\OAuth2\\Client\\Test\\": "tests/src/"
         }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check": "phpcs src --standard=psr2 -sp"
     }
 }

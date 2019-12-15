@@ -2,7 +2,7 @@
     "name": "genix/cms",
     "type": "project",
     "description": "Simple and Free Opensource CMS and Framework",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "homepage": "http://genix.id",
     "keywords": ["genixcms", "genix", "cms", "metalgenix", "blog", "blog software", "bootstrap"],
     "license": "MIT",
@@ -17,18 +17,19 @@
         "vendor-dir": "inc/lib/Vendor"
     },
     "require": {
-        "php": ">=5.5.9",
-        "phpmailer/phpmailer": "6.0.0rc5",
+        "php": ">=7.2.5",
+        "phpmailer/phpmailer": "6.1.4",
         "kissifrot/php-ixr": "1.8.3",
-        "google/recaptcha": "~1.1",
-        "omnipay/common": "2.5.2",
-        "omnipay/paypal": "2.6.3",
-        "studio-42/elfinder": "2.1.24",
-        "league/oauth2-client": "1.4.2",
-        "league/oauth2-google": "1.0.1",
-        "symfony/dependency-injection": "v3.2.1",
-        "symfony/http-kernel": "v3.2.1",
-        "guzzlehttp/guzzle": "6.2.2",
-        "angelleye/paypal-php-library": "2.0.*"
+        "google/recaptcha": "1.2.3",
+        "omnipay/common": "v3.0.2",
+        "omnipay/paypal": "v3.0.2",
+        "studio-42/elfinder": "2.1.51",
+        "league/oauth2-client": "2.4.1",
+        "league/oauth2-google": "3.0.2",
+        "symfony/dependency-injection": "v5.0.1",
+        "symfony/http-kernel": "v5.0.1",
+        "guzzlehttp/guzzle": "6.5.0",
+        "angelleye/paypal-php-library": "3.0.4",
+        "php-http/guzzle6-adapter": "v2.0.1"
     }
 }

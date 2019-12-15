@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.5.
+> Update Notice: Please Update to version v1.1.6.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -33,7 +33,7 @@ This CMSF is a starter point to build your own online applications. With already
 ### Requirements
 
 * Webserver - Apache/Nginx
-* PHP >=5.6.x / PHP >=7.0
+* PHP >=7.2.5 
     - PHP-GD
     - PHP-cURL
     - PHP-OpenSSL

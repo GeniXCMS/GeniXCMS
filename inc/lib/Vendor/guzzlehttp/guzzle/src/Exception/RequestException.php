@@ -1,9 +1,9 @@
 <?php
 namespace GuzzleHttp\Exception;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -14,7 +14,7 @@ class RequestException extends TransferException
     /** @var RequestInterface */
     private $request;
 
-    /** @var ResponseInterface */
+    /** @var ResponseInterface|null */
     private $response;
 
     /** @var array */
@@ -81,10 +81,10 @@ class RequestException extends TransferException
         $level = (int) floor($response->getStatusCode() / 100);
         if ($level === 4) {
             $label = 'Client error';
-            $className = __NAMESPACE__ . '\\ClientException';
+            $className = ClientException::class;
         } elseif ($level === 5) {
             $label = 'Server error';
-            $className = __NAMESPACE__ . '\\ServerException';
+            $className = ServerException::class;
         } else {
             $label = 'Unsuccessful request';
             $className = __CLASS__;
@@ -93,13 +93,15 @@ class RequestException extends TransferException
         $uri = $request->getUri();
         $uri = static::obfuscateUri($uri);
 
-        // Server Error: `GET /` resulted in a `404 Not Found` response:
+        // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
         $message = sprintf(
-            '%s: `%s` resulted in a `%s` response',
+            '%s: `%s %s` resulted in a `%s %s` response',
             $label,
-            $request->getMethod() . ' ' . $uri,
-            $response->getStatusCode() . ' ' . $response->getReasonPhrase()
+            $request->getMethod(),
+            $uri,
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
         );
 
         $summary = static::getResponseBodySummary($response);
@@ -122,37 +124,17 @@ class RequestException extends TransferException
      */
     public static function getResponseBodySummary(ResponseInterface $response)
     {
-        $body = $response->getBody();
-
-        if (!$body->isSeekable()) {
-            return null;
-        }
-
-        $size = $body->getSize();
-        $summary = $body->read(120);
-        $body->rewind();
-
-        if ($size > 120) {
-            $summary .= ' (truncated...)';
-        }
-
-        // Matches any printable character, including unicode characters:
-        // letters, marks, numbers, punctuation, spacing, and separators.
-        if (preg_match('/[^\pL\pM\pN\pP\pS\pZ\n\r\t]/', $summary)) {
-            return null;
-        }
-
-        return $summary;
+        return \GuzzleHttp\Psr7\get_message_body_summary($response);
     }
 
     /**
-     * Obfuscates URI if there is an username and a password present
+     * Obfuscates URI if there is a username and a password present
      *
      * @param UriInterface $uri
      *
      * @return UriInterface
      */
-    private static function obfuscateUri($uri)
+    private static function obfuscateUri(UriInterface $uri)
     {
         $userInfo = $uri->getUserInfo();
 

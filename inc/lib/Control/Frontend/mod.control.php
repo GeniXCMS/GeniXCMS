@@ -8,15 +8,16 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140805
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+System::gZip(true);
 
 $route = Router::scrap($param);
 //echo $route['mod'];
@@ -37,5 +38,6 @@ if (Hooks::exist($data['mod'], 'mod_control')) { // check if mod exist at hooks 
     exit();
 }
 
+System::Zipped();
 /* End of file mod.control.php */
 /* Location: ./inc/lib/Control/Frontend/mod.control.php */

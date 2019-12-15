@@ -1,20 +1,20 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-/*
+/**
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -42,12 +42,16 @@ switch ($step) {
             echo 'Please Press <a href="?" 
                 class="btn btn-danger">Back Button</a>.';
         } else {
-            if (Db::connect($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpass'], $_POST['dbname'])) {
+            $dbhost = (isset($_POST['dbhost']) ? Typo::cleanX($_POST['dbhost']) : '');
+            $dbuser = (isset($_POST['dbuser']) ? Typo::strip(Typo::cleanX($_POST['dbuser'])) : '');
+            $dbpass = (isset($_POST['dbpass']) ? Typo::strip(Typo::cleanX($_POST['dbpass'])) : '');
+            $dbname = (isset($_POST['dbname']) ? Typo::cleanX($_POST['dbname']) : '');
+            if (Db::connect($dbhost, $dbuser, $dbpass, $dbname)) {
                 $vars = array(
-                        'dbhost' => (isset($_POST['dbhost']) ? Typo::cleanX($_POST['dbhost']) : ''),
-                        'dbname' => (isset($_POST['dbname']) ? Typo::cleanX($_POST['dbname']) : ''),
-                        'dbuser' => (isset($_POST['dbuser']) ? Typo::strip(Typo::escape($_POST['dbuser'])) : ''),
-                        'dbpass' => (isset($_POST['dbpass']) ? Typo::strip(Typo::escape($_POST['dbpass'])) : ''),
+                        'dbhost' => $dbhost,
+                        'dbname' => $dbname,
+                        'dbuser' => $dbuser,
+                        'dbpass' => $dbpass,
                     );
                 Session::set_session($vars);
                 Theme::install('step1');

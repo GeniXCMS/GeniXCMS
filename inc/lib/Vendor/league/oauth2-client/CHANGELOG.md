@@ -1,5 +1,73 @@
 # OAuth 2.0 Client Changelog
 
+## 2.4.1
+
+_Released: 2018-11-22_
+
+* Revert to use of `AccessToken` in type hints to preserve backwards
+  compatibility; this fixes the issue reported in [#752](https://github.com/thephpleague/oauth2-client/issues/752)
+  and [#753](https://github.com/thephpleague/oauth2-client/issues/753)
+
+## 2.4.0
+
+_Released: 2018-11-21_
+
+* Add `HttpBasicAuthOptionProvider` to ease implementation for providers
+  requiring HTTP basic auth
+* Add `GuardedPropertyTrait` to allow providers the ability to specify
+  properties that may not be overridden by user-defined values passed to the
+  provider constructor
+* Add `AccessTokenInterface` and `ResourceOwnerAccessTokenInterface` to allow
+  providers the ability to override the default `AccessToken`
+
+## 2.3.1
+
+_Released: 2018-11-19_
+
+* Allow paragonie/random_compat's empty 9.99.99 placeholder
+* Throw an `UnexpectedValueException` on non-JSON responses from access token
+  request (when calling `AbstractProvider::getAccessToken()`)
+
+## 2.3.0
+
+_Released: 2018-01-13_
+
+* Add `ProviderRedirectTrait` tool for 3rd-party provider libraries to use when
+  handling provider redirections
+* Fix TypeError thrown because `getResourceOwner()` receives a non-JSON Response
+* Gracefully handle non-standard errors received from providers
+* Update README to reflect official support of PHP 7.2
+
+## 2.2.1
+
+_Released: 2017-04-25_
+
+* Fix potential type error when HTTP 500 errors are encountered
+* Allow broader range of `random_compat` versions
+
+## 2.2.0
+
+_Released: 2017-02-01_
+
+* Allow base URLs to contain query parameters
+* Protect against `+` being improperly encoded in URL parameters
+* Remove misleading `state` option from authorization parameters
+* Stop generating more random bytes than necessary
+
+## 2.1.0
+
+_Released: 2017-01-24_
+
+* Allow `expires_in` with a value of `0`
+
+## 2.0.0
+
+_Released: 2017-01-12_
+
+* Rename `getResponse()` to `getParsedResponse()`
+* Add `getResponse()` method that returns the unparsed PSR-7 `Response` instance
+* Removed `RandomFactory`, switched to native random functions
+
 ## 1.4.1
 
 _Released: 2016-04-29_

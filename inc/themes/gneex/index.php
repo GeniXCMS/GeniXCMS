@@ -353,12 +353,14 @@ if ($gneex['front_layout'] == 'magazine') {
                 <?php
                 if ($data['num'] > 0) {
                     foreach ($data['posts'] as $p) {
+                        $categories = Categories::name($p->cat);
+                        $catMeta = ($categories != "") ? 'in '. $categories . ", ": "";
                         echo '
                         <article class="blog-post col-md-12">
                             <h2><a href="'.Url::post($p->id)."\">$p->title</a></h2>
                             <hr />
                             ".Posts::format($p->content, $p->id).'
-                            <div class="blog-footer">posted in '.Categories::name($p->cat).', at '.Date::format($p->date, 'd M Y H:i')." by <a href=\"#\">{$p->author}</a></div>
+                            <div class="blog-footer">posted '.$catMeta.' at '.Date::format($p->date, 'd M Y H:i')." by <a href=\"#\">{$p->author}</a></div>
                         </article>
                             ";
                     }

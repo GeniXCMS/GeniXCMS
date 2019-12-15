@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class System
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.5';
+    public static $version = '1.1.6';
 
     /**
      * GeniXCMS Version Release.
@@ -100,7 +100,7 @@ class System
         /* Load themes configuration */
         new Theme();
 
-        
+
         /* Attach Hooks : admin_page_notif_action */
         Hooks::attach('admin_page_notif_action', array('System', 'alert'));
 

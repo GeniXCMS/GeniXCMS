@@ -195,54 +195,63 @@ class Gneex
             background-color: '.$opt['background_color_featured'].';
             background-image: url(\''.$opt['background_featured'].'\');
         }';
-        $css .= '
-        .panel.panel-one .panel-heading, .panel.panel-one .panel-body {
-            background-color: '.$opt['panel_1_color'].';
-            color: '.$opt['panel_1_font_color'].';
+        if ($opt['panel_1_color'] != "") {
+            $css .= '
+            .panel.panel-one .panel-heading, .panel.panel-one .panel-body {
+                background-color: '.$opt['panel_1_color'].';
+                color: '.$opt['panel_1_font_color'].';
+            }
+            .panel.panel-one {
+                border: 1px solid '.$opt['panel_1_color'].';    
+            }
+            .panel.panel-one .panel-body a {
+                color: '.$opt['panel_1_font_color'].';
+            }
+            ';
         }
-        .panel.panel-one {
-            border: 1px solid '.$opt['panel_1_color'].';    
+        if ($opt['panel_2_color'] != "") {
+            $css .= '
+            .panel.panel-two .panel-heading, .panel.panel-two .panel-body {
+                background-color: '.$opt['panel_2_color'].';
+                color: '.$opt['panel_2_font_color'].';
+            }
+            .panel.panel-two {
+                border: 1px solid '.$opt['panel_2_color'].';    
+            }
+            .panel.panel-two .panel-body a {
+                color: '.$opt['panel_2_font_color'].';
+            }
+            ';
         }
-        .panel.panel-one .panel-body a {
-            color: '.$opt['panel_1_font_color'].';
+        if ($opt['panel_3_color'] != "") {
+            $css .= '
+            .panel.panel-three .panel-heading, .panel.panel-three .panel-body {
+                background-color: '.$opt['panel_3_color'].';
+                color: '.$opt['panel_3_font_color'].';
+            }
+            .panel.panel-three {
+                border: 1px solid '.$opt['panel_3_color'].';    
+            }
+            .panel.panel-three .panel-body a {
+                color: '.$opt['panel_3_font_color'].';
+            }
+            ';
         }
-        ';
-        $css .= '
-        .panel.panel-two .panel-heading, .panel.panel-two .panel-body {
-            background-color: '.$opt['panel_2_color'].';
-            color: '.$opt['panel_2_font_color'].';
+        if ($opt['panel_5_color'] != "") {
+            $css .= '
+            .panel.panel-five .panel-heading, .panel.panel-five .panel-body {
+                background-color: '.$opt['panel_5_color'].';
+                color: '.$opt['panel_5_font_color'].';
+            }
+            .panel.panel-five {
+                border: 1px solid '.$opt['panel_5_color'].';    
+            }
+            .panel.panel-five .panel-body a {
+                color: '.$opt['panel_5_font_color'].';
+            }
+            ';
         }
-        .panel.panel-two {
-            border: 1px solid '.$opt['panel_2_color'].';    
-        }
-        .panel.panel-two .panel-body a {
-            color: '.$opt['panel_2_font_color'].';
-        }
-        ';
-        $css .= '
-        .panel.panel-three .panel-heading, .panel.panel-three .panel-body {
-            background-color: '.$opt['panel_3_color'].';
-            color: '.$opt['panel_3_font_color'].';
-        }
-        .panel.panel-three {
-            border: 1px solid '.$opt['panel_3_color'].';    
-        }
-        .panel.panel-three .panel-body a {
-            color: '.$opt['panel_3_font_color'].';
-        }
-        ';
-        $css .= '
-        .panel.panel-five .panel-heading, .panel.panel-five .panel-body {
-            background-color: '.$opt['panel_5_color'].';
-            color: '.$opt['panel_5_font_color'].';
-        }
-        .panel.panel-five {
-            border: 1px solid '.$opt['panel_5_color'].';    
-        }
-        .panel.panel-five .panel-body a {
-            color: '.$opt['panel_5_font_color'].';
-        }
-        ';
+        
         $css .= '
         .panel.panel-red .panel-heading, .panel.panel-red .panel-body {
             background-color: '.$opt['sidebar_background_color_header'].';
@@ -252,6 +261,36 @@ class Gneex
             border: '.$opt['sidebar_border_width'].'px solid '.$opt['sidebar_border_color'].';    
         }
         .panel.panel-red .panel-body a {
+            color: '.$opt['sidebar_font_color_body'].';
+        }
+        .panel.panel-black .panel-heading, .panel.panel-black .panel-body {
+            background-color: '.$opt['sidebar_background_color_header'].';
+            color: '.$opt['sidebar_font_color_header'].';
+        }
+        .panel.panel-black {
+            border: '.$opt['sidebar_border_width'].'px solid '.$opt['sidebar_border_color'].';    
+        }
+        .panel.panel-black .panel-body a {
+            color: '.$opt['sidebar_font_color_body'].';
+        }
+        .panel.panel-green .panel-heading, .panel.panel-green .panel-body {
+            background-color: '.$opt['sidebar_background_color_header'].';
+            color: '.$opt['sidebar_font_color_header'].';
+        }
+        .panel.panel-green {
+            border: '.$opt['sidebar_border_width'].'px solid '.$opt['sidebar_border_color'].';    
+        }
+        .panel.panel-green .panel-body a {
+            color: '.$opt['sidebar_font_color_body'].';
+        }
+        .panel.panel-blue .panel-heading, .panel.panel-blue .panel-body {
+            background-color: '.$opt['sidebar_background_color_header'].';
+            color: '.$opt['sidebar_font_color_header'].';
+        }
+        .panel.panel-blue {
+            border: '.$opt['sidebar_border_width'].'px solid '.$opt['sidebar_border_color'].';    
+        }
+        .panel.panel-blue .panel-body a {
             color: '.$opt['sidebar_font_color_body'].';
         }
         ';

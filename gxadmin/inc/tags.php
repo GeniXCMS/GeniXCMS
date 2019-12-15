@@ -6,13 +6,13 @@
  *
  * @since 0.0.8 build date 20160315
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
@@ -23,7 +23,7 @@
     <section class="content-header">
         <h1><i class="fa fa-tags"></i>  <?=TAGS;?>
             <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">
-                <span class="glyphicon glyphicon-plus"></span> 
+                <span class="glyphicon glyphicon-plus"></span>
                 <span class="hidden-xs hidden-sm"><?=ADD_TAG;?></span>
             </button>
         </h1>
@@ -54,8 +54,8 @@
 
                     if ($c->parent == '' || $c->parent == 0) {
                         echo "<div class=\"col-sm-6 col-md-4 item\" >
-                            <div class=\"panel panel-default\">
-                                <div class=\"panel-heading\">
+                            <div class=\"box box-warning\">
+                                <div class=\"box-header\">
                                     <form action=\"index.php?page=tags\" method=\"POST\" name=\"updatecat\">
                                     <div class=\"input-group\">
                                         <a href=\"?page=tags&act=del&id={$c->id}&token=".TOKEN."\" class=\"input-group-addon\"

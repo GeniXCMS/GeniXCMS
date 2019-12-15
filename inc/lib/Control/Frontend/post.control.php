@@ -8,16 +8,16 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-
+System::gZip(true);
 $data = Router::scrap($param);
 //print_r($_GET);
 if (SMART_URL == true) {
@@ -58,5 +58,6 @@ if (!isset($posts['error'])) {
     exit;
 }
 
+System::Zipped();
 /* End of file post.control.php */
 /* Location: ./inc/lib/Control/Frontend/post.control.php */

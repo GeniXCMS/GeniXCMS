@@ -7,9 +7,5 @@ $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
     'angelleye\\PayPal' => array($vendorDir . '/angelleye/paypal-php-library/src'),
-    'SecurityLib' => array($vendorDir . '/ircmaxell/security-lib/lib'),
-    'RandomLib' => array($vendorDir . '/ircmaxell/random-lib/lib'),
-    'Omnipay\\Common\\' => array($vendorDir . '/omnipay/common/src'),
-    'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
-    'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
+    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
 );

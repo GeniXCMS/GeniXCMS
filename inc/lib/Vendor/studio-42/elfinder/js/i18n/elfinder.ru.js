@@ -2,7 +2,8 @@
  * Русский язык translation
  * @author Dmitry "dio" Levashov <dio@std42.ru>
  * @author Andrew Berezovsky <andrew.berezovsky@gmail.com>
- * @version 2016-06-01
+ * @author Alex Yashkin <alex@yashkin.by>
+ * @version 2019-09-25
  */
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -14,11 +15,12 @@
 	}
 }(this, function(elFinder) {
 	elFinder.prototype.i18.ru = {
-		translator : 'Dmitry "dio" Levashov &lt;dio@std42.ru&gt;, Andrew Berezovsky &lt;andrew.berezovsky@gmail.com&gt;',
+		translator : 'Dmitry "dio" Levashov &lt;dio@std42.ru&gt;, Andrew Berezovsky &lt;andrew.berezovsky@gmail.com&gt;, Alex Yashkin &lt;alex@yashkin.by&gt;',
 		language   : 'Русский язык',
 		direction  : 'ltr',
-		dateFormat : 'd M Y H:i', // Mar 13, 2012 05:27 PM
-		fancyDateFormat : '$1 H:i', // will produce smth like: Today 12:25 PM
+		dateFormat : 'd M Y H:i', // will show like: 25 Сен 2019 12:25
+		fancyDateFormat : '$1 H:i', // will show like: Сегодня 12:25
+		nonameDateFormat : 'ymd-His', // noname upload will show like: 190925-122503
 		messages   : {
 
 			/********************************** errors **********************************/
@@ -50,6 +52,7 @@
 			'errLocked'            : '"$1" защищен и не может быть переименован, перемещен или удален.',
 			'errExists'            : 'В папке уже существует файл с именем "$1".',
 			'errInvName'           : 'Недопустимое имя файла.',
+			'errInvDirname'        : 'Недопустимое имя папки.',  // from v2.1.24 added 12.4.2017
 			'errFolderNotFound'    : 'Папка не найдена.',
 			'errFileNotFound'      : 'Файл не найден.',
 			'errTrgFolderNotFound' : 'Целевая папка "$1" не найдена.',
@@ -75,6 +78,7 @@
 			'errMove'              : 'Невозможно переместить "$1".',
 			'errCopyInItself'      : 'Невозможно скопировать "$1" в самого себя.',
 			'errRm'                : 'Невозможно удалить "$1".',
+			'errTrash'             : 'Невозможно переместить в корзину.', // from v2.1.24 added 30.4.2017
 			'errRmSrc'             : 'Невозможно удалить файлы источника.',
 			'errExtract'           : 'Невозможно извлечь фалы из "$1".',
 			'errArchive'           : 'Невозможно создать архив.',
@@ -106,7 +110,13 @@
 			'errConvUTF8'          : 'Не конвертируется в UTF-8', // from v2.1 added 08.04.2014
 			'errFolderUpload'      : 'Если вы хотите загружать папки, попробуйте Google Chrome.', // from v2.1 added 26.6.2015
 			'errSearchTimeout'     : 'Превышено время ожидания при поиске "$1". Результаты поиска частичные.', // from v2.1 added 12.1.2016
-			'errReauthRequire'     : 'Требуется повторная авторизация.', // from v2.1.10 added 3.24.2016
+			'errReauthRequire'     : 'Требуется повторная авторизация.', // from v2.1.10 added 24.3.2016
+			'errMaxTargets'        : 'Максимальное число выбираемых файлов: $1.', // from v2.1.17 added 17.10.2016
+			'errRestore'           : 'Невозможно восстановить из корзины. Не удалось определить путь для восстановления.', // from v2.1.24 added 3.5.2017
+			'errEditorNotFound'    : 'Не найден редактор для этого типа файлов.', // from v2.1.25 added 23.5.2017
+			'errServerError'       : 'Возникла ошибка на стороне сервера.', // from v2.1.25 added 16.6.2017
+			'errEmpty'             : 'Невозможно очистить папку "$1".', // from v2.1.25 added 22.6.2017
+			'moreErrors'           : 'Еще ошибок: $1', // from v2.1.44 added 9.12.2018
 
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'Создать архив',
@@ -124,13 +134,15 @@
 			'cmdinfo'      : 'Свойства',
 			'cmdmkdir'     : 'Новая папка',
 			'cmdmkdirin'   : 'В новую папку', // from v2.1.7 added 19.2.2016
-			'cmdmkfile'    : 'Новый текстовый файл',
+			'cmdmkfile'    : 'Новый файл',
 			'cmdopen'      : 'Открыть',
 			'cmdpaste'     : 'Вставить',
 			'cmdquicklook' : 'Быстрый просмотр',
 			'cmdreload'    : 'Обновить',
 			'cmdrename'    : 'Переименовать',
 			'cmdrm'        : 'Удалить',
+			'cmdtrash'     : 'Переместить в корзину', //from v2.1.24 added 29.4.2017
+			'cmdrestore'   : 'Восстановить', //from v2.1.24 added 3.5.2017
 			'cmdsearch'    : 'Поиск файлов',
 			'cmdup'        : 'Наверх',
 			'cmdupload'    : 'Загрузить файлы',
@@ -142,6 +154,18 @@
 			'cmdplaces'    : 'В избранное', // added 28.12.2014
 			'cmdchmod'     : 'Изменить права доступа', // from v2.1 added 20.6.2015
 			'cmdopendir'   : 'Открыть папку', // from v2.1 added 13.1.2016
+			'cmdcolwidth'  : 'Сбросить ширину колонок', // from v2.1.13 added 12.06.2016
+			'cmdfullscreen': 'Полный экран', // from v2.1.15 added 03.08.2016
+			'cmdmove'      : 'Переместить', // from v2.1.15 added 21.08.2016
+			'cmdempty'     : 'Очистить папку', // from v2.1.25 added 22.06.2017
+			'cmdundo'      : 'Отменить', // from v2.1.27 added 31.07.2017
+			'cmdredo'      : 'Вернуть', // from v2.1.27 added 31.07.2017
+			'cmdpreference': 'Предпочтения', // from v2.1.27 added 03.08.2017
+			'cmdselectall' : 'Выбрать все', // from v2.1.28 added 15.08.2017
+			'cmdselectnone': 'Отменить выбор', // from v2.1.28 added 15.08.2017
+			'cmdselectinvert': 'Инвертировать выбор', // from v2.1.28 added 15.08.2017
+			'cmdopennew'   : 'Открыть в новом окне', // from v2.1.38 added 3.4.2018
+			'cmdhide'      : 'Скрыть (персонально)', // from v2.1.41 added 24.7.2018
 
 			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Закрыть',
@@ -162,6 +186,11 @@
 			'btnFileName':'Имя файла',  // from v2.1 added 22.5.2015
 			'btnSaveClose': 'Сохранить и закрыть', // from v2.1 added 12.6.2015
 			'btnBackup' : 'Резервная копия', // fromv2.1 added 28.11.2015
+			'btnRename'    : 'Переименовать',      // from v2.1.24 added 6.4.2017
+			'btnRenameAll' : 'Переименовать (все)', // from v2.1.24 added 6.4.2017
+			'btnPrevious' : 'Пред. ($1/$2)', // from v2.1.24 added 11.5.2017
+			'btnNext'     : 'След. ($1/$2)', // from v2.1.24 added 11.5.2017
+			'btnSaveAs'   : 'Сохранить как', // from v2.1.25 added 24.5.2017
 
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'Открыть папку',
@@ -191,6 +220,17 @@
 			'ntfchmod'    : 'Изменение прав доступа к файлу', // from v2.1 added 20.6.2015
 			'ntfpreupload': 'Проверка измени загруженного файла', // from v2.1 added 31.11.2015
 			'ntfzipdl'    : 'Создание файла для скачки', // from v2.1.7 added 23.1.2016
+			'ntfparents'  : 'Получение информации о пути', // from v2.1.17 added 2.11.2016
+			'ntfchunkmerge': 'Обработка загруженного файла', // from v2.1.17 added 2.11.2016
+			'ntftrash'    : 'Перемещение в корзину', // from v2.1.24 added 2.5.2017
+			'ntfrestore'  : 'Восстановление из корзины', // from v2.1.24 added 3.5.2017
+			'ntfchkdir'   : 'Проверка папки назначения', // from v2.1.24 added 3.5.2017
+			'ntfundo'     : 'Отмена предыдущей операции', // from v2.1.27 added 31.07.2017
+			'ntfredo'     : 'Восстановление предыдущей операции', // from v2.1.27 added 31.07.2017
+			'ntfchkcontent' : 'Проверка содержимого', // from v2.1.41 added 3.8.2018
+
+			/*********************************** volumes *********************************/
+			'volume_Trash' : 'Корзина', //from v2.1.24 added 29.4.2017
 
 			/************************************ dates **********************************/
 			'dateUnknown' : 'неизвестно',
@@ -241,18 +281,30 @@
 			'sortsize'          : 'по размеру',
 			'sortdate'          : 'по дате',
 			'sortFoldersFirst'  : 'Папки в начале',
+			'sortperm'          : 'по разрешениям', // from v2.1.13 added 13.06.2016
+			'sortmode'          : 'по режиму',       // from v2.1.13 added 13.06.2016
+			'sortowner'         : 'по владельцу',      // from v2.1.13 added 13.06.2016
+			'sortgroup'         : 'по группе',      // from v2.1.13 added 13.06.2016
+			'sortAlsoTreeview'  : 'Также и дерево каталогов',  // from v2.1.15 added 01.08.2016
 
 			/********************************** new items **********************************/
 			'untitled file.txt' : 'НовыйФайл.txt', // added 10.11.2015
 			'untitled folder'   : 'НоваяПапка',   // added 10.11.2015
 			'Archive'           : 'НовыйАрхив',  // from v2.1 added 10.11.2015
+			'untitled file'     : 'НовыйФайл.$1',  // from v2.1.41 added 6.8.2018
+			'extentionfile'     : '$1 Файл',    // from v2.1.41 added 6.8.2018
+			'extentiontype'     : '$1: $2',      // from v2.1.43 added 17.10.2018
 
 			/********************************** messages **********************************/
 			'confirmReq'      : 'Необходимо подтверждение',
 			'confirmRm'       : 'Вы уверены, что хотите удалить файлы?<br>Действие необратимо!',
 			'confirmRepl'     : 'Заменить старый файл новым?',
+			'confirmRest'     : 'Заменить существующий файл файлом из корзины?', // fromv2.1.24 added 5.5.2017
 			'confirmConvUTF8' : 'Не UTF-8<br/>Сконвертировать в UTF-8?<br/>Данные станут UTF-8 при сохранении после конвертации.', // from v2.1 added 08.04.2014
+			'confirmNonUTF8'  : 'Невозможно определить кодировку файла. Необходима предварительная конвертация файла в UTF-8 для дальнейшего редактирования.<br/>Выберите кодировку файла.', // from v2.1.19 added 28.11.2016
 			'confirmNotSave'  : 'Произошли изменения.<br/>Если не сохраните изменения, то потеряете их.', // from v2.1 added 15.7.2015
+			'confirmTrash'    : 'Вы уверены, что хотите переместить файлы в корзину?', //from v2.1.24 added 29.4.2017
+			'confirmMove'     : 'Вы уверены, что хотите переместить файлы в "$1"?', //from v2.1.50 added 27.7.2019
 			'apllyAll'        : 'Применить для всех',
 			'name'            : 'Имя',
 			'size'            : 'Размер',
@@ -270,6 +322,10 @@
 			'selectlfile'     : 'Выбрать последний файл',
 			'viewlist'        : 'В виде списка',
 			'viewicons'       : 'В виде иконок',
+			'viewSmall'       : 'Маленькие иконки', // from v2.1.39 added 22.5.2018
+			'viewMedium'      : 'Средние иконки', // from v2.1.39 added 22.5.2018
+			'viewLarge'       : 'Большие иконки', // from v2.1.39 added 22.5.2018
+			'viewExtraLarge'  : 'Очень большие иконки', // from v2.1.39 added 22.5.2018
 			'places'          : 'Избранное',
 			'calc'            : 'Вычислить',
 			'path'            : 'Путь',
@@ -287,14 +343,14 @@
 			'about'           : 'О программе',
 			'shortcuts'       : 'Горячие клавиши',
 			'help'            : 'Помощь',
-			'webfm'           : 'Файловый менеджер для web',
+			'webfm'           : 'Файловый менеджер для Web',
 			'ver'             : 'Версия',
 			'protocolver'     : 'версия протокола',
 			'homepage'        : 'Сайт проекта',
 			'docs'            : 'Документация',
-			'github'          : 'Форкните на Github',
-			'twitter'         : 'Следите в twitter',
-			'facebook'        : 'Присоединяйтесь на facebook',
+			'github'          : 'Форкните на GitHub',
+			'twitter'         : 'Следите в Twitter',
+			'facebook'        : 'Присоединяйтесь на Facebook',
 			'team'            : 'Команда',
 			'chiefdev'        : 'ведущий разработчик',
 			'developer'       : 'разработчик',
@@ -309,6 +365,7 @@
 			'selectForUpload' : 'Выбрать файлы для загрузки',
 			'moveFiles'       : 'Переместить файлы',
 			'copyFiles'       : 'Скопировать файлы',
+			'restoreFiles'    : 'Восстановить файлы', // from v2.1.24 added 5.5.2017
 			'rmFromPlaces'    : 'Удалить из избранного',
 			'aspectRatio'     : 'Соотношение сторон',
 			'scale'           : 'Масштаб',
@@ -354,10 +411,93 @@
 			'openMulti'       : 'Открыть несколько файлов', // from v2.1.12 added 5.14.2016
 			'openMultiConfirm': 'Вы пытаетесь открыть $1 файл(а/ов). Вы уверены, что хотите открыть их в браузере?', // from v2.1.12 added 5.14.2016
 			'emptySearch'     : 'Ничего не найдено', // from v2.1.12 added 5.16.2016
+			'editingFile'     : 'Это редактируемый файл.', // from v2.1.13 added 6.3.2016
+			'hasSelected'     : 'Вы выбрали $1 файл(-ов).', // from v2.1.13 added 6.3.2016
+			'hasClipboard'    : 'У вас $1 файл(-ов) в буфере обмена.', // from v2.1.13 added 6.3.2016
+			'incSearchOnly'   : 'Инкрементный поиск возможен только из текущего вида.', // from v2.1.13 added 6.30.2016
+			'reinstate'       : 'Восстановить', // from v2.1.15 added 3.8.2016
+			'complete'        : '$1 завершен', // from v2.1.15 added 21.8.2016
+			'contextmenu'     : 'Контекстное меню', // from v2.1.15 added 9.9.2016
+			'pageTurning'     : 'Переключение страницы', // from v2.1.15 added 10.9.2016
+			'volumeRoots'     : 'Корни томов', // from v2.1.16 added 16.9.2016
+			'reset'           : 'Сбросить', // from v2.1.16 added 1.10.2016
+			'bgcolor'         : 'Фоновый цвет', // from v2.1.16 added 1.10.2016
+			'colorPicker'     : 'Выбор цвета', // from v2.1.16 added 1.10.2016
+			'8pxgrid'         : '8px сетка', // from v2.1.16 added 4.10.2016
+			'enabled'         : 'Включено', // from v2.1.16 added 4.10.2016
+			'disabled'        : 'Отключено', // from v2.1.16 added 4.10.2016
+			'emptyIncSearch'  : 'Ничего не найдено в текущем виде.\\AНажмите [Enter] для развертывания цели поиска.', // from v2.1.16 added 5.10.2016
+			'emptyLetSearch'  : 'Поиск по первому символу не дал результатов в текущем виде.', // from v2.1.23 added 24.3.2017
+			'textLabel'       : 'Текстовая метка', // from v2.1.17 added 13.10.2016
+			'minsLeft'        : '$1 минут осталось', // from v2.1.17 added 13.11.2016
+			'openAsEncoding'  : 'Переоткрыть с выбранной кодировкой', // from v2.1.19 added 2.12.2016
+			'saveAsEncoding'  : 'Сохранить с выбранной кодировкой', // from v2.1.19 added 2.12.2016
+			'selectFolder'    : 'Выбрать папку', // from v2.1.20 added 13.12.2016
+			'firstLetterSearch': 'Поиск по первому символу', // from v2.1.23 added 24.3.2017
+			'presets'         : 'Пресеты', // from v2.1.25 added 26.5.2017
+			'tooManyToTrash'  : 'Слишком много файлов для перемещения в корзину.', // from v2.1.25 added 9.6.2017
+			'TextArea'        : 'Текстовая область', // from v2.1.25 added 14.6.2017
+			'folderToEmpty'   : 'Очистить папку "$1".', // from v2.1.25 added 22.6.2017
+			'filderIsEmpty'   : 'Нет файлов в паке "$1".', // from v2.1.25 added 22.6.2017
+			'preference'      : 'Настройки', // from v2.1.26 added 28.6.2017
+			'language'        : 'Язык', // from v2.1.26 added 28.6.2017
+			'clearBrowserData': 'Сбросить настройки для этого браузера', // from v2.1.26 added 28.6.2017
+			'toolbarPref'     : 'Настройки панели', // from v2.1.27 added 2.8.2017
+			'charsLeft'       : '... еще символов: $1.',  // from v2.1.29 added 30.8.2017
+			'sum'             : 'Общий размер', // from v2.1.29 added 28.9.2017
+			'roughFileSize'   : 'Приблизительный размер файла', // from v2.1.30 added 2.11.2017
+			'autoFocusDialog' : 'Фокус на элементе диалога при наведении мыши',  // from v2.1.30 added 2.11.2017
+			'select'          : 'Выбрать', // from v2.1.30 added 23.11.2017
+			'selectAction'    : 'Действие при выборе файла', // from v2.1.30 added 23.11.2017
+			'useStoredEditor' : 'Открывать в редакторе, выбранном в прошлый раз', // from v2.1.30 added 23.11.2017
+			'selectinvert'    : 'Выбрать элементы с инвертированием', // from v2.1.30 added 25.11.2017
+			'renameMultiple'  : 'Переименовать выбранные элементы ($1 шт.) в $2?<br/>Действие нельзя отменить!', // from v2.1.31 added 4.12.2017
+			'batchRename'     : 'Групповое переименование', // from v2.1.31 added 8.12.2017
+			'plusNumber'      : '+ Число', // from v2.1.31 added 8.12.2017
+			'asPrefix'        : 'Добавить префикс', // from v2.1.31 added 8.12.2017
+			'asSuffix'        : 'Добавить суффикс', // from v2.1.31 added 8.12.2017
+			'changeExtention' : 'Изменить расширение', // from v2.1.31 added 8.12.2017
+			'columnPref'      : 'Настройки колонок (для просмотра в виде списка)', // from v2.1.32 added 6.2.2018
+			'reflectOnImmediate' : 'Все изменения будут немедленно отражены в архиве.', // from v2.1.33 added 2.3.2018
+			'reflectOnUnmount'   : 'Изменения не вступят в силу до тех пор, пока вы не размонтируете этот том.', // from v2.1.33 added 2.3.2018
+			'unmountChildren' : 'Тома, смонтированные на этом томе, также будут размонтированы. Вы хотите отключить его?', // from v2.1.33 added 5.3.2018
+			'selectionInfo'   : 'Свойства', // from v2.1.33 added 7.3.2018
+			'hashChecker'     : 'Алгоритмы для отображения хеш-сумм файлов', // from v2.1.33 added 10.3.2018
+			'infoItems'       : 'Элементы в панели свойств', // from v2.1.38 added 28.3.2018
+			'pressAgainToExit': 'Нажмите снова для выхода.', // from v2.1.38 added 1.4.2018
+			'toolbar'         : 'Панель', // from v2.1.38 added 4.4.2018
+			'workspace'       : 'Рабочая область', // from v2.1.38 added 4.4.2018
+			'dialog'          : 'Диалог', // from v2.1.38 added 4.4.2018
+			'all'             : 'Все', // from v2.1.38 added 4.4.2018
+			'iconSize'        : 'Размер иконок (В виде иконок)', // from v2.1.39 added 7.5.2018
+			'editorMaximized' : 'Открывать редактор в развернутом виде', // from v2.1.40 added 30.6.2018
+			'editorConvNoApi' : 'Так как конвертация с помощью API недоступно, произведите конвертацию на веб-сайте.', //from v2.1.40 added 8.7.2018
+			'editorConvNeedUpload' : 'После конвертации вы должны загрузить скачанный файл, чтобы сохранить его.', //from v2.1.40 added 8.7.2018
+			'convertOn'       : 'Конвертировать на сайте $1', // from v2.1.40 added 10.7.2018
+			'integrations'    : 'Интеграции', // from v2.1.40 added 11.7.2018
+			'integrationWith' : 'Менеджер elFinder интегрирован со следующими внешними сервисами. Ознакомьтесь с правилами пользования, политиками безопасности и др. перед их использованием.', // from v2.1.40 added 11.7.2018
+			'showHidden'      : 'Показать скрытые элементы', // from v2.1.41 added 24.7.2018
+			'hideHidden'      : 'Скрыть скрытые элементы', // from v2.1.41 added 24.7.2018
+			'toggleHidden'    : 'Показать/скрыть скрытые элементы', // from v2.1.41 added 24.7.2018
+			'makefileTypes'   : 'Типы файлов в меню "Новый файл"', // from v2.1.41 added 7.8.2018
+			'typeOfTextfile'  : 'Тип текстового файла', // from v2.1.41 added 7.8.2018
+			'add'             : 'Добавить', // from v2.1.41 added 7.8.2018
+			'theme'           : 'Тема', // from v2.1.43 added 19.10.2018
+			'default'         : 'По умолчанию', // from v2.1.43 added 19.10.2018
+			'description'     : 'Описание', // from v2.1.43 added 19.10.2018
+			'website'         : 'Веб-сайт', // from v2.1.43 added 19.10.2018
+			'author'          : 'Автор', // from v2.1.43 added 19.10.2018
+			'email'           : 'Email', // from v2.1.43 added 19.10.2018
+			'license'         : 'Лицензия', // from v2.1.43 added 19.10.2018
+			'exportToSave'    : 'Невозможно сохранить файл. Чтобы не потерять изменения, экспортируйте их на свой ПК.', // from v2.1.44 added 1.12.2018
+			'dblclickToSelect': 'Двойной клик по файлу для его выбора.', // from v2.1.47 added 22.1.2019
+			'useFullscreen'   : 'Использовать полноэкранный режим', // from v2.1.47 added 19.2.2019
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Неизвестный',
+			'kindRoot'        : 'Корень тома', // from v2.1.16 added 16.10.2016
 			'kindFolder'      : 'Папка',
+			'kindSelects'     : 'Выбор', // from v2.1.29 added 29.8.2017
 			'kindAlias'       : 'Ссылка',
 			'kindAliasBroken' : 'Битая ссылка',
 			// applications
@@ -394,7 +534,7 @@
 			'kindCHeader'     : 'Заголовочный файл C',
 			'kindCPP'         : 'Исходник C++',
 			'kindCPPHeader'   : 'Заголовочный файл C++',
-			'kindShell'       : 'Unix shell script',
+			'kindShell'       : 'Скрипт Unix shell',
 			'kindPython'      : 'Исходник Python',
 			'kindJava'        : 'Исходник Java',
 			'kindRuby'        : 'Исходник Ruby',
@@ -404,7 +544,7 @@
 			'kindAWK'         : 'Исходник AWK',
 			'kindCSV'         : 'Текст с разделителями',
 			'kindDOCBOOK'     : 'Документ Docbook XML',
-			'kindMarkdown'    : 'Markdown text', // added 20.7.2015
+			'kindMarkdown'    : 'Текст Markdown', // added 20.7.2015
 			// images
 			'kindImage'       : 'Изображение',
 			'kindBMP'         : 'Изображение BMP',

@@ -1,8 +1,8 @@
 /**
  * Czech translation
- * @author Jay Gridley <gridley.jay@hotmail.com>
  * @author RobiNN <kelcakrobo@gmail.com>
- * @version 2017-04-21
+ * @author Jay Gridley <gridley.jay@hotmail.com>
+ * @version 2019-08-09
  */
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -14,12 +14,12 @@
 	}
 }(this, function(elFinder) {
 	elFinder.prototype.i18.cs = {
-		translator : 'Jay Gridley &lt;gridley.jay@hotmail.com&gt;, RobiNN &lt;kelcakrobo@gmail.com&gt;',
-		language   : 'čeština',
+		translator : 'RobiNN &lt;kelcakrobo@gmail.com&gt;, Jay Gridley &lt;gridley.jay@hotmail.com&gt;',
+		language   : 'Čeština',
 		direction  : 'ltr',
-		dateFormat : 'd. m. Y H:i', // Mar 13, 2012 05:27 PM
-		fancyDateFormat : '$1 H:i', // will produce smth like: Today 12:25 PM
-		nonameDateFormat : 'ymd-His', // to apply if upload file is noname: 120513172700
+		dateFormat : 'd. m. Y H:i', // will show like: 09. 08. 2019 14:18
+		fancyDateFormat : '$1 H:i', // will show like: Dnes 14:18
+		nonameDateFormat : 'ymd-His', // noname upload will show like: 190809-141840
 		messages   : {
 
 			/********************************** errors **********************************/
@@ -77,6 +77,7 @@
 			'errMove'              : '"$1" nelze přemístit.',
 			'errCopyInItself'      : '"$1" nelze zkopírovat do sebe sama.',
 			'errRm'                : '"$1" nelze odstranit.',
+			'errTrash'             : 'Nelze se dostat do koše.', // from v2.1.24 added 30.4.2017
 			'errRmSrc'             : 'Nelze odstranit zdrojový soubor(y).',
 			'errExtract'           : 'Nelze extrahovat soubory z "$1".',
 			'errArchive'           : 'Nelze vytvořit archív.',
@@ -106,10 +107,15 @@
 			'errExtractExec'       : 'Chyba při extrahování souboru: "$1"',
 			'errNetUnMount'        : 'Nepodařilo se odpojit', // from v2.1 added 30.04.2012
 			'errConvUTF8'          : 'Nelze převést na UTF-8', // from v2.1 added 08.04.2014
-			'errFolderUpload'      : 'Pokud chcete nahrát do složky, zkuste použít prohlížeč Google Chrome.', // from v2.1 added 26.6.2015
+			'errFolderUpload'      : 'Chcete-li nahrát složku, zkuste moderní prohlížeč.', // from v2.1 added 26.6.2015
 			'errSearchTimeout'     : 'Vypršení časového limitu při hledání "$1". Je částečně výsledkem hledání.', // from v2.1 added 12.1.2016
 			'errReauthRequire'     : 'Opětovné povolení je nutné.', // from v2.1.10 added 24.3.2016
 			'errMaxTargets'        : 'Maximální počet volitelných předmětů je $1.', // from v2.1.17 added 17.10.2016
+			'errRestore'           : 'Nelze obnovit z koše. Nelze identifikovat cíl obnovení.', // from v2.1.24 added 3.5.2017
+			'errEditorNotFound'    : 'Editor tohoto typu souboru nebyl nalezen.', // from v2.1.25 added 23.5.2017
+			'errServerError'       : 'Došlo k chybě na straně serveru.', // from v2.1.25 added 16.6.2017
+			'errEmpty'             : 'Nelze vyprázdnit složku "$1".', // from v2.1.25 added 22.6.2017
+			'moreErrors'           : 'Existují ještě další $1 chyby.', // from v2.1.44 added 9.12.2018
 
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'Vytvořit archív',
@@ -127,13 +133,15 @@
 			'cmdinfo'      : 'Zobrazit informace',
 			'cmdmkdir'     : 'Nová složka',
 			'cmdmkdirin'   : 'Do nové složky', // from v2.1.7 added 19.2.2016
-			'cmdmkfile'    : 'Nový textový soubor',
+			'cmdmkfile'    : 'Nový soubor',
 			'cmdopen'      : 'Otevřít',
 			'cmdpaste'     : 'Vložit',
 			'cmdquicklook' : 'Náhled',
 			'cmdreload'    : 'Obnovit',
 			'cmdrename'    : 'Přejmenovat',
 			'cmdrm'        : 'Smazat',
+			'cmdtrash'     : 'Do koše', //from v2.1.24 added 29.4.2017
+			'cmdrestore'   : 'Obnovit', //from v2.1.24 added 3.5.2017
 			'cmdsearch'    : 'Najít soubory',
 			'cmdup'        : 'Přejít do nadřazené složky',
 			'cmdupload'    : 'Nahrát soubor(y)',
@@ -148,6 +156,15 @@
 			'cmdcolwidth'  : 'Obnovení šířku sloupce', // from v2.1.13 added 12.06.2016
 			'cmdfullscreen': 'Celá obrazovka', // from v2.1.15 added 03.08.2016
 			'cmdmove'      : 'Posouvat', // from v2.1.15 added 21.08.2016
+			'cmdempty'     : 'Vyprázdnit složku', // from v2.1.25 added 22.06.2017
+			'cmdundo'      : 'Krok zpět', // from v2.1.27 added 31.07.2017
+			'cmdredo'      : 'Udělat to znovu', // from v2.1.27 added 31.07.2017
+			'cmdpreference': 'Preference', // from v2.1.27 added 03.08.2017
+			'cmdselectall' : 'Vyberat vše', // from v2.1.28 added 15.08.2017
+			'cmdselectnone': 'Nic nevyberať', // from v2.1.28 added 15.08.2017
+			'cmdselectinvert': 'Invertovat výběr', // from v2.1.28 added 15.08.2017
+			'cmdopennew'   : 'Otevři v novém okně', // from v2.1.38 added 3.4.2018
+			'cmdhide'      : 'Skrýt (Předvolba)', // from v2.1.41 added 24.7.2018
 
 			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Zavřít',
@@ -170,6 +187,9 @@
 			'btnBackup' : 'Zálohovat', // fromv2.1 added 28.11.2015
 			'btnRename'    : 'Přejmenovat',      // from v2.1.24 added 6.4.2017
 			'btnRenameAll' : 'Přejmenovat vše', // from v2.1.24 added 6.4.2017
+			'btnPrevious' : 'Předch ($1/$2)', // from v2.1.24 added 11.5.2017
+			'btnNext'     : 'Další ($1/$2)', // from v2.1.24 added 11.5.2017
+			'btnSaveAs'   : 'Uložit jako', // from v2.1.25 added 24.5.2017
 
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'Otevírání složky',
@@ -177,10 +197,10 @@
 			'ntfreload'   : 'Obnovování obsahu složky',
 			'ntfmkdir'    : 'Vytváření složky',
 			'ntfmkfile'   : 'Vytváření souborů',
-			'ntfrm'       : 'Mazání souborů',
-			'ntfcopy'     : 'Kopírování souborů',
-			'ntfmove'     : 'Přesunování souborů',
-			'ntfprepare'  : 'Příprava ke kopírování souborů',
+			'ntfrm'       : 'Vymazání položek',
+			'ntfcopy'     : 'Kopírování položek',
+			'ntfmove'     : 'Přemístění položek',
+			'ntfprepare'  : 'Kontrola existujících položek',
 			'ntfrename'   : 'Přejmenovávání souborů',
 			'ntfupload'   : 'Nahrávání souborů',
 			'ntfdownload' : 'Stahování souborů',
@@ -201,6 +221,15 @@
 			'ntfzipdl'    : 'Vytvořit soubor ke stažení', // from v2.1.7 added 23.1.2016
 			'ntfparents'  : 'Získání informací o cestě', // from v2.1.17 added 2.11.2016
 			'ntfchunkmerge': 'Zpracování nahraného souboru', // from v2.1.17 added 2.11.2016
+			'ntftrash'    : 'Hodit do koše', // from v2.1.24 added 2.5.2017
+			'ntfrestore'  : 'Obnova z koše', // from v2.1.24 added 3.5.2017
+			'ntfchkdir'   : 'Kontrola cílové složky', // from v2.1.24 added 3.5.2017
+			'ntfundo'     : 'Zrušit  předchozí operaci', // from v2.1.27 added 31.07.2017
+			'ntfredo'     : 'Obnovit předchozí zrušení', // from v2.1.27 added 31.07.2017
+			'ntfchkcontent' : 'Kontrola obsahu', // from v2.1.41 added 3.8.2018
+
+			/*********************************** volumes *********************************/
+			'volume_Trash' : 'Koš', //from v2.1.24 added 29.4.2017
 
 			/************************************ dates **********************************/
 			'dateUnknown' : 'neznámý',
@@ -258,17 +287,23 @@
 			'sortAlsoTreeview'  : 'Také stromové zobrazení',  // from v2.1.15 added 01.08.2016
 
 			/********************************** new items **********************************/
-			'untitled file.txt' : 'Nový textový soubor.txt', // added 10.11.2015
+			'untitled file.txt' : 'Nový soubor.txt', // added 10.11.2015
 			'untitled folder'   : 'Nová složka',   // added 10.11.2015
 			'Archive'           : 'Nový archiv',  // from v2.1 added 10.11.2015
+			'untitled file'     : 'Nový soubor.$1',  // from v2.1.41 added 6.8.2018
+			'extentionfile'     : '$1 soubor',    // from v2.1.41 added 6.8.2018
+			'extentiontype'     : '$1: $2',      // from v2.1.43 added 17.10.2018
 
 			/********************************** messages **********************************/
 			'confirmReq'      : 'Požadováno potvrzení',
 			'confirmRm'       : 'Opravdu chcete odstranit tyto soubory?<br/>Operace nelze vrátit!',
 			'confirmRepl'     : 'Nahradit staré soubory novými?',
+			'confirmRest'     : 'Nahradit stávající položku položkou z koše?', // fromv2.1.24 added 5.5.2017
 			'confirmConvUTF8' : 'Není v UTF-8, převést do UTF-8?<br/>Obsah po převodu se stává UTF-8.', // from v2.1 added 08.04.2014
 			'confirmNonUTF8'  : 'Kódování tohoto souboru nemoholo rozpoznán. Pro úpravy je třeba dočasně převést do kódování UTF-8.<br/>Prosím, vyberte kódování znaků souboru.', // from v2.1.19 added 28.11.2016
 			'confirmNotSave'  : 'Byl změněn.<br/>Pokud obsahuje neuložené změny, dojde ke ztrátě práce.', // from v2.1 added 15.7.2015
+			'confirmTrash'    : 'Opravdu chcete položky přesunout do koše?', //from v2.1.24 added 29.4.2017
+			'confirmMove'     : 'Opravdu chcete položky přesunout do "$1"?', //from v2.1.50 added 27.7.2019
 			'apllyAll'        : 'Pro všechny',
 			'name'            : 'Název',
 			'size'            : 'Velikost',
@@ -280,12 +315,16 @@
 			'noaccess'        : 'přístup odepřen',
 			'and'             : 'a',
 			'unknown'         : 'neznámý',
-			'selectall'       : 'Vybrat všechny soubory',
-			'selectfiles'     : 'Vybrat soubor(y)',
-			'selectffile'     : 'Vybrat první soubor',
-			'selectlfile'     : 'Vybrat poslední soubor',
+			'selectall'       : 'Vybrat všechny položky',
+			'selectfiles'     : 'Vybrat položku(y)',
+			'selectffile'     : 'Vybrat první položku',
+			'selectlfile'     : 'Vybrat poslední položku',
 			'viewlist'        : 'Seznam',
 			'viewicons'       : 'Ikony',
+			'viewSmall'       : 'Malé ikony', // from v2.1.39 added 22.5.2018
+			'viewMedium'      : 'Střední ikony', // from v2.1.39 added 22.5.2018
+			'viewLarge'       : 'Velké ikony', // from v2.1.39 added 22.5.2018
+			'viewExtraLarge'  : 'Extra velké ikony', // from v2.1.39 added 22.5.2018
 			'places'          : 'Místa',
 			'calc'            : 'Vypočítat',
 			'path'            : 'Cesta',
@@ -325,6 +364,7 @@
 			'selectForUpload' : 'Vyberte soubory',
 			'moveFiles'       : 'Přesunout sobory',
 			'copyFiles'       : 'Zkopírovat soubory',
+			'restoreFiles'    : 'Obnovit položky', // from v2.1.24 added 5.5.2017
 			'rmFromPlaces'    : 'Odstranit z míst',
 			'aspectRatio'     : 'Poměr stran',
 			'scale'           : 'Měřítko',
@@ -379,7 +419,7 @@
 			'contextmenu'     : 'Kontextové menu', // from v2.1.15 added 9.9.2016
 			'pageTurning'     : 'Otáčení stránky', // from v2.1.15 added 10.9.2016
 			'volumeRoots'     : 'Kořeny média', // from v2.1.16 added 16.9.2016
-			'reset'           : 'Reset', // from v2.1.16 added 1.10.2016
+			'reset'           : 'Obnovit', // from v2.1.16 added 1.10.2016
 			'bgcolor'         : 'Barva pozadí', // from v2.1.16 added 1.10.2016
 			'colorPicker'     : 'Výběr barvy', // from v2.1.16 added 1.10.2016
 			'8pxgrid'         : '8px mřížka', // from v2.1.16 added 4.10.2016
@@ -393,11 +433,70 @@
 			'saveAsEncoding'  : 'Uložit s vybraným kódováním', // from v2.1.19 added 2.12.2016
 			'selectFolder'    : 'Vyberte složku', // from v2.1.20 added 13.12.2016
 			'firstLetterSearch': 'Hledání prvního listu', // from v2.1.23 added 24.3.2017
+			'presets'         : 'Předvolby', // from v2.1.25 added 26.5.2017
+			'tooManyToTrash'  : 'Je to příliš mnoho položek, takže se nemohou dostat do koše.', // from v2.1.25 added 9.6.2017
+			'TextArea'        : 'Textarea', // from v2.1.25 added 14.6.2017
+			'folderToEmpty'   : 'Vyprázdnit složku "$1".', // from v2.1.25 added 22.6.2017
+			'filderIsEmpty'   : 'Ve složce "$1" nejsou žádné položky.', // from v2.1.25 added 22.6.2017
+			'preference'      : 'Předvolby', // from v2.1.26 added 28.6.2017
+			'language'        : 'Nastavte jazyk', // from v2.1.26 added 28.6.2017
+			'clearBrowserData': 'Inicializujte nastavení uložená v tomto prohlížeči', // from v2.1.26 added 28.6.2017
+			'toolbarPref'     : 'Nastavení panelu nástrojů', // from v2.1.27 added 2.8.2017
+			'charsLeft'       : '...$1 znaků zbývá.',  // from v2.1.29 added 30.8.2017
+			'sum'             : 'Součet', // from v2.1.29 added 28.9.2017
+			'roughFileSize'   : 'Hrubá velikost souboru', // from v2.1.30 added 2.11.2017
+			'autoFocusDialog' : 'Zaměření na prvek dialogu s mouseover',  // from v2.1.30 added 2.11.2017
+			'select'          : 'Vybrat', // from v2.1.30 added 23.11.2017
+			'selectAction'    : 'Akce při vybraném souboru', // from v2.1.30 added 23.11.2017
+			'useStoredEditor' : 'Otevřít pomocí naposledy použitého editoru', // from v2.1.30 added 23.11.2017
+			'selectinvert'    : 'Obrátit výběr položek', // from v2.1.30 added 25.11.2017
+			'renameMultiple'  : 'Opravdu chcete přejmenovat $1 vybraných položek, jako například $2<br/>Není to možné vrátit zpět!', // from v2.1.31 added 4.12.2017
+			'batchRename'     : 'Batch přejmenování', // from v2.1.31 added 8.12.2017
+			'plusNumber'      : '+ Číslo', // from v2.1.31 added 8.12.2017
+			'asPrefix'        : 'Přidat předponu', // from v2.1.31 added 8.12.2017
+			'asSuffix'        : 'Přidat příponu', // from v2.1.31 added 8.12.2017
+			'changeExtention' : 'Změnit příponu', // from v2.1.31 added 8.12.2017
+			'columnPref'      : 'Nastavení sloupců (Zobrazení seznamu)', // from v2.1.32 added 6.2.2018
+			'reflectOnImmediate' : 'Všechny změny se okamžitě projeví v archivu.', // from v2.1.33 added 2.3.2018
+			'reflectOnUnmount'   : 'Jakékoliv změny se nebudou odrážet, dokud nebude tento svazek odpojen.', // from v2.1.33 added 2.3.2018
+			'unmountChildren' : 'Následující svazky namontované na tomto svazku jsou také odpojeny. Opravdu ji odpojíte?', // from v2.1.33 added 5.3.2018
+			'selectionInfo'   : 'Informace o výběru', // from v2.1.33 added 7.3.2018
+			'hashChecker'     : 'Algoritmy pro zobrazení hashování souborů', // from v2.1.33 added 10.3.2018
+			'infoItems'       : 'Informační položky (panel s informacemi o výběru)', // from v2.1.38 added 28.3.2018
+			'pressAgainToExit': 'Dalším stisknutím opustíte.', // from v2.1.38 added 1.4.2018
+			'toolbar'         : 'Panel nástrojů', // from v2.1.38 added 4.4.2018
+			'workspace'       : 'Pracovní prostor', // from v2.1.38 added 4.4.2018
+			'dialog'          : 'Dialog', // from v2.1.38 added 4.4.2018
+			'all'             : 'Všechno', // from v2.1.38 added 4.4.2018
+			'iconSize'        : 'Velikost ikony (zobrazení ikon)', // from v2.1.39 added 7.5.2018
+			'editorMaximized' : 'Otevřete maximalizované okno editora', // from v2.1.40 added 30.6.2018
+			'editorConvNoApi' : 'Protože konverze podle API momentálně není k dispozici, převeďte na webové stránce.', //from v2.1.40 added 8.7.2018
+			'editorConvNeedUpload' : 'Po konverzi musíte nahrát převeden soubor pomocí URL položky nebo stažený soubor k uložení převedeného souboru.', //from v2.1.40 added 8.7.2018
+			'convertOn'       : 'Převést na stránce $1', // from v2.1.40 added 10.7.2018
+			'integrations'    : 'Integrace', // from v2.1.40 added 11.7.2018
+			'integrationWith' : 'Tento elFinder má integrované následující externí služby. Před použitím zkontrolujte podmínky používání, zásady ochrany osobních údajů atd.', // from v2.1.40 added 11.7.2018
+			'showHidden'      : 'Zobrazit skryté položky', // from v2.1.41 added 24.7.2018
+			'hideHidden'      : 'Skrýt skryté položky', // from v2.1.41 added 24.7.2018
+			'toggleHidden'    : 'Zobrazit/skrýt skryté položky', // from v2.1.41 added 24.7.2018
+			'makefileTypes'   : 'Typy souborů, jež mají být povoleny pomocí "Nový soubor"', // from v2.1.41 added 7.8.2018
+			'typeOfTextfile'  : 'Typ textového souboru', // from v2.1.41 added 7.8.2018
+			'add'             : 'Přidat', // from v2.1.41 added 7.8.2018
+			'theme'           : 'Téma', // from v2.1.43 added 19.10.2018
+			'default'         : 'Výchozí', // from v2.1.43 added 19.10.2018
+			'description'     : 'Popis', // from v2.1.43 added 19.10.2018
+			'website'         : 'Stránka', // from v2.1.43 added 19.10.2018
+			'author'          : 'Autor', // from v2.1.43 added 19.10.2018
+			'email'           : 'E-mail', // from v2.1.43 added 19.10.2018
+			'license'         : 'Licence', // from v2.1.43 added 19.10.2018
+			'exportToSave'    : 'Tuto položku nelze uložit. Abyste se vyhnuli ztrátě úprav, musíte je exportovat do počítače.', // from v2.1.44 added 1.12.2018
+			'dblclickToSelect': 'Poklepáním na soubor jej vyberte.', // from v2.1.47 added 22.1.2019
+			'useFullscreen'   : 'Použít režim celé obrazovky', // from v2.1.47 added 19.2.2019
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Neznámý',
 			'kindRoot'        : 'Kořen média', // from v2.1.16 added 16.10.2016
 			'kindFolder'      : 'Složka',
+			'kindSelects'     : 'Výběry', // from v2.1.29 added 29.8.2017
 			'kindAlias'       : 'Alias',
 			'kindAliasBroken' : 'Zlomený alias',
 			// applications

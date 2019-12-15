@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Session
@@ -58,7 +58,7 @@ class Session
     }
 
     /*
-    *    Session Handler 
+    *    Session Handler
     *
     *    $gxsess = array (
     *                    'key' => 'sesskey_val',
@@ -104,7 +104,7 @@ class Session
                 $_SESSION['gxsess']['val'][$vars] = $val;
             }
         } else {
-            if (is_array($_SESSION['gxsess']['val'][$vars])) {
+            if (array_key_exists($vars, $_SESSION['gxsess']['val']) && is_array($_SESSION['gxsess']['val'][$vars])) {
                 $arr = array_merge($_SESSION['gxsess']['val'][$vars], $val);
                 $_SESSION['gxsess']['val'][$vars] = $arr;
             } else {

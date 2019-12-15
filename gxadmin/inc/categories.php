@@ -6,13 +6,13 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
@@ -62,8 +62,8 @@
 
                             if ($c->parent == '' || $c->parent == 0) {
                                 echo "<div class=\"col-sm-6 col-md-4 item\" >
-                            <div class=\"panel panel-default\">
-                                <div class=\"panel-heading\">
+                            <div class=\"box box-warning\">
+                                <div class=\"box-header\">
                                     <form action=\"index.php?page=categories\" method=\"POST\" name=\"updatecat\">
                                     <div class=\"input-group\">
                                         <a href=\"?page=categories&act=del&id={$c->id}&token=".TOKEN."\" class=\"input-group-addon\"
@@ -79,7 +79,7 @@
                                     </form>
 
                                 </div>
-                                <div class="panel-body">
+                                <div class="box-body">
                                 <ul class="list-group">';
                                 foreach ($data['cat'] as $c2) {
                                     if ($c2->parent == $c->id) {
@@ -159,4 +159,3 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-

@@ -6,7 +6,7 @@
         ?>
         <div class="row">
           <div class="col-sm-6 col-md-12">
-            <div class="panel panel-red">
+            <div class="panel panel-green">
               <div class="panel-heading">
                 <h3 class="panel-title">Recent Post</h3>
               </div>
@@ -30,7 +30,7 @@
           </div>
 
           <div class="col-sm-6 col-md-12">
-            <div class="panel panel-red ">
+            <div class="panel panel-black ">
               <div class="panel-heading">
                 <h3 class="panel-title">Recent Comments</h3>
               </div>
@@ -60,7 +60,7 @@
 
 
           <div class="col-sm-6 col-md-12">
-            <div class="panel panel-red ">
+            <div class="panel panel-blue ">
               <div class="panel-heading">
                 <h3 class="panel-title">Related Site</h3>
               </div>

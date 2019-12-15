@@ -2,6 +2,7 @@
 
 namespace League\OAuth2\Client\Provider;
 
+use League\OAuth2\Client\Exception\HostedDomainException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
@@ -11,76 +12,83 @@ class Google extends AbstractProvider
 {
     use BearerAuthorizationTrait;
 
-    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'id';
-
     /**
      * @var string If set, this will be sent to google as the "access_type" parameter.
-     * @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
+     * @link https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
      */
     protected $accessType;
 
     /**
      * @var string If set, this will be sent to google as the "hd" parameter.
-     * @link https://developers.google.com/accounts/docs/OAuth2Login#hd-param
+     * @link https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
      */
     protected $hostedDomain;
 
     /**
-     * @var array Default fields to be requested from the user profile.
-     * @link https://developers.google.com/+/web/api/rest/latest/people
+     * @var string If set, this will be sent to google as the "prompt" parameter.
+     * @link https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
      */
-    protected $defaultUserFields = [
-        'id',
-        'name(familyName,givenName)',
-        'displayName',
-        'emails/value',
-        'image/url',
-    ];
+    protected $prompt;
+
     /**
-     * @var array Additional fields to be requested from the user profile.
-     *            If set, these values will be included with the defaults.
+     * @var array List of scopes that will be used for authentication.
+     * @link https://developers.google.com/identity/protocols/googlescopes
      */
-    protected $userFields = [];
+    protected $scopes = [];
 
     public function getBaseAuthorizationUrl()
     {
-        return 'https://accounts.google.com/o/oauth2/auth';
+        return 'https://accounts.google.com/o/oauth2/v2/auth';
     }
 
     public function getBaseAccessTokenUrl(array $params)
     {
-        return 'https://accounts.google.com/o/oauth2/token';
+        return 'https://www.googleapis.com/oauth2/v4/token';
     }
 
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        $fields = array_merge($this->defaultUserFields, $this->userFields);
-        return 'https://www.googleapis.com/plus/v1/people/me?' . http_build_query([
-            'fields' => implode(',', $fields),
-            'alt'    => 'json',
-        ]);
+        return 'https://openidconnect.googleapis.com/v1/userinfo';
     }
 
     protected function getAuthorizationParameters(array $options)
     {
-        $params = array_merge(
-            parent::getAuthorizationParameters($options),
-            array_filter([
-                'hd'          => $this->hostedDomain,
-                'access_type' => $this->accessType,
-                // if the user is logged in with more than one account ask which one to use for the login!
-                'authuser'    => '-1'
-            ])
-        );
+        if (empty($options['hd']) && $this->hostedDomain) {
+            $options['hd'] = $this->hostedDomain;
+        }
 
-        return $params;
+        if (empty($options['access_type']) && $this->accessType) {
+            $options['access_type'] = $this->accessType;
+        }
+
+        if (empty($options['prompt']) && $this->prompt) {
+            $options['prompt'] = $this->prompt;
+        }
+
+        // The "approval_prompt" option MUST be removed to prevent conflicts with non-empty "prompt".
+        if (!empty($options['prompt'])) {
+            $options['approval_prompt'] = null;
+        }
+
+        // Default scopes MUST be included for OpenID Connect.
+        // Additional scopes MAY be added by constructor or option.
+        $scopes = array_merge($this->getDefaultScopes(), $this->scopes);
+
+        if (!empty($options['scope'])) {
+            $scopes = array_merge($scopes, $options['scope']);
+        }
+
+        $options['scope'] = array_unique($scopes);
+
+        return parent::getAuthorizationParameters($options);
     }
 
     protected function getDefaultScopes()
     {
+        // "openid" MUST be the first scope in the list.
         return [
-            'email',
             'openid',
+            'email',
             'profile',
         ];
     }
@@ -92,21 +100,52 @@ class Google extends AbstractProvider
 
     protected function checkResponse(ResponseInterface $response, $data)
     {
-        if (!empty($data['error'])) {
-            $code  = 0;
-            $error = $data['error'];
-
-            if (is_array($error)) {
-                $code  = $error['code'];
-                $error = $error['message'];
-            }
-
-            throw new IdentityProviderException($error, $code, $data);
+        // @codeCoverageIgnoreStart
+        if (empty($data['error'])) {
+            return;
         }
+        // @codeCoverageIgnoreEnd
+
+        $code = 0;
+        $error = $data['error'];
+
+        if (is_array($error)) {
+            $code = $error['code'];
+            $error = $error['message'];
+        }
+
+        throw new IdentityProviderException($error, $code, $data);
     }
 
     protected function createResourceOwner(array $response, AccessToken $token)
     {
-        return new GoogleUser($response);
+        $user = new GoogleUser($response);
+
+        $this->assertMatchingDomain($user->getHostedDomain());
+
+        return $user;
+    }
+
+    /**
+     * @throws HostedDomainException If the domain does not match the configured domain.
+     */
+    protected function assertMatchingDomain($hostedDomain)
+    {
+        if ($this->hostedDomain === null) {
+            // No hosted domain configured.
+            return;
+        }
+
+        if ($this->hostedDomain === '*' && $hostedDomain) {
+            // Any hosted domain is allowed.
+            return;
+        }
+
+        if ($this->hostedDomain === $hostedDomain) {
+            // Hosted domain is correct.
+            return;
+        }
+
+        throw HostedDomainException::notMatchingDomain($this->hostedDomain);
     }
 }

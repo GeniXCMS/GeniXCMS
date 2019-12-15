@@ -6,13 +6,13 @@
  *
  * @since 0.0.1 build date 20141003
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 date_default_timezone_set('UTC');
@@ -31,7 +31,7 @@ try {
     echo $e->getMessage();
 }
 
-System::gZip();
+System::gZip(true);
 
 if (isset($_POST['register'])) {
     $token = Typo::cleanX($_POST['token']);

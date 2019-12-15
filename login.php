@@ -6,15 +6,16 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 date_default_timezone_set('UTC');
 
 define('GX_PATH', realpath(__DIR__.'/'));
@@ -38,7 +39,7 @@ if (!isset($_GET['backto']) && isset($_SERVER['HTTP_REFERER'])) {
     header('Location: '.Site::$url.'login.php?backto='.Site::$url);
 }
 
-System::gZip();
+System::gZip(true);
 
 $data = [];
 if (isset($_POST['login'])) {
@@ -130,6 +131,11 @@ if (!User::isLoggedin()) {
     <form class="form-signin" role="form" method="post">
     <h2 class="form-signin-heading"><?=LOGIN_TITLE; ?></h2>
     <div class="form-group">
+        <?php
+            echo Hooks::run('login_form_header');
+        ?>
+    </div>
+    <div class="form-group">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user"></i></span>
             <input type="text" name="username" class="form-control" placeholder="<?=USERNAME; ?>" required autofocus>
@@ -141,15 +147,21 @@ if (!User::isLoggedin()) {
             <input type="password" name="password" class="form-control" placeholder="<?=PASSWORD; ?>" required>
         </div>
     </div>
+
     <?=Xaptcha::html(); ?>
-    <label class="checkbox">
-        <a href="forgotpassword.php"><?=FORGOT_PASS; ?></a>
-    </label>
-    <input type="hidden" name="token" value="<?=TOKEN; ?>">
-    <button class="btn btn-lg btn-success btn-block" name="login" type="submit">
-        <i class="fa fa-sign-in"></i> <?=SIGN_IN; ?>
-    </button>
+        <label class="checkbox">
+            <a href="forgotpassword.php"><?=FORGOT_PASS; ?></a>
+        </label>
+        <input type="hidden" name="token" value="<?=TOKEN; ?>">
+        <button class="btn btn-lg btn-success btn-block" name="login" type="submit">
+            <i class="fa fa-sign-in"></i> <?=SIGN_IN; ?>
+        </button>
     </form>
+        <div class="">
+            <?php
+                echo Hooks::run('login_form_footer');
+            ?>
+        </div>
     </div>
 
 <?php

@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 
 /**
@@ -27,11 +27,9 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
     /**
      * Sets the fragment path that triggers the fragment listener.
      *
-     * @param string $path The path
-     *
      * @see FragmentListener
      */
-    public function setFragmentPath($path)
+    public function setFragmentPath(string $path)
     {
         $this->fragmentPath = $path;
     }
@@ -39,14 +37,12 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
     /**
      * Generates a fragment URI for a given controller.
      *
-     * @param ControllerReference $reference A ControllerReference instance
-     * @param Request             $request   A Request instance
-     * @param bool                $absolute  Whether to generate an absolute URL or not
-     * @param bool                $strict    Whether to allow non-scalar attributes or not
+     * @param bool $absolute Whether to generate an absolute URL or not
+     * @param bool $strict   Whether to allow non-scalar attributes or not
      *
      * @return string A fragment URI
      */
-    protected function generateFragmentUri(ControllerReference $reference, Request $request, $absolute = false, $strict = true)
+    protected function generateFragmentUri(ControllerReference $reference, Request $request, bool $absolute = false, bool $strict = true)
     {
         if ($strict) {
             $this->checkNonScalar($reference->attributes);
@@ -77,10 +73,10 @@ abstract class RoutableFragmentRenderer implements FragmentRendererInterface
         return $request->getBaseUrl().$path;
     }
 
-    private function checkNonScalar($values)
+    private function checkNonScalar(array $values)
     {
         foreach ($values as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->checkNonScalar($value);
             } elseif (!is_scalar($value) && null !== $value) {
                 throw new \LogicException(sprintf('Controller attributes cannot contain non-scalar/non-null values (value for key "%s" is not a scalar or null).', $key));

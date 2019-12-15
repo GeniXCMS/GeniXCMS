@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.6 build date 20150706
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Hooks
@@ -76,6 +76,8 @@ class Hooks
             'module_install_action' => array(),
             'theme_install_action' => array(),
             'mod_control' => array(),
+            'login_form_header' => array(),
+            'login_form_footer' => array()
             );
 
         return $hooks;

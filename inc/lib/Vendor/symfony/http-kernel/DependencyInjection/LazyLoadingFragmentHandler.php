@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\HttpKernel\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 
@@ -23,42 +23,23 @@ use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 class LazyLoadingFragmentHandler extends FragmentHandler
 {
     private $container;
-    private $rendererIds = array();
+    private $initialized = [];
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container    A container
-     * @param RequestStack       $requestStack The Request stack that controls the lifecycle of requests
-     * @param bool               $debug        Whether the debug mode is enabled or not
-     */
-    public function __construct(ContainerInterface $container, RequestStack $requestStack, $debug = false)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack, bool $debug = false)
     {
         $this->container = $container;
 
-        parent::__construct($requestStack, array(), $debug);
-    }
-
-    /**
-     * Adds a service as a fragment renderer.
-     *
-     * @param string $name     The service name
-     * @param string $renderer The render service id
-     */
-    public function addRendererService($name, $renderer)
-    {
-        $this->rendererIds[$name] = $renderer;
+        parent::__construct($requestStack, [], $debug);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function render($uri, $renderer = 'inline', array $options = array())
+    public function render($uri, string $renderer = 'inline', array $options = [])
     {
-        if (isset($this->rendererIds[$renderer])) {
-            $this->addRenderer($this->container->get($this->rendererIds[$renderer]));
-
-            unset($this->rendererIds[$renderer]);
+        if (!isset($this->initialized[$renderer]) && $this->container->has($renderer)) {
+            $this->addRenderer($this->container->get($renderer));
+            $this->initialized[$renderer] = true;
         }
 
         return parent::render($uri, $renderer, $options);

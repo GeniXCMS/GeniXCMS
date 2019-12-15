@@ -16,19 +16,13 @@ $gneex = Gneex::$opt;
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
       <style>
-        @import 'https://fonts.googleapis.com/css?family=Heebo:700|Open+Sans|Rasa';
+        @import 'https://fonts.googleapis.com/css?family=Montserrat&display=swap';
       </style> 
     </head>
 
     <body>
         <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=422479467810457";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
+
         <header id="header" class="clearfix">
         <div class="container">
             

@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2017 Puguh Wijayanto
+ * @copyright 2014-2019 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -39,10 +39,9 @@ class Typo
         $val = self::strip_tags_content($c, '<script>', true);
         $val = preg_replace_callback(
             '#\<pre\>(.+?)\<\/pre\>#',
-            create_function(
-                '$matches',
-                'return "<pre>".str_replace(\'"\', \'&quot;\', $matches[1])."</pre>";'
-            ),
+            function($matches) {
+                return "<pre>".str_replace('"', '&quot;', $matches[1])."</pre>";
+            },
             $val
         );
         $val = self::filterXss($val);

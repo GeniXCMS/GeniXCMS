@@ -20,11 +20,14 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=5.5.0",
+        "ext-ctype": "*",
+        "ext-filter": "*"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "2.*",
-        "phpunit/phpunit": "4.*"
+        "friendsofphp/php-cs-fixer": "^2.2",
+        "phpunit/phpunit": "^4.8 || ^5.7",
+        "doctrine/annotations": "^1.2"
     },
     "suggest": {
         "psr/log": "For optional PSR-3 debug logging",
@@ -39,5 +42,10 @@
             "PHPMailer\\PHPMailer\\": "src/"
         }
     },
-    "license": "LGPL-2.1"
+    "autoload-dev": {
+        "psr-4": {
+            "PHPMailer\\Test\\": "test/"
+        }
+    },
+    "license": "LGPL-2.1-only"
 }

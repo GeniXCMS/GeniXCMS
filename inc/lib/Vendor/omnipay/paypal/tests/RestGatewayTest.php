@@ -31,7 +31,7 @@ class RestGatewayTest extends GatewayTestCase
                 'lastName' => 'User',
                 'number' => '4111111111111111',
                 'expiryMonth' => '12',
-                'expiryYear' => '2016',
+                'expiryYear' => date('Y'),
                 'cvv' => '123',
             )),
         );
@@ -152,6 +152,27 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertSame('abc123', $request->getTransactionReference());
         $data = $request->getData();
         $this->assertEmpty($data);
+    }
+
+    public function testListPlan()
+    {
+        $request = $this->gateway->listPlan(array(
+            'page'         => 0,
+            'status'       => 'ACTIVE',
+            'pageSize'    => 10, //number of plans in a single page
+            'totalRequired'     => 'yes'
+        ));
+
+        $this->assertInstanceOf('\Omnipay\PayPal\Message\RestListPlanRequest', $request);
+        $this->assertSame(0, $request->getPage());
+        $this->assertSame('ACTIVE', $request->getStatus());
+        $this->assertSame(10, $request->getPageSize());
+        $this->assertSame('yes', $request->getTotalRequired());
+
+        $endPoint = $request->getEndpoint();
+        $this->assertSame('https://api.paypal.com/v1/payments/billing-plans', $endPoint);
+        $data = $request->getData();
+        $this->assertNotEmpty($data);
     }
 
     public function testFetchPurchase()

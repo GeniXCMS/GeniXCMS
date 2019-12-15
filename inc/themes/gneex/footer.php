@@ -9,10 +9,7 @@
                     ?>
                 </div>
                 <div class="col-md-5">
-                    <h4>Tags</h4>
-                    <?php
-                        echo Tags::cloud();
-                    ?>
+
                 </div>
                 <div class="col-md-4">
 

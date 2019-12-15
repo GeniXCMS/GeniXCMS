@@ -19,37 +19,47 @@ class GoogleUser implements ResourceOwnerInterface
 
     public function getId()
     {
-        return $this->response['id'];
+        return $this->response['sub'];
     }
 
     /**
-     * Get perferred display name.
+     * Get preferred display name.
      *
      * @return string
      */
     public function getName()
     {
-        return $this->response['displayName'];
+        return $this->response['name'];
     }
 
     /**
-     * Get perferred first name.
+     * Get preferred first name.
      *
-     * @return string
+     * @return string|null
      */
     public function getFirstName()
     {
-        return $this->response['name']['givenName'];
+        return $this->getResponseValue('given_name');
     }
 
     /**
-     * Get perferred last name.
+     * Get preferred last name.
      *
-     * @return string
+     * @return string|null
      */
     public function getLastName()
     {
-        return $this->response['name']['familyName'];
+        return $this->getResponseValue('family_name');
+    }
+
+    /**
+     * Get locale.
+     *
+     * @return string|null
+     */
+    public function getLocale()
+    {
+        return $this->getResponseValue('locale');
     }
 
     /**
@@ -59,9 +69,17 @@ class GoogleUser implements ResourceOwnerInterface
      */
     public function getEmail()
     {
-        if (!empty($this->response['emails'])) {
-            return $this->response['emails'][0]['value'];
-        }
+        return $this->getResponseValue('email');
+    }
+
+    /**
+     * Get hosted domain.
+     *
+     * @return string|null
+     */
+    public function getHostedDomain()
+    {
+        return $this->getResponseValue('hd');
     }
 
     /**
@@ -71,9 +89,7 @@ class GoogleUser implements ResourceOwnerInterface
      */
     public function getAvatar()
     {
-        if (!empty($this->response['image']['url'])) {
-            return $this->response['image']['url'];
-        }
+        return $this->getResponseValue('picture');
     }
 
     /**
@@ -84,5 +100,13 @@ class GoogleUser implements ResourceOwnerInterface
     public function toArray()
     {
         return $this->response;
+    }
+
+    private function getResponseValue($key)
+    {
+        if (array_key_exists($key, $this->response)) {
+            return $this->response[$key];
+        }
+        return null;
     }
 }

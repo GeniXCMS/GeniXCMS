@@ -109,8 +109,7 @@ class Adaptive extends PayPal
 						'X-PAYPAL-SECURITY-PASSWORD: ' . $this -> APIPassword, 
 						'X-PAYPAL-SECURITY-SIGNATURE: ' . $this -> APISignature, 
 						'X-PAYPAL-SECURITY-SUBJECT: ' . $this -> APISubject, 
-						'X-PAYPAL-SECURITY-VERSION: ' . $this -> APIVersion, 
-						'X-PAYPAL-REQUEST-DATA-FORMAT: XML', 
+						'X-PAYPAL-REQUEST-DATA-FORMAT: XML',
 						'X-PAYPAL-RESPONSE-DATA-FORMAT: XML', 
 						'X-PAYPAL-APPLICATION-ID: ' . $this -> ApplicationID, 
 						'X-PAYPAL-DEVICE-ID: ' . $this -> DeviceID, 
@@ -347,8 +346,8 @@ class Adaptive extends PayPal
 			
 			$XMLRequest .= '<receiver xmlns="">';
 			$XMLRequest .= $Receiver['Amount'] != '' ? '<amount xmlns="">' . $Receiver['Amount'] . '</amount>' : '';
-			$XMLRequest .= $Receiver['Email'] != '' ? '<email xmlns="">' . $Receiver['Email'] . '</email>' : '';
-			$XMLRequest .= $Receiver['AccountID'] != '' ? '<accountId xmlns="">' . $Receiver['AccountID'] . '</accountId>' : '';
+			$XMLRequest .= $Receiver['Email'] != '' ? '<email xmlns="">' . $Receiver['Email'] . '</email>' : '';			
+                        $XMLRequest .= !empty($Receiver['AccountID']) ? '<accountId xmlns="">' . $Receiver['AccountID'] . '</accountId>' : '';
 			$XMLRequest .= $Receiver['InvoiceID'] != '' ? '<invoiceId xmlns="">' . $Receiver['InvoiceID'] . '</invoiceId>' : '';
 			$XMLRequest .= $Receiver['PaymentType'] != '' ? '<paymentType xmlns="">' . $Receiver['PaymentType'] . '</paymentType>' : '';
 			$XMLRequest .= $Receiver['PaymentSubType'] != '' ? '<paymentSubType xmlns="">' . $Receiver['PaymentSubType'] . '</paymentSubType>' : '';
