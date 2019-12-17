@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -276,7 +276,19 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user` WHERE `userid` = '%s' LIMIT 1",
+                "SELECT `id` FROM `user` WHERE `userid` = '%s' LIMIT 1",
+                Typo::cleanX($userid)
+            )
+        );
+
+        return $usr[0]->id;
+    }
+
+    public static function idDetail($userid)
+    {
+        $usr = Db::result(
+            sprintf(
+                "SELECT `id` FROM `user_detail` WHERE `userid` = '%s' LIMIT 1",
                 Typo::cleanX($userid)
             )
         );
@@ -288,7 +300,7 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user` WHERE `id` = '%d' LIMIT 1",
+                "SELECT `userid` FROM `user` WHERE `id` = '%d' LIMIT 1",
                 Typo::int($id)
             )
         );
@@ -300,7 +312,7 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                "SELECT `email` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
                 Typo::int($id),
                 Typo::cleanX($id)
             )
@@ -313,7 +325,7 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                "SELECT `group` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
                 Typo::int($id),
                 Typo::cleanX($id)
             )
@@ -326,7 +338,7 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                "SELECT `join_date` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
                 Typo::int($id),
                 Typo::cleanX($id)
             )
@@ -339,7 +351,7 @@ class User
     {
         $usr = Db::result(
             sprintf(
-                "SELECT * FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
+                "SELECT `avatar` FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
                 Typo::int($id),
                 Typo::cleanX($id)
             )

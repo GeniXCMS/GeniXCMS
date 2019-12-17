@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -97,7 +97,7 @@ switch ($step) {
                         'user' => array(
                             'userid' => Session::val('adminuser'),
                             'pass' => User::randpass(Session::val('adminpass')),
-                            'email' => 'admin@'.Session::val('sitedomain'),
+                            'email' => Session::val('adminuser') . '@' . Session::val('sitedomain'),
                             'group' => '0',
                             'join_date' => date('Y-m-d H:i:s'),
                             'status' => '1',

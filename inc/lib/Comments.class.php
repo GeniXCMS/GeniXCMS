@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -473,8 +473,8 @@ class Comments
             foreach ($comments as $key => $value) {
                 $comment = substr(Typo::strip($value->comment), 0, 30);
                 $author = !empty($value->userid) ? $value->userid: $value->name;
-                $date = Date::format($value->date);
-                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a> <br/><small>by {$author} on {$date}</small></li>";
+                $date = Date::format($value->date, "d M Y");
+                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a> <br/><small>&nbsp;<i>by {$author} on {$date}</i></small></li>";
             }
             $html .= "</ol>";
         }

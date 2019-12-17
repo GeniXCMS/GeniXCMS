@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -104,8 +104,9 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                     <div class="col-sm-12">
 
                         <div class="table-responsive">
+                        <form action="" method="post">
                         <table class="table table-hover">
-                            <form action="" method="post">
+                            
                             <thead>
                                 <tr>
                                     <th class="text-center"><?=ID;?></th>
@@ -143,7 +144,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                                                 <td class="text-center">'.$p->email.'</td>
                                                 <td class="text-center">'.Date::format($p->date, 'd M Y').'<br /><small>'.Date::format($p->date, 'H:i A')."</small></td>
                                                 <td class=\"text-center\">{$status}</td>
-                                                <td class=\"text-center\">{$p->userid}</td>
+                                                <td class=\"text-center\">{$p->name}</td>
                                                 <td class=\"text-center\">
                                                     <a href=\"index.php?page=comments&act=del&id={$p->id}&token=".TOKEN."\" class=\"label label-danger\"
                                                     onclick=\"return confirm('Are you sure you want to delete this item?');\"><i class=\"fa fa-remove\"></i></a>
@@ -185,9 +186,9 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
                                     </button>
                                 </th>
                             </tfoot>
-                            </form>
+                            
                         </table>
-
+                        </form>
                         </div>
                     </div>
                 </div>

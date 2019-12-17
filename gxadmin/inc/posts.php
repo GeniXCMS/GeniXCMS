@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -112,8 +112,9 @@
         <div class="col-sm-12">
 
         <div class="table-responsive">
+        <form action="" method="post">
         <table class="table table-hover">
-            <form action="" method="post">
+            
             <thead>
                 <tr>
                     <th><?=ID;?></th>
@@ -191,9 +192,9 @@
                     </button>
                 </th>
             </tfoot>
-            </form>
+            
         </table>
-
+        </form>
         </div>
         </div>
                 </div>

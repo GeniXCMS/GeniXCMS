@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -373,7 +373,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                 }
 
-                $data['usr'] = Db::result("SELECT * FROM `user` AS A 
+                $data['usr'] = Db::result("SELECT *, A.`id` as `id` FROM `user` AS A 
                         LEFT JOIN `user_detail` AS B 
                         ON A.`userid` = B.`userid` 
                         WHERE {$where} ORDER BY A.`userid` ASC LIMIT {$offset}, {$max}");

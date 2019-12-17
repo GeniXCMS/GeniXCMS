@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -68,6 +68,7 @@ if (User::validate($author)) {
             "SELECT * FROM `posts`
                         WHERE `author` = '%s' %s
                         AND `status` = '1'
+                        AND `type` = 'post'
                         ORDER BY `date`
                         DESC LIMIT %d, %d",
             $author,

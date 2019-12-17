@@ -103,11 +103,11 @@ article .content img {
     color: #eee;
 }
 
-#header .navbar-default .navbar-nav>.active>a, 
+/* #header .navbar-default .navbar-nav>.active>a, 
 #header .navbar-default .navbar-nav>.active>a:focus, 
 #header .navbar-default .navbar-nav>.active>a:hover {
-    /* background-color: #333333; */
-}
+    background-color: #333333; 
+} */
 
 #header .navbar-collapse {
     position: absolute;
@@ -376,11 +376,6 @@ a:hover, a:focus {
     font-weight: bold;
 }
 
-.panel.panel-five {
-    /* border: 1px solid #d8cbc7; */
-    
-    
-}
 
 
 .panel.panel-one .panel-heading, .panel.panel-one .panel-body {
@@ -392,9 +387,6 @@ a:hover, a:focus {
     font-weight: bold;
 }
 
-.panel.panel-one {
-    /* border: 1px solid #cc3f0c;     */
-}
 
 
 .panel.panel-one .panel-body a, 

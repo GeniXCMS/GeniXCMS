@@ -239,7 +239,7 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
-                    <ul class="treeview-menu" style="">
+                    <ul class="treeview-menu">
                         <li <?=(isset($_GET['page']) && $_GET['page'] == 'settings') ? 'class="active"' : ''; ?>>
                             <a href="index.php?page=settings">
                                 <i class="fa fa-wrench"></i> <span>Global Settings</span>

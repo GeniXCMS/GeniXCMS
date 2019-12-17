@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.7 build date 20150711
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -73,6 +73,7 @@ class Router
             'sitemap.xml' => array('sitemap'),
             'sitemap/(.*).xml' => array('sitemap' => 1),
             'sitemap/' => array('sitemap'),
+            'search/' => array('search'),
             'error/' => array('error'),
             'rss/' => array('rss'),
             '/' => array('default'),

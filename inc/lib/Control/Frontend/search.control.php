@@ -6,7 +6,7 @@
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20141006
- * @version 1.1.6
+ * @version 1.1.7
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
  * @author Puguh Wijayanto (www.metalgenix.com)
@@ -55,7 +55,7 @@ if(isset($_GET['paging'])){
     $offset = 0;
     $qpage = "?&q={$q}&token={$_GET['token']}";
 }
-$url = ItemUrl::search().$qpage;
+$url = Url::search().$qpage;
 $paging = array(
                 'paging' => $paging,
                 'table' => 'posts',
@@ -68,13 +68,11 @@ $data['paging'] =  Paging::create($paging);
 
 //echo $paging;
 $data['posts'] = Db::result(
-                        sprintf("SELECT * FROM `posts` AS A
-                            LEFT JOIN `items` AS B
-                            ON A.`id` = B.`post_id`
-                            WHERE A.`type` = 'gxmarket'
+                        sprintf("SELECT * FROM `posts`
+                            WHERE `type` = 'post'
                             %s
-                            AND A.`status` = '1'
-                            ORDER BY A.`date` 
+                            AND `status` = '1'
+                            ORDER BY `date` 
                             DESC LIMIT %d, %d",
                             $where, $offset, $data['max']
                             )

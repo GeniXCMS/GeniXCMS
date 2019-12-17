@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @link https://github.com/semplon/GeniXCMS
  * @link http://genix.id
@@ -382,6 +382,23 @@ class Url
                 $type = ($type != '') ? '&type='.$type: '';
                 $url = Site::$url."?author={$vars}$type";
                 break;
+        }
+
+        return $url;
+    }
+
+    public static function search() {
+        switch (SMART_URL) {
+            case true:
+                # code...
+                $url = Site::$url."search/";
+                break;
+            
+            default:
+                # code...
+                $url = Site::$url."index.php?search";
+                break;
+
         }
 
         return $url;
