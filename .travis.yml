@@ -5,14 +5,12 @@ php:
 services:
   - mysql
 
+addons:
+  mariadb: '10.0'
+  
 before_install:
   - mysql -e 'CREATE DATABASE db_test;'
 
-env:
-  - DB=mysql
-
-addons:
-  mariadb: '10.0'
 
 
 script: phpunit
