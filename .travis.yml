@@ -1,6 +1,12 @@
 language: php
 php:
   - 7.2.5
+  
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE db_test;'
 
 env:
   - DB=mysql
@@ -8,7 +14,5 @@ env:
 addons:
   mariadb: '10.0'
 
-before_script:
-  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS db_test;" -uroot; fi
 
 script: phpunit
