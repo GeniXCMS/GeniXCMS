@@ -27,7 +27,7 @@
         "league/oauth2-client": "2.4.1",
         "league/oauth2-google": "3.0.2",
         "symfony/dependency-injection": "v5.0.1",
-        "symfony/http-kernel": "v5.0.1",
+        "symfony/http-kernel": "v5.1.5",
         "guzzlehttp/guzzle": "6.5.0",
         "angelleye/paypal-php-library": "3.0.4",
         "php-http/guzzle6-adapter": "v2.0.1"
