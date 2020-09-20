@@ -82,7 +82,7 @@ We are now ready for composer installation. Run this command at your server.
 more detail about composer, please read the documentation at http://getcomposer.org
 
 more details of installation :
-http://docs.genix.id/user-guide/installation/
+http://docs.genix.me/user-guide/installation/
 
 
 ### Upgrading
