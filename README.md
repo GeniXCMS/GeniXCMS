@@ -127,3 +127,7 @@ Contact us for Donation.
 ### Developer
 
 Developed by : Puguh Wijayanto - [](https://github.com/semplon)
+
+### Suported By 
+
+[![](https://i.imgur.com/1lDiVET.png)](https://fosshost.org)
