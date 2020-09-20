@@ -217,30 +217,7 @@
         <!-- /.col -->
 
 
-        <div class="col-md-6 connectedSortable">
-            <!-- Map box -->
-            <div class="box box-solid bg-light-blue-gradient">
-                <div class="box-header">
-                    <!-- tools box -->
-                    <div class="pull-right box-tools">
-
-                    </div>
-                    <!-- /. tools -->
-
-                    <i class="fa fa-map-marker"></i>
-
-                    <h3 class="box-title">
-                        Registered Users Location
-                    </h3>
-                </div>
-                <div class="box-body">
-                    <div id="world-map" style="height: 250px; width: 100%;"></div>
-                </div>
-                <!-- /.box-body-->
-
-            </div>
-            <!-- /.box -->
-        </div>
+        
 
     </div>
 

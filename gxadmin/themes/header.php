@@ -33,16 +33,15 @@
     <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/iCheck/square/blue.css">
     <!-- Morris chart -->
 <!--    <link rel="stylesheet" href="--><?//=Site::$url;?><!--assets/plugins/morris/morris.css">-->
-    <!-- jvectormap -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    
     <!-- Date Picker -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"> -->
     <!-- bootstrap slider -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-slider/slider.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css">
 
     <!-- LOAD Javascript -->
     <script src="<?=Site::$url;?>assets/js/jquery.min.js"></script>

@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-12 text-center footer-copyright">
                     <small>Copyright &copy; <?=date('Y');?>, <?=Site::$name;?>. All Rights reserved. 
-                    powered by <a href="http://genix.id">GeniXCMS</a></small>
+                    powered by <a href="http://genix.me">GeniXCMS</a></small>
                 </div>
             </div>
         </div>

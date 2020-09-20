@@ -187,25 +187,22 @@ if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
 <!-- <script src="<?=Site::$url;?>assets/plugins/morris/morris.min.js"></script> -->
 <!-- Sparkline -->
-<script src="<?=Site::$url;?>assets/plugins/sparkline/jquery.sparkline.min.js"></script>
-<!-- jvectormap -->
-<script src="<?=Site::$url;?>assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="<?=Site::$url;?>assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="<?=Site::$url;?>assets/plugins/knob/jquery.knob.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>-->
-<script src="<?=Site::$url;?>assets/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
 <!-- datepicker -->
-<script src="<?=Site::$url;?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="<?=Site::$url;?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- Slimscroll -->
-<script src="<?=Site::$url;?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
-<script src="<?=Site::$url;?>assets/plugins/fastclick/fastclick.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 <!-- iCheck -->
-<script src="<?=Site::$url;?>assets/plugins/iCheck/icheck.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?=Site::$url;?>assets/js/app.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -213,7 +210,7 @@ if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
 <!-- AdminLTE for demo purposes -->
 <script src="<?=Site::$url;?>assets/js/demo.js"></script>
 <!-- Bootstrap slider -->
-<script src="<?=Site::$url;?>assets/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous"></script>
 
 
 <script>
@@ -250,31 +247,7 @@ if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
 //    });
     //jvectormap data
     var registeredUserLocation = <?=User::jsonUserLocation();?>;
-    //World map by jvectormap
-    $('#world-map').vectorMap({
-        map: 'world_mill_en',
-        backgroundColor: "transparent",
-        regionStyle: {
-            initial: {
-                fill: '#e4e4e4',
-                "fill-opacity": 1,
-                stroke: 'none',
-                "stroke-width": 0,
-                "stroke-opacity": 1
-            }
-        },
-        series: {
-            regions: [{
-                values: registeredUserLocation,
-                scale: ["#92c1dc", "#ebf4f9"],
-                normalizeFunction: 'polynomial'
-            }]
-        },
-        onRegionLabelShow: function (e, el, code) {
-            if (typeof registeredUserLocation[code] != "undefined")
-                el.html(el.html() + ': ' + registeredUserLocation[code] + ' registered users');
-        }
-    });
+
 
 
 </script>
