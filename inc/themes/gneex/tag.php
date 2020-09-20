@@ -49,9 +49,9 @@ $gneex = Gneex::$opt;
 //                            
                             echo '
                         <article class="blog-post col-md-12">
-                            <h2 class="title"><a href="' . Url::post($p->id) . "\">$p->title</a></h2>
+                            <h2 class="title"><a href="' . Url::post($p->post_id) . "\">$p->title</a></h2>
                             <hr />
-                            " . Posts::format($p->content, $p->id) . '
+                            " . Posts::format($p->content, $p->post_id) . '
                             <div class="blog-footer">posted in ' . Categories::name($p->cat) . ', at ' . Date::format($p->date) . " by <a href=\"#\">{$p->author}</a></div>
                         </article>
                             ";

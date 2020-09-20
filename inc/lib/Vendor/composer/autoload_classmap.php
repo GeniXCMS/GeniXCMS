@@ -6,9 +6,20 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
+    'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
+    'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+    'DivisionByZeroError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
+    'Error' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/Error.php',
     'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
+    'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'Omnipay\\Omnipay' => $vendorDir . '/omnipay/common/src/Omnipay.php',
+    'ParseError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
     'RecursiveCallbackFilterIterator' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeLocalFileSystem.class.php',
+    'SessionUpdateTimestampHandlerInterface' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+    'TypeError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'elFinder' => $vendorDir . '/studio-42/elfinder/php/elFinder.class.php',
     'elFinderAbortException' => $vendorDir . '/studio-42/elfinder/php/elFinder.class.php',
     'elFinderConnector' => $vendorDir . '/studio-42/elfinder/php/elFinderConnector.class.php',
@@ -25,6 +36,7 @@ return array(
     'elFinderPluginWatermark' => $vendorDir . '/studio-42/elfinder/php/plugins/Watermark/plugin.php',
     'elFinderSession' => $vendorDir . '/studio-42/elfinder/php/elFinderSession.php',
     'elFinderSessionInterface' => $vendorDir . '/studio-42/elfinder/php/elFinderSessionInterface.php',
+    'elFinderTriggerException' => $vendorDir . '/studio-42/elfinder/php/elFinder.class.php',
     'elFinderVolumeBox' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeBox.class.php',
     'elFinderVolumeDriver' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDriver.class.php',
     'elFinderVolumeDropbox' => $vendorDir . '/studio-42/elfinder/php/elFinderVolumeDropbox.class.php',

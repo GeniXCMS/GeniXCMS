@@ -1,7 +1,10 @@
     <section id="blog">
         <div class="container">
-            
-                <div class="col-md-8">
+            <?php
+            $bar = Posts::getParam('sidebar', $data['posts'][0]->id);
+            $cols = ($bar == 'yes' || $bar == '') ? '8': '12';
+            ?>
+                <div class="col-md-<?php echo $cols; ?>">
                     <div class="blog-lists clearfix">
                     <?php
                     if (Gneex::opt('adsense') != '') {
@@ -32,7 +35,7 @@
                     ?>
                     </div>
                 </div>
-                <?php Theme::theme('rightside', $data); ?>
+                <?php if ($bar == 'yes' || $bar == '') { Theme::theme('rightside', $data); } ?>
                 
 
         </div>

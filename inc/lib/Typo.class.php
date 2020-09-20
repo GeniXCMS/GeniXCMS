@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -36,6 +36,8 @@ class Typo
 
     public static function cleanX($c)
     {
+        // $c = urldecode($c);
+        // echo $c;
         $val = self::strip_tags_content($c, '<script>', true);
         $val = preg_replace_callback(
             '#\<pre\>(.+?)\<\/pre\>#',
@@ -44,13 +46,18 @@ class Typo
             },
             $val
         );
-        $val = self::filterXss($val);
+        Vendor::loadonce("ezyang/htmlpurifier/library/HTMLPurifier.auto.php");
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        $val = $purifier->purify($val);
+        // $val = self::filterXss($val);
         $val = htmlspecialchars(
             $val,
             ENT_QUOTES | ENT_HTML5,
             'utf-8'
         );
         $val = str_replace('\\', "\\\\", $val);
+        // echo $val;
         // $val = htmlentities(
         //             $c,
         //             ENT_QUOTES | ENT_IGNORE, "UTF-8");
@@ -308,6 +315,9 @@ class Typo
         onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
         onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background|oncut)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
         $str = preg_replace('#(.*?)(javascript:.*)(.*?)#', '', $str);
+        $str = preg_replace('#(.*?)(onload|onerror|onblur|onchange|onscroll|oninput|
+        onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
+        onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background|oncut)=("|\')(.*)("|\')(.*?)#', '', $str);
         //$str = preg_replace('#&lt;(.*?)script&gt;#', '', $str);
         return $str;
     }

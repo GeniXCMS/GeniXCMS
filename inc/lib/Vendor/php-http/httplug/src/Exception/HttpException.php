@@ -20,10 +20,7 @@ class HttpException extends RequestException
     protected $response;
 
     /**
-     * @param string            $message
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     * @param \Exception|null   $previous
+     * @param string $message
      */
     public function __construct(
         $message,
@@ -63,6 +60,6 @@ class HttpException extends RequestException
             $response->getReasonPhrase()
         );
 
-        return new self($message, $request, $response, $previous);
+        return new static($message, $request, $response, $previous);
     }
 }

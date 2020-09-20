@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -384,6 +384,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                                 'user' => ['A', 'LEFT JOIN', 'userid'],
                                 'user_detail' => ['B', 'LEFT JOIN', 'userid']
                             ],
+                            'select' => 'A.`id` ',
                             'where' => $where,
                             'max' => $max,
                             'url' => 'index.php?page=users'.$qpage,

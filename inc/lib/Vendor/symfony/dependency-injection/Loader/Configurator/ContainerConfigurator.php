@@ -48,13 +48,7 @@ class ContainerConfigurator extends AbstractConfigurator
     {
         if (!$this->container->hasExtension($namespace)) {
             $extensions = array_filter(array_map(function (ExtensionInterface $ext) { return $ext->getAlias(); }, $this->container->getExtensions()));
-            throw new InvalidArgumentException(sprintf(
-                'There is no extension able to load the configuration for "%s" (in %s). Looked for namespace "%s", found %s',
-                $namespace,
-                $this->file,
-                $namespace,
-                $extensions ? sprintf('"%s"', implode('", "', $extensions)) : 'none'
-            ));
+            throw new InvalidArgumentException(sprintf('There is no extension able to load the configuration for "%s" (in "%s"). Looked for namespace "%s", found "%s".', $namespace, $this->file, $namespace, $extensions ? implode('", "', $extensions) : 'none'));
         }
 
         $this->container->loadFromExtension($namespace, static::processValue($config));
@@ -75,20 +69,55 @@ class ContainerConfigurator extends AbstractConfigurator
     {
         return new ServicesConfigurator($this->container, $this->loader, $this->instanceof, $this->path, $this->anonymousCount);
     }
+
+    /**
+     * @return static
+     */
+    final public function withPath(string $path): self
+    {
+        $clone = clone $this;
+        $clone->path = $clone->file = $path;
+
+        return $clone;
+    }
 }
 
 /**
  * Creates a service reference.
+ *
+ * @deprecated since Symfony 5.1, use service() instead.
  */
 function ref(string $id): ReferenceConfigurator
 {
+    trigger_deprecation('symfony/dependency-injection', '5.1', '"%s()" is deprecated, use "service()" instead.', __FUNCTION__);
+
     return new ReferenceConfigurator($id);
+}
+
+/**
+ * Creates a reference to a service.
+ */
+function service(string $serviceId): ReferenceConfigurator
+{
+    return new ReferenceConfigurator($serviceId);
+}
+
+/**
+ * Creates an inline service.
+ *
+ * @deprecated since Symfony 5.1, use inline_service() instead.
+ */
+function inline(string $class = null): InlineServiceConfigurator
+{
+    trigger_deprecation('symfony/dependency-injection', '5.1', '"%s()" is deprecated, use "inline_service()" instead.', __FUNCTION__);
+
+    return new InlineServiceConfigurator(new Definition($class));
 }
 
 /**
  * Creates an inline service.
  */
-function inline(string $class = null): InlineServiceConfigurator
+function inline_service(string $class = null): InlineServiceConfigurator
 {
     return new InlineServiceConfigurator(new Definition($class));
 }

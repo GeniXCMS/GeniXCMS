@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Paging
@@ -60,11 +60,14 @@ class Paging
                     }
                     $on = substr($on, 0, -1);
                     $table = $table.$on;
+                    $sel = $vars['select'];
                 } else {
                     $table = "`".Typo::cleanX($vars['table'])."`";
+                    $sel = '`id`';
                 }
+                
 //                echo $table;
-                Db::result("SELECT * FROM {$table} {$where}");
+                Db::result("SELECT {$sel} FROM {$table} {$where}");
                 $dbtotal = Db::$num_rows;
             }
 

@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -166,7 +166,7 @@ class Categories
         }
         $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
         //print_r($cat);
-        $drop = '<div class="panel-group" id="accordion" role="tablist">
+        $html = '<div class="panel-group" id="accordion" role="tablist">
             ';
         if (Db::$num_rows > 0) {
             foreach ($cat as $c) {
@@ -182,12 +182,12 @@ class Categories
                         $catparent = '';
                         $in = '';
                         $collapseHeading = '';
-                        $href = '';
+                        $href = ($catparent == $c->id) ? "#collapse-{$c->id}" : Url::cat($c->id);
                         $data_toggle = '';
                     }
                     // print_r($catparent);
 
-                    $drop .= "<div class=\"panel panel-gxmarket\">
+                    $html .= "<div class=\"panel panel-default\">
                     <div id=\"{$collapseHeading}\" class=\"panel-heading\" role=\"tab\" >
                     <a href=\"{$href}\" data-toggle=\"{$data_toggle}\"  aria-expanded=\"false\"
                     aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>
@@ -197,16 +197,16 @@ class Categories
                     foreach ($cat as $c2) {
                         if ($c2->parent == $c->id) {
                             //if (isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                            $drop .= '<li><a href="'.Url::cat($c2->id)."\">{$c2->name}</a></li>";
+                            $html .= '<li><a href="'.Url::cat($c2->id)."\">{$c2->name}</a></li>";
                         }
                     }
-                    $drop .= '</ul></div></div>';
+                    $html .= '</ul></div></div>';
                 }
             }
         }
-        $drop .= '</div>';
+        $html .= '</div>';
 
-        return $drop;
+        return $html;
     }
 
     /**

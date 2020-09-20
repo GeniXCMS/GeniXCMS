@@ -7,11 +7,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 0.0.1 build date 20141003
- * @version 1.1.7
+ * @version 1.1.8
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 $data = Router::scrap($param);
