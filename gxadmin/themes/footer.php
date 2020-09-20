@@ -4,7 +4,7 @@
     <div class="pull-right hidden-xs">
         <b>Version</b> <?=System::$version;?>
     </div>
-    <strong>Copyright &copy; 2014-<?=date('Y');?> <a href="https://genix.id" target="_blank">GeniXCMS</a>.</strong> All rights
+    <strong>Copyright &copy; 2014-<?=date('Y');?> <a href="https://genix.me" target="_blank">GeniXCMS</a>.</strong> All rights
     reserved.
     <?php
     $end_time = microtime(true);

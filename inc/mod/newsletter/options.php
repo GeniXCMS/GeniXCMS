@@ -1,5 +1,6 @@
 <?php
 Theme::editor();
+$data = [];
 if (isset($_POST['sendmail'])) {
     // check token first
     $token = Typo::cleanX($_POST['token']);
