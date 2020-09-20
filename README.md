@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.7.
+> Update Notice: Please Update to version v1.1.8.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
@@ -106,7 +106,7 @@ define('USE_MEMCACHED', false);
 ### Showcase
 
 Showcase URL :
-- [http://demo.genix.id](http://demo.genix.id)
+- [https://demo.genix.me](https://demo.genix.me)
 
 
 ### License
@@ -116,7 +116,7 @@ Showcase URL :
 
 ### Website
 
-Link : [http://genix.id](http://genix.id)
+Link : [https://genix.me](https://genix.me)
 
 
 ### Donate
@@ -126,4 +126,4 @@ Contact us for Donation.
 
 ### Developer
 
-Developed by : Puguh Wijayanto - [metalgenix.com](http://metalgenix.com)
+Developed by : Puguh Wijayanto - [](https://github.com/semplon)

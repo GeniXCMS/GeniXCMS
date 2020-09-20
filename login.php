@@ -6,13 +6,13 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @link https://github.com/semplon/GeniXCMS
- * @link http://genix.id
+ * 
  *
  * @author Puguh Wijayanto <psw@metalgenix.com>
- * @copyright 2014-2019 Puguh Wijayanto
+ * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -34,7 +34,7 @@ try {
 
 if (!isset($_GET['backto']) && isset($_SERVER['HTTP_REFERER'])) {
     $url = str_replace(Site::$url.'login.php?backto=', '', $_SERVER['HTTP_REFERER']);
-    header('Location: '.Site::$url.'login.php?backto='.$url);   
+    header('Location: '.Site::$url.'login.php?backto='.urlencode($url));   
 } elseif (!isset($_GET['backto']) && !isset($_SERVER['HTTP_REFERER'])) {
     header('Location: '.Site::$url.'login.php?backto='.Site::$url);
 }
@@ -166,7 +166,7 @@ if (!User::isLoggedin()) {
 
 <?php
 } else {
-    $backto = isset($_GET['backto']) ? $_GET['backto']: Site::$url; 
+    $backto = isset($_GET['backto']) ? Typo::cleanX($_GET['backto']): Site::$url; 
     header("Location: ".$backto);
 }
 echo '</div>';
