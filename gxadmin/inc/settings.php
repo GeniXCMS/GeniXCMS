@@ -49,7 +49,7 @@
                 <li><a href="#logo" role="tab" data-toggle="tab"><?=LOGO;?></a></li>
                 <li><a href="#library" role="tab" data-toggle="tab"><?=LIBRARY;?></a></li>
                 <li><a href="#posts" role="tab" data-toggle="tab"><?=POSTS;?></a></li>
-                <li><a href="#payment" role="tab" data-toggle="tab"><?=PAYMENT;?></a></li>
+                <!-- <li><a href="#payment" role="tab" data-toggle="tab"><?=PAYMENT;?></a></li> -->
                 <li><a href="#security" role="tab" data-toggle="tab"><?=SECURITY;?></a></li>
             </ul>
 

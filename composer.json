@@ -21,16 +21,8 @@
         "phpmailer/phpmailer": "6.1.7",
         "kissifrot/php-ixr": "1.8.3",
         "google/recaptcha": "1.2.4",
-        "omnipay/common": "v3.0.4",
-        "omnipay/paypal": "v3.0.2",
         "studio-42/elfinder": "2.1.57",
-        "league/oauth2-client": "2.5.0",
         "league/oauth2-google": "3.0.3",
-        "symfony/dependency-injection": "v5.1.5",
-        "symfony/http-kernel": "v5.1.5",
-        "guzzlehttp/guzzle": "6.5.5",
-        "angelleye/paypal-php-library": "3.0.5",
-        "php-http/guzzle6-adapter": "v2.0.1",
         "ezyang/htmlpurifier": "v4.13.0"
     }
 }

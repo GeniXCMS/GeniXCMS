@@ -1,4 +1,4 @@
-# GeniXCMS
+# GeniXCMS-LITE
 > Update Notice: Please Update to version v1.1.8.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
