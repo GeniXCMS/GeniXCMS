@@ -1,7 +1,8 @@
 # GeniXCMS
 > Update Notice: Please Update to version v1.1.8.
 
-[![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
+[![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS?ref=badge_shield)
+
 [![CircleCI](https://circleci.com/gh/semplon/GeniXCMS.svg?style=shield&circle-token=c2ef105b7d61e90dadd066ad0e25e3f53d97c6c1)](https://circleci.com/gh/semplon/GeniXCMS)
 [![wercker status](https://app.wercker.com/status/69ad23cfc66fab2f4155d69bf4d47d0d/s "wercker status")](https://app.wercker.com/project/bykey/69ad23cfc66fab2f4155d69bf4d47d0d)
 [![Codeship](https://codeship.com/projects/64d60110-3e1c-0133-6054-5a0949beaeb8/status?branch=master)](https://codeship.com/projects/102695)
@@ -113,6 +114,9 @@ Showcase URL :
 
 **GeniXCMS** License : [**MIT License**](LICENSE)
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS?ref=badge_large)
 
 ### Website
 
