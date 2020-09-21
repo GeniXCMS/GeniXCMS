@@ -1,58 +1,5 @@
 [
     {
-        "name": "angelleye/paypal-php-library",
-        "version": "v3.0.5",
-        "version_normalized": "3.0.5.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/angelleye/paypal-php-library.git",
-            "reference": "5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/angelleye/paypal-php-library/zipball/5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf",
-            "reference": "5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "paypal/rest-api-sdk-php": "*",
-            "php": ">=5.3.0"
-        },
-        "time": "2020-07-01T18:36:47+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "angelleye\\PayPal": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0+"
-        ],
-        "authors": [
-            {
-                "name": "Angell EYE",
-                "email": "service@angelleye.com",
-                "homepage": "https://github.com/angelleye/paypal-php-library/graphs/contributors"
-            }
-        ],
-        "description": "PHP wrapper for PayPal APIs",
-        "homepage": "https://github.com/angelleye/paypal-php-library",
-        "keywords": [
-            "adaptive payments",
-            "angelleye",
-            "api",
-            "express checkout",
-            "invoicing",
-            "payflow",
-            "payments pro",
-            "paypal",
-            "rest"
-        ]
-    },
-    {
         "name": "clue/stream-filter",
         "version": "v1.4.1",
         "version_normalized": "1.4.1.0",
@@ -845,58 +792,6 @@
             "pseudorandom",
             "random"
         ]
-    },
-    {
-        "name": "paypal/rest-api-sdk-php",
-        "version": "1.14.0",
-        "version_normalized": "1.14.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/paypal/PayPal-PHP-SDK.git",
-            "reference": "72e2f2466975bf128a31e02b15110180f059fc04"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/paypal/PayPal-PHP-SDK/zipball/72e2f2466975bf128a31e02b15110180f059fc04",
-            "reference": "72e2f2466975bf128a31e02b15110180f059fc04",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "ext-json": "*",
-            "php": ">=5.3.0",
-            "psr/log": "^1.0.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8.35"
-        },
-        "time": "2019-01-04T20:04:25+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "PayPal": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "PayPal",
-                "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
-            }
-        ],
-        "description": "PayPal's PHP SDK for REST APIs",
-        "homepage": "http://paypal.github.io/PayPal-PHP-SDK/",
-        "keywords": [
-            "payments",
-            "paypal",
-            "rest",
-            "sdk"
-        ],
-        "abandoned": true
     },
     {
         "name": "php-http/discovery",

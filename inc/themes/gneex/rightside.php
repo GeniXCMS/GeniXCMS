@@ -66,9 +66,8 @@
               </div>
               <div class="panel-body">
                 <ol class="list-unstyled">
-                  <li><a href="http://metalgenix.com">MetalGeniX</a></li>
-                  <li><a href="http://genix.id">GeniXCMS</a></li>
-                  <li><a href="http://docs.genix.id">GeniXCMS Docs</a></li>
+                  <li><a href="http://genix.me">GeniXCMS</a></li>
+                  <li><a href="http://docs.genix.me">GeniXCMS Docs</a></li>
                 </ol>
               </div>
               

@@ -250,20 +250,6 @@ class ComposerStaticInitb0c97bd9f2eeb278d17396dd6e6a9a25
     );
 
     public static $prefixesPsr0 = array (
-        'a' => 
-        array (
-            'angelleye\\PayPal' => 
-            array (
-                0 => __DIR__ . '/..' . '/angelleye/paypal-php-library/src',
-            ),
-        ),
-        'P' => 
-        array (
-            'PayPal' => 
-            array (
-                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
-            ),
-        ),
         'H' => 
         array (
             'HTMLPurifier' => 
