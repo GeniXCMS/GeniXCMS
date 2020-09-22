@@ -7,10 +7,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 1.0.0 build date 20160804
- * @version 1.1.9
+ * @version 1.1.10
  * @link https://github.com/semplon/GeniXCMS
  * 
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */

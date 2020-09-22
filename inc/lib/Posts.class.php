@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -691,7 +691,7 @@ class Posts
         $q = Db::result($sql);
 
         $slnum = str_replace($slug, '', $q[0]->slug);
-        $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): '0';
+        $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): 0;
 
         return $slnum;
 

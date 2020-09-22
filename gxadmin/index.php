@@ -6,12 +6,12 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -20,7 +20,7 @@ date_default_timezone_set('UTC');
 /*
  * Set Directories. This will set the directories first before load all
  * libraries.
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @since 0.0.1
  */
 define('GX_PATH', realpath(__DIR__.'/../'));
@@ -33,7 +33,7 @@ define('GX_ASSET', GX_PATH.'/assets/');
  * Libraries Loader Function. This will load all libraries inside the inc/lib
  * directory.
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -41,7 +41,7 @@ require '../autoload.php';
 
 /*
  * Run the Main caller at GxMain Class. This will call the Backend Controller.
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @since 0.0.1
  */
 try {

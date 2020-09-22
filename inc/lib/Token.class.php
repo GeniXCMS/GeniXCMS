@@ -6,12 +6,12 @@
  *
  * @since 0.0.2 build date 20150309
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */
@@ -19,7 +19,7 @@
 /**
  * Token Class.
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.2
  */

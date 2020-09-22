@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -23,7 +23,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class is the main class for call all the necessary controller.
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -35,7 +35,7 @@ class GxMain
      * This will check the config file at inc/config/config.php exist or not
      * if not exist, run the installation proccess.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -53,7 +53,7 @@ class GxMain
      *
      * This will load the frontpage controller.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -68,7 +68,7 @@ class GxMain
      * This will load the backend controller. Secured, so to access it must be
      * logged in with a current privilege. Default privilege is 2.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -92,7 +92,7 @@ class GxMain
      *
      * This will load the install controller.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */

@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -297,9 +297,9 @@ if (User::access(0)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
 
-                        $menuid = Typo::cleanX(Typo::strip(Typo::filterXss($_POST['id'])));
-                        $name = Typo::cleanX(Typo::strip(Typo::filterXss($_POST['name'])));
-                        $class = Typo::cleanX(Typo::filterXss($_POST['class']));
+                        $menuid = Typo::jsonFormat(Typo::strip($_POST['id']));
+                        $name = Typo::jsonFormat(Typo::strip($_POST['name']));
+                        $class = Typo::jsonFormat(Typo::strip($_POST['class']));
                         $menu = array(
                                 $menuid => array(
                                             'name' => $name,
@@ -313,6 +313,7 @@ if (User::access(0)) {
                         }
 
                         $menu = json_encode($menu);
+                        // echo $menu;
                         Options::update('menus', $menu);
                         new Options();
                         $data['alertSuccess'][] = 'Menu Added';
@@ -404,8 +405,7 @@ if (User::access(0)) {
 
                 // CHANGE ORDER END
 
-                $data['menus'] = Options::get('menus');
-//                print_r($data['menus']);
+                $data['menus'] = Options::get('menus', false);
                 Theme::admin('header', $data);
                 System::inc('menus', $data);
                 Theme::admin('footer');

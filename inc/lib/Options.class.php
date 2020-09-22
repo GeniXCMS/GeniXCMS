@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141001
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -71,12 +71,12 @@ class Options
         return $post;
     }
 
-    public static function get($vars)
+    public static function get($vars, $decode = true)
     {
         $vars = Typo::cleanX($vars);
         $op = Db::result("SELECT `value` FROM `options` WHERE `name` = '{$vars}' LIMIT 1");
         if (Db::$num_rows > 0) {
-            return Typo::Xclean($op[0]->value);
+            return ($decode == true ) ? Typo::Xclean($op[0]->value): $op[0]->value;
         } else {
             return false;
         }

@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.9';
+    public static $version = '1.1.10';
 
     /**
      * GeniXCMS Version Release.
@@ -42,7 +42,7 @@ class System
      * System Constructor.
      * Initializing the system, check the config file.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -52,11 +52,8 @@ class System
         /* Load config file */
         self::config('config');
 
-        /* Start the session */
-        Session::start();
-
         /* Initiate database */
-        new Db();
+        new Db();      
 
         /* Initiate Hooks system */
         new Hooks();
@@ -75,10 +72,12 @@ class System
 
         /* Initiate Sites variables */
         new Site();
+
         /* Initiate HTTP variables */
         new Http();
 
-        
+        /* Start the session */
+        Session::start();
 
         /* Initiate System Language */
         self::lang(Options::v('system_lang'));
@@ -115,7 +114,7 @@ class System
      * System Library Loader.
      * This will include library which is called.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */

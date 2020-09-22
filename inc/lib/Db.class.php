@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -23,7 +23,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class will process the database queries, including Create, Edit, Delete
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -50,7 +50,7 @@ class Db
      * This will initiate database connection before all
      * process.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -102,7 +102,7 @@ class Db
      * This is called during the installation process. Using mysqli because of
      * the deprecation of mysql.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -141,7 +141,7 @@ class Db
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -171,7 +171,7 @@ class Db
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -247,7 +247,7 @@ class Db
      *
      * @param array $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -289,7 +289,7 @@ class Db
      *
      * @param array $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -347,7 +347,7 @@ class Db
      *
      * @param array $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */

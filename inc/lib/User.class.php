@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -36,6 +36,7 @@ class User
     {
         if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username'])) {
             header('Location: '.Site::$url.'login.php');
+            // print_r($_SESSION);
             exit;
         } else {
 
@@ -56,8 +57,7 @@ class User
 
     public static function isLoggedin()
     {
-        $username = Session::val('username');
-        if (isset($username)) {
+        if (isset($_SESSION['gxsess']['val']['loggedin']) && $_SESSION['gxsess']['val']['loggedin'] == 1) {
             $v = true;
         } else {
             $v = false;

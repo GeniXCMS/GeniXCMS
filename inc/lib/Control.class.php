@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -23,7 +23,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class will proccess the controller
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -40,7 +40,7 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -55,7 +55,7 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -78,7 +78,7 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -96,7 +96,7 @@ class Control
      * Control Frontend Handler Function. This will handle the controller which
      * file will be included at the Frontend controller.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      * Add New SMART URL handler for better and simple router.
@@ -193,7 +193,7 @@ class Control
      * Control Backend Handler Function. This will handle the controller which
      * file will be included at the Backend controller.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -213,7 +213,7 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -232,7 +232,7 @@ class Control
     /**
      * Control Install Handler Function. This will handle the Install page.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */

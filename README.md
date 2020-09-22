@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.9.
+> Update Notice: Please Update to version v1.1.10.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 
@@ -130,7 +130,7 @@ Contact us for Donation.
 
 ### Developer
 
-Developed by : Puguh Wijayanto - [](https://github.com/semplon)
+Developed by : Puguh Wijayanto - [https://github.com/semplon](https://github.com/semplon)
 
 ### Suported By 
 

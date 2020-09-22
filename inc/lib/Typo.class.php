@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -24,7 +24,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class will process text modifier, including sanitizing, slug, strip
  * tags, create random characters.
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -263,12 +263,14 @@ class Typo
 
     public static function jsonFormat($var)
     {
+        // $var = self::cleanX($var);
         $var = str_replace("\r\n", "\n", $var);
         $var = str_replace("\r", "\n", $var);
 
         // // // JSON requires new line characters be escaped
         $var = str_replace("\n", '\\n', $var);
         $var = str_replace("'", '\\u0027', $var);
+        // $var = str_replace('"', '\\u0022', $var);
         $var = preg_replace_callback(
             '/<([^<>]+)>/',
             function ($matches) {
@@ -287,7 +289,7 @@ class Typo
         $var = str_replace('/>', ' />', $var);
         $var = str_replace('</', '<\/', $var);
 
-        $var = self::cleanX($var);
+        
         $var = str_replace('\&', '&', $var);
 
         return $var;

@@ -10,5 +10,5 @@ define('GX_ASSET', GX_PATH.'/assets/');
 
 require 'autoload.php';
 
-$str = Typo::cleanX("';alert(String.fromCharCode(88,83,83))//\';alert(String.fromCharCode(88,83,83))//\";alert(String.fromCharCode(88,83,83))\/\/\";alert(String.fromCharCode(88,83,83))//--></SCRIPT>\">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>=&{}");
+$str = Typo::jsonFormat('"><script src=x onerror=confirm(2);>');
 echo $str;

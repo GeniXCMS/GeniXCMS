@@ -6,12 +6,12 @@
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -36,27 +36,28 @@
             <div class="col-sm-12">
             <?php
             if (isset($data['menus']) && $data['menus'] != '') {
-                foreach (json_decode($data['menus']) as $k => $m) {
+                $menus = json_decode(Typo::Xclean($data['menus']), true);
+                foreach ($menus as $k => $m) {
                     echo "
                         <div class=\"box-group\" id=\"accordion\">
                           <div class=\"panel box box-primary\">
                             <div class=\"box-header with-border\">
                               <div class=\"panel-title clearfix\">
-                                <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#$k\">
+                                <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#{$k}\">
                                     <div class=\"col-md-4\">
-                                        <h4><strong>$m->name </strong></h4>
+                                        <h4><strong>{$m['name']} </strong></h4>
                                     </div>
                                     <div class=\"col-md-4 box-title\">
                                         <h4>
                                         <small>
-                                            <em>$k</em>
+                                            <em>{$k}</em>
                                         </small>
                                         </h4>
                                     </div>
                                 </a>
                                 <div class=\"col-md-3\">
                                     <div class=\"input-group\">
-                                        <input type=\"text\" value=\"$m->class\" placeholder=\"Class Style\" class=\"form-control\">
+                                        <input type=\"text\" value=\"{$m['class']}\" placeholder=\"Class Style\" class=\"form-control\">
                                         <span class=\"input-group-btn\">
                                         <button name=\"editclass\" type=\"submit\" class=\"btn btn-default\">
                                             Go!
@@ -70,7 +71,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div id=\"$k\" class=\"panel-collapse collapse\">
+                            <div id=\"{$k}\" class=\"panel-collapse collapse\">
                                 <div class=\"panel-body\">
                                     <!-- Nav tabs -->
                                         <ul class=\"nav nav-tabs\" role=\"tablist\">

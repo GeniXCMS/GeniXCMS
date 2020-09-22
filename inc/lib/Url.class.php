@@ -8,12 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.9
+ * @version 1.1.10
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  * @copyright 2014-2020 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
@@ -24,7 +24,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class will create all the URL format automatically for Posts, Categories,
  * pages, sitemap, rss.
  *
- * @author Puguh Wijayanto <psw@metalgenix.com>
+ * @author Puguh Wijayanto <metalgenix@gmail.com>
  *
  * @since 0.0.1
  */
@@ -40,7 +40,7 @@ class Url
      * This will create the posts url automatically based on
      * the SMART_URL will formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -79,7 +79,7 @@ class Url
      * This will create the pages url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -118,7 +118,7 @@ class Url
      * This will create the categories url automatically based on the SMART_URL
      * will formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -143,7 +143,7 @@ class Url
      *
      * This will create the custom url. It will result as is.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -160,7 +160,7 @@ class Url
      * This will create the sitemap url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -187,7 +187,7 @@ class Url
      * This will create the rss url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -212,7 +212,7 @@ class Url
      *
      * This will load the url slug from the database according to the posts id.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.1
      */
@@ -230,7 +230,7 @@ class Url
      * This will create the flag url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 0.0.7
      */
@@ -277,7 +277,7 @@ class Url
      * This will create the ajax url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 1.0.0
      */
@@ -303,7 +303,7 @@ class Url
      * This will create the tags url automatically based on the SMART_URL will
      * formatted as friendly url if SMART_URL is set to true.
      *
-     * @author Puguh Wijayanto <psw@metalgenix.com>
+     * @author Puguh Wijayanto <metalgenix@gmail.com>
      *
      * @since 1.0.0
      */
