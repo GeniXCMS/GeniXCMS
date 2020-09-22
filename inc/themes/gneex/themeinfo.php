@@ -3,7 +3,7 @@
  * Name: GneeX Theme
  * Desc: Default GeniXCMS Themes
  * Version: 1.1.3
- * Build: 1.1.8
+ * Build: 1.1.9
  * Developer: GeniXCMS
  * URI: https://genix.me
  * License: MIT License
