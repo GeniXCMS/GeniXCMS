@@ -4,59 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d64f9593e5294bfb23a787164fac1275",
+    "content-hash": "2f9d564be3ea1f8417a6efb2b1e7a278",
     "packages": [
-        {
-            "name": "angelleye/paypal-php-library",
-            "version": "v3.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/angelleye/paypal-php-library.git",
-                "reference": "5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/angelleye/paypal-php-library/zipball/5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf",
-                "reference": "5ca1bd1a92a24bd69d6ac7ddcd2fcfd7f17655cf",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "paypal/rest-api-sdk-php": "*",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "angelleye\\PayPal": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Angell EYE",
-                    "email": "service@angelleye.com",
-                    "homepage": "https://github.com/angelleye/paypal-php-library/graphs/contributors"
-                }
-            ],
-            "description": "PHP wrapper for PayPal APIs",
-            "homepage": "https://github.com/angelleye/paypal-php-library",
-            "keywords": [
-                "adaptive payments",
-                "angelleye",
-                "api",
-                "express checkout",
-                "invoicing",
-                "payflow",
-                "payments pro",
-                "paypal",
-                "rest"
-            ],
-            "time": "2020-07-01T18:36:47+00:00"
-        },
         {
             "name": "clue/stream-filter",
             "version": "v1.4.1",
@@ -824,56 +773,6 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
-        },
-        {
-            "name": "paypal/rest-api-sdk-php",
-            "version": "1.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/PayPal-PHP-SDK.git",
-                "reference": "72e2f2466975bf128a31e02b15110180f059fc04"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/PayPal-PHP-SDK/zipball/72e2f2466975bf128a31e02b15110180f059fc04",
-                "reference": "72e2f2466975bf128a31e02b15110180f059fc04",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=5.3.0",
-                "psr/log": "^1.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PayPal": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
-                }
-            ],
-            "description": "PayPal's PHP SDK for REST APIs",
-            "homepage": "http://paypal.github.io/PayPal-PHP-SDK/",
-            "keywords": [
-                "payments",
-                "paypal",
-                "rest",
-                "sdk"
-            ],
-            "abandoned": true,
-            "time": "2019-01-04T20:04:25+00:00"
         },
         {
             "name": "php-http/discovery",

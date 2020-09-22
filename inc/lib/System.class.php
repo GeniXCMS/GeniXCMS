@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.8
+ * @version 1.1.9
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.8';
+    public static $version = '1.1.9';
 
     /**
      * GeniXCMS Version Release.
@@ -52,6 +52,9 @@ class System
         /* Load config file */
         self::config('config');
 
+        /* Start the session */
+        Session::start();
+
         /* Initiate database */
         new Db();
 
@@ -75,8 +78,7 @@ class System
         /* Initiate HTTP variables */
         new Http();
 
-        /* Start the session */
-        Session::start();
+        
 
         /* Initiate System Language */
         self::lang(Options::v('system_lang'));

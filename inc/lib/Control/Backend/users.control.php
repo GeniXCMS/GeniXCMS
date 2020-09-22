@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.8
+ * @version 1.1.9
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
@@ -250,7 +250,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $pass2 = Typo::strip($_POST['pass2']);
 
                         $token = Typo::cleanX($_POST['token']);
-                        if (!isset($_POST['token']) || !Token::isExist($token)) {
+                        if (!isset($_POST['token']) || !Token::validate($token)) {
                             // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }

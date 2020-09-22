@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.8
+ * @version 1.1.9
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
@@ -54,7 +54,7 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 1.1.8
+ * @version 1.1.9
  * @link https://github.com/semplon/GeniXCMS
  * 
  * @author Puguh Wijayanto (www.metalgenix.com)
