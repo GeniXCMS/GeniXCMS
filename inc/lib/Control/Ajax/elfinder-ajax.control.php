@@ -4,7 +4,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 $data = Router::scrap($param);
 //print_r($data);
 $gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
-$token = (Token::isExist($gettoken)) ? TOKEN: '';
+$token = (Token::validate($gettoken)) ? $gettoken: '';
 $url = Site::canonical();
 if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
     $vendorPath = Vendor::path('studio-42/elfinder');
