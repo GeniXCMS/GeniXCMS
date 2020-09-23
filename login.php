@@ -172,8 +172,5 @@ if (!User::isLoggedin()) {
 echo '</div>';
 
 Theme::theme('footer', $data);
-echo "<pre>";
-print_r($_SERVER);
-echo "</pre>";
 System::Zipped();
 ?>
