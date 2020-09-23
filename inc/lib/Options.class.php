@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141001
  *
- * @version 1.1.10
+ * @version 1.1.11
  *
  * @link https://github.com/semplon/GeniXCMS
  * 

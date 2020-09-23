@@ -6,7 +6,7 @@
  *
  * @since 0.0.2 build date 20150309
  *
- * @version 1.1.10
+ * @version 1.1.11
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
@@ -42,8 +42,8 @@ class Token
         for ($i = 0; $i < $length; ++$i) {
             $token .= $codeAlphabet[Typo::crypto_rand_secure(0, strlen($codeAlphabet))];
         }
-        
-        $url = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
+        $url = $protocol."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $ip = $_SERVER['REMOTE_ADDR'];
         $time = time();
@@ -151,7 +151,8 @@ class Token
     }
 
     public static function isValid($token) {
-        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
+        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $pairing = md5($url);
         $tokens = json_decode(Typo::Xclean(Options::get('tokens')), true);

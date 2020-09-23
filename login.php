@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.10
+ * @version 1.1.11
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
@@ -172,5 +172,8 @@ if (!User::isLoggedin()) {
 echo '</div>';
 
 Theme::theme('footer', $data);
+echo "<pre>";
+print_r($_SERVER);
+echo "</pre>";
 System::Zipped();
 ?>

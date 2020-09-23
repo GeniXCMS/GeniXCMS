@@ -1,5 +1,5 @@
 # GeniXCMS
-> Update Notice: Please Update to version v1.1.10.
+> Update Notice: Please Update to version v1.1.11.
 
 [![Build Status](https://travis-ci.org/semplon/GeniXCMS.svg?branch=master)](https://travis-ci.org/semplon/GeniXCMS)
 
