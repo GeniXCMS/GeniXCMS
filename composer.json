@@ -23,7 +23,7 @@
         "google/recaptcha": "1.2.4",
         "omnipay/common": "v3.0.4",
         "omnipay/paypal": "v3.0.2",
-        "studio-42/elfinder": "2.1.57",
+        "studio-42/elfinder": "2.1.59",
         "league/oauth2-client": "2.5.0",
         "league/oauth2-google": "3.0.3",
         "symfony/dependency-injection": "v5.1.5",
