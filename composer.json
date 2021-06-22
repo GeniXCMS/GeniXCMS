@@ -18,7 +18,7 @@
     },
     "require": {
         "php": ">=7.2.5",
-        "phpmailer/phpmailer": "6.1.7",
+        "phpmailer/phpmailer": "6.5.0",
         "kissifrot/php-ixr": "1.8.3",
         "google/recaptcha": "1.2.4",
         "omnipay/common": "v3.0.4",
