@@ -28,7 +28,7 @@
         "league/oauth2-google": "3.0.3",
         "symfony/dependency-injection": "v5.1.5",
         "symfony/http-kernel": "v5.1.5",
-        "guzzlehttp/guzzle": "6.5.5",
+        "guzzlehttp/guzzle": "6.5.8",
         "php-http/guzzle6-adapter": "v2.0.1",
         "ezyang/htmlpurifier": "v4.13.0"
     }
