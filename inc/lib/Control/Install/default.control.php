@@ -8,18 +8,20 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 date_default_timezone_set('UTC');
 //define('SITE_ID', Typo::getToken(20));
+new Http();
+
 !defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
 
 echo '<h2>Install Page</h2>';
@@ -100,12 +102,12 @@ switch ($step) {
                             'email' => Session::val('adminuser') . '@' . Session::val('sitedomain'),
                             'group' => '0',
                             'join_date' => date('Y-m-d H:i:s'),
-                            'status' => '1',
+                            'status' => '1'
                             ),
                         'detail' => array(
                             'userid' => Session::val('adminuser'),
-                            'fname' => Session::val('adminname'),
-                            ),
+                            'fname' => Session::val('adminname')
+                            )
                         );
                 User::create($vars);
 

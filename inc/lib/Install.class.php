@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -54,21 +54,21 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 1.1.11
+ * @version 1.1.12
  * @link https://github.com/semplon/GeniXCMS
  * 
  * @author Puguh Wijayanto (www.metalgenix.com)
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  *
-*/error_reporting(0);
+*/error_reporting(E_ALL);
 
 // DB CONFIG
 define('DB_HOST', '".Session::val('dbhost')."');
 define('DB_NAME', '".Session::val('dbname')."');
 define('DB_PASS', '".Session::val('dbpass')."');
 define('DB_USER', '".Session::val('dbuser')."');
-define('DB_DRIVER', 'mysqli');
+!defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
 
 define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
 define('GX_URL_PREFIX', '.html');

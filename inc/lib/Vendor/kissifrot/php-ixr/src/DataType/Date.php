@@ -29,29 +29,14 @@ class Date
         $this->dateTime = $date->setTimestamp($timestamp);
     }
 
-    private function parseIso($iso)
-    {
-        $formats = [
-            \DateTime::ATOM,
-            /* The older version of IXR_Date (which is still used in e.g. WordPress) does not parse
-             * iso8601 dates using DateTime::createFromFormat(DateTime::ATOM,..),
-             * but using substr() with fixed offsets.
-             * The parser does not expect dashes between year, month and day.
-             * To be compatible with wordpress clients, lets mimic the behaviour here. */
-            // with timezone
-            'Ymd\TH:i:sP',
-            'Ymd\THisP',
-            // without timezone
-            'Ymd\TH:i:s',
-            'Ymd\THis',
-        ];
-
-        foreach ($formats as $format) {
-            $this->dateTime = \DateTime::createFromFormat($format, $iso);
-            if ($this->dateTime !== false) {
-                break;
-            }
-        }
+    /**
+     * Parses more or less complete iso dates and much more, if no timezone given assumes UTC
+     *
+     * @param string $iso
+     * @throws \Exception when no valid date is given
+     */
+    protected function parseIso($iso) {
+        $this->dateTime = new \DateTime($iso, new \DateTimeZone('UTC'));
     }
 
     public function getIso()

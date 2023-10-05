@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class User
@@ -98,7 +98,7 @@ class User
         if (is_array($vars)) {
             //print_r($vars['user']);
             $ip = [ 'ipaddress' => $_SERVER['REMOTE_ADDR'] ];
-            $ipCountry = (!Http::isLocal($ip)) ? Http::getIpCountry($ip): '';
+            $ipCountry = (!Http::isLocal($_SERVER['REMOTE_ADDR'])) ? Http::getIpCountry($_SERVER['REMOTE_ADDR']): '';
             $u = $vars['user'];
             $u = array_merge($ip, $u);
             $sql = array(
@@ -106,6 +106,7 @@ class User
                 'key' => $u,
             );
             $db = Db::insert($sql);
+
 
             if (!isset($vars['detail']) || $vars['detail'] == '') {
                 Db::insert("INSERT INTO `user_detail` (`userid`, `country`) VALUES ('{$vars['user']['userid']}', '{$ipCountry}')");

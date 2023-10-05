@@ -10,9 +10,9 @@ namespace Http\Message;
 final class CookieJar implements \Countable, \IteratorAggregate
 {
     /**
-     * @var \SplObjectStorage
+     * @var \SplObjectStorage<Cookie, mixed>
      */
-    protected $cookies;
+    private $cookies;
 
     public function __construct()
     {
@@ -92,7 +92,7 @@ final class CookieJar implements \Countable, \IteratorAggregate
      *
      * @return Cookie[]
      */
-    protected function findMatchingCookies(callable $match)
+    private function findMatchingCookies(callable $match)
     {
         $cookies = [];
 
@@ -195,6 +195,7 @@ final class CookieJar implements \Countable, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->cookies->count();
@@ -203,6 +204,7 @@ final class CookieJar implements \Countable, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return clone $this->cookies;

@@ -102,7 +102,7 @@ class Message
     public function tagOpen($parser, $tag, $attr)
     {
         $this->_currentTagContents = '';
-        $this->currentTag = $tag;
+        $this->_currentTag = $tag;
         switch ($tag) {
             case 'methodCall':
             case 'methodResponse':
@@ -150,7 +150,7 @@ class Message
                 $valueFlag = true;
                 break;
             case 'string':
-                $value = (string)trim($this->_currentTagContents);
+                $value = (string)($this->_currentTagContents);
                 $valueFlag = true;
                 break;
             case 'dateTime.iso8601':

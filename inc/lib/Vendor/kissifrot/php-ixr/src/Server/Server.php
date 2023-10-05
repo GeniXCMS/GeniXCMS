@@ -77,40 +77,27 @@ EOD;
             return new Error(-32601, 'server error. requested method ' . $methodname . ' does not exist.');
         }
         $method = $this->callbacks[$methodname];
-
         // Perform the callback and send the response
-        if (count($args) == 1) {
-            // If only one paramater just send that instead of the whole array
+
+        if (is_array($args) && count($args) == 1) {
+            // If only one parameter just send that instead of the whole array
             $args = $args[0];
         }
 
-        // Are we dealing with a function or a method?
-        if (is_string($method) && substr($method, 0, 5) == 'this:') {
-            // It's a class method - check it exists
-            $method = substr($method, 5);
-            if (!method_exists($this, $method)) {
-                return new Error(-32601, 'server error. requested class method "' . $method . '" does not exist.');
+        try {
+            // Are we dealing with a function or a method?
+            if (is_string($method) && substr($method, 0, 5) === 'this:') {
+                // It's a class method - check it exists
+                $method = substr($method, 5);
+
+                return $this->$method($args);
             }
 
-            //Call the method
-            $result = $this->$method($args);
-        } else {
-            // It's a function - does it exist?
-            if (is_array($method)) {
-                if (!is_callable([$method[0], $method[1]])) {
-                    return new Error(-32601,
-                        'server error. requested object method "' . $method[1] . '" does not exist.');
-                }
-            } else {
-                if (!function_exists($method)) {
-                    return new Error(-32601, 'server error. requested function "' . $method . '" does not exist.');
-                }
-            }
-
-            // Call the function
-            $result = call_user_func($method, $args);
+            return call_user_func($method, $args);
+        } catch (\BadFunctionCallException $exception) {
+            return new Error(-32601, "server error. requested callable '{$method}' does not exist.");
         }
-        return $result;
+
     }
 
     public function error($error, $message = false)

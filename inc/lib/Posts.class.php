@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Posts
@@ -642,17 +642,26 @@ class Posts
             // get params
             $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$vars['id']}'";
             $r = Db::result($sql);
-            $arr = array();
-            foreach ($r as $k => $v) {
-                $arr[] = [ $v->param => $v->value ];
-            }
+            if (!isset($r['error'])){
+                $arr = array();
+                foreach ($r as $k => $v) {
+                    $arr[] = [ $v->param => $v->value ];
+                }
 
-            $arrM = array_merge($arrA, $arr);
-            $p = array();
-            foreach ($arrM as $i => $l) {
-                $p = array_merge($l, $p);
+                $arrM = array_merge($arrA, $arr);
+                $p = array();
+                foreach ($arrM as $i => $l) {
+                    $p = array_merge($l, $p);
+                }
+                $res[0] = (object)$p;
+            } else {
+                $p = array();
+                foreach ($arrA as $i => $l) {
+                    $p = array_merge($l, $p);
+                }
+                $res[0] = (object)$p;
             }
-            $res[0] = (object)$p;
+            
         } else {
             $res['error'] = "data not found";
         }

@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -95,27 +95,30 @@ class Http
 
     public static function isLocal($url)
     {
-        $data['url'] = $url;
-        $url_p = @parse_url($url);
-        $host = trim( $url_p['host'], '.' );
-        if ( filter_var($host, FILTER_VALIDATE_IP)) {
-            $ip = $host;
-        } else {
-            $ip = gethostbyname( $host );
-            if ( $ip === $host ) {
-                $ip = false;
+        if( $url != "::1") {
+            $data['url'] = $url;
+            $url_p = @parse_url($url);
+            $host = trim( $url_p['host'], '.' );
+            if ( filter_var($host, FILTER_VALIDATE_IP)) {
+                $ip = $host;
+            } else {
+                $ip = gethostbyname( $host );
+                if ( $ip === $host ) {
+                    $ip = false;
+                }
             }
-        }
 
-        if ($ip) {
-            $parts = array_map( 'intval', explode( '.', $ip ) );
-            if ( 127 === $parts[0] || 10 === $parts[0] || 0 === $parts[0]
-                || ( 172 === $parts[0] && 16 <= $parts[1] && 31 >= $parts[1] )
-                || ( 192 === $parts[0] && 168 === $parts[1] )
-            ) {
-                    return false;
+            if ($ip) {
+                $parts = array_map( 'intval', explode( '.', $ip ) );
+                if ( 127 === $parts[0] || 10 === $parts[0] || 0 === $parts[0]
+                    || ( 172 === $parts[0] && 16 <= $parts[1] && 31 >= $parts[1] )
+                    || ( 192 === $parts[0] && 168 === $parts[1] )
+                ) {
+                        return false;
+                }
             }
         }
+        
     }
 
     /**
@@ -226,11 +229,9 @@ class Http
 
     public static function varIpApi()
     {
-        $ipApi = [
-            'https://freegeoip.app/json/',
-            'https://freegeoip.live/json/',
-            'https://freegeoip.lwan.ws/json/',
-        ];
+        $ipApi = array(
+            'https://api.ipbase.com/v1/json/'
+        );
 
         return $ipApi;
     }

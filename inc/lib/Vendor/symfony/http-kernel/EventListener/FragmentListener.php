@@ -33,8 +33,8 @@ use Symfony\Component\HttpKernel\UriSigner;
  */
 class FragmentListener implements EventSubscriberInterface
 {
-    private $signer;
-    private $fragmentPath;
+    private UriSigner $signer;
+    private string $fragmentPath;
 
     /**
      * @param string $fragmentPath The path that triggers this listener
@@ -50,7 +50,7 @@ class FragmentListener implements EventSubscriberInterface
      *
      * @throws AccessDeniedHttpException if the request does not come from a trusted IP
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -65,7 +65,7 @@ class FragmentListener implements EventSubscriberInterface
             return;
         }
 
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             $this->validateRequest($request);
         }
 
@@ -75,7 +75,7 @@ class FragmentListener implements EventSubscriberInterface
         $request->query->remove('_path');
     }
 
-    protected function validateRequest(Request $request)
+    protected function validateRequest(Request $request): void
     {
         // is the Request safe?
         if (!$request->isMethodSafe()) {

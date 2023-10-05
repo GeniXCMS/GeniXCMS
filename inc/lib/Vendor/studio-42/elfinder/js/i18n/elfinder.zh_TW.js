@@ -1,9 +1,11 @@
 /**
- * Traditional Chinese translation
+ * 正體中文 translation
  * @author Yuwei Chuang <ywchuang.tw@gmail.com>
  * @author Danny Lin <danny0838@gmail.com>
  * @author TCC <john987john987@gmail.com>
- * @version 2017-09-28
+ * @author Rick Jiang <rick.jiang@aol.com&gt
+ * @author Banny Tai <cssf998811@gmail.com>
+ * @version 2023-06-02
  */
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -15,12 +17,12 @@
 	}
 }(this, function(elFinder) {
 	elFinder.prototype.i18.zh_TW = {
-		translator : 'Yuwei Chuang &lt;ywchuang.tw@gmail.com&gt;, Danny Lin &lt;danny0838@gmail.com&gt;, TCC &lt;john987john987@gmail.com&gt;',
+		translator : 'Yuwei Chuang &lt;ywchuang.tw@gmail.com&gt;, Danny Lin &lt;danny0838@gmail.com&gt;, TCC &lt;john987john987@gmail.com&gt;, Rick Jiang &lt;rick.jiang@aol.com&gt, Banny Tai &lt;cssf998811@gmail.com&gt;',
 		language   : '正體中文',
 		direction  : 'ltr',
-		dateFormat : 'Y/m/d H:i', // Mar 13, 2012 05:27 PM
-		fancyDateFormat : '$1 H:i', // will produce smth like: Today 12:25 PM
-		nonameDateFormat : 'ymd-His', // to apply if upload file is noname: 120513172700
+		dateFormat : 'Y/m/d H:i', // will show like: 2023/06/02 09:48
+		fancyDateFormat : '$1 H:i', // will show like: 今天 09:48
+		nonameDateFormat : 'ymd-His', // noname upload will show like: 230602-094822
 		messages   : {
 
 			/********************************** errors **********************************/
@@ -116,6 +118,8 @@
 			'errEditorNotFound'    : '編輯器找不到此文件類型。', // from v2.1.25 added 23.5.2017
 			'errServerError'       : '服務器發生錯誤。', // from v2.1.25 added 16.6.2017
 			'errEmpty'             : '無法清空"$1"文件夾', // from v2.1.25 added 22.6.2017
+			'moreErrors'           : '發生 $1 個錯誤.', // from v2.1.44 added 9.12.2018
+			'errMaxMkdirs'         : '一次最多可以創建 $1 個文件夾。', // from v2.1.58 added 20.6.2021
 
 			/******************************* commands names ********************************/
 			'cmdarchive'   : '建立壓縮檔',
@@ -163,6 +167,8 @@
 			'cmdselectall' : '全選', // from v2.1.28 added 15.08.2017
 			'cmdselectnone': '取消選取', // from v2.1.28 added 15.08.2017
 			'cmdselectinvert': '反向選取', // from v2.1.28 added 15.08.2017
+			'cmdopennew'   : '在新視窗開啟', // from v2.1.38 added 3.4.2018
+			'cmdhide'      : '隱藏（偏好）', // from v2.1.41 added 24.7.2018
 
 			/*********************************** buttons ***********************************/
 			'btnClose'  : '關閉',
@@ -224,6 +230,7 @@
 			'ntfchkdir'   : '正在檢查目標資料夾', // from v2.1.24 added 3.5.2017
 			'ntfundo'     : '正在撤銷上一步動作', // from v2.1.27 added 31.07.2017
 			'ntfredo'     : '正在重做上一步動作', // from v2.1.27 added 31.07.2017
+			'ntfchkcontent' : '正在確認內容', // from v2.1.41 added 3.8.2018
 
 			/*********************************** volumes *********************************/
 			'volume_Trash' : '垃圾桶', //from v2.1.24 added 29.4.2017
@@ -287,6 +294,9 @@
 			'untitled file.txt' : '新檔案.txt', // added 10.11.2015
 			'untitled folder'   : '新資料夾',   // added 10.11.2015
 			'Archive'           : '新壓縮檔',  // from v2.1 added 10.11.2015
+			'untitled file'     : '新檔案.$1',  // from v2.1.41 added 6.8.2018
+			'extentionfile'     : '$1: 檔案',    // from v2.1.41 added 6.8.2018
+			'extentiontype'     : '$1: $2',      // from v2.1.43 added 17.10.2018
 
 			/********************************** messages **********************************/
 			'confirmReq'      : '請確認',
@@ -297,6 +307,7 @@
 			'confirmNonUTF8'  : '無法偵測此檔案的字元編碼, 須暫時轉換為 UTF-8 以供編輯.<br/>請選擇此檔案的字元編碼.', // from v2.1.19 added 28.11.2016
 			'confirmNotSave'  : '此檔案已修改.<br/>若未儲存將遺失目前的工作.', // from v2.1 added 15.7.2015
 			'confirmTrash'    : '確定要將項目丟到垃圾桶嗎？', //from v2.1.24 added 29.4.2017
+			'confirmMove'     : '確定要將項目移至“$1”嗎？', //from v2.1.50 added 27.7.2019
 			'apllyAll'        : '全部套用',
 			'name'            : '名稱',
 			'size'            : '大小',
@@ -314,6 +325,10 @@
 			'selectlfile'     : '選擇最後一個檔案',
 			'viewlist'        : '列表檢視',
 			'viewicons'       : '圖示檢視',
+			'viewSmall'       : '小圖示', // from v2.1.39 added 22.5.2018
+			'viewMedium'      : '中圖示', // from v2.1.39 added 22.5.2018
+			'viewLarge'       : '大圖示', // from v2.1.39 added 22.5.2018
+			'viewExtraLarge'  : '超大圖示', // from v2.1.39 added 22.5.2018
 			'places'          : '位置',
 			'calc'            : '計算',
 			'path'            : '路徑',
@@ -432,6 +447,55 @@
 			'clearBrowserData': '初始化保存在此瀏覽器中的設置', // from v2.1.26 added 28.6.2017
 			'toolbarPref'     : '工具欄設置', // from v2.1.27 added 2.8.2017
 			'charsLeft'       : '... 剩下 $1 個字元',  // from v2.1.29 added 30.8.2017
+			'linesLeft'       : '... 剩下 $1 行',  // from v2.1.52 added 16.1.2020
+			'sum'             : '總計', // from v2.1.29 added 28.9.2017
+			'roughFileSize'   : '粗略的檔案大小', // from v2.1.30 added 2.11.2017
+			'autoFocusDialog' : '滑鼠懸停在對話框內',  // from v2.1.30 added 2.11.2017
+			'select'          : '選擇', // from v2.1.30 added 23.11.2017
+			'selectAction'    : '選擇檔案時的動作', // from v2.1.30 added 23.11.2017
+			'useStoredEditor' : '使用上次的編輯器開啟', // from v2.1.30 added 23.11.2017
+			'selectinvert'    : '反向選擇', // from v2.1.30 added 25.11.2017
+			'renameMultiple'  : '確定要重新命名 $1 為 $2 嗎？<br/>此動作無法恢復！', // from v2.1.31 added 4.12.2017
+			'batchRename'     : '批次重新命名', // from v2.1.31 added 8.12.2017
+			'plusNumber'      : '增加數量', // from v2.1.31 added 8.12.2017
+			'asPrefix'        : '新增前輟', // from v2.1.31 added 8.12.2017
+			'asSuffix'        : '新增後輟', // from v2.1.31 added 8.12.2017
+			'changeExtention' : '變更範圍', // from v2.1.31 added 8.12.2017
+			'columnPref'      : ' 列設置(列表檢視)', // from v2.1.32 added 6.2.2018
+			'reflectOnImmediate' : '所有修改將立即套用到檔案.', // from v2.1.33 added 2.3.2018
+			'reflectOnUnmount'   : '所有修改在卸載之前不會有變化.', // from v2.1.33 added 2.3.2018
+			'unmountChildren' : '安裝在該磁碟以下的磁碟也會卸載，你確定要卸載嗎？', // from v2.1.33 added 5.3.2018
+			'selectionInfo'   : '選擇資訊', // from v2.1.33 added 7.3.2018
+			'hashChecker'     : '顯示檔案雜湊算法', // from v2.1.33 added 10.3.2018
+			'infoItems'       : '檔案資訊（選擇資訊面板）', // from v2.1.38 added 28.3.2018
+			'pressAgainToExit': '再次點擊後退出', // from v2.1.38 added 1.4.2018
+			'toolbar'         : '工具列', // from v2.1.38 added 4.4.2018
+			'workspace'       : '工作區', // from v2.1.38 added 4.4.2018
+			'dialog'          : '對話框', // from v2.1.38 added 4.4.2018
+			'all'             : '全部', // from v2.1.38 added 4.4.2018
+			'iconSize'        : '圖示尺寸 (圖示顯示)', // from v2.1.39 added 7.5.2018
+			'editorMaximized' : '開啟最大化編輯視窗', // from v2.1.40 added 30.6.2018
+			'editorConvNoApi' : '由於使用 API 轉換功能目前無法使用，請到網站上轉換.', //from v2.1.40 added 8.7.2018
+			'editorConvNeedUpload' : '轉換後，必須上傳檔案網址或一個下載的檔案，以保存轉換後的檔案.', //from v2.1.40 added 8.7.2018
+			'convertOn'       : '在 $1 網站上轉換', // from v2.1.40 added 10.7.2018
+			'integrations'    : '整合', // from v2.1.40 added 11.7.2018
+			'integrationWith' : 'elFinder 整合以下外部服務，使用前請先檢查使用條款、隱私權政策等.', // from v2.1.40 added 11.7.2018
+			'showHidden'      : '顯示已隱藏的項目', // from v2.1.41 added 24.7.2018
+			'hideHidden'      : '隱藏已隱藏的項目', // from v2.1.41 added 24.7.2018
+			'toggleHidden'    : '顯示/隱藏已隱藏的項目', // from v2.1.41 added 24.7.2018
+			'makefileTypes'   : '允許"新檔案"使用的檔案類型', // from v2.1.41 added 7.8.2018
+			'typeOfTextfile'  : '文字檔案類型', // from v2.1.41 added 7.8.2018
+			'add'             : '新增', // from v2.1.41 added 7.8.2018
+			'theme'           : '主題', // from v2.1.43 added 19.10.2018
+			'default'         : '預設', // from v2.1.43 added 19.10.2018
+			'description'     : '描述', // from v2.1.43 added 19.10.2018
+			'website'         : '網站', // from v2.1.43 added 19.10.2018
+			'author'          : '作者', // from v2.1.43 added 19.10.2018
+			'email'           : '信箱', // from v2.1.43 added 19.10.2018
+			'license'         : '許可證', // from v2.1.43 added 19.10.2018
+			'exportToSave'    : '檔案無法存檔，為避免遺失編輯資料，需要導出到你的電腦.', // from v2.1.44 added 1.12.2018
+			'dblclickToSelect': '連續點擊以選擇', // from v2.1.47 added 22.1.2019
+			'useFullscreen'   : '使用全螢幕模式', // from v2.1.47 added 19.2.2019
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : '未知',

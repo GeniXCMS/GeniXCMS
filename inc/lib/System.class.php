@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class System
@@ -24,7 +24,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.11';
+    public static $version = '1.1.12';
 
     /**
      * GeniXCMS Version Release.
@@ -58,6 +58,9 @@ class System
         /* Initiate Hooks system */
         new Hooks();
 
+        /* Initiate HTTP variables */
+        new Http();
+
         /* Initiate Options variables. */
         new Options();
 
@@ -72,9 +75,7 @@ class System
 
         /* Initiate Sites variables */
         new Site();
-
-        /* Initiate HTTP variables */
-        new Http();
+        
 
         /* Start the session */
         Session::start();
@@ -169,13 +170,13 @@ class System
     // Call this function to output everything as gzipped content.
     public static function Zipped()
     {
-        global $HTTP_ACCEPT_ENCODING;
+        // global $_SERVER['HTTP_ACCEPT_ENCODING'];
 
         if (headers_sent()) {
             $encoding = false;
-        } elseif (strpos($HTTP_ACCEPT_ENCODING, 'x-gzip') !== false) {
+        } elseif (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false) {
             $encoding = 'x-gzip';
-        } elseif (strpos($HTTP_ACCEPT_ENCODING, 'gzip') !== false) {
+        } elseif (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
             $encoding = 'gzip';
         } else {
             $encoding = false;

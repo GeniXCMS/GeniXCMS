@@ -8,13 +8,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141004
  *
- * @version 1.1.11
+ * @version 1.1.12
  *
  * @link https://github.com/semplon/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2020 Puguh Wijayanto
+ * @copyright 2014-2021 Puguh Wijayanto
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Site
@@ -34,8 +34,8 @@ class Site
     public function __construct()
     {
         global $GLOBALS, $data;
-        self::$editors = &$GLOBALS;
-        self::$data = &$data;
+        self::$editors = $GLOBALS;
+        self::$data = $data;
         self::$url = Options::v('siteurl');
         self::$cdn = Options::v('cdn_url');
         self::$domain = Options::v('sitedomain');

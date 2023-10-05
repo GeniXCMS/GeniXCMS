@@ -3,8 +3,13 @@
 namespace Http\Message\UriFactory;
 
 use Http\Message\UriFactory;
+use Laminas\Diactoros\Uri as LaminasUri;
 use Psr\Http\Message\UriInterface;
-use Zend\Diactoros\Uri;
+use Zend\Diactoros\Uri as ZendUri;
+
+if (!interface_exists(UriFactory::class)) {
+    throw new \LogicException('You cannot use "Http\Message\MessageFactory\DiactorosUriFactory" as the "php-http/message-factory" package is not installed. Try running "composer require php-http/message-factory". Note that this package is deprecated, use "psr/http-factory" instead');
+}
 
 /**
  * Creates Diactoros URI.
@@ -23,7 +28,11 @@ final class DiactorosUriFactory implements UriFactory
         if ($uri instanceof UriInterface) {
             return $uri;
         } elseif (is_string($uri)) {
-            return new Uri($uri);
+            if (class_exists(LaminasUri::class)) {
+                return new LaminasUri($uri);
+            }
+
+            return new ZendUri($uri);
         }
 
         throw new \InvalidArgumentException('URI must be a string or UriInterface');
