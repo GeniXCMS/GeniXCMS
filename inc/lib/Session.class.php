@@ -26,6 +26,7 @@ class Session
     public static function start()
     {
         $url = Site::$url;
+        $url = ( $url == "" ) ? $_SERVER['REQUEST_URI']: $url;
         $site_id = !defined('SITE_ID') ? 'Installation' : SITE_ID;
         session_name('GeniXCMS-'.$site_id);
         session_start();
