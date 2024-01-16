@@ -16,7 +16,6 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-error_reporting(E_ALL);
 date_default_timezone_set('UTC');
 
 define('GX_PATH', realpath(__DIR__.'/'));
