@@ -36,11 +36,14 @@ This CMSF is a starter point to build your own online applications. With already
 ### Requirements
 
 * Webserver - Apache/Nginx
-* PHP >=7.2.5 
+* PHP >=8 
     - PHP-GD
     - PHP-cURL
     - PHP-OpenSSL
     - PHP-imagick
+    - PHP-intl
+    - PHP-mysqli
+    - PHP-XML
 * MySQL 4
 
 ### Recommended
@@ -109,7 +112,7 @@ define('USE_MEMCACHED', false);
 ### Showcase
 
 Showcase URL :
-- [https://demo.genix.me](https://demo.genix.me)
+- [https://demo.genixcms.my.id/](https://demo.genixcms.my.id/)
 
 
 ### License
@@ -120,7 +123,7 @@ Showcase URL :
 
 ### Website
 
-Link : [https://genix.me](https://genix.me)
+Link : [https://genixcms.my.id/](https://genixcms.my.id/)
 
 
 ### Donate
@@ -134,4 +137,3 @@ Developed by : Puguh Wijayanto - [https://github.com/semplon](https://github.com
 
 ### Suported By 
 
-[![](https://i.imgur.com/1lDiVET.png)](https://fosshost.org)
