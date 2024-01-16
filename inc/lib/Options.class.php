@@ -117,6 +117,10 @@ class Options
         }
     }
 
+    public static function isExist($var) {
+        return self::validate($var);
+    }
+
 
 }
 

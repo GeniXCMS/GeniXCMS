@@ -215,7 +215,7 @@ final class ProxyHelper
 
     public static function exportSignature(\ReflectionFunctionAbstract $function, bool $withParameterTypes = true, string &$args = null): string
     {
-        $hasByRef = false;
+        $byRefIndex = 0;
         $args = '';
         $param = null;
         $parameters = [];
@@ -225,16 +225,20 @@ final class ProxyHelper
                 .($param->isPassedByReference() ? '&' : '')
                 .($param->isVariadic() ? '...' : '').'$'.$param->name
                 .($param->isOptional() && !$param->isVariadic() ? ' = '.self::exportDefault($param) : '');
-            $hasByRef = $hasByRef || $param->isPassedByReference();
+            if ($param->isPassedByReference()) {
+                $byRefIndex = 1 + $param->getPosition();
+            }
             $args .= ($param->isVariadic() ? '...$' : '$').$param->name.', ';
         }
 
-        if (!$param || !$hasByRef) {
+        if (!$param || !$byRefIndex) {
             $args = '...\func_get_args()';
         } elseif ($param->isVariadic()) {
             $args = substr($args, 0, -2);
         } else {
-            $args .= sprintf('...\array_slice(\func_get_args(), %d)', \count($parameters));
+            $args = explode(', ', $args, 1 + $byRefIndex);
+            $args[$byRefIndex] = sprintf('...\array_slice(\func_get_args(), %d)', $byRefIndex);
+            $args = implode(', ', $args);
         }
 
         $signature = 'function '.($function->returnsReference() ? '&' : '')
@@ -318,6 +322,9 @@ final class ProxyHelper
     {
         $propertyScopes = Hydrator::$propertyScopes[$parent] ??= Hydrator::getPropertyScopes($parent);
         uksort($propertyScopes, 'strnatcmp');
+        foreach ($propertyScopes as $k => $v) {
+            unset($propertyScopes[$k][3]);
+        }
         $propertyScopes = VarExporter::export($propertyScopes);
         $propertyScopes = str_replace(VarExporter::export($parent), 'parent::class', $propertyScopes);
         $propertyScopes = preg_replace("/(?|(,)\n( )       |\n        |,\n    (\]))/", '$1$2', $propertyScopes);

@@ -2,7 +2,7 @@
 /**
  * Name: Code Highlight
  * Desc: Simple Code Highlight for GeniXCMS
- * Version: 1.0.0
+ * Version: 1.0.1
  * Build: 1.0.0
  * Developer: Puguh Wijayanto
  * URI: http://www.metalgenix.com

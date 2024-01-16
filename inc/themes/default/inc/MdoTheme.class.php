@@ -11,8 +11,12 @@ class MdoTheme
 
     public function __construct()
     {
-        self::$opt = json_decode(Options::v('mdo_theme_options'), true);
-        if (self::$opt['mdo_adsense'] != '') {
+        $mdo_opt = Options::v('mdo_theme_options');
+        $mdo_opt = ($mdo_opt == "") ? json_encode(['error' => 'Data Not Found']): $mdo_opt;
+        self::$opt = json_decode($mdo_opt, true);
+
+        $mdo_adsense = (key_exists("mdo_adsense", self::$opt)) ? self::$opt['mdo_adsense']: "";
+        if ($mdo_adsense != '') {
             Hooks::attach('footer_load_lib', array('MdoTheme', 'loadAdsenseJs'));
         }
     }

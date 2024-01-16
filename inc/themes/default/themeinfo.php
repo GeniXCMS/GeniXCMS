@@ -2,10 +2,10 @@
 /*
  * Name: Default Themes 
  * Desc: Default GeniXCMS Themes 
- * Version: 0.0.2 
+ * Version: 0.0.3 
  * Build: 1.0.0
- * Developer: Puguh Wijayanto 
- * URI: http://www.metalgenix.com 
+ * Developer: GeniXCMS 
+ * URI: https://github.com/GeniXCMS
  * License: MIT License
  * Icon: <i class="fa fa-cogs"></i>
 */

@@ -25,8 +25,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class DefinitionErrorExceptionPass extends AbstractRecursivePass
 {
-    private $erroredDefinitions = [];
-    private $sourceReferences = [];
+    protected bool $skipScalars = true;
+
+    private array $erroredDefinitions = [];
+    private array $sourceReferences = [];
 
     /**
      * @return void

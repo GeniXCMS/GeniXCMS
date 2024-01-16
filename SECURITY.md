@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-We are supporting securities update for these versions
+aWe are supporting securities update for these versions
 
 | Version | Supported          |
 | ------- | ------------------ |

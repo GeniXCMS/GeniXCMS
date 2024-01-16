@@ -90,7 +90,7 @@
                             <div class="col-md-12">
                                 <ul class="list-group">
                                 <?php
-                                if (count($data['list_lang']) > 0) {
+                                if ($data['list_lang'] != "" && count($data['list_lang']) > 0) {
                                     
                                     $list_lang = $data['list_lang'];
                                     foreach ($list_lang as $key => $value) {

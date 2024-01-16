@@ -40,14 +40,29 @@ class Date
         return $newdate;
     }
 
+
+    /**
+     * Function : local date format
+     * 
+     * format pattern : https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table
+     */
     public static function local($date, $format = '')
     {
         setlocale(LC_TIME, Options::v('country_id'));
-        (empty($format)) ? $format = '%#d %B %Y %H:%M %p' : $format = $format;
+        $format = (empty($format)) ? 'MMMM d, Y H:m:s' : $format;
         $date = new DateTime($date);
         $date->setTimezone(new DateTimeZone(self::$timezone));
-        $newdate = $date->format('Y/m/j H:i:s');
-        $newdate = strftime($format, strtotime($newdate));
+        $newdate = $date->format('Y/m/j h:i:s');
+        $fmt = new IntlDateFormatter(
+            Options::v('country_id'),
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL,
+            self::$timezone,
+            IntlDateFormatter::GREGORIAN,
+            $format
+        );
+        
+        $newdate = $fmt->format(strtotime($newdate));
 
         return $newdate.' '.$date->format('T');
     }
