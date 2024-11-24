@@ -10,11 +10,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @version 1.1.12
  *
- * @link https://github.com/semplon/GeniXCMS
+ * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2021 Puguh Wijayanto
+ * @author GenixCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -24,6 +26,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class is the main class for call all the necessary controller.
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
  *
  * @since 0.0.1
  */
@@ -36,6 +39,7 @@ class GxMain
      * if not exist, run the installation proccess.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -54,6 +58,7 @@ class GxMain
      * This will load the frontpage controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -69,6 +74,7 @@ class GxMain
      * logged in with a current privilege. Default privilege is 2.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -93,6 +99,7 @@ class GxMain
      * This will load the install controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

@@ -10,11 +10,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @version 1.1.12
  *
- * @link https://github.com/semplon/GeniXCMS
+ * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2021 Puguh Wijayanto
+ * @author GenixCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -24,6 +26,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class will process the Installation Process.
  *
  * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
  *
  * @since 0.0.1
  */
@@ -41,6 +44,7 @@ class Install
      * from the session.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -55,10 +59,11 @@ class Install
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
  * @version 1.1.12
- * @link https://github.com/semplon/GeniXCMS
+ * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto (www.metalgenix.com)
- * @copyright 2014-2021 Puguh Wijayanto
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  *
 */error_reporting(E_ALL);
@@ -114,6 +119,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      * installation proccess.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -295,6 +301,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      * This will insert value on the SQL Table during the installation.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

@@ -7,7 +7,7 @@
  * @package GeniXCMS
  * @since 0.0.1 build date 20141006
  * @version 1.1.12
- * @link https://github.com/semplon/GeniXCMS
+ * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto (www.metalgenix.com)
  * @copyright 2014-2015 Puguh Wijayanto

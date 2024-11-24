@@ -12,6 +12,6 @@ We are supporting securities update for these versions
 
 ## Reporting a Vulnerability
 
-Please report any vulnerability to metalgenix@gmail.com or genixcms@gmail.com
+Please report any vulnerability to genixcms@gmail.com
 
 Thank You,

@@ -8,10 +8,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @package GeniXCMS
  * @since 1.0.0 build date 20160804
  * @version 1.1.12
- * @link https://github.com/semplon/GeniXCMS
+ * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @copyright 2014-2021 Puguh Wijayanto
+ * @author GenixCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */
 

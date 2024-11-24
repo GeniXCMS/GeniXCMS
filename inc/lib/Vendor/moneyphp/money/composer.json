@@ -24,7 +24,7 @@
     ],
     "homepage": "http://moneyphp.org",
     "require": {
-        "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
         "ext-bcmath": "*",
         "ext-filter": "*",
         "ext-json": "*"
@@ -33,19 +33,19 @@
         "ext-gmp": "*",
         "ext-intl": "*",
         "cache/taggable-cache": "^1.1.0",
-        "doctrine/coding-standard": "^9.0",
-        "doctrine/instantiator": "^1.4.0",
-        "florianv/exchanger": "^2.6.3",
+        "doctrine/coding-standard": "^12.0",
+        "doctrine/instantiator": "^1.5.0 || ^2.0",
+        "florianv/exchanger": "^2.8.1",
         "florianv/swap": "^4.3.0",
-        "moneyphp/iso-currencies": "^3.2.1",
-        "moneyphp/crypto-currencies": "^1.0.0",
-        "php-http/message": "^1.11.0",
-        "php-http/mock-client": "^1.4.1",
+        "moneyphp/iso-currencies": "^3.4",
+        "moneyphp/crypto-currencies": "^1.1.0",
+        "php-http/message": "^1.16.0",
+        "php-http/mock-client": "^1.6.0",
         "phpbench/phpbench": "^1.2.5",
-        "phpunit/phpunit": "^9.5.4",
+        "phpunit/phpunit": "^10.5.9",
         "psalm/plugin-phpunit": "^0.18.4",
-        "psr/cache": "^1.0.1",
-        "vimeo/psalm": "~5.15.0"
+        "psr/cache": "^1.0.1 || ^2.0 || ^3.0",
+        "vimeo/psalm": "~5.20.0"
     },
     "suggest": {
         "ext-gmp": "Calculate without integer limits",
@@ -88,13 +88,13 @@
         ],
         "clean": "rm -rf build/ vendor/",
         "test": [
-            "vendor/bin/phpunit -v",
             "vendor/bin/phpbench run",
+            "vendor/bin/phpunit",
             "vendor/bin/psalm",
             "vendor/bin/phpcs"
         ],
         "test-coverage": [
-            "vendor/bin/phpunit -v --coverage-text --coverage-clover=build/unit_coverage.xml"
+            "vendor/bin/phpunit --coverage-text --coverage-clover=build/unit_coverage.xml"
         ],
         "update-currencies": [
             "cp vendor/moneyphp/iso-currencies/resources/current.php resources/currency.php",

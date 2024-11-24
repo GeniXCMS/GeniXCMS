@@ -88,7 +88,7 @@ We are now ready for composer installation. Run this command at your server.
 more detail about composer, please read the documentation at http://getcomposer.org
 
 more details of installation :
-http://docs.genix.me/user-guide/installation/
+http://docs.genixcms.my.id/user-guide/installation/
 
 
 ### Upgrading
@@ -133,7 +133,7 @@ Contact us for Donation.
 
 ### Developer
 
-Developed by : Puguh Wijayanto - [https://github.com/semplon](https://github.com/semplon)
+Developed by : GeniXCMS - [https://github.com/GeniXCMS](https://github.com/GeniXCMS)
 
-### Suported By 
+### Supported By 
 

@@ -5,7 +5,7 @@ We are accepting contribution from anyone. Below are some of method to contribut
 
 ## Reporting Issues
 
-- All issues are submited at GeniXCMS Github Issues page https://github.com/semplon/GeniXCMS/issues
+- All issues are submited at GeniXCMS Github Issues page https://github.com/GeniXCMS/GeniXCMS/issues
 - Before submitting one issue, ***please search first*** if the issue is already exist, and comment at the existing issue.
 - Every time you submit issue please include information as detail as possible. It to make us easy to solve the problem.
 
