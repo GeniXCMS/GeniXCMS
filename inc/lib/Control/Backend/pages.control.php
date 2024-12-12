@@ -34,7 +34,7 @@ if (User::access(2)) {
             switch (isset($_POST['submit'])) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -120,7 +120,7 @@ if (User::access(2)) {
             switch (isset($_POST['submit'])) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -255,7 +255,7 @@ if (User::access(2)) {
             switch ($action) {
                 case 'publish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -275,7 +275,7 @@ if (User::access(2)) {
                     break;
                 case 'unpublish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -295,7 +295,7 @@ if (User::access(2)) {
                     break;
                 case 'delete':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }

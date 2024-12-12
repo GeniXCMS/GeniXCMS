@@ -28,7 +28,7 @@ if (User::access(1)) {
             $slug = Typo::slugify(Typo::cleanX($_POST['cat']));
             $cat = Typo::cleanX($_POST['cat']);
             $token = Typo::cleanX($_POST['token']);
-            if (!isset($_POST['token']) || !Token::validate($token)) {
+            if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }
@@ -63,7 +63,7 @@ if (User::access(1)) {
             // cleanup first
             $cat = Typo::cleanX($_POST['cat']);
             $token = Typo::cleanX($_POST['token']);
-            if (!isset($_POST['token']) || !Token::validate($token)) {
+            if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
                 $alertDanger[] = TOKEN_NOT_EXIST;
             }

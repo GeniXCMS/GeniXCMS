@@ -4,7 +4,7 @@ $data = [];
 if (isset($_POST['sendmail'])) {
     // check token first
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::validate($token)) {
+    if (!isset($_POST['token']) && !Token::validate($token)) {
         $alertDanger[] = TOKEN_NOT_EXIST;
     }
     if (isset($alertDanger)) {

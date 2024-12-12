@@ -33,5 +33,14 @@ if (Theme::exist('404')) {
         Back to <a href="'.Options::v('siteurl').'">'.Options::v('sitename').'</a>
         </center>
         ';
+        if (isset($val) && $val != '') {
+?>
+    <div class="alert alert-danger">
+    <?=$val; ?>
+    </div>
+
+<?php
+        }
+        
     Site::footer();
 }

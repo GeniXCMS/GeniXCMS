@@ -130,7 +130,7 @@ class Image
 
     public static function compressPng($path, $max_quality = 80)
     {
-        $check = shell_exec('pngquant --version');
+        $check = function_exists("shell_exec") ? shell_exec('pngquant --version'): false;
         if (!$check) {
             return false;
         } else {

@@ -26,7 +26,7 @@ if (User::access(1)) {
 
     if (isset($_POST['change'])) {
         $token = Typo::cleanX($_POST['token']);
-        if (!isset($_POST['token']) || !Token::validate($token)) {
+        if (!isset($_POST['token']) && !Token::validate($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
 

@@ -36,7 +36,7 @@ if (User::access(2)) {
                     // print_r($_POST);
                     $token = Typo::cleanX($_POST['token']);
                     // check token first
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -134,7 +134,7 @@ if (User::access(2)) {
                 case true:
                     // check token first
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
 
@@ -258,7 +258,7 @@ if (User::access(2)) {
                 if (isset($_GET['id'])) {
                     $id = Typo::int($_GET['id']);
                     $token = Typo::cleanX($_GET['token']);
-                    if (!isset($_GET['token']) || !Token::validate($token)) {
+                    if (!isset($_GET['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -295,7 +295,7 @@ if (User::access(2)) {
             switch ($action) {
                 case 'publish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -315,7 +315,7 @@ if (User::access(2)) {
                     break;
                 case 'unpublish':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }
@@ -335,7 +335,7 @@ if (User::access(2)) {
                     break;
                 case 'delete':
                     $token = Typo::cleanX($_POST['token']);
-                    if (!isset($_POST['token']) || !Token::validate($token)) {
+                    if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
                         $alertDanger[] = TOKEN_NOT_EXIST;
                     }

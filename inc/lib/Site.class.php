@@ -178,8 +178,9 @@ class Site
     public static function canonical()
     {
         $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
-
-        return $protocol.$_SERVER['HTTP_HOST'].urlencode($_SERVER['REQUEST_URI']);
+        $request_uri =  ($_SERVER['REQUEST_URI'] == "/") ? "/": urlencode($_SERVER['REQUEST_URI']);
+        
+        return $protocol.$_SERVER['HTTP_HOST'].$request_uri;
     }
 
     public static function minifyHTML($input)

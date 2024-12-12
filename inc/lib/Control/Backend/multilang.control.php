@@ -25,7 +25,7 @@ if (User::access(0)) {
 
     if (isset($_POST['addcountry'])) {
         $token = Typo::cleanX($_POST['token']);
-        if (!isset($_POST['token']) || !Token::validate($token)) {
+        if (!isset($_POST['token']) && !Token::validate($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_POST['multilang_country_name']) || $_POST['multilang_country_name'] == '') {
@@ -79,7 +79,7 @@ if (User::access(0)) {
 
     if (isset($_POST['change'])) {
         $token = Typo::cleanX($_POST['token']);
-        if (!isset($_POST['token']) || !Token::validate($token)) {
+        if (!isset($_POST['token']) && !Token::validate($token)) {
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
 

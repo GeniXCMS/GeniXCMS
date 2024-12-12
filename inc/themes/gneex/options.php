@@ -143,7 +143,7 @@ if (Gneex::checkDB()) {
                 <div class="alert alert-info">This is our official release of customized themes. <br />
                 This theme was developed to give you chance to create great
                 website with GeniXCMS.</div>
-                <p>Have any suggestions or advice ? please don't hesitate to contact us at info@genix.id</p>
+                <p>Have any suggestions or advice ? please don't hesitate to contact us at genixcms@gmail.com</p>
                 <p>Or you can submit issue or pull request at <a href="https://github.com/GeniXCMS/GneeX" target="_blank">here <i class="fa fa-external-link"></i></a> </p>
             </div>
 

@@ -37,7 +37,7 @@ System::gZip(true);
 
 if (isset($_POST['register'])) {
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::validate($token)) {
+    if (!isset($_POST['token']) && !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }

@@ -48,7 +48,7 @@ System::gZip();
 $data = [];
 if (isset($_POST['login'])) {
     $token = Typo::cleanX($_POST['token']);
-    if (!isset($_POST['token']) || !Token::validate($token)) {
+    if (!isset($_POST['token']) && !Token::validate($token)) {
         // VALIDATE ALL
         $alertDanger[] = TOKEN_NOT_EXIST;
     }

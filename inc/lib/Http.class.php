@@ -36,6 +36,7 @@ class Http
     {
         $prot = self::validateProtocol($url, array('http', 'https'));
         if ($prot){
+            // echo "prot";
             //check if host is same with config
              $url_p = @parse_url($url);
              $url_c = @parse_url(Site::$url);
@@ -54,6 +55,7 @@ class Http
                  return false;
 
              } else {
+                echo "host same";
                  return true;
              }
         } else {
@@ -74,22 +76,23 @@ class Http
     public static function validatePort($url, $ports = [80, 443, 8080])
     {
         $purl = @parse_url($url);
-        if (in_array($purl['port'], $ports)) {
+        if ( isset($purl['port']) && in_array($purl['port'], $ports)) {
             return true;
-        } elseif($purl['port'] == ''){
+        } /* elseif($purl['port'] == ''){
             return true;
-        } else {
+        } */ else {
             return false;
         }
     }
 
     public static function sameAsSite($url)
     {
-        $purl = @parse_url($url);
+        $purl = @parse_url(urldecode($url));
         $surl = @parse_url(Site::$url);
         if ($purl['host'] == $surl['host']) {
             return true;
         } else {
+            echo $purl['host'];
             return false;
         }
 

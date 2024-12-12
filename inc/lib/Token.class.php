@@ -88,16 +88,24 @@ class Token
         return $newtoken;
     }
 
-    public static function isExist($token)
+    public static function isExist($token, $is_ajax = false)
     {
+        // $http_host = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $_SERVER['HTTP_HOST'];
+        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
+        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        $pairing = md5($url);
+        $token2 = $token . "_" . $pairing;
         $json = Options::get('tokens');
         $tokens = json_decode(Typo::Xclean($json), true);
         if (!is_array($tokens) || $tokens == '') {
             $tokens = array();
         }
-        if (array_key_exists($token, $tokens)) {
+        if (array_key_exists($token2, $tokens)) {
+            // echo "Exist";
             $call = true;
         } else {
+            // echo $url."_".$_SERVER['HTTP_REFERER'];
             $call = false;
         }
 
@@ -130,9 +138,12 @@ class Token
         return $tokens;
     }
 
-    public static function validate($token)
+    public static function validate($token, $is_ajax = false )
     {
-        if (!self::isExist($token) && !self::isValid($token)) {
+        if (
+            !self::isExist($token, $is_ajax ) && 
+            !self::isValid($token, $is_ajax )
+        ) {
             $valid = false;
         } else {
             $valid = true;
@@ -141,11 +152,16 @@ class Token
         return $valid;
     }
 
-    public static function urlMatch($token)
+    public static function urlMatch($token, $is_ajax=false)
     {
+        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
+        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        $pairing = md5($url);
+
         $tokens = json_decode(Typo::Xclean(Options::v('tokens')), true);
         $urlLive = $_SERVER['REQUEST_URI'];
-        $urlToken = array_key_exists($token, $tokens) ? $tokens[$token]['url']: '';
+        $urlToken = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token]['url']: '';
         if ($urlToken == $urlLive) {
             return true;
         } else {
@@ -153,13 +169,14 @@ class Token
         }
     }
 
-    public static function isValid($token) {
+    public static function isValid($token, $is_ajax = false) {
         $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $pairing = md5($url);
         $tokens = json_decode(Typo::Xclean(Options::get('tokens')), true);
         $paired = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token."_".$pairing]['pairing']: "";
+        // echo $paired;
         if ($pairing == $paired) {
             $call = true;
         } else {
