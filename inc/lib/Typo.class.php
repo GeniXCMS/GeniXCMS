@@ -191,6 +191,30 @@ class Typo
         return $token;
     }
 
+    public static function createToken($length, $capAlphabet=true, $lowAlphabet=true, $number=true, $symbol=false) {
+        $token = '';
+        $codeAlphabet = '';
+        if( $capAlphabet ) {
+            $codeAlphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
+        if( $lowAlphabet ) {
+            $codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
+        }
+        if( $number ) {
+            $codeAlphabet .= '0123456789';
+        }
+        if( $symbol ) {
+            $codeAlphabet .= '!@#$%^&*()_-+=|;:.<>~';
+        }
+        
+        for ($i = 0; $i < $length; ++$i) {
+            $token .= $codeAlphabet[self::crypto_rand_secure(0, strlen($codeAlphabet))];
+        }
+
+        return $token;
+    }
+
+
     public static function int($var)
     {
         $var = sprintf('%d', $var);

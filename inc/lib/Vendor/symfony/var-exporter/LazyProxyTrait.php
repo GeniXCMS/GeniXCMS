@@ -47,6 +47,13 @@ trait LazyProxyTrait
             $instance ??= Registry::$classReflectors[$class]->newInstanceWithoutConstructor();
         }
 
+        if (isset($instance->lazyObjectState)) {
+            $instance->lazyObjectState->initializer = $initializer;
+            unset($instance->lazyObjectState->realInstance);
+
+            return $instance;
+        }
+
         $instance->lazyObjectState = new LazyObjectState($initializer);
 
         foreach (Registry::$classResetters[$class] as $reset) {
@@ -59,7 +66,7 @@ trait LazyProxyTrait
     /**
      * Returns whether the object is initialized.
      *
-     * @param $partial Whether partially initialized objects should be considered as initialized
+     * @param bool $partial Whether partially initialized objects should be considered as initialized
      */
     #[Ignore]
     public function isLazyObjectInitialized(bool $partial = false): bool
@@ -125,7 +132,7 @@ trait LazyProxyTrait
 
         if (!$parent && null === $class && !\array_key_exists($name, (array) $instance)) {
             $frame = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
-            trigger_error(sprintf('Undefined property: %s::$%s in %s on line %s', $instance::class, $name, $frame['file'], $frame['line']), \E_USER_NOTICE);
+            trigger_error(\sprintf('Undefined property: %s::$%s in %s on line %s', $instance::class, $name, $frame['file'], $frame['line']), \E_USER_NOTICE);
         }
 
         get_in_scope:
@@ -310,7 +317,7 @@ trait LazyProxyTrait
             $value = $properties[$k = $name] ?? $properties[$k = "\0*\0$name"] ?? $properties[$k = "\0$class\0$name"] ?? $properties[$k = "\0$scope\0$name"] ?? $k = null;
 
             if (null === $k) {
-                trigger_error(sprintf('serialize(): "%s" returned as member variable from __sleep() but does not exist', $name), \E_USER_NOTICE);
+                trigger_error(\sprintf('serialize(): "%s" returned as member variable from __sleep() but does not exist', $name), \E_USER_NOTICE);
             } else {
                 $data[$k] = $value;
             }

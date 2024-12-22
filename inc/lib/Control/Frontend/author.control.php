@@ -102,6 +102,7 @@ if (User::validate($author)) {
     Control::error('404');
     exit;
 }
+
 System::Zipped();
 /* End of file cat.control.php */
 /* Location: ./inc/lib/Control/Frontend/cat.control.php */

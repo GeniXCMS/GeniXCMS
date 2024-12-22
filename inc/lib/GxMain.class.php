@@ -64,6 +64,7 @@ class GxMain
      */
     public function index()
     {
+        // echo "Frontend";
         Control::frontend();
     }
 

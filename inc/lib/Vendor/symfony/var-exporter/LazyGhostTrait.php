@@ -27,7 +27,7 @@ trait LazyGhostTrait
      * Skipped properties should be indexed by their array-cast identifier, see
      * https://php.net/manual/language.types.array#language.types.array.casting
      *
-     * @param (\Closure(static):void   $initializer       The closure should initialize the object it receives as argument
+     * @param \Closure(static):void    $initializer       The closure should initialize the object it receives as argument
      * @param array<string, true>|null $skippedProperties An array indexed by the properties to skip, a.k.a. the ones
      *                                                    that the initializer doesn't initialize, if any
      * @param static|null              $instance
@@ -51,6 +51,17 @@ trait LazyGhostTrait
             $instance ??= Registry::$classReflectors[$class]->newInstanceWithoutConstructor();
         }
 
+        if (isset($instance->lazyObjectState)) {
+            $instance->lazyObjectState->initializer = $initializer;
+            $instance->lazyObjectState->skippedProperties = $skippedProperties ??= [];
+
+            if (LazyObjectState::STATUS_UNINITIALIZED_FULL !== $instance->lazyObjectState->status) {
+                $instance->lazyObjectState->reset($instance);
+            }
+
+            return $instance;
+        }
+
         $instance->lazyObjectState = new LazyObjectState($initializer, $skippedProperties ??= []);
 
         foreach (Registry::$classResetters[$class] as $reset) {
@@ -63,7 +74,7 @@ trait LazyGhostTrait
     /**
      * Returns whether the object is initialized.
      *
-     * @param $partial Whether partially initialized objects should be considered as initialized
+     * @param bool $partial Whether partially initialized objects should be considered as initialized
      */
     #[Ignore]
     public function isLazyObjectInitialized(bool $partial = false): bool
@@ -143,7 +154,7 @@ trait LazyGhostTrait
 
         if (null === $class) {
             $frame = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
-            trigger_error(sprintf('Undefined property: %s::$%s in %s on line %s', $this::class, $name, $frame['file'], $frame['line']), \E_USER_NOTICE);
+            trigger_error(\sprintf('Undefined property: %s::$%s in %s on line %s', $this::class, $name, $frame['file'], $frame['line']), \E_USER_NOTICE);
         }
 
         get_in_scope:
@@ -320,7 +331,7 @@ trait LazyGhostTrait
             $value = $properties[$k = $name] ?? $properties[$k = "\0*\0$name"] ?? $properties[$k = "\0$class\0$name"] ?? $properties[$k = "\0$scope\0$name"] ?? $k = null;
 
             if (null === $k) {
-                trigger_error(sprintf('serialize(): "%s" returned as member variable from __sleep() but does not exist', $name), \E_USER_NOTICE);
+                trigger_error(\sprintf('serialize(): "%s" returned as member variable from __sleep() but does not exist', $name), \E_USER_NOTICE);
             } else {
                 $data[$k] = $value;
             }

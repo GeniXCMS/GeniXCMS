@@ -78,10 +78,12 @@
                         <label>Default Language</label>
                         <select name="multilang_default" class="form-control">
                             <?php
-                            foreach ($data['list_lang'] as $key => $value) {
-                                $sel = ($key == $data['default_lang']) ? 'selected' : '';
-                                echo "<option value=\"{$key}\" $sel>{$value['country']}</option>";
-                            }
+                            if ( is_array($data['list_lang']) ):
+                                foreach ($data['list_lang'] as $key => $value) {
+                                    $sel = ($key == $data['default_lang']) ? 'selected' : '';
+                                    echo "<option value=\"{$key}\" $sel>{$value['country']}</option>";
+                                }
+                            endif;
                             ?>
                         </select>
                         <small class="help-block">Multilanguage default country. Choose one.</small>

@@ -32,13 +32,13 @@ class Date
 
     public static function format($date, $format = '')
     {
-        $timezone = self::$timezone; //Options::v('timezone');
-        $time = strtotime($date);
-        (empty($format)) ? $format = 'j F Y H:i A T' : $format = $format;
-        $date = new DateTime($date);
-        $date->setTimezone(new DateTimeZone(self::$timezone));
+        $timezone = new DateTimeZone(self::$timezone); //Options::v('timezone');
+        // $time = date_create_from_format( $format, $date ?? '', $timezone);
+        $format = (empty($format)) ?  'j F Y H:i A T' : $format;
+        $date = new DateTime($date ?? ''); 
+        $date->setTimezone($timezone);
         $newdate = $date->format($format);
-
+        
         return $newdate;
     }
 
@@ -82,7 +82,7 @@ class Date
                  * Only get timezones explicitely not part of "Others".
                  * @see http://www.php.net/manual/en/timezones.others.php
                  */
-                if (preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'])
+                if ($zone['timezone_id'] != "" && preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'])
                     && $zone['timezone_id']) {
                     $cities[$zone['timezone_id']][] = $key;
                 }

@@ -64,11 +64,11 @@ class Hydrator
                 return $baseHydrator;
 
             case 'ErrorException':
-                return $baseHydrator->bindTo(null, new class() extends \ErrorException {
+                return $baseHydrator->bindTo(null, new class extends \ErrorException {
                 });
 
             case 'TypeError':
-                return $baseHydrator->bindTo(null, new class() extends \Error {
+                return $baseHydrator->bindTo(null, new class extends \Error {
                 });
 
             case 'SplObjectStorage':
@@ -166,11 +166,11 @@ class Hydrator
                 return $baseHydrator;
 
             case 'ErrorException':
-                return $baseHydrator->bindTo(new \stdClass(), new class() extends \ErrorException {
+                return $baseHydrator->bindTo(new \stdClass(), new class extends \ErrorException {
                 });
 
             case 'TypeError':
-                return $baseHydrator->bindTo(new \stdClass(), new class() extends \Error {
+                return $baseHydrator->bindTo(new \stdClass(), new class extends \Error {
                 });
 
             case 'SplObjectStorage':
@@ -260,9 +260,9 @@ class Hydrator
                 continue;
             }
             $name = $property->name;
+            $readonlyScope = null;
 
             if (\ReflectionProperty::IS_PRIVATE & $flags) {
-                $readonlyScope = null;
                 if ($flags & \ReflectionProperty::IS_READONLY) {
                     $readonlyScope = $class;
                 }
@@ -270,7 +270,6 @@ class Hydrator
 
                 continue;
             }
-            $readonlyScope = null;
             if ($flags & \ReflectionProperty::IS_READONLY) {
                 $readonlyScope = $property->class;
             }

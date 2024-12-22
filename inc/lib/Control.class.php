@@ -114,7 +114,7 @@ class Control
         $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
                 'account', 'search', 'author', 'tag', 'thumb', 'default'
             );
-        if (SMART_URL) {
+        if (defined(SMART_URL) && SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                 (SMART_URL && isset($_GET)) ? self::route($arr) : self::get($arr);
             } else {

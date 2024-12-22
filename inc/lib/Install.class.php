@@ -66,7 +66,8 @@ class Install
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  *
-*/error_reporting(E_ALL);
+*/
+error_reporting(E_ALL);
 
 // DB CONFIG
 define('DB_HOST', '".Session::val('dbhost')."');
@@ -82,7 +83,7 @@ define('ADMIN_DIR', 'gxadmin');
 define('USE_MEMCACHED', false);
 define('SITE_ID', '".Typo::getToken(20)."');
 
-
+define('DEBUG', false);
 
 
 

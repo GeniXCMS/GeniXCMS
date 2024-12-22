@@ -45,14 +45,15 @@ class Session
         }
         session_regenerate_id();
         $path = isset($uri['path']) ? $uri['path'] : '';
-        setcookie(session_name(), session_id(), time() + 3600, $path, '', '', true);
+        $domain = Site::$domain == "" ? $_SERVER["HTTP_HOST"] : Site::$domain;
+        setcookie(name: session_name(), value: session_id(), expires_or_options: time() + 3600, path: $path, domain: $domain, secure: false, httponly: true);
         $GLOBALS['start_time'] = microtime(true);
     }
 
     private static function sesKey()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $browser = $_SERVER['HTTP_USER_AGENT'];
+        $browser = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT']: '';
         $dt = date('Y-m-d H');
 
         $key = md5($ip.$browser.$dt);
@@ -82,14 +83,8 @@ class Session
         if (is_array($val)) {
             # code...
             foreach ($val as $k => $v) {
-                switch ($k) {
-                    case $vars:
-                        return $v;
-                        break;
-
-                    default:
-                        //echo "no value";
-                        break;
+                if( $k == $vars ) {
+                    return $v;
                 }
             }
         } else {
