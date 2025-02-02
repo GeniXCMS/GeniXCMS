@@ -56,7 +56,7 @@ class Image
     public static function resize($src, $dst, $width, $height, $crop = 0)
     {
         if (!list($w, $h) = getimagesize($src)) {
-            return 'Unsupported picture type!';
+            return false; //'Unsupported picture type!';
         }
 
         $type = strtolower(substr(strrchr($src, '.'), 1));
@@ -77,13 +77,13 @@ class Image
                 $img = imagecreatefrompng($src);
                 break;
             default:
-                return 'Unsupported picture type!';
+                return false; // 'Unsupported picture type!';
         }
 
         // resize
         if ($crop) {
             if ($w < $width or $h < $height) {
-                return 'Picture is too small!';
+                return false; // 'Picture is too small!';
             }
             $ratio = max($width / $w, $height / $h);
             $h = $height / $ratio;
@@ -91,7 +91,7 @@ class Image
             $w = $width / $ratio;
         } else {
             if ($w < $width and $h < $height) {
-                return 'Picture is too small!';
+                return false; // 'Picture is too small!';
             }
             $ratio = min($width / $w, $height / $h);
             $width = $w * $ratio;
@@ -131,7 +131,7 @@ class Image
     public static function compressPng($path, $max_quality = 80)
     {
         $check = function_exists("shell_exec") ? shell_exec('pngquant --version'): false;
-        if (!$check) {
+        if (false == $check) {
             return false;
         } else {
             // guarantee that quality won't be worse than that.
@@ -155,12 +155,14 @@ class Image
 
     public static function compressJpg($path, $quality = 80)
     {
-        $img = new Imagick();
-        $img->readImage($path);
-        $img->setImageCompression(imagick::COMPRESSION_JPEG);
-        $img->setImageCompressionQuality($quality);
-        $img->stripImage();
-        $img->writeImage($path);
+        if (extension_loaded('imagick')){
+            $img = new Imagick();
+            $img->readImage($path);
+            $img->setImageCompression(imagick::COMPRESSION_JPEG);
+            $img->setImageCompressionQuality($quality);
+            $img->stripImage();
+            $img->writeImage($path);
+        }
     }
 
     public static function isJpg(&$pict)
@@ -195,8 +197,6 @@ class Image
                 $url .= ' ' . $key . '="' . $val . '"';
             }
             $url .= ' />';
-        }else {
-            $url = $url;
         }
 
         return $url;

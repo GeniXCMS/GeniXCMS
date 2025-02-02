@@ -44,7 +44,7 @@ class Url
      * the SMART_URL will formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -84,7 +84,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -124,7 +124,7 @@ class Url
      * will formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -150,7 +150,7 @@ class Url
      * This will create the custom url. It will result as is.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -168,7 +168,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -196,7 +196,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -222,7 +222,7 @@ class Url
      * This will load the url slug from the database according to the posts id.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -241,7 +241,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.7
      */
@@ -289,7 +289,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 1.0.0
      */
@@ -316,7 +316,7 @@ class Url
      * formatted as friendly url if SMART_URL is set to true.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 1.0.0
      */

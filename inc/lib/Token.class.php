@@ -92,8 +92,10 @@ class Token
     {
         // $http_host = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $_SERVER['HTTP_HOST'];
         $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        $url = $_SERVER['HTTP_REFERER'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        // echo $url;
         $pairing = md5($url);
         $token2 = $token . "_" . $pairing;
         $json = Options::get('tokens');
@@ -114,7 +116,7 @@ class Token
 
     public static function remove($token)
     {
-        $json = Options::get('tokens');
+        $json = Options::v('tokens');
         $tokens = json_decode(Typo::Xclean($json), true);
         unset($tokens[$token]);
         $tokens = json_encode($tokens);
@@ -141,7 +143,7 @@ class Token
     public static function validate($token, $is_ajax = false )
     {
         if (
-            !self::isExist($token, $is_ajax ) && 
+            !self::isExist($token, $is_ajax ) || 
             !self::isValid($token, $is_ajax )
         ) {
             $valid = false;
@@ -155,7 +157,8 @@ class Token
     public static function urlMatch($token, $is_ajax=false)
     {
         $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        $url = $_SERVER['HTTP_REFERER'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $pairing = md5($url);
 
@@ -171,7 +174,8 @@ class Token
 
     public static function isValid($token, $is_ajax = false) {
         $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
+        $url = $_SERVER['HTTP_REFERER'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $pairing = md5($url);
         $tokens = json_decode(Typo::Xclean(Options::get('tokens')), true);

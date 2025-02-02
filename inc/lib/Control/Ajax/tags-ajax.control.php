@@ -18,21 +18,24 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 */
 $data = Router::scrap($param);
 $gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
-$token = (Token::validate($gettoken)) ? $gettoken: '';
+$token = (true === Token::validate($gettoken, true)) ? $gettoken: '';
 $url = Site::canonical();
-if ($token != '' && Token::validate($token) && Http::validateUrl($url)) {
+if ($token != '' && Http::validateUrl($url)) {
     if (User::access(2)) {
         $term = Typo::cleanX($_GET['term']);
         $tags = Db::result(
             "SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '".$term."%' ORDER BY `name` ASC"
         );
-        $tag = array();
-        foreach ($tags as $t) {
-            $tag2[] = array(
-                'label' => $t->name,
-            );
-            $tag = array_merge($tag, $tag2);
+        $tag2[] = array();
+        if( Db::$num_rows > 0 ) {
+            foreach ($tags as $t) {
+                $tag2[] = array(
+                    'label' => $t->name,
+                );
+                // $tag2 = array_merge($tag, $tag2);
+            }
         }
+        
         echo json_encode($tag2);
     } else {
         echo '{"status":"error"}';

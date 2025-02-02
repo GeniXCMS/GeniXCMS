@@ -45,7 +45,7 @@ class System
      * Initializing the system, check the config file.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -119,7 +119,7 @@ class System
      * This will include library which is called.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

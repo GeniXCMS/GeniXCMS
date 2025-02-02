@@ -39,7 +39,7 @@ class GxMain
      * if not exist, run the installation proccess.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -58,7 +58,7 @@ class GxMain
      * This will load the frontpage controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -75,7 +75,7 @@ class GxMain
      * logged in with a current privilege. Default privilege is 2.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -100,7 +100,7 @@ class GxMain
      * This will load the install controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

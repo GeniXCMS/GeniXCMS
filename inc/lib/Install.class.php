@@ -44,7 +44,7 @@ class Install
      * from the session.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -120,7 +120,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      * installation proccess.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -302,7 +302,7 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      * This will insert value on the SQL Table during the installation.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

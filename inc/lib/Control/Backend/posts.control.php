@@ -190,9 +190,7 @@ if (User::access(2)) {
                                     } else {
                                         $content = $_POST['content'][$key];
                                     }
-                                } else {
-                                    $content = $content;
-                                }
+                                } 
                                 $content = Hooks::filter('post_submit_content_filter', $content);
 
                                 $multilang[] = array(

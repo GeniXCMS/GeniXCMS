@@ -44,7 +44,7 @@ class Control
      * @param string $vars
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -60,7 +60,7 @@ class Control
      * @param string $vars
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -84,7 +84,7 @@ class Control
      * @param string $vars
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -103,7 +103,7 @@ class Control
      * file will be included at the Frontend controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      * Add New SMART URL handler for better and simple router.
@@ -114,7 +114,7 @@ class Control
         $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
                 'account', 'search', 'author', 'tag', 'thumb', 'default'
             );
-        if (defined(SMART_URL) && SMART_URL) {
+        if (defined('SMART_URL') && SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                 (SMART_URL && isset($_GET)) ? self::route($arr) : self::get($arr);
             } else {
@@ -144,7 +144,7 @@ class Control
                 $get = (int) $get;
             }
         }
-//        echo $get;
+
         if ($get > 0) {
             foreach ($_GET as $k => $v) {
                 if (in_array($k, $arr)) {
@@ -202,7 +202,7 @@ class Control
      * file will be included at the Backend controller.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -223,7 +223,7 @@ class Control
      * @param string $vars
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -243,7 +243,7 @@ class Control
      * Control Install Handler Function. This will handle the Install page.
      *
      * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

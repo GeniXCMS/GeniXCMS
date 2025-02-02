@@ -30,7 +30,9 @@ if (User::access(0)) {
     }
 
     if (isset($_POST['upload'])) {
-        if (!Token::validate($_POST['token'])) {
+        $token = Typo::cleanX($_POST['token']);
+        if (!isset($_POST['token']) && !Token::validate($token, true)) {
+            // VALIDATE ALL
             $alertDanger[] = TOKEN_NOT_EXIST;
         }
         if (!isset($_FILES['module']['name']) || $_FILES['module']['name'] == '') {

@@ -206,7 +206,8 @@ class Mod
                 if (isset($_GET['act'])) {
                     if ($_GET['act'] == ACTIVATE) {
 
-                        if (!Token::validate($token)) {
+                        if (!isset($_POST['token']) && !Token::validate($token, true)) {
+                            // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
@@ -217,7 +218,8 @@ class Mod
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == DEACTIVATE) {
-                        if (!Token::validate($token)) {
+                        if (!isset($_POST['token']) && !Token::validate($token, true)) {
+                            // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
 
@@ -228,7 +230,8 @@ class Mod
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == 'remove') {
-                        if (!Token::validate($token)) {
+                        if (!isset($_POST['token']) && !Token::validate($token, true)) {
+                            // VALIDATE ALL
                             $alertDanger[] = TOKEN_NOT_EXIST;
                         }
                         if (self::isActive($modules)) {

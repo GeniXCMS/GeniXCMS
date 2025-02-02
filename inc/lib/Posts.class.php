@@ -157,9 +157,8 @@ class Posts
         if (is_array($more[0])) {
             $post = str_replace('[[--readmore--]]', '', $post);
             // return $post;
-        } else {
-            $post = $post;
         }
+
         $post = Hooks::filter('post_content_filter', $post);
 
         return $post;
@@ -180,8 +179,6 @@ class Posts
         if (count($more) > 1) {
             // $post = explode('[[--readmore--]]', $post);
             $post = $more[0].' <a href="'.Url::post($id).'">'.READ_MORE.'</a>';
-        } else {
-            $post = $post;
         }
 
         $post = Hooks::filter('post_content_filter', $post);
@@ -388,11 +385,7 @@ class Posts
                     $post_arr[] = $posts_arr;
                     $post = $post_arr;
                 }
-            } else {
-                $post = $post;
             }
-        } else {
-            $post = $post;
         }
 
         return $post;
@@ -594,7 +587,6 @@ class Posts
             for ($i = 1; $i <= count($im); $i += 2) {
                 if (isset($im[$i][0])) {
                     return $im[$i][0];
-                    break;
                 }
             }
         }
@@ -677,7 +669,7 @@ class Posts
         $slug = Typo::slugify($str);
         // check if slug is exist
         if (self::slugExist($slug)) {
-            $slnum = self::getLastSlug($slug)+1;
+            $slnum = (int) self::getLastSlug($slug)+1;
             $slug = $slug.'-'.$slnum;
         }
 

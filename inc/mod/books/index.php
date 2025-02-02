@@ -10,10 +10,10 @@
  * Icon: <i class="fa fa-cogs"></i>
  */
 
-function loadModLib($class_name)
+function loadBooksLib($class_name)
 {
     Mod::inc($class_name.".lib",'',dirname(__FILE__)."/inc/");
 }
-spl_autoload_register('loadModLib');
+spl_autoload_register('loadBooksLib');
 
 new Mods();
