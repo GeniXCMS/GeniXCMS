@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.3 build date 20150126
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -113,6 +113,14 @@ class Date
         }
 
         return $opt;
+    }
+
+    public static function monthName($month) 
+    {
+        $dateObj   = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('F');
+
+        return $monthName;
     }
 
     public static function optCountry($val = '')

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -19,9 +19,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-System::gZip();
+// System::gZip();
 $data = Router::scrap($param);
-$data['sitemap'] = (SMART_URL) ? $data['sitemap'] : Typo::cleanX($_GET['sitemap']);
+// print_r($data);
+$data['sitemap'] = (SMART_URL) ? @$data['sitemap'] : Typo::cleanX($_GET['sitemap']);
 $map = Sitemap::$_map;
 
 if (isset($data['sitemap']) && $data['sitemap'] != '') {
@@ -32,6 +33,6 @@ if (isset($data['sitemap']) && $data['sitemap'] != '') {
 }else{
     Sitemap::createIndex();
 }
-System::Zipped();
+// System::Zipped();
 /* End of file sitemap.control.php */
 /* Location: ./inc/lib/Control/Frontend/sitemap.control.php */

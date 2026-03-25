@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,6 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 if (User::access(0)) {
+    $data = [];
     if (isset($_GET['view']) && $_GET['view'] == 'options') {
         $theme = Options::v('themes');
         $data['sitetitle'] = Theme::name($theme);
@@ -31,10 +32,10 @@ if (User::access(0)) {
         if (isset($_POST['upload'])) {
             $token = Typo::cleanX($_POST['token']);
             if (!Token::validate($token)) {
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (!isset($_FILES['theme']['name']) || $_FILES['theme']['name'] == '') {
-                $alertDanger[] = NOFILE_UPLOADED;
+                $alertDanger[] = _("No Files Uploaded.");
             }
 
             if (!isset($alertDanger)) {
@@ -70,7 +71,7 @@ if (User::access(0)) {
                                 @unlink($mod['filepath']);
                                 $data['alertDanger'][] = 'Failed to Install your theme';
                             } else {
-                                $data['alertSuccess'][] = MSG_THEME_INSTALLED;
+                                $data['alertSuccess'][] = _("Theme Installed Successfully.");
                             }
                         }
                     }
@@ -78,7 +79,7 @@ if (User::access(0)) {
                     Hooks::run('theme_install_action', $theme);
                     
                 } else {
-                    $data['alertDanger'][] = MSG_THEME_CANT_EXTRACT;
+                    $data['alertDanger'][] = _("Cannot extract files.");
                 }
                 unlink($theme['filepath']);
             } else {
@@ -93,36 +94,38 @@ if (User::access(0)) {
             if ($_GET['act'] == 'activate') {
                 $token = Typo::cleanX($_GET['token']);
                 if (!Token::validate($token)) {
-                    $alertDanger[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 }
 
                 if (!isset($alertDanger)) {
                     Theme::activate(Typo::cleanX($_GET['themes']));
-                    $data['alertSuccess'][] = THEME_ACTIVATED;
+                    $data['alertSuccess'][] = _("Themes activated.");
                 } else {
                     $data['alertDanger'] = $alertDanger;
                 }
             } elseif ($_GET['act'] == 'remove') {
                 $token = Typo::cleanX($_GET['token']);
                 if (!Token::validate($_GET['token'])) {
-                    $alertDanger[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 }
                 if (Theme::isActive(Typo::cleanX($_GET['themes']))) {
-                    $alertDanger[] = MSG_THEME_IS_ACTIVE;
+                    $alertDanger[] = _("Theme is Active. Please deactivate first.");
                 }
                 if (!isset($alertDanger)) {
                     if (Files::delTree(GX_THEME.'/'.$_GET['themes'])) {
-                        $data['alertSuccess'][] = THEME_REMOVED;
+                        $data['alertSuccess'][] = _("Themes removed.");
                     } else {
-                        $data['alertDanger'][] = MSG_THEME_NOT_REMOVED;
+                        $data['alertDanger'][] = _("Theme Cannot removed. Please check if You had permission to remove the files.");
                     }
                 } else {
                     $data['alertDanger'] = $alertDanger;
                 }
             }
+            System::alert($data);
         }
+        
 
-        $data['sitetitle'] = THEMES;
+        $data['sitetitle'] = _("Themes");
         $data['themes'] = Theme::thmList();
         Theme::admin('header', $data);
         System::inc('themes', $data);

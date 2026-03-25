@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 1.0.0 build date 20160804
- * @version 1.1.12
+ * @version 2.0.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto <metalgenix@gmail.com>
@@ -24,11 +24,7 @@ $url = Site::canonical();
 if ($token != '' && Http::validateUrl($url)) {
     if (User::access(2)) {
         $v = trim(System::latestVersion());
-
-        // print_r($v);
-        $v2 = str_replace('.', '', $v);
-        $selfv = str_replace('.', '', System::$version);
-        if ($v2 < $selfv || $v2 == $selfv) {
+        if (version_compare($v, System::$version, '<=') == "-1") {
             echo '{"status": "true"}';
         } else {
             echo '{"status": "false", "version":"'.$v.'"}';

@@ -1,84 +1,70 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-/**
- * GeniXCMS - Content Management System
- *
- * PHP Based Content Management System and Framework
- *
- * @since 0.0.1 build date 20141006
- *
- * @version 1.1.12
- *
- * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- * @copyright 2014-2023 Puguh Wijayanto
- * @copyright 2023-2024 GeniXCMS
- * @license http://www.opensource.org/licenses/mit-license.php MIT
- */
-System::gZip(true);
-Cache::start();
 
-$post = '';
-$data = Router::scrap($param);
-$data['p_type'] = 'index';
-$data['max'] = Options::v('post_perpage');
-//print_r($_GET);
-if (SMART_URL) {
-    if (isset($data['paging'])) {
-        $paging = $data['paging'];
-    }
-} else {
-    if (isset($_GET['paging'])) {
-        $paging = Typo::int($_GET['paging']);
+class DefaultControl extends BaseControl
+{
+    public function run($param)
+    {
+        $data = Router::scrap($param);
+        $data['p_type'] = 'index';
+        $data['max'] = Options::v('post_perpage');
+
+        if (SMART_URL) {
+            $paging = isset($data['paging']) ? $data['paging'] : 1;
+        } else {
+            $paging = isset($_GET['paging']) ? Typo::int($_GET['paging']) : 1;
+        }
+
+        $offset = ($paging > 1) ? ($paging - 1) * $data['max'] : 0;
+        $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
+
+        $data['sitetitle'] = Site::$slogan . $pagingtitle;
+        $posts = Db::result(
+            sprintf(
+                "SELECT * FROM `posts`
+                    WHERE `type` = 'post'
+                    AND `status` = '1'
+                    ORDER BY `date`
+                    DESC LIMIT %d, %d",
+                $offset,
+                $data['max']
+            )
+        );
+        $data['num'] = Db::$num_rows;
+        $data['posts'] = Posts::prepare($posts);
+
+        $url = (SMART_URL) ? Site::$url : Site::$url . '/index.php?';
+        $paging_arr = [
+            'paging' => $paging,
+            'table' => 'posts',
+            'where' => "`type` = 'post'",
+            'max' => $data['max'],
+            'url' => $url,
+            'type' => Options::v('pagination'),
+        ];
+        $data['paging'] = Paging::create($paging_arr, SMART_URL);
+
+        $data['recent_posts'] = Posts::lists([
+            'num' => 5,
+            'image' => true,
+            'image_size' => 100,
+            'title' => true,
+            'date' => true,
+            'type' => "post",
+            'class' => [
+                'row' => 'd-flex align-items-center mb-3 border-bottom pb-3',
+                'img' => 'rounded flex-shrink-0',
+                'list' => 'flex-grow-1 ms-3',
+                'h4' => 'fs-5 mb-0 text-dark',
+                'date' => 'text-body-secondary mt-0'
+            ]
+        ]);
+
+        $data['curr_paging'] = $paging;
+        $this->render('index', $data);
     }
 }
-if (isset($paging)) {
-    if ($paging > 0) {
-        $offset = ($paging - 1) * $data['max'];
-    } else {
-        $offset = 0;
-    }
-    $pagingtitle = " - Page {$paging}";
-} else {
-    $offset = 0;
-    $paging = 1;
-    $pagingtitle = '';
-}
-//echo $paging;
-$data['sitetitle'] = Site::$slogan.$pagingtitle;
-$data['posts'] = Db::result(
-    sprintf("SELECT * FROM `posts`
-                            WHERE `type` = 'post'
-                            AND `status` = '1'
-                            ORDER BY `date`
-                            DESC LIMIT %d, %d",
-        $offset,
-        $data['max']
-    )
-);
-$data['num'] = Db::$num_rows;
 
-$data['posts'] = Posts::prepare($data['posts']);
-
-$url = (SMART_URL) ? Site::$url : Site::$url.'/index.php?';
-$paging = array(
-                'paging' => $paging,
-                'table' => 'posts',
-                'where' => '`type` = \'post\'',
-                'max' => $data['max'],
-                'url' => $url,
-                'type' => Options::v('pagination'),
-            );
-$data['paging'] = Paging::create($paging, SMART_URL);
-Theme::theme('header', $data);
-Theme::theme('index', $data);
-Theme::footer();
-
-Cache::end();
-System::Zipped();
-/* End of file default.control.php */
-/* Location: ./inc/lib/Control/Frontend/default.control.php */
+$control = new DefaultControl();
+$control->run($param);

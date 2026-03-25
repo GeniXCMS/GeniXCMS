@@ -77,7 +77,7 @@ We are now ready for composer installation. Run this command at your server.
 more detail about composer, please read the documentation at http://getcomposer.org
 
 more details of installation :
-http://docs.genixcms.my.id/user-guide/installation/
+http://docs.genixcms.web.id/user-guide/installation/
 
 
 ### Upgrading
@@ -101,7 +101,7 @@ define('USE_MEMCACHED', false);
 ### Showcase
 
 Showcase URL :
-- [https://demo.genixcms.my.id/](https://demo.genixcms.my.id/)
+- [https://demo.genixcms.web.id/](https://demo.genixcms.web.id/)
 
 
 ### License
@@ -112,7 +112,7 @@ Showcase URL :
 
 ### Website
 
-Link : [https://genixcms.my.id/](https://genixcms.my.id/)
+Link : [https://genixcms.web.id/](https://genixcms.web.id/)
 
 
 ### Donate

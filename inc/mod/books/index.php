@@ -7,7 +7,7 @@
  * Developer: Puguh Wijayanto 
  * URI: http://www.metalgenix.com 
  * License: MIT License 
- * Icon: <i class="fa fa-cogs"></i>
+ * Icon: fa fa-cogs
  */
 
 function loadBooksLib($class_name)

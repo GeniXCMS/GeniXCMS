@@ -7,5 +7,5 @@
  * Developer: GeniXCMS
  * URI: https://github.com/GeniXCMS
  * License: MIT License
- * Icon: <i class="fa fa-desktop"></i>
+ * Icon: bi bi-display
  */

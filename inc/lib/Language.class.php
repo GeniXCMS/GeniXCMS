@@ -9,7 +9,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -28,6 +28,29 @@ class Language
     }
 
     public static function getList()
+    {
+        $handle = glob(GX_PATH.'/inc/lang/locale/*', GLOB_ONLYDIR);
+        // print_r($handle);
+        $lang = [];
+        foreach( $handle as $k => $v ) {
+            $lang[] = basename($v);
+        }
+        // while (false !== ($entry = $handle->read())) {
+        //     if ($entry != '.' && $entry != '..') {
+        //         $file = GX_PATH.'/inc/lang/locale/'.$entry;
+        //         $ext = pathinfo($file, PATHINFO_EXTENSION);
+        //         if (is_file($file) == true && $ext == 'php') {
+        //             $lang[] = $entry;
+        //         }
+        //     }
+        // }
+
+        // $handle->close();
+
+        return $lang;
+    }
+
+    public static function getList2()
     {
         $handle = dir(GX_PATH.'/inc/lang/');
         while (false !== ($entry = $handle->read())) {
@@ -169,7 +192,7 @@ class Language
 
     public static function flagLib()
     {
-        echo '<link href="'.Site::$url.'assets/css/flag-icon.min.css" rel="stylesheet">';
+        echo '<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">';
     }
 }
 /* End of file Language.class.php */

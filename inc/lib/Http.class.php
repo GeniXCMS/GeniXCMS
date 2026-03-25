@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -55,7 +55,7 @@ class Http
                  return false;
 
              } else {
-                echo "host same";
+                // echo "host same";
                  return true;
              }
         } else {

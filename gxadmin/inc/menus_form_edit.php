@@ -3,19 +3,6 @@
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
- * @since 0.0.1 build date 20150202
- *
- * @version 1.1.12
- *
- * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- * @copyright 2014-2023 Puguh Wijayanto
- * @copyright 2023-2024 GeniXCMS
- * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 if (isset($_GET['id'])) {
     $menuid = Typo::cleanX($_GET['id']);
@@ -23,208 +10,188 @@ if (isset($_GET['id'])) {
     $menuid = $data['menus'][0]->menuid;
 }
 
-//     print_r($data);
-
-if (isset($_GET['token'])
-    && Token::validate(Typo::cleanX($_GET['token']))) {
+if (isset($_GET['token']) && Token::validate(Typo::cleanX($_GET['token']))) {
     $token = TOKEN;
 } else {
     $token = '';
 }
 ?>
 <form action="" method="POST">
-
     <div class="col-md-12">
-            <?=Hooks::run('admin_page_notif_action', $data);?>
+        <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <section class="content-header">
-        <h1><i class="fa fa-sitemap"></i> <?=MENU_EDIT;?>
-        <div class="pull-right">
-        <button type="submit" name="edititem" class="btn btn-success btn-sm">
-            <span class="glyphicon glyphicon-ok"></span>
-            <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
-        </button>
-        <a href="index.php?page=menus" class="btn btn-danger btn-sm">
-            <span class="glyphicon glyphicon-remove"></span>
-            <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
-        </a>
-        </div>
-        </h1>
-    </section>
-<section class="content">
-    <div class="row">
-    <div class="col-sm-4">
-        <div class="form-group">
-            <label><?=MENU_PARENT;?></label>
 
-            <select class="form-control" name="parent">
-                <option></option>
-            <?php
-               //echo($data['abc']);
-                //print_r($data['menus']);
+    <div class="container-fluid py-4">
+        <!-- Header Section -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6 text-start">
+                <h3 class="fw-bold text-dark mb-0"><?=_("Link Adjustment");?></h3>
+                <p class="text-muted small mb-0"><?=_("Modify the target, label, and hierarchical position of this menu entry.");?></p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <div class="btn-group gap-2">
+                    <button type="submit" name="edititem" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-check2-circle me-1"></i> <?=_("Apply Changes");?>
+                    </button>
+                    <a href="index.php?page=menus" class="btn btn-light border rounded-pill px-4">
+                        <i class="bi bi-arrow-left me-1"></i> <?=_("Back to Menu");?>
+                    </a>
+                </div>
+            </div>
+        </div>
 
-            foreach ($data['parent'] as $p) {
-                
-                if ($p->parent == '0') {
-                    if ($data['menus'][0]->parent == $p->id) {
-                        $sel = 'SELECTED';
-                    } else {
-                        $sel = '';
-                    }
-                    echo "<option value=\"$p->id\" $sel>$p->name</option>";
-                    $parent2 = $data['parent'];
-                    foreach ($parent2 as $p2) {
-                        if ($p2->parent == $p->id) {
-                            if ($data['menus'][0]->parent == $p2->id) {
-                                $sel = 'SELECTED';
-                            } else {
-                                $sel = '';
-                            }
-                            echo "<option value=\"$p2->id\" $sel>&nbsp;&nbsp;&nbsp;$p2->name</option>";
-                            foreach ($data['parent'] as $p3) {
-                                if ($p3->parent == $p2->id) {
-                                    if ($data['menus'][0]->parent == $p3->id) {
-                                        $sel = 'SELECTED';
-                                    } else {
-                                        $sel = '';
-                                    }
-                                    echo "<option value=\"$p3->id\" $sel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            ?>
-            </select>
-            <small><?=MENU_PARENT_DESCR;?></small>
-        </div>
-    </div>
-    <div class="col-sm-4" >
-        <div class="form-group">
-            <label><?=MENU_ID;?></label>
-            <input type="text" name='id' class="form-control" value="<?=$menuid;?>" readonly >
-            <small><?=MENU_ID_DESCR;?></small>
-        </div>
-    </div>
-    <div class="col-sm-4" >
-        <div class="form-group">
-            <label><?=MENU_NAME;?></label>
-            <input type="text" name='name' class="form-control" value="<?=$data['menus'][0]->name;?>">
-            <small><?=MENU_NAME_DESCR;?></small>
-        </div>
-    </div>
-    <div class="col-sm-4" >
-        <div class="form-group">
-            <label><?=MENU_CLASS;?></label>
-            <input type="text" name='class' class="form-control" value="<?=$data['menus'][0]->class;?>">
-            <small><?=MENU_CLASS_DESCR;?></small>
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <h3><?=MENU_TYPE;?></h3>
-        <div class="col-sm-4" >
-            <div class="form-group">
-                <label><?=PAGE;?></label>
-                <div class="input-group">
-                    <?php
-                    if ($data['menus'][0]->type == 'page') {
-                        $on = 'checked';
-                    } else {
-                        $on = '';
-                    }
-                    ?>
-                    <span class="input-group-addon">
-                        <input type="radio" name='type' class="" value="page" <?=$on;?>>
-                    </span>
-                    <?php
-                        $vars = array(
-                                    'name' => 'page',
-                                    'type' => 'page',
-                                    'sort' => 'ASC',
-                                    'selected' => $data['menus'][0]->value,
-                                    'order_by' => 'title',
-                                );
-                        echo Posts::dropdown($vars);
-                    ?>
-                 </div>
-                <small><?=MENU_PAGE_DESCR;?></small>
-            </div>
-        </div>
-        <div class="col-sm-4" >
-            <div class="form-group">
-                <label><?=CATEGORIES;?></label>
-                <div class="input-group">
-                    <?php
-                    if ($data['menus'][0]->type == 'cat') {
-                        $on = 'checked';
-                    } else {
-                        $on = '';
-                    }
-                    ?>
-                    <span class="input-group-addon">
-                        <input type="radio" name='type' class="" value="cat" <?=$on;?>>
-                    </span>
-                    <?php
-                        $vars = array(
-                                    'name' => 'cat',
-                                    'sort' => 'ASC',
-                                    'selected' => $data['menus'][0]->value,
-                                    'order_by' => 'name',
-                                );
-                        echo Categories::dropdown($vars);
-                    ?>
-                 </div>
-                <small><?=MENU_CATEGORIES_DESCR;?></small>
-            </div>
-        </div>
-        <div class="col-sm-4" >
-            <div class="form-group">
-                <label><?=MODULES;?></label>
-                <div class="input-group">
-                    <?php
-                    if ($data['menus'][0]->type == 'mod') {
-                        $on = 'checked';
-                        $val = $data['menus'][0]->value;
-                    } else {
-                        $on = '';
-                        $val = '';
-                    }
-                    ?>
-                    <span class="input-group-addon">
-                        <input type="radio" name='type' class="" value="mod" <?=$on;?>>
-                    </span>
-                    <select name="mod" class="form-control">
-                    <?=Mod::menuList($val);?>
-                    </select>
-                 </div>
-                <small><?=MENU_MODULES_DESCR;?></small>
-            </div>
-        </div>
-        <div class="col-sm-4" >
-            <div class="form-group">
-                <label><?=MENU_CUSTOM_LINK;?></label>
-                <div class="input-group">
-                    <?php
-                    if ($data['menus'][0]->type == 'custom') {
-                        $on = 'checked';
-                        $val = $data['menus'][0]->value;
-                    } else {
-                        $on = '';
-                        $val = '';
-                    }
-                    ?>
-                    <span class="input-group-addon">
-                        <input type="radio" name='type' class="" value="custom" <?=$on;?>>
-                    </span>
-                    <input class="form-control" name="custom" value="<?=$val;?>">
-                 </div>
-                <small><?=MENU_CUSTOM_LINK_DESCR;?></small>
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-1">
+                        <h6 class="fw-bold text-muted extra-small text-uppercase tracking-wider m-0"><?=_("Configuration");?></h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <!-- Parent & Info -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Hierarchical Parent");?></label>
+                                    <select class="form-select border-0 bg-light rounded-3 py-2 px-3" name="parent">
+                                        <option value="0"><?=_("Top Level (None)");?></option>
+                                        <?php
+                                        foreach ($data['parent'] as $p) {
+                                            if ($p->parent == '0') {
+                                                $sel = ($data['menus'][0]->parent == $p->id) ? 'SELECTED' : '';
+                                                echo "<option value=\"$p->id\" $sel>$p->name</option>";
+                                                foreach ($data['parent'] as $p2) {
+                                                    if ($p2->parent == $p->id) {
+                                                        $sel = ($data['menus'][0]->parent == $p2->id) ? 'SELECTED' : '';
+                                                        echo "<option value=\"$p2->id\" $sel>&nbsp;&nbsp;&nbsp;$p2->name</option>";
+                                                        foreach ($data['parent'] as $p3) {
+                                                            if ($p3->parent == $p2->id) {
+                                                                $sel = ($data['menus'][0]->parent == $p3->id) ? 'SELECTED' : '';
+                                                                echo "<option value=\"$p3->id\" $sel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$p3->name</option>";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Registry ID");?></label>
+                                    <input type="text" name='id' class="form-control border-0 bg-white rounded-3 py-2 px-3 shadow-none" value="<?=$menuid;?>" readonly >
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted text-uppercase"><?=_("CSS Class");?></label>
+                                    <input type="text" name='class' class="form-control border-0 bg-light rounded-3 py-2 px-3" value="<?=$data['menus'][0]->class;?>">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Label Text");?></label>
+                                    <input type="text" name='name' class="form-control border-0 bg-light rounded-4 py-3 px-4 fw-bold fs-5 text-primary" value="<?=$data['menus'][0]->name;?>" required>
+                                    <div class="extra-small text-muted mt-1 ps-2"><?=_("Visual text displayed on the navigation bar.");?></div>
+                                </div>
+                            </div>
+
+                            <!-- Menu Type Selection -->
+                            <div class="col-12 mt-2">
+                                <h6 class="fw-bold text-dark extra-small text-uppercase tracking-widest mb-3 border-bottom pb-2"><?=_("Redirect Target Type");?></h6>
+                                <div class="row g-3">
+                                    <!-- Internal Page -->
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-light rounded-4 p-3 h-100 <?=($data['menus'][0]->type == 'page')?'border-start border-4 border-primary shadow-sm':''?>">
+                                            <div class="form-check d-flex align-items-start gap-2">
+                                                <input type="radio" name='type' id="typePage" class="form-check-input mt-1" value="page" <?=($data['menus'][0]->type == 'page')?'checked':''?>>
+                                                <label class="form-check-label flex-grow-1" for="typePage">
+                                                    <div class="fw-bold text-dark small"><?=_("Internal Page");?></div>
+                                                    <div class="extra-small text-muted mb-2"><?=_("Connect to a static page.");?></div>
+                                                    <?php
+                                                    $vars = array(
+                                                        'name' => 'page',
+                                                        'type' => 'page',
+                                                        'sort' => 'ASC',
+                                                        'selected' => $data['menus'][0]->value,
+                                                        'order_by' => 'title',
+                                                        'class' => 'form-select form-select-sm border-0 bg-white rounded-pill px-3 mt-1'
+                                                    );
+                                                    echo Posts::dropdown($vars);
+                                                    ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Category Archive -->
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-light rounded-4 p-3 h-100 <?=($data['menus'][0]->type == 'cat')?'border-start border-4 border-primary shadow-sm':''?>">
+                                            <div class="form-check d-flex align-items-start gap-2">
+                                                <input type="radio" name='type' id="typeCat" class="form-check-input mt-1" value="cat" <?=($data['menus'][0]->type == 'cat')?'checked':''?>>
+                                                <label class="form-check-label flex-grow-1" for="typeCat">
+                                                    <div class="fw-bold text-dark small"><?=_("Category View");?></div>
+                                                    <div class="extra-small text-muted mb-2"><?=_("Link to category archives.");?></div>
+                                                    <?php
+                                                    $vars = array(
+                                                        'name' => 'cat',
+                                                        'sort' => 'ASC',
+                                                        'selected' => $data['menus'][0]->value,
+                                                        'order_by' => 'name',
+                                                        'class' => 'form-select form-select-sm border-0 bg-white rounded-pill px-3 mt-1'
+                                                    );
+                                                    echo Categories::dropdown($vars);
+                                                    ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- System Module -->
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-light rounded-4 p-3 h-100 <?=($data['menus'][0]->type == 'mod')?'border-start border-4 border-primary shadow-sm':''?>">
+                                            <div class="form-check d-flex align-items-start gap-2">
+                                                <input type="radio" name='type' id="typeMod" class="form-check-input mt-1" value="mod" <?=($data['menus'][0]->type == 'mod')?'checked':''?>>
+                                                <label class="form-check-label flex-grow-1" for="typeMod">
+                                                    <div class="fw-bold text-dark small"><?=_("System Module");?></div>
+                                                    <div class="extra-small text-muted mb-2"><?=_("Direct access to modular features.");?></div>
+                                                    <?php
+                                                        $val = ($data['menus'][0]->type == 'mod') ? $data['menus'][0]->value : '';
+                                                    ?>
+                                                    <select name="mod" class="form-select form-select-sm border-0 bg-white rounded-pill px-3 mt-1">
+                                                        <?=Mod::menuList($val);?>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom Resource -->
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-light rounded-4 p-3 h-100 <?=($data['menus'][0]->type == 'custom')?'border-start border-4 border-primary shadow-sm':''?>">
+                                            <div class="form-check d-flex align-items-start gap-2">
+                                                <input type="radio" name='type' id="typeCustom" class="form-check-input mt-1" value="custom" <?=($data['menus'][0]->type == 'custom')?'checked':''?>>
+                                                <label class="form-check-label flex-grow-1" for="typeCustom">
+                                                    <div class="fw-bold text-dark small"><?=_("Custom Endpoint");?></div>
+                                                    <div class="extra-small text-muted mb-2"><?=_("Link to external resources.");?></div>
+                                                    <?php
+                                                        $val = ($data['menus'][0]->type == 'custom') ? $data['menus'][0]->value : '';
+                                                    ?>
+                                                    <input class="form-control form-control-sm border-0 bg-white rounded-pill px-3 mt-1" name="custom" value="<?=$val;?>" placeholder="https://...">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-</section>
-<input type="hidden" name="token" value="<?=$token;?>">
+    <input type="hidden" name="token" value="<?=$token;?>">
 </form>
 

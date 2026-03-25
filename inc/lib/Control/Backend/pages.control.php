@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,8 +20,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-if (User::access(2)) {
-    $data['sitetitle'] = PAGES;
+if (User::access(1)) {
+    $data['sitetitle'] = _("Pages");
     Theme::editor('full');
     if (isset($_GET['act'])) {
         $act = $_GET['act'];
@@ -36,7 +36,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     //clean up first
                     if (Options::v('multilang_enable') === 'on') {
@@ -56,7 +56,7 @@ if (User::access(2)) {
                         $content = Hooks::filter('post_submit_content_filter', $content);
                     }
                     if (!isset($_POST['title']) || $_POST['title'] == '') {
-                        $alertDanger[] = TITLE_CANNOT_EMPTY;
+                        $alertDanger[] = _("Title cannot be empty.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -70,6 +70,7 @@ if (User::access(2)) {
                                     'title' => $title,
                                     'content' => $content,
                                     'date' => $date,
+                                    'modified' => $date,
                                     'type' => 'page',
                                     'author' => Session::val('username'),
                                     'status' => Typo::int($_POST['status']),
@@ -99,7 +100,7 @@ if (User::access(2)) {
                             }
                         }
 
-                        $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_ADDED;
+                        $data['alertSuccess'][] = _("Page")." {$title} "._("Added Successfully");
                         Hooks::run('post_submit_add_action', $_POST);
                         isset($_POST['token']) ? Token::remove($token): '';
                     }
@@ -122,7 +123,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (Options::v('multilang_enable') === 'on') {
                         $def = Options::v('multilang_default');
@@ -141,7 +142,7 @@ if (User::access(2)) {
                         $content = Hooks::filter('post_submit_content_filter', $content);
                     }
                     if (!isset($_POST['title']) || $_POST['title'] == '') {
-                        $alertDanger[] = TITLE_CANNOT_EMPTY;
+                        $alertDanger[] = _("Title cannot be empty.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -192,7 +193,7 @@ if (User::access(2)) {
                             }
                         }
 
-                        $data['alertSuccess'][] = PAGE."  {$title} ".MSG_PAGE_UPDATED;
+                        $data['alertSuccess'][] = _("Page")."  {$title} "._("Updated Successfully");
                         Token::remove($token);
                     }
 
@@ -222,7 +223,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_GET['token']);
                     if (!isset($_GET['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -233,13 +234,13 @@ if (User::access(2)) {
                     if (isset($del['error'])) {
                         $data['alertDanger'][] = $del['error'];
                     } else {
-                        $data['alertSuccess'][] = PAGE." {$title} ".MSG_PAGE_REMOVED;
+                        $data['alertSuccess'][] = _("Page")." {$title} "._("Removed Successfully");
                     }
                     if (isset($_GET['token'])) {
                         Token::remove($token);
                     }
                 } else {
-                    $data['alertDanger'][] = 'No ID Selected';
+                    $data['alertDanger'][] = _('No ID Selected');
                 }
             }
             if (isset($_POST['action'])) {
@@ -257,7 +258,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -277,7 +278,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -297,7 +298,7 @@ if (User::access(2)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;

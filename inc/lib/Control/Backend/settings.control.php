@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,36 +20,36 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-if (User::access(0)) {
-    $data['sitetitle'] = SETTINGS;
+if (User::access(1)) {
+    $data['sitetitle'] = _("Settings");
     switch (isset($_POST['change'])) {
         case '1':
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
                 $vars = array();
-                if (isset($_FILES['logo']) && $_FILES['logo'] != '') {
-                    $path = '/assets/images/';
-                    $allowed = array('png', 'jpg', 'gif');
-                    $upload = Upload::go('logo', $path, $allowed);
-                    if (isset($upload['error']) != '') {
-                        echo $upload['error'];
-                    } else {
-                        if (Image::isPng($upload['filepath'])) {
-                            Image::compressPng($upload['filepath']);
-                        } elseif (Image::isJpg($upload['filepath'])) {
-                            Image::compressJpg($upload['filepath']);
-                        }
-                        $vars['logo'] = $upload['path'];
-                    }
-                } else {
-                    unset($_POST['logo']);
-                }
+                // if (isset($_FILES['logo']) && $_FILES['logo'] != '') {
+                //     $path = '/assets/images/';
+                //     $allowed = array('png', 'jpg', 'gif');
+                //     $upload = Upload::go('logo', $path, $allowed);
+                //     if (isset($upload['error']) != '') {
+                //         echo $upload['error'];
+                //     } else {
+                //         if (Image::isPng($upload['filepath'])) {
+                //             Image::compressPng($upload['filepath']);
+                //         } elseif (Image::isJpg($upload['filepath'])) {
+                //             Image::compressJpg($upload['filepath']);
+                //         }
+                //         $vars['logo'] = $upload['path'];
+                //     }
+                // } else {
+                //     unset($_POST['logo']);
+                // }
 
                 //print_r($_POST);
                 $flip = array_flip($_POST);
@@ -74,9 +74,12 @@ if (User::access(0)) {
                 }
                 unset($vars['change']);
                 //print_r($vars);
-                Options::update($vars);
+                if( count($vars) > 0 )
+                    Options::update($vars);
+                    $data['alertSuccess'][] = _("Settings Updated");
+
                 new Options();
-                $data['alertSuccess'][] = MSG_SETTINGS_SAVED;
+                $data['alertSuccess'][] = _("New Settings Saved Successfully.");
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);

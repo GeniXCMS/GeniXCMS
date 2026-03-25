@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -25,6 +25,7 @@ define('GX_LIB', GX_PATH.'/inc/lib/');
 define('GX_MOD', GX_PATH.'/inc/mod/');
 define('GX_THEME', GX_PATH.'/inc/themes/');
 define('GX_ASSET', GX_PATH.'/assets/');
+define('GX_CACHE', GX_PATH.'/assets/cache/');
 
 
 

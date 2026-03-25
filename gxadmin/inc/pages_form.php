@@ -3,308 +3,174 @@
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
- * @since 0.0.1 build date 20150202
- *
- * @version 1.1.12
- *
- * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- * @copyright 2014-2023 Puguh Wijayanto
- * @copyright 2023-2024 GeniXCMS
- * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-if (isset($_GET['token'])
-    && Token::validate($_GET['token'])) {
+if (isset($_GET['token']) && Token::validate($_GET['token'])) {
     $token = TOKEN;
 } else {
     $token = '';
 }
-($_GET['act'] == 'edit') ? $pagetitle = 'Edit' : $pagetitle = 'New';
-($_GET['act'] == 'edit') ? $act = "edit&id=".Typo::int($_GET['id'])."&token=".$token : $act = 'add';
+
+$isEdit = ($_GET['act'] == 'edit');
+$pagetitle = $isEdit ? _("Modify Page Structure") : _("Initialize New Page");
+$act = $isEdit ? "edit&id=".Typo::int($_GET['id'])."&token=".$token : 'add';
+
+$id = $isEdit ? Typo::int($_GET['id']) : 0;
+$title = $content = $date = $status = $tags = '';
+$pub = $unpub = '';
 
 if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
-        //print_r($data['post']);
         foreach ($data['post'] as $p) {
             $title = $p->title;
             $content = $p->content;
             $date = $p->date;
             $status = $p->status;
-            $cat = $p->cat;
             $tags = @$p->tags;
         }
-        if ($status == 1) {
-            $pub = 'SELECTED';
-            $unpub = '';
-        } elseif ($status == 0) {
-            $pub = '';
-            $unpub = 'SELECTED';
-        }
-        $id = Typo::int($_GET['id']);
+        $pub = ($status == 1) ? 'SELECTED' : '';
+        $unpub = ($status == 0) ? 'SELECTED' : '';
     } else {
-        $title = '';
-        $content = '';
-        $date = '';
-        $status = '';
-        $cat = '';
-        $pub = '';
-        $unpub = '';
-        $tags = '';
         $data['alertDanger'][] = $data['post']['error'];
     }
-} else {
-    $title = '';
-    $content = '';
-    $date = '';
-    $status = '';
-    $cat = '';
-    $pub = '';
-    $unpub = '';
-    $tags = '';
 }
-
 ?>
-<form action="index.php?page=pages&act=<?=$act?>" method="post" role="form" class="">
 
-    <div class="col-md-12">
-        <?=Hooks::run('admin_page_notif_action', $data);?>
-    </div>
-    <section class="content-header">
-        <h1><i class="fa fa-file-o"></i> <?=$pagetitle;
-?> <?=PAGE;?>
-            <div class="pull-right">
+<div class="col-md-12">
+    <?=Hooks::run('admin_page_notif_action', $data);?>
+</div>
 
+<form action="index.php?page=pages&act=<?=$act?>&token=<?=TOKEN;?>" method="post" role="form">
+    <div class="container-fluid py-4">
+        <!-- Editor Header -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-7">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item small"><a href="index.php?page=pages" class="text-decoration-none text-muted"><?=_("Pages Library");?></a></li>
+                        <li class="breadcrumb-item small active" aria-current="page"><?=_("Drafting");?></li>
+                    </ol>
+                </nav>
+                <h3 class="fw-bold text-dark mb-0"><?=$pagetitle;?></h3>
             </div>
-        </h1>
-    </section>
-    <section class="content">
-        <!-- Default box -->
-        <div class="box box-success">
-            <div class="box-header with-border">
-                <h3 class="box-title">
-                    Add Page
-                </h3>
-
-                <div class="box-tools pull-right">
-                    <button type="submit" name="submit" class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span>
-                        <span class="hidden-xs hidden-sm"><?=SUBMIT;?></span>
-                    </button>
-
-                    <a href="index.php?page=pages" class="btn btn-danger btn-sm">
-                        <span class="glyphicon glyphicon-remove"></span>
-                        <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
-                    </a>
-                </div>
+            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                <a href="index.php?page=pages" class="btn btn-light rounded-pill px-4 me-2 border">
+                    <i class="bi bi-arrow-left me-1"></i> <?=_("Back");?>
+                </a>
+                <button type="submit" name="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-cloud-upload me-1"></i> <?=_("Commit Changes");?>
+                </button>
             </div>
-            <div class="box-body">
-        <div class="row">
+        </div>
 
-                <div class="col-sm-8" id="myTab">
-                    <?php
-                    if (Options::v('multilang_enable') === 'on') {
-                        $def = Options::v('multilang_default');
-                        $deflang = Language::getDefaultLang();
-                        $listlang = json_decode(Options::v('multilang_country'), true);
-                        $deflag = strtolower($listlang[$def]['flag']);
-
-                        echo "<div class='nav-tabs-custom'>
-                    <ul class=\"nav nav-tabs\" role=\"tablist\">
-                        <li class=\"active\"><a href=\"#lang-{$def}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$deflag}\"></span> {$deflang['country']}</a></li>";
-
-                        unset($listlang[Options::v('multilang_default')]);
-                        foreach ($listlang as $key => $value) {
-                            $flag = strtolower($value['flag']);
-                            echo "
-                        <li><a href=\"#lang-{$key}\" role=\"tab\" data-toggle=\"tab\"><span class=\"flag-icon flag-icon-{$flag}\"></span> {$value['country']}</a></li>";
-                        }
-
-                        echo "
-                    </ul>
-                    <div class=\"clearfix\">&nbsp;</div>
-                    <div class=\"tab-content\">
-                    <!-- Tab Pane General -->
-                    <div class=\"tab-pane active\" id=\"lang-{$def}\">
-                        <div class=\"form-group\">
-                            <label for=\"title\">".TITLE." ({$def}) </label>
-                            <input type=\"title\" name=\"title[{$def}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$title}\">
-                        </div>
-                        <div class=\"form-group\">
-                            <label for=\"content\">".CONTENT." </label> <a href=\"#\" id=\"toggleEditor\" class=\"btn btn-danger btn-xs pull-right\"><i class=\"fa fa-desktop\"></i> Editor</a>
-                            
-                            <textarea name=\"content[{$def}]\" class=\"form-control content editor ge-html-output\" id=\"content\" rows=\"20\">{$content}</textarea>
-                            <div id=\"myGrid\">{$content}</div>
-                        </div>
+        <div class="row g-4">
+            <!-- Main Content Area -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <?php if (Options::v('multilang_enable') === 'on'): ?>
+                        <ul class="nav nav-pills nav-pills-custom mb-3" id="langTab" role="tablist">
+                            <?php
+                            $def = Options::v('multilang_default');
+                            $listlang = json_decode(Options::v('multilang_country'), true);
+                            foreach ($listlang as $key => $value):
+                                $flag = strtolower($value['flag']);
+                                $isActive = ($key == $def) ? 'active' : '';
+                            ?>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link <?=$isActive;?> rounded-pill px-4" id="tab-<?=$key;?>" data-bs-toggle="pill" data-bs-target="#pane-<?=$key;?>" type="button" role="tab">
+                                    <span class="flag-icon flag-icon-<?=$flag;?> me-2 small"></span> <?=$value['country'];?>
+                                </button>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
                     </div>
-                    ";
-                        unset($listlang[Options::v('multilang_default')]);
-                        foreach ($listlang as $key => $value) {
-                            if (isset($_GET['act']) && $_GET['act'] == 'edit') {
-                                $lang = Language::getLangParam($key, $id);
-                                if ($lang == '' || !Posts::existParam('multilang', $id)) {
-                                    $lang['title'] = $title;
-                                    $lang['content'] = $content;
-                                } else {
-                                    $lang = $lang;
-                                }
-                            } else {
-                                $lang['title'] = '';
-                                $lang['content'] = '';
-                            }
-                            echo "
-                    <div class=\"tab-pane\" id=\"lang-{$key}\">
-                    
-                        <div class=\"form-group\">
-                            <label for=\"title\">".TITLE." ({$key}) </label>
-                            <input type=\"title\" name=\"title[{$key}]\" class=\"form-control\" id=\"title\" placeholder=\"Post Title\" value=\"{$lang['title']}\">
-                        </div>
-                        <div class=\"form-group\">
-                            <label for=\"content\">".CONTENT."</label> 
-                            <textarea name=\"content[{$key}]\" class=\"form-control content editor\" id=\"content_{$key}\" rows=\"20\">{$lang['content']}</textarea>
-                        </div>
-                    </div>
-                    
-                        ";
-                            $asset = '<script>
-                                $(document).ready(function(){
-                                    // $(\'.tab-content\').each(function(){
-                                    //     $(\'#myGrid_'.$key.'\').gridEditor({
-                                    //         content_types: [\'summernote\'],
-                                    //         source_textarea: \'#content_'.$key.'\'
-                                    //     });
-                                    // });
-                                    // $(\'#myGrid_'.$key.'\').hide();
-                                    // $(".ge-mainControls").hide();
-                                    // $(\'#toggleEditor_'.$key.'\').click(
-                                    //     function(){
-                                    //         $(\'#myGrid_'.$key.'\').toggle();
-                                    //         $(".note-editor").toggle();
-                                    //         $(".ge-mainControls").toggle();
-                                    //     }
-                                    // );
 
-                                    $(\'#content_'.$key.'\').each(function(i, obj) { $(obj).summernote({
-                                        minHeight: 300,
-                                        maxHeight: ($(window).height() - 150),
-                                        toolbar: [
-                                                '.System::$toolbar.'
-                                            ],
-                                        callbacks: {
-                                            onImageUpload: function(files, editor, welEditable) {
-                                                sendFile(files[0],editor,welEditable);
-                                            },
-                                            onPaste: function (e) {
-                                                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData(\'Text\');
-                                                e.preventDefault();
-                                                document.execCommand(\'insertText\', false, bufferText);
-                                            },
-                                            onChange: function(e) {
-                                                var characteres = $(".note-editable").text();
-                                                var wordCount = characteres.trim().split(\' \').length;
-                                                if (characteres.length == 0) {
-                                                    $(\'.note-statusbar\').html(\'&nbsp; 0 word <div class="note-resizebar">    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>  </div>\');
-                                                    return;
-                                                }
-                                                //Update value
-                                                $(".note-statusbar").html(\'&nbsp; \'+wordCount+\' words <div class="note-resizebar">    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>    <div class="note-icon-bar"></div>  </div>\');
-                                 
-                                            }
-                                        },
-                                        popover: {
-                                        image: [
-                                            [\'imagesize\', [\'imageSize100\', \'imageSize50\', \'imageSize25\']],
-                                            [\'floatBS\', [\'floatBSLeft\', \'floatBSNone\', \'floatBSRight\']],
-                                            [\'custom\', [\'imageAttributes\',\'imageShape\']],
-                                            [\'remove\', [\'removeMedia\']]
-                                        ],
-                                        dialogsInBody: true,
-                                    },
-                                      });
-                                    });
-                                    
-                                });
-                                </script>
-                                ';
-                            System::adminAsset($asset);
-
-                            unset($lang);
-                        }
-
-                        echo '</div></div>';
-                    } else {
-                        ?>
-                        <div class="form-group">
-                        <label for="title"><?=TITLE; ?></label>
-                        <input type="title" name="title" class="form-control" id="title" placeholder="Post Title" value="<?=$title; ?>">
-                        </div>
-                        <div class="form-group">
-                        <label for="content"><?=CONTENT; ?></label> <a href="#" id="toggleEditor" class="btn btn-danger btn-xs pull-right"><i class="fa fa-desktop"></i> Editor</a>
-                        <textarea name="content" class="form-control content editor" id="content" rows="20"><?=$content; ?></textarea>
-                        <div id="myGrid"><?=$content; ?></div>
-                        </div>
-                        <?php
-
-                    }
-                    Hooks::run('page_param_form', $data);
-                ?>
-                </div>
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><?=OPTIONS;?></h3>
-                        </div>
-                        <div class="panel-body">
-
-                            <div class="form-group">
-                                <label><?=STATUS;?></label>
-                                <select name="status" class="form-control">
-                                    <option value="1" <?=$pub;
-?>><?=PUBLISH;?></option>
-                                    <option value="0" <?=$unpub;
-?>><?=UNPUBLISH;?></option>
-                                </select>
-                                <small><?=PUBLISHED;
-?> or <?=UNPUBLISHED;?></small>
-                            </div>
-
-                            <div class="form-group">
-                                <label><?=POST_DATE;?></label>
-                                <div class='input-group date' id='dateTime'>
-                                    <input type='text' class="form-control" name="date" value="<?=$date;?>" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                    <div class="card-body p-4 pt-2">
+                        <div class="tab-content" id="langTabContent">
+                            <?php if (Options::v('multilang_enable') === 'on'): 
+                                foreach ($listlang as $key => $value):
+                                    $isActive = ($key == $def) ? 'show active' : '';
+                                    if ($isEdit) {
+                                        $langData = Language::getLangParam($key, $id);
+                                        if ($langData == '' || !Posts::existParam('multilang', $id)) {
+                                            $langData['title'] = $title;
+                                            $langData['content'] = $content;
+                                        }
+                                    } else {
+                                        $langData['title'] = '';
+                                        $langData['content'] = '';
+                                    }
+                            ?>
+                            <div class="tab-pane fade <?=$isActive;?>" id="pane-<?=$key;?>" role="tabpanel">
+                                <div class="mb-4">
+                                    <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Page Heading");?> (<?=$key;?>)</label>
+                                    <input type="text" name="title[<?=$key;?>]" class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold" 
+                                           placeholder="<?=_("Enter a descriptive title...");?>" value="<?=$langData['title'];?>">
                                 </div>
-                                <small><?=LEFT_IT_BLANK_NOW_DATE;?></small>
+                                <div class="mb-0">
+                                    <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Body Composition");?></label>
+                                    <textarea name="content[<?=$key;?>]" class="form-control editor rounded-4" id="editor_<?=$key;?>" rows="22"><?=$langData['content'];?></textarea>
+                                </div>
                             </div>
+                            <?php endforeach; else: ?>
+                            <div class="mb-4">
+                                <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Page Heading");?></label>
+                                <input type="text" name="title" class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold" 
+                                       placeholder="<?=_("Enter a descriptive title...");?>" value="<?=$title;?>">
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Body Composition");?></label>
+                                <textarea name="content" class="form-control editor rounded-4" id="primary_editor" rows="22"><?=$content;?></textarea>
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
+                </div>
+                <?php Hooks::run('page_param_form_bottom', $data); ?>
+            </div>
 
-                    <!-- <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><?=TAGS;?></h3>
+            <!-- Sidebar Controls -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white py-3 px-4 border-0">
+                        <h6 class="m-0 fw-bold"><i class="bi bi-gear-wide-connected me-2"></i><?=_("Publication Settings");?></h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Visibility Status");?></label>
+                            <div class="input-group rounded-3 border-0 bg-light px-3 py-1">
+                                <span class="input-group-text bg-transparent border-0"><i class="bi bi-eye text-primary"></i></span>
+                                <select name="status" class="form-select border-0 bg-transparent fw-medium ps-1">
+                                    <option value="1" <?=$pub;?>><?=_("Public / Live");?></option>
+                                    <option value="0" <?=$unpub;?>><?=_("Private / Draft");?></option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <textarea name="tags" class="form-control"><?=$tags;?></textarea>
-                            <small><?=TAGS_DESC;?></small>
+
+                        <div class="mb-0">
+                            <label class="form-label small text-muted text-uppercase fw-bold"><?=_("Internal Timestamp");?></label>
+                            <div class="input-group rounded-3 border-0 bg-light px-3 py-1">
+                                <span class="input-group-text bg-transparent border-0"><i class="bi bi-calendar-event text-danger"></i></span>
+                                <input type="text" name="date" class="form-control border-0 bg-transparent fw-medium ps-1" id="dateTime" value="<?=$date;?>" placeholder="<?=_("Now");?>">
+                            </div>
+                            <div class="form-text extra-small opacity-75 mt-2 ms-1"><?=_("Leave empty for immediate publication.");?></div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
 
+                <?php Hooks::run('page_param_form_sidebar', $data); ?>
+            </div>
         </div>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-
-        </div>
-        <!-- /.box-footer-->
-        </div>
-        <!-- /.box -->
-    </section>
-
-<input type="hidden" name="token" value="<?=$token;?>">
+    </div>
+    <input type="hidden" name="token" value="<?=$token;?>">
 </form>
+
+<style>
+    .nav-pills-custom .nav-link { color: #64748b; font-weight: 600; font-size: 0.85rem; border: 1px solid #f1f5f9; margin-right: 8px; transition: all 0.3s ease; }
+    .nav-pills-custom .nav-link:hover { background-color: #f8fafc; border-color: #e2e8f0; }
+    .nav-pills-custom .nav-link.active { background-color: var(--gx-primary); color: #fff; border-color: var(--gx-primary); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
+    .form-control-lg:focus { background-color: #fff !important; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    .extra-small { font-size: 0.75rem; }
+    .card-header h6 { letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.8rem; }
+</style>

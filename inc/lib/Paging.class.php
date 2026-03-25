@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -42,6 +42,7 @@ class Paging
      */
     public static function create($vars, $smart = false)
     {
+        $r = '';
         if (is_array($vars)) {
             if (isset($vars['where'])) {
                 $where = ' WHERE '.$vars['where'];
@@ -80,7 +81,7 @@ class Paging
             }
 
             if (isset($vars['type']) && $vars['type'] == 'number') { // NUMBER
-                $r = '<ul class="pagination pagination-sm no-margin pull-right">';
+                $r = '<nav><ul class="pagination pagination-sm pull-right no-margin">';
                 $maxpage = 7;
                 $curr = Typo::int($vars['paging']);
                 $max = Typo::int($vars['max']);
@@ -111,15 +112,15 @@ class Paging
                         $url = $vars['url'].'&paging='.$i;
                     }
                     if ($curr == $i) {
-                        $sel = 'class="active"';
+                        $sel = 'active';
                     } else {
                         $sel = '';
                     }
-                    $r .= "<li {$sel}><a href=\"{$url}\">$i</a></li>";
+                    $r .= "<li class='page-item {$sel}'><a class='page-link' href=\"{$url}\">$i</a></li>";
                 }
-                $r .= '</ul>';
+                $r .= '</ul></nav>';
             } elseif (isset($vars['type']) && $vars['type'] == 'pager') { // PAGER
-                $r = '<ul class="pagination-sm no-margin pager">';
+                $r = '<nav><ul class="pagination pagination-sm no-margin pager">';
                 $limit = ceil($total / $vars['max']);
                 $curr = Typo::int($vars['paging']);
                 $max = Typo::int($vars['max']);
@@ -133,7 +134,7 @@ class Paging
                     } else {
                         $url = $vars['url'].'&paging='.$prev;
                     }
-                    $r .= "<li class=\"pull-left\"><a href=\"{$url}\">Previous</a></li>";
+                    $r .= "<li class=\"pull-left\"><a class='page-link' href=\"{$url}\">"._('Previous')."</a></li>";
                 }
 
                 if ($curr < $limit) {
@@ -145,12 +146,12 @@ class Paging
                         $url = $vars['url'].'&paging='.$next;
                     }
                     $r .= "
-                    <li class=\"pull-right\"><a href=\"{$url}\">Next</a></li>";
+                    <li class=\"pull-right\"><a class=\"page-link\"  href=\"{$url}\">"._('Next')."</a></li>";
                 }
-                $r .= '</ul>';
+                $r .= '</ul></nav>';
             }
         } else {
-            $r = '<alert>Query Error, in Array Please</alert>';
+            $r = _('<alert>Query Error, in Array Please</alert>');
         }
 
         return $r;

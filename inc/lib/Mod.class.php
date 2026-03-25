@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -36,7 +36,7 @@ class Mod
     /**
      * @param $var
      */
-    public static function options($var)
+    public static function options($var, $data = array())
     {
         $file = GX_MOD.$var.'/options.php';
         if (file_exists($file)) {
@@ -96,20 +96,21 @@ class Mod
     {
         $json = Options::v('modules');
         $mod = json_decode($json, true);
-        //$mod = self::modList();
-        //print_r($mod);
         if (is_array($mod)) {
             $list = '';
             asort($mod);
             foreach ($mod as $m) {
                 if (self::exist($m)) {
                     $data = self::data($m);
-                    if (isset($_GET['mod']) && $_GET['mod'] == $m) {
-                        $class = 'class="active"';
-                    } else {
-                        $class = '';
-                    }
-                    $list .= "<li $class><a href=\"index.php?page=mods&mod={$m}\"  >".$data['icon'].' <span>'.$data['name'].'</span></a></li>';
+                    $class = (isset($_GET['mod']) && $_GET['mod'] == $m) ? 'active' : '';
+                    $icon = isset($data['icon']) && $data['icon'] ? $data['icon'] : 'bi bi-puzzle';
+                    $list .= "
+                    <li class=\"{$class}\">
+                        <a href=\"index.php?page=mods&mod={$m}\">
+                            <i class=\"{$icon}\"></i> <span>".$data['name']."</span>
+                        </a>
+                    </li>
+                    ";
                 }
             }
         } else {
@@ -204,45 +205,45 @@ class Mod
                 $token = isset($_GET['token']) ? Typo::cleanX($_GET['token']): '';
                 $modules = isset($_GET['modules']) ? Typo::cleanX($_GET['modules']): '';
                 if (isset($_GET['act'])) {
-                    if ($_GET['act'] == ACTIVATE) {
+                    if ($_GET['act'] == 'activate') {
 
                         if (!isset($_POST['token']) && !Token::validate($token, true)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
 
                         if (!isset($alertDanger)) {
                             self::activate($modules);
-                            $GLOBALS['alertSuccess'] = MODULES_ACTIVATED;
+                            $GLOBALS['alertSuccess'] = _('Module Activated');
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
-                    } elseif ($_GET['act'] == DEACTIVATE) {
+                    } elseif ($_GET['act'] == 'deactivate') {
                         if (!isset($_POST['token']) && !Token::validate($token, true)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
 
                         if (!isset($alertDanger)) {
                             self::deactivate($modules);
-                            $GLOBALS['alertSuccess'] = MODULES_DEACTIVATED;
+                            $GLOBALS['alertSuccess'] = _('Module Deactivated');
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;
                         }
                     } elseif ($_GET['act'] == 'remove') {
                         if (!isset($_POST['token']) && !Token::validate($token, true)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
                         if (self::isActive($modules)) {
-                            $alertDanger[] = 'Module is Active. Please deactivate first.';
+                            $alertDanger[] = _('Module is Active. Please deactivate first.');
                         }
                         if (!isset($alertDanger)) {
                             self::deactivate($modules);
                             if (false != Files::delTree(GX_MOD.$_GET['modules'])) {
-                                $GLOBALS['alertSuccess'] = MODULES_DELETED;
+                                $GLOBALS['alertSuccess'] = _('Module Deleted');
                             } else {
-                                $GLOBALS['alertDanger'][] = "Can't delete module files";
+                                $GLOBALS['alertDanger'][] = _("Can't delete module files");
                             }
                         } else {
                             $GLOBALS['alertDanger'] = $alertDanger;

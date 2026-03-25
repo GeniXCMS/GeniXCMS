@@ -1,0 +1,230 @@
+/* =============================================
+   GneeX Latte Theme - style.css
+   Base styles (non-customizable via options)
+   Dynamic/themeable styles are in function.php
+   ============================================= */
+
+/* ---- Layout ---- */
+body {
+    letter-spacing: 0.01em;
+}
+
+article {
+    text-align: justify;
+}
+
+article iframe {
+    max-width: 100% !important;
+}
+
+article img.pull-right {
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+/* ---- Featured Slider ---- */
+#featured {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+ul.list-featured {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+ul.list-featured>li>a>img {
+    width: 100%;
+}
+
+ul.list-featured>li {
+    margin-bottom: 15px;
+    overflow: hidden;
+    max-height: 170px;
+    position: relative;
+}
+
+img.featuredimg {
+    height: 100% !important;
+    width: auto;
+}
+
+.list-featured .featured-text {
+    display: none;
+    position: absolute;
+}
+
+ul.list-featured>li a:hover>.featured-text {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    left: 15px;
+    background-color: rgba(0, 0, 0, .8);
+    padding: 5px;
+    color: #eee;
+}
+
+ul.list-featured>li a>.featured-text>h4,
+ul.list-featured>li a:hover>.featured-text>h4 {
+    color: #fff;
+    font-size: .857em;
+}
+
+/* ---- Blog section ---- */
+#blog {
+    min-height: 200px;
+}
+
+.blog-post {
+    margin-bottom: 15px;
+}
+
+/* ---- Panel / Magazine ---- */
+#magazine {
+    margin: 50px 0;
+}
+
+.vertical-list {
+    max-height: 180px;
+    overflow: hidden;
+}
+
+.horizontal-list {
+    max-height: 130px;
+    overflow: hidden;
+}
+
+h3.panel-title {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.panel.panel-one .panel-body,
+.panel.panel-two .panel-body,
+.panel.panel-three .panel-body,
+.panel.panel-five .panel-body {
+    padding-top: 3px;
+}
+
+.panel.panel-five .panel-body img,
+.panel.panel-one .panel-body img,
+.panel.panel-two .panel-body img,
+.panel.panel-three .panel-body img {
+    width: 100% !important;
+}
+
+/* ---- Sidebar ---- */
+.sidebar-cards .card-body {
+    padding: 1.25rem;
+}
+
+/* ---- Post read-more button ---- */
+.btn-read-more {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--transition);
+    border-radius: 0;
+}
+
+.btn-read-more:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ---- Media / Image handling ---- */
+img.listNews {
+    max-width: 64px;
+    margin: 3px 0 0 0;
+}
+
+article .content img {
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
+    max-width: 100%;
+}
+
+/* ---- Related posts ---- */
+.related {
+    text-align: left;
+    font-size: .9em;
+}
+
+/* ---- FlexSlider controls ---- */
+.flex-control-nav {
+    bottom: -15px;
+}
+
+/* ---- Hero section sizing ---- */
+.hero-bg-small {
+    min-height: 280px !important;
+}
+
+/* ---- Pagination ---- */
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* ---- Inner / single post ---- */
+.post-inner {
+    padding: 2rem;
+}
+
+/* ---- Footer links override ---- */
+footer a {
+    transition: var(--transition);
+}
+
+/* ---- Tags ---- */
+.tag-cloud {
+    padding: 0 10px;
+    line-height: 25px;
+}
+
+/* ---- Comments ---- */
+#comments .media-heading {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .hero-bg {
+        min-height: 380px !important;
+    }
+
+    .post-inner-card {
+        padding: 20px !important;
+    }
+
+    .vertical-list {
+        max-height: 120px;
+    }
+
+    .horizontal-list {
+        max-height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    article iframe {
+        width: 100% !important;
+        height: 200px !important;
+    }
+}

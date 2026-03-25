@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160902
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -19,7 +19,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-System::gZip();
+
 
 $data = Router::scrap($param);
 // print_r($data);
@@ -39,6 +39,19 @@ if (isset($data['thumb']) && $data['thumb'] != '' ) {
     $size = '';
     $align = '';
 }
-Image::thumbFly($thumb, $type, $size, $align);
 
-System::Zipped();
+$imgExts = explode(".",$thumb);
+rsort($imgExts);
+$imgExt = $imgExts[0];
+if($imgExt == 'png') {
+    header('Content-Type: image/png');
+}
+if($imgExt == 'jpg' || $imgExt == 'jpeg') {
+    header('Content-Type: image/jpeg');
+}
+if($imgExt == 'webp') {
+    header('Content-Type: image/webp');
+}
+
+
+Image::thumbFly($thumb, $type, $size, $align);

@@ -26,7 +26,7 @@ class Contact
                 case true:
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)){
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (Xaptcha::isEnable()) {
                         if (!isset($_POST['g-recaptcha-response']) || $_POST['g-recaptcha-response'] == '') {

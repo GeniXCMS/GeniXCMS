@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.2 build date 20150313
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -36,48 +36,57 @@ class Files
 
     public static function elfinderLib()
     {
-        // $url = (SMART_URL)? Site::$url . '/ajax/elfinder?token=' . TOKEN : Site::$url . "/index.php?ajax=elfinder&token=" . TOKEN;
         $url = Url::ajax('elfinder');
-        $html = '
-    <!--<script src="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="stylesheet" href="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.structure.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="'.Site::$url.'/assets/js/jquery-ui/jquery-ui.theme.min.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
-    <link rel="stylesheet" href="'.Vendor::url().'/studio-42/elfinder/css/elfinder.min.css"      type="text/css">
-    <link rel="stylesheet" href="'.Site::$url.'/assets/css/theme-bootstrap-libreicons-svg.css"      type="text/css">
+        $vendorUrl = Vendor::url();
+        
+        $html = <<<HTML
+    <link rel="stylesheet" href="{$vendorUrl}/studio-42/elfinder/css/elfinder.min.css" type="text/css">
+    <link rel="stylesheet" href="{$vendorUrl}/studio-42/elfinder/css/theme.css" type="text/css">
 
     <!-- elfinder core -->
-    <script src="'.Vendor::url().'/studio-42/elfinder/js/elfinder.min.js"></script>
-    <!-- elfinder 1.x connector API support -->
-    <script src="'.Vendor::url()."/studio-42/elfinder/js/proxy/elFinderSupportVer1.js\"></script>
+    <script src="{$vendorUrl}/studio-42/elfinder/js/elfinder.min.js"></script>
+    <script src="{$vendorUrl}/studio-42/elfinder/js/proxy/elFinderSupportVer1.js"></script>
 
-    <script>
-        
+    <script shadow>
+        $(document).ready(function() {
+            // Compatibility shim for jQuery UI 1.12+ (deprecated buttonset)
+            if ($.fn.buttonset === undefined) {
+                $.fn.buttonset = function() {
+                    return this.each(function() {
+                        var el = $(this);
+                        if (el.is("div")) {
+                            el.controlgroup();
+                        } else {
+                            el.checkboxradio();
+                        }
+                    });
+                };
+            }
+
             $('#elfinder').elfinder({
-                url : '".$url."',
-                height : '500',
+                url : '{$url}',
+                baseUrl : '{$vendorUrl}/studio-42/elfinder/',
+                height : '100%',
                 handlers : {
                     select : function(event, elfinderInstance) {
                         var selected = event.data.selected;
                     },
-
                 },
-
                 lang : 'en',
                 customData : {answer : 42},
-
             });
-        
+        });
 
         function elfinderDialog() {
             var fm = $('<div/>').dialogelfinder({
-                url : '".$url."',
+                url : '{$url}',
                 lang : 'en',
                 width : 840,
                 height: 450,
                 destroyOnClose : true,
                 getFileCallback : function(files, fm) {
                     console.log(files);
-                    $('.editor').summernote('editor.insertImage',files.url);
+                    $('.editor').summernote('editor.insertImage', files.url);
                 },
                 commandsOptions : {
                     getfile : {
@@ -85,12 +94,30 @@ class Files
                         folders : false
                     }
                 }
-
             }).dialogelfinder('instance');
         }
 
+        function elfinderDialog2() {
+            var fm = $('<div/>').dialogelfinder({
+                url : '{$url}',
+                lang : 'en',
+                width : 840,
+                height: 450,
+                destroyOnClose : true,
+                getFileCallback : function(files, fm) {
+                    $('#post_image').val(files.url);
+                    $('#post_image_preview').attr('src', files.url);
+                },
+                commandsOptions : {
+                    getfile : {
+                        oncomplete : 'close',
+                        folders : false
+                    }
+                }
+            }).dialogelfinder('instance');
+        }
     </script>
-        ";
+HTML;
 
         return $html;
     }

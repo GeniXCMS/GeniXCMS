@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -26,7 +26,7 @@ class System
      *
      * @return float
      */
-    public static $version = '1.1.12';
+    public static $version = '2.0.0-alpha';
 
     /**
      * GeniXCMS Version Release.
@@ -51,6 +51,9 @@ class System
      */
     public function __construct()
     {
+        if(array_key_exists("HTTP_X_FORWARDED_PROTO", $_SERVER) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
+            $_SERVER["HTTPS"] = "on";
+        }
 
         /* Load config file */
         self::config('config');
@@ -81,7 +84,7 @@ class System
         
 
         /* Start the session */
-        Session::start();
+        new Session();
 
         /* Initiate System Language */
         self::lang(Options::v('system_lang'));
@@ -98,6 +101,12 @@ class System
 
         /* Initiate Modules */
         new Mod();
+
+        /* Initiate Params */
+        new Params();
+
+        /* Initiate Archives */
+        new Archives();
 
         /* Run Hooks : init */
         Hooks::run('init');
@@ -132,6 +141,21 @@ class System
     }
 
     public static function lang($vars)
+    {
+        $dir = GX_PATH.'/inc/lang/locale';
+        if (defined('LC_MESSAGES')) {
+            setlocale(LC_MESSAGES, $vars); // Linux
+            bindtextdomain("genixcms", $dir);
+        } else {
+            putenv("LC_ALL={$vars}"); // windows
+            bindtextdomain("genixcms", $dir);
+        }
+        
+        
+        textdomain("genixcms");
+    }
+
+    public static function lang2($vars)
     {
         $file = GX_PATH.'/inc/lang/'.$vars.'.lang.php';
         if (file_exists($file)) {
@@ -194,6 +218,7 @@ class System
             $contents = ob_get_contents();
             ob_end_clean();
             header('Content-Encoding: '.$encoding);
+            header('Vary: Accept-Encoding');
             echo "\x1f\x8b\x08\x00\x00\x00\x00\x00";
             $size = strlen($contents);
             $contents = gzcompress($contents, 9);
@@ -259,7 +284,7 @@ class System
 
     public static function getLatestVersion($now)
     {
-        $v = Http::fetch('https://raw.githubusercontent.com/semplon/GeniXCMS/master/VERSION');
+        $v = Http::fetch('https://raw.githubusercontent.com/GeniXCMS/GeniXCMS/master/VERSION');
 
         $arr = array(
         'version' => trim($v),
@@ -278,8 +303,7 @@ class System
 
         $html = "
         <div class=\"alert alert-warning\">
-            <span class=\"fa fa-warning\"></span> Warning: Your CMS version is different with our latest version (<strong>$v</strong>).
-            Please upgrade your system.
+            <span class=\"fa fa-warning\"></span> "._("Warning: Your CMS version is different with our latest version (<strong>$v</strong>). Please upgrade your system.")."
         </div>
         ";
 
@@ -288,73 +312,66 @@ class System
 
     public static function alert($data)
     {
-//        global $data;
+       global $html;
         $html = '';
 //     print_r($data);
         $data = (isset($data[0]) && is_array($data[0])) ? $data[0]: $data;
         if (isset($data['alertSuccess'])) {
-            $html .= '<div class="alert alert-success" id="notification">
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <ul class="list-unstyled">';
+            $html .= '
+            <script>
+            ';
             foreach ($data['alertSuccess'] as $alert) {
-                $html .= "<li>".Typo::cleanX($alert)."</li>";
+                $html .="toastr.success('".Typo::cleanX($alert)."');";
             }
-            $html .= '</ul></div>';
+        $html .= "</script>";
         }
         if (isset($data['alertDanger'])) {
-            $html .= '<div class="alert alert-danger" id="notification">
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <ul class="list-unstyled">';
+            $html .= '<script>';
             foreach ($data['alertDanger'] as $alert) {
-                $html .= "<li>".Typo::cleanX($alert)."</li>";
+                $html .= "toastr.error('".Typo::cleanX($alert)."');";
             }
-            $html .= '</ul></div>';
+            $html .= '</script>';
         }
         if (isset($data['alertInfo'])) {
-            $html .= '<div class="alert alert-info" id="notification">
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <ul class="list-unstyled">';
+            $html .= '<script>';
             foreach ($data['alertInfo'] as $alert) {
-                $html .= "<li>".Typo::cleanX($alert)."</li>";
+                $html .= "toastr.info('".Typo::cleanX($alert)."');";
             }
-            $html .= '</ul></div>';
+            $html .= '</script>';
         }
         if (isset($data['alertWarning'])) {
-            $html .= '<div class="alert alert-warning" id="notification">
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <ul class="list-unstyled">';
+            $html .= '<script>';
             foreach ($data['alertWarning'] as $alert) {
-                $html .= "<li>".Typo::cleanX($alert)."</li>";
+                $html .= "toastr.warning('".Typo::cleanX($alert)."');";
             }
-            $html .= '</ul></div>';
+            $html .= '</script>';
         }
         if (isset($data['alertDefault'])) {
-            $html .= '<div class="alert alert-default" id="notification">
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <ul class="list-unstyled">';
+            $html .= '<script>';
             foreach ($data['alertDefault'] as $alert) {
-                $html .= "<li>".Typo::cleanX($alert)."</li>";
+                $html .= "toastr.info('".Typo::cleanX($alert)."');";
             }
-            $html .= '</ul></div>';
+            $html .= '</script>';
         }
+        // $data['var'] = 'alert';
+        // $data['alert'] = $html;
+        
 
-        return $html;
+        Hooks::attach('footer_load_lib', function(){
+            global $html;
+            echo $html;
+        });
+        Hooks::attach('admin_footer_action', function(){
+            global $html;
+            echo $html;
+        });
     }
+
+    // public static function print($data) {
+    //     global $data;
+    //     print_r($data);
+    //     echo $data[$data['var']];
+    // }
 
     public static function loadAdminAsset()
     {

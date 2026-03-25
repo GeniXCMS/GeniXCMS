@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -103,14 +103,14 @@ class Menus
                     $parent = self::isHadParent($m->id, $menuid);
                     $n = Db::$num_rows;
                     if ($n > 0 && $bsnav) {
-                        $class = 'class="dropdown"';
-                        $aclass = 'dropdown-toggle" data-toggle="dropdown';
+                        $class = 'nav-item dropdown';
+                        $aclass = 'nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"';
                     } else {
-                        $class = '';
-                        $aclass = '';
+                        $class = 'nav-item';
+                        $aclass = 'nav-link';
                     }
                     $type = $m->type;
-                    $menu .= "<li $class>";
+                    $menu .= "<li class='$class'>";
                     $menu .= "<a href='".Url::$type($m->value)."' class=\"{$m->class} {$aclass}\">".$m->name.'</a>';
                     $parent = $m->id;
 //                    echo $parent;
@@ -123,11 +123,11 @@ class Menus
                                 $parent = self::isHadParent($m2->id, $menuid);
                                 $n = Db::$num_rows;
                                 if ($n > 0 && $bsnav) {
-                                    $class = 'class="dropdown-submenu"';
-                                    $aclass = 'dropdown-toggle" data-toggle="dropdown';
+                                    $class = 'dropdown-submenu dropdown-item dropdown-toggle';
+                                    $aclass = '" data-bs-toggle="dropdown" aria-expanded="false"';
                                 } else {
                                     $class = '';
-                                    $aclass = '';
+                                    $aclass = 'dropdown-item';
                                 }
                                 $type = $m2->type;
 //                                print_r($m2);
@@ -142,11 +142,11 @@ class Menus
                                             $parent = self::isHadParent($m3->id, $menuid);
                                             $n = Db::$num_rows;
                                             if ($n > 0 && $bsnav) {
-                                                $class = 'class="dropdown-submenu"';
-                                                $aclass = 'dropdown-toggle" data-toggle="dropdown';
+                                                $class = '';
+                                                $aclass = 'dropdown-item';
                                             } else {
                                                 $class = '';
-                                                $aclass = '';
+                                                $aclass = 'dropdown-item';
                                             }
                                             $type = $m3->type;
                                             $menu .= "<li $class>";
@@ -162,10 +162,10 @@ class Menus
                                                         $n = Db::$num_rows;
                                                         if ($n > 0 && $bsnav) {
                                                             $class = 'class="dropdown-submenu"';
-                                                            $aclass = 'dropdown-toggle" data-toggle="dropdown';
+                                                            $aclass = 'dropdown-item';
                                                         } else {
                                                             $class = '';
-                                                            $aclass = '';
+                                                            $aclass = 'dropdown-item';
                                                         }
                                                         $type = $m4->type;
                                                         $menu .= "<li $class>";
@@ -215,12 +215,12 @@ class Menus
                 if ($m->parent == '0') {
                     $menu .= '<li clas="form-inline"><div class="row">';
                     $menu .= '
-                            <h4 class="col-md-10">'.$m->name." 
-                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
-                                    <span class=\"glyphicon glyphicon-edit\"></span>
+                            <h4 class="col-10 col-md-10">'.$m->name." 
+                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"badge text-bg-primary pull-right\" >
+                                    <span class=\"bi bi-pencil-square\"></span>
                                 </a>
-                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"label label-danger pull-right\" >
-                                    <span class=\"glyphicon glyphicon-remove\"></span>
+                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}&token=".TOKEN."\" class=\"badge text-bg-danger pull-right\" >
+                                    <span class=\"bi bi-x-square\"></span>
                                 </a>
                             </h4>
                             <div class=\"pull-right col-md-2\">
@@ -239,12 +239,12 @@ class Menus
                         foreach ($menus as $m2) {
                             if ($m2->parent == $m->id) {
                                 $menu .= '<li><div class="row">';
-                                $menu .= '<h5 class="col-md-10">'.$m2->name."
-                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m2->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
-                                                    <span class=\"glyphicon glyphicon-edit\"></span>
+                                $menu .= '<h5 class="col-10 col-md-10">'.$m2->name."
+                                                <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m2->id}&token=".TOKEN."\" class=\"badge text-bg-primary pull-right\" >
+                                                    <span class=\"bi bi-pencil-square\"></span>
                                                 </a>
-                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m2->id}&token=".TOKEN.'" class="label label-danger pull-right" >
-                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m2->id}&token=".TOKEN.'" class="badge text-bg-danger pull-right" >
+                                                    <span class="bi bi-x-square"></span>
                                                 </a>
 
                                             </h5>';
@@ -263,12 +263,12 @@ class Menus
                                     foreach ($menus as $m3) {
                                         if ($m3->parent == $m2->id) {
                                             $menu .= '<li><div class="row">';
-                                            $menu .= '<h6 class="col-md-10">'.$m3->name."
+                                            $menu .= '<h6 class="col-10 col-md-10">'.$m3->name."
                                                                 <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m3->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
-                                                                    <span class=\"glyphicon glyphicon-edit\"></span>
+                                                                    <span class=\"bi bi-pencil-square\"></span>
                                                                 </a>
                                                                 <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m3->id}&token=".TOKEN.'" class="label label-danger pull-right" >
-                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                    <span class="bi bi-x-square"></span>
                                                                 </a>
                                                             </h6>';
                                             $menu .= "
@@ -284,12 +284,12 @@ class Menus
                                                 foreach ($menus as $m4) {
                                                     if ($m4->parent == $m3->id) {
                                                         $menu .= '<li><div class="row">';
-                                                        $menu .= '<h6 class="col-md-10">'.$m4->name."
+                                                        $menu .= '<h6 class="col-10 col-md-10">'.$m4->name."
                                                                                 <a href=\"index.php?page=menus&act=edit&id={$menuid}&itemid={$m4->id}&token=".TOKEN."\" class=\"label label-primary pull-right\" >
-                                                                                    <span class=\"glyphicon glyphicon-edit\"></span>
+                                                                                    <span class=\"bi bi-pencil-square\"></span>
                                                                                 </a>
                                                                                 <a href=\"index.php?page=menus&act=del&id={$menuid}&itemid={$m4->id}&token=".TOKEN.'" class="label label-primary pull-right" >
-                                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                                    <span class="bi bi-x-square"></span>
                                                                                 </a>
                                                                             </h6>';
                                                         $menu .= "
@@ -319,10 +319,10 @@ class Menus
             }
             $menu .= '</ul>
                     <div class="row">
-                        <div class="col-md-2 pull-right">
+                        <div class="col-md-12 float-end">
                             <input type="hidden" name="token" value="'.TOKEN.'">
                             <button name="changeorder" type="submit" class="btn btn-warning pull-right">
-                                Change Order
+                                <i class="bi bi-sort-down"></i> '._('Change Order').'
                             </button>
                         </div>
                     </div>

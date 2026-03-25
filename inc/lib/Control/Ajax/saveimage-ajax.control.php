@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 0.0.1 build date 20141003
- * @version 1.1.12
+ * @version 2.0.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto <metalgenix@gmail.com>
@@ -37,10 +37,55 @@ if ($token != '' && Http::validateUrl($url)) {
                 } elseif (Image::isJpg($tmp)) {
                     Image::compressJpg($tmp);
                 }
-                echo Site::$url.'/assets/media/images/'.$_FILES['file']['name'];
+                
+                $output = [
+                    'status' => 'success',
+                    'url' => Site::$url.'/assets/media/images/'.$_FILES['file']['name'],
+                    'path' => 'assets/media/images/'.$_FILES['file']['name']
+                ];
+    
+                echo json_encode($output);
                 //echo '{"status":"success"}';
                 exit;
             }
+        } else {
+            $data = $_POST['file'];
+
+            if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
+                $data = substr($data, strpos($data, ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, gif
+            
+                if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
+                    throw new \Exception('invalid image type');
+                }
+                $data = str_replace( ' ', '+', $data );
+                $data = base64_decode($data);
+            
+                if ($data === false) {
+                    throw new \Exception('base64_decode failed');
+                }
+            } else {
+                throw new \Exception('did not match data URI with image data');
+            }
+            
+            file_put_contents(GX_PATH.'/assets/media/images/'.$_POST['file_name'], $data);
+
+            $tmp = GX_PATH.'/assets/media/images/'.$_POST['file_name'];
+            if (Image::isPng($tmp)) {
+                Image::compressPng($tmp);
+            } elseif (Image::isJpg($tmp)) {
+                Image::compressJpg($tmp);
+            }
+
+            $output = [
+                'status' => 'success',
+                'url' => Site::$url.'assets/media/images/'.$_POST['file_name'],
+                'path' => 'assets/media/images/'.$_POST['file_name']
+            ];
+
+            echo json_encode($output);
+            //echo '{"status":"success"}';
+            exit;
         }
     } else {
         echo '{"status":"error"}';

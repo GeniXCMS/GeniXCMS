@@ -20,8 +20,8 @@ class Gneex
             Hooks::attach('header_load_meta', array('Gneex', 'loadCSS'));
             Hooks::attach('admin_footer_action', array('Gneex', 'loadAdminAsset'));
 
-            Hooks::attach('post_param_form', array('Gneex', 'postParam'));
-            Hooks::attach('page_param_form', array('Gneex', 'postParam'));
+            Hooks::attach('post_param_form_bottom', array('Gneex', 'postParam'));
+            Hooks::attach('page_param_form_bottom', array('Gneex', 'postParam'));
         }
     }
 
@@ -55,7 +55,6 @@ class Gneex
             for ($i = 1; $i <= count($im); $i += 2) {
                 if (isset($im[$i][0])) {
                     return $im[$i][0];
-                    break;
                 }
             }
         }

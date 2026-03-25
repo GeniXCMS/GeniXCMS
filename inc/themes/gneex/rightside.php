@@ -66,8 +66,8 @@
               </div>
               <div class="panel-body">
                 <ol class="list-unstyled">
-                  <li><a href="http://genixcms.my.id">GeniXCMS</a></li>
-                  <li><a href="http://docs.genixcms.my.id">GeniXCMS Docs</a></li>
+                  <li><a href="http://genixcms.web.id">GeniXCMS</a></li>
+                  <li><a href="http://docs.genixcms.web.id">GeniXCMS Docs</a></li>
                 </ol>
               </div>
               

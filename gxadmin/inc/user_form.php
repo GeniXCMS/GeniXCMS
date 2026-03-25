@@ -3,116 +3,114 @@
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
- * @since 0.0.1 build date 20150202
- *
- * @version 1.1.12
- *
- * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- * @copyright 2014-2023 Puguh Wijayanto
- * @copyright 2023-2024 GeniXCMS
- * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+$id = isset($_GET['id']) ? Typo::int($_GET['id']): '';
 ?>
 <form action="" method="post">
-
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
-    <section class="content-header">
-        <h1><i class="fa fa-group"></i> Edit User
-            <div class="pull-right">
-                <button  class="btn btn-success btn-sm" type="submit" name="edituser">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    <span class="hidden-xs hidden-sm">Update</span>
-                </button>
-                <a class="btn btn-danger  btn-sm" href="<?=(User::access(2)) ? 'index.php?page=users' : 'index.php';?>">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    <span class="hidden-xs hidden-sm">Cancel</span>
-                </a>
+
+    <div class="container-fluid py-4">
+        <!-- Header Section -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6 text-start">
+                <h3 class="fw-bold text-dark mb-0"><?=_("Profile Configuration");?></h3>
+                <p class="text-muted small mb-0"><?=_("Refine account details and permission levels for this user.");?></p>
             </div>
-        </h1>
-    </section>
-    <section class="content">
-        <!-- Default box -->
-        <div class="box box-success">
-            <div class="box-header with-border">
-                <h3 class="box-title">
-                    Modify User
-                </h3>
-
-                <div class="box-tools pull-right">
-
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <div class="btn-group gap-2">
+                    <button class="btn btn-primary rounded-pill px-4 shadow-sm" type="submit" name="edituser">
+                        <i class="bi bi-check2-circle me-1"></i> <?=_("Save Evolution");?>
+                    </button>
+                    <a class="btn btn-light border rounded-pill px-4" href="<?=(User::access(2)) ? 'index.php?page=users' : 'index.php';?>">
+                        <i class="bi bi-arrow-left me-1"></i> <?=_("Return back");?>
+                    </a>
                 </div>
             </div>
-            <div class="box-body">
-    <div class="row">
-
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label>Userid</label>
-            <?php if (User::access(0)) {
-                $id = isset($_GET['id']) ? Typo::int($_GET['id']): '';
-                $userid = User::userid($id);
-    ?>
-                <input type="text" name="userid" class="form-control" value="<?=$userid; ?>">
-                <input type="hidden" name="olduserid" class="form-control" value="<?=$userid; ?>">
-            <?php
-} else {
-    echo '<div class="form-control">'.$userid.'</div>';
-} ?>
-            <small>Only Admin can edit userid</small>
         </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="text" name="email" class="form-control" value="<?=User::email($id);?>">
-            <small>Email must be different with another.</small>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="pass" class="form-control" value="">
-            <small>Type password to change it. Left it blank to use old password.</small>
-        </div>
-    </div>
-    <div class="col-sm-6">
-    <?php if (User::access(1)) {
-    ?>
-        <div class="form-group">
-            <label>Group Level</label>
-            <?php
-            $var = array(
-                    'name' => 'group',
-                    'selected' => User::group($id),
-                    'update' => true,
-                );
-        echo User::dropdown($var); ?>
-            
-            <small>Group Level of the user.</small>
-        </div>
-    <?php
-} ?>
-    </div>
 
-
-    </div>
-
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Identity Card -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-1">
+                        <h6 class="fw-bold text-muted extra-small text-uppercase tracking-wider m-0"><?=_("Core Identity");?></h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Username");?></label>
+                                <?php if (User::access(0)) {
+                                    $userid = User::userid($id);
+                                ?>
+                                    <input type="text" name="userid" class="form-control border-0 bg-light rounded-3 py-2 px-3" value="<?=$userid; ?>">
+                                    <input type="hidden" name="olduserid" class="form-control" value="<?=$userid; ?>">
+                                    <div class="extra-small text-muted mt-1 ps-1"><?=_("Only administrative access can modify the unique ID.");?></div>
+                                <?php } else { ?>
+                                    <div class="form-control border-0 bg-light rounded-3 py-2 px-3 text-muted"><?=$userid;?></div>
+                                <?php } ?>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Email Contact");?></label>
+                                <input type="text" name="email" class="form-control border-0 bg-light rounded-3 py-2 px-3" value="<?=User::email($id);?>">
+                                <div class="extra-small text-muted mt-1 ps-1"><?=_("Used for communications and recovery.");?></div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Security Shield (Password)");?></label>
+                                <input type="password" name="pass" class="form-control border-0 bg-light rounded-3 py-2 px-3" placeholder="••••••••">
+                                <div class="extra-small text-muted mt-1 ps-1"><?=_("Leave empty to preserve existing authentication credentials.");?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-                Footer
-            </div>
-            <!-- /.box-footer-->
-        </div>
-        <!-- /.box -->
-    </section>
 
-<input type="hidden" name="token" value="<?=TOKEN?>">
+            <div class="col-lg-4">
+                <!-- Access Control Card -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-1">
+                        <h6 class="fw-bold text-muted extra-small text-uppercase tracking-wider m-0"><?=_("Access Protocol");?></h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <?php if (User::access(1)) { ?>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Permission Rank");?></label>
+                                <?php
+                                $var = array(
+                                    'name' => 'group',
+                                    'selected' => User::group($id),
+                                    'update' => true,
+                                    'class' => 'form-select border-0 bg-light rounded-3 py-2 px-3'
+                                );
+                                echo User::dropdown($var); ?>
+                                <div class="extra-small text-muted mt-2">
+                                    <i class="bi bi-shield-lock me-1"></i> <?=_("Defines administrative capabilities.");?>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <div class="text-center py-4 bg-light rounded-4 opacity-75">
+                                <i class="bi bi-lock fs-2 text-muted"></i>
+                                <p class="extra-small fw-bold text-muted text-uppercase m-0"><?=_("Restricted Access");?></p>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div class="card border-0 shadow-sm rounded-4 bg-primary bg-opacity-10 border-start border-4 border-primary">
+                    <div class="card-body p-4">
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <i class="bi bi-info-circle-fill text-primary fs-4"></i>
+                            <h6 class="fw-bold text-dark m-0"><?=_("Pro Tip");?></h6>
+                        </div>
+                        <p class="extra-small text-muted mb-0">
+                            <?=_("Updating user credentials might require the user to re-authenticate their session. Changes take effect immediately upon saving.");?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="token" value="<?=TOKEN?>">
 </form>

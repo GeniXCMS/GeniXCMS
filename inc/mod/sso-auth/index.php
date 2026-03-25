@@ -7,7 +7,7 @@
  * Developer: Puguh Wijayanto 
  * URI: http://www.metalgenix.com 
  * License: MIT License 
- * Icon: <i class="fa fa-key"></i>
+ * Icon: fa fa-key
  */
 
 function loadSSOLib($class_name)

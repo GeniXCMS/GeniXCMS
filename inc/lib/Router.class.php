@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.7 build date 20150711
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -73,11 +73,17 @@ class Router
             'author/(.*)/paging/([0-9]+)/' => array('author' => 1, 'paging' => 2),
             'author/(.*)/(.*)/' => array('author' => 1, 'type' => 2),
             'author/(.*)/' => array('author' => 1),
+            '([0-9]{4})/([0-9]{2})/paging/([0-9]+)/' => array('archive', 'year' => 1, 'month' => 2, 'paging' => 3 ),
+            '([0-9]{4})/([0-9]{2})/' => array('archive', 'year' => 1, 'month' => 2 ),
             'sitemap.xml' => array('sitemap'),
             'sitemap/(.*).xml' => array('sitemap' => 1),
             'sitemap/' => array('sitemap'),
             'search/' => array('search'),
             'error/' => array('error'),
+            'forgotpass/' => array('forgotpass'),
+            'register/' => array('register'),
+            'logout/' => array('logout'),
+            'login/' => array('login'),
             'rss/' => array('rss'),
             '/' => array('default'),
         );

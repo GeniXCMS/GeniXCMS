@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160827
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -29,7 +29,7 @@ class Pages
     public static function isPage()
     {
         global $data;
-        if ($data['p_type'] == 'page') {
+        if (isset($data['p_type']) && $data['p_type'] == 'page') {
             return true;
         } else {
             return false;
@@ -39,7 +39,7 @@ class Pages
     public static function isPost()
     {
         global $data;
-        if ($data['p_type'] == 'post') {
+        if (isset($data['p_type']) && $data['p_type'] == 'post') {
             return true;
         } else {
             return false;
@@ -49,7 +49,7 @@ class Pages
     public static function isCat()
     {
         global $data;
-        if ($data['p_type'] == 'cat') {
+        if (isset($data['p_type']) && $data['p_type'] == 'cat') {
             return true;
         } else {
             return false;
@@ -59,7 +59,7 @@ class Pages
     public static function isTag()
     {
         global $data;
-        if ($data['p_type'] == 'tag') {
+        if (isset($data['p_type']) && $data['p_type'] == 'tag') {
             return true;
         } else {
             return false;
@@ -69,7 +69,7 @@ class Pages
     public static function isHome()
     {
         global $data;
-        if ($data['p_type'] == 'index') {
+        if (isset($data['p_type']) && $data['p_type'] == 'index') {
             return true;
         } else {
             return false;
@@ -79,7 +79,7 @@ class Pages
     public static function isMod()
     {
         global $data;
-        if ($data['p_type'] == 'mod') {
+        if (isset($data['p_type']) && $data['p_type'] == 'mod') {
             return true;
         } else {
             return false;

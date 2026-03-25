@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -19,17 +19,47 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+$lang = Options::v('system_lang');
+$latte = new Latte\Engine;
+$latte->addExtension(new Latte\Essential\RawPhpExtension);
+$latte->addExtension(new Latte\Essential\TranslatorExtension(
+	Typo::translate(...),
+	$lang,
+));
+// Set the temporary directory for compiled templates
+$latte->setTempDirectory(GX_CACHE . '/temp');
+
+// Enable auto-refresh for development mode
+$latte->setautoRefresh();
+
+$data['site_name'] = Site::$name;
+$data['site_footer'] = Site::footer();
+$data['site_url'] = Site::$url;
+$data['site_cdn'] = Site::$cdn;
+$data['site_logo'] = Site::logo(width:'200px', class: "img-fluid");
+$data['theme_url'] = Url::theme();
+$data['token'] = TOKEN;
+$data['tag_cloud'] = Tags::cloud();
+$data['archives_list'] = Archives::list(10);
+$data['platform_name'] = "GeniXCMS";
+$data['platform_version'] = System::v();
+$data['platform_fullname'] = $data['platform_name'] . " " . $data['platform_version'];
+
+$data['site_meta'] = Site::meta($data);
 
 header('HTTP/1.0 500 Internal Server Error');
 if (Theme::exist('500')) {
-    Theme::theme('500');
+    $latte->render(GX_THEME . Theme::$active . '/header.php', $data );
+    $latte->render(GX_THEME . Theme::$active . '/500.php', $data );
+    $latte->render(GX_THEME . Theme::$active . '/footer.php', $data );
 } else {
-    echo '<center>
+    $latte->render(GX_THEME . Theme::$active . '/header.php', $data );
+    echo '<center class="mb-5 mt-5">
         <h1>Ooops!!</h1>
         <h2 style="font-size: 20em">500</h2>
         <h3>Internal Server Error</h3>
         Back to <a href="'.Options::v('siteurl').'">'.Options::v('sitename').'</a>
         </center>
         ';
-    Site::footer();
+    $latte->render(GX_THEME . Theme::$active . '/footer.php', $data );
 }

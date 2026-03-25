@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141001
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -50,7 +50,7 @@ class Options
                 $opt = Db::insert($ins);
             }
         } else {
-            Control::error('unknown', 'Format not Found, please in array');
+            Control::error('unknown', _('Format not Found, please in array'));
         }
 
         return $opt;
@@ -98,10 +98,17 @@ class Options
     {
         $opt = self::$_data;
         // echo "<pre>";
-        foreach ($opt as $k => $v) {
-            // echo $v->name;
-            if ($v->name == $vars) {
-                return Typo::Xclean($v->value);
+        if (is_array($opt)) {
+            foreach ($opt as $k => $v) {
+                // echo $v->name."\n";
+                if ($v->name == $vars ) {
+                    if( $v->value != "" && $v->value != NULL ) {
+                        return Typo::Xclean($v->value);
+                    } else {
+                        return '';
+                    }
+                    
+                }
             }
         }
         // echo "</pre>";

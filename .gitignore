@@ -6,3 +6,12 @@ assets/.quarantine
 assets/media/*
 .htaccess
 .idea
+test*
+temp*
+opt.txt
+out*.txt
+error_log.txt
+error.txt
+check*
+db_*
+front*

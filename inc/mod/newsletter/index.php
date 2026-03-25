@@ -7,5 +7,5 @@
  * Developer: Puguh Wijayanto  
  * URI: http://www.metalgenix.com 
  * License: MIT License  
- * Icon: <i class="fa fa-envelope-o"></i> 
+ * Icon: fa fa-envelope-o
 */

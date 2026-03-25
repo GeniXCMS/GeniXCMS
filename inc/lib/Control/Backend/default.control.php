@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
     // echo(Options::v('sitename'));
-    $data['sitetitle'] = DASHBOARD;
+    $data['sitetitle'] = _('Dashboard');
     Theme::admin('header', $data);
     System::inc('dashboard', $data);
     // Mod::Options('genixmarket-dg');

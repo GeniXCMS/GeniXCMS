@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,7 +20,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-$data['sitetitle'] = 'Media';
+$data['sitetitle'] = _('Media');
 Hooks::attach('admin_footer_action', array('Files', 'elfinderLib'));
 Theme::admin('header', $data);
 System::inc('media', $data);

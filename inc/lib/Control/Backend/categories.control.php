@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 if (User::access(1)) {
-    $data['sitetitle'] = CATEGORIES;
+    $data['sitetitle'] = _('Categories');
     switch (isset($_POST['addcat'])) {
         case true:
             // cleanup first
@@ -30,10 +30,10 @@ if (User::access(1)) {
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (!isset($_POST['cat']) || $_POST['cat'] == '') {
-                $alertDanger[] = CATEGORY_CANNOT_EMPTY;
+                $alertDanger[] = _("Category cannot be empty.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -47,7 +47,7 @@ if (User::access(1)) {
                     )
                 );
                 //print_r($cat);
-                $data['alertSuccess'][] = MSG_CATEGORY_ADDED.' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Category Added").' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);
@@ -65,7 +65,7 @@ if (User::access(1)) {
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -78,7 +78,7 @@ if (User::access(1)) {
                             ),
                 );
                 $cat = Db::update($vars);
-                $data['alertSuccess'][] = MSG_CATEGORY_UPDATED.' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Category Updated").' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);
@@ -93,18 +93,20 @@ if (User::access(1)) {
         $token = Typo::cleanX($_GET['token']);
         if (!isset($_GET['token']) || !Token::validate($token)) {
             // VALIDATE ALL
-            $alertDanger[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
         }
         if (isset($alertDanger)) {
             $data['alertDanger'] = $alertDanger;
         } else {
             Categories::delete(Typo::int($_GET['id']));
-            $data['alertSuccess'][] = MSG_CATEGORY_REMOVED;
+            $data['alertSuccess'][] = _("Category Removed");
         }
         if (isset($_GET['token'])) {
             Token::remove($token);
         }
     }
+
+    System::alert($data);
     $data['cat'] = Db::result("SELECT * FROM `cat` WHERE `type` = 'post' ORDER BY `id` DESC");
     $data['num'] = Db::$num_rows;
     Theme::admin('header', $data);

@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -19,16 +19,23 @@
  */
 header('HTTP/1.0 403 Forbidden');
 if (Theme::exist('noaccess')) {
-    Theme::theme('noaccess');
+    $latte->render(GX_THEME . Theme::$active . '/noaccess.php', $data );
 } else {
     ?>
-    <div class="row">
+    <div class="container-fluid">
+        <section class="app-content-header">
         <div class="col-sm-12">
             <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
             <hr>
-            <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
-                        href="<?= Options::v('siteurl'); ?>">frontpage</a> or just <a href="logout.php">Logout</a></div>
+            
         </div>
+
+        </section>
+        <section class="app-content">
+        <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
+        href="<?=Site::$url;?>">frontpage</a> or just <a href="<?=Site::$url;?>logout/">Logout</a></div>
+        </section>
+        
     </div>
 
     <?php

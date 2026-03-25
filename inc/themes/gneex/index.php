@@ -49,7 +49,7 @@ if ($gneex['front_layout'] == 'magazine') {
                 <?php
                 $cat = $gneex['panel_1'];
                 if (isset($cat) && $cat != ''){
-                $post = Posts::getPostCat($cat, 8); ?>
+                $post = Posts::getPostByCat($cat, 8); ?>
 
                 <div class="panel panel-one">
                     <div class="panel-heading">
@@ -115,7 +115,7 @@ if ($gneex['front_layout'] == 'magazine') {
                 $cat = $gneex['panel_2'];
                 if (isset($cat) && $cat != ''){
                     $col2 = !empty($gneex['panel_3']) ? '6': '12';
-                    $post = Posts::getPostCat($cat, 6); ?>
+                    $post = Posts::getPostByCat($cat, 6); ?>
                     <div class="col-sm-<?=$col2;?>">
                         <div class="panel panel-two">
                             <div class="panel-heading">
@@ -174,7 +174,7 @@ if ($gneex['front_layout'] == 'magazine') {
                 $cat = $gneex['panel_3'];
                 if (isset($cat) && $cat != ''){
                     $col3 = !empty($gneex['panel_2']) ? '6': '12';
-                    $post = Posts::getPostCat($cat, 6); ?>
+                    $post = Posts::getPostByCat($cat, 6); ?>
                     <div class="col-sm-<?=$col3;?>">
                         <div class="panel panel-three">
                             <div class="panel-heading">
@@ -241,7 +241,7 @@ if ($gneex['front_layout'] == 'magazine') {
                 <?php
                 $cat = $gneex['panel_4'];
                 if (isset($cat) && $cat != ''){
-                $post = Posts::getPostCat($cat, 4);
+                $post = Posts::getPostByCat($cat, 4);
                 echo '<h4>' . Categories::name($cat) . '</h4>'; ?>
                 <hr/>
                 <div class="row">
@@ -278,7 +278,7 @@ if ($gneex['front_layout'] == 'magazine') {
                 <?php
                 $cat = $gneex['panel_5'];
                 if (isset($cat) && $cat != ''){
-                $post = Posts::getPostCat($cat, 8);
+                $post = Posts::getPostByCat($cat, 8);
                 $postig = !isset($post['error']) ? $post[0]: ''; ?>
 
                 <div class="panel panel-five">

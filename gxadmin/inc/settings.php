@@ -3,728 +3,445 @@
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
- * @since 0.0.1 build date 20150202
- *
- * @version 1.1.12
- *
- * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- * @copyright 2014-2023 Puguh Wijayanto
- * @copyright 2023-2024 GeniXCMS
- * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
+    <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
 
-        <div class="col-md-12">
-            <?=Hooks::run('admin_page_notif_action', $data);?>
+    <div class="container-fluid py-4">
+        <!-- Header Section -->
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6 text-start">
+                <h3 class="fw-bold text-dark mb-0"><?=_("Global Settings");?></h3>
+                <p class="text-muted small mb-0"><?=_("Control the core identity, localization, and functional parameters of your ecosystem.");?></p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <div class="btn-group gap-2">
+                    <button type="submit" name="change" class="btn btn-primary rounded-pill px-4 shadow-sm" value="Change">
+                        <i class="bi bi-save me-1"></i> <?=_("Save Architecture");?>
+                    </button>
+                    <button type="reset" class="btn btn-light border rounded-pill px-4">
+                        <?=_("Discard Changes");?>
+                    </button>
+                </div>
+            </div>
         </div>
-        <section class="content-header">
-            <h1 class="clearfix">
-                <div class="pull-left">
-                    <i class="fa fa-wrench"></i> <?=SETTINGS;?>
-                </div>
-                <div class="pull-right">
-                    <button type="submit" name="change" class="btn btn-success btn-sm" value="Change">
-                        <span class="glyphicon glyphicon-ok"></span>
-                        <span class="hidden-xs hidden-sm"><?=CHANGE;?></span>
-                    </button>
-                    <button type="reset" class="btn btn-danger btn-sm" value="Cancel">
-                        <span class="glyphicon glyphicon-remove"></span>
-                        <span class="hidden-xs hidden-sm"><?=CANCEL;?></span>
-                    </button>
-                </div>
-            </h1>
-        </section>
-        <section class="content" id="myTab">
 
-                    <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#general" role="tab" data-toggle="tab"><?=GENERAL;?></a></li>
-                <li><a href="#localization" role="tab" data-toggle="tab"><?=LOCALIZATION;?></a></li>
-                <li><a href="#email" role="tab" data-toggle="tab"><?=EMAIL;?></a></li>
-                <li><a href="#social" role="tab" data-toggle="tab"><?=SOCIAL;?></a></li>
-                <li><a href="#logo" role="tab" data-toggle="tab"><?=LOGO;?></a></li>
-                <li><a href="#library" role="tab" data-toggle="tab"><?=LIBRARY;?></a></li>
-                <li><a href="#posts" role="tab" data-toggle="tab"><?=POSTS;?></a></li>
-                <li><a href="#payment" role="tab" data-toggle="tab"><?=PAYMENT;?></a></li>
-                <li><a href="#security" role="tab" data-toggle="tab"><?=SECURITY;?></a></li>
-            </ul>
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <!-- Tab Pane General -->
-                <div class="tab-pane active clearfix" id="general">
-                    <h3>
-                        <?=WEBSITE_DETAIL;?>
-                        <hr />
-                    </h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_NAME;?></label>
-                                <input type="text" name="sitename" value="<?=Options::v('sitename');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_NAME_DESC;?></small>
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" id="settingsContainer">
+            <div class="card-header bg-light border-0 p-2">
+                <ul class="nav nav-pills nav-fill flex-nowrap overflow-auto scrollbar-hide px-2 pt-2 pb-2" id="settingsTab" role="tablist" style="white-space: nowrap;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab"><?=_("General");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="localization-tab" data-bs-toggle="tab" data-bs-target="#localization" type="button" role="tab"><?=_("Localization");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab"><?=_("E-Mail");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="social-tab" data-bs-toggle="tab" data-bs-target="#social" type="button" role="tab"><?=_("Social");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="logo-tab" data-bs-toggle="tab" data-bs-target="#logo" type="button" role="tab"><?=_("Identity");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="library-tab" data-bs-toggle="tab" data-bs-target="#library" type="button" role="tab"><?=_("Assets");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab"><?=_("Posts");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"><?=_("Payment");?></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill small fw-bold py-2 px-4 shadow-none m-1" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab"><?=_("Security");?></button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4 pt-5">
+                <div class="tab-content" id="settingsTabContent">
+                    <!-- General -->
+                    <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-primary ps-3 h6"><?=_("Platform Identity");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Website Name");?></label>
+                                <input type="text" name="sitename" value="<?=Options::v('sitename');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_SLOGAN;?></label>
-                                <input type="text" name="siteslogan" value="<?=Options::v('siteslogan');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_SLOGAN_DESC;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Website Slogan");?></label>
+                                <input type="text" name="siteslogan" value="<?=Options::v('siteslogan');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                             </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_DOMAIN;?></label>
-                                <input type="text" name="sitedomain" value="<?=Options::v('sitedomain');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_DOMAIN_DESC;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Domain Authority");?></label>
+                                <input type="text" name="sitedomain" value="<?=Options::v('sitedomain');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" placeholder="<?=_("example.org");?>">
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_URI;?></label>
-                                <input type="text" name="siteurl" value="<?=Options::v('siteurl');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_URI_DESC;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Base URL Path");?></label>
+                                <input type="text" name="siteurl" value="<?=Options::v('siteurl');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" placeholder="<?=_("http://www.example.org/");?>">
                             </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_KEYWORDS;?></label>
-                                <input type="text" name="sitekeywords" value="<?=Options::v('sitekeywords');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_KEYWORDS_DESC;?></small>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SEO Metadata Keywords");?></label>
+                                <input type="text" name="sitekeywords" value="<?=Options::v('sitekeywords');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_DESCRIPTION;?></label>
-                                <textarea  name="sitedesc" class="form-control"><?=Options::v('sitedesc');?></textarea>
-                                <small class="help-block"><?=WEBSITE_DESCRIPTION_DESC;?></small>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SEO Meta Description");?></label>
+                                <textarea name="sitedesc" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" rows="3"><?=Options::v('sitedesc');?></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Administrative E-mail");?></label>
+                                <input type="email" name="siteemail" value="<?=Options::v('siteemail');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                             </div>
                         </div>
-
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=WEBSITE_EMAIL;?></label>
-                                <input type="text" name="siteemail" value="<?=Options::v('siteemail');?>" class="form-control">
-                                <small class="help-block"><?=WEBSITE_EMAIL_DESCR;?></small>
-                            </div>
-
-                        </div>
-
                     </div>
 
-
-                </div><!-- Tab Pane General End -->
-
-                <!-- Tab Pane Localization -->
-                <div class="tab-pane clearfix" id="localization">
-                    <h3>
-                        <?=LOCALIZATION;?>
-                        <hr />
-                    </h3>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6 form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label><?=COUNTRY;?></label>
-                                        <select name="country_id" class="form-control">
-                                            <?=Date::optCountry(Options::v('country_id'));?>
-                                        </select>
-                                        <small class="help-block"><?=COUNTRY_DESC;?></small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label><?=TIMEZONE;?></label>
-                                        <select name="timezone" class="form-control">
-                                            <?=Date::optTimeZone(Options::v('timezone'));?>
-                                        </select>
-                                        <small class="help-block"><?=TIMEZONE_DESC;?></small>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label><?=WEBSITE_LANG;?></label>
-                                        <select name="system_lang" class="form-control">
-                                            <?=Language::optDropdown(Options::v('system_lang'));?>
-                                        </select>
-                                        <small class="help-block"><?=WEBSITE_LANG_DESC;?></small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label><?=CHARSET;?></label>
-                                        <input name="charset" class="form-control" value="<?=Options::v('charset');?>">
-                                        <small class="help-block"><?=CHARSET_DESC;?></small>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div><!-- Tab Pane Localization END -->
-
-                <!-- Tab Pane Email -->
-                <div class="tab-pane clearfix" id="email">
-                    <h3><?=SETTINGS_EMAIL_SETTINGS;?><hr /></h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_EMAIL_MAIL;?></label>
-                                <?php
-                                if (Options::v('mailtype') == 0) {
-                                    $o = 'selected';
-                                    $s = '';
-                                } elseif (Options::v('mailtype') == 1) {
-                                    $s = 'selected';
-                                    $o = '';
-                                }
-                                ?>
-                                <select name="mailtype" class="form-control">
-                                    <option value="0" <?=$o;?>>Mail</option>
-                                    <option value="1" <?=$s;?>>SMTP</option>
+                    <!-- Localization -->
+                    <div class="tab-pane fade" id="localization" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-info ps-3 h6"><?=_("Regional Settings");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Country Origin");?></label>
+                                <select name="country_id" class="form-select border-0 bg-light rounded-3 py-2 shadow-none">
+                                    <?=Date::optCountry(Options::v('country_id'));?>
                                 </select>
-                                <small class="help-block"><?=SETTINGS_EMAIL_MAIL_DESCR;?></small>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_EMAIL_SMTP;?></label>
-                                <input type="text" name="smtpport" value="<?=Options::v('smtpport');?>" class="form-control">
-
-                                <small class="help-block"><?=SETTINGS_EMAIL_SMTP_DESCR;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Chronological Timezone");?></label>
+                                <select name="timezone" class="form-select border-0 bg-light rounded-3 py-2 shadow-none">
+                                    <?=Date::optTimeZone(Options::v('timezone'));?>
+                                </select>
                             </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_EMAIL_MAILSRV;?></label>
-                                <input type="text" name="smtphost" value="<?=Options::v('smtphost');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_EMAIL_MAILSRV_DESCR;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Default System Language");?></label>
+                                <select name="system_lang" class="form-select border-0 bg-light rounded-3 py-2 shadow-none">
+                                    <?=Language::optDropdown(Options::v('system_lang'));?>
+                                </select>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_EMAIL_SMTP_USR;?></label>
-                                <input type="text" name="smtpuser" value="<?=Options::v('smtpuser');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_EMAIL_SMTP_USR_DESCR;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Character Encoding");?></label>
+                                <input name="charset" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" value="<?=Options::v('charset');?>" placeholder="UTF-8">
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_EMAIL_SMTP_PWD;?></label>
-                                <input type="password" name="smtppass" value="<?=Options::v('smtppass');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_EMAIL_SMTP_PWD_DESCR;?></small>
+                    <!-- E-Mail -->
+                    <div class="tab-pane fade" id="email" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-success ps-3 h6"><?=_("Mail Delivery Pipeline");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Transport Layer");?></label>
+                                <select name="mailtype" class="form-select border-0 bg-light rounded-3 py-2 shadow-none">
+                                    <option value="0" <?= (Options::v('mailtype') == 0) ? 'selected' : ''; ?>><?=_("Native PHP Mail");?></option>
+                                    <option value="1" <?= (Options::v('mailtype') == 1) ? 'selected' : ''; ?>><?=_("SMTP Protocol");?></option>
+                                </select>
                             </div>
-                            <div class="col-sm-6 form-group">
-
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SMTP Gateway Port");?></label>
+                                <input type="text" name="smtpport" value="<?=Options::v('smtpport');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" placeholder="<?=_("587");?>">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SMTP Server Hostname");?></label>
+                                <input type="text" name="smtphost" value="<?=Options::v('smtphost');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" placeholder="<?=_("smtp.example.org");?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SMTP Authentication Username");?></label>
+                                <input type="text" name="smtpuser" value="<?=Options::v('smtpuser');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("SMTP Encryption Password");?></label>
+                                <input type="password" name="smtppass" value="<?=Options::v('smtppass');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                             </div>
                         </div>
-
-                    </div>
-                </div><!-- Tab Pane Email END -->
-
-                <!-- Tab Pane Social -->
-                <div class="tab-pane clearfix" id="social">
-                    <h3><?=SETTINGS_SOCIAL;?><hr /></h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_SOCIAL_FBACC;?></label>
-                                <input type="text" name="fbacc" value="<?=Options::v('fbacc');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_SOCIAL_FBACC_DESCR;?></small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_SOCIAL_FBPAGE;?></label>
-                                <input type="text" name="fbpage" value="<?=Options::v('fbpage');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_SOCIAL_FBPAGE_DESCR;?></small>
-                            </div>
-                        </div>
-
                     </div>
 
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_SOCIAL_TWITTER;?></label>
+                    <!-- Social -->
+                    <div class="tab-pane fade" id="social" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-warning ps-3 h6"><?=_("Connected Networks");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Facebook Profile Link");?></label>
                                 <div class="input-group">
-                                    <span class="input-group-addon">@</span>
-                                    <input type="text" name="twitter" value="<?=Options::v('twitter');?>" class="form-control">
-                                </div>
-                                <small class="help-block"><?=SETTINGS_SOCIAL_TWITTER_DESCR;?></small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_SOCIAL_LINKEDIN;?></label>
-                                <input type="text" name="linkedin" value="<?=Options::v('linkedin');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_SOCIAL_LINKEDIN_DESCR;?></small>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div><!-- Tab Pane Social END -->
-
-                <!-- Tab Pane Logo -->
-                <div class="tab-pane clearfix" id="logo">
-                    <h3><?=SETTINGS_LOGO;?><hr /></h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LOGO_CURRENT;?></label>
-                                <?php
-                                $is_logourl = Options::v('is_logourl');
-                                $logourl = Options::v('logourl');
-                                $logo = Options::v('logo');
-                                if ($is_logourl == 'on' && $logourl != '') {
-                                    $logoimg = '<img src="'.Options::v('logourl').'" class="clearfix">';
-                                } elseif ($is_logourl == 'off' && $logo != '') {
-                                    $logoimg = '<img src="'.Site::$url.Options::v('logo').'" class="clearfix">';
-                                } else {
-                                    $logoimg = '';
-                                }
-                                ?>
-                                <div class="col-sm-12 clearfix">
-                                    <?=$logoimg;?>
-
-                                </div>
-                                <small class="help-block"><?=SETTINGS_LOGO_CURRENT_DESCR;?></small>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LOGO_BROWSE;?></label>
-                                <div class="">
-                                    <input type="file" name="logo" class="form-control" accept=".job,.png,.gif">
-                                    <small class="help-block"><?=SETTINGS_LOGO_BROWSE_DESCR;?></small>
+                                    <span class="input-group-text border-0 bg-light ps-3 pe-0 text-muted"><i class="bi bi-facebook"></i></span>
+                                    <input type="text" name="fbacc" value="<?=Options::v('fbacc');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                                 </div>
                             </div>
-                            <div class="col-sm-6 form-group">
-
-                                <label><?=SETTINGS_LOGO_URL;?></label>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Facebook Business Page");?></label>
+                                <input type="text" name="fbpage" value="<?=Options::v('fbpage');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("X / Twitter Handle");?></label>
                                 <div class="input-group">
-
-                                    <span class="input-group-addon">
-                                        <?php if (Options::v('is_logourl') == 'on') {
-                                            $is_logourl = 'checked';
-} else {
-    $is_logourl = 'off';
-}
-                                        ?>
-                                        <input type="checkbox" name="is_logourl" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$is_logourl;?>>
-                                    </span>
-                                    <input type="text" name="logourl" value="<?=Options::v('logourl');?>" class="form-control">
+                                    <span class="input-group-text border-0 bg-light ps-3 pe-0 text-muted">@</span>
+                                    <input type="text" name="twitter" value="<?=Options::v('twitter');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
                                 </div>
-                                <small class="help-block"><?=SETTINGS_LOGO_URL_DESCR;?></small>
                             </div>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LOGO_FAVICON;?></label>
-                                <input type="text" name="siteicon" value="<?=Options::v('siteicon');?>" class="form-control">
-                                <small class="help-block"><?=SETTINGS_LOGO_FAVICON_DESCR;?></small>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("LinkedIn Professional Profile");?></label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 bg-light ps-3 pe-0 text-muted"><i class="bi bi-linkedin"></i></span>
+                                    <input type="text" name="linkedin" value="<?=Options::v('linkedin');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                </div><!-- Tab Pane Logo END -->
-
-                <!-- Tab Pane Library -->
-                <div class="tab-pane clearfix" id="library">
-                    <h3><?=SETTINGS_LIBRARY;?><hr /></h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_CDNURL;?></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-link"></i>
-                                    </span>
-                                    <input type="text" name="cdn_url" rel="tooltip"
-                                    class="form-control" placeholder="CDN Url"
-                                    value="<?=Options::v('cdn_url');?>">
+                    <!-- Identity -->
+                    <div class="tab-pane fade" id="logo" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-danger ps-3 h6"><?=_("Graphic Identity");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Primary Brand Logo");?></label>
+                                <div class="bg-light rounded-4 p-4 text-center mb-3">
+                                    <?php
+                                    $is_logourl = Options::v('is_logourl');
+                                    $logourl = Options::v('logourl');
+                                    $logo = Options::v('logo');
+                                    $logoimg = ($is_logourl == 'on' && $logourl != '') ? $logourl : (($logo != '') ? Site::$url.$logo : '');
+                                    ?>
+                                    <div class="logo_preview p-3 mb-3 cursor-pointer d-inline-block shadow-none rounded bg-white" id="fileBrowse" onclick="uploadLogo()">
+                                        <?php if($logoimg): ?>
+                                            <img src="<?=$logoimg;?>" class="img-fluid" id="logo_preview" style="max-height: 120px;">
+                                        <?php else: ?>
+                                            <div class="py-5 px-5"><i class="bi bi-image fs-1 text-muted opacity-25"></i></div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <input type="file" id="ImageBrowse" name="file" hidden>
+                                    <input type="hidden" name="logo" id="logo_image" value="<?=$logo;?>">
+                                    <div class="extra-small text-muted"><?=_("Recommended height: 80-120px. PNG or SVG preferred.");?></div>
                                 </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_CDNURL_DESCR;?></small>
                             </div>
-
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_JQUERY;?></label>
-                                <?php if (Options::v('use_jquery') == 'on') {
-                                    $use_jquery = 'checked';
-} else {
-    $use_jquery = 'off';
-}
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_jquery" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_jquery;?>>
-                                    </span>
-                                    <input type="text" name="jquery_v" rel="tooltip"
-                                    class="form-control" placeholder="Jquery Version"
-                                    value="<?=Options::v('jquery_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                            <?=SETTINGS_LIBRARY_CDN;?>
-                                        </button>
-                                    </span>
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light rounded-4 p-4 h-100">
+                                    <div class="mb-4">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" name="is_logourl" id="useLogoUrl" <?= (Options::v('is_logourl') == 'on') ? 'checked' : ''; ?>>
+                                            <label class="form-check-label fw-bold" for="useLogoUrl"><?=_("External Logo Storage");?></label>
+                                        </div>
+                                        <input type="text" name="logourl" value="<?=Options::v('logourl');?>" class="form-control border-0 bg-white rounded-3 shadow-none mt-2" placeholder="<?=_("https://cdn.example.com/logo.png");?>">
+                                    </div>
+                                    <div class="mb-0">
+                                        <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Browser Favicon Path");?></label>
+                                        <input type="text" name="siteicon" value="<?=Options::v('siteicon');?>" class="form-control border-0 bg-white rounded-3 shadow-none" placeholder="favicon.ico">
+                                    </div>
                                 </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_JQUERY_DESCR;?></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Library Assets -->
+                    <div class="tab-pane fade" id="library" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-dark ps-3 h6"><?=_("External Libraries & CDNs");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Public CDN Repository");?></label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 bg-light px-3 text-muted"><i class="bi bi-hdd-network"></i></span>
+                                    <input type="text" name="cdn_url" class="form-control border-0 bg-light rounded-end-3 py-2 shadow-none" value="<?=Options::v('cdn_url');?>">
+                                </div>
                             </div>
                             
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_BOOTSTRAP;?></label>
-                                <?php
-                                if (Options::v('use_bootstrap') == 'on') {
-                                    $use_bootstrap = 'checked';
-                                } else {
-                                    $use_bootstrap = 'off';
-                                }
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_bootstrap" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bootstrap;?>>
-                                    </span>
-                                    <input type="text" name="bs_v" rel="tooltip"
-                                    class="form-control disable" placeholder="Bootstrap Version"
-                                    readonly value="<?=Options::v('bs_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                            <?=SETTINGS_LIBRARY_LOCAL;?>
-                                        </button>
-                                    </span>
-                                </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_BOOTSTRAP_DESCR;?></small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_FAWESOME;?></label>
-                                <?php
-                                if (Options::v('use_fontawesome') == 'on') {
-                                    $use_fontawesome = 'checked';
-                                } else {
-                                    $use_fontawesome = 'off';
-                                }
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_fontawesome" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_fontawesome;?>>
-                                    </span>
-                                    <input type="text" name="fontawesome_v" rel="tooltip"
-                                    class="form-control disable" placeholder="Fontawesome Version"
-                                    readonly value="<?=Options::v('fontawesome_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                            <?=SETTINGS_LIBRARY_CDN;?>
-                                        </button>
-                                    </span>
-                                </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_FAWESOME_DESCR;?></small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_EDITOR;?></label>
-                                <?php
-                                if (Options::v('use_editor') == 'on') {
-                                    $use_editor = 'checked';
-                                } else {
-                                    $use_editor = 'off';
-                                }
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_editor" rel="tooltip"
-                                        title="Check here if you want to use Editor" <?=$use_editor;?>>
-                                    </span>
-                                    <input type="text" name="editor_v" rel="tooltip"
-                                    class="form-control disable" placeholder="Editor Version"
-                                    readonly value="<?=Options::v('editor_v');?>">
-                                    <span class="input-group-btn">
-                                        <select name="editor_type" rel="tooltip"
-                                        title=""
-                                        class="btn btn-default">
-                                            <option value="summernote"><?=SETTINGS_LIBRARY_SUMMERNOTE;?></option>
-                                        </select>
-                                    </span>
-                                </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_EDITOR_DESCR;?></small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_LIBRARY_BVALIDATOR;?></label>
-                                <?php
-                                if (Options::v('use_bsvalidator') == 'on') {
-                                    $use_bsvalidator = 'checked';
-                                } else {
-                                    $use_bsvalidator = 'off';
-                                }
-                                ?>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" name="use_bsvalidator" rel="tooltip"
-                                        title="Check here if you want to use URL" <?=$use_bsvalidator;?>>
-                                    </span>
-                                    <input type="text" name="bsvalidator_v" rel="tooltip"
-                                    class="form-control disable" placeholder="Bootstrap Validator Version"
-                                    readonly value="<?=Options::v('bsvalidator_v');?>">
-                                    <span class="input-group-btn">
-                                        <button type="" name="" rel="tooltip"
-                                        title="" class="btn btn-default">
-                                            <?=SETTINGS_LIBRARY_LOCAL;?>
-                                        </button>
-                                    </span>
-                                </div>
-                                <small class="help-block"><?=SETTINGS_LIBRARY_BVALIDATOR_DESCR;?></small>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- Tab Pane Library END -->
-
-
-                <div class="tab-pane clearfix" id="posts">
-                    <h3><?=SETTINGS_POSTS;?><hr /></h3>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_POSTS_PERPAGE;?></label>
-                                <input type="number" name="post_perpage" value="<?=Options::v('post_perpage');?>" class="form-control" min='1'>
-                                <small class="help-block"><?=SETTINGS_POSTS_PERPAGE_DESCR;?></small>
-
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_POSTS_PAGINATION;?></label>
-                                <?php
-                                if (Options::v('pagination') == 'number') {
-                                    $number = 'selected';
-                                    $pager = '';
-                                } elseif (Options::v('pagination') == 'pager') {
-                                    $pager = 'selected';
-                                    $number = '';
-                                } else {
-                                    $pager = '';
-                                    $number = '';
-                                }
-                                ?>
-                                <select  name="pagination" class="form-control">
-                                    <option value="number" <?=$number;
-?>><?=SETTINGS_POSTS_PAGINATION_NUMBER;?></option>
-                                    <option value="pager" <?=$pager;
-?>><?=SETTINGS_POSTS_PAGINATION_PAGER;?></option>
-                                </select>
-                                <small class="help-block"><?=SETTINGS_POSTS_PAGINATION_DESCR;?> Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code> </small>
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label><?=SETTINGS_POSTS_PINGER;?></label>
-                                <div class="input-group">
-                                    <?php
-                                    $pinger_enable = Options::v('pinger_enable');
-                                    if ($pinger_enable == 'on') {
-                                        $pinger_enable_val = 'checked';
-                                    } else {
-                                        $pinger_enable_val = 'off';
-                                    }
-                                    ?>
-                                    <div class="input-group-addon">
-                                        <input type="checkbox" name="pinger_enable"  <?=$pinger_enable_val;?>> 
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light rounded-4 p-3 h-100">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="use_jquery" id="useJquery" <?= (Options::v('use_jquery') == 'on') ? 'checked' : ''; ?>>
+                                        <label class="form-check-label fw-bold" for="useJquery"><?=_("jQuery Framework");?></label>
                                     </div>
-                                    <span class="form-control">Enable pinger ?</span>
+                                    <input type="text" name="jquery_v" class="form-control border-0 bg-white rounded-3 py-1 shadow-none" value="<?=Options::v('jquery_v');?>" placeholder="<?=_("Version (e.g. 1.12.0)");?>">
                                 </div>
-                                <div class="clearfix">&nbsp;</div>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><?=SETTINGS_POSTS_PINGER_HTTP?></span>
-                                    <textarea name="pinger" class="form-control" style="height: 200px;" ><?=Options::v('pinger');?></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light rounded-4 p-3 h-100 opacity-75">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="use_bootstrap" id="useBS" checked disabled>
+                                        <label class="form-check-label fw-bold" for="useBS"><?=_("Bootstrap UI Toolkit");?></label>
+                                    </div>
+                                    <input type="text" name="bs_v" class="form-control border-0 bg-white rounded-3 py-1 shadow-none" value="<?=Options::v('bs_v');?>" readonly>
+                                    <div class="extra-small text-muted mt-1 fw-bold"><?=_("Core System Dependency.");?></div>
                                 </div>
+                            </div>
 
-                                <small class="help-block"><?=SETTINGS_POSTS_PINGER_DESCR?></small>
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light rounded-4 p-3 h-100">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="use_fontawesome" id="useFA" <?= (Options::v('use_fontawesome') == 'on') ? 'checked' : ''; ?>>
+                                        <label class="form-check-label fw-bold" for="useFA"><?=_("FontAwesome Icons");?></label>
+                                    </div>
+                                    <input type="text" name="fontawesome_v" class="form-control border-0 bg-white rounded-3 py-1 shadow-none" value="<?=Options::v('fontawesome_v');?>">
+                                </div>
+                            </div>
 
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light rounded-4 p-3 h-100">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="use_editor" id="useEditor" <?= (Options::v('use_editor') == 'on') ? 'checked' : ''; ?>>
+                                        <label class="form-check-label fw-bold" for="useEditor"><?=_("Visual Content Editor");?></label>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <input type="text" name="editor_v" class="form-control border-0 bg-white rounded-3 py-1 shadow-none" value="<?=Options::v('editor_v');?>">
+                                        <select name="editor_type" class="form-select border-0 bg-white rounded-3 py-1 shadow-none fs-8 fw-bold">
+                                            <option value="summernote" selected><?=_("Summernote");?></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                </div><!-- Posts Tab END -->
-
-                <?php
-                $curr = Options::v('currency');
-                if ($curr == 'USD') {
-                    $usd = 'SELECTED';
-                    $euro = '';
-                    $pound = '';
-                } elseif ($curr == 'EUR') {
-                    $euro = 'SELECTED';
-                    $usd = '';
-                    $pound = '';
-                } elseif ($curr == 'GBP') {
-                    $pound = 'SELECTED';
-                    $usd = '';
-                    $euro = '';
-                } else {
-                    $pound = '';
-                    $usd = '';
-                    $euro = '';
-                }
-                ?>
-
-                <!-- Payment Tab Start -->
-                <div class="tab-pane clearfix" id="payment">
-                    <h3><?=SETTINGS_PAYMENT?><hr /></h3>
-                    <div class="col-sm-12">
-                        <h4><?=SETTINGS_PAYMENT_PAYPAL_CONF?></h4>
-                        <div class="row">
-                            <div class="form-group  col-md-12 clearfix">
-                                <label for="currency"><?=SETTINGS_PAYMENT_PAYPAL_CSYMB?></label>
-                                <select class="form-control col-md-6" id="currency" name="currency" required>
-                                    <option value="USD" <?=$usd;?>>$ (USD)</option>
-                                    <option value="EUR" <?=$euro;?>>&euro; (EUR)</option>
-                                    <option value="GBP" <?=$pound;?>>&pound; (GBP)</option>
+                    <!-- Posts -->
+                    <div class="tab-pane fade" id="posts" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-info ps-3 h6"><?=_("Content Architectural Controls");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Article Pagination Density");?></label>
+                                <input type="number" name="post_perpage" value="<?=Options::v('post_perpage');?>" class="form-control border-0 bg-light rounded-3 py-2 shadow-none" min='1'>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Pagination Styling");?></label>
+                                <select name="pagination" class="form-select border-0 bg-light rounded-3 py-2 shadow-none">
+                                    <option value="number" <?= (Options::v('pagination') == 'number') ? 'selected' : ''; ?>><?=_("Numeric [1, 2, 3]");?></option>
+                                    <option value="pager" <?= (Options::v('pagination') == 'pager') ? 'selected' : ''; ?>><?=_("Classic [Prev / Next]");?></option>
                                 </select>
-                                <small class="help-block"><?=SETTINGS_PAYMENT_PAYPAL_CSYMB_DESCR?></small>
-
                             </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppsandbox"><?=SETTINGS_PAYMENT_SANDBOX?></label>
-                                <div class="form-group">
-                                    <?php
-                                    $ppsandbox = Options::v('ppsandbox');
-                                    if ($ppsandbox == 'on') {
-                                        $sandbox = 'checked';
-                                        $sandval = 0;
-                                    } else {
-                                        $sandbox = '';
-                                        $sandval = '1';
-                                    }
-                                    ?>
-
-                                    <input type="checkbox" class="" id="ppsandbox"
-                                    name="ppsandbox"  <?=$sandbox;?>> <?=SETTINGS_PAYMENT_SANDBOX_EN?>
+                            <div class="col-md-12">
+                                <div class="card border-0 bg-light rounded-4 p-4">
+                                    <div class="row g-4">
+                                        <div class="col-md-5">
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input" type="checkbox" name="pinger_enable" id="enablePing" <?= (Options::v('pinger_enable') == 'on') ? 'checked' : ''; ?>>
+                                                <label class="form-check-label fw-bold" for="enablePing"><?=_("Search Engine Pinger");?></label>
+                                            </div>
+                                            <div class="extra-small text-muted lh-sm"><?=_("Automatically notify global indexers when fresh content is published. Uses standard XML-RPC protocols.");?></div>
+                                        </div>
+                                        <div class="col-md-7">
+                                             <label class="form-label extra-small fw-bold text-muted text-uppercase mb-2"><?=_("Pinger Registry (URLs)");?></label>
+                                             <textarea name="pinger" class="form-control border-0 bg-white rounded-3 shadow-none p-3 fs-8" rows="6" style="font-family: monospace;"><?=Options::v('pinger');?></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <small class="help-block"><?=SETTINGS_PAYMENT_SANDBOX_EN_DESCR?></small>
-                            </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppemail"><?=SETTINGS_PAYMENT_PAYPALAPI_USR?></label>
-                                <input type="text" class="form-control" id="ppemail" placeholder="API Username"
-                                name="ppuser" value="<?=Options::v('ppuser');?>">
-                                <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_USR_DESCR?></small>
-                            </div>
-                            <div class="form-group  col-md-6">
-                                <label for="ppsecurity"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD?></label>
-                                <input type="text" class="form-control" id="ppsecurity" placeholder="PayPal API Password"
-                                name="pppass" value="<?=Options::v('pppass');?>">
-                                <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_PWD_DESCR?></small>
-                            </div>
-                            <div class="form-group  col-md-6 clearfix">
-                                <label for="ppsecret"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN?></label>
-                                <input type="text" class="form-control" id="ppsecret" placeholder="PayPal Signature"
-                                name="ppsign" value="<?=Options::v('ppsign');?>">
-                                <small class="help-block"><?=SETTINGS_PAYMENT_PAYPALAPI_SIGN_DESCR?></small>
                             </div>
                         </div>
-                        <div class="form-group col-md-12 clearfix">
-                            <span class="alert alert-warning center-block">
-                                <?=SETTINGS_PAYMENT_ALERT?>
-                            </span>
+                    </div>
+
+                    <!-- Payment -->
+                    <div class="tab-pane fade" id="payment" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-success ps-3 h6"><?=_("Transaction Gateways");?></h6>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Platform Currency");?></label>
+                                <?php $curr = Options::v('currency'); ?>
+                                <select class="form-select border-0 bg-light rounded-3 py-2 shadow-none" name="currency">
+                                    <option value="USD" <?= ($curr == 'USD') ? 'selected' : ''; ?>>$ USD (<?=_("Dollar");?>)</option>
+                                    <option value="EUR" <?= ($curr == 'EUR') ? 'selected' : ''; ?>>&euro; EUR (<?=_("Euro");?>)</option>
+                                    <option value="GBP" <?= ($curr == 'GBP') ? 'selected' : ''; ?>>&pound; GBP (<?=_("Pound");?>)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card border-start border-4 border-primary rounded-3 bg-light shadow-none p-3 border-top-0 border-end-0 border-bottom-0">
+                                    <h6 class="fw-bold fs-7 mb-2 text-dark"><i class="bi bi-paypal me-2 text-primary"></i><?=_("PayPal Merchant Configuration");?></h6>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" name="ppsandbox" id="ppSand" <?= (Options::v('ppsandbox') == 'on') ? 'checked' : ''; ?>>
+                                                <label class="form-check-label small fw-bold" for="ppSand"><?=_("Sandbox Mode");?></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label extra-small fw-bold text-muted text-uppercase"><?=_("API Username / Merchant Email");?></label>
+                                            <input type="text" name="ppuser" value="<?=Options::v('ppuser');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label extra-small fw-bold text-muted text-uppercase"><?=_("API Password");?></label>
+                                            <input type="password" name="pppass" value="<?=Options::v('pppass');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label extra-small fw-bold text-muted text-uppercase"><?=_("API Signature");?></label>
+                                            <input type="text" name="ppsign" value="<?=Options::v('ppsign');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                </div><!-- Payment Tab Stop -->
-
-                <!-- Security Tab Start -->
-                <div class="tab-pane clearfix" id="security">
-                    <h3>Security
-                    <hr />
-                    </h3>
-
-                    <div class="col-md-12">
-                        <h4><?=GOOGLE_RECAPTCHA?></h4>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label><?=GOOGLE_RECAPTCHA?></label>
-                        <?php
-                        $google_captcha_enable = Options::v('google_captcha_enable');
-                        if ($google_captcha_enable == 'on') {
-                            $enable_captcha = 'checked';
-                        } else {
-                            $enable_captcha = '';
-                        }
-                        ?>
-                        <div class="form-group">
-                            <input type="checkbox" class="" id="google_captcha_enable"
-                            name="google_captcha_enable"  <?=$enable_captcha;?>>
-                            <?=GOOGLE_RECAPTCHA_ENABLE?>
-                            <small class="help-block"><?=GOOGLE_RECAPTCHA_ENABLE_DESCR?></small>
-                        </div>
-
-                    </div>
-                    <div class="col-md-6">
-                        <label><?=GOOGLE_RECAPTCHA_LANG?></label>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_lang"
-                            value="<?=Options::v('google_captcha_lang');?>">
-                            <small class="help-block"><?=GOOGLE_RECAPTCHA_LANG_DESCR?></small>
+                    <!-- Security -->
+                    <div class="tab-pane fade" id="security" role="tabpanel">
+                        <h6 class="fw-bold text-dark mb-4 border-start border-4 border-danger ps-3 h6"><?=_("Platform Fortification");?></h6>
+                        <div class="card border-0 bg-light rounded-4 p-4">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-5 border-end border-2 border-white pe-md-4">
+                                    <h6 class="fw-bold fs-7 text-dark mb-3"><i class="bi bi-shield-lock-fill me-2 text-danger"></i><?=_("Anti-Bot Defense (reCaptcha)");?></h6>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" name="google_captcha_enable" id="enableCap" <?= (Options::v('google_captcha_enable') == 'on') ? 'checked' : ''; ?>>
+                                        <label class="form-check-label fw-bold h6 mb-0" for="enableCap"><?=_("Active Barrier");?></label>
+                                    </div>
+                                    <div class="extra-small text-muted lh-sm mb-3"><?=_("Prevents automated scripts from exploiting forms and registration pipelines.");?></div>
+                                    <div class="alert alert-warning border-0 rounded-3 p-3 extra-small mb-0">
+                                        <i class="bi bi-info-circle me-1"></i><?=_("Keys must matching the domain configured in General tab.");?>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 ps-md-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Component Locale");?></label>
+                                            <input type="text" name="google_captcha_lang" value="<?=Options::v('google_captcha_lang');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label small fw-bold text-muted text-uppercase"><?=_("System Site Key");?></label>
+                                            <input type="text" name="google_captcha_sitekey" value="<?=Options::v('google_captcha_sitekey');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label small fw-bold text-muted text-uppercase"><?=_("Encryption Secret");?></label>
+                                            <input type="password" name="google_captcha_secret" value="<?=Options::v('google_captcha_secret');?>" class="form-control form-control-sm border-0 bg-white shadow-none rounded-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label><?=GOOGLE_RECAPTCHA_SITEKEY?></label>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_sitekey"
-                            value="<?=Options::v('google_captcha_sitekey');?>">
-                            <small class="help-block"><?=GOOGLE_RECAPTCHA_SITEKEY_DESCR?></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label><?=GOOGLE_RECAPTCHA_SECRET?></label>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="google_captcha_secret"
-                            value="<?=Options::v('google_captcha_secret');?>">
-                            <small class="help-block"><?=GOOGLE_RECAPTCHA_SECRET_DESCR?></small>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="alert alert-warning">
-                            <?=GOOGLE_RECAPTCHA_INFO;?>
-
-                        </div>
-                    </div>
-                </div><!-- Security Tab Stop -->
+                </div>
             </div>
-                    </div>
-
-        </section> <!-- TAB PANE END -->
-
-
-<input type="hidden" name="token" value="<?=TOKEN;?>">
+        </div>
+    </div>
+    <input type="hidden" name="token" value="<?=TOKEN;?>">
 </form>
-<div class="clearfix"></div>
+
 <script>
-    $('#myTab a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    })
+    $(document).ready(function (e) {
+        $("#ImageBrowse").on("change", function() {
+            var reader,
+            input = document.getElementById('ImageBrowse'),
+            preview = document.getElementById('logo_preview');
+
+            if (input.files && input.files[0]) {
+                reader = new FileReader();
+                reader.onload = function(e) {
+                    if(preview) {
+                        preview.setAttribute('src', e.target.result);
+                    } else {
+                        $('#fileBrowse').html('<img src="'+e.target.result+'" class="img-fluid" id="logo_preview" style="max-height: 120px;">');
+                    }
+                    $.ajax({
+                        type:'POST',
+                        url: '<?=Url::ajax("saveimage");?>',
+                        data: {file: e.target.result, file_name: input.files[0]['name']},
+                        success:function(data){
+                            data = JSON.parse(data);
+                            $('#logo_image').val(data.path);
+                        }
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            } 
+        });
+    });
+
+    function uploadLogo() {
+        var input = document.getElementById('ImageBrowse');
+        input.click();    
+    }
 </script>

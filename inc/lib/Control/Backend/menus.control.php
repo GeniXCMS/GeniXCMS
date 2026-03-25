@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,8 +20,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-if (User::access(0)) {
-    $data['sitetitle'] = MENUS;
+if (User::access(1)) {
+    $data['sitetitle'] = _("Menus");
     if (isset($_GET['act'])) {
         $act = $_GET['act'];
     } else {
@@ -38,13 +38,13 @@ if (User::access(0)) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (!isset($_POST['id']) || $_POST['id'] == '') {
-                        $alertDanger[] = MENUID_CANNOT_EMPTY;
+                        $alertDanger[] = _("MenuID cannot be empty.");
                     }
                     if (!isset($_POST['name']) || $_POST['name'] == '') {
-                        $alertDanger[] = MENUNAME_CANNOT_EMPTY;
+                        $alertDanger[] = _("Menu Name cannot be empty.");
                     }
 
                     if (isset($alertDanger)) {
@@ -109,7 +109,7 @@ if (User::access(0)) {
                             'value' => $_POST[$type],
                         );
                         Menus::insert($vars);
-                        $data['alertSuccess'][] = 'Menu Added';
+                        $data['alertSuccess'][] = _('Menu Added');
                     }
                     if (isset($_POST['token'])) {
                         Token::remove($_POST['token']);
@@ -119,13 +119,14 @@ if (User::access(0)) {
                 default:
                     break;
             }
+            System::alert($data);
                 //$data['abc'] = "abc";
             if (isset($_GET['id'])) {
                 $menuid = Typo::cleanX(Typo::filterXss($_POST['id']));
             } else {
                 $menuid = '';
             }
-                $data['parent'] = Menus::isHadParent('', $menuid);
+                $data['parent'] = Menus::isHadParent(0, $menuid);
                 //echo "<pre>"; print_r($data); echo "</pre>";
                 Theme::admin('header', $data);
                 System::inc('menus_form', $data);
@@ -145,7 +146,7 @@ if (User::access(0)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -168,7 +169,7 @@ if (User::access(0)) {
                             'key' => $vars,
                         );
                         Menus::update($vars);
-                        $data['alertSuccess'][] = 'Menu Updated';
+                        $data['alertSuccess'][] = _('Menu Updated');
                         Token::remove($token);
                     }
 
@@ -177,14 +178,14 @@ if (User::access(0)) {
                 default:
                     break;
             }
-
+            System::alert($data);
             if (isset($_GET['id'])) {
                 $menuid = Typo::cleanX(Typo::filterXss($_GET['id']));
             } else {
                 $menuid = '';
             }
                 $data['menus'] = Menus::getId($itemid);
-                $data['parent'] = Menus::isHadParent('', $menuid);
+                $data['parent'] = Menus::isHadParent(0, $menuid);
                 Theme::admin('header', $data);
                 System::inc('menus_form_edit', $data);
                 Theme::admin('footer');
@@ -194,13 +195,13 @@ if (User::access(0)) {
                 $token = Typo::cleanX($_POST['token']);
                 if (!isset($_POST['token']) && !Token::validate($token)) {
                     // VALIDATE ALL
-                    $alertDanger[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 }
                 if (!isset($_POST['name']) || $_POST['name'] == '') {
-                    $alertDanger[] = MENU_NAME_CANNOT_EMPTY;
+                    $alertDanger[] = _("Menu Name Cannot be Empty");
                 }
                 if (!isset($_POST['type']) || $_POST['type'] == '') {
-                    $alertDanger[] = MENU_TYPE_CANNOT_EMPTY;
+                    $alertDanger[] = _("Menu Type Cannot be Empty");
                 }
                 if (isset($alertDanger)) {
                     $data['alertDanger'] = $alertDanger;
@@ -214,7 +215,7 @@ if (User::access(0)) {
                             'value' => Typo::cleanX($_POST[$_POST['type']]),
                         );
                     Menus::insert($vars);
-                    $data['alertSuccess'][] = 'Menu Item Added';
+                    $data['alertSuccess'][] = _('Menu Item Added');
                     Token::remove($token);
                 }
             } else {
@@ -223,25 +224,26 @@ if (User::access(0)) {
                     $itemid = Typo::int($_GET['itemid']);
                     if (!isset($_GET['token']) || !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
                     } else {
                         Menus::delete($itemid);
-                        $data['alertSuccess'][] = 'Menu Deleted';
+                        $data['alertSuccess'][] = _('Menu Deleted');
                     }
                     if (isset($_GET['token'])) {
                         Token::remove($token);
                     }
                 } else {
-                    $data['alertDanger'][] = 'No ID Selected.';
+                    $data['alertDanger'][] = _('No ID Selected.');
                 }
             }
-                $data['menus'] = Options::get('menus');
-                Theme::admin('header', $data);
-                System::inc('menus', $data);
-                Theme::admin('footer');
+            System::alert($data);
+            $data['menus'] = Options::get('menus');
+            Theme::admin('header', $data);
+            System::inc('menus', $data);
+            Theme::admin('footer');
             break;
 
         case 'remove':
@@ -249,7 +251,7 @@ if (User::access(0)) {
                 $token = Typo::cleanX($_GET['token']);
                 if (!isset($_GET['token']) || !Token::validate($token)) {
                     // VALIDATE ALL
-                    $alertDanger[] = TOKEN_NOT_EXIST;
+                    $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 }
                 if (isset($alertDanger)) {
                     $data['alertDanger'] = $alertDanger;
@@ -262,18 +264,19 @@ if (User::access(0)) {
                     $menu = json_encode($menus);
                     Options::update('menus', $menu);
                     new Options();
-                    $data['alertSuccess'][] = 'Menu Deleted';
+                    $data['alertSuccess'][] = _('Menu Deleted');
                 }
                 if (isset($_GET['token'])) {
                     Token::remove($token);
                 }
             } else {
-                $data['alertDanger'][] = 'No ID Selected.';
+                $data['alertDanger'][] = _('No ID Selected.');
             }
-                $data['menus'] = Options::get('menus');
-                Theme::admin('header', $data);
-                System::inc('menus', $data);
-                Theme::admin('footer');
+            System::alert($data);
+            $data['menus'] = Options::get('menus');
+            Theme::admin('header', $data);
+            System::inc('menus', $data);
+            Theme::admin('footer');
             break;
 
         default:
@@ -287,13 +290,13 @@ if (User::access(0)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (!isset($_POST['id']) || $_POST['id'] == '') {
-                        $alertDanger[] = MENUID_CANNOT_EMPTY;
+                        $alertDanger[] = _("MenuID cannot be empty.");
                     }
                     if (!isset($_POST['name']) || $_POST['name'] == '') {
-                        $alertDanger[] = MENUNAME_CANNOT_EMPTY;
+                        $alertDanger[] = _("Menu Name cannot be empty.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -318,7 +321,7 @@ if (User::access(0)) {
                         // echo $menu;
                         Options::update('menus', $menu);
                         new Options();
-                        $data['alertSuccess'][] = 'Menu Added';
+                        $data['alertSuccess'][] = _('Menu Added');
                     }
                     if (isset($_POST['token'])) {
                         Token::remove($token);
@@ -340,13 +343,13 @@ if (User::access(0)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (!isset($_POST['name']) || $_POST['name'] == '') {
-                        $alertDanger[] = MENU_NAME_CANNOT_EMPTY;
+                        $alertDanger[] = _("Menu Name Cannot be Empty");
                     }
                     if (!isset($_POST['type']) || $_POST['type'] == '') {
-                        $alertDanger[] = MENU_TYPE_CANNOT_EMPTY;
+                        $alertDanger[] = _("Menu Type Cannot be Empty");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -360,7 +363,7 @@ if (User::access(0)) {
                             'value' => Typo::cleanX($_POST[$_POST['type']]),
                         );
                         Menus::insert($vars);
-                        $data['alertSuccess'][] = 'Menu Item Added';
+                        $data['alertSuccess'][] = _('Menu Item Added');
                         Token::remove($token);
                     }
 
@@ -386,7 +389,7 @@ if (User::access(0)) {
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
                     if (isset($alertDanger)) {
                         $data['alertDanger'] = $alertDanger;
@@ -394,7 +397,7 @@ if (User::access(0)) {
                         Menus::updateMenuOrder(
                             $_POST['order']
                         );
-                        $data['alertSuccess'][] = 'Menu Order Changed';
+                        $data['alertSuccess'][] = _('Menu Order Changed');
                     }
                     if (isset($_POST['token'])) {
                         Token::remove($token);
@@ -406,11 +409,11 @@ if (User::access(0)) {
             }
 
                 // CHANGE ORDER END
-
-                $data['menus'] = Options::get('menus', false);
-                Theme::admin('header', $data);
-                System::inc('menus', $data);
-                Theme::admin('footer');
+            System::alert($data);
+            $data['menus'] = Options::get('menus', false);
+            Theme::admin('header', $data);
+            System::inc('menus', $data);
+            Theme::admin('footer');
             break;
     }
 } else {

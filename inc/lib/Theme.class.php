@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -40,7 +40,7 @@ class Theme
         if (self::exist($var)) {
             include GX_THEME.THEME.'/'.$var.'.php';
         } else {
-            Control::error('unknown', 'Theme file is missing.');
+            Control::error('unknown', _('Theme file is missing.'));
         }
     }
 
@@ -116,7 +116,14 @@ class Theme
 
     public static function install($var)
     {
-        include GX_PATH.'/gxadmin/themes/install/'.$var.'.php';
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        include GX_PATH.'/'.$admin_dir.'/themes/install/'.$var.'.php';
+    }
+
+    public static function auth($var, $data='')
+    {
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        include GX_PATH.'/'.$admin_dir.'/themes/auth/'.$var.'.php';
     }
 
     public static function options($var)
@@ -225,31 +232,22 @@ class Theme
     public static function thmMenu()
     {
         $thm = Options::v('themes');
-        //$mod = self::modList();
-        //print_r($mod);
         $list = '';
 
         if (User::access(0)) {
             $data = self::data($thm);
-            if (isset($_GET['page'])
-                && $_GET['page'] == 'themes'
-                && isset($_GET['view'])
-                && $_GET['view'] == 'options') {
-                $class = 'class="active"';
-            } else {
-                $class = '';
-            }
             if (self::optionsExist($thm)) {
                 $active = (isset($_GET['page'])
                     && $_GET['page'] == 'themes'
                     && isset($_GET['view'])
-                    && $_GET['view']  == 'options') ? 'class="active"' : '';
+                    && $_GET['view'] == 'options') ? 'active' : '';
+                $icon = isset($data['icon']) && $data['icon'] ? $data['icon'] : 'bi bi-palette2';
                 $list .= "
-                <li $class $active>
-                    <a href=\"index.php?page=themes&view=options\" $active>".$data['icon'].' <span>'.$data['name'].'</span></a>
-                </li>';
-            } else {
-                $list = '';
+                <li class=\"{$active}\">
+                    <a href=\"index.php?page=themes&view=options\">
+                        <i class=\"{$icon}\"></i> <span>".$data['name']."</span>
+                    </a>
+                </li>";
             }
         }
 

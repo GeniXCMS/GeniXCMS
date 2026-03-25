@@ -7,7 +7,7 @@
  * Developer: Puguh Wijayanto
  * URI: http://www.metalgenix.com
  * License: MIT License
- * Icon: <i class="fa fa-code"></i>.
+ * Icon: fa fa-code
  */
 function loadGXCodeHighLib($class_name)
 {

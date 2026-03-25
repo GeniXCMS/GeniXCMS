@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -130,6 +130,10 @@ class Url
      */
     public static function cat($vars)
     {
+        if (is_array($vars)) {
+            error_log("DEBUG: Url::cat received an ARRAY: " . json_encode($vars));
+            $vars = $vars[0] ?? 0;
+        }
         switch (SMART_URL) {
             case true:
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
@@ -356,12 +360,14 @@ class Url
     {
         // $vars = urlencode($vars);
         $vars = str_replace(Site::$url, '', $vars);
+        $vars = str_replace(Site::$cdn, '', $vars);
 
         switch (SMART_URL) {
             case true:
                 $type = ($type != '') ? 'type/'.$type.'/' : '';
                 $size = ($size != '') ? 'size/'.$size.'/' : '';
                 $align = ($align != '') ? 'align/'.$align.'/' : '';
+                $vars = str_replace('thumb/', '', $vars);
 
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 $url = Site::$cdn.$inFold.'thumb/'.$type.$size.$align.$vars;
@@ -415,6 +421,67 @@ class Url
         }
 
         return $url;
+    }
+
+
+    public static function archive($month, $year)
+    {
+        switch (SMART_URL) {
+            case true:
+                $month = strlen($month) == 1 ? (string) "0".$month: $month;
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.$year.'/'.$month."/";
+                break;
+
+            default:
+                $url = Site::$url."?archive&month={$month}&year={$year}";
+                break;
+        }
+
+        return $url;
+    }
+
+    public static function login($var = '')
+    {
+        switch (SMART_URL) {
+            case true:
+                $param = ($var != '') ? "?".$var: "";
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url.$inFold.'login/'.$param;
+                break;
+
+            default:
+                $param = ($var != '') ? "&".$var: "";
+                $url = Site::$url."?login".$param;
+                break;
+        }
+
+        return $url;
+    }
+
+    public static function breadcrumbs($data)
+    {
+        $out = '<nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">';
+        $out .= '<li class="breadcrumb-item"><a href="'.Site::$url.'">' . _('Home') . '</a></li>';
+
+        if (isset($data['p_type'])) {
+            if ($data['p_type'] == 'page' && isset($data['posts'][0]->title)) {
+                $out .= '<li class="breadcrumb-item active" aria-current="page">'.$data['posts'][0]->title.'</li>';
+            } elseif ($data['p_type'] == 'post' && isset($data['posts'][0]->title)) {
+                $cat_id = isset($data['posts'][0]->cat) ? $data['posts'][0]->cat : 0;
+                if ($cat_id > 0) {
+                    $out .= '<li class="breadcrumb-item"><a href="'.self::cat($cat_id).'">'.Categories::name($cat_id).'</a></li>';
+                }
+                $out .= '<li class="breadcrumb-item active" aria-current="page">'.$data['posts'][0]->title.'</li>';
+            } elseif ($data['p_type'] == 'cat' && isset($data['cat'])) {
+                $out .= '<li class="breadcrumb-item active" aria-current="page">'.Categories::name($data['cat']).'</li>';
+            }
+        }
+
+        $out .= '</ol></nav>';
+
+        return $out;
     }
 }
 

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username')) == $_GET['id'])) {
-    $data['sitetitle'] = USERS;
+    $data['sitetitle'] = _('Users');
     if (isset($_GET['act'])) {
         $act = $_GET['act'];
     } else {
@@ -75,7 +75,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $token = Typo::cleanX($_POST['token']);
                     if (!isset($_POST['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $alertDanger[] = TOKEN_NOT_EXIST;
+                        $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
 
                     // VALIDATE ALL check if inputed userid is not same
@@ -83,11 +83,11 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $olduserid = Typo::cleanX($_POST['olduserid']);
                     $id = Typo::int($_GET['id']);
                     if (!User::isSame($olduserid, $userid) && User::validate($userid)) {
-                        $alertDanger[] = MSG_USER_EXIST;
+                        $alertDanger[] = _("User Exist! Choose Another Username");
                     }
 
                     if (!User::isEmail($_POST['email'], $id)) {
-                        $alertDanger[] = MSG_USER_EMAIL_EXIST;
+                        $alertDanger[] = _("Email Already Used. Please Use Another E-Mail:");
                     }
 
                     if (!isset($alertDanger)) {
@@ -132,7 +132,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             }
             Theme::admin('header', $data);
             System::inc('user_form', $data);
-            Theme::admin('footer');
+            Theme::admin('footer', $data);
             break;
         case 'del':
             if (User::access(1)) {
@@ -140,67 +140,39 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $id = Typo::int($_GET['id']);
                     $user = User::userid($id);
                     $token = Typo::cleanX($_GET['token']);
-                    if (!isset($_GET['token']) || !Token::validate($token)) {
+                    if (!isset($_GET['token']) && !Token::validate($token)) {
                         // VALIDATE ALL
-                        $data['alertDanger'][] = TOKEN_NOT_EXIST;
+                        $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     } else {
                         User::delete($id);
                         Hooks::run('user_delete_action', $_GET);
-                        $data['alertSuccess'][] = USER.' '.$user.' '.MSG_USER_REMOVED;
+                        $data['alertSuccess'][] = _("User").' '.$user.' '._("Removed Successfully");
                     }
                     if (isset($_GET['token'])) {
                         Token::remove($token);
                     }
                 } else {
-                    $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
+                    $data['alertDanger'][] = _("No ID Selected");
                 }
-                $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
-                $data['num'] = Db::$num_rows;
-                $page = array(
-                            'paging' => $paging,
-                            'table' => 'user',
-                            'where' => $where,
-                            'max' => $max,
-                            'url' => 'index.php?page=users'.$qpage,
-                            'type' => 'pager',
-                        );
-                $data['paging'] = Paging::create($page);
-                Theme::admin('header', $data);
-                System::inc('user', $data);
-                Theme::admin('footer');
             }
             break;
         case 'active':
             if (User::access(1)) {
                 $id = Typo::int($_GET['id']);
                 $token = Typo::cleanX($_GET['token']);
-                if (!isset($_GET['token']) || !Token::validate($_GET['token'])) {
+                if (!isset($_GET['token']) && !Token::validate($_GET['token'])) {
                     // VALIDATE ALL
-                    $data['alertDanger'][] = TOKEN_NOT_EXIST;
+                    $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 } else {
                     if (User::activate($id)) {
-                        $data['alertSuccess'][] = USER.' '.User::userid($id).' '.MSG_USER_ACTIVATED;
+                        $data['alertSuccess'][] = _("User").' '.User::userid($id).' '._("Activated Successfully.");
                     } else {
-                        $data['alertDanger'][] = USER.' '.User::userid($id).' '.MSG_USER_ACTIVATION_FAIL;
+                        $data['alertDanger'][] = _("User").' '.User::userid($id).' '._("Activation fail.");
                     }
                 }
                 if (isset($_GET['token'])) {
                     Token::remove($token);
                 }
-                $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
-                $data['num'] = Db::$num_rows;
-                $page = array(
-                            'paging' => $paging,
-                            'table' => 'user',
-                            'where' => $where,
-                            'max' => $max,
-                            'url' => 'index.php?page=users'.$qpage,
-                            'type' => 'pager',
-                        );
-                $data['paging'] = Paging::create($page);
-                Theme::admin('header', $data);
-                System::inc('user', $data);
-                Theme::admin('footer');
             }
             break;
 
@@ -208,33 +180,19 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             if (User::access(1)) {
                 $token = Typo::cleanX($_GET['token']);
                 $id = Typo::int($_GET['id']);
-                if (!isset($_GET['token']) || !Token::validate($token)) {
+                if (!isset($_GET['token']) && !Token::validate($token)) {
                     // VALIDATE ALL
-                    $data['alertDanger'][] = TOKEN_NOT_EXIST;
+                    $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 } else {
                     if (User::deactivate($id)) {
-                        $data['alertSuccess'][] = USER.' '.User::userid($id).' '.MSG_USER_DEACTIVATED;
+                        $data['alertSuccess'][] = _("User").' '.User::userid($id).' '._("Deactivated Successfully.");
                     } else {
-                        $data['alertDanger'][] = USER.' '.User::userid($id).' '.MSG_USER_DEACTIVATION_FAIL;
+                        $data['alertDanger'][] = _("User").' '.User::userid($id).' '._("Deactivation fail.");
                     }
                 }
                 if (isset($_GET['token'])) {
                     Token::remove($token);
                 }
-                $data['usr'] = Db::result("SELECT * FROM `user` WHERE {$where} ORDER BY `userid` ASC LIMIT {$offset}, {$max}");
-                $data['num'] = Db::$num_rows;
-                $page = array(
-                            'paging' => $paging,
-                            'table' => 'user',
-                            'where' => $where,
-                            'max' => $max,
-                            'url' => 'index.php?page=users'.$qpage,
-                            'type' => 'pager',
-                        );
-                $data['paging'] = Paging::create($page);
-                Theme::admin('header', $data);
-                System::inc('user', $data);
-                Theme::admin('footer');
             }
             break;
 
@@ -254,30 +212,30 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $token = Typo::cleanX($_POST['token']);
                         if (!isset($_POST['token']) && !Token::validate($token)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
 
                         if (!isset($userid) || $userid == '') {
                             // VALIDATE ALL
-                            $alertDanger[] = USERID_CANNOT_EMPTY;
+                            $alertDanger[] = _("Username cannot be empty.");
                         }
                         if (!isset($_POST['pass1']) || $_POST['pass1'] == '') {
                             // VALIDATE ALL
-                            $alertDanger[] = PASS1_CANNOT_EMPTY;
+                            $alertDanger[] = _("Password 1 cannot be empty.");
                         }
                         if (!isset($_POST['pass2']) || $_POST['pass2'] == '') {
                             // VALIDATE ALL
-                            $alertDanger[] = PASS2_CANNOT_EMPTY;
+                            $alertDanger[] = _("Password 2 cannot be empty.");
                         }
 
                         if (User::validate($userid)) {
-                            $alertDanger[] = MSG_USER_EXIST;
+                            $alertDanger[] = _("User Exist! Choose Another Username");
                         }
                         if (!User::isSame($_POST['pass1'], $_POST['pass2'])) {
-                            $alertDanger[] = MSG_USER_PWD_MISMATCH;
+                            $alertDanger[] = _("Password Did Not Match, Retype Your Password Again.");
                         }
                         if (!User::isEmail($_POST['email'])) {
-                            $alertDanger[] = MSG_USER_EMAIL_EXIST;
+                            $alertDanger[] = _("Email Already Used. Please Use Another E-Mail:");
                         }
 
                         if (!isset($alertDanger)) {
@@ -295,7 +253,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                             User::create($vars);
                             Hooks::run('user_submit_add_action', $_POST);
                             Token::remove($token);
-                            $data['alertSuccess'][] = USER." {$userid}, ".MSG_USER_ADDED;
+                            $data['alertSuccess'][] = _("User")." {$userid}, "._("Added Successfully");
                         } else {
                             $data['alertDanger'] = $alertDanger;
                         }
@@ -323,13 +281,15 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $token = Typo::cleanX($_POST['token']);
                         if (!isset($_POST['token']) && !Token::validate($token)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
                         if (isset($alertDanger)) {
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
+                                $userid = User::userid($id);
                                 User::activate($id);
+                                $data['alertSuccess'][] = _("User {$userid} Activated");
                             }
                         }
                         if (isset($_POST['token'])) {
@@ -340,13 +300,15 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $token = Typo::cleanX($_POST['token']);
                         if (!isset($_POST['token']) && !Token::validate($token)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
                         if (isset($alertDanger)) {
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
+                                $userid = User::userid($id);
                                 User::deactivate($id);
+                                $data['alertSuccess'][] = _("User {$userid} Deactivated");
                             }
                         }
                         if (isset($_POST['token'])) {
@@ -357,13 +319,15 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         $token = Typo::cleanX($_POST['token']);
                         if (!isset($_POST['token']) && !Token::validate($token)) {
                             // VALIDATE ALL
-                            $alertDanger[] = TOKEN_NOT_EXIST;
+                            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                         }
                         if (isset($alertDanger)) {
                             $data['alertDanger'] = $alertDanger;
                         } else {
                             foreach ($user_id as $id) {
+                                $userid = User::userid($id);
                                 User::delete($id);
+                                $data['alertSuccess'][] = _("User {$userid} Deleted");
                             }
                         }
                         if (isset($_POST['token'])) {
@@ -375,31 +339,33 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                 }
 
-                $data['usr'] = Db::result("SELECT *, A.`id` as `id` FROM `user` AS A 
-                        LEFT JOIN `user_detail` AS B 
-                        ON A.`userid` = B.`userid` 
-                        WHERE {$where} ORDER BY A.`userid` ASC LIMIT {$offset}, {$max}");
-                $data['num'] = Db::$num_rows;
-                $page = array(
-                            'paging' => $paging,
-                            'table' => [
-                                'user' => ['A', 'LEFT JOIN', 'userid'],
-                                'user_detail' => ['B', 'LEFT JOIN', 'userid']
-                            ],
-                            'select' => 'A.`id` ',
-                            'where' => $where,
-                            'max' => $max,
-                            'url' => 'index.php?page=users'.$qpage,
-                            'type' => 'pager',
-                        );
-                $data['paging'] = Paging::create($page);
-
-                Theme::admin('header', $data);
-                System::inc('user', $data);
-                Theme::admin('footer');
+                
+                
             }
             break;
     }
+    $data['usr'] = Db::result("SELECT A.`userid`, A.`group`, A.`email`, A.`join_date`, A.`status`, A.`id` as `id`, B.`country` FROM `user` AS A 
+                        LEFT JOIN `user_detail` AS B 
+                        ON A.`userid` = B.`userid` 
+            WHERE {$where} ORDER BY A.`userid` ASC LIMIT {$offset}, {$max}");
+    $data['num'] = Db::$num_rows;
+    $page = array(
+                'paging' => $paging,
+                'table' => [
+                    'user' => ['A', 'LEFT JOIN', 'userid'],
+                    'user_detail' => ['B', 'LEFT JOIN', 'userid']
+                ],
+                'select' => 'A.`id` ',
+                'where' => $where,
+                'max' => $max,
+                'url' => 'index.php?page=users'.$qpage,
+                'type' => 'pager',
+            );
+    $data['paging'] = Paging::create($page);
+    System::alert($data);
+    Theme::admin('header', $data);
+    System::inc('user', $data);
+    Theme::admin('footer');
 } else {
     Theme::admin('header');
     Control::error('noaccess');

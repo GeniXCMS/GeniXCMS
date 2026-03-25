@@ -1,0 +1,431 @@
+:root {
+    --gx-sidebar-width: 260px;
+    --gx-sidebar-bg: #1e293b;
+    --gx-sidebar-color: #94a3b8;
+    --gx-sidebar-active-bg: #334155;
+    --gx-sidebar-active-color: #fff;
+    --gx-primary: #3b82f6;
+    --gx-primary-hover: #2563eb;
+    --gx-body-bg: #f8fafc;
+    --gx-card-border: #e2e8f0;
+    --gx-success: #10b981;
+    --gx-warning: #f59e0b;
+    --gx-danger: #ef4444;
+    --gx-radius: 10px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background-color: var(--gx-body-bg);
+    color: #334155;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+#sidebar {
+    width: var(--gx-sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--gx-sidebar-bg);
+    color: var(--gx-sidebar-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar.collapsed {
+    margin-left: calc(-1 * var(--gx-sidebar-width));
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+    list-style: none;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Sidebar Scrollbar */
+.sidebar-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Firefox */
+.sidebar-menu {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.menu-label {
+    padding: 4px 18px;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 5px 18px;
+    color: var(--gx-sidebar-color);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+    font-size: 0.78rem;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-menu li a:hover {
+    background: var(--gx-sidebar-active-bg);
+    color: #fff;
+    border-left-color: var(--gx-primary);
+}
+
+.sidebar-menu li.active>a {
+    background: var(--gx-sidebar-active-bg);
+    color: #fff;
+    border-left-color: var(--gx-primary);
+}
+
+.sidebar-menu li a i {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+
+/* Main Content Styling */
+#main-wrapper {
+    margin-left: var(--gx-sidebar-width);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-wrapper.expanded {
+    margin-left: 0;
+}
+
+.top-navbar {
+    background: #fff;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.content-body {
+    padding: 30px;
+    flex: 1;
+}
+
+/* UI Elements */
+.card {
+    border: 1px solid var(--gx-card-border);
+    border-radius: var(--gx-radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Uniform border-radius overrides ──
+   Force all Bootstrap rounded-* utilities to use var(--gx-radius) = 10px
+   so every element in the admin shares one consistent radius.
+   Specifically override rounded-4 (16px) and rounded-3 (8px) used across forms & pages.
+*/
+.rounded,
+.rounded-1,
+.rounded-2,
+.rounded-3,
+.rounded-4,
+.rounded-5 {
+    border-radius: var(--gx-radius) !important;
+}
+
+/* Directional rounded utilities */
+.rounded-top-3,
+.rounded-top-4 {
+    border-top-left-radius: var(--gx-radius) !important;
+    border-top-right-radius: var(--gx-radius) !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.rounded-bottom-3,
+.rounded-bottom-4 {
+    border-bottom-left-radius: var(--gx-radius) !important;
+    border-bottom-right-radius: var(--gx-radius) !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.rounded-start-3,
+.rounded-start-4 {
+    border-top-left-radius: var(--gx-radius) !important;
+    border-bottom-left-radius: var(--gx-radius) !important;
+}
+
+.rounded-end-3,
+.rounded-end-4 {
+    border-top-right-radius: var(--gx-radius) !important;
+    border-bottom-right-radius: var(--gx-radius) !important;
+}
+
+/* Pill/circle stay as-is */
+.rounded-pill {
+    border-radius: 9999px !important;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;
+}
+
+/* Inputs, selects, textareas */
+.form-control,
+.form-select,
+.input-group .form-control {
+    border-radius: var(--gx-radius) !important;
+}
+
+.input-group .form-control:first-child,
+.input-group-text:first-child {
+    border-top-left-radius: var(--gx-radius) !important;
+    border-bottom-left-radius: var(--gx-radius) !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.input-group .form-control:last-child,
+.input-group-text:last-child {
+    border-top-right-radius: var(--gx-radius) !important;
+    border-bottom-right-radius: var(--gx-radius) !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* Dropdown menus */
+.dropdown-menu {
+    border-radius: var(--gx-radius) !important;
+}
+
+/* Alert boxes */
+.alert {
+    border-radius: var(--gx-radius) !important;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid var(--gx-card-border);
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: var(--gx-primary);
+    border-color: var(--gx-primary);
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    background-color: var(--gx-primary-hover);
+    border-color: var(--gx-primary-hover);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item a {
+    color: var(--gx-primary);
+    text-decoration: none;
+}
+
+/* Footer */
+.admin-footer {
+    padding: 20px 30px;
+    background: #fff;
+    border-top: 1px solid var(--gx-card-border);
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--gx-sidebar-width));
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    #main-wrapper {
+        margin-left: 0;
+    }
+}
+
+.nav-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.nav-item.open>.nav-tree {
+    display: block;
+}
+
+.nav-tree li a {
+    padding: 7px 20px 7px 45px !important;
+    font-size: 0.75rem;
+}
+
+.sidebar-brand-wrapper {
+    padding: 15px 25px;
+    margin-bottom: 10px;
+}
+
+.sidebar-brand-wrapper img {
+    max-height: 35px;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+    border-radius: 9999px;
+}
+
+.extra-small {
+    font-size: 0.75rem;
+}
+
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container-fluid {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Scroll Top Button */
+#scrollTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 1050;
+    display: flex;
+    /* Always flex but hidden by opacity */
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#scrollTop i {
+    font-size: 1.25rem;
+    line-height: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#scrollTop:hover {
+    transform: translateY(-5px) scale(1.1);
+    background-color: var(--gx-primary-hover);
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4) !important;
+}
+
+#scrollTop.visible {
+    opacity: 1;
+    visibility: visible;
+}

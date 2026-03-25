@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-12 text-center footer-copyright">
                     <small>Copyright &copy; <?=date('Y');?>, <?=Site::$name;?>. All Rights reserved. 
-                    powered by <a href="https://genixcms.my.id">GeniXCMS</a></small>
+                    powered by <a href="https://genixcms.web.id">GeniXCMS</a></small>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.2/jquery.flexslider.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
             $('.featured').flexslider({
                 animation: "slide",

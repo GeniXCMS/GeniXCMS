@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 if (User::access(0)) {
-    $data['sitetitle'] = MODULES;
+    $data['sitetitle'] = _("Modules");
     if (isset($GLOBALS['alertDanger'])) {
         $data['alertDanger'] = $GLOBALS['alertDanger'];
     }
@@ -33,10 +33,10 @@ if (User::access(0)) {
         $token = Typo::cleanX($_POST['token']);
         if (!isset($_POST['token']) && !Token::validate($token, true)) {
             // VALIDATE ALL
-            $alertDanger[] = TOKEN_NOT_EXIST;
+            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
         }
         if (!isset($_FILES['module']['name']) || $_FILES['module']['name'] == '') {
-            $alertDanger[] = NOFILE_UPLOADED;
+            $alertDanger[] = _("No Files Uploaded.");
         }
 
         if (!isset($alertDanger)) {
@@ -52,7 +52,7 @@ if (User::access(0)) {
                 if (count($dir) == 1) {
                     $zip->close();
                     @unlink($mod['filepath']);
-                    $data['alertDanger'][] = 'Failed to Install your module';
+                    $data['alertDanger'][] = _('Failed to Install your module');
                 } else {
                     $zip->extractTo(GX_MOD);
                     $entry = [];
@@ -70,17 +70,17 @@ if (User::access(0)) {
                             @unlink(GX_MOD.$value);
                             Files::delTree(GX_MOD.$dir[0]);
                             @unlink($mod['filepath']);
-                            $data['alertDanger'][] = 'Failed to Install your module';
+                            $data['alertDanger'][] = _('Failed to Install your module');
                         } else {
-                            $data['alertSuccess'][] = MSG_MOD_INSTALLED;
+                            $data['alertSuccess'][] = _("Module Installed Successfully.");
                         }
                     }
                 }
 
                 Hooks::run('module_install_action', $mod);
-                $data['alertSuccess'][] = MSG_MOD_INSTALLED;
+                $data['alertSuccess'][] = _("Module Installed Successfully.");
             } else {
-                $data['alertDanger'][] = MSG_MOD_CANT_EXTRACT;
+                $data['alertDanger'][] = _("Cannot extract files.");
             }
             unlink($mod['filepath']);
         } else {
@@ -90,7 +90,7 @@ if (User::access(0)) {
             Token::remove(Typo::cleanX($_POST['token']));
         }
     }
-
+    System::alert($data);
     $data['mods'] = Mod::modList();
     Theme::admin('header', $data);
     System::inc('modules', $data);

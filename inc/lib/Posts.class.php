@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -178,7 +178,7 @@ class Posts
         //print_r($more);
         if (count($more) > 1) {
             // $post = explode('[[--readmore--]]', $post);
-            $post = $more[0].' <a href="'.Url::post($id).'">'.READ_MORE.'</a>';
+            $post = $more[0].' <a href="'.Url::post($id).'">'._("Read More").'</a>';
         }
 
         $post = Hooks::filter('post_content_filter', $post);
@@ -203,7 +203,7 @@ class Posts
         $posts = Db::result($sql);
 
         if (isset($posts['error'])) {
-            $posts['error'] = 'No Posts found.';
+            $posts['error'] = _('Error: No Posts found.');
         } else {
             $posts = self::prepare($posts);
         }
@@ -356,7 +356,7 @@ class Posts
     {
         $post_id = Typo::int($post_id);
         $param = Typo::cleanX($param);
-        $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
+        $sql = "SELECT `id` FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
         $q = Db::result($sql);
         if (Db::$num_rows > 0) {
             return true;
@@ -396,7 +396,7 @@ class Posts
     //     'cat' => '',
     //     'type' => 'post',
     //     'excerpt' => 'true',
-    //     'excerpt_max' => 'true',
+    //     'excerpt_max' => '200',
     //     'title' => 'true',
     //     'author' => 'true',
     //     'date' => 'true',
@@ -411,6 +411,7 @@ class Posts
 
     public static function lists($vars)
     {
+        $imgSize = isset($vars['image_size']) ? $vars['image_size'] : 60;
         $class = isset($vars['class']) ? $vars['class'] : '';
 
         $imgClass = isset($class['img']) ? $class['img'] : '';
@@ -418,16 +419,17 @@ class Posts
         $liClass = isset($class['list']) ? $class['list'] : '';
         $pClass = isset($class['p']) ? $class['p'] : '';
         $h4Class = isset($class['h4']) ? $class['h4'] : '';
+        $dateClass = isset($class['date']) ? $class['date'] : '';
         $excerptMax = isset($vars['excerpt_max']) ? $vars['excerpt_max'] : '200';
 
         $pcat = self::recent($vars);
         if (isset($pcat['error'])) {
-            echo 'No Post(s) found.';
+            return _('No Post(s) found.');
         } else {
             $pcat = self::prepare($pcat);
-
+            $html = "";
             foreach ($pcat as $p) {
-                echo '<div class="media '.$ulClass.'">';
+                $html .= '<div class="recent-list-item d-flex align-items-center mb-3 '.$ulClass.'">';
                 $content = (isset($vars['excerpt']) && $vars['excerpt'] === true) ? substr(
                     strip_tags(
                         Typo::Xclean($p->content)
@@ -436,26 +438,29 @@ class Posts
                     $excerptMax
                 ) : '';
                 if (isset($vars['image']) && $vars['image'] == true) {
-                    $img = self::getImage(Typo::Xclean($p->content));
+                    $post_image = Posts::getPostImage($p->id);
+                    $img = ( $post_image != "" ) ? $post_image: self::getImage(Typo::Xclean($p->content), 1);
                     if ($img != '') {
-                        $img = Url::thumb($img, 'square', 60);
+                        $img = Url::thumb($img, 'square', $imgSize);
                     } else {
-                        $img = Url::thumb('assets/images/noimage.png', '', 60);
+                        $img = Url::thumb('assets/images/noimage.png', 'square', $imgSize);
                     }
-                    echo '<div class="media-left">
+                    $html .= '<div class="flex-shrink-0">
                         <a href="'.Url::post($p->id).'">
-                          <img class="media-object '.$imgClass.'" src="'.$img.'" alt="'.$p->title.'">
+                          <img class="'.$imgClass.'" src="'.$img.'" alt="'.$p->title.'" width="'.$imgSize.'" height="'.$imgSize.'" style="object-fit: cover;">
                         </a>
                       </div>';
                 }
-                echo '<div class="media-body '.$liClass.'">';
-                echo (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading '.$h4Class.'"><a href="'.Url::post($p->id)."\">{$p->title}</a></h4>" : '';
-                echo (isset($vars['date']) && $vars['date'] === true) ? '<small>posted on : '.Date::local($p->date).' </small> ' : '';
-                echo (isset($vars['author']) && $vars['author'] === true) ? '<small>by : '.$p->author.'</small>' : '';
-                echo (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="'.$pClass.'">'.$content.'</p>' : '';
-                echo '</div>';
-                echo '</div>';
+                $html .= '<div class="flex-grow-1 ms-3 '.$liClass.'">';
+                $html .= (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading mb-1 '.$h4Class.'"><a href="'.Url::post($p->id)."\">{$p->title}</a></h4>" : '';
+                $html .= (isset($vars['date']) && $vars['date'] === true) ? '<small class="text-muted '.$dateClass.'">'.Date::local($p->date).' </small> ' : '';
+                $html .= (isset($vars['author']) && $vars['author'] === true) ? '<small class="text-muted">by : '.$p->author.'</small>' : '';
+                $html .= (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="mb-0 '.$pClass.'">'.$content.'</p>' : '';
+                $html .= '</div>';
+                $html .= '</div>';
             }
+
+            return $html;
         }
     }
 
@@ -472,7 +477,7 @@ class Posts
         return $title.' : '.$tag;
     }
 
-    public static function related($id, $num, $cat, $mode = 'list')
+    public static function related($id, $num, $cat, $mode = 'list', $limit=20)
     {
         $id = Typo::int($id);
         if (self::existParam('tags', $id)) {
@@ -508,11 +513,11 @@ class Posts
             )
         );
         if (isset($post['error'])) {
-            $related = '<div class="col-sm-12">No Related Post(s)</div>';
+            $related = '<div class="col-sm-12">'._('No Related Post(s)').'</div>';
         } else {
             $related = '';
             if ($mode == 'list') {
-                $related .= '<ul class="list-group related">';
+                $related .= '<ul class="list-group list-group-flush related">';
                 foreach ($post as $p) {
                     if ($p->id != $id) {
                         $related .= '<li class="list-group-item"><a href="'.Url::post($p->id)."\">$p->title</a></li>";
@@ -522,23 +527,29 @@ class Posts
                 }
                 $related .= '</ul>';
             } elseif ($mode == 'box') {
-                $related .= '<ul class="list-group related clearfix">';
+                $related .= '<div class="row related-box">';
                 foreach ($post as $p) {
                     if ($p->id != $id) {
-                        $title = (strlen($p->title) > 20) ? substr($p->title, 0, 15).'...' : $p->title;
-                        $img = self::getImage(Typo::Xclean($p->content));
-                        if ($img != '') {
-                            $img = Url::thumb($img, 'square', 200);
-                        } else {
-                            $img = Url::thumb('assets/images/noimage.png', '', 200);
-                        }
-                        $related .= '<li class="list-unstyled col-xs-6 col-sm-3 col-md-3 clearfix"><a href="'.Url::post($p->id).'">
-                        <img src="'.$img.'" class="img-responsive center-block" alt="'.$p->title.'" title="'.$p->title.'">'.$title.'</a></li>';
-                    } else {
-                        $related .= '';
+                        $title = (strlen($p->title) > $limit) ? substr($p->title, 0, $limit-2).'...' : $p->title;
+                        $post_image = Posts::getPostImage($p->id);
+                        $img = ( $post_image != "" ) ? $post_image: Posts::getImage(Typo::Xclean($p->content), 1);
+                        $imgurl = $img == "" ? Url::thumb(Site::$url."assets/images/noimage.png", 'large', 400): Url::thumb($img, 'large', 400);
+
+                        $related .= '<div class="col-6 col-sm-4 mb-4">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden related-card transition-base">
+                                <a href="'.Url::post($p->id).'" class="text-decoration-none text-dark h-100 d-flex flex-column">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="'.$imgurl.'" class="card-img-top object-fit-cover" alt="'.$p->title.'">
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <h6 class="card-title fw-bold mb-0" style="font-size: 0.9rem; line-height: 1.4;">'.$title.'</h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>';
                     }
                 }
-                $related .= '</ul>';
+                $related .= '</div>';
             }
         }
 
@@ -556,6 +567,11 @@ class Posts
         }
     }
 
+    /**
+     * Get Post ID from Slug
+     * @param string $slug
+     * @return mixed
+     */
     public static function idSlug($slug)
     {
         $sql = "SELECT `id` FROM `posts` WHERE `slug` = '{$slug}' LIMIT 1";
@@ -567,23 +583,111 @@ class Posts
         }
     }
 
-    public static function getPostCat($id, $max)
+    /**
+     * Get Post Content by Post ID
+     * @param int $id
+     * @return mixed
+     */
+    public static function getPostContent($id)
+    {
+        $sql = sprintf("SELECT `content` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            $r = Typo::Xclean($q[0]->content);
+        } else {
+            $r['error'] = _('Error: No Post to Show');
+        }
+
+        return $r;
+    }
+
+    public static function author($id)
+    {
+        $sql = sprintf("SELECT `author` FROM `posts` WHERE `id` = '%d' LIMIT 1", $id);
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            $r = $q[0]->author;
+        } else {
+            $r['error'] = _('Error: No Post to Show');
+        }
+
+        return $r;
+    }
+
+    public static function cat($id)
+    {
+        $sql = sprintf("SELECT `cat` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            $r = $q[0]->cat;
+        } else {
+            $r['error'] = _('Error: No Post to Show');
+        }
+
+        return $r;
+    }
+
+    public static function date($id)
+    {
+        $sql = sprintf("SELECT `date` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
+        $q = Db::result($sql);
+        if (Db::$num_rows > 0) {
+            $r = $q[0]->date;
+        } else {
+            $r['error'] = _('Error: No Post to Show');
+        }
+
+        return $r;
+    }
+
+    /**
+     * Get Post by Cat ID
+     * @param int $id
+     * @param int $max
+     * @return mixed
+     */
+    public static function getPostByCat($id, $max)
     {
         $sql = sprintf("SELECT * FROM `posts` WHERE `cat` = '%d' AND `status` = '1' ORDER BY `date` DESC LIMIT 0, %d", $id, $max);
         $q = Db::result($sql);
         if (Db::$num_rows > 0) {
             $r = $q;
         } else {
-            $r['error'] = 'Error: No Post to Show';
+            $r['error'] = _('Error: No Post to Show');
         }
 
         return $r;
     }
 
-    public static function getImage($post)
+    public static function getPostImage($post_id)
     {
-        preg_match_all('/<img .*?src=[\'"]([^\'"]+)[\'"].*?>/Ui', $post, $im);
+        if (Posts::existParam('post_image', $post_id)) {
+            $image = Posts::getParam('post_image', $post_id);
+        } else {
+            $image = '';
+        }
+
+        return $image;
+    }
+
+    public static function getImage($post, $number=1)
+    {
+        preg_match_all('/<img .*?src=[\'"]([^\'"]+)[\'"].*?>/si', $post, $im);
+        // print_r($im);
         if (count($im) >= 1) {
+            return self::setImage($im, $number);
+        }
+    }
+
+    public static function setImage($im, $number) {
+        if(isset($number)) {
+            $num = $number-1;
+            if(isset($im[1][$num])) {
+                return $im[1][$num];
+            } else {
+                return isset($im[1][0]) ? $im[1][0]: "";
+            }
+        } else {
             for ($i = 1; $i <= count($im); $i += 2) {
                 if (isset($im[$i][0])) {
                     return $im[$i][0];
@@ -657,7 +761,7 @@ class Posts
             }
             
         } else {
-            $res['error'] = "data not found";
+            $res['error'] = _("Data not found");
         }
 
 
@@ -676,10 +780,15 @@ class Posts
         return $slug;
     }
 
+    /**
+     * Check if Slug is Exist
+     * @param string $slug
+     * @return bool
+     */
     public static function slugExist($slug)
     {
         $slug = Typo::cleanX($slug);
-        $sql = "SELECT * FROM `posts` WHERE `slug` LIKE '%{$slug}%' ";
+        $sql = "SELECT `id` FROM `posts` WHERE `slug` LIKE '%{$slug}%' ";
         Db::result($sql);
         if (Db::$num_rows > 0) {
             return true;
@@ -690,7 +799,7 @@ class Posts
 
     public static function getLastSlug($slug)
     {
-        $sql = "SELECT * FROM `posts` WHERE `slug` LIKE '%{$slug}%' ORDER BY `id` DESC LIMIT 1";
+        $sql = "SELECT `slug` FROM `posts` WHERE `slug` LIKE '%{$slug}%' ORDER BY `id` DESC LIMIT 1";
         $q = Db::result($sql);
 
         $slnum = str_replace($slug, '', $q[0]->slug);

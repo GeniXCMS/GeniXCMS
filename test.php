@@ -10,5 +10,19 @@ define('GX_ASSET', GX_PATH.'/assets/');
 
 require 'autoload.php';
 
-$str = Typo::jsonFormat('"><script src=x onerror=confirm(2);>');
-echo $str;
+// $str = Typo::jsonFormat('"><script src=x onerror=confirm(2);>');
+// echo $str;
+$locale = "indonesian";
+$dir = GX_PATH.'/inc/lang/locale';
+if (defined('LC_MESSAGES')) {
+    setlocale(LC_MESSAGES, $locale); // Linux
+    bindtextdomain("genixcms", $dir);
+} else {
+    putenv("LC_ALL={$locale}"); // windows
+    bindtextdomain("genixcms", $dir);
+}
+
+
+textdomain("genixcms");
+
+echo _("Pages");

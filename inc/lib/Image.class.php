@@ -1,4 +1,6 @@
 <?php
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
@@ -8,7 +10,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150214
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -128,7 +130,17 @@ class Image
         return true;
     }
 
-    public static function compressPng($path, $max_quality = 80)
+    public static function compressPng($img)
+    {
+        $im = imagecreatefrompng($img);
+        $quality = 9; //0 - 9 (0= no compression, 9 = high compression)
+        imageAlphaBlending($im, true); 
+        imageSaveAlpha($im, true);
+        imagepng($im, $img, $quality);  //leave out filename if you want it to output to the buffer
+        imagedestroy($im);
+    }
+
+    public static function compressPng2($path, $max_quality = 80)
     {
         $check = function_exists("shell_exec") ? shell_exec('pngquant --version'): false;
         if (false == $check) {
@@ -158,7 +170,7 @@ class Image
         if (extension_loaded('imagick')){
             $img = new Imagick();
             $img->readImage($path);
-            $img->setImageCompression(imagick::COMPRESSION_JPEG);
+            $img->setImageCompression(Imagick::COMPRESSION_JPEG);
             $img->setImageCompressionQuality($quality);
             $img->stripImage();
             $img->writeImage($path);
@@ -202,13 +214,160 @@ class Image
         return $url;
     }
 
+    public static function convertWebp($img)
+    {
+        $manager = new ImageManager(
+            Driver::class
+        );
+
+        if (file_exists($img)) {
+            $image = $manager->read($img);
+            $image->save($img.".webp", progressive: true, quality: 65);
+            $image->toWebp();
+            
+        }
+    }
+
+    public static function thumbFly($img, $type, $size, $align) {
+        $manager = new ImageManager(
+            Driver::class
+        );
+        $img = str_replace('thumb/', '', $img);
+        $noimage = 'assets/images/noimage.png';
+        $imgExts = explode(".",$img);
+        rsort($imgExts);
+        $imgExt = $imgExts[0];
+        $ighash = ($noimage == $img) ? sha1('noimage'.$img) : sha1($img);
+        // $cacheFile = ($noimage == $img) ? $img : GX_ASSET.'cache/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
+        $cacheFile = GX_ASSET.'cache/thumbs/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
+
+        $square = ($size != '') ? Typo::int($size) : 150;
+        $large = ($size != '') ? Typo::int($size) : 200;
+        $small = ($size != '') ? Typo::int($size) : 100;
+
+        if (file_exists($cacheFile)) {
+            $src = $cacheFile;
+            readfile($src);
+            // $image = $manager->read($src);
+
+            // if (Options::v('is_logourl') == 'on' && Options::v('logourl') != '') {
+            //     $logo = GX_PATH.'/'.Options::v('logourl');
+            // } elseif (Options::v('is_logourl') == 'off' && Options::v('logo') != '') {
+            //     $logo = GX_PATH.'/'.Options::v('logo');
+            // }
+
+            // $image->place(
+            //     $logo,
+            //     'bottom-right', 
+            //     10, 
+            //     10,
+            //     30
+            // );
+
+            // if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
+            //     $encoded = $image->toJpeg();
+            // }
+            // if ($imgExt == 'gif') {
+            //     $encoded = $image->toGif();
+            // }
+            // if ($imgExt == 'png') {
+            //     $encoded = $image->toPng();
+            // }
+            // if ($imgExt == 'webp') {
+            //     $encoded = $image->toWebp();
+            // }
+            
+
+
+        } else {
+            
+
+            // check whether files exist on remote or local
+            if (Files::isRemote($img)) {
+                $imgSrc = $img;
+                if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
+                    $exist = true;
+                } else {
+                    $exist = false;
+                }
+            } else {
+                $imgSrc = GX_PATH.'/'.$img;
+                if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
+                    $exist = true;
+                } else {
+                    $exist = false;
+                }
+            }
+
+            list($width) = getimagesize($imgSrc);
+
+            $image = $manager->read($imgSrc);
+
+            // type : square, large, small
+            if( $type == 'square' ) {
+                $image->cover($square, $square);
+            }
+            if( $type == 'large' ) {
+                $image->scale(width: $large);
+            }
+            if( $type == 'small' ) {
+                $image->scale(width: $small);
+            }
+
+            $use_watermark = Options::v('media_use_watermark');
+            if( $use_watermark == "on" ) {
+                $watermark_image = Options::v('media_watermark_image');
+                $watermark_position = Options::v('media_watermark_position');
+                $watermark_opacity = Options::v('media_watermark_opacity');
+                if( 
+                (isset($size) && $size > 200) || 
+                (!isset($size) || $size == '' && $width > 200) 
+                ) {
+                    $image->place(
+                        GX_PATH.'/'.$watermark_image,
+                        $watermark_position, 
+                        0, 
+                        0,
+                        $watermark_opacity
+                    );
+                } 
+            }
+            
+            
+
+            $image->save($cacheFile, progressive: true, quality: 65);
+
+            if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
+                $encoded = $image->toJpeg();
+            }
+            if ($imgExt == 'gif') {
+                $encoded = $image->toGif();
+            }
+            if ($imgExt == 'png') {
+                $encoded = $image->toPng();
+            }
+            if ($imgExt == 'webp') {
+                $encoded = $image->toWebp();
+            }
+
+            echo $encoded;
+
+        }
+
+        
+    }
+
     /**
      * @link http://1stwebmagazine.com/generate-thumbnail-on-the-fly-with-php
      */
-    public static function thumbFly($img, $type = 'square', $size = '', $align = '')
+    public static function thumbFly2($img, $type = 'square', $size = '', $align = '')
     {
+        $manager = new ImageManager(
+            Driver::class
+        );
+
         $noimage = 'assets/images/noimage.png';
-        $imgExt = substr($img, -3);
+        $imgExt = pathinfo($img, PATHINFO_EXTENSION); //substr($img, -3);
         $ighash = ($noimage == $img) ? sha1('noimage'.$img) : sha1($img);
         // $cacheFile = ($noimage == $img) ? $img : GX_ASSET.'cache/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
         $cacheFile = GX_ASSET.'cache/thumbs/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
@@ -216,7 +375,7 @@ class Image
         if (file_exists($cacheFile)) {
             $imgSrc = $cacheFile;
             list($width_orig, $height_orig) = getimagesize($imgSrc);
-            if ($imgExt == 'jpg') {
+            if ($imgExt == 'jpg' || $imgExt == 'jpeg' || $imgExt == 'webp') {
                 $myImage = imagecreatefromjpeg($imgSrc);
             }
             if ($imgExt == 'gif') {
@@ -225,7 +384,10 @@ class Image
             if ($imgExt == 'png') {
                 $myImage = imagecreatefrompng($imgSrc);
             }
-            if ($imgExt == 'jpg') {
+            if ($imgExt == 'webp') {
+                $myImage = imagecreatefromwebp($imgSrc);
+            }
+            if ($imgExt == 'jpg'|| $imgExt == 'jpeg'|| $imgExt == 'webp') {
                 imagejpeg($myImage, null, 100);
             }
             if ($imgExt == 'gif') {
@@ -234,6 +396,7 @@ class Image
             if ($imgExt == 'png') {
                 imagepng($myImage, null, 9);
             }
+
         } else {
             $square = ($size != '') ? Typo::int($size) : 150;
             $large = ($size != '') ? Typo::int($size) : 200;
@@ -272,7 +435,7 @@ class Image
 
                 if ($exist) {
                     // image extension
-                    if ($imgExt == 'jpg') {
+                    if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
                         $myImage = imagecreatefromjpeg($imgSrc);
                     }
                     if ($imgExt == 'gif') {
@@ -280,6 +443,9 @@ class Image
                     }
                     if ($imgExt == 'png') {
                         $myImage = imagecreatefrompng($imgSrc);
+                    }
+                    if ($imgExt == 'webp') {
+                        $myImage = imagecreatefromwebp($imgSrc);
                     }
 
                 // getting the image dimensions
@@ -298,8 +464,8 @@ class Image
                     }
 
                 // middle
-                    $x_mid = $new_width / 2;
-                    $y_mid = $new_height / 2;
+                    $x_mid = round( $new_width / 2 );
+                    $y_mid = round( $new_height / 2 );
 
                 // create new image
                     $process = imagecreatetruecolor(round($new_width), round($new_height));
@@ -325,8 +491,28 @@ class Image
 
                     imagedestroy($process);
                     imagedestroy($myImage);
+                    $image = $manager->read($imgSrc);
+                    $use_watermark = Options::v('media_use_watermark');
+                    if( $use_watermark == "on" ) {
+                        $watermark_image = Options::v('media_watermark_image');
+                        $watermark_position = Options::v('media_watermark_position');
+                        $watermark_opacity = Options::v('media_watermark_opacity');
+                        if( 
+                        (isset($size) && $size > 200) || 
+                        (!isset($size) || $size == '' && $width_orig > 200) 
+                        ) {
+                            $image->place(
+                                GX_PATH.'/'.$watermark_image,
+                                $watermark_position, 
+                                0, 
+                                0,
+                                $watermark_opacity
+                            );
+                        } 
+                    }
+                    
 
-                    if ($imgExt == 'jpg') {
+                    if ($imgExt == 'jpg' || $imgExt == 'jpeg' || $imgExt == 'webp') {
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagejpeg($thumb, $loc, 100);
@@ -362,7 +548,7 @@ class Image
 
                 if ($exist) {
                     // image extension
-                    if ($imgExt == 'jpg') {
+                    if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
                         $myImage = imagecreatefromjpeg($imgSrc);
                     }
                     if ($imgExt == 'gif') {
@@ -370,6 +556,9 @@ class Image
                     }
                     if ($imgExt == 'png') {
                         $myImage = imagecreatefrompng($imgSrc);
+                    }
+                    if ($imgExt == 'webp') {
+                        $myImage = imagecreatefromwebp($imgSrc);
                     }
 
                     //getting the image dimensions
@@ -380,8 +569,8 @@ class Image
                     $thumb_height = $thumb_width / $ratio_orig;
 
                     // new dimensions
-                    $new_width = $thumb_width;
-                    $new_height = $thumb_height;
+                    $new_width = round($thumb_width);
+                    $new_height = round($thumb_height);
 
                     // middle
                     $x_mid = $new_width / 2;
@@ -394,7 +583,27 @@ class Image
                     $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
                     imagecopyresampled($thumb, $process, 0, 0, ($x_mid - ($thumb_width / 2)), ($y_mid - ($thumb_height / 2)), $thumb_width, $thumb_height, $thumb_width, $thumb_height);
 
-                    if ($imgExt == 'jpg') {
+                    $image = $manager->read($imgSrc);
+                    $use_watermark = Options::v('media_use_watermark');
+                    if( $use_watermark == "on" ) {
+                        $watermark_image = Options::v('media_watermark_image');
+                        $watermark_position = Options::v('media_watermark_position');
+                        $watermark_opacity = Options::v('media_watermark_opacity');
+                        if( 
+                        (isset($size) && $size > 200) || 
+                        (!isset($size) || $size == '' && $width_orig > 200) 
+                        ) {
+                            $image->place(
+                                GX_PATH.'/'.$watermark_image,
+                                $watermark_position, 
+                                0, 
+                                0,
+                                $watermark_opacity
+                            );
+                        } 
+                    }
+                    
+                    if ($imgExt == 'jpg' || $imgExt == 'jpeg' || $imgExt == 'webp' ) {
                         if (!file_exists($cacheFile)) {
                             $loc = $cacheFile;
                             imagejpeg($thumb, $loc, 100);

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -126,7 +126,7 @@ class Categories
             }
             $drop .= '</select>';
         } else {
-            $drop = 'Category config not in Array';
+            $drop = _('Category config not in Array');
         }
 
 
@@ -193,7 +193,7 @@ class Categories
 
                     $html .= "<div class=\"panel panel-default\">
                     <div id=\"{$collapseHeading}\" class=\"panel-heading\" role=\"tab\" >
-                    <a href=\"{$href}\" data-toggle=\"{$data_toggle}\"  aria-expanded=\"false\"
+                    <a href=\"{$href}\" data-bs-toggle=\"{$data_toggle}\"  aria-expanded=\"false\"
                     aria-controls=\"collapse-{$c->id}\" class=\"collapsed\" data-parent=\"#accordion\"><strong>{$c->name}</strong></a>
                     </div>
                     <div class=\"panel-collapse collapse {$in}\" role=\"tabpanel\" id=\"collapse-{$c->id}\" aria-labelledby=\"collapseListGroupHeading{$c->id}\">
@@ -229,6 +229,10 @@ class Categories
      */
     public static function name($id)
     {
+        if (is_array($id)) {
+            error_log("DEBUG: Categories::name received an ARRAY: " . json_encode($id));
+            return _('Multiple Categories');
+        }
         $id = sprintf('%d', $id);
         if (isset($id)) {
             $cat = Db::result("SELECT `name` FROM `cat`
@@ -240,7 +244,7 @@ class Categories
                 return $cat[0]->name;
             }
         } else {
-            echo 'No ID Selected';
+            return _('No ID Selected');
         }
 
         //print_r($cat);
@@ -332,7 +336,7 @@ class Categories
                 return $cat[0]->type;
             }
         } else {
-            echo 'No ID Selected';
+            return _('No ID Selected');
         }
     }
 
@@ -350,7 +354,7 @@ class Categories
                 return $cat[0]->id;
             }
         } else {
-            echo 'No Name Selected';
+            return _('No Name Selected');
         }
     }
 
@@ -380,7 +384,7 @@ class Categories
                 return $cat[0]->slug;
             }
         } else {
-            echo 'No ID Selected';
+            return _('No ID Selected');
         }
 
         //print_r($cat);

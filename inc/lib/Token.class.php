@@ -6,7 +6,7 @@
  *
  * @since 0.0.2 build date 20150309
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -35,17 +35,9 @@ class Token
 
     public static function create()
     {
-        $length = '40';
-        $token = '';
-        $codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
-        $codeAlphabet .= '0123456789';
-        // $codeAlphabet.= "!@#$%^&*()[]\/{}|:\<>";
-        //$codeAlphabet.= SECURITY_KEY;
-        for ($i = 0; $i < $length; ++$i) {
-            $token .= $codeAlphabet[Typo::crypto_rand_secure(0, strlen($codeAlphabet))];
-        }
-        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
+        $length = '10';
+        $token = Typo::createToken($length);
+        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: (isset($_SERVER['HTTPS']) ? "https": $_SERVER['REQUEST_SCHEME']) ;
         $url = $protocol."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -90,13 +82,7 @@ class Token
 
     public static function isExist($token, $is_ajax = false)
     {
-        // $http_host = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $_SERVER['HTTP_HOST'];
-        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
-        $url = $_SERVER['HTTP_REFERER'];
-        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-        // echo $url;
-        $pairing = md5($url);
+        $pairing = self::pairing();
         $token2 = $token . "_" . $pairing;
         $json = Options::get('tokens');
         $tokens = json_decode(Typo::Xclean($json), true);
@@ -104,10 +90,8 @@ class Token
             $tokens = array();
         }
         if (array_key_exists($token2, $tokens)) {
-            // echo "Exist";
             $call = true;
         } else {
-            // echo $url."_".$_SERVER['HTTP_REFERER'];
             $call = false;
         }
 
@@ -116,6 +100,8 @@ class Token
 
     public static function remove($token)
     {
+      	$pairing = self::pairing();
+      	$token = $token."_".$pairing;
         $json = Options::v('tokens');
         $tokens = json_decode(Typo::Xclean($json), true);
         unset($tokens[$token]);
@@ -130,9 +116,8 @@ class Token
     public static function ridOld($tokens)
     {
         $time = time();
-        // echo $time;
         foreach ($tokens as $token => $value) {
-            if ($time - $value['time'] > 3600) {
+            if ($time - $value['time'] > 86400) {
                 unset($tokens[$token]);
             }
         }
@@ -143,8 +128,7 @@ class Token
     public static function validate($token, $is_ajax = false )
     {
         if (
-            !self::isExist($token, $is_ajax ) || 
-            !self::isValid($token, $is_ajax )
+            !self::isValid($token)
         ) {
             $valid = false;
         } else {
@@ -156,12 +140,7 @@ class Token
 
     public static function urlMatch($token, $is_ajax=false)
     {
-        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
-        $url = $_SERVER['HTTP_REFERER'];
-        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-        $pairing = md5($url);
-
+        $pairing = self::pairing();
         $tokens = json_decode(Typo::Xclean(Options::v('tokens')), true);
         $urlLive = $_SERVER['REQUEST_URI'];
         $urlToken = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token]['url']: '';
@@ -172,15 +151,10 @@ class Token
         }
     }
 
-    public static function isValid($token, $is_ajax = false) {
-        $protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: $_SERVER['REQUEST_SCHEME'] ;
-        // $url = ( true == $is_ajax ) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'] .$_SERVER['REQUEST_URI'];
-        $url = $_SERVER['HTTP_REFERER'];
-        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-        $pairing = md5($url);
+    public static function isValid($token) {
+        $pairing = self::pairing();
         $tokens = json_decode(Typo::Xclean(Options::get('tokens')), true);
         $paired = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token."_".$pairing]['pairing']: "";
-        // echo $paired;
         if ($pairing == $paired) {
             $call = true;
         } else {
@@ -188,6 +162,14 @@ class Token
         }
 
         return $call;
+    }
+  
+    public static function pairing() {
+		$protocol = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO']: (isset($_SERVER['HTTPS']) ? "https": $_SERVER['REQUEST_SCHEME']) ;
+        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER']: $protocol."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+        $pairing = md5($url);
+      	return $pairing;
     }
 
 }

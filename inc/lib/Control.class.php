@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -112,7 +112,8 @@ class Control
     public static function frontend()
     {
         $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
-                'account', 'search', 'author', 'tag', 'thumb', 'default'
+                'account', 'search', 'author', 'tag', 'thumb', 'default',
+                'login', 'register', 'forgotpass', 'logout', 'archive'
             );
         if (defined('SMART_URL') && SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
@@ -206,10 +207,10 @@ class Control
      *
      * @since 0.0.1
      */
-    public static function backend($vars = '')
+    public static function backend()
     {
         if (!empty($_GET['page'])) {
-            self::incBack($_GET['page']);
+            self::incBack(urlencode($_GET['page']));
         } else {
             self::incBack('default');
         }

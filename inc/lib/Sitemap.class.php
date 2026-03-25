@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141005
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @link https://genix.id
@@ -84,12 +84,12 @@ class Sitemap
 
     public static function map()
     {
-        $map = array(
-            'post' => array(
+        $map = [
+            'post' => [
                 'class' => 'Url',
                 'url' => 'post'
-            )
-        );
+            ]
+            ];
 
         return $map;
     }

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.12
+ * @version 2.0.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,8 +20,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-if (User::access(2)) {
-    $data['sitetitle'] = COMMENTS;
+if (User::access(1)) {
+    $data['sitetitle'] = _("Comments");
 
 
 
@@ -41,7 +41,7 @@ if (User::access(2)) {
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -61,7 +61,7 @@ if (User::access(2)) {
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -81,7 +81,7 @@ if (User::access(2)) {
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -111,7 +111,7 @@ if (User::access(2)) {
             $token = Typo::cleanX($_GET['token']);
             if (!isset($_GET['token']) || !Token::validate($token)) {
                 // VALIDATE ALL
-                $alertDanger[] = TOKEN_NOT_EXIST;
+                $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
             }
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
@@ -121,7 +121,7 @@ if (User::access(2)) {
                 if (isset($del['error'])) {
                     $data['alertDanger'][] = $del['error'];
                 } else {
-                    $data['alertSuccess'][] = COMMENTS.'  '.MSG_PAGE_REMOVED;
+                    $data['alertSuccess'][] = _("Comments").'  '._("Removed Successfully");
                     Hooks::run('post_delete_action', $_GET);
                 }
             }
@@ -130,9 +130,11 @@ if (User::access(2)) {
             }
 
         } else {
-            $data['alertDanger'][] = MSG_USER_NO_ID_SELECTED;
+            $data['alertDanger'][] = _("No ID Selected");
         }
     }
+
+    System::alert($data);
 
     if (isset($_GET['act'])) {
         $act = $_GET['act'];

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -82,16 +82,16 @@ class GxMain
     public function admin()
     {
         User::secure();
-        System::gZip();
-        if (User::access(2)) {
+        // System::gZip();
+        if (User::access(4)) {
             // System::versionCheck();
             Control::handler('backend');
         } else {
-            Theme::admin('header');
+            Theme::admin('headermini');
             Control::error('noaccess');
-            Theme::admin('footer');
+            Theme::admin('footermini');
         }
-        System::Zipped();
+        // System::Zipped();
     }
 
     /**
@@ -107,11 +107,11 @@ class GxMain
     public function install()
     {
         Session::start();
-        System::gZip();
+        // System::gZip();
         Theme::install('header');
         Control::handler('install');
         Theme::install('footer');
-        System::Zipped();
+        // System::Zipped();
     }
 }
 

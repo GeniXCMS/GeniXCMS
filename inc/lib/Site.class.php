@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141004
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -59,53 +59,141 @@ class Site
     /* Call all Website Meta at Header
     *
     */
-    public static function meta($location = '', $cont_desc = '', $pre = '')
+    public static function meta($data, $location = '', $cont_desc = '',  $pre = '')
     {
-        global $data;
-//        print_r($data);
+        // global $data;
+        // print_r($data);
         //if (empty($data['posts'][0]->title)) {
 
         if (is_array($data)) {
-
+            $pre = $pre != "" ? $pre." ": "";
             $cont_title = self::title($data);
-            $cont_title = "{$pre} {$cont_title} - ";
+            $cont_title = "{$pre}{$cont_title} - ";
             $canonical = self::canonical();
         } else {
             $cont_title = '';
-            $canonical = '';
+            $canonical = self::canonical();
         }
         if (is_array($data)  && isset($data['posts'][0]->content)) {
             $desc = Typo::strip($data['posts'][0]->content);
         } else {
-            $desc = '';
+            $desc = $cont_desc;
         }
+
+        $site_desc = self::desc($desc);
         $cont_title = Hooks::filter('site_title_filter', $cont_title);
-        $keyword = Hooks::filter('site_key_filter', self::$key);
-        echo '
+        $full_title = Hooks::filter('full_site_title_filter', "{$cont_title}".self::$name);
+        $keyword = Hooks::filter('site_key_filter', self::keyWords($data));
+        $out =  '
     <!--// Start Meta: Generated Automaticaly by GeniXCMS -->
     <meta charset="'.Options::v('charset').'">';
-        echo "
+        $out .=  "
     <!-- SEO: Title stripped 70chars for SEO Purpose -->
-    <title>{$cont_title}".self::$name.'</title>
-    <meta name="Keyword" content="'.$keyword.'">
+    <title>{$full_title}</title>
+    <meta name=\"keyword\" content=\"".$keyword."\">
     <!-- SEO: Description stripped 150chars for SEO Purpose -->
-    <meta name="Description" content="'.self::desc($desc).'">';
+    <meta name=\"description\" content=\"".$site_desc."\">";
         if (isset($data['posts'][0]->author) && !isset($data['posts'][1]->author)) {
-            echo "
-    <meta name=\"Author\" content=\"{$data['posts'][0]->author}\">";
+            $out .=  "
+    <meta name=\"author\" content=\"{$data['posts'][0]->author}\">";
         }
-        echo "
-    <meta name=\"Generator\" content=\"GeniXCMS ".System::v()."\">
-    <meta name=\"robots\" content=\"".Options::v('robots')."\">
+        $out .=  "
+    <meta name=\"generator\" content=\"GeniXCMS ".System::v()."\">
+    <meta name=\"robots\" content=\"".self::indexing($data)."\">
     <link rel=\"canonical\" href=\"".$canonical."\" />
     <link rel=\"shortcut icon\" href=\"".Options::v('siteicon')."\" />
     <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed for ".self::$name."\" href=\"".self::$url."rss/\" />
-        ";
+    
+    <!-- Open Graph / Facebook -->
+    <meta property=\"og:type\" content=\"website\">
+    <meta property=\"og:url\" content=\"".$canonical."\">
+    <meta property=\"og:title\" content=\"{$full_title}\">
+    <meta property=\"og:description\" content=\"".$site_desc."\">";
+        
+        if (isset($data['imgurl'])) {
+            $out .= "
+    <meta property=\"og:image\" content=\"".$data['imgurl']."\">";
+        }
 
-        ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
-        echo '
+        $out .= "
+    <!-- Twitter -->
+    <meta property=\"twitter:card\" content=\"summary_large_image\">
+    <meta property=\"twitter:url\" content=\"".$canonical."\">
+    <meta property=\"twitter:title\" content=\"{$full_title}\">
+    <meta property=\"twitter:description\" content=\"".$site_desc."\">";
+
+        if (isset($data['imgurl'])) {
+            $out .= "
+    <meta property=\"twitter:image\" content=\"".$data['imgurl']."\">";
+        }
+
+        $out .= self::jsonLD($data);
+
+        $out .= ($location == 'backend') ? Hooks::run('header_load_admin_meta', $data) : Hooks::run('header_load_meta', $data);
+        $out .=  '
     <!-- Generated Automaticaly by GeniXCMS :End Meta //-->';
         // echo $meta;
+
+        return $out;
+    }
+
+    public static function jsonLD($data)
+    {
+        $payload = [];
+        if (isset($data['posts'][0]) && !isset($data['posts'][1])) {
+            $post = $data['posts'][0];
+            $payload = [
+                "@context" => "https://schema.org",
+                "@type" => (isset($data['p_type']) && $data['p_type'] == 'page') ? "WebPage" : "BlogPosting",
+                "headline" => $post->title,
+                "description" => self::desc(Typo::strip($post->content)),
+                "author" => [
+                    "@type" => "Person",
+                    "name" => $post->author
+                ],
+                "datePublished" => $post->date,
+                "url" => self::canonical()
+            ];
+
+            if (isset($data['imgurl'])) {
+                $payload["image"] = $data['imgurl'];
+            }
+        } else {
+            $payload = [
+                "@context" => "https://schema.org",
+                "@type" => "WebSite",
+                "name" => self::$name,
+                "url" => self::$url,
+                "description" => self::$desc
+            ];
+        }
+
+        return '
+    <script type="application/ld+json">
+    '.json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).'
+    </script>';
+    }
+
+    public static function indexing($data) 
+    {
+        $noindex = [
+            'tag',
+            'search',
+            'archive',
+            'author'
+        ];
+        $indexfollow = [
+            'post', 'page', 'index', 'cat'
+        ];
+        $indexing = Options::v('robots');
+        if(isset($data['p_type']) && in_array($data['p_type'], $noindex) ) {
+            $indexing = "noindex, follow";
+        }
+        if( isset($data['p_type']) && in_array($data['p_type'], $indexfollow)  ) {
+            $indexing = "index, follow";
+        }
+
+        return $indexing;
     }
 
     public static function title($data)
@@ -136,8 +224,6 @@ class Site
     {
         global $data;
 
-        Hooks::run('footer_load_lib', $data);
-
         if( defined( 'DEBUG' ) && DEBUG) {
 
             if( isset($data)) {
@@ -145,6 +231,9 @@ class Site
                 print_r($data);
                 echo "</pre>";
             }
+            echo "<pre>";
+            print_r($_SESSION);
+            echo "</pre>";
             ob_start();
             phpinfo();
             $phpinfo = ob_get_contents();
@@ -176,6 +265,8 @@ class Site
                 </div>
                 ";  
         }
+
+        return Hooks::run('footer_load_lib', $data);
     }
 
     public static function desc($vars)
@@ -190,15 +281,30 @@ class Site
         return $desc;
     }
 
-    public static function logo($width = '', $height = '')
+    public static function keyWords($data) {
+        // print_r($data);
+        $keys = explode(",", self::$key);
+        if( isset($data['p_type']) && $data['p_type'] == "index" && count($keys ) > 0 ) {
+            return self::$key;
+        } else {
+            if( isset($data['posts'][0]) ) {
+                $post = $data['posts'][0];
+                $keys = Posts::getParam('tags', $post->id);
+                return $keys;
+            }
+        }
+        
+    }
+
+    public static function logo($width = '', $height = '', $class = '')
     {
         // check which logo is used, logourl or uploaded files.
         if (Options::v('is_logourl') == 'on' && Options::v('logourl') != '') {
             $logo = '<img src="'.Options::v('logourl')."\"
-                    style=\"width: $width; height: $height; margin: 1px;\">";
+                    style=\"width: $width; height: $height; margin: 1px;\" class=\"{$class}\" alt=\"".Site::$name."\">";
         } elseif (Options::v('is_logourl') == 'off' && Options::v('logo') != '') {
             $logo = '<img src="'.self::$cdn.Options::v('logo')."\"
-                    style=\"width: $width; height: $height; margin: 1px;\">";
+                    style=\"width: $width; height: $height; margin: 1px;\" class=\"{$class}\" alt=\"".Site::$name."\">";
         } else {
             $logo = '<span class="mg genixcms-logo"></span>';
         }
@@ -217,9 +323,9 @@ class Site
     public static function canonical()
     {
         $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
-        $request_uri =  ($_SERVER['REQUEST_URI'] == "/") ? "/": urlencode($_SERVER['REQUEST_URI']);
+        // $request_uri =  ($_SERVER['REQUEST_URI'] == "/") ? "/": urlencode($_SERVER['REQUEST_URI']);
         
-        return $protocol.$_SERVER['HTTP_HOST'].$request_uri;
+        return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
 
     public static function minifyHTML($input)
@@ -365,15 +471,19 @@ class Site
         $bs = Options::v('use_bootstrap');
         if ($bs == 'on') {
             $lib .= '
-    <link href="'.self::$cdn."assets/css/bootstrap.min.css\" rel=\"stylesheet\">\n";
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">';
         }
         $fa = Options::v('use_fontawesome');
         if ($fa == 'on') {
             $lib .= "
-    <link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css\" rel=\"stylesheet\">\n";
+    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css\" integrity=\"sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==\" crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\" />";
         }
 
-        echo $lib;
+        
+
+        return $lib;
     }
 
     public static function loadLibFooter()
@@ -384,15 +494,36 @@ class Site
         $jquery_v = Options::v('jquery_v');
         if ($jquery == 'on') {
             $foot .= '
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/'.$jquery_v.'/jquery.min.js"></script>';
+    <script src="https://code.jquery.com/jquery-'.$jquery_v.'.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>';
         }
 
         $bs = Options::v('use_bootstrap');
         if ($bs == 'on') {
             $foot .= '
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <!-- These files are included by default by GeniXCMS. You can set it at the dashboard -->
-            <script src="'.self::$cdn.'assets/js/bootstrap.min.js"></script>
-            <script src="'.self::$cdn.'assets/js/ie10-viewport-bug-workaround.js"></script>';
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>';
+
+            $foot .= '<script>
+            toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            }
+            </script>';
         }
 
         if (isset($GLOBALS['editor']) && $GLOBALS['editor'] == true) {
@@ -404,11 +535,9 @@ class Site
             $url = Url::ajax('saveimage');
             $foot .= '
 
-    <link href="'.self::$cdn.'assets/css/summernote.css" rel="stylesheet">
-    <script src="'.self::$cdn.'assets/js/summernote.min.js"></script>
-    <script src="'.self::$cdn.'assets/js/plugins/summernote-ext-genixcms.js"></script>
-    <script src="'.self::$cdn.'assets/js/plugins/summernote-image-attributes.js"></script>
-    <script src="'.self::$cdn.'assets/js/plugins/summernote-floats-bs.min.js"></script>
+    <link href="'.self::$cdn.'assets/vendor/summernote/summernote-bs5.min.css" rel="stylesheet">
+    <script src="'.self::$cdn.'assets/vendor/summernote/summernote-bs5.min.js"></script>
+    <script src="'.self::$cdn.'assets/vendor/summernote/plugin/summernote-image-attributes.js"></script>
     <script>
       $(document).ready(function() {
         $(".editor").summernote({
@@ -469,7 +598,6 @@ class Site
             });
           }
 
-         $(".alert").alert();
       });
 
 
@@ -486,7 +614,7 @@ class Site
             $foot .= $GLOBALS['validator_js'];
         }
 
-        echo $foot;
+        return $foot;
     }
 }
 

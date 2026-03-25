@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -36,7 +36,7 @@ class Comments
             $html = '<a id="commentform"></a><div class="col-md-12 comments-wrapper clearfix">';
             if (isset($_POST['addComment'])) {
                 $data = self::addComment($_POST);
-                $html .= System::alert($data);
+                System::alert($data);
             }
 
             $html .= '
@@ -47,15 +47,15 @@ class Comments
                 $html .= '
             
                 <div class="form-group col-md-6">
-                    <label class="">Name</label>
+                    <label class="">'._("Name").'</label>
                     <input type="text" id="name" name="comments-name" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">Email</label>
+                    <label class="">'._("Email").'</label>
                     <input type="email" id="email" name="comments-email" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">Website</label>
+                    <label class="">'._("Website").'</label>
                     <input type="text" id="url" name="comments-url" class="form-control">
                 </div>';
             } else {
@@ -63,7 +63,7 @@ class Comments
             }
             $html .= '
                 <div class="form-group col-md-12">
-                    <label>Comments</label>
+                    <label>'._("Comments").'</label>
                     <textarea class="form-control editor" name="comments-msg" id="message" required></textarea>
                     <small class="input-help">allowed html tag : <code>&lt;b&gt;&lt;i&gt;&lt;ul&gt;&lt;li&gt;&lt;ol&gt;&lt;u&gt;&lt;s&gt;</code></small>
                 </div>
@@ -76,7 +76,7 @@ class Comments
             $html .= '
                 <div class="col-md-12">
                     <button class="btn btn-success" type="submit" name="addComment">
-                    Send Comment
+                    '._("Send Comments").'
                     </button>
                     <input type="hidden" name="token" value="'.TOKEN.'">
                     <input type="hidden" name="comments-parent" id="parentComment" value="0">
@@ -98,31 +98,31 @@ class Comments
 
         unset($vars['addComment']);
         $token = Typo::cleanX($vars['token']);
-        if (!isset($vars['token']) || !Token::validate($token)) {
-            $alertDanger[] = TOKEN_NOT_EXIST;
+        if (!isset($vars['token']) && !Token::validate($token)) {
+            $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
         }
         if (!isset($vars['comments-msg']) || null == $vars['comments-msg'] || $vars['comments-msg'] == '<p><br></p>') {
-            $alertDanger[] = 'Nothing to send.';
+            $alertDanger[] = _('Nothing to send.');
         }
         if ((!isset($vars['comments-name']) || null == $vars['comments-msg']) && null === Session::val('username')) {
-            $alertDanger[] = 'Who are you ?';
+            $alertDanger[] = _('Who are you ?');
         }
         if ((!isset($vars['comments-email']) || null == $vars['comments-email']) && null === Session::val('username')) {
-            $alertDanger[] = 'How we contact you ?';
+            $alertDanger[] = _('How we contact you ?');
         }
         if (self::checkSpamWord($_POST['comments-msg'], self::spamWord())) {
-            $alertDanger[] = 'Spam Word Detected!!';
+            $alertDanger[] = _('Spam Word Detected!!');
         }
         if (self::checkLastComment()) {
-            $alertDanger[] = 'You are commenting too fast!!';
+            $alertDanger[] = _('You are commenting too fast!!');
         }
 
         if (Xaptcha::isEnable()) {
             if (!isset($vars['g-recaptcha-response']) || $vars['g-recaptcha-response'] == '') {
-                $alertDanger[] = 'Please insert the Captcha';
+                $alertDanger[] = _('Please insert the Captcha');
             }
             if (!Xaptcha::verify($vars['g-recaptcha-response'])) {
-                $alertDanger[] = 'Your Captcha is not correct.';
+                $alertDanger[] = _('Your Captcha is not correct.');
             }
         }
 
@@ -139,7 +139,7 @@ class Comments
                         )
                     )
                 );
-            $post_id = Typo::int($data['posts'][0]->id);
+            $post_id = isset($data['posts'][0]->id) ? Typo::int($data['posts'][0]->id) : 0;
             $parent = Typo::int($vars['comments-parent']);
             $status = (null !== Session::val('username')) ? '1' : '2';
             $type = Posts::type($post_id);
@@ -161,13 +161,13 @@ class Comments
                         ),
                 );
             if (Db::insert($vars)) {
-                $data['alertSuccess'][] = 'Comments Sent.';
+                $data['alertSuccess'][] = _('Comments Sent.');
                 $sess = array(
                         'lastcomment' => time(),
                     );
                 Session::set($sess);
             } else {
-                $data['alertDanger'][] = 'Trouble sending Comment.';
+                $data['alertDanger'][] = _('Trouble sending Comment.');
             }
         } else {
             $data['alertDanger'] = $alertDanger;
@@ -182,30 +182,32 @@ class Comments
         $offset = Typo::int($vars['offset']);
         $max = Typo::int($vars['max']);
         $parent = Typo::int($vars['parent']);
-        $post_id = $data['posts'][0]->id;
+        $post_id = isset($data['posts'][0]->id) ? $data['posts'][0]->id : 0;
+        if ($post_id == 0) return '';
         $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '{$parent}' ";
         $order = ($parent > 0) ? 'ASC' : 'DESC';
         $sql = sprintf('SELECT * FROM `comments` WHERE 1 %s ORDER BY `date` %s LIMIT %d, %d', $where, $order, $offset, $max);
         $cmn = Db::result($sql);
 
-        $html = '<div class="col-md-12">
-        <ul class="media-list">';
+        $html = '<div class="row">';
         if (DB::$num_rows > 0) {
             foreach ($cmn as $c => $v) {
                 $url = isset($v->url) ? $v->url : '#';
                 $avatar = Image::getGravatar($v->email, 60);
                 $html .= '
-						  <li class="media">
-						    <div class="media-left">
+						    <div class="d-flex">
+                                <div class="flex-shrink-0">
 						      <a href="'.$url.'">
 						        <img class="media-object img-thumbnail" src="'.$avatar.'" alt="'.$v->name.'">
 						      </a>
+                              
 						      <div class="text-center">
-						      <a href="#commentform" onclick="setParent('.$v->id.')" class="badge" style="width: 100%"><i class="fa fa-reply"></i> reply</a>
+						      <a href="#commentform" onclick="setParent('.$v->id.')" class="badge text-bg-primary" style="width: 100%"><i class="bi bi-reply"></i> reply</a>
 						      </div>
-						    </div>
-						    <div class="media-body">
-						      <h4 class="media-heading">'.$v->name.'<small class="pull-right">'.Date::format($v->date, 'd M Y H:i:s T').'</small></h4>
+                              </div>
+						    
+						    <div class="flex-grow-1 ms-3">
+						      <h4 class="">'.$v->name.'<small class="meta-desc float-end">'.Date::format($v->date, 'd M Y H:i:s T').'</small></h4>
 						      '.$v->comment;
                 $html .= '<div class="">&nbsp;</div>';
                 $vars = array(
@@ -217,13 +219,13 @@ class Comments
                 $html .= '
 						      <hr />
 						    </div>
+                            </div>
 						    
-						  </li>
 						';
             }
         }
 
-        $html .= '</ul>
+        $html .= '
         </div>';
 
         return $html;
@@ -244,7 +246,8 @@ class Comments
             }
             $vars['offset'] = $offset;
             $html .= self::listC($vars);
-            $post_id = $data['posts'][0]->id;
+            $post_id = isset($data['posts'][0]->id) ? $data['posts'][0]->id : 0;
+            if ($post_id == 0) return '';
             $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '0' ";
             $page = array(
                     'paging' => $paging,
@@ -269,48 +272,48 @@ class Comments
 		$(document).ready(function() {
 		    $('#commentForm').bootstrapValidator({
                 feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
+                    valid: 'bi bi-check2',
+                    invalid: 'bi bi-x-square',
+                    validating: 'bi bi-arrow-clockwise'
                 },
                 fields: {
                     'comments-name': {
-                        message: 'Name is required',
+                        message: '"._('Name is required')."',
                         validators: {
                             notEmpty: {
-                                message: 'Name is required'
+                                message: '"._('Name is required')."'
                             },
                             stringLength: {
                                 min: 3,
                                 max: 30,
-                                message: 'Name must be more than 6 and less than 30 characters long'
+                                message: '"._('Name must be more than 6 and less than 30 characters long')."'
                             },
                             regexp: {
                                 regexp: /^[a-zA-Z0-9_\.]+$/,
-                                message: 'Name can only consist of alphabetical, number, dot and underscore'
+                                message: '"._('Name can only consist of alphabetical, number, dot and underscore')."'
                             }
                         }
                     },
                     'comments-email': {
-                        message: 'Email is required',
+                        message: '"._('Email is required')."',
                         validators: {
                             notEmpty: {
-                                message: 'Email is required'
+                                message: '"._('Email is required')."',
                             },
                             emailAddress: {
-                                message: 'The input is not a valid email address'
+                                message: '"._('The input is not a valid email address')."',
                             }
                         }
                     },
                     'comments-msg': {
-                        message: 'Message is required',
+                        message: '"._('Message is required')."',
                         validators: {
                             notEmpty: {
-                                message: 'The message is required'
+                                message: '"._('Message is required')."',
                             },
                             stringLength: {
                                 max: 700,
-                                message: 'The message must be less than 700 characters long'
+                                message: '"._('The message must be less than 700 characters long')."',
                             }
                         }
                     },
@@ -321,7 +324,7 @@ class Comments
 		});
 		function setParent(id) {
 	    	$('#parentComment').val(id);
-	    	$('#cancelreply').html('<a href=\"#commentform\" onclick=\"removeCancel()\" class=\"label label-danger\" ><i class=\"fa fa-remove\"></i> Cancel Reply</a>');
+	    	$('#cancelreply').html('<a href=\"#commentform\" onclick=\"removeCancel()\" class=\"label label-danger\" ><i class=\"bi bi-x-square\"></i> Cancel Reply</a>');
 	    }
 	    function removeCancel() {
 	    	setParent(0);
@@ -381,7 +384,7 @@ class Comments
                     'id' => $id,
                     ),
             );
-        Db::delete($var);
+        return Db::delete($var);
     }
 
     public static function deleteWithPost($post_id)
@@ -393,7 +396,7 @@ class Comments
                     'post_id' => $post_id,
                     ),
             );
-        Db::delete($var);
+        return Db::delete($var);
     }
 
     public static function postExist($id)
@@ -469,7 +472,7 @@ class Comments
         $comments = Db::result($sql);
 
         if (isset($comments['error'])) {
-            $html = 'No Comments found.';
+            $html = _('No Comments found.');
         } else {
             $html = "<ol class='list-unstyled'>";
             foreach ($comments as $key => $value) {

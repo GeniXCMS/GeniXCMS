@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -22,13 +22,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 class User
 {
     public static $group = array(
-        '0' => ADMINISTRATOR,
-        '1' => SUPERVISOR,
-        '2' => EDITOR,
-        '3' => AUTHOR,
-        '4' => CONTRIBUTOR,
-        '5' => VIP_MEMBER,
-        '6' => GENERAL_MEMBER, );
+        '0' => "Administrator",
+        '1' => "Supervisor",
+        '2' => "Editor",
+        '3' => "Author",
+        '4' => "Contributor",
+        '5' => "VIP Member",
+        '6' => "General Member"
+    );
 
     public function __construct()
     {
@@ -37,8 +38,8 @@ class User
     public static function secure()
     {
         if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username'])) {
-            header('Location: '.Site::$url.'login.php');
-            // print_r($_SESSION);
+            $url = Url::login("backto=" . urlencode(Site::canonical()));
+            header("Location: $url");
             exit;
         } else {
 
@@ -284,7 +285,7 @@ class User
             )
         );
 
-        return $usr[0]->id;
+        return (isset($usr[0]->id)) ? $usr[0]->id : '';
     }
 
     public static function idDetail($userid)
@@ -296,7 +297,7 @@ class User
             )
         );
 
-        return $usr[0]->id;
+        return (isset($usr[0]->id)) ? $usr[0]->id : '';
     }
 
     public static function userid($id)
@@ -308,7 +309,7 @@ class User
             )
         );
 
-        return $usr[0]->userid;
+        return (isset($usr[0]->userid)) ? $usr[0]->userid : '';
     }
 
     public static function email($id)
@@ -321,7 +322,7 @@ class User
             )
         );
 
-        return $usr[0]->email;
+        return (isset($usr[0]->email)) ? $usr[0]->email : '';
     }
 
     public static function group($id)
@@ -334,7 +335,7 @@ class User
             )
         );
 
-        return $usr[0]->group;
+        return (isset($usr[0]->group)) ? $usr[0]->group : '';
     }
 
     public static function regdate($id)
@@ -347,7 +348,7 @@ class User
             )
         );
 
-        return $usr[0]->join_date;
+        return (isset($usr[0]->join_date)) ? $usr[0]->join_date : '';
     }
 
     public static function avatar($id)
@@ -360,7 +361,7 @@ class User
             )
         );
 
-        return $usr[0]->avatar;
+        return (isset($usr[0]->avatar)) ? $usr[0]->avatar : '';
     }
 
     public static function activate($id)
@@ -400,15 +401,16 @@ class User
     //     );
     public static function dropdown($vars)
     {
-        $html = '<select name="'.$vars['name'].'" class="form-control">';
-        $html .= (!isset($vars['selected']) && !isset($vars['update'])) ? '<option value="">All Group</option>' : '';
+        $class = (isset($vars['class'])) ? $vars['class'] : 'form-control';
+    $html = '<select name="'.$vars['name'].'" class="'.$class.'">';
+        $html .= (!isset($vars['selected']) && !isset($vars['update'])) ? '<option value="">'._('All Group').'</option>' : '';
         foreach (self::$group as $key => $value) {
             $selected = (isset($vars['selected']) && $vars['selected'] == $key) ? 'selected' : '';
             $ugroup = Session::val('group');
             if ($ugroup <= $key && isset($vars['update']) && $vars['update'] == true) {
-                $html .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+                $html .= '<option value="'.$key.'" '.$selected.'>'._($value).'</option>';
             } else {
-                $html .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+                $html .= '<option value="'.$key.'" '.$selected.'>'._($value).'</option>';
             }
         }
         $html .= '</select>';
@@ -420,15 +422,21 @@ class User
     {
         $sql = "SELECT * FROM `user` ORDER BY `join_date` DESC LIMIT {$max}";
         $q = Db::result($sql);
-        echo "<ul  class=\"users-list clearfix\">";
-        foreach ($q as $k => $v) {
-            echo "<li>
-                <img src='".Image::getGravatar($v->email)."'>
-                <a class=\"users-list-name\" href=\"#\">{$v->userid}</a>
-                <span class=\"users-list-date\">".Date::format($v->join_date)."</span>
-            </li>";
+        // echo "<ul  class=\"users-list clearfix\">";
+        if (Db::$num_rows > 0) {
+            foreach ($q as $k => $v) {
+                echo "
+                <div class=\"col-3 p-2\">
+                    <img class=\"img-fluid rounded-circle\" src=\"".Image::getGravatar($v->email)."\" alt=\"User Image\">
+                    <a class=\"btn fw-bold fs-7 text-secondary text-truncate w-100 p-0\" href=\"#\">
+                        {$v->userid}
+                    </a>
+                    <div class=\"fs-8\">".Date::format($v->join_date)."</div>
+                </div>
+                ";
+            }
         }
-        echo "</ul>";
+        // echo "</ul>";
     }
 
     public static function jsonUserLocation()
@@ -436,14 +444,16 @@ class User
         $sql = "SELECT DISTINCT `country` FROM `user_detail`";
         $q = Db::result($sql);
         $ctr = array();
-        foreach ($q as $k => $v) {
-            if ($v->country != '') {
-                $sql2 = "SELECT * FROM `user_detail` WHERE `country` = '{$v->country}'";
-                $q2 = Db::result($sql2);
-                $ctr[$v->country] = Db::$num_rows;
+        if (Db::$num_rows > 0) {
+            foreach ($q as $k => $v) {
+                if ($v->country != '') {
+                    $sql2 = "SELECT `id` FROM `user_detail` WHERE `country` = '{$v->country}'";
+                    $q2 = Db::result($sql2);
+                    $ctr[$v->country] = Db::$num_rows;
+                }
             }
         }
-//        print_r($ctr);
+        // print_r($ctr);
         return json_encode($ctr);
     }
 

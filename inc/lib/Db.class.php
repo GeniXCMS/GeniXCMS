@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -78,8 +78,6 @@ class Db
                     exit;
                 } else {
                     self::query("SET SESSION `sql_mode` = 'STRICT_ALL_TABLES'");
-
-                    return true;
                 }
             } catch (exception $e) {
                 Control::error('db', $e->getMessage());
@@ -226,7 +224,7 @@ class Db
                     $r[] = $q->fetch_object();
                 }
             } else {
-                $r['error'] = 'data not found';
+                $r['error'] = _('Data not found');
             }
 
             $q->close();
@@ -416,8 +414,6 @@ class Db
             $vars = self::$mysqli->escape_string($vars);
         } elseif (DB_DRIVER == 'pdo') {
             $vars = self::$pdo->quote($vars);
-        } else {
-            $vars = $vars;
         }
 
         return $vars;
@@ -436,6 +432,10 @@ class Db
         }
 
         return self::$mem->addServer($host, $port);
+    }
+
+    public static function close () {
+        return true;
     }
 }
 

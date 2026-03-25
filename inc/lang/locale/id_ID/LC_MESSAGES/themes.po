@@ -1,0 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-04 08:45+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: footer.php:11
+msgid "Copyright &copy; 2014-"
+msgstr ""
+
+#: footer.php:11
+msgid "All rights reserved."
+msgstr ""
+
+#: footer.php:17
+msgid "Page generated in "
+msgstr ""
+
+#: footer.php:17
+msgid " seconds."
+msgstr ""
+
+#: header.php:285
+msgid "Dashboard"
+msgstr ""
+
+#: header.php:292 header.php:300
+msgid "Posts"
+msgstr ""
+
+#: header.php:306
+msgid "Categories"
+msgstr ""
+
+#: header.php:312
+msgid "Tags"
+msgstr ""
+
+#: header.php:320
+msgid "Pages"
+msgstr ""
+
+#: header.php:326
+msgid "Comments"
+msgstr ""
+
+#: header.php:332
+msgid "Media"
+msgstr ""
+
+#: header.php:338
+msgid "Users"
+msgstr ""
+
+#: header.php:344
+msgid "Menus"
+msgstr ""
+
+#: header.php:350
+msgid "Themes"
+msgstr ""
+
+#: header.php:356
+msgid "Modules"
+msgstr ""
+
+#: header.php:365
+msgid "Settings"
+msgstr ""
+
+#: header.php:373
+msgid "Global Settings"
+msgstr ""
+
+#: header.php:379
+msgid "Multilanguage"
+msgstr ""
+
+#: header.php:385
+msgid "Permalink"
+msgstr ""
+
+#: header.php:391
+msgid "Comments Settings"
+msgstr ""
+
+#: header.php:397
+msgid "Cache Settings"
+msgstr ""
+
+#: header.php:408
+msgid "Logout"
+msgstr ""

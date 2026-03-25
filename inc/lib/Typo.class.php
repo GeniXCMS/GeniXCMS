@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -180,13 +180,7 @@ class Typo
 
     public static function getToken($length)
     {
-        $token = '';
-        $codeAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
-        $codeAlphabet .= '0123456789';
-        for ($i = 0; $i < $length; ++$i) {
-            $token .= $codeAlphabet[self::crypto_rand_secure(0, strlen($codeAlphabet))];
-        }
+        $token = self::createToken($length);
 
         return $token;
     }
@@ -324,7 +318,7 @@ class Typo
 
     public static function jsonDeFormat($var)
     {
-        return mb_convert_encoding($var, 'UTF-8', mb_list_encodings());
+        return $var;
     }
 
     public static function validateEmail($email)
@@ -349,6 +343,12 @@ class Typo
         onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background|oncut)=("|\')(.*)("|\')(.*?)#', '', $str);
         //$str = preg_replace('#&lt;(.*?)script&gt;#', '', $str);
         return $str;
+    }
+
+    public static function translate (string $original) {
+        $translated = _($original);
+        
+        return $translated;
     }
 }
 

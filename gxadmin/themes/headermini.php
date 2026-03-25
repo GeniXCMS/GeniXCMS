@@ -6,79 +6,81 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <?=Site::meta('backend');?>
-    <!-- LOAD CSS -->
-    <link href="<?=Site::$url;?>assets/css/bootstrap.min.css" rel="stylesheet">
-<!--    <link href="--><?//=Site::$url;?><!--assets/css/bootstrap-theme.css" rel="stylesheet">-->
-    <link href="<?=Site::$url;?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>assets/css/font-awesome.min.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>assets/css/grideditor.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-<!--    <link href="--><?//=Site::$url;?><!--assets/css/sb-admin-2.css" rel="stylesheet">-->
-    <link href="<?=Site::$url;?>assets/css/dashboard.css" rel="stylesheet">
-<!--    <link href="--><?//=Site::$url;?><!--assets/css/genixfont.css" rel="stylesheet">-->
-    <link href="<?=Site::$url;?>assets/css/flag-icon.min.css" rel="stylesheet">
-    <link href="<?=Site::$url;?>assets/css/jquery.tagsinput.min.css" rel="stylesheet">
-
-
-
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/css/skins/_all-skins.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/iCheck/square/blue.css">
-    <!-- Morris chart -->
-<!--    <link rel="stylesheet" href="--><?//=Site::$url;?><!--assets/plugins/morris/morris.css">-->
-    <!-- jvectormap -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-    <!-- Date Picker -->
-<!--    <link rel="stylesheet" href="--><?//=Site::$url;?><!--assets/plugins/datepicker/datepicker3.css">-->
-    <!-- Daterange picker -->
-<!--    <link rel="stylesheet" href="--><?//=Site::$url;?><!--assets/plugins/daterangepicker/daterangepicker.css">-->
-    <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <!-- bootstrap slider -->
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/plugins/bootstrap-slider/slider.css">
-
-    <!-- LOAD Javascript -->
-    <script src="<?=Site::$url;?>assets/js/jquery.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/bootstrap.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/moment-locales.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/jquery.tagsinput.min.js"></script>
-
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+    />
+    <!--end::Fonts-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css"
+      integrity="sha256-tZHrRjVqNSRyWg2wbppGnT833E/Ys0DHWGwT04GiqQg="
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI="
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css" />
+    <!--end::Required Plugin(AdminLTE)-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-<!--    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
-    <script src="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.structure.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="<?=Site::$url;?>assets/js/jquery-ui/jquery-ui.theme.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <!-- Metis Menu Plugin JavaScript -->
-<!--    <script src="--><?//=Site::$url;?><!--assets/js/plugins/metisMenu/metisMenu.min.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
-    <!-- Custom Theme JavaScript -->
-    <!--    <script src="--><?//=Site::$url;?><!--assets/js/sb-admin-2.js"></script>-->
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"
+    ></script>
 
-    <!-- MetisMenu CSS -->
-    <!--    <link href="--><?//=Site::$url;?><!--assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link href="<?=Site::$url;?>assets/css/summernote.css" rel="stylesheet">
-    <script src="<?=Site::$url;?>assets/js/summernote.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/plugins/summernote-ext-genixcms.js"></script>
-    <script src="<?=Site::$url;?>assets/js/plugins/summernote-image-attributes.js"></script>
-    <script src="<?=Site::$url;?>assets/js/plugins/summernote-floats-bs.min.js"></script>
-    <script src="<?=Site::$url;?>assets/js/jquery.grideditor.js"></script>
-    <script src="<?=Site::$url;?>assets/js/jquery.grideditor.summernote.js"></script>
-    <script src="<?=Site::$url;?>assets/js/genixcms.js"></script>
+    <!--begin::Required Plugin(Bootstrap 5)-->
+    <script
+        src="<?=Site::$url;?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"
+    ></script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script>
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+    </script>
+<style>
+/* Override AdminLTE login-page defaults so our custom layout fills viewport correctly */
+body.login-page {
+    padding: 0 !important;
+    background: none !important;
+    min-height: 100vh;
+}
+.login-box, .login-logo, .login-card-body { all: unset; }
+</style>
 </head>
-<body class="hold-transition  login-page">
+<body class="hold-transition login-page">
+    <?php echo System::alert($data);?>

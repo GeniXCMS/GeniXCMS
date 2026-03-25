@@ -1,8 +1,8 @@
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <div class="col-12 col-sm-3 col-sm-offset-1 blog-sidebar">
             <?=Language::flagList();?>
             <div class="sidebar-module sidebar-module-inset">
                 <h4>About</h4>
-                <h5><?=Site::logo('','40px');?> <?=Site::$name;?></h5>
+                <h5><?=Site::logo('','35px');?> <?=Site::$name;?></h5>
                 <p><em><?=Options::v('siteslogan');?></em>
                     <?=Site::$desc;?></p>
                 </div>

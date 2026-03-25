@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.6 build date 20150706
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -45,6 +45,8 @@ class Hooks
             'post_title_filter' => array(),
             'post_meta_filter' => array(),
             'post_content_filter' => array(),
+            'post_content_before_action' => array(),
+            'post_content_after_action' => array(),
             'post_author_filter' => array(),
             'post_date_filter' => array(),
             'post_category_filter' => array(),
@@ -57,8 +59,10 @@ class Hooks
             'post_submit_category_filter' => array(),
             'post_delete_action' => array(), // on delete
             'post_sqldel_action' => array(), // on sql delete
-            'post_param_form' => array(),
-            'page_param_form' => array(),
+            'post_param_form_bottom' => array(),
+            'post_param_form_sidebar' => array(),
+            'page_param_form_bottom' => array(),
+            'page_param_form_sidebar' => array(),
             'user_submit_add_action' => array(),
             'user_sqladd_action' => array(),
             'user_submit_edit_action' => array(),
@@ -102,7 +106,7 @@ class Hooks
      */
     public static function run()
     {
-        //print_r(self::$hooks[$var]);
+        // print_r($data);
         $hooks = self::$hooks;
         $num_args = func_num_args();
         $args = func_get_args();
@@ -112,6 +116,7 @@ class Hooks
 
         // Hook name should always be first argument
         $hook_name = array_shift($args);
+        // echo $hook_name;
 
         if (!isset($hooks[$hook_name])) {
             return;
@@ -121,7 +126,7 @@ class Hooks
         if (is_array($hooks[$hook_name])) {
             $val = '';
             $func = $hooks[$hook_name];
-            for ($i = 0; $i < count($func); ++$i) {
+            for ($i = 0; $i < count($func); $i++) {
                 if ($func[$i] != '') {
                     // $args = call_user_func_array($func, $args); //
                     $val .= $func[$i]((array) $args);
@@ -157,14 +162,9 @@ class Hooks
                 if ($func != '') {
                     // $args = call_user_func_array($func, $args); //
                     $args = $func((array) $args);
-                } else {
-                    $args = $args;
                 }
             }
 
-            $args = $args;
-        } else {
-            $args = $args;
         }
 
         $args = is_array($args) ? $args[0] : $args;

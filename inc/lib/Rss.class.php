@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141005
  *
- * @version 1.1.12
+ * @version 2.0.0-alpha
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -42,14 +42,16 @@ class Rss
         <link>'.Site::$url.'</link>
         <description>'.Site::$desc.'</description>
         <lastBuildDate>'.Date::format(date('Y-m-d H:i:s'), 'D, j M Y H:i:s O').'</lastBuildDate>
-        <atom:link href="'.Site::$url.'/rss/" rel="self" type="application/rss+xml" />
+        <atom:link href="'.Site::$url.'rss/" rel="self" type="application/rss+xml" />
             ';
         if (!isset($posts['error'])) {
             foreach ($posts as $p) {
+                $content = preg_replace('/&nbsp;/i', '', $p->content);
+                $content = str_replace('[[--readmore--]]', '', $content);
                 $xml .= '
         <item>
             <title>'.strip_tags(Typo::Xclean($p->title)).'</title>
-            <description>'.preg_replace('/&nbsp;/i', '', $p->content).'</description>
+            <description>'.$content.'</description>
             <pubDate>'.Date::format($p->date, 'D, j M Y H:i:s O').'</pubDate>
             <link>'.$class::$url($p->id).'</link>
             <guid>'.$class::$url($p->id).'</guid>
