@@ -3,11 +3,15 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 class Widget {
     public static function show($location = 'sidebar') {
-        $sql = "SELECT * FROM `widgets` WHERE `status` = '1' AND `location` = '$location' ORDER BY `sorting` ASC";
-        $q = Db::result($sql);
+        $q = Query::table('widgets')
+            ->where('status', '1')
+            ->where('location', $location)
+            ->orderBy('sorting', 'ASC')
+            ->get();
         $html = '';
-        if (Db::$num_rows > 0) {
+        if (!empty($q)) {
             foreach ($q as $w) {
+                if (!is_object($w)) continue;
                 $html .= '<div class="widget-box mb-4" id="widget-'.$w->id.'">';
                 if ($w->title != '') {
                     $html .= '<div class="widget-header"><h3 class="widget-title h5 fw-bold m-0">'.$w->title.'</h3></div>';

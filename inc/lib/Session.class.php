@@ -19,24 +19,16 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-class Session
+class Session implements SessionHandlerInterface
 {
     public function __construct()
     {
         if(SESSION_DB == true) {
             // Set handler to overide SESSION
-            session_set_save_handler(
-                [$this, "_open"],
-                [$this, "_close"],
-                [$this, "_read"],
-                [$this, "_write"],
-                [$this, "_destroy"],
-                [$this, "_gc"]
-            );
-            register_shutdown_function('session_write_close');
+            session_set_save_handler($this, true);
             // Start the session
             // session_start();
-            $this->_gc(SESSION_EXPIRES*3600);
+            $this->gc((int)(SESSION_EXPIRES*3600));
         }
         $this::start(SESSION_EXPIRES);
     }
@@ -46,13 +38,19 @@ class Session
         $url = Site::$url;
         $url = ( $url == "" ) ? $_SERVER['REQUEST_URI']: $url;
         $site_id = !defined('SITE_ID') ? 'Installation' : SITE_ID;
-        $expires = isset($duration) ? $duration * 3600: 1 * 3600;
+        $expires = (int)(isset($duration) ? $duration * 3600: 1 * 3600);
         $uri = parse_url($url);
         $path = isset($uri['path']) ? $uri['path'] : '/';
         $domain = Site::$domain == "" ? $_SERVER["HTTP_HOST"] : Site::$domain;
         
         session_name('GeniXCMS-'.$site_id);
-        session_set_cookie_params(time() + $expires,$path, $domain, false, true);
+        session_set_cookie_params([
+            'lifetime' => (int)$expires,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => false,
+            'httponly' => true,
+        ]);
         session_start([
             'cookie_lifetime' => 31536000,
         ]);
@@ -68,11 +66,11 @@ class Session
                                 );
         }
         if (isset($_SESSION['gxsess']) || $_SESSION['gxsess'] != '') {
-            $expires = isset($_SESSION['gxsess']['val']['rememberme']) && $_SESSION['gxsess']['val']['rememberme'] == true ? 3600 * 24 * 365 * 1000: $expires;
+            $expires = isset($_SESSION['gxsess']['val']['rememberme']) && $_SESSION['gxsess']['val']['rememberme'] == true ? 3600 * 24 * 365 : $expires;
         }
         session_regenerate_id();
         
-        setcookie(name: session_name(), value: session_id(), expires_or_options: time() + $expires, path: $path, domain: $domain, secure: false, httponly: true);
+        setcookie(name: session_name(), value: session_id(), expires_or_options: (int)(time() + $expires), path: $path, domain: $domain, secure: false, httponly: true);
         $GLOBALS['start_time'] = microtime(true);
     }
 
@@ -146,7 +144,7 @@ class Session
         self::set_session($vars, $val);
     }
 
-    public static function destroy()
+    public static function logout()
     {
         session_destroy();
         unset($_SESSION['gxsess']);
@@ -160,7 +158,7 @@ class Session
     /**
      * Open
      */
-    public function _open() {
+    public function open($path, $name): bool {
         // If successful
         if (Db::connect()) {
             // Return True
@@ -173,7 +171,7 @@ class Session
     /**
      * Close
      */
-    public function _close() {
+    public function close(): bool {
         // Close the database connection
         // If successful
         if (Db::close()) {
@@ -187,17 +185,15 @@ class Session
     /**
      * Read
      */
-    public function _read($id) {
+    #[\ReturnTypeWillChange]
+    public function read($id) {
         // Set query
-        $q = Db::result("SELECT `data` FROM `sessions` WHERE `id` = '{$id}'");
+        $q = Db::result("SELECT `data` FROM `sessions` WHERE `id` = ?", [$id]);
         // Attempt execution
         // If successful
         if ($q) {
-            // Save returned row
-            $row = $q;
-            // print_r($row);
             // Return the data
-            return isset($row[0]->data) ? $row[0]->data: "";
+            return isset($q[0]->data) ? $q[0]->data: "";
         }else{
             // Return an empty string
             return "";
@@ -207,12 +203,12 @@ class Session
     /**
      * Write
      */
-    public function _write($id, $data) {
+    public function write($id, $data): bool {
         // Create time stamp
         $access = time();
 
         // Set query
-        $q = Db::query("REPLACE INTO `sessions` VALUES ('{$id}', '{$access}', '{$data}')");
+        $q = Db::query("REPLACE INTO `sessions` VALUES (?, ?, ?)", [$id, $access, $data]);
 
 
         // Attempt Execution
@@ -229,9 +225,9 @@ class Session
     /**
      * Destroy
      */
-    public function _destroy($id) {
+    public function destroy($id): bool {
         // Set query
-        $q = Db::query("DELETE FROM `sessions` WHERE `id` = '{$id}'");
+        $q = Db::query("DELETE FROM `sessions` WHERE `id` = ?", [$id]);
 
 
         // Attempt execution
@@ -248,24 +244,15 @@ class Session
     /**
      * Garbage Collection
      */
-    public function _gc($max) {
+    #[\ReturnTypeWillChange]
+    public function gc($max) {
         // Calculate what is to be deemed old
         $old = time() - $max;
-        $q = Db::result("SELECT `id` FROM `sessions` WHERE `access` < '{$old}' ");
-        if( DB::$num_rows > 0 ) {
-            // echo "ADDA";
-            // Set query
-            $q = Db::query("DELETE FROM `sessions` WHERE `access` < '{$old}' ");
-    
-    
-            // Attempt execution
-            if ($q) {
-                // Return True
-                return true;
-            }
+        $q = Db::query("DELETE FROM `sessions` WHERE `access` < ?", [$old]);
+        if ($q) {
+            return (int) Db::$num_rows;
         }
         
-
         // Return False
         return false;
     }

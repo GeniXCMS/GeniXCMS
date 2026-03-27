@@ -14,47 +14,56 @@ $pagetitle = $isEdit ? _('Edit') : _('Create');
 $act = $isEdit ? "edit&id=".Typo::int($_GET['id'])."&token=".$token : 'add';
 
 if (isset($data['post'])) {
-    foreach ($data['post'] as $p) {
-        $title = $p->title;
-        $content = $p->content;
-        $date = $p->date;
-        $status = $p->status;
-        $cat = $p->cat;
-        $tags = $p->tags ?? "";
-        $post_image = $p->post_image ?? "";
+    if (!isset($data['post']['error'])) {
+        foreach ($data['post'] as $p) {
+            $title = $p->title;
+            $content = $p->content;
+            $date = $p->date;
+            $status = $p->status;
+            $cat = $p->cat;
+            $tags = $p->tags ?? "";
+            $post_image = $p->post_image ?? "";
+        }
+        $id = Typo::int($_GET['id']);
+    } else {
+        $data['alertDanger'][] = $data['post']['error'];
+        $title = $content = $date = $status = $cat = $tags = $post_image = '';
     }
-    $id = Typo::int($_GET['id']);
 } else {
     $title = $content = $date = $status = $cat = $tags = $post_image = '';
 }
+?>
+<?php
+$ui = new UiBuilder([
+    'header' => [
+        'title' => $pagetitle . ' ' . _('Post'),
+        'subtitle' => _('Compose and distribute high-fidelity content across the digital enterprise.'),
+        'icon' => 'bi bi-pencil-square',
+        'buttons' => [
+            [
+                'label' => _('Publish Changes'),
+                'type' => 'button',
+                'icon' => 'bi bi-send',
+                'class' => 'btn btn-primary rounded-pill px-4 shadow-sm'
+            ],
+            [
+                'label' => _('Discard'),
+                'url' => 'index.php?page=posts',
+                'icon' => 'bi bi-x-circle',
+                'class' => 'btn btn-light border bg-white rounded-pill px-4'
+            ]
+        ]
+    ]
+]);
 ?>
 <form action="index.php?page=posts&act=<?=$act?>&token=<?=TOKEN;?>" method="post" role="form">
     <div class="col-md-12">
         <?=Hooks::run('admin_page_notif_action', $data);?>
     </div>
 
-    <div class="container-fluid py-4">
-        <!-- Editor Header -->
-        <div class="row align-items-center mb-4">
-            <div class="col-md-6">
-                <h3 class="fw-bold text-dark mb-0"><?=$pagetitle;?> <?=_("Post");?></h3>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0 mb-0 small">
-                        <li class="breadcrumb-item"><a href="index.php?page=posts" class="text-decoration-none"><?=_("Posts");?></a></li>
-                        <li class="breadcrumb-item active"><?=$pagetitle;?></li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <button type="submit" name="submit" class="btn btn-primary rounded-pill px-4 shadow-sm me-2">
-                    <i class="bi bi-send me-1"></i> <?=_("Publish Changes");?>
-                </button>
-                <a href="index.php?page=posts" class="btn btn-light border rounded-pill px-4">
-                    <i class="bi bi-x-circle me-1"></i> <?=_("Discard");?>
-                </a>
-            </div>
-        </div>
+    <?php $ui->renderHeader(); ?>
 
+    <div class="container-fluid px-0">
         <div class="row g-4">
             <!-- Main Content Area -->
             <div class="col-lg-8">
@@ -234,4 +243,27 @@ if (isset($data['post'])) {
             }
         }).dialogelfinder('instance');
     }
+
+    $(document).ready(function() {
+        if ($('#tags').length > 0) {
+            $('#tags').tagsInput({
+                width: 'auto',
+                height: 'auto',
+                defaultText: '<?=_("add a tag");?>'
+            });
+
+            // Target the input created by tagsInput (id+tag)
+            var ajaxUrl = '<?=Url::ajax("tags");?>';
+            $('#tags_tag').autocomplete({
+                source: function(request, response) {
+                    $.getJSON(ajaxUrl, { term: request.term }, response);
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    $('#tags').addTag(ui.item.value);
+                    return false;
+                }
+            });
+        }
+    });
 </script>

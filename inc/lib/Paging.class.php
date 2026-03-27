@@ -70,8 +70,14 @@ class Paging
                 }
                 
 //                echo $table;
-                Db::result("SELECT {$sel} FROM {$table} {$where}");
-                $dbtotal = Db::$num_rows;
+                $count = Query::table($vars['table'] ?? '');
+                if (isset($vars['where'])) {
+                    // whereRaw for complex legacy WHERE strings
+                    $count->whereRaw(ltrim($where, ' WHERE '));
+                }
+                $dbtotal = is_string($vars['table'] ?? null)
+                    ? $count->count()
+                    : (int) (Db::result("SELECT {$sel} FROM {$table} {$where}") ? Db::$num_rows : 0);
             }
 
             if (isset($vars['total'])) {

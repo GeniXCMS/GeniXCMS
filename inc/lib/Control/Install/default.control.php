@@ -50,17 +50,20 @@ switch ($step) {
             $dbuser = (isset($_POST['dbuser']) ? Typo::strip(Typo::cleanX($_POST['dbuser'])) : '');
             $dbpass = (isset($_POST['dbpass']) ? Typo::strip(Typo::cleanX($_POST['dbpass'])) : '');
             $dbname = (isset($_POST['dbname']) ? Typo::cleanX($_POST['dbname']) : '');
-            if (Db::connect($dbhost, $dbuser, $dbpass, $dbname)) {
+            $dbdriver = (isset($_POST['dbdriver']) ? Typo::cleanX($_POST['dbdriver']) : 'mysql');
+            
+            if (Db::connect($dbhost, $dbuser, $dbpass, $dbname, $dbdriver)) {
                 $vars = array(
                         'dbhost' => $dbhost,
                         'dbname' => $dbname,
                         'dbuser' => $dbuser,
                         'dbpass' => $dbpass,
+                        'dbdriver' => $dbdriver,
                     );
                 Session::set_session($vars);
                 Theme::install('step1');
             } else {
-                $data['alertDanger'][] = Db::$mysqli->connect_error;
+                $data['alertDanger'][] = "Database connection failed! Please check your configuration.";
                 Control::error('db', $data);
                 echo 'Please Press <a href="?" 
                 class="btn btn-danger">Back Button</a>.';

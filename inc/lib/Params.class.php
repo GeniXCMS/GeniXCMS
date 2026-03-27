@@ -44,7 +44,7 @@ class Params
         return $params;
     }
 
-    public static function register($vars=[])
+    public static function register($vars = [])
     {
         $params = self::$_params;
         $res = array_merge($params, $vars);
@@ -56,26 +56,29 @@ class Params
     {
         global $data;
         // print_r($data);
-        if(is_array($vars)) {
+        if (is_array($vars)) {
             $value = '';
-            if( isset($data['post']) && Posts::existParam($vars['name'], $data['post'][0]->id )) {
-                $value = Posts::getParam($vars['name'], $data['post'][0]->id);
+            if (isset($data['post']) && is_array($data['post']) && isset($data['post'][0])) {
+                $post = $data['post'][0];
+                if (is_object($post) && Posts::existParam($vars['name'], $post->id)) {
+                    $value = Posts::getParam($vars['name'], $post->id);
+                }
             }
             // check type 
-            if( $vars['type'] == 'text') {
+            if ($vars['type'] == 'text') {
                 return "<input type='text' name='param[{$vars['name']}]' value='{$value}' class='form-control'>";
             }
-            if( $vars['type'] == 'checkbox') {
+            if ($vars['type'] == 'checkbox') {
                 return "<input type='checkbox' name='param[{$vars['name']}]' value='{$value}' class=''>";
             }
-            if( $vars['type'] == 'textarea') {
+            if ($vars['type'] == 'textarea') {
                 return "<textarea name='param[{$vars['name']}]' class='form-control'>{$value}</textarea>";
             }
-            if( $vars['type'] == 'dropdown') {
+            if ($vars['type'] == 'dropdown') {
                 $html = "<select name='param[{$vars['name']}]' class='form-control'>";
-                foreach($vars['value'] as $k => $v ) {
-                    $sel = $value == $v ? "selected": "";
-                    $html .= "<option value='{$v}' {$sel}>".ucfirst($v)."</option>";
+                foreach ($vars['value'] as $k => $v) {
+                    $sel = $value == $v ? "selected" : "";
+                    $html .= "<option value='{$v}' {$sel}>" . ucfirst($v) . "</option>";
                 }
                 $html .= "</select>";
             }
@@ -99,15 +102,15 @@ class Params
     {
         $html = "";
         $params = self::$_params;
-        if( is_array($params[$location]) ) {
-            foreach( $params[$location] as $k => $v ) {
+        if (is_array($params[$location])) {
+            foreach ($params[$location] as $k => $v) {
                 $html .= "<div class='card card-outline card-secondary mt-3'>
                 <div class='card-header'>{$v['grouptitle']}</div>
                     <div class='class-body'><div class='container-fluid'><div class='row'>";
-                foreach( $v['fields'] as $k2 => $v2 ) {
+                foreach ($v['fields'] as $k2 => $v2) {
                     $html .= "<div class='{$v2['boxclass']}'><div class=\"form-group\">
-                        <label for=\"{$v2['name']}\">"._($v2["title"])."</label> ";
-                    $html .= self::build($v2);    
+                        <label for=\"{$v2['name']}\">" . _($v2["title"]) . "</label> ";
+                    $html .= self::build($v2);
                     $html .= "</div></div>";
                 }
                 $html .= "</div></div></div></div>";

@@ -53,14 +53,27 @@ if ($token != '' || in_array($action, $public_actions)) {
 
         case 'categories':
             $type = isset($_GET['type']) ? Typo::cleanX($_GET['type']) : 'post';
-            $cats = Db::result("SELECT * FROM `cat` WHERE `type` = '{$type}' ORDER BY `name` ASC");
+            $cats = Query::table('cat')->where('type', $type)->orderBy('name', 'ASC')->get();
             echo json_encode(['status' => 'success', 'data' => $cats]);
             break;
 
         case 'tags':
             $term = isset($_GET['term']) ? Typo::cleanX($_GET['term']) : '';
-            $tags = Db::result("SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '{$term}%' ORDER BY `name` ASC");
+            $tags = Query::table('cat')
+                ->where('type', 'tag')
+                ->where('name', 'LIKE', $term . '%')
+                ->orderBy('name', 'ASC')
+                ->get();
             echo json_encode(['status' => 'success', 'data' => $tags]);
+            break;
+
+        case 'authors':
+            $authors = Query::table('posts')
+                ->select('DISTINCT `author`')
+                ->where('status', '1')
+                ->orderBy('author', 'ASC')
+                ->get();
+            echo json_encode(['status' => 'success', 'data' => $authors]);
             break;
 
         default:

@@ -11,7 +11,7 @@ class TagControl extends BaseControl
         $data['max'] = Options::v('post_perpage');
 
         $tag_input = (SMART_URL) ? $data['tag'] : Typo::strip($_GET['tag']);
-        $tag_id = Tags::id(Typo::cleanX(Db::escape($tag_input)));
+        $tag_id = Tags::id(Typo::cleanX($tag_input));
         
         $type = Categories::type($tag_id);
         $name = Tags::name($tag_id);
@@ -28,22 +28,14 @@ class TagControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post in : Tags - ' . $name . $pagingtitle;
-            $posts = Db::result(
-                sprintf(
-                    "SELECT *,A.`id` as `id` FROM `posts` AS A
-                        LEFT JOIN `posts_param` AS B
-                        ON A.`id` = B.`post_id`
-                        WHERE B.`param` = 'tags' 
-                        AND B.`value` LIKE '%%%s%%'
-                        AND A.`status` = '1'
-                        ORDER BY A.`date` 
-                        DESC LIMIT %d, %d",
-                    $name,
-                    $offset,
-                    $data['max']
-                )
-            );
-            $data['num'] = Db::$num_rows;
+            $posts = Query::table('posts')
+                ->select('`posts`.*,`posts`.`id` as `id`')
+                ->join('posts_param AS B', '`posts`.`id`', '=', 'B.`post_id`')
+                ->whereRaw("B.`param` = 'tags' AND B.`value` LIKE ? AND `posts`.`status` = '1'", ["%{$name}%"])
+                ->orderBy('`posts`.`date`', 'DESC')
+                ->limit($data['max'], $offset)
+                ->get();
+            $data['num'] = count($posts);
             $data['posts'] = Posts::prepare($posts);
 
             $url = Url::tag($name);

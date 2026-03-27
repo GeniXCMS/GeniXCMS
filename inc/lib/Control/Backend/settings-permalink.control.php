@@ -33,8 +33,7 @@ if (User::access(0)) {
             $vars = array();
             $flip = array_flip($_POST);
         // print_r($_POST);
-            $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
-            $q = Db::result($sql);
+            $q = Query::table('options')->where('value', 'on')->get();
             $input = array('permalink_use_index_php');
 
             foreach ($q as $ob) {

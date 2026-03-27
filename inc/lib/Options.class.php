@@ -40,14 +40,10 @@ class Options
     {
         if (is_array($vars)) {
             foreach ($vars as $name => $value) {
-                $ins = array(
-                        'table' => 'options',
-                        'key' => array(
-                            'name' => Typo::cleanX($name),
-                            'value' => Typo::cleanX($value),
-                            ),
-                    );
-                $opt = Db::insert($ins);
+                $opt = Query::table('options')->insert([
+                    'name' => Typo::cleanX($name),
+                    'value' => Typo::cleanX($value)
+                ]);
             }
         } else {
             Control::error('unknown', _('Format not Found, please in array'));
@@ -62,23 +58,40 @@ class Options
             foreach ($key as $k => $v) {
                 $k = Typo::cleanX($k);
                 $v = Typo::cleanX($v);
-                $post = Db::query("UPDATE `options` SET `value`='{$v}' WHERE `name` = '{$k}' LIMIT 1");
+                $exist = self::get($k);
+                if ($exist === false) {
+                    Query::table('options')->insert([
+                        'name' => $k,
+                        'value' => $v
+                    ]);
+                } else {
+                    Query::table('options')->where('name', $k)->update(['value' => $v]);
+                }
             }
         } else {
             $key = Typo::cleanX($key);
             $val = Typo::cleanX($val);
-            $post = Db::query("UPDATE `options` SET `value`='{$val}' WHERE `name` = '{$key}' LIMIT 1");
+            $exist = self::get($key);
+            if ($exist === false) {
+                Query::table('options')->insert([
+                    'name' => $key,
+                    'value' => $val
+                ]);
+            } else {
+                Query::table('options')->where('name', $key)->update(['value' => $val]);
+            }
         }
 
-        return $post;
+        return true;
     }
 
     public static function get($vars, $decode = true)
     {
         $vars = Typo::cleanX($vars);
-        $op = Db::result("SELECT `value` FROM `options` WHERE `name` = '{$vars}' LIMIT 1");
-        if (Db::$num_rows > 0) {
-            return ($decode == true ) ? Typo::Xclean($op[0]->value): $op[0]->value;
+        $op = Query::table('options')->where('name', $vars)->first();
+        
+        if ($op) {
+            return ($decode == true ) ? Typo::Xclean($op->value): $op->value;
         } else {
             return false;
         }
@@ -86,21 +99,14 @@ class Options
 
     public static function load()
     {
-        $op = Db::result('SELECT * FROM `options` ORDER BY `id` ASC ');
-        if (Db::$num_rows > 0) {
-            return $op;
-        } else {
-            return false;
-        }
+        return Query::table('options')->orderBy('id', 'ASC')->get();
     }
 
     public static function v($vars)
     {
         $opt = self::$_data;
-        // echo "<pre>";
         if (is_array($opt)) {
             foreach ($opt as $k => $v) {
-                // echo $v->name."\n";
                 if ($v->name == $vars ) {
                     if( $v->value != "" && $v->value != NULL ) {
                         return Typo::Xclean($v->value);
@@ -111,7 +117,6 @@ class Options
                 }
             }
         }
-        // echo "</pre>";
     }
 
     public static function validate($vars)

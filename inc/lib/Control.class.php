@@ -111,7 +111,7 @@ class Control
      */
     public static function frontend()
     {
-        $arr = array('ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
+        $arr = array('api', 'ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
                 'account', 'search', 'author', 'tag', 'thumb', 'default',
                 'login', 'register', 'forgotpass', 'logout', 'archive'
             );
@@ -121,12 +121,9 @@ class Control
             } else {
                 self::route($arr);
             }
-
-        //    self::route($arr);
         } elseif (!SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0 ) {
             self::get($arr);
         } else {
-
             self::incFront('default');
         }
     }
@@ -136,6 +133,7 @@ class Control
         $get = 0;
         foreach ($_GET as $k => $v) {
             if (in_array($k, $arr)
+                || $k == 'api'
                 || $k == 'paging'
                 || $k == 'error'
                 || $k == 'ajax'
@@ -151,6 +149,11 @@ class Control
                 if (in_array($k, $arr)) {
                     if ($k == 'ajax') {
                         self::ajax($v);
+                    } elseif ($k == 'api') {
+                        $res = $_GET['resource'] ?? '';
+                        $id = $_GET['identifier'] ?? '';
+                        $act = $_GET['action'] ?? '';
+                        self::api($res, $id, $act);
                     } else {
                         self::incFront($k);
                     }
@@ -176,7 +179,7 @@ class Control
             self::error('404');
         } else {
             foreach ((array) $var[0] as $k => $v) {
-                if ($k == '0' && $v != 'error' && $v != 'ajax') {
+                if ($k == '0' && $v != 'error' && $v != 'ajax' && $v != 'api') {
                     /** Frontpage */
                     self::incFront($v, $var);
                 } elseif (!SMART_URL && isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
@@ -184,11 +187,20 @@ class Control
                 } elseif ($v == 'error' || $k == 'error') {
                     $error = ($k == 'error') ? $v : '404';
                     self::error($error, $var);
-                } elseif ($k == 'ajax') {
+                } elseif ($k == 'ajax' || $v == 'ajax') {
                     self::ajax($v, $var);
+                } elseif ($k == 'api' || $v == 'api') {
+
+                    $res = ''; $id = ''; $act = '';
+                    foreach($var as $vk => $vv) {
+                      if(isset($vv['resource'])) $res = $vv['resource'];
+                      if(isset($vv['identifier'])) $id = $vv['identifier'];
+                      if(isset($vv['action'])) $act = $vv['action'];
+                    }
+
+                    self::api($res, $id, $act);
                 } else {
                     if (in_array($k, $arr)) {
-                        
                         self::incFront($k, $var);
                     } else {
                         self::error('404');
@@ -196,6 +208,10 @@ class Control
                 }
             }
         }
+    }
+
+    public static function api($resource = '', $identifier = '', $action = '') {
+        Api::dispatch($resource, $identifier, $action);
     }
 
     /**

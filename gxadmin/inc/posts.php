@@ -4,226 +4,198 @@
  *
  * PHP Based Content Management System and Framework
  */
+
+// ── PREPARE DATA ──────────────────────────────────────────────────
+$username = Session::val('username');
+$group = Session::val('group');
+
+$rows = [];
+if ($data['num'] > 0) {
+    foreach ($data['posts'] as $p) {
+        $pObj = (object)$p;
+        $accessEdit = $group <= 2 ? 1 : ($pObj->author == $username ? 1 : 0);
+        $accessDelete = $group < 2 ? 1 : 0;
+        
+        $status = ($pObj->status == '0') ? 'warning' : 'success';
+        $statusLabel = ($pObj->status == '0') ? _("Draft") : _("Live");
+        
+        // Interaction Logic (Views & Comments)
+        $pObj = (object)$p;
+        $views = number_format($pObj->views ?? 0);
+        $commentCount = Query::table('comments')->where('post_id', $pObj->id)->where('status', '1')->count();
+        
+        // Thumbnail Logic
+        $post_image = Posts::getPostImage($pObj->id);
+        $thumb = ($post_image != "") ? $post_image : Posts::getImage(Typo::Xclean($pObj->content), 1);
+        $thumbUrl = ($thumb != '') ? Url::thumb($thumb, 'square', 100) : Site::$url.'assets/images/noimage.png';
+
+        $actions = '<div class="btn-group gap-1">';
+        $actions .= '<a href="'.Url::post($pObj->id).'" target="_blank" class="btn btn-light btn-sm rounded-circle border" title="'._("Preview").'"><i class="bi bi-eye text-primary"></i></a>';
+        if ($accessEdit) {
+            $actions .= '<a href="index.php?page=posts&act=edit&id='.$pObj->id.'&token='.TOKEN.'" class="btn btn-light btn-sm rounded-circle border" title="'._("Edit").'"><i class="bi bi-pencil-square text-success"></i></a>';
+        }
+        if ($accessDelete) {
+            $actions .= '<a href="index.php?page=posts&act=del&id='.$pObj->id.'&token='.TOKEN.'" class="btn btn-light btn-sm rounded-circle border" onclick="return confirm(\''._("Are you sure you want to delete this?").'\');" title="'._("Delete").'"><i class="bi bi-trash text-danger"></i></a>';
+        }
+        $actions .= '</div>';
+
+        $rows[] = [
+            ['content' => "
+                <div class='d-flex align-items-center ps-4 py-2'>
+                    <div class='me-3 position-relative'>
+                        <img src='{$thumbUrl}' class='rounded-3 shadow-sm border' width='50' height='50' style='object-fit: cover;'>
+                        <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white border text-dark extra-small' style='font-size: 0.6rem;'>#{$pObj->id}</span>
+                    </div>
+                    <div>
+                        <a href='index.php?page=posts&act=edit&id={$pObj->id}&token=".TOKEN."' class='fw-bold text-dark text-decoration-none d-block mb-1 ls-n1' style='font-size: 0.95rem;'>".((strlen($pObj->title) > 60) ? substr($pObj->title, 0, 57).'...' : $pObj->title)."</a>
+                        <div class='d-flex gap-2 align-items-center'>
+                            <span class='badge bg-{$status} bg-opacity-10 text-{$status} border border-{$status} border-opacity-25 rounded-pill px-2 fw-bold text-uppercase ls-1' style='font-size: 0.65rem;'>{$statusLabel}</span>
+                            <span class='badge bg-light text-muted border px-2 py-1 rounded-pill fw-bold text-uppercase' style='font-size: 0.65rem;'>".Categories::name($pObj->cat)."</span>
+                        </div>
+                    </div>
+                </div>", 'class' => 'p-0'],
+            ['content' => "
+                <div class='d-flex align-items-center justify-content-center'>
+                    <img src='".Image::getGravatar(User::email($pObj->author), 40)."' class='rounded-circle me-2 border p-1 bg-white' width='32'>
+                    <div class='text-start'>
+                        <div class='small fw-bold text-dark mb-0'>{$pObj->author}</div>
+                        <div class='text-muted extra-small'>"._("Writer")."</div>
+                    </div>
+                </div>", 'class' => 'text-center'],
+            ['content' => "
+                <div class='d-flex flex-column align-items-center justify-content-center opacity-75'>
+                    <div class='d-flex align-items-center gap-2 mb-1'>
+                        <i class='bi bi-eye text-primary'></i>
+                        <span class='small fw-bold text-dark'>{$views}</span>
+                    </div>
+                    <div class='d-flex align-items-center gap-2'>
+                        <i class='bi bi-chat-dots text-success'></i>
+                        <span class='small fw-bold text-dark'>{$commentCount}</span>
+                    </div>
+                </div>", 'class' => 'text-center'],
+            ['content' => "
+                <div class='text-center'>
+                    <div class='small fw-bold text-dark mb-0'>".Date::format($pObj->date, 'd M Y')."</div>
+                    <div class='text-muted extra-small'>".Date::format($pObj->date, 'H:i A')."</div>
+                </div>", 'class' => 'text-center'],
+            ['content' => $actions, 'class' => 'text-center'],
+            ['content' => "<div class='text-center pe-4'><input type='checkbox' name='post_id[]' value='{$pObj->id}' class='check form-check-input shadow-none border'></div>", 'class' => 'p-0']
+        ];
+    }
+}
+
+// Stats Data
+$statsItems = [
+    ['label' => _('Total Library'), 'value' => (string)Stats::totalPost('post'), 'icon' => 'bi bi-journal-album', 'color' => 'primary'],
+    ['label' => _('Live Assets'), 'value' => (string)Stats::activePost('post'), 'icon' => 'bi bi-broadcast-pin', 'color' => 'success'],
+    ['label' => _('Archived / Draft'), 'value' => (string)Stats::inactivePost('post'), 'icon' => 'bi bi-archive', 'color' => 'warning']
+];
+
+// ── DEFINE UI SCHEMA ──────────────────────────────────────────────
+$schema = [
+    'header' => [
+        'title' => _('Content Repository'),
+        'subtitle' => _('Manage your digital publication assets with real-time engagement insights.'),
+        'icon' => 'bi bi-journal-text',
+        'button' => [
+            'url' => 'index.php?page=posts&act=add&token=' . TOKEN,
+            'label' => _('New Post'),
+            'icon' => 'bi bi-plus-lg',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold'
+        ],
+    ],
+    'content' => [
+        ['type' => 'stat_cards', 'items' => $statsItems],
+        [
+            'type' => 'card',
+            'no_padding' => true,
+            'header_action' => '
+                <form action="index.php?page=posts" method="get" class="d-flex gap-2 flex-wrap justify-content-end">
+                    <input type="hidden" name="page" value="posts">
+                    <div class="input-group input-group-sm w-auto shadow-sm rounded-pill overflow-hidden border">
+                        <span class="input-group-text bg-white border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="q" class="form-control border-0 ps-1 bg-white" placeholder="'._("Search...").'" style="width:160px;" value="'.($_GET['q'] ?? '').'">
+                    </div>
+                    '.Categories::dropdown(['name' => 'cat', 'type' => 'post', 'class' => 'form-select form-select-sm rounded-pill px-3 shadow-none border bg-white shadow-sm', 'selected' => ($_GET['cat'] ?? '')]).'
+                    <select name="status" class="form-select form-select-sm rounded-pill px-3 shadow-none border bg-white shadow-sm" style="width:110px;">
+                        <option value="">'._("All Status").'</option>
+                        <option value="1" '.(isset($_GET['status']) && $_GET['status'] == '1' ? 'selected' : '').'>'._("Live").'</option>
+                        <option value="0" '.(isset($_GET['status']) && $_GET['status'] == '0' ? 'selected' : '').'>'._("Draft").'</option>
+                    </select>
+                    <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold shadow-sm"><i class="bi bi-funnel-fill me-1"></i> '._("Filter").'</button>
+                    <a href="index.php?page=posts" class="btn btn-light btn-sm rounded-pill px-3 border shadow-sm" title="'._("Reset").'"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </form>',
+            'body_elements' => [
+                [
+                    'type' => 'form',
+                    'action' => '',
+                    'fields' => [
+                        [
+                            'type' => 'table',
+                            'headers' => [
+                                ['content' => _('Publication Details'), 'class' => 'ps-4 py-3'],
+                                ['content' => _('Ownership'), 'class' => 'text-center'],
+                                ['content' => _('Engagement'), 'class' => 'text-center'],
+                                ['content' => _('Timeline'), 'class' => 'text-center'],
+                                ['content' => _('Management'), 'class' => 'text-center'],
+                                ['content' => '<div class="text-center pe-4"><input type="checkbox" id="selectall" class="form-check-input shadow-none border"></div>', 'class' => 'p-0', 'width' => '50px']
+                            ],
+                            'rows' => $rows,
+                            'empty_message' => _('Your publication library is currently empty.')
+                        ],
+                        ['type' => 'raw', 'html' => '<input type="hidden" name="token" value="'.TOKEN.'">']
+                    ]
+                ]
+            ],
+            'footer' => '
+                <div class="d-flex justify-content-between align-items-center w-100 p-2">
+                    <div class="bulk-action-wrapper">
+                        '.((new UiBuilder())->renderElement([
+                            'type' => 'bulk_actions',
+                            'button_label' => _('Apply to Selected'),
+                            'options' => [
+                                'publish' => _('Commit to Live'),
+                                'unpublish' => _('Revert to Draft'),
+                                'delete' => _('Permanent Deletion')
+                            ]
+                        ], true)).'
+                    </div>
+                    <div class="pagination-wrapper">'.$data['paging'].'</div>
+                </div>'
+        ]
+    ]
+];
+
+// ── RENDER ────────────────────────────────────────────────────────
+echo '<div class="col-md-12">';
+echo Hooks::run('admin_page_notif_action', $data);
+echo '</div>';
+
+$builder = new UiBuilder($schema);
+$builder->render();
 ?>
 
-<div class="col-md-12">
-    <?=Hooks::run('admin_page_notif_action', $data);?>
-</div>
-
-<div class="container-fluid py-4">
-    <!-- Header Section -->
-    <div class="row align-items-center mb-4">
-        <div class="col-md-6">
-            <h3 class="fw-bold text-dark mb-0"><?=_("Content Management");?></h3>
-            <p class="text-muted small"><?=_("Manage and organize your website posts.");?></p>
-        </div>
-        <div class="col-md-6 text-md-end">
-            <a href="index.php?page=posts&act=add&token=<?=TOKEN;?>" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                <i class="bi bi-plus-circle me-1"></i> <?=_("Create New Post");?>
-            </a>
-        </div>
-    </div>
-
-    <!-- Stats Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm bg-white p-3 d-flex flex-row align-items-center">
-                <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary me-3">
-                    <i class="bi bi-files fs-4"></i>
-                </div>
-                <div>
-                    <div class="text-muted small fw-bold text-uppercase"><?=_("Total");?></div>
-                    <div class="h4 fw-bold m-0"><?=Stats::totalPost('post');?></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm bg-white p-3 d-flex flex-row align-items-center">
-                <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success me-3">
-                    <i class="bi bi-check-circle fs-4"></i>
-                </div>
-                <div>
-                    <div class="text-muted small fw-bold text-uppercase"><?=_("Published");?></div>
-                    <div class="h4 fw-bold m-0"><?=Stats::activePost('post');?></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm bg-white p-3 d-flex flex-row align-items-center">
-                <div class="bg-danger bg-opacity-10 p-3 rounded-3 text-danger me-3">
-                    <i class="bi bi-dash-circle fs-4"></i>
-                </div>
-                <div>
-                    <div class="text-muted small fw-bold text-uppercase"><?=_("Drafts");?></div>
-                    <div class="h4 fw-bold m-0"><?=Stats::inactivePost('post');?></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Filter & Table Card -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="card-header bg-white border-0 py-4 px-4">
-            <form action="index.php?page=posts" method="get" class="row g-3">
-                <input type="hidden" name="page" value="posts">
-                <input type="hidden" name="token" value="<?=TOKEN;?>">
-                
-                <div class="col-lg-3 col-md-6">
-                    <div class="input-group border rounded-pill overflow-hidden bg-light">
-                        <span class="input-group-text bg-transparent border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="q" class="form-control bg-transparent border-0" placeholder="<?=_("Filter by title...");?>">
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-6">
-                    <?php
-                    $vars = array(
-                        'name' => 'cat',
-                        'type' => 'post',
-                        'class' => 'form-select border rounded-pill bg-light ps-3'
-                    );
-                    echo Categories::dropdown($vars);
-                    ?>
-                </div>
-
-                <div class="col-lg-2 col-md-6">
-                    <select name="status" class="form-select border rounded-pill bg-light ps-3">
-                        <option value="1"><?=_("Published");?></option>
-                        <option value="0"><?=_("Draft");?></option>
-                    </select>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="input-group">
-                        <input type="date" name="from" class="form-control border rounded-start-pill bg-light ps-3" placeholder="<?=_("From");?>">
-                        <input type="date" name="to" class="form-control border rounded-end-pill bg-light ps-3" placeholder="<?=_("To");?>">
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <button type="submit" class="btn btn-dark rounded-pill w-100 px-3">
-                        <i class="bi bi-funnel me-1"></i> <?=_("Apply Filter");?>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="card-body p-0">
-            <form action="" method="post">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light text-muted small text-uppercase">
-                            <tr>
-                                <th class="ps-4 py-3" style="width: 50px;"><?=_("ID");?></th>
-                                <th><?=_("Core Post Details");?></th>
-                                <th class="text-center"><?=_("Taxonomy");?></th>
-                                <th class="text-center"><?=_("Timeline");?></th>
-                                <th class="text-center"><?=_("Accountability");?></th>
-                                <th class="text-center pe-4" style="width: 120px;"><?=_("Interaction");?></th>
-                                <th class="text-center pe-4" style="width: 50px;">
-                                    <input type="checkbox" id="selectall" class="form-check-input">
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $username = Session::val('username');
-                            $group = Session::val('group');
-                            if ($data['num'] > 0):
-                                foreach ($data['posts'] as $p):
-                                    $accessEdit = $group <= 2 ? 1: ($p->author == $username ? 1 : 0);
-                                    $accessDelete = $group < 2 ? 1: 0;
-                                    
-                                    if ($p->status == '0') {
-                                        $statusLabel = '<span class="badge bg-warning bg-opacity-10 text-warning px-3 rounded-pill">'._("Draft").'</span>';
-                                        $rowStyle = 'background-color: rgba(255, 193, 7, 0.02);';
-                                    } else {
-                                        $statusLabel = '<span class="badge bg-success bg-opacity-10 text-success px-3 rounded-pill">'._("Published").'</span>';
-                                        $rowStyle = '';
-                                    }
-                            ?>
-                            <tr style="<?=$rowStyle;?>">
-                                <td class="ps-4 text-muted small"><?=$p->id;?></td>
-                                <td>
-                                    <a href="<?=Url::post($p->id);?>" target="_blank" class="fw-bold text-dark text-decoration-none d-block mb-1">
-                                        <?=(strlen($p->title) > 50) ? substr($p->title, 0, 48).'...' : $p->title;?>
-                                    </a>
-                                    <?=$statusLabel;?>
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge border text-muted px-2 py-1"><?=Categories::name($p->cat);?></span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="small fw-semibold"><?=Date::format($p->date, 'd M Y');?></div>
-                                    <div class="text-muted extra-small"><?=Date::format($p->date, 'H:i A');?></div>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <img src="<?=Site::$url;?>assets/images/user1-256x256.png" class="rounded-circle me-2" width="24">
-                                        <span class="small text-dark fw-medium"><?=$p->author;?></span>
-                                    </div>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group">
-                                        <?php if($accessEdit): ?>
-                                        <a href="index.php?page=posts&act=edit&id=<?=$p->id;?>&token=<?=TOKEN;?>" class="btn btn-light btn-sm rounded-circle me-1 border" title="<?=_("Edit");?>">
-                                            <i class="bi bi-pencil-square text-success"></i>
-                                        </a>
-                                        <?php endif; ?>
-                                        <?php if($accessDelete): ?>
-                                        <a href="index.php?page=posts&act=del&id=<?=$p->id;?>&token=<?=TOKEN;?>" 
-                                           class="btn btn-light btn-sm rounded-circle border" 
-                                           onclick="return confirm('<?=_("Are you sure you want to delete this?");?>');" title="<?=_("Delete");?>">
-                                            <i class="bi bi-trash text-danger"></i>
-                                        </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                                <td class="text-center pe-4">
-                                    <input type="checkbox" name="post_id[]" value="<?=$p->id;?>" class="check form-check-input">
-                                </td>
-                            </tr>
-                            <?php endforeach; else: ?>
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
-                                    <p class="text-muted"><?=_("No posts found in your library.");?></p>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-2">
-                        <?php if(User::access(2)): ?>
-                        <select name="action" class="form-select form-select-sm rounded-pill bg-light" style="width: 150px;">
-                            <option value="publish"><?=_("Bulk Publish");?></option>
-                            <option value="unpublish"><?=_("Bulk Draft");?></option>
-                            <option value="delete"><?=_("Bulk Delete");?></option>
-                        </select>
-                        <button type="submit" name="doaction" class="btn btn-danger btn-sm rounded-pill px-3">
-                            <i class="bi bi-lightning-fill"></i> <?=_("Execute");?>
-                        </button>
-                        <?php endif; ?>
-                        <input type="hidden" name="token" value="<?=TOKEN;?>">
-                    </div>
-                    <div class="pagination-wrapper">
-                        <?=$data['paging'];?>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <style>
-    .extra-small { font-size: 0.75rem; }
-    .btn-group .btn:hover { background-color: #f8fafc; border-color: #cbd5e1 !important; transform: translateY(-1px); }
-    .table-hover tbody tr:hover { background-color: rgba(59, 130, 246, 0.03) !important; }
-    .pagination-wrapper .pagination { margin-bottom: 0; }
-    .pagination-wrapper .page-link { border-radius: 50% !important; margin: 0 2px; border: 0; background: #f1f5f9; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
-    .pagination-wrapper .page-item.active .page-link { background: var(--gx-primary); color: #fff; }
+    .ls-1 { letter-spacing: 0.5px; }
+    .ls-n1 { letter-spacing: -0.5px; }
+    .extra-small { font-size: 0.65rem !important; }
+    .pagination-wrapper .pagination { margin-bottom: 0; gap: 5px; }
+    .pagination-wrapper .page-link { border-radius: 50% !important; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 0; background: #f8f9fa; color: #6c757d; font-weight: bold; font-size: 0.85rem; }
+    .pagination-wrapper .page-item.active .page-link { background: var(--gx-primary); color: #fff; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2); }
 </style>
 
+<script>
+    $(document).ready(function() {
+        $('#selectall').click(function() {
+            $('.check').prop('checked', this.checked);
+        });
+        $('.check').click(function() {
+            if (!this.checked) {
+                $('#selectall').prop('checked', false);
+            }
+            if ($('.check:checked').length == $('.check').length && $('.check').length > 0) {
+                $('#selectall').prop('checked', true);
+            }
+        });
+    });
+</script>

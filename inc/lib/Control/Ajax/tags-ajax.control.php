@@ -17,29 +17,29 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
 */
 $data = Router::scrap($param);
-$gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
-$token = (true === Token::validate($gettoken, true)) ? $gettoken: '';
-$url = Site::canonical();
-if ($token != '' && Http::validateUrl($url)) {
+$gettoken = (SMART_URL) ? ($data['token'] ?? '') : (Typo::cleanX($_GET['token'] ?? ''));
+$tokenValid = Token::validate($gettoken, true);
+
+if ($tokenValid) {
     if (User::access(2)) {
-        $term = Typo::cleanX($_GET['term']);
-        $tags = Db::result(
-            "SELECT * FROM `cat` WHERE `type` = 'tag' AND `name` LIKE '".$term."%' ORDER BY `name` ASC"
-        );
-        $tag2[] = array();
-        if( Db::$num_rows > 0 ) {
+        $term = isset($_GET['term']) ? Typo::cleanX($_GET['term']) : '';
+        $tags = Query::table('cat')
+            ->select('name')
+            ->where('type', 'tag')
+            ->where('name', 'LIKE', "%{$term}%")
+            ->orderBy('name', 'ASC')
+            ->get();
+        $tag2 = [];
+        if (!empty($tags)) {
             foreach ($tags as $t) {
-                $tag2[] = array(
-                    'label' => $t->name,
-                );
-                // $tag2 = array_merge($tag, $tag2);
+                if (is_object($t)) $tag2[] = $t->name;
             }
         }
         
         echo json_encode($tag2);
     } else {
-        echo '{"status":"error"}';
+        echo json_encode(['status' => 'error', 'message' => 'No access']);
     }
 } else {
-    echo '{"status":"Token not exist"}';
+    echo json_encode(['status' => 'error', 'message' => 'Token invalid']);
 }

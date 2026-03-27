@@ -29,22 +29,18 @@ class PageControl extends BaseControl
         
         $page = $this->getPageId($data);
 
-        $posts = Db::result(
-            sprintf(
-                "SELECT * FROM `posts` 
-                    WHERE (`id` = '%d' OR `slug` = '%s')
-                    AND `type` = 'page'
-                    AND `status` = '1'
-                    LIMIT 1",
-                $page,
-                $page
-            )
-        );
+        $pageInt = Typo::int($page);
+        $pageSlug = Typo::cleanX($page);
+        $post_row = Query::table('posts')
+            ->whereRaw("`id` = ? OR `slug` = ?", [$pageInt, $pageSlug])
+            ->where('type', 'page')
+            ->where('status', '1')
+            ->first();
 
-        $num_rows = Db::$num_rows;
+        $posts = $post_row ? [$post_row] : [];
         $data['posts'] = Posts::prepare($posts);
 
-        if ($num_rows > 0) {
+        if (!empty($posts)) {
             $post = $data['posts'][0];
             
             $data['title'] = $post->title;

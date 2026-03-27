@@ -39,9 +39,13 @@ if ($token != '' && Http::validateUrl($url)) {
                 }
                 
                 $output = [
+                    'success' => 1,
                     'status' => 'success',
                     'url' => Site::$url.'/assets/media/images/'.$_FILES['file']['name'],
-                    'path' => 'assets/media/images/'.$_FILES['file']['name']
+                    'path' => 'assets/media/images/'.$_FILES['file']['name'],
+                    'file' => [
+                        'url' => Site::$url.'/assets/media/images/'.$_FILES['file']['name']
+                    ]
                 ];
     
                 echo json_encode($output);
@@ -78,9 +82,13 @@ if ($token != '' && Http::validateUrl($url)) {
             }
 
             $output = [
+                'success' => 1,
                 'status' => 'success',
                 'url' => Site::$url.'assets/media/images/'.$_POST['file_name'],
-                'path' => 'assets/media/images/'.$_POST['file_name']
+                'path' => 'assets/media/images/'.$_POST['file_name'],
+                'file' => [
+                    'url' => Site::$url.'assets/media/images/'.$_POST['file_name']
+                ]
             ];
 
             echo json_encode($output);

@@ -27,100 +27,75 @@ class Stats
 
     public static function totalPost($vars)
     {
-        $type = Typo::cleanX($vars);
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}'");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('posts')->where('type', $vars)->count();
     }
 
     public static function activePost($vars)
     {
-        $type = Typo::cleanX($vars);
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}' AND `status` = '1' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('posts')->where('type', $vars)->where('status', '1')->count();
     }
 
     public static function inactivePost($vars)
     {
-        $type = Typo::cleanX($vars);
-        $posts = Db::result("SELECT `id` FROM `posts` WHERE `type` = '{$type}' AND `status` = '0' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('posts')->where('type', $vars)->where('status', '0')->count();
     }
 
     public static function totalCat($vars)
     {
-        $type = Typo::cleanX($vars);
-        $posts = Db::result("SELECT `id` FROM `cat` WHERE `type` = '{$type}'");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('cat')->where('type', $vars)->count();
     }
 
     public static function totalUser()
     {
-        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('user')->where('group', '>', '0')->count();
     }
 
     public static function totalAdmin()
     {
-        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` = '0' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('user')->where('group', '0')->count();
     }
 
     public static function activeUser()
     {
-        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '1' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('user')->where('group', '>', '0')->where('status', '1')->count();
     }
 
     public static function inactiveUser()
     {
-        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '0' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('user')->where('group', '>', '0')->where('status', '0')->count();
     }
 
     public static function pendingUser()
     {
-        $posts = Db::result("SELECT `id` FROM `user` WHERE `group` > '0' AND `status` = '0' AND `activation` != '' ");
-        $npost = Db::$num_rows;
-
-        return $npost;
+        return Query::table('user')
+            ->where('group', '>', '0')
+            ->where('status', '0')
+            ->where('activation', '!=', '')
+            ->count();
     }
 
     public static function mostViewed($count, $type = 'post')
     {
-        $count = Typo::int($count);
-        return Db::result(sprintf("SELECT * FROM `posts` WHERE `type` = '{$type}' ORDER BY `views` DESC LIMIT 0,%d", $count));
+        return Query::table('posts')
+            ->where('type', $type)
+            ->orderBy('views', 'DESC')
+            ->limit($count)
+            ->get();
     }
 
     public static function addViews($id)
     {
         $botlist = self::botList();
-        $nom = 0;
+        $isBot = false;
         foreach ($botlist as $bot) {
             if (preg_match("/{$bot}/", $_SERVER['HTTP_USER_AGENT'])) {
-                $nom = 1 + $nom;
-            } else {
-                $nom = 0;
+                $isBot = true;
+                break;
             }
         }
-        if ($nom == 0) {
-            $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = '{$id}' LIMIT 1";
-            $q = Db::query($sql);
+        if (!$isBot) {
+            $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = ? LIMIT 1";
+            Db::query($sql, [$id]);
         }
     }
 
@@ -164,36 +139,21 @@ class Stats
 
     public static function pendingComments()
     {
-        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '2'");
-        Db::result($sql);
-
-        return Db::$num_rows;
+        return Query::table('comments')->where('status', '2')->count();
     }
 
     public static function totalComments()
     {
-        $sql = sprintf('SELECT * FROM `comments`');
-        Db::result($sql);
-
-        return Db::$num_rows;
+        return Query::table('comments')->count();
     }
 
     public static function activeComments()
     {
-        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '1'");
-        Db::result($sql);
-
-        return Db::$num_rows;
+        return Query::table('comments')->where('status', '1')->count();
     }
 
     public static function inactiveComments()
     {
-        $sql = sprintf("SELECT * FROM `comments` WHERE `status` = '0'");
-        Db::result($sql);
-
-        return Db::$num_rows;
+        return Query::table('comments')->where('status', '0')->count();
     }
 }
-
-/* End of file Stats.class.php */
-/* Location: ./inc/lib/Stats.class.php */

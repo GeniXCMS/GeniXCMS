@@ -27,21 +27,15 @@ class AuthorControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post by : ' . $author . $pagingtitle;
-            $posts = Db::result(
-                sprintf(
-                    "SELECT * FROM `posts`
-                        WHERE `author` = '%s' %s
-                        AND `status` = '1'
-                        AND `type` = 'post'
-                        ORDER BY `date`
-                        DESC LIMIT %d, %d",
-                    $author,
-                    $where,
-                    $offset,
-                    $data['max']
-                )
-            );
-            $data['num'] = Db::$num_rows;
+            $q = Query::table('posts')
+                ->where('author', $author)
+                ->where('status', '1')
+                ->where('type', 'post');
+            if ($type != '') {
+                $q->where('type', $type);
+            }
+            $posts = $q->orderBy('date', 'DESC')->limit($data['max'], $offset)->get();
+            $data['num'] = count($posts);
             $data['posts'] = Posts::prepare($posts);
 
             $url = Url::author($author, $type);

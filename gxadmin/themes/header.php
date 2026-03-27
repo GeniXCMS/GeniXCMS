@@ -12,9 +12,13 @@
     <!-- Vendor CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+    <?php $__editorType = Options::v('editor_type') ?: 'summernote'; ?>
+    <?php if ($__editorType === 'summernote'): ?>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.css" rel="stylesheet">
+    <?php endif; ?>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" rel="stylesheet">
     
     <!-- Custom Admin Style -->
     <link href="<?=Site::$url;?>assets/css/gneex-admin.css" rel="stylesheet">
@@ -24,8 +28,23 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <?php if ($__editorType === 'summernote'): ?>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.js"></script>
+    <?php elseif ($__editorType === 'editorjs'): ?>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.30.6/dist/editorjs.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.7/dist/header.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@2.0.9/dist/editorjs-list.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.10.1/dist/image.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@2.7.6/dist/quote.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@2.9.3/dist/code.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@2.7.6/dist/embed.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@2.4.3/dist/table.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.3.0/dist/bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@1.5.1/dist/inline-code.umd.min.js"></script>
+    <?php endif; ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
     <script src="<?=Site::$url;?>assets/js/genixcms.js"></script>
 
     <script>
@@ -83,6 +102,9 @@
         <li class="<?=(isset($_GET['page']) && $_GET['page'] == 'users') ? 'active' : ''; ?>">
             <a href="index.php?page=users"><i class="bi bi-people"></i> <span><?=_("Users");?></span></a>
         </li>
+        <li class="<?=(isset($_GET['page']) && $_GET['page'] == 'permissions') ? 'active' : ''; ?>">
+            <a href="index.php?page=permissions"><i class="bi bi-shield-lock"></i> <span><?=_("ACL Manager");?></span></a>
+        </li>
         <li class="<?=(isset($_GET['page']) && $_GET['page'] == 'menus') ? 'active' : ''; ?>">
             <a href="index.php?page=menus"><i class="bi bi-list-nested"></i> <span><?=_("Menus");?></span></a>
         </li>
@@ -104,14 +126,14 @@
         <li class="nav-item <?=(isset($_GET['page']) && strpos($_GET['page'], 'settings') !== false) ? 'open active' : ''; ?>">
             <a href="#" class="has-tree"><i class="bi bi-gear"></i> <span><?=_("Settings");?></span> <i class="bi bi-chevron-down ms-auto small"></i></a>
             <ul class="nav-tree">
-                <li><a href="index.php?page=settings"><?=_("Global Settings");?></a></li>
+                <li><a href="index.php?page=settings" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings') ? 'text-white fw-bold' : ''; ?>"><?=_("Global Settings");?></a></li>
                 <?php if(User::access(0)): ?>
-                <li><a href="index.php?page=settings-media"><?=_("Media Settings");?></a></li>
-                <li><a href="index.php?page=settings-multilang"><?=_("Multilanguage Settings");?></a></li>
-                <li><a href="index.php?page=settings-permalink"><?=_("Permalink Settings");?></a></li>
+                <li><a href="index.php?page=settings-media" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings-media') ? 'text-white fw-bold' : ''; ?>"><?=_("Media Settings");?></a></li>
+                <li><a href="index.php?page=settings-multilang" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings-multilang') ? 'text-white fw-bold' : ''; ?>"><?=_("Multilanguage Settings");?></a></li>
+                <li><a href="index.php?page=settings-permalink" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings-permalink') ? 'text-white fw-bold' : ''; ?>"><?=_("Permalink Settings");?></a></li>
                 <?php endif; ?>
-                <li><a href="index.php?page=settings-comments"><?=_("Comments Settings");?></a></li>
-                <li><a href="index.php?page=settings-cache"><?=_("Cache Settings");?></a></li>
+                <li><a href="index.php?page=settings-comments" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings-comments') ? 'text-white fw-bold' : ''; ?>"><?=_("Comments Settings");?></a></li>
+                <li><a href="index.php?page=settings-cache" class="<?=(isset($_GET['page']) && $_GET['page'] == 'settings-cache') ? 'text-white fw-bold' : ''; ?>"><?=_("Cache Settings");?></a></li>
             </ul>
         </li>
         <?php endif; ?>

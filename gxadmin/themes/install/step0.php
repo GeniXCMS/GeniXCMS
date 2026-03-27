@@ -20,6 +20,19 @@
 <div class="table-responsive">
     <table class="table table-responsive">
         <tr>
+            <td>Database Driver</td>
+            <td>
+                <div class="form-group">
+                    <select name="dbdriver" class="form-control">
+                        <option value="mysql">MySQL / MariaDB</option>
+                        <option value="pgsql">PostgreSQL</option>
+                        <option value="sqlite">SQLite</option>
+                    </select>
+                    <span class="help-block">Select your database engine.</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <td>Database Name</td>
             <td >
                 <div class="form-group">

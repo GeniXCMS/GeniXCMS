@@ -41,8 +41,7 @@ if (isset($data['thumb']) && $data['thumb'] != '' ) {
 }
 
 $imgExts = explode(".",$thumb);
-rsort($imgExts);
-$imgExt = $imgExts[0];
+$imgExt = strtolower(end($imgExts));
 if($imgExt == 'png') {
     header('Content-Type: image/png');
 }

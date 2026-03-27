@@ -19,11 +19,18 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @copyright 2023-2024 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-class Posts
+class Posts extends Model
 {
+    protected $table = 'posts';
+
     public static $last_id = '';
 
-    public function __construct()
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
+    public static function categories($id, $type = 'post')
     {
     }
 
@@ -42,13 +49,9 @@ class Posts
         if (is_array($vars)) {
             $slug = self::createSlug($vars['title']);
             $vars = array_merge($vars, array('slug' => $slug));
-            //print_r($vars);
-            $ins = array(
-                        'table' => 'posts',
-                        'key' => $vars,
-                    );
-            $post = Db::insert($ins);
-            self::$last_id = Db::$last_id;
+            
+            $post = Query::table('posts')->insert($vars);
+            self::$last_id = Db::$last_id; // Db class still maintains the last_id property
             Hooks::run('post_sqladd_action', $vars, self::$last_id);
 
             if (Pinger::isOn()) {
@@ -65,16 +68,8 @@ class Posts
     public static function update($vars)
     {
         if (is_array($vars)) {
-            //$slug = Typo::slugify($vars['title']);
-            //$vars = array_merge($vars, array('slug' => $slug));
-            //print_r($vars);
             $id = Typo::int($_GET['id']);
-            $ins = array(
-                        'table' => 'posts',
-                        'id' => $id,
-                        'key' => $vars,
-                    );
-            $post = Db::update($ins);
+            $post = Query::table('posts')->where('id', $id)->update($vars);
             Hooks::run('post_sqladd_action', $vars, $id);
 
             if (Pinger::isOn()) {
@@ -91,14 +86,7 @@ class Posts
     public static function publish($id)
     {
         $id = Typo::int($id);
-        $ins = array(
-                    'table' => 'posts',
-                    'id' => $id,
-                    'key' => array(
-                                'status' => '1',
-                            ),
-                );
-        $post = Db::update($ins);
+        $post = Query::table('posts')->where('id', $id)->update(['status' => '1']);
 
         return $post;
     }
@@ -106,14 +94,7 @@ class Posts
     public static function unpublish($id)
     {
         $id = Typo::int($id);
-        $ins = array(
-                    'table' => 'posts',
-                    'id' => $id,
-                    'key' => array(
-                                'status' => '0',
-                            ),
-                );
-        $post = Db::update($ins);
+        $post = Query::table('posts')->where('id', $id)->update(['status' => '0']);
 
         return $post;
     }
@@ -122,21 +103,8 @@ class Posts
     {
         $id = Typo::int($id);
         try {
-            $vars1 = array(
-                        'table' => 'posts',
-                        'where' => array(
-                                    'id' => $id,
-                                    ),
-                        );
-            $d = Db::delete($vars1);
-
-            $vars2 = array(
-                        'table' => 'posts_param',
-                        'where' => array(
-                                    'post_id' => $id,
-                                    ),
-                        );
-            $d = Db::delete($vars2);
+            Query::table('posts')->where('id', $id)->delete();
+            Query::table('posts_param')->where('post_id', $id)->delete();
             Hooks::run('post_sqldel_action', $id);
             if (Comments::postExist($id)) {
                 Comments::deleteWithPost($id);
@@ -194,16 +162,17 @@ class Posts
 
     public static function recent($vars)
     {
-        $catW = isset($vars['cat']) ? " AND `cat` = '".Typo::int($vars['cat'])."'" : '';
         $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
         $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
-        $sql = "SELECT * FROM `posts`
-                WHERE `type` = '{$type}' {$catW} AND `status` = '1'
-                ORDER BY `date` DESC LIMIT {$num}";
-        $posts = Db::result($sql);
+        
+        $q = Query::table('posts')->where('type', $type)->where('status', '1');
+        if (isset($vars['cat'])) {
+            $q->where('cat', Typo::int($vars['cat']));
+        }
+        $posts = $q->orderBy('date', 'DESC')->limit($num)->get();
 
-        if (isset($posts['error'])) {
-            $posts['error'] = _('Error: No Posts found.');
+        if (empty($posts)) {
+            $posts = ['error' => _('Error: No Posts found.')];
         } else {
             $posts = self::prepare($posts);
         }
@@ -213,14 +182,12 @@ class Posts
 
     public static function title($id)
     {
-        $sql = sprintf("SELECT `title` FROM `posts` WHERE `id` = '%d'", $id);
         try {
-            $r = Db::result($sql);
-            if (isset($r['error'])) {
-                $title['error'] = $r['error'];
-                //echo $title['error'];
+            $r = Query::table('posts')->select('title')->where('id', Typo::int($id))->first();
+            if (!$r) {
+                $title['error'] = _('Data not found');
             } else {
-                $title = $r[0]->title;
+                $title = $r->title;
             }
         } catch (Exception $e) {
             $title = $e->getMessage();
@@ -244,96 +211,64 @@ class Posts
     public static function dropdown($vars)
     {
         if (is_array($vars)) {
-            //print_r($vars);
             $name = $vars['name'];
-            $where = "WHERE `status` = '1' ";
+            $q = Query::table('posts')->where('status', '1');
             if (isset($vars['type'])) {
-                $type = Typo::cleanX($vars['type']);
-                $where .= " AND `type` = '{$type}' ";
-            } else {
-                $where .= ' ';
+                $q->where('type', Typo::cleanX($vars['type']));
             }
-
-            $order_by = 'ORDER BY ';
-            if (isset($vars['order_by'])) {
-                $orderBy = Typo::cleanX($vars['order_by']);
-                $order_by .= " `{$orderBy}` ";
-            } else {
-                $order_by .= ' `name` ';
-            }
-            if (isset($vars['sort'])) {
-                $sort = " ".Typo::cleanX($vars['sort']). " ";
-            } else {
-                $sort = 'ASC';
-            }
-        }
-        $cat = Db::result("SELECT * FROM `posts` {$where} {$order_by} {$sort}");
-        $num = Db::$num_rows;
-        $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
-        if ($num > 0) {
-            foreach ($cat as $c) {
-                // if ($c->parent == '') {
-                if (isset($vars['selected']) && $c->id == $vars['selected']) {
-                    $sel = 'SELECTED';
-                } else {
-                    $sel = '';
+            $orderBy = isset($vars['order_by']) ? Typo::cleanX($vars['order_by']) : 'name';
+            $sort = isset($vars['sort']) ? Typo::cleanX($vars['sort']) : 'ASC';
+            $cat = $q->orderBy($orderBy, $sort)->get();
+            
+            $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
+            if (!empty($cat) && is_array($cat)) {
+                foreach ($cat as $c) {
+                    if (isset($vars['selected']) && $c->id == $vars['selected']) {
+                        $sel = 'SELECTED';
+                    } else {
+                        $sel = '';
+                    }
+                    $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->title}</option>";
                 }
-                $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->title}</option>";
-                    // foreach ($cat as $c2) {
-                    //
-                    //     if ($c2->parent == $c->id) {
-                    //         if (isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                    //         $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">&nbsp;&nbsp;&nbsp;{$c2->name}</option>";
-                    //     }
-                    // }
-                // }
             }
-        }
-        $drop .= '</select>';
+            $drop .= '</select>';
 
-        return $drop;
+            return $drop;
+        }
+
+        return '';
     }
 
     public static function addParam($param, $value, $post_id)
     {
-        $sql = array(
-                'table' => 'posts_param',
-                'key' => array(
-                        'post_id' => Typo::int($post_id),
-                        'param' => Typo::cleanX($param),
-                        'value' => Typo::cleanX($value),
-                    ),
-            );
-        $q = Db::insert($sql);
-        if ($q) {
-            return true;
-        } else {
-            return false;
-        }
+        $q = Query::table('posts_param')->insert([
+            'post_id' => Typo::int($post_id),
+            'param' => Typo::cleanX($param),
+            'value' => Typo::cleanX($value)
+        ]);
+        
+        return $q ? true : false;
     }
 
     public static function editParam($param, $value, $post_id)
     {
-        $post_id = Typo::int($post_id);
-        $param = Typo::cleanX($param);
-        $value = Typo::cleanX($value);
-        $sql = "UPDATE `posts_param` SET `value` = '{$value}' WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' ";
-        $q = Db::query($sql);
-        if ($q) {
-            return true;
-        } else {
-            return false;
-        }
+        $q = Query::table('posts_param')
+            ->where('post_id', Typo::int($post_id))
+            ->where('param', Typo::cleanX($param))
+            ->update(['value' => Typo::cleanX($value)]);
+            
+        return $q ? true : false;
     }
 
     public static function getParam($param, $post_id)
     {
-        $post_id = Typo::int($post_id);
-        $param = Typo::cleanX($param);
-        $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return Typo::Xclean($q[0]->value);
+        $q = Query::table('posts_param')
+            ->where('post_id', Typo::int($post_id))
+            ->where('param', Typo::cleanX($param))
+            ->first();
+            
+        if ($q) {
+            return Typo::Xclean($q->value);
         } else {
             return '';
         }
@@ -341,28 +276,23 @@ class Posts
 
     public static function delParam($param, $post_id)
     {
-        $post_id = Typo::int($post_id);
-        $param = Typo::cleanX($param);
-        $sql = "DELETE FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
-        $q = Db::query($sql);
-        if ($q) {
-            return true;
-        } else {
-            return false;
-        }
+        $q = Query::table('posts_param')
+            ->where('post_id', Typo::int($post_id))
+            ->where('param', Typo::cleanX($param))
+            ->delete();
+            
+        return $q ? true : false;
     }
 
     public static function existParam($param, $post_id)
     {
-        $post_id = Typo::int($post_id);
-        $param = Typo::cleanX($param);
-        $sql = "SELECT `id` FROM `posts_param` WHERE `post_id` = '{$post_id}' AND `param` = '{$param}' LIMIT 1";
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $q = Query::table('posts_param')
+            ->select('id')
+            ->where('post_id', Typo::int($post_id))
+            ->where('param', Typo::cleanX($param))
+            ->first();
+            
+        return $q ? true : false;
     }
 
     public static function prepare($post)
@@ -491,27 +421,18 @@ class Posts
             $where_tag = '';
         }
         $post_type = self::type($id);
-        $post = Db::result(
-            sprintf(
-                "SELECT DISTINCT B.`post_id`, A.`id`, A.`date`, A.`title`, A.`content`,
-                        A.`author`, A.`cat`, A.`type`
-                        FROM `posts` AS A
-                        JOIN `posts_param` AS B
-                        ON A.`id` = B.`post_id`
-                        WHERE (A.`cat` = '%d' %s)
-                        AND A.`id` != '%d'
-                        AND A.`status` = '1'
-                        AND A.`type` = '%s'
-                        ORDER BY
-                        RAND() LIMIT %d, %d",
-                $cat,
-                $where_tag,
-                $id,
-                $post_type,
-                0,
-                $num
-            )
-        );
+        
+        $post = Query::table('posts')
+            ->select("DISTINCT B.`post_id`, `posts`.`id`, `posts`.`date`, `posts`.`title`, `posts`.`content`, `posts`.`author`, `posts`.`cat`, `posts`.`type`")
+            ->join('posts_param AS B', '`posts`.`id`', '=', 'B.`post_id`')
+            ->whereRaw("(`posts`.`cat` = ? $where_tag) AND `posts`.`id` != ? AND `posts`.`status` = '1' AND `posts`.`type` = ?", [$cat, $id, $post_type])
+            ->orderByRaw('RAND()')
+            ->limit($num, 0)
+            ->get();
+            
+        if (empty($post)) {
+            $post = ['error' => _('No Related Post(s)')];
+        }
         if (isset($post['error'])) {
             $related = '<div class="col-sm-12">'._('No Related Post(s)').'</div>';
         } else {
@@ -519,6 +440,7 @@ class Posts
             if ($mode == 'list') {
                 $related .= '<ul class="list-group list-group-flush related">';
                 foreach ($post as $p) {
+                    if (!is_object($p)) continue;
                     if ($p->id != $id) {
                         $related .= '<li class="list-group-item"><a href="'.Url::post($p->id)."\">$p->title</a></li>";
                     } else {
@@ -529,6 +451,7 @@ class Posts
             } elseif ($mode == 'box') {
                 $related .= '<div class="row related-box">';
                 foreach ($post as $p) {
+                    if (!is_object($p)) continue;
                     if ($p->id != $id) {
                         $title = (strlen($p->title) > $limit) ? substr($p->title, 0, $limit-2).'...' : $p->title;
                         $post_image = Posts::getPostImage($p->id);
@@ -558,10 +481,9 @@ class Posts
 
     public static function type($post_id)
     {
-        $sql = "SELECT `type` FROM `posts` WHERE `id` = '{$post_id}' LIMIT 1";
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return $q[0]->type;
+        $q = Query::table('posts')->select('type')->where('id', Typo::cleanX($post_id))->first();
+        if ($q) {
+            return $q->type;
         } else {
             return '';
         }
@@ -574,10 +496,9 @@ class Posts
      */
     public static function idSlug($slug)
     {
-        $sql = "SELECT `id` FROM `posts` WHERE `slug` = '{$slug}' LIMIT 1";
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return $q[0]->id;
+        $q = Query::table('posts')->select('id')->where('slug', Typo::cleanX($slug))->first();
+        if ($q) {
+            return $q->id;
         } else {
             return '';
         }
@@ -590,10 +511,9 @@ class Posts
      */
     public static function getPostContent($id)
     {
-        $sql = sprintf("SELECT `content` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            $r = Typo::Xclean($q[0]->content);
+        $q = Query::table('posts')->select('content')->where('id', Typo::int($id))->orderBy('date', 'DESC')->first();
+        if ($q) {
+            $r = Typo::Xclean($q->content);
         } else {
             $r['error'] = _('Error: No Post to Show');
         }
@@ -603,10 +523,9 @@ class Posts
 
     public static function author($id)
     {
-        $sql = sprintf("SELECT `author` FROM `posts` WHERE `id` = '%d' LIMIT 1", $id);
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            $r = $q[0]->author;
+        $q = Query::table('posts')->select('author')->where('id', Typo::int($id))->first();
+        if ($q) {
+            $r = $q->author;
         } else {
             $r['error'] = _('Error: No Post to Show');
         }
@@ -616,10 +535,9 @@ class Posts
 
     public static function cat($id)
     {
-        $sql = sprintf("SELECT `cat` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            $r = $q[0]->cat;
+        $q = Query::table('posts')->select('cat')->where('id', Typo::int($id))->orderBy('date', 'DESC')->first();
+        if ($q) {
+            $r = $q->cat;
         } else {
             $r['error'] = _('Error: No Post to Show');
         }
@@ -629,10 +547,9 @@ class Posts
 
     public static function date($id)
     {
-        $sql = sprintf("SELECT `date` FROM `posts` WHERE `id` = '%d' ORDER BY `date` DESC LIMIT 1", $id);
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            $r = $q[0]->date;
+        $q = Query::table('posts')->select('date')->where('id', Typo::int($id))->orderBy('date', 'DESC')->first();
+        if ($q) {
+            $r = $q->date;
         } else {
             $r['error'] = _('Error: No Post to Show');
         }
@@ -648,9 +565,14 @@ class Posts
      */
     public static function getPostByCat($id, $max)
     {
-        $sql = sprintf("SELECT * FROM `posts` WHERE `cat` = '%d' AND `status` = '1' ORDER BY `date` DESC LIMIT 0, %d", $id, $max);
-        $q = Db::result($sql);
-        if (Db::$num_rows > 0) {
+        $q = Query::table('posts')
+            ->where('cat', Typo::int($id))
+            ->where('status', '1')
+            ->orderBy('date', 'DESC')
+            ->limit($max, 0)
+            ->get();
+            
+        if (!empty($q)) {
             $r = $q;
         } else {
             $r['error'] = _('Error: No Post to Show');
@@ -710,51 +632,40 @@ class Posts
      */
     public static function fetch($vars)
     {
-
-        $where = '1 ';
+        $q = Query::table('posts');
         if (isset($vars['id'])) {
-            $where .= " AND `id` = '{$vars['id']}' ";
+            $q->where('id', Typo::int($vars['id']));
         }
-//        if (isset($vars['slug']) && $vars['slug'] != '') {
-//            $where .= "OR `slug` = '{$vars['slug']}' ) ";
-//        } else {
-//            $where .= ") ";
-//        }
         if (isset($vars['type'])) {
-            $where .= " AND `type` = '{$vars['type']}' ";
+            $q->where('type', Typo::cleanX($vars['type']));
         }
         if (isset($vars['status'])) {
-            $where .= " AND `status` = '{$vars['status']}' ";
-        }
-        if (isset($vars['where']) && $vars['where'] != '') {
-            $where .= $vars['where'];
+            $q->where('status', Typo::cleanX($vars['status']));
         }
 
-        $sql = "SELECT * FROM `posts` WHERE {$where}";
-        $q = Db::result($sql);
-        if (!isset($q['error'])){
-            $arrA = array();
-            foreach ($q[0] as $a => $b) {
+        $post = $q->first();
+        if ($post) {
+            $arrA = [];
+            foreach ($post as $a => $b) {
                 $arrA []= [ $a => $b ];
             }
             // get params
-            $sql = "SELECT * FROM `posts_param` WHERE `post_id` = '{$vars['id']}'";
-            $r = Db::result($sql);
-            if (!isset($r['error'])){
-                $arr = array();
-                foreach ($r as $k => $v) {
+            $r = Query::table('posts_param')->where('post_id', Typo::int($vars['id']))->get();
+            if (!empty($r)) {
+                $arr = [];
+                foreach ($r as $v) {
                     $arr[] = [ $v->param => $v->value ];
                 }
 
                 $arrM = array_merge($arrA, $arr);
-                $p = array();
-                foreach ($arrM as $i => $l) {
+                $p = [];
+                foreach ($arrM as $l) {
                     $p = array_merge($l, $p);
                 }
                 $res[0] = (object)$p;
             } else {
-                $p = array();
-                foreach ($arrA as $i => $l) {
+                $p = [];
+                foreach ($arrA as $l) {
                     $p = array_merge($l, $p);
                 }
                 $res[0] = (object)$p;
@@ -788,25 +699,22 @@ class Posts
     public static function slugExist($slug)
     {
         $slug = Typo::cleanX($slug);
-        $sql = "SELECT `id` FROM `posts` WHERE `slug` LIKE '%{$slug}%' ";
-        Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $q = Query::table('posts')->select('id')->where('slug', 'LIKE', "%{$slug}%")->first();
+        
+        return $q ? true : false;
     }
 
     public static function getLastSlug($slug)
     {
-        $sql = "SELECT `slug` FROM `posts` WHERE `slug` LIKE '%{$slug}%' ORDER BY `id` DESC LIMIT 1";
-        $q = Db::result($sql);
+        $slug = Typo::cleanX($slug);
+        $q = Query::table('posts')->select('slug')->where('slug', 'LIKE', "%{$slug}%")->orderBy('id', 'DESC')->first();
 
-        $slnum = str_replace($slug, '', $q[0]->slug);
-        $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): 0;
-
-        return $slnum;
-
+        if ($q) {
+            $slnum = str_replace($slug, '', $q->slug);
+            $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): 0;
+            return $slnum;
+        }
+        return 0;
     }
 }
 

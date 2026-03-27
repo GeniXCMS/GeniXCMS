@@ -6,9 +6,16 @@ abstract class BaseControl
 {
     protected $latte;
     protected $data = [];
+    protected $db;
+    protected $user;
+    protected $system;
 
-    public function __construct()
+    public function __construct($db = null, $user = null, $system = null)
     {
+        $this->db = $db ?? Container::get('db');
+        $this->user = $user ?? Container::get('user');
+        $this->system = $system ?? Container::get('system');
+        
         $this->initLatte();
         $this->initCommonData();
     }

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact - The Quiet Editor</title>
+<!-- Fonts: Manrope for Sans, Newsreader for Serif -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#c7eade",
+              "on-primary-fixed-variant": "#426258",
+              "surface-container": "#ebeef3",
+              "tertiary": "#536447",
+              "surface-variant": "#dde3ea",
+              "on-error-container": "#752121",
+              "on-secondary-fixed": "#3d403e",
+              "secondary-fixed-dim": "#d2d5d2",
+              "on-primary-container": "#39584e",
+              "on-secondary": "#f7f9f7",
+              "primary": "#45655b",
+              "inverse-on-surface": "#9c9d9f",
+              "tertiary-dim": "#47583c",
+              "error-dim": "#4e0309",
+              "secondary": "#5c605e",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#3e4e33",
+              "on-secondary-fixed-variant": "#595c5a",
+              "on-primary-fixed": "#26453c",
+              "secondary-dim": "#505452",
+              "surface-container-highest": "#dde3ea",
+              "surface-dim": "#d3dbe3",
+              "surface-bright": "#f9f9fc",
+              "on-secondary-container": "#4f5251",
+              "on-tertiary-container": "#506144",
+              "on-surface": "#2d3339",
+              "secondary-fixed": "#e1e3e0",
+              "on-background": "#2d3339",
+              "error": "#9f403d",
+              "surface-tint": "#45655b",
+              "tertiary-container": "#e6fad5",
+              "primary-fixed": "#c7eade",
+              "surface": "#f9f9fc",
+              "surface-container-high": "#e4e8ee",
+              "primary-fixed-dim": "#b9dcd0",
+              "inverse-primary": "#d3f6e9",
+              "outline-variant": "#acb3b9",
+              "tertiary-fixed-dim": "#d8ecc7",
+              "primary-dim": "#39584f",
+              "on-surface-variant": "#596066",
+              "outline": "#757b82",
+              "error-container": "#fe8983",
+              "on-tertiary-fixed-variant": "#5a6b4e",
+              "secondary-container": "#e1e3e0",
+              "background": "#f9f9fc",
+              "on-tertiary": "#ecffdb",
+              "inverse-surface": "#0c0e10",
+              "on-error": "#fff7f6",
+              "tertiary-fixed": "#e6fad5",
+              "on-primary": "#defff3",
+              "surface-container-low": "#f2f3f7"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Newsreader"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Newsreader', serif;
+            background-color: #f9f9fc;
+            color: #2d3339;
+        }
+        h1, h2, h3, nav, button, label {
+            font-family: 'Manrope', sans-serif;
+        }
+        .editorial-shadow {
+            box-shadow: 0px 24px 48px rgba(45, 51, 57, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-100/10 dark:border-zinc-800/10">
+<div class="flex justify-between items-center h-20 px-8 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-emerald-900 dark:text-emerald-50 font-['Manrope']">
+                The Quiet Editor
+            </div>
+<nav class="hidden md:flex items-center space-x-10 font-['Manrope'] tracking-tight">
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors" href="#">Home</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors" href="#">Categories</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors" href="#">About</a>
+<a class="text-emerald-900 dark:text-emerald-400 font-semibold border-b-2 border-emerald-900 dark:border-emerald-400 pb-1" href="#">Contact</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-emerald-900 dark:text-emerald-500 hover:opacity-80 transition-opacity duration-300">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="md:hidden p-2 text-emerald-900">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="pt-40 pb-24 px-6">
+<div class="max-w-3xl mx-auto">
+<!-- Header Section -->
+<section class="text-center mb-20">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-primary font-bold mb-4 block">Reach Out</span>
+<h1 class="font-headline text-5xl md:text-6xl font-extrabold tracking-tighter text-on-surface mb-6">Get in Touch</h1>
+<p class="font-body text-xl text-on-surface-variant leading-relaxed italic max-w-xl mx-auto">
+                    Whether it's a reflection on an article or a proposal for collaboration, your thoughts are the pulse of this publication.
+                </p>
+</section>
+<!-- Contact Form Container -->
+<div class="bg-surface-container-lowest rounded-xl editorial-shadow p-8 md:p-16 relative overflow-hidden">
+<!-- Subtle background accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+<form class="space-y-8 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Name Field -->
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline font-bold" for="name">Name</label>
+<input class="w-full bg-surface-container-low border-none ring-1 ring-outline-variant/15 focus:ring-primary focus:ring-2 transition-all duration-300 p-4 font-body text-lg rounded-DEFAULT outline-none placeholder:text-outline/40" id="name" placeholder="Elias Thorne" type="text"/>
+</div>
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline font-bold" for="email">Email</label>
+<input class="w-full bg-surface-container-low border-none ring-1 ring-outline-variant/15 focus:ring-primary focus:ring-2 transition-all duration-300 p-4 font-body text-lg rounded-DEFAULT outline-none placeholder:text-outline/40" id="email" placeholder="elias@example.com" type="email"/>
+</div>
+</div>
+<!-- Message Field -->
+<div class="space-y-2">
+<label class="font-label text-xs uppercase tracking-widest text-outline font-bold" for="message">Message</label>
+<textarea class="w-full bg-surface-container-low border-none ring-1 ring-outline-variant/15 focus:ring-primary focus:ring-2 transition-all duration-300 p-4 font-body text-lg rounded-DEFAULT outline-none placeholder:text-outline/40 resize-none" id="message" placeholder="Share your thoughts with us..." rows="6"></textarea>
+</div>
+<!-- Submit Button -->
+<div class="pt-4 flex justify-center md:justify-end">
+<button class="group relative px-10 py-4 bg-primary text-on-primary font-headline font-bold rounded-lg overflow-hidden transition-all duration-300 hover:translate-y-[-2px] active:scale-95 shadow-lg shadow-primary/20" type="submit">
+<span class="relative z-10 flex items-center">
+                                Send Message
+                                <span class="material-symbols-outlined ml-2 text-sm group-hover:translate-x-1 transition-transform">send</span>
+</span>
+<div class="absolute inset-0 bg-primary-dim opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</div>
+</form>
+</div>
+<!-- Side Info: Alternative Methods -->
+<div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-12 text-center border-t border-outline-variant/10 pt-16">
+<div>
+<span class="material-symbols-outlined text-primary mb-4" data-icon="alternate_email">alternate_email</span>
+<h3 class="font-headline font-bold text-sm uppercase tracking-widest mb-2">Editorial</h3>
+<p class="font-body text-on-surface-variant">hello@quieteditor.com</p>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-4" data-icon="location_on">location_on</span>
+<h3 class="font-headline font-bold text-sm uppercase tracking-widest mb-2">Studio</h3>
+<p class="font-body text-on-surface-variant">42 Serenity Way, London</p>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-4" data-icon="chat_bubble">chat_bubble</span>
+<h3 class="font-headline font-bold text-sm uppercase tracking-widest mb-2">Connect</h3>
+<p class="font-body text-on-surface-variant">@thequieteditor</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full pt-20 pb-10 bg-zinc-100 dark:bg-zinc-900 tonal transition from surface to surface-container">
+<div class="flex flex-col items-center space-y-8 px-6 max-w-7xl mx-auto text-center">
+<div class="font-['Manrope'] font-black uppercase tracking-widest text-sm text-emerald-900 dark:text-emerald-500">
+                The Quiet Editor
+            </div>
+<nav class="flex flex-wrap justify-center gap-x-8 gap-y-4 font-['Newsreader'] italic text-lg">
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors duration-300" href="#">Newsletter</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors duration-300" href="#">Privacy Policy</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors duration-300" href="#">Terms of Service</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors duration-300" href="#">RSS Feed</a>
+</nav>
+<p class="text-zinc-600 dark:text-zinc-400 text-sm font-['Newsreader'] italic">
+                © 2024 The Quiet Editor. Built for the thoughtful reader.
+            </p>
+</div>
+</footer>
+</body></html>

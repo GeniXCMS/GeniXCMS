@@ -61,20 +61,17 @@ class Menus
     {
         $parent = Typo::cleanX($parent);
         $menuid = Typo::cleanX($menuid);
-        if (isset($menuid)) {
-            $where = " AND `menuid` = '{$menuid}'";
-        } else {
-            $where = '';
+        $q = Query::table('menus');
+        if (isset($menuid) && $menuid != '') {
+            $q->where('menuid', $menuid);
         }
         if (isset($parent) && $parent != '') {
-            $parent = " `parent` = '{$parent}'";
+            $q->where('parent', $parent);
         } else {
-            $parent = '1';
+            $q->where('parent', '1');
         }
-        $sql = sprintf('SELECT * FROM `menus` WHERE %s %s', $parent, $where);
-        $menu = Db::result($sql);
-
-        return $menu;
+        
+        return $q->get();
     }
 
     public static function getParent($id)
@@ -94,14 +91,14 @@ class Menus
     public static function getMenu($menuid, $class = '', $bsnav = false)
     {
         $menus = self::getMenuRaw($menuid);
-        $n = Db::$num_rows;
+        $n = count($menus);
         if ($n > 0) {
             $menu = "<ul class=\"menu-{$menuid} {$class}\">";
             foreach ($menus as $m) {
                 
                 if ($m->parent == '0') {
                     $parent = self::isHadParent($m->id, $menuid);
-                    $n = Db::$num_rows;
+                    $n = count($parent);
                     if ($n > 0 && $bsnav) {
                         $class = 'nav-item dropdown';
                         $aclass = 'nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"';
@@ -121,7 +118,7 @@ class Menus
                         foreach ($menus as $m2) {
                             if ($m2->parent == $m->id) {
                                 $parent = self::isHadParent($m2->id, $menuid);
-                                $n = Db::$num_rows;
+                                $n = count($parent);
                                 if ($n > 0 && $bsnav) {
                                     $class = 'dropdown-submenu dropdown-item dropdown-toggle';
                                     $aclass = '" data-bs-toggle="dropdown" aria-expanded="false"';
@@ -140,7 +137,7 @@ class Menus
                                     foreach ($menus as $m3) {
                                         if ($m3->parent == $m2->id) {
                                             $parent = self::isHadParent($m3->id, $menuid);
-                                            $n = Db::$num_rows;
+                                            $n = count($parent);
                                             if ($n > 0 && $bsnav) {
                                                 $class = '';
                                                 $aclass = 'dropdown-item';
@@ -159,7 +156,7 @@ class Menus
                                                 foreach ($menus as $m4) {
                                                     if ($m4->parent == $m3->id) {
                                                         $parent = self::isHadParent($m4->id, $menuid);
-                                                        $n = Db::$num_rows;
+                                                        $n = count($parent);
                                                         if ($n > 0 && $bsnav) {
                                                             $class = 'class="dropdown-submenu"';
                                                             $aclass = 'dropdown-item';
@@ -207,7 +204,7 @@ class Menus
     public static function getMenuAdmin($menuid, $class = '')
     {
         $menus = self::getMenuRaw($menuid);
-        $n = Db::$num_rows;
+        $n = count($menus);
         if ($n > 0) {
             $menu = "<form action=\"\" method=\"post\"><ul class=\"menu-{$menuid} {$class} \">";
             foreach ($menus as $m) {
@@ -233,7 +230,7 @@ class Menus
                     $parent = $m->id;
                     //echo $parent;
                     $parent = self::isHadParent($m->id, $menuid);
-                    $n = Db::$num_rows;
+                    $n = count($parent);
                     if ($n > 0) {
                         $menu .= "<ul class=\"submenu {$class}\">";
                         foreach ($menus as $m2) {
@@ -257,7 +254,7 @@ class Menus
                                         
                                                 ";
                                 $parent = self::isHadParent($m2->id, $menuid);
-                                $n = Db::$num_rows;
+                                $n = count($parent);
                                 if ($n > 0) {
                                     $menu .= "<ul class=\"submenu {$class}\">";
                                     foreach ($menus as $m3) {
@@ -278,7 +275,7 @@ class Menus
                                                         </div>
                                                                 ";
                                             $parent = self::isHadParent($m3->id, $menuid);
-                                            $n = Db::$num_rows;
+                                            $n = count($parent);
                                             if ($n > 0) {
                                                 $menu .= "<ul class=\"submenu {$class}\">";
                                                 foreach ($menus as $m4) {
@@ -337,9 +334,7 @@ class Menus
     public static function getMenuRaw($menuid)
     {
         $menuid = Typo::cleanX($menuid);
-        $sql = sprintf("SELECT * FROM `menus` WHERE `menuid` = '%s' ORDER BY `order` ASC", $menuid);
-        $menus = Db::result($sql);
-        $n = Db::$num_rows;
+        $menus = Query::table('menus')->where('menuid', $menuid)->orderBy('order', 'ASC')->get();
 
         return $menus;
     }
@@ -347,12 +342,11 @@ class Menus
     public static function getId($id = '')
     {
         if (isset($id)) {
-            Typo::int($id);
-            $sql = sprintf("SELECT * FROM `menus` WHERE `id` = '%d'", $id);
-            $menus = Db::result($sql);
-            $n = Db::$num_rows;
+            $id = Typo::int($id);
+            $menus = Query::table('menus')->where('id', $id)->first();
+            $menus = ($menus) ? [$menus] : [];
         } else {
-            $menus = '';
+            $menus = [];
         }
 
         return $menus;
@@ -361,60 +355,29 @@ class Menus
     public static function updateMenuOrder($vars)
     {
         foreach ($vars as $k => $v) {
-            
-            $v['order'] = Typo::int($v['order']);
-            $sql = array(
-                        'table' => 'menus',
-                        'id' => Typo::int($k),
-                        'key' => $v,
-                    );
-            Db::update($sql);
+            $order = Typo::int($v['order']);
+            Query::table('menus')->where('id', Typo::int($k))->update(['order' => $order]);
         }
     }
 
-    /*
-    *    $vars = array(
-    *                    'parent' => $_POST['parent'],
-    *                    'menuid' => $_POST['id'],
-    *                    'name' => $_POST['name'],
-    *                    'class' => $_POST['class'],
-    *                    'type' => $_POST['type'],
-    *                    'value' => $_POST['value']
-    *                );
-    */
     public static function insert($vars)
     {
         if (is_array($vars)) {
-            $sql = array(
-                        'table' => 'menus',
-                        'key' => $vars,
-                    );
-            $menu = Db::insert($sql);
+            Query::table('menus')->insert($vars);
         }
     }
 
     public static function update($vars)
     {
         if (is_array($vars)) {
-            $sql = array(
-                        'table' => 'menus',
-                        'id' => $vars['id'],
-                        'key' => $vars['key']
-                    );
-            $menu = Db::update($sql);
+            Query::table('menus')->where('id', $vars['id'])->update($vars['key']);
         }
     }
 
     public static function delete($id)
     {
         $id = Typo::int($id);
-        $sql = array(
-                    'table' => 'menus',
-                    'where' => array(
-                                    'id' => $id
-                                ),
-                );
-        $menu = Db::delete($sql);
+        Query::table('menus')->where('id', $id)->delete();
     }
 }
 

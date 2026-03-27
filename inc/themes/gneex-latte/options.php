@@ -10,7 +10,8 @@
  * All rendering is delegated to GxOptionsBuilder.
  */
 
-require_once __DIR__ . '/GxOptionsBuilder.php';
+// OptionsBuilder is now default in core.
+
 
 // ─────────────────────────────────────────────────────────
 // 1. INSTALL DB (first run)
@@ -154,24 +155,13 @@ if (Gneex::checkDB()) {
 
     $schema = [
 
-        // ── QUICK PRESETS ──────────────────────────────────────────────────
-        [
-            'id'       => 'tab-presets',
-            'label'    => 'Quick Presets',
-            'icon'     => 'fa fa-magic',
-            'group'    => 'General',
-            'active'   => true,
-            'type'     => 'presets',
-            'title'    => '🎨 Quick Style Presets',
-            'subtitle' => 'Apply a complete color scheme instantly. All color fields will be updated.',
-        ],
-
         // ── HEADER & NAVIGATION ────────────────────────────────────────────
         [
             'id'       => 'tab-header',
             'label'    => 'Header & Nav',
             'icon'     => 'fa fa-bars',
             'group'    => 'General',
+            'active'   => true,
             'title'    => 'Header & Navigation',
             'subtitle' => 'Configure the site header, logo sizing, and breadcrumbs.',
             'cards'    => [
@@ -224,6 +214,14 @@ if (Gneex::checkDB()) {
                         ['type'=>'text',     'name'=>'hero_btn_primary_link', 'label'=>'Primary Button Link', 'placeholder'=>'e.g. #blog or https://...'],
                         ['type'=>'text',     'name'=>'hero_btn_secondary_text', 'label'=>'Secondary Button Text', 'placeholder'=>'e.g. Our Story'],
                         ['type'=>'text',     'name'=>'hero_btn_secondary_link', 'label'=>'Secondary Button Link', 'placeholder'=>'e.g. /about or https://...'],
+                    ],
+                ],
+                [
+                    'title'  => 'Hero Typography',
+                    'subtitle' => 'Customize the fonts specifically for the hero banner sections.',
+                    'fields' => [
+                        ['type'=>'typo_row', 'prefix'=>'typo_hero_title', 'label'=>'Hero Title Typography'],
+                        ['type'=>'typo_row', 'prefix'=>'typo_hero_text',  'label'=>'Hero Subtitle/Description Typography'],
                     ],
                 ],
                 [
@@ -536,7 +534,7 @@ if (Gneex::checkDB()) {
         'brandColor' => '#10b981',         // custom brand color (emerald green)
         'saveKey'    => 'gneex_options_update',
     ];
-    $builder = new GxOptionsBuilder($o, $presets, $panel_palettes, $config);
+    $builder = new OptionsBuilder($o, $presets, $panel_palettes, $config);
     $builder->render($schema);
 
 } else {

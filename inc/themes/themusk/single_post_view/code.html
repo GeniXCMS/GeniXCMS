@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Art of Simplicity - The Quiet Editor</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#c7eade",
+              "on-primary-fixed-variant": "#426258",
+              "surface-container": "#ebeef3",
+              "tertiary": "#536447",
+              "surface-variant": "#dde3ea",
+              "on-error-container": "#752121",
+              "on-secondary-fixed": "#3d403e",
+              "secondary-fixed-dim": "#d2d5d2",
+              "on-primary-container": "#39584e",
+              "on-secondary": "#f7f9f7",
+              "primary": "#45655b",
+              "inverse-on-surface": "#9c9d9f",
+              "tertiary-dim": "#47583c",
+              "error-dim": "#4e0309",
+              "secondary": "#5c605e",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#3e4e33",
+              "on-secondary-fixed-variant": "#595c5a",
+              "on-primary-fixed": "#26453c",
+              "secondary-dim": "#505452",
+              "surface-container-highest": "#dde3ea",
+              "surface-dim": "#d3dbe3",
+              "surface-bright": "#f9f9fc",
+              "on-secondary-container": "#4f5251",
+              "on-tertiary-container": "#506144",
+              "on-surface": "#2d3339",
+              "secondary-fixed": "#e1e3e0",
+              "on-background": "#2d3339",
+              "error": "#9f403d",
+              "surface-tint": "#45655b",
+              "tertiary-container": "#e6fad5",
+              "primary-fixed": "#c7eade",
+              "surface": "#f9f9fc",
+              "surface-container-high": "#e4e8ee",
+              "primary-fixed-dim": "#b9dcd0",
+              "inverse-primary": "#d3f6e9",
+              "outline-variant": "#acb3b9",
+              "tertiary-fixed-dim": "#d8ecc7",
+              "primary-dim": "#39584f",
+              "on-surface-variant": "#596066",
+              "outline": "#757b82",
+              "error-container": "#fe8983",
+              "on-tertiary-fixed-variant": "#5a6b4e",
+              "secondary-container": "#e1e3e0",
+              "background": "#f9f9fc",
+              "on-tertiary": "#ecffdb",
+              "inverse-surface": "#0c0e10",
+              "on-error": "#fff7f6",
+              "tertiary-fixed": "#e6fad5",
+              "on-primary": "#defff3",
+              "surface-container-low": "#f2f3f7"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Newsreader"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-100/10 dark:border-zinc-800/10">
+<div class="flex justify-between items-center h-20 px-8 max-w-7xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-emerald-900 dark:text-emerald-50 font-['Manrope']">The Quiet Editor</div>
+<!-- Navigation Links (Web) -->
+<div class="hidden md:flex items-center space-x-10">
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors font-['Manrope'] tracking-tight" href="#">Home</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors font-['Manrope'] tracking-tight" href="#">Categories</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors font-['Manrope'] tracking-tight" href="#">About</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors font-['Manrope'] tracking-tight" href="#">Contact</a>
+</div>
+<!-- Search Action -->
+<div class="flex items-center">
+<button class="p-2 text-emerald-900 dark:text-emerald-500 hover:opacity-80 transition-opacity duration-300">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<header class="w-full max-w-7xl mx-auto px-6 pt-16 md:pt-24 mb-16 text-center">
+<div class="mb-6">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-primary font-bold">Editorial • Design Philosophy</span>
+</div>
+<h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-on-surface mb-8 leading-[1.1]">The Art of Simplicity</h1>
+<div class="flex items-center justify-center space-x-4 mb-12">
+<div class="flex flex-col items-center">
+<span class="font-headline text-sm font-bold text-on-surface">By Julian Vane</span>
+<span class="font-body italic text-sm text-on-surface-variant">March 14, 2024 — 8 min read</span>
+</div>
+</div>
+<div class="relative w-full aspect-[21/9] overflow-hidden rounded-xl bg-surface-container shadow-2xl shadow-on-surface/5">
+<img alt="Minimalist desk setup" class="w-full h-full object-cover" data-alt="minimalist wooden desk with a single white ceramic lamp and a small notebook in soft morning sunlight casting long shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1E7oXl_bCsbrmj7KTo3nWZb4rvOlicgMr7kxAfPlPuUKizr5XhwEKVMC4MwcynYbIlZTxW0vUkIPkpBd3kaKJAFhyw9rQ1fiM0BmWo0Q6mgoefEypcA7FiierDVjw-LHi6TZtuVlbPlPZ9J3XnsoYxYdUy1lNF4RrvvD5GeAP-AZJqxSHSWv80ufcXY8X21J4Xzg9POyLbwZPEBqZCTFD0y3YrMP3K9dEnW3pELSuZuACP_eIsdAx1xAUa0XObnHOTdKseoliK6c"/>
+</div>
+</header>
+<!-- Article Content -->
+<article class="max-w-3xl mx-auto px-6 pb-24">
+<div class="space-y-8 text-xl leading-relaxed text-on-surface/90">
+<p class="first-letter:text-7xl first-letter:font-headline first-letter:font-bold first-letter:mr-3 first-letter:float-left first-letter:text-primary">
+                    Simplicity is not merely the absence of clutter; it is the presence of intention. In a digital landscape increasingly defined by noise and high-velocity consumption, the act of paring back becomes a radical gesture. To simplify is to respect the reader's focus, acknowledging that their attention is the most finite resource we have.
+                </p>
+<p>
+                    When we look at the history of editorial design, the most enduring works are those that understand the power of silence. The "Quiet Editor" knows that every pixel, every word, and every line of space must earn its place on the canvas. It is a process of subtraction that reveals the essential core of a message.
+                </p>
+<div class="py-12 border-l-2 border-primary pl-8 my-12">
+<blockquote class="font-body text-3xl italic text-on-surface leading-snug">
+                        "The ability to simplify means to eliminate the unnecessary so that the necessary may speak."
+                    </blockquote>
+<cite class="block mt-4 font-headline text-sm font-bold uppercase tracking-widest text-on-surface-variant">— Hans Hofmann</cite>
+</div>
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mt-16 mb-6">The Architecture of Breathing Room</h2>
+<p>
+                    Whitespace is often misunderstood as "nothing." In reality, it is a structural element as vital as a load-bearing wall. It provides the visual lungs of a layout, allowing ideas to expand and settle. Without it, even the most profound thoughts become indistinguishable from the background hum of the internet.
+                </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-16">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden">
+<img alt="Architectural detail" class="w-full h-full object-cover grayscale" data-alt="clean geometric architectural detail showing a white concrete wall meeting a clear blue sky with sharp diagonal shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD2Z-6vSFV5WPVgVAm1I8kPr-ztqEwJ4GjFXMHj6_Nshxu8KmwmOiToZ8L8P_OomoL6sgfiSyJu5ZxHpvICjpAmDdvzO1bs1JYNN457qoRd5Ws7RPz5TRrX42oVhSYvrjBT48jEsJZh2Q44kq9Loyh4tJR1nRAFR0BDUxxPMU80tHzvnDTlX4rql57tNL0mD7U02BBxzzUgSm3eBpAqKeVQpJmSenZQ7jVqlBZpfFnsAScfMX5GVzukZrMa6mz_pA3OXezpXn8J9o"/>
+</div>
+<div class="flex flex-col justify-center space-y-4">
+<p class="text-lg italic text-on-surface-variant font-body">
+                            Asymmetry in design mimics the natural world. It creates a sense of movement and organic flow that rigid, centered grids often lack. 
+                        </p>
+<p class="text-sm font-headline font-bold uppercase tracking-widest text-primary">
+                            Visual Balance
+                        </p>
+</div>
+</div>
+<p>
+                    In our design system, we prioritize the Newsreader serif for body text because it carries a literary weight that sans-serifs struggle to replicate. It invites the reader into a slower pace of consumption—a digital equivalent of a hardbound book.
+                </p>
+<p>
+                    To achieve true simplicity, one must be willing to let go. It is an iterative process of refinement, where the designer acts as an editor, continuously asking: "What else can be removed?" until only the truth remains.
+                </p>
+</div>
+<!-- Tags Section -->
+<div class="mt-20 pt-10 border-t border-outline-variant/20 flex flex-wrap gap-3">
+<span class="bg-secondary-fixed-dim px-4 py-1.5 rounded-full font-label text-[0.7rem] font-bold uppercase tracking-wider text-on-secondary-fixed">Design</span>
+<span class="bg-secondary-fixed-dim px-4 py-1.5 rounded-full font-label text-[0.7rem] font-bold uppercase tracking-wider text-on-secondary-fixed">Minimalism</span>
+<span class="bg-secondary-fixed-dim px-4 py-1.5 rounded-full font-label text-[0.7rem] font-bold uppercase tracking-wider text-on-secondary-fixed">Philosophy</span>
+</div>
+</article>
+<!-- Related Posts Section -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex justify-between items-end mb-12">
+<div>
+<span class="font-label text-xs uppercase tracking-[0.2em] text-primary font-bold block mb-2">Continue Reading</span>
+<h3 class="font-headline text-4xl font-extrabold tracking-tighter">Related Essays</h3>
+</div>
+<a class="font-headline text-sm font-bold border-b-2 border-primary pb-1 hover:text-primary-dim transition-colors" href="#">View All Archive</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<!-- Post Card 1 -->
+<a class="group" href="#">
+<div class="aspect-[4/3] bg-surface-container-highest rounded-lg mb-6 overflow-hidden">
+<img alt="Quiet library" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="interior of a modern minimalist library with floor-to-ceiling wooden bookshelves and soft atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGffoIiADbaex4k-6i5CBcS6bVh5ZtBPZcoMAkOnUI61dlx-i2ylGvSL74jG4Uoe5mn-jr2ZuVdlilEQ58N4RovwwYrSeSxm9oGS3ZDlDFbc07mJTzCl3H9Jm7xSHYSwDJIUu8yHcFy_hF_S8wIAMYcZOLTYqQHr5rEVquA3YuNL-ZhT6LYNDKl35ek1UQ8V--OgnZGOP0EKerAcGKlVzicUFBWKo1FvdKtGixOlEb13gl8tdNeANYhZfk2dYpJTpYVzBCIx3r2aM"/>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">Finding Stillness in the Digital Age</h4>
+<p class="font-body italic text-on-surface-variant line-clamp-2">How to build a sustainable relationship with our devices without losing our sanity.</p>
+</a>
+<!-- Post Card 2 -->
+<a class="group" href="#">
+<div class="aspect-[4/3] bg-surface-container-highest rounded-lg mb-6 overflow-hidden">
+<img alt="Typewriter" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="close up of a vintage black typewriter on a white table with a single sheet of paper in it" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCka7pY8NOasqLBDqgDvlRlRSBfeBt8MnVEuh3Jrf3KTYWpVd9K3_fciwQojiCjJrYd8oxOKvhDmDMx0CLa_zm-AIXjQ_GwnY9mW8f-pTUHG5z30PjHLBUHsB53DuSlQtqdvMT0vVilr8Rfnbhxg2OMGGdVoKq_0IRa5l0T7IqW8CYucWYWaUplcZOoz_yalMipE0IzrZEj5wn9vcMEafmNoX0MQlm5-wEjCmxk46-TNIK9sGe26eDWQzigQdNrtf3WUHDDO0tw9FE"/>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Typographic Soul</h4>
+<p class="font-body italic text-on-surface-variant line-clamp-2">Exploring how font choices influence the emotional resonance of written content.</p>
+</a>
+<!-- Post Card 3 -->
+<a class="group" href="#">
+<div class="aspect-[4/3] bg-surface-container-highest rounded-lg mb-6 overflow-hidden">
+<img alt="Abstract shadow" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="abstract shadows of a window frame on a neutral colored wall with a small plant's silhouette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsey8x8XdLQkVEbzd_NL5xq7VnkdMtcGuq5MIyfYdt0BMS0RPbdYTdj5LJH5H2SysA-gqfSXdG2kfoNxK6KXfysQs54K_mRMIUumRwyLAsphmuqHhuc-iC-L0rSHjAlGYfIFWFOqTjQN933ZpgNg9Uz7yQE3hXAAOatTYLPU3dYIzkN6agS8D-mFw3mvRr299IXwRK6CgdCq6MlWaGsE0OzvrpHPDz11EEQL9e-Tn5kz-8oFnzo9kGOJsqoewTgN9grgBy_DmJ-r4"/>
+</div>
+<h4 class="font-headline text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Weight of Objects</h4>
+<p class="font-body italic text-on-surface-variant line-clamp-2">Why physical craftsmanship matters more than ever in a virtual world.</p>
+</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-zinc-100 dark:bg-zinc-900 w-full pt-20 pb-10">
+<div class="flex flex-col items-center space-y-8 px-6 max-w-7xl mx-auto text-center">
+<div class="font-['Manrope'] font-black uppercase tracking-widest text-sm text-emerald-900 dark:text-emerald-500">The Quiet Editor</div>
+<div class="flex flex-wrap justify-center gap-x-12 gap-y-4">
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors font-['Newsreader'] italic text-lg" href="#">Newsletter</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors font-['Newsreader'] italic text-lg" href="#">Privacy Policy</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors font-['Newsreader'] italic text-lg" href="#">Terms of Service</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors font-['Newsreader'] italic text-lg" href="#">RSS Feed</a>
+</div>
+<p class="text-zinc-500 font-['Newsreader'] italic text-lg mt-8">
+                © 2024 The Quiet Editor. Built for the thoughtful reader.
+            </p>
+</div>
+</footer>
+</body></html>

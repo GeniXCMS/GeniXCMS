@@ -12,7 +12,7 @@ class GxCodeHighlight
     {
         $html = "
         <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/monokai-sublime.min.css\">
-        <script src=\"//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js\"></script>
+        <script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js\"></script>
         <script>
             hljs.configure({
                 useBR: false,

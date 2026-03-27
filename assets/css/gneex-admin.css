@@ -1,5 +1,5 @@
 :root {
-    --gx-sidebar-width: 260px;
+    --gx-sidebar-width: 235px;
     --gx-sidebar-bg: #1e293b;
     --gx-sidebar-color: #94a3b8;
     --gx-sidebar-active-bg: #334155;
@@ -61,7 +61,7 @@ body {
 }
 
 .sidebar-header {
-    padding: 20px;
+    padding: 15px 18px;
     background: rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
@@ -110,8 +110,8 @@ body {
 }
 
 .menu-label {
-    padding: 4px 18px;
-    font-size: 0.58rem;
+    padding: 4px 15px;
+    font-size: 0.55rem;
     text-transform: uppercase;
     font-weight: 700;
     color: #64748b;
@@ -121,12 +121,12 @@ body {
 .sidebar-menu li a {
     display: flex;
     align-items: center;
-    padding: 5px 18px;
+    padding: 5px 15px;
     color: var(--gx-sidebar-color);
     text-decoration: none;
     transition: all 0.2s;
     font-weight: 500;
-    font-size: 0.78rem;
+    font-size: 0.775rem;
     border-left: 3px solid transparent;
 }
 
@@ -143,8 +143,8 @@ body {
 }
 
 .sidebar-menu li a i {
-    width: 20px;
-    margin-right: 12px;
+    width: 18px;
+    margin-right: 10px;
     font-size: 0.95rem;
     opacity: 0.7;
 }

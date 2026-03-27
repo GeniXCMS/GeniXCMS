@@ -139,28 +139,25 @@ class Comments
                         )
                     )
                 );
-            $post_id = isset($data['posts'][0]->id) ? Typo::int($data['posts'][0]->id) : 0;
+            $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? Typo::int($data['posts'][0]->id) : 0;
             $parent = Typo::int($vars['comments-parent']);
             $status = (null !== Session::val('username')) ? '1' : '2';
             $type = Posts::type($post_id);
             $userid = (null !== Session::val('username')) ? Session::val('username') : '';
-            $vars = array(
-                    'table' => 'comments',
-                    'key' => array(
-                            'date' => $date,
-                            'userid' => $userid,
-                            'name' => $name,
-                            'email' => $email,
-                            'url' => $url,
-                            'comment' => $comment,
-                            'post_id' => $post_id,
-                            'parent' => $parent,
-                            'status' => $status,
-                            'type' => $type,
-                            'ipaddress' => $_SERVER['REMOTE_ADDR'],
-                        ),
+            $insert_data = array(
+                    'date' => $date,
+                    'userid' => $userid,
+                    'name' => $name,
+                    'email' => $email,
+                    'url' => $url,
+                    'comment' => $comment,
+                    'post_id' => $post_id,
+                    'parent' => $parent,
+                    'status' => $status,
+                    'type' => $type,
+                    'ipaddress' => $_SERVER['REMOTE_ADDR'],
                 );
-            if (Db::insert($vars)) {
+            if (Query::table('comments')->insert($insert_data)) {
                 $data['alertSuccess'][] = _('Comments Sent.');
                 $sess = array(
                         'lastcomment' => time(),
@@ -182,15 +179,19 @@ class Comments
         $offset = Typo::int($vars['offset']);
         $max = Typo::int($vars['max']);
         $parent = Typo::int($vars['parent']);
-        $post_id = isset($data['posts'][0]->id) ? $data['posts'][0]->id : 0;
+        $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? $data['posts'][0]->id : 0;
         if ($post_id == 0) return '';
-        $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '{$parent}' ";
-        $order = ($parent > 0) ? 'ASC' : 'DESC';
-        $sql = sprintf('SELECT * FROM `comments` WHERE 1 %s ORDER BY `date` %s LIMIT %d, %d', $where, $order, $offset, $max);
-        $cmn = Db::result($sql);
+        
+        $cmn = Query::table('comments')
+            ->where('post_id', $post_id)
+            ->where('status', '1')
+            ->where('parent', $parent)
+            ->orderBy('date', ($parent > 0) ? 'ASC' : 'DESC')
+            ->limit($max, $offset)
+            ->get();
 
         $html = '<div class="row">';
-        if (DB::$num_rows > 0) {
+        if (Db::$num_rows > 0) {
             foreach ($cmn as $c => $v) {
                 $url = isset($v->url) ? $v->url : '#';
                 $avatar = Image::getGravatar($v->email, 60);
@@ -246,7 +247,7 @@ class Comments
             }
             $vars['offset'] = $offset;
             $html .= self::listC($vars);
-            $post_id = isset($data['posts'][0]->id) ? $data['posts'][0]->id : 0;
+            $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? $data['posts'][0]->id : 0;
             if ($post_id == 0) return '';
             $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '0' ";
             $page = array(
@@ -339,52 +340,33 @@ class Comments
     public static function publish($id)
     {
         $id = Typo::int($id);
-        $var = array(
-                'table' => 'comments',
-                'id' => $id,
-                'key' => array(
-                        'status' => '1',
-                    ),
-            );
-        Db::update($var);
+        Query::table('comments')
+            ->where('id', $id)
+            ->update(array('status' => '1'));
     }
 
     public static function unpublish($id)
     {
         $id = Typo::int($id);
-        $var = array(
-                'table' => 'comments',
-                'id' => $id,
-                'key' => array(
-                        'status' => '0',
-                    ),
-            );
-        Db::update($var);
+        Query::table('comments')
+            ->where('id', $id)
+            ->update(array('status' => '0'));
     }
 
     public static function pending($id)
     {
         $id = Typo::int($id);
-        $var = array(
-                'table' => 'comments',
-                'id' => $id,
-                'key' => array(
-                        'status' => '2',
-                    ),
-            );
-        Db::update($var);
+        Query::table('comments')
+            ->where('id', $id)
+            ->update(array('status' => '2'));
     }
 
     public static function delete($id)
     {
         $id = Typo::int($id);
-        $var = array(
-                'table' => 'comments',
-                'where' => array(
-                    'id' => $id,
-                    ),
-            );
-        return Db::delete($var);
+        return Query::table('comments')
+            ->where('id', $id)
+            ->delete();
     }
 
     public static function deleteWithPost($post_id)

@@ -38,15 +38,18 @@ if (User::access(1)) {
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
-                $cat = Db::insert(
-                    sprintf(
-                        "INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'post' )",
-                        $cat,
-                        $slug,
-                        Typo::int($_POST['parent'])
-                    )
-                );
-                //print_r($cat);
+                $image = Typo::cleanX($_POST['image'] ?? '');
+                $desc = Typo::cleanX($_POST['desc'] ?? '');
+                $parent = Typo::int($_POST['parent'] ?? 0);
+                
+                Query::table('cat')->insert([
+                    'name'   => $cat,
+                    'slug'   => $slug,
+                    'parent' => $parent,
+                    'image'  => $image,
+                    'desc'   => $desc,
+                    'type'   => 'post',
+                ]);
                 $data['alertSuccess'][] = _("Category Added").' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
@@ -62,6 +65,7 @@ if (User::access(1)) {
         case true:
             // cleanup first
             $cat = Typo::cleanX($_POST['cat']);
+            $slug = Typo::slugify($_POST['cat']);
             $token = Typo::cleanX($_POST['token']);
             if (!isset($_POST['token']) && !Token::validate($token)) {
                 // VALIDATE ALL
@@ -70,14 +74,13 @@ if (User::access(1)) {
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
-                $vars = array(
-                    'table' => 'cat',
-                    'id' => Typo::int($_POST['id']),
-                    'key' => array(
-                                'name' => $cat,
-                            ),
-                );
-                $cat = Db::update($vars);
+                Query::table('cat')->where('id', Typo::int($_POST['id']))->update([
+                    'name'   => $cat,
+                    'slug'   => $slug,
+                    'parent' => Typo::int($_POST['parent'] ?? 0),
+                    'image'  => Typo::cleanX($_POST['image'] ?? ''),
+                    'desc'   => Typo::cleanX($_POST['desc'] ?? ''),
+                ]);
                 $data['alertSuccess'][] = _("Category Updated").' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
@@ -107,8 +110,8 @@ if (User::access(1)) {
     }
 
     System::alert($data);
-    $data['cat'] = Db::result("SELECT * FROM `cat` WHERE `type` = 'post' ORDER BY `id` DESC");
-    $data['num'] = Db::$num_rows;
+    $data['cat'] = Query::table('cat')->where('type', 'post')->orderBy('id', 'DESC')->get();
+    $data['num'] = count($data['cat']);
     Theme::admin('header', $data);
     System::inc('categories', $data);
     Theme::admin('footer');

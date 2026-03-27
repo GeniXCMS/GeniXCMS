@@ -96,11 +96,13 @@ class Theme
     public static function editor($mode = 'light', $height = '300')
     {
         $editor = Options::v('use_editor');
+        $editor_type = Options::v('editor_type') ?: 'summernote';
         if ($editor == 'on') {
             $GLOBALS['editor'] = true;
         } else {
             $GLOBALS['editor'] = false;
         }
+        $GLOBALS['editor_type'] = $editor_type;
         System::toolbarMode($mode);
         System::toolbar($mode);
         $GLOBALS['editor_height'] = $height;

@@ -61,8 +61,12 @@ class Token
      */
     public static function json($t, $pairing)
     {
-        $token = Options::v('tokens');
-        $token = json_decode(Typo::Xclean($token), true);
+        $json = Options::v('tokens');
+        $json = ($json !== false && $json !== null) ? $json : '{}';
+        $token = json_decode(Typo::Xclean($json), true);
+        if (!is_array($token)) {
+            $token = [];
+        }
         $newtoken = array(
                         $t => array(
                             'time' => TOKEN_TIME,
@@ -85,6 +89,7 @@ class Token
         $pairing = self::pairing();
         $token2 = $token . "_" . $pairing;
         $json = Options::get('tokens');
+        $json = ($json !== false && $json !== null) ? $json : '{}';
         $tokens = json_decode(Typo::Xclean($json), true);
         if (!is_array($tokens) || $tokens == '') {
             $tokens = array();
@@ -103,7 +108,11 @@ class Token
       	$pairing = self::pairing();
       	$token = $token."_".$pairing;
         $json = Options::v('tokens');
+        $json = ($json !== false && $json !== null) ? $json : '{}';
         $tokens = json_decode(Typo::Xclean($json), true);
+        if (!is_array($tokens)) {
+            $tokens = [];
+        }
         unset($tokens[$token]);
         $tokens = json_encode($tokens);
         if (Options::update('tokens', $tokens)) {
@@ -141,7 +150,12 @@ class Token
     public static function urlMatch($token, $is_ajax=false)
     {
         $pairing = self::pairing();
-        $tokens = json_decode(Typo::Xclean(Options::v('tokens')), true);
+        $json = Options::v('tokens');
+        $json = ($json !== false && $json !== null) ? $json : '{}';
+        $tokens = json_decode(Typo::Xclean($json), true);
+        if (!is_array($tokens)) {
+            $tokens = [];
+        }
         $urlLive = $_SERVER['REQUEST_URI'];
         $urlToken = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token]['url']: '';
         if ($urlToken == $urlLive) {
@@ -153,7 +167,12 @@ class Token
 
     public static function isValid($token) {
         $pairing = self::pairing();
-        $tokens = json_decode(Typo::Xclean(Options::get('tokens')), true);
+        $json = Options::get('tokens');
+        $json = ($json !== false && $json !== null) ? $json : '{}';
+        $tokens = json_decode(Typo::Xclean($json), true);
+        if (!is_array($tokens)) {
+            $tokens = [];
+        }
         $paired = array_key_exists($token."_".$pairing, $tokens) ? $tokens[$token."_".$pairing]['pairing']: "";
         if ($pairing == $paired) {
             $call = true;

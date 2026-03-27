@@ -232,8 +232,8 @@ class Url
      */
     public static function slug($vars)
     {
-        $s = Db::result("SELECT `slug` FROM `posts` WHERE `id` = '{$vars}' LIMIT 1");
-        $s = (Db::$num_rows > 0) ? $s[0]->slug : '';
+        $q = Query::table('posts')->select('slug')->where('id', Typo::int($vars))->first();
+        $s = $q ? $q->slug : '';
 
         return $s;
     }
@@ -361,13 +361,14 @@ class Url
         // $vars = urlencode($vars);
         $vars = str_replace(Site::$url, '', $vars);
         $vars = str_replace(Site::$cdn, '', $vars);
+        $vars = ltrim($vars, '/');
+        $vars = str_replace('thumb/', '', $vars);
 
         switch (SMART_URL) {
             case true:
                 $type = ($type != '') ? 'type/'.$type.'/' : '';
                 $size = ($size != '') ? 'size/'.$size.'/' : '';
                 $align = ($align != '') ? 'align/'.$align.'/' : '';
-                $vars = str_replace('thumb/', '', $vars);
 
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 $url = Site::$cdn.$inFold.'thumb/'.$type.$size.$align.$vars;
@@ -378,6 +379,7 @@ class Url
                 break;
         }
 
+        $url = str_replace(':/', '://', str_replace('//', '/', $url));
         return $url;
     }
 

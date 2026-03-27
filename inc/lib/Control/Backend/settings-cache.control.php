@@ -34,8 +34,7 @@ if (User::access(1)) {
             $vars = array();
             $flip = array_flip($_POST);
         // print_r($_POST);
-            $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
-            $q = Db::result($sql);
+            $q = Query::table('options')->where('value', 'on')->get();
             $input = array('cache_enabled', 'cache_path', 'cache_timeout');
 
             foreach ($q as $ob) {

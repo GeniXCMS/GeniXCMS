@@ -33,8 +33,7 @@ if (User::access(1)) {
             $vars = array();
             $flip = array_flip($_POST);
         // print_r($_POST);
-            $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
-            $q = Db::result($sql);
+            $q = Query::table('options')->where('value', 'on')->get();
             $input = array('comments_enable', 'spamwords', 'comments_perpage');
 
             foreach ($q as $ob) {

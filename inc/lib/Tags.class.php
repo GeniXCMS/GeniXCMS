@@ -21,7 +21,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 /**
- * Categories Class.
+ * Tags Class.
  *
  * This class will process the categories function. Including Create, Edit,
  * Delete the categories.
@@ -152,14 +152,13 @@ class Tags
                 if ($tag_i != '') {
                     $slug = Typo::slugify($tag_i);
                     $cat = Typo::cleanX($tag_i);
-                    Db::insert(
-                        sprintf(
-                            "INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'tag' )",
-                            $cat,
-                            $slug,
-                            0
-                        )
-                    );
+                    Query::table('cat')->insert([
+                        'name' => $cat,
+                        'slug' => $slug,
+                        'parent' => 0,
+                        'desc' => '',
+                        'type' => 'tag'
+                    ]);
                 }
             }
         }
@@ -168,14 +167,13 @@ class Tags
     public static function exist($tag)
     {
         $tag = Typo::cleanX($tag);
-        $sql = "SELECT `name` FROM `cat` WHERE `name` = '{$tag}' OR `slug` = '{$tag}' AND `type` = 'tag'";
-        $q = Db::result($sql);
-        // echo Db::$num_rows;
-        if (Db::$num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $cat = Query::table('cat')
+            ->where('name', $tag)
+            ->orWhere('slug', $tag)
+            ->where('type', 'tag')
+            ->first();
+
+        return ($cat) ? true : false;
     }
 
     public static function id($name)
@@ -190,21 +188,17 @@ class Tags
 
     public static function count($tag)
     {
-        $tag = Typo::cleanX($tag);
-        $sql = "SELECT * FROM `posts_param` WHERE `param` = 'tags' AND `value` LIKE '%%{$tag}%%' ";
-        $q = Db::result($sql);
-
-        return Db::$num_rows;
+        return Query::table('posts_param')
+            ->where('param', 'tags')
+            ->where('value', 'LIKE', "%{$tag}%")
+            ->count();
     }
 
     public static function cloud()
     {
         // get all tags first
-        $sql = "SELECT * FROM `cat` WHERE `type` = 'tag'";
-        $q = Db::result($sql);
-        if (!isset($q['error'])) {
-            # code...
-        
+        $q = Query::table('cat')->where('type', 'tag')->get();
+        if ($q) {
             $tags = [];
             foreach ($q as $key => $value) {
                 $tags[$value->name] = self::count($value->name);
@@ -221,6 +215,3 @@ class Tags
         return $cloud;
     }
 }
-
-/* End of file Categories.class.php */
-/* Location: ./inc/lib/Categories.class.php */

@@ -25,21 +25,14 @@ class CatControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post in : ' . Categories::name($cat) . $pagingtitle;
-            $posts = Db::result(
-                sprintf(
-                    "SELECT * FROM `posts`
-                        WHERE `type` = '%s'
-                        AND `cat` = '%d'
-                        AND `status` = '1'
-                        ORDER BY `date`
-                        DESC LIMIT %d, %d",
-                    $type,
-                    $cat,
-                    $offset,
-                    $data['max']
-                )
-            );
-            $data['num'] = Db::$num_rows;
+            $posts = Query::table('posts')
+                ->where('type', $type)
+                ->where('cat', Typo::int($cat))
+                ->where('status', '1')
+                ->orderBy('date', 'DESC')
+                ->limit($data['max'], $offset)
+                ->get();
+            $data['num'] = count($posts);
             $data['posts'] = Posts::prepare($posts);
 
             $url = Url::cat($cat);

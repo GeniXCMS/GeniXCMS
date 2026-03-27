@@ -1,0 +1,57 @@
+#!/usr/bin/php
+<?php
+/**
+ * GeniXCMS CLI Console.
+ *
+ * PHP Based Content Management System and Framework.
+ *
+ */
+
+if (PHP_SAPI !== 'cli') {
+    die("This script can only be run from the command line.");
+}
+
+define('GX_PATH', realpath(__DIR__ . '/'));
+define('GX_LIB', GX_PATH . '/inc/lib/');
+define('GX_MOD', GX_PATH . '/inc/mod/');
+define('GX_THEME', GX_PATH . '/inc/themes/');
+define('GX_ASSET', GX_PATH . '/assets/');
+define('GX_CACHE', GX_PATH . '/assets/cache/');
+
+require 'autoload.php';
+
+// Include DB config
+if (file_exists(GX_PATH . '/inc/config/config.php')) {
+    require_once GX_PATH . '/inc/config/config.php';
+    Db::connect();
+} else {
+    die("Config file not found. Please install GeniXCMS first.\n");
+}
+
+$args = $argv;
+$command = isset($args[1]) ? $args[1] : '';
+
+echo "GeniXCMS Console - Version 2.0.0-alpha\n";
+echo "--------------------------------------\n";
+
+switch ($command) {
+    case 'migrate':
+        echo "Running migrations...\n";
+        Migration::run();
+        break;
+        
+    case 'migrate:rollback':
+        echo "Rolling back last batch...\n";
+        Migration::rollback();
+        break;
+
+    case 'help':
+    default:
+        echo "Available commands:\n";
+        echo "  migrate           Run all pending migrations.\n";
+        echo "  migrate:rollback  Rollback the last batch of migrations.\n";
+        echo "  help              Show this help message.\n";
+        break;
+}
+
+echo "\nFinished.\n";

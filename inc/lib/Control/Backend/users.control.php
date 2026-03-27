@@ -28,32 +28,39 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
         $act = '';
     }
 
-    // search query
-    $where = ' 1 ';
+    // search query - build parameterized conditions
+    $whereRaws = [];
+    $whereBindings = [];
     $qpage = '';
     if (isset($_GET['q']) && $_GET['q'] != '') {
         $q = Typo::cleanX($_GET['q']);
-        $where .= "AND (A.`userid` LIKE '%%{$q}%%' OR A.`email` LIKE '%%{$q}%%') ";
+        $whereRaws[] = "(A.`userid` LIKE ? OR A.`email` LIKE ?)";
+        $whereBindings[] = "%{$q}%";
+        $whereBindings[] = "%{$q}%";
         $qpage .= "&q={$_GET['q']}";
     }
     if (isset($_GET['from']) && $_GET['from'] != '') {
         $from = Typo::cleanX($_GET['from']);
-        $where .= "AND A.`join_date` >= '{$from}' ";
+        $whereRaws[] = "A.`join_date` >= ?";
+        $whereBindings[] = $from;
         $qpage .= "&from={$from}";
     }
     if (isset($_GET['to']) && $_GET['to'] != '') {
         $to = Typo::cleanX($_GET['to']);
-        $where .= "AND A.`join_date` <= '{$to}' ";
+        $whereRaws[] = "A.`join_date` <= ?";
+        $whereBindings[] = $to;
         $qpage .= "&to={$to}";
     }
     if (isset($_GET['group']) && $_GET['group'] != '') {
         $group = Typo::int($_GET['group']);
-        $where .= "AND A.`group` = '{$group}' ";
+        $whereRaws[] = "A.`group` = ?";
+        $whereBindings[] = $group;
         $qpage .= "&group={$group}";
     }
     if (isset($_GET['status']) && $_GET['status'] != '') {
         $status = Typo::int($_GET['status']);
-        $where .= "AND A.`status` = '{$status}' ";
+        $whereRaws[] = "A.`status` = ?";
+        $whereBindings[] = $status;
         $qpage .= "&status={$status}";
     }
 
@@ -344,11 +351,23 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
             }
             break;
     }
-    $data['usr'] = Db::result("SELECT A.`userid`, A.`group`, A.`email`, A.`join_date`, A.`status`, A.`id` as `id`, B.`country` FROM `user` AS A 
-                        LEFT JOIN `user_detail` AS B 
-                        ON A.`userid` = B.`userid` 
-            WHERE {$where} ORDER BY A.`userid` ASC LIMIT {$offset}, {$max}");
-    $data['num'] = Db::$num_rows;
+    $userSql = "SELECT A.`userid`, A.`group`, A.`email`, A.`join_date`, A.`status`, A.`id` as `id`, B.`country`
+        FROM `user` AS A LEFT JOIN `user_detail` AS B ON A.`userid` = B.`userid`";
+    if (!empty($whereRaws)) {
+        $userSql .= " WHERE " . implode(' AND ', $whereRaws);
+    }
+    
+    // Calculate total for paging
+    $countSql = "SELECT COUNT(A.`id`) as total FROM `user` AS A LEFT JOIN `user_detail` AS B ON A.`userid` = B.`userid`";
+    if (!empty($whereRaws)) {
+        $countSql .= " WHERE " . implode(' AND ', $whereRaws);
+    }
+    $countRes = Db::result($countSql, $whereBindings);
+    $totalCount = isset($countRes[0]) ? (int)$countRes[0]->total : 0;
+
+    $userSql .= " ORDER BY A.`userid` ASC LIMIT " . (int)$offset . ", " . (int)$max;
+    $data['usr'] = Db::result($userSql, $whereBindings);
+    $data['num'] = count($data['usr']);
     $page = array(
                 'paging' => $paging,
                 'table' => [
@@ -356,7 +375,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     'user_detail' => ['B', 'LEFT JOIN', 'userid']
                 ],
                 'select' => 'A.`id` ',
-                'where' => $where,
+                'total' => $totalCount,
                 'max' => $max,
                 'url' => 'index.php?page=users'.$qpage,
                 'type' => 'pager',

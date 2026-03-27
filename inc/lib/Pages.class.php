@@ -20,10 +20,23 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-class Pages
+class Pages extends Model
 {
-    public function __construct()
+    protected $table = 'posts';
+
+    public function __construct($attributes = [])
     {
+        parent::__construct($attributes);
+    }
+
+    public static function content($id)
+    {
+        global $data;
+        if (isset($data['p_type']) && $data['p_type'] == 'page') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function isPage()

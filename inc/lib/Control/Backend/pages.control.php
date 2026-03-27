@@ -99,6 +99,8 @@ if (User::access(1)) {
                                 Posts::addParam($k, $v, $post_id);
                             }
                         }
+                        $post_image = Typo::cleanX($_POST['post_image']);
+                        Posts::addParam('post_image', $post_image, $post_id);
 
                         $data['alertSuccess'][] = _("Page")." {$title} "._("Added Successfully");
                         Hooks::run('post_submit_add_action', $_POST);
@@ -192,6 +194,12 @@ if (User::access(1)) {
                                 }
                             }
                         }
+                        $post_image = Typo::cleanX($_POST['post_image']);
+                        if (Posts::existParam('post_image', $id)) {
+                            Posts::editParam('post_image', $post_image, $id);
+                        } else {
+                            Posts::addParam('post_image', $post_image, $id);
+                        }
 
                         $data['alertSuccess'][] = _("Page")."  {$title} "._("Updated Successfully");
                         Token::remove($token);
@@ -204,10 +212,11 @@ if (User::access(1)) {
                     break;
             }
 
-            $data['post'] = Db::result("SELECT * FROM `posts` AS A 
-                                        LEFT JOIN `posts_param` AS B
-                                        ON A.`id` = B.`post_id` 
-                                        WHERE A.`id` = '{$id}' ");
+            $data['post'] = Query::table('posts')
+                ->select('`posts`.*')
+                ->join('posts_param AS B', '`posts`.`id`', '=', 'B.`post_id`')
+                ->where('`posts`.`id`', Typo::int($id))
+                ->get();
             Theme::admin('header', $data);
             System::inc('pages_form', $data);
             Theme::admin('footer');
@@ -320,36 +329,43 @@ if (User::access(1)) {
                     break;
             }
 
-                // search query
-                $where = '';
-                $qpage = '';
+            // search query - parameterized
+            $whereRaws = [];
+            $whereBindings = [];
+            $qpage = '';
             if (isset($_GET['q']) && $_GET['q'] != '') {
                 $q = Typo::cleanX($_GET['q']);
-                $where .= "AND (`title` LIKE '%{$q}%' OR `content` LIKE '%{$q}%') ";
+                $whereRaws[] = "(`title` LIKE ? OR `content` LIKE ?)";
+                $whereBindings[] = "%{$q}%";
+                $whereBindings[] = "%{$q}%";
                 $qpage .= "&q={$_GET['q']}";
             }
             if (isset($_GET['cat']) && $_GET['cat'] != '') {
                 $cat = Typo::int($_GET['cat']);
-                $where .= "AND `cat` = '{$cat}' ";
+                $whereRaws[] = "`cat` = ?";
+                $whereBindings[] = $cat;
                 $qpage .= "&cat={$cat}";
             }
             if (isset($_GET['from']) && $_GET['from'] != '') {
                 $from = Typo::cleanX($_GET['from']);
-                $where .= "AND `date` >= '{$from}' ";
+                $whereRaws[] = "`date` >= ?";
+                $whereBindings[] = $from;
                 $qpage .= "&from={$from}";
             }
             if (isset($_GET['to']) && $_GET['to'] != '') {
                 $to = Typo::cleanX($_GET['to']);
-                $where .= "AND `date` <= '{$to}' ";
+                $whereRaws[] = "`date` <= ?";
+                $whereBindings[] = $to;
                 $qpage .= "&to={$to}";
             }
             if (isset($_GET['status']) && $_GET['status'] != '') {
                 $status = Typo::int($_GET['status']);
-                $where .= "AND `status` LIKE '%%{$status}%%' ";
+                $whereRaws[] = "`status` = ?";
+                $whereBindings[] = $status;
                 $qpage .= "&status={$status}";
             }
 
-                $max = '15';
+            $max = 15;
             if (isset($_GET['paging'])) {
                 $paging = Typo::int($_GET['paging']);
                 $offset = ($paging - 1) * $max;
@@ -358,18 +374,21 @@ if (User::access(1)) {
                 $offset = 0;
             }
 
-            $data['posts'] = Db::result(
-                sprintf("SELECT * FROM `posts` 
-                                        WHERE `type` = 'page' %s
-                                        ORDER BY `date` DESC 
-                                        LIMIT %d,%d", $where, $offset, $max)
-            );
-            $data['num'] = Db::$num_rows;
+            $q_builder = Query::table('posts')->where('type', 'page');
+            if (!empty($whereRaws)) {
+                $q_builder->whereRaw(implode(' AND ', $whereRaws), $whereBindings);
+            }
+            
+            $countQuery = clone $q_builder;
+            $totalCount = $countQuery->count();
+            
+            $data['posts'] = $q_builder->orderBy('date', 'DESC')->limit($max, $offset)->get();
+            $data['num'] = count($data['posts']);
 
             $page = array(
                 'paging' => $paging,
                 'table' => 'posts',
-                'where' => "`type` = 'page' ".$where,
+                'total' => $totalCount,
                 'max' => $max,
                 'url' => 'index.php?page=pages'.$qpage,
                 'type' => 'pager',

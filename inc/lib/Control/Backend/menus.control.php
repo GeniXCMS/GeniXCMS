@@ -259,8 +259,7 @@ if (User::access(1)) {
                     $menus = json_decode(Options::v('menus'), true);
                     unset($menus[$_GET['menuid']]);
                     $menuid = Typo::cleanX($_GET['menuid']);
-                    $sql = sprintf("DELETE FROM `menus` WHERE `menuid` = '%s' ", $menuid);
-                    Db::query($sql);
+                    Query::table('menus')->where('menuid', $menuid)->delete();
                     $menu = json_encode($menus);
                     Options::update('menus', $menu);
                     new Options();

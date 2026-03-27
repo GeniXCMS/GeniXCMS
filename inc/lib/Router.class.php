@@ -56,14 +56,14 @@ class Router
             'category/([0-9]+)/(.*)/' => array('cat' => 1),
             'tag/(.*)/paging/([0-9]+)/' => array('tag' => 1, 'paging' => 2),
             'tag/(.*)/' => array('tag' => 1),
-            '([a-z]{2})/mod/(.*)'.GX_URL_PREFIX => array('mod' => 2, 'lang' => 1),
+            '([a-z]{2})/mod/(.*)' . GX_URL_PREFIX => array('mod' => 2, 'lang' => 1),
             // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => 2, 'lang' => 1),
-            'mod/(.*)'.GX_URL_PREFIX => array('mod' => 1),
+            'mod/(.*)' . GX_URL_PREFIX => array('mod' => 1),
             // '/(.+)'.GX_URL_PREFIX => array('page' => 1),
             'paging/([0-9]+)/' => array('default', 'paging' => 1),
             'error/([0-9]+)/' => array('error' => 1),
-            '([a-z]{2})/(.*)'.GX_URL_PREFIX => array('post' => 2, 'lang' => 1),
-            '(.*)'.GX_URL_PREFIX => array('post' => 1),
+            '([a-z]{2})/(.*)' . GX_URL_PREFIX => array('post' => 2, 'lang' => 1),
+            '(.*)' . GX_URL_PREFIX => array('post' => 1),
             'ajax/(.*)/(.*)' => array('ajax' => 1, 'token' => 2),
             'thumb/size/([0-9]+)/(.*)' => array('thumb' => 2, 'size' => 1),
             'thumb/type/(.*)/(.*)' => array('thumb' => 2, 'type' => 1),
@@ -73,8 +73,8 @@ class Router
             'author/(.*)/paging/([0-9]+)/' => array('author' => 1, 'paging' => 2),
             'author/(.*)/(.*)/' => array('author' => 1, 'type' => 2),
             'author/(.*)/' => array('author' => 1),
-            '([0-9]{4})/([0-9]{2})/paging/([0-9]+)/' => array('archive', 'year' => 1, 'month' => 2, 'paging' => 3 ),
-            '([0-9]{4})/([0-9]{2})/' => array('archive', 'year' => 1, 'month' => 2 ),
+            '([0-9]{4})/([0-9]{2})/paging/([0-9]+)/' => array('archive', 'year' => 1, 'month' => 2, 'paging' => 3),
+            '([0-9]{4})/([0-9]{2})/' => array('archive', 'year' => 1, 'month' => 2),
             'sitemap.xml' => array('sitemap'),
             'sitemap/(.*).xml' => array('sitemap' => 1),
             'sitemap/' => array('sitemap'),
@@ -85,6 +85,8 @@ class Router
             'logout/' => array('logout'),
             'login/' => array('login'),
             'rss/' => array('rss'),
+            'api/v1/(.*)/(.*)' => array('api' => 'v1', 'resource' => 1, 'identifier' => 2),
+            'api/v1/(.*)' => array('api' => 'v1', 'resource' => 1),
             '/' => array('default'),
         );
 
@@ -103,8 +105,7 @@ class Router
         self::$_route = array_merge($var, $route);
         // new Router();
         $keys = array_map('strlen', array_keys(self::$_route));
-        array_multisort($keys, SORT_DESC, self::$_route);
-//         print_r(self::$_route);
+        array_multisort($keys, SORT_DESC, self::$_route); //         print_r(self::$_route);
         return self::$_route;
     }
 
@@ -115,19 +116,20 @@ class Router
      */
     public static function run()
     {
-        $m = self::match();
-//         print_r($m);
+        $m = self::match (); //         print_r($m);
         if (is_array($m)) {
-            $val = self::extract($m[0], $m[1]);
-//             print_r($val);
+            $val = self::extract($m[0], $m[1]); //             print_r($val);
             if (isset($val) && $val != null) {
                 return $val;
-            } else {
+            }
+            else {
                 $val['error'] = '';
 
                 return $val;
             }
-        } else {
+        }
+        else {
+            $val = array();
             $val['error'] = '';
 
             return $val;
@@ -137,9 +139,9 @@ class Router
     /**
      * Check if the requested uri match with available router map.
      *
-     * @return array
+     * @return array|false
      */
-    public static function match()
+    public static function match ()
     {
         $uri = self::getURI();
 
@@ -147,16 +149,19 @@ class Router
             $result = [self::$_route[$uri], $uri];
 
             return $result;
-        } else {
+        }
+        else {
             foreach (self::$_route as $k => $v) {
                 $regx = str_replace('/', '\/', $k);
-                if (preg_match('/^'.$regx.'$/Us', $uri, $m)) {
+                if (preg_match('/^' . $regx . '$/Us', $uri, $m)) {
                     $result = [$v, $m];
 
                     return $result;
                 }
             }
         }
+
+        return false;
     }
 
     /**
@@ -172,15 +177,17 @@ class Router
         $va = array();
         foreach ($var as $k2 => $v2) {
             if (!is_int($k2)) {
-                if( !is_int($v2) ) {
+                if (!is_int($v2)) {
                     $va[] = [$k2 => $v2];
                 }
                 if (is_int($v2)) {
                     $va[] = [$k2 => $m[$v2]];
-                } 
-            } elseif (is_int($k2)) {
+                }
+            }
+            elseif (is_int($k2)) {
                 $va[] = [$v2];
-            } else {
+            }
+            else {
                 $va = array($v2);
             }
         }
@@ -206,16 +213,17 @@ class Router
         // print_r($uri[0]);
         if (self::inFolder()) {
             $uri = self::stripFolder($uri[0]);
-            // echo $uri;
-        } else {
+        // echo $uri;
+        }
+        else {
             $uri2 = explode('/', $uri[0]);
             unset($uri2[0]);
             $uri = implode('/', $uri2);
-            // echo $uri;
+        // echo $uri;
         }
         // echo $uri;
 
-        $uri = (Options::v('permalink_use_index_php') == 'on') ?
+        $uri = (Options::v('permalink_use_index_php') == 'on') ? 
             str_replace('index.php/', '', $uri) : $uri;
         // echo $uri;
 
@@ -231,7 +239,8 @@ class Router
         // print_r($uri);
         if (count($uri) > 4) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -245,6 +254,7 @@ class Router
      */
     public static function scrap($param)
     {
+        $data = [];
         if ($param != '') {
             foreach ($param as $k => $v) {
                 if (is_array($v)) {
@@ -252,13 +262,12 @@ class Router
                     foreach ($v as $k2 => $v2) {
                         $data[$k2] = $v2;
                     }
-                    // print_r($data);
-                } else {
+                // print_r($data);
+                }
+                else {
                     $data = [$v];
                 }
             }
-        } else {
-            $data = [];
         }
 
         return $data;
@@ -287,11 +296,12 @@ class Router
 
             $uris = '';
             for ($i = 0; $i < count($uri); ++$i) {
-                $uris .= '/'.$uri[$i];
+                $uris .= '/' . $uri[$i];
             }
 
             return $uris;
-        } else {
+        }
+        else {
             return '/';
         }
     }

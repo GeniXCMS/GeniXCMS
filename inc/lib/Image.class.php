@@ -221,22 +221,33 @@ class Image
         );
 
         if (file_exists($img)) {
-            $image = $manager->read($img);
-            $image->save($img.".webp", progressive: true, quality: 65);
-            $image->toWebp();
-            
+            $pathInfo = pathinfo($img);
+            $ext = strtolower($pathInfo['extension']);
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
+                try {
+                    $newName = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.webp';
+                    $image = $manager->read($img);
+                    $image->encodeByPath($newName, ...['quality' => 65])->save($newName);
+                    return $newName;
+                } catch (\Exception $e) {
+                    // Fail gracefully
+                }
+            }
         }
+        return false;
     }
 
     public static function thumbFly($img, $type, $size, $align) {
         $manager = new ImageManager(
             Driver::class
         );
+        $img = is_array($img) ? ($img[0] ?? '') : $img;
+        $img = urldecode($img);
         $img = str_replace('thumb/', '', $img);
+
         $noimage = 'assets/images/noimage.png';
         $imgExts = explode(".",$img);
-        rsort($imgExts);
-        $imgExt = $imgExts[0];
+        $imgExt = strtolower(end($imgExts));
         $ighash = ($noimage == $img) ? sha1('noimage'.$img) : sha1($img);
         // $cacheFile = ($noimage == $img) ? $img : GX_ASSET.'cache/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
         $cacheFile = GX_ASSET.'cache/thumbs/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
@@ -247,7 +258,9 @@ class Image
 
         if (file_exists($cacheFile)) {
             $src = $cacheFile;
+            ob_clean();
             readfile($src);
+            exit;
             // $image = $manager->read($src);
 
             // if (Options::v('is_logourl') == 'on' && Options::v('logourl') != '') {
@@ -285,23 +298,31 @@ class Image
             // check whether files exist on remote or local
             if (Files::isRemote($img)) {
                 $imgSrc = $img;
-                if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
-                    $exist = true;
-                } else {
-                    $exist = false;
-                }
+                $exist = Files::remoteExist($imgSrc);
             } else {
                 $imgSrc = GX_PATH.'/'.$img;
-                if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
-                    $exist = true;
-                } else {
-                    $exist = false;
-                }
+                $exist = file_exists($imgSrc);
             }
 
-            list($width) = getimagesize($imgSrc);
+            if (!$exist) {
+                $imgSrc = GX_PATH.'/'.$noimage;
+                $imgExt = 'png';
+            }
 
-            $image = $manager->read($imgSrc);
+            $getsize = @getimagesize($imgSrc);
+            if (!$getsize) {
+                 $imgSrc = GX_PATH.'/'.$noimage;
+                 $getsize = getimagesize($imgSrc);
+            }
+            list($width) = $getsize;
+
+            try {
+                $image = $manager->read($imgSrc);
+            } catch (\Exception $e) {
+                // If read fails, fallback to noimage
+                $imgSrc = GX_PATH.'/'.$noimage;
+                $image = $manager->read($imgSrc);
+            }
 
             // type : square, large, small
             if( $type == 'square' ) {
@@ -335,23 +356,20 @@ class Image
             
             
 
-            $image->save($cacheFile, progressive: true, quality: 65);
-
-            if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
-                $encoded = $image->toJpeg();
-            }
-            if ($imgExt == 'gif') {
-                $encoded = $image->toGif();
-            }
-            if ($imgExt == 'png') {
-                $encoded = $image->toPng();
-            }
-            if ($imgExt == 'webp') {
-                $encoded = $image->toWebp();
+            $options = [];
+            if (in_array(strtolower($imgExt), ['jpg', 'jpeg'])) {
+                $options['progressive'] = true;
+                $options['quality'] = 65;
+            } elseif (in_array(strtolower($imgExt), ['webp', 'avif'])) {
+                $options['quality'] = 65;
             }
 
-            echo $encoded;
+            $encoded = $image->encodeByPath($cacheFile, ...$options);
+            $encoded->save($cacheFile);
 
+            ob_clean();
+            echo (string) $encoded;
+            exit;
         }
 
         
@@ -365,6 +383,9 @@ class Image
         $manager = new ImageManager(
             Driver::class
         );
+
+        $img = is_array($img) ? ($img[0] ?? '') : $img;
+        $img = urldecode($img);
 
         $noimage = 'assets/images/noimage.png';
         $imgExt = pathinfo($img, PATHINFO_EXTENSION); //substr($img, -3);
@@ -405,21 +426,25 @@ class Image
             // check whether files exist on remote or local
             if (Files::isRemote($img)) {
                 $imgSrc = $img;
-                // var_dump(Files::isClean($imgSrc));
-                if (Files::remoteExist($imgSrc) && Files::isClean($imgSrc)) {
-//                if (Files::remoteExist($imgSrc)) {
+                if (Files::remoteExist($imgSrc)) {
                     $exist = true;
                 } else {
                     $exist = false;
                 }
             } else {
                 $imgSrc = GX_PATH.'/'.$img;
-                if (file_exists($imgSrc) && Files::isClean($imgSrc)) {
+                if (file_exists($imgSrc)) {
                     $exist = true;
                 } else {
                     $exist = false;
                 }
             }
+            
+            if (!$exist) {
+                $imgSrc = GX_PATH.'/'.$noimage;
+                $imgExt = 'png';
+            }
+            
             // echo $imgSrc;
             ////////////////////////////////////////////////////////////////////////////////// square
             if (isset($type) && ($type == 'square' || $type == '')) {
@@ -433,7 +458,7 @@ class Image
             // image source
                 // $imgSrc = GX_PATH.'/'.$img;
 
-                if ($exist) {
+                if (true) {
                     // image extension
                     if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
                         $myImage = imagecreatefromjpeg($imgSrc);
@@ -448,8 +473,12 @@ class Image
                         $myImage = imagecreatefromwebp($imgSrc);
                     }
 
-                // getting the image dimensions
-                    list($width_orig, $height_orig) = getimagesize($imgSrc);
+                    $getsize = @getimagesize($imgSrc);
+                    if (!$getsize) {
+                        $imgSrc = GX_PATH.'/'.$noimage;
+                        $getsize = getimagesize($imgSrc);
+                    }
+                    list($width_orig, $height_orig) = $getsize;
 
                 // ratio
                     $ratio_orig = $width_orig / $height_orig;
@@ -546,7 +575,7 @@ class Image
             // $imgSrc = GX_PATH.'/'.$img;
             // $imgSrc = $img;
 
-                if ($exist) {
+                if (true) {
                     // image extension
                     if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
                         $myImage = imagecreatefromjpeg($imgSrc);

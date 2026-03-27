@@ -58,40 +58,27 @@ class System
         /* Load config file */
         self::config('config');
 
-        /* Initiate database */
-        new Db();      
+        /* Set Security Headers */
+        self::securityHeaders();
 
-        /* Initiate Hooks system */
-        new Hooks();
-
-        /* Initiate HTTP variables */
-        new Http();
-
-        /* Initiate Options variables. */
-        new Options();
-
-        /* Load cache configuration */
-        new Cache();
-
-        /* Initate Token creation */
-        new Token();
-
-        /* Initate Date localization */
-        new Date();
-
-        /* Initiate Sites variables */
-        new Site();
-        
-
-        /* Start the session */
-        new Session();
+        /* Initiate core services in Container */
+        Container::set('db', new Db());
+        Container::set('hooks', new Hooks());
+        Container::set('http', new Http());
+        Container::set('options', new Options());
+        Container::set('cache', new Cache());
+        Container::set('token', new Token());
+        Container::set('date', new Date());
+        Container::set('site', new Site());
+        Container::set('session', new Session());
+        Container::set('user', new User());
 
         /* Initiate System Language */
         self::lang(Options::v('system_lang'));
-        new Language();
+        Container::set('language', new Language());
 
         /* Initiate Router */
-        new Router();
+        Container::set('router', new Router());
 
         /* Initiate Vendor */
         new Vendor();
@@ -160,7 +147,66 @@ class System
         $file = GX_PATH.'/inc/lang/'.$vars.'.lang.php';
         if (file_exists($file)) {
             include $file;
+        } else {
+            include GX_PATH.'/inc/lang/id_ID.lang.php';
         }
+    }
+
+    /**
+     * Set System Security Headers.
+     * 
+     * This method initializes various security headers to protect GeniXCMS from common web exploits.
+     * It includes a central Content Security Policy (CSP) that can be extended by modules.
+     * 
+     * @since 2.0.0
+     * @hook system_security_headers_args (Filter) - Modifier of CSP mapping array.
+     */
+    public static function securityHeaders()
+    {
+        // Skip for CLI tasks
+        if (PHP_SAPI === 'cli')
+            return;
+
+        /**
+         * Standard Security Directives
+         * - nosniff: Stops browser from inferring MIME types
+         * - SAMEORIGIN: Denies framing by external sites (Anti-Clickjacking)
+         * - 1; mode=block: High security XSS filtering for legacy browsers
+         */
+        header("X-Content-Type-Options: nosniff");
+        header("X-Frame-Options: SAMEORIGIN");
+        header("X-XSS-Protection: 1; mode=block");
+        header("Referrer-Policy: strict-origin-when-cross-origin");
+
+        /**
+         * Content Security Policy (CSP)
+         * Defines trusted sources for scripts, styles, and other resources.
+         * Default includes common CDNs used by GeniXCMS Admin UI.
+         */
+        $csp_rules = [
+            "default-src" => ["'self'"],
+            "script-src" => ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com"],
+            "style-src" => ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://code.jquery.com", "https://cdnjs.cloudflare.com"],
+            "img-src" => ["'self'", "data:", "https:", "*"],
+            "font-src" => ["'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+            "connect-src" => ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            "frame-src" => ["'self'"],
+            "object-src" => ["'none'"]
+        ];
+
+        // Allow developers to inject their own trusted origins or adjust directives
+        $csp_rules_filtered = Hooks::filter('system_security_headers_args', $csp_rules);
+        if (is_array($csp_rules_filtered)) {
+            $csp_rules = $csp_rules_filtered;
+        }
+
+        // Complie and send CSP header
+        $csp_string = "";
+        foreach ($csp_rules as $directive => $sources) {
+            $csp_string .= "{$directive} " . implode(' ', $sources) . "; ";
+        }
+
+        header("Content-Security-Policy: " . trim($csp_string));
     }
 
     public static function config($var)

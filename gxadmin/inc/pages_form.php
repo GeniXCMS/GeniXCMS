@@ -21,47 +21,63 @@ $pub = $unpub = '';
 if (isset($data['post'])) {
     if (!isset($data['post']['error'])) {
         foreach ($data['post'] as $p) {
+            if (!is_object($p)) continue;
             $title = $p->title;
             $content = $p->content;
             $date = $p->date;
             $status = $p->status;
             $tags = @$p->tags;
+            $post_image = $p->post_image ?? "";
         }
         $pub = ($status == 1) ? 'SELECTED' : '';
         $unpub = ($status == 0) ? 'SELECTED' : '';
     } else {
         $data['alertDanger'][] = $data['post']['error'];
+        $title = $content = $date = $status = $tags = $post_image = '';
     }
+} else {
+    $title = $content = $date = $status = $tags = $post_image = '';
 }
 ?>
 
-<div class="col-md-12">
-    <?=Hooks::run('admin_page_notif_action', $data);?>
-</div>
-
+<?php
+$ui = new UiBuilder([
+    'header' => [
+        'title' => $pagetitle,
+        'subtitle' => _('Drafting and structured architecture for the digital interface.'),
+        'icon' => 'bi bi-files',
+        'buttons' => [
+            [
+                'label' => _('Commit Changes'),
+                'type' => 'button',
+                'icon' => 'bi bi-cloud-upload',
+                'class' => 'btn btn-primary rounded-pill px-4 shadow-sm'
+            ],
+            [
+                'label' => _('Back'),
+                'url' => 'index.php?page=pages',
+                'icon' => 'bi bi-arrow-left',
+                'class' => 'btn btn-light border bg-white rounded-pill px-4'
+            ]
+        ]
+    ]
+]);
+?>
 <form action="index.php?page=pages&act=<?=$act?>&token=<?=TOKEN;?>" method="post" role="form">
-    <div class="container-fluid py-4">
-        <!-- Editor Header -->
-        <div class="row align-items-center mb-4">
-            <div class="col-md-7">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-1">
-                        <li class="breadcrumb-item small"><a href="index.php?page=pages" class="text-decoration-none text-muted"><?=_("Pages Library");?></a></li>
-                        <li class="breadcrumb-item small active" aria-current="page"><?=_("Drafting");?></li>
-                    </ol>
-                </nav>
-                <h3 class="fw-bold text-dark mb-0"><?=$pagetitle;?></h3>
-            </div>
-            <div class="col-md-5 text-md-end mt-3 mt-md-0">
-                <a href="index.php?page=pages" class="btn btn-light rounded-pill px-4 me-2 border">
-                    <i class="bi bi-arrow-left me-1"></i> <?=_("Back");?>
-                </a>
-                <button type="submit" name="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                    <i class="bi bi-cloud-upload me-1"></i> <?=_("Commit Changes");?>
-                </button>
-            </div>
-        </div>
+    <div class="col-md-12">
+        <?=Hooks::run('admin_page_notif_action', $data);?>
+    </div>
 
+    <?php $ui->renderHeader(); ?>
+
+    <div class="container-fluid px-0">
+        <?php $ui->renderElement([
+            'type' => 'breadcrumb',
+            'items' => [
+                ['label' => _('Pages Library'), 'url' => 'index.php?page=pages'],
+                ['label' => _('Drafting'), 'active' => true]
+            ]
+        ]); ?>
         <div class="row g-4">
             <!-- Main Content Area -->
             <div class="col-lg-8">
@@ -159,6 +175,27 @@ if (isset($data['post'])) {
                     </div>
                 </div>
 
+                <!-- Media Section -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h6 class="fw-bold m-0 text-dark small"><i class="bi bi-image me-2 text-success"></i><?=_("Hero Asset");?></h6>
+                    </div>
+                    <div class="card-body px-4 pb-4 pt-0 text-center">
+                        <div class="media-drop-zone rounded-4 border-2 border-dashed bg-light p-3 position-relative" style="cursor: pointer;" onclick="elfinderDialog2()">
+                            <?php if($post_image): ?>
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm" src="<?=$post_image;?>" style="max-height: 250px; width: 100%; object-fit: cover;">
+                            <?php else: ?>
+                                <div class="py-5" id="post_image_placeholder">
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                    <p class="text-muted small mt-2 mb-0"><?=_("Click to select hero image");?></p>
+                                </div>
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm d-none" style="max-height: 250px; width: 100%; object-fit: cover;">
+                            <?php endif; ?>
+                        </div>
+                        <input name="post_image" id="post_image" type="hidden" value="<?=$post_image;?>">
+                    </div>
+                </div>
+
                 <?php Hooks::run('page_param_form_sidebar', $data); ?>
             </div>
         </div>
@@ -173,4 +210,26 @@ if (isset($data['post'])) {
     .form-control-lg:focus { background-color: #fff !important; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
     .extra-small { font-size: 0.75rem; }
     .card-header h6 { letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.8rem; }
+    .media-drop-zone { transition: all 0.3s ease; border: 2px dashed #e2e8f0; }
+    .media-drop-zone:hover { border-color: var(--gx-primary); background-color: rgba(59, 130, 246, 0.05) !important; }
 </style>
+
+<script>
+    // Link elfinder selection to preview image
+    function elfinderDialog2() {
+        var fm = $('<div/>').dialogelfinder({
+            url : '<?=Site::$url;?>inc/lib/elfinder/php/connector.minimal.php',
+            lang : 'en',
+            width : 840,
+            destroyOnClose : true,
+            getFileCallback : function(files, fm) {
+                $('#post_image').val(files.url);
+                $('#post_image_preview').attr('src', files.url).removeClass('d-none');
+                $('#post_image_placeholder').addClass('d-none');
+            },
+            commandsOptions : {
+                getfile : { oncomplete : 'close', folders : false }
+            }
+        }).dialogelfinder('instance');
+    }
+</script>

@@ -65,8 +65,7 @@ class Sitemap
 
     public static function createIndex()
     {
-        $sql = "SELECT * FROM `cat` WHERE `type` != 'tag'";
-        $q = Db::result($sql);
+        $q = Query::table('cat')->where('type', '!=', 'tag')->get();
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>
    <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';

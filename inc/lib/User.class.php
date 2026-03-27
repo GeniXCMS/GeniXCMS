@@ -104,24 +104,18 @@ class User
             $ipCountry = (!Http::isLocal($_SERVER['REMOTE_ADDR'])) ? Http::getIpCountry($_SERVER['REMOTE_ADDR']): '';
             $u = $vars['user'];
             $u = array_merge($ip, $u);
-            $sql = array(
-                'table' => 'user',
-                'key' => $u,
-            );
-            $db = Db::insert($sql);
-
+            
+            $db = Query::table('user')->insert($u);
 
             if (!isset($vars['detail']) || $vars['detail'] == '') {
-                Db::insert("INSERT INTO `user_detail` (`userid`, `country`) VALUES ('{$vars['user']['userid']}', '{$ipCountry}')");
+                Query::table('user_detail')->insert([
+                    'userid' => $vars['user']['userid'],
+                    'country' => $ipCountry
+                ]);
             } else {
-
-                $u = $vars['detail'];
-                $u = array_merge($u, ['country' => $ipCountry]);
-                $sql = array(
-                    'table' => 'user_detail',
-                    'key' => $u,
-                );
-                Db::insert($sql);
+                $ud = $vars['detail'];
+                $ud = array_merge($ud, ['country' => $ipCountry]);
+                Query::table('user_detail')->insert($ud);
             }
             Hooks::run('user_sqladd_action', $vars);
         }
@@ -163,20 +157,10 @@ class User
             //print_r($vars);
             $u = $vars['user'];
 
-            $sql = array(
-                'table' => 'user',
-                'id' => $vars['id'],
-                'key' => $u,
-            );
-            Db::update($sql);
+            Query::table('user')->where('id', $vars['id'])->update($u);
             if (isset($vars['detail']) && $vars['detail'] != '') {
-                $u = $vars['detail'];
-                $sql = array(
-                    'table' => 'user_detail',
-                    'id' => $vars['id'],
-                    'key' => $u,
-                );
-                Db::update($sql);
+                $ud = $vars['detail'];
+                Query::table('user_detail')->where('id', $vars['id'])->update($ud);
             }
             Hooks::run('user_sqledit_action', $vars);
         }
@@ -185,22 +169,9 @@ class User
     public static function delete($id)
     {
         $id = Typo::int($id);
-        $vars = array(
-            'table' => 'user',
-            'where' => array(
-                'id' => $id,
-            ),
-        );
-        Db::delete($vars);
-
-        $vars = array(
-            'table' => 'user_detail',
-            'where' => array(
-                'id' => $id,
-            ),
-        );
-        Db::delete($vars);
-        Hooks::run('user_sqldel_action', $vars);
+        Query::table('user')->where('id', $id)->delete();
+        Query::table('user_detail')->where('id', $id)->delete();
+        Hooks::run('user_sqldel_action', ['id' => $id]);
     }
 
     // $vars = array(
@@ -232,21 +203,12 @@ class User
 
     public static function validate($user, $except='')
     {
+        $q = Query::table('user')->where('userid', Typo::cleanX(Typo::strip($user)));
         if ($except != '') {
-            $id = Typo::cleanX(Typo::strip($except));
-            $where = "AND `userid` != '{$id}' ";
-        } else {
-            $where = '';
+            $q->where('userid', '!=', Typo::cleanX(Typo::strip($except)));
         }
-        $user = Typo::cleanX(Typo::strip($user));
-        $sql = sprintf("SELECT * FROM `user` WHERE `userid` = '%s' %s ", $user, $where);
-        $usr = Db::result($sql);
-        $n = Db::$num_rows;
-        if ($n > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $usr = $q->first();
+        return ($usr) ? true : false;
     }
 
     public static function isSame($p1, $p2)
@@ -260,138 +222,64 @@ class User
 
     public static function isEmail($vars, $id='')
     {
-        if (isset($id)) {
-            $id = Typo::int($id);
-            $where = "AND `id` != '{$id}' ";
-        } else {
-            $where = '';
+        $q = Query::table('user')->where('email', Typo::cleanX($vars));
+        if ($id != '') {
+            $q->where('id', '!=', Typo::int($id));
         }
-        $vars = Typo::cleanX($vars);
-        $sql = sprintf("SELECT * FROM `user` WHERE `email` = '%s' %s", $vars, $where);
-        $e = Db::result($sql);
-        if (Db::$num_rows > 0) {
-            return false;
-        } else {
-            return true;
-        }
+        $e = $q->first();
+        return ($e) ? false : true;
     }
 
     public static function id($userid)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `id` FROM `user` WHERE `userid` = '%s' LIMIT 1",
-                Typo::cleanX($userid)
-            )
-        );
-
-        return (isset($usr[0]->id)) ? $usr[0]->id : '';
+        $usr = Query::table('user')->where('userid', $userid)->first();
+        return (isset($usr->id)) ? $usr->id : '';
     }
 
     public static function idDetail($userid)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `id` FROM `user_detail` WHERE `userid` = '%s' LIMIT 1",
-                Typo::cleanX($userid)
-            )
-        );
-
-        return (isset($usr[0]->id)) ? $usr[0]->id : '';
+        $usr = Query::table('user_detail')->where('userid', $userid)->first();
+        return (isset($usr->id)) ? $usr->id : '';
     }
 
     public static function userid($id)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `userid` FROM `user` WHERE `id` = '%d' LIMIT 1",
-                Typo::int($id)
-            )
-        );
-
-        return (isset($usr[0]->userid)) ? $usr[0]->userid : '';
+        $usr = Query::table('user')->where('id', $id)->first();
+        return (isset($usr->userid)) ? $usr->userid : '';
     }
 
     public static function email($id)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `email` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
-                Typo::int($id),
-                Typo::cleanX($id)
-            )
-        );
-
-        return (isset($usr[0]->email)) ? $usr[0]->email : '';
+        $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
+        return (isset($usr->email)) ? $usr->email : '';
     }
 
     public static function group($id)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `group` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
-                Typo::int($id),
-                Typo::cleanX($id)
-            )
-        );
-
-        return (isset($usr[0]->group)) ? $usr[0]->group : '';
+        $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
+        return (isset($usr->group)) ? $usr->group : '';
     }
 
     public static function regdate($id)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `join_date` FROM `user` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
-                Typo::int($id),
-                Typo::cleanX($id)
-            )
-        );
-
-        return (isset($usr[0]->join_date)) ? $usr[0]->join_date : '';
+        $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
+        return (isset($usr->join_date)) ? $usr->join_date : '';
     }
 
     public static function avatar($id)
     {
-        $usr = Db::result(
-            sprintf(
-                "SELECT `avatar` FROM `user_detail` WHERE `id` = '%d' OR `userid` = '%s' LIMIT 1",
-                Typo::int($id),
-                Typo::cleanX($id)
-            )
-        );
-
-        return (isset($usr[0]->avatar)) ? $usr[0]->avatar : '';
+        $usr = Query::table('user_detail')->where('id', $id)->orWhere('userid', $id)->first();
+        return (isset($usr->avatar)) ? $usr->avatar : '';
     }
 
     public static function activate($id)
     {
-        $act = Db::query(
-            sprintf(
-                "UPDATE `user` SET `status` = '1' WHERE `id` = '%d'",
-                Typo::int($id)
-            )
-        );
-        if ($act) {
-            return true;
-        } else {
-            return false;
-        }
+        return Query::table('user')->where('id', $id)->update(['status' => '1']);
     }
 
     public static function deactivate($id)
     {
-        $act = Db::query(
-            sprintf(
-                "UPDATE `user` SET `status` = '0' WHERE `id` = '%d'",
-                Typo::int($id)
-            )
-        );
-        if ($act) {
-            return true;
-        } else {
-            return false;
-        }
+        return Query::table('user')->where('id', $id)->update(['status' => '0']);
     }
 
     // $vars = array(
@@ -420,10 +308,8 @@ class User
 
     public static function listRecentBox($max=10)
     {
-        $sql = "SELECT * FROM `user` ORDER BY `join_date` DESC LIMIT {$max}";
-        $q = Db::result($sql);
-        // echo "<ul  class=\"users-list clearfix\">";
-        if (Db::$num_rows > 0) {
+        $q = Query::table('user')->orderBy('join_date', 'DESC')->limit($max)->get();
+        if ($q) {
             foreach ($q as $k => $v) {
                 echo "
                 <div class=\"col-3 p-2\">
@@ -436,24 +322,20 @@ class User
                 ";
             }
         }
-        // echo "</ul>";
     }
 
     public static function jsonUserLocation()
     {
-        $sql = "SELECT DISTINCT `country` FROM `user_detail`";
-        $q = Db::result($sql);
+        $q = Db::result("SELECT DISTINCT `country` FROM `user_detail` ");
         $ctr = array();
-        if (Db::$num_rows > 0) {
+        if ($q) {
             foreach ($q as $k => $v) {
                 if ($v->country != '') {
-                    $sql2 = "SELECT `id` FROM `user_detail` WHERE `country` = '{$v->country}'";
-                    $q2 = Db::result($sql2);
-                    $ctr[$v->country] = Db::$num_rows;
+                    $count = Query::table('user_detail')->where('country', $v->country)->count();
+                    $ctr[$v->country] = $count;
                 }
             }
         }
-        // print_r($ctr);
         return json_encode($ctr);
     }
 
@@ -496,6 +378,3 @@ class User
         }
     }
 }
-
-/* End of file user.class.php */
-/* Location: ./inc/lib/user.class.php */

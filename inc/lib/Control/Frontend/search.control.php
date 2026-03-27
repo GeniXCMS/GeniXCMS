@@ -15,17 +15,18 @@ class SearchControl extends BaseControl
             $q = Typo::cleanX($_GET['q']);
             $data['sitetitle'] = "Search: " . $q;
             $sq = explode(' ', $q);
-            $where = '';
-            $pwhere = '';
+            $whereConditions = [];
+            $whereBindings = [];
             foreach ($sq as $k) {
-                $where .= "AND (`title` LIKE '%{$k}%' OR `content` LIKE '%{$k}%') ";
-                $pwhere .= "AND (`title` LIKE '%{$k}%' OR `content` LIKE '%{$k}%') ";
+                $whereConditions[] = "(`title` LIKE ? OR `content` LIKE ?)"; 
+                $whereBindings[] = "%{$k}%";
+                $whereBindings[] = "%{$k}%";
             }
             $data['q'] = $q;
         } else {
             $data['sitetitle'] = "Search: ";
-            $where = '';
-            $pwhere = '';
+            $whereConditions = [];
+            $whereBindings = [];
             $data['q'] = '';
             $q = '';
         }
@@ -41,29 +42,24 @@ class SearchControl extends BaseControl
 
         $url = Url::search() . $qpage;
         $paging_arr = [
-            'paging' => $paging,
-            'table' => 'posts',
-            'where' => "`type` = 'post' AND `status` = '1' {$pwhere}",
-            'max' => $data['max'],
-            'url' => $url,
-            'type' => 'number'
+            'paging'  => $paging,
+            'table'   => 'posts',
+            'where'   => "`type` = 'post' AND `status` = '1'" . (isset($whereConditions) && $whereConditions ? ' AND ' . implode(' AND ', array_map(fn($c) => str_replace('?', "'%%s'", $c), $whereConditions)) : ''),
+            'max'     => $data['max'],
+            'url'     => $url,
+            'type'    => 'number'
         ];
         $data['paging'] = Paging::create($paging_arr);
 
-        $data['posts'] = Db::result(
-            sprintf(
-                "SELECT * FROM `posts`
-                    WHERE `type` = 'post'
-                    %s
-                    AND `status` = '1'
-                    ORDER BY `date` 
-                    DESC LIMIT %d, %d",
-                $where,
-                $offset,
-                $data['max']
-            )
-        );
-        $data['num'] = Db::$num_rows;
+        $q_builder = Query::table('posts')
+            ->where('type', 'post')
+            ->where('status', '1');
+        if (!empty($whereConditions)) {
+            $q_builder->whereRaw(implode(' AND ', $whereConditions), $whereBindings);
+        }
+        $posts = $q_builder->orderBy('date', 'DESC')->limit($data['max'], $offset)->get();
+        $data['posts'] = $posts;
+        $data['num'] = count($posts);
 
         $data['recent_posts'] = Posts::lists([
             'num' => 5,

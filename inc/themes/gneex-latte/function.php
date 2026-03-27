@@ -328,12 +328,12 @@ class Gneex
 
     public static function loadCSS()
     {
-        // Ensure GxOptionsBuilder is available
-        if (!class_exists('GxOptionsBuilder')) {
-            require_once __DIR__ . '/GxOptionsBuilder.php';
+        // Global safeguard: never inject the theme's premium frontend styles into the administrative portal
+        if (strpos($_SERVER['PHP_SELF'], 'gxadmin') !== false) {
+            return '';
         }
 
-        return GxOptionsBuilder::generateFrontendCSS(self::$opt, [
+        return OptionsBuilder::generateFrontendCSS(self::$opt, [
             'themeUrl'  => Url::theme(),
             'minify'    => true,
         ]);

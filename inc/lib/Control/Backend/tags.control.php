@@ -38,14 +38,13 @@ if (User::access(1)) {
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
-                $cat = Db::insert(
-                    sprintf(
-                        "INSERT INTO `cat` VALUES (null, '%s', '%s', '%d', '', 'tag' )",
-                        $cat,
-                        $slug,
-                        0
-                    )
-                );
+                Query::table('cat')->insert([
+                    'name' => $cat,
+                    'slug' => $slug,
+                    'parent' => 0,
+                    'image' => '',
+                    'type' => 'tag',
+                ]);
                 //print_r($cat);
                 $data['alertSuccess'][] = _("Tag Added").' '.$_POST['cat'];
             }
@@ -70,14 +69,9 @@ if (User::access(1)) {
             if (isset($alertDanger)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
-                $vars = array(
-                            'table' => 'cat',
-                            'id' => Typo::int($_POST['id']),
-                            'key' => array(
-                                        'name' => $cat,
-                                    ),
-                        );
-                $cat = Db::update($vars);
+                Query::table('cat')->where('id', Typo::int($_POST['id']))->update([
+                    'name' => $cat,
+                ]);
                 $data['alertSuccess'][] = _("Tag Updated").' '.$_POST['cat'];
             }
             if (isset($_POST['token'])) {
@@ -107,8 +101,8 @@ if (User::access(1)) {
         }
     }
     System::alert($data);
-    $data['cat'] = Db::result("SELECT * FROM `cat` WHERE `type` = 'tag' ORDER BY `id` DESC");
-    $data['num'] = Db::$num_rows;
+    $data['cat'] = Query::table('cat')->where('type', 'tag')->orderBy('id', 'DESC')->get();
+    $data['num'] = count($data['cat']);
     Theme::admin('header', $data);
     System::inc('tags', $data);
     Theme::admin('footer');

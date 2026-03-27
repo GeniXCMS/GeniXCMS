@@ -12,23 +12,41 @@
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 
-class DynamicBuilder {
-    public static function init() {
+class DynamicBuilder
+{
+    public static function init()
+    {
         Hooks::attach('admin_footer_action', array('DynamicBuilder', 'injectStatic'));
         Hooks::attach('page_param_form_bottom', array('DynamicBuilder', 'injectToggle'));
         Hooks::attach('footer_load_lib', array('DynamicBuilder', 'injectFrontendJS'));
-        
+
         // Handle Ajax Save
         if (isset($_GET['ajax']) && $_GET['ajax'] == 'dynamic_builder_save') {
             self::savePage();
         }
     }
 
-    public static function injectFrontendJS() {
-        $siteUrl = rtrim(Site::$url, '/').'/';
+    public static function savePage()
+    {
+        if (!User::access(0)) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+            exit;
+        }
+
+        // This method is a placeholder for direct AJAX saving if implemented in the future.
+        // Currently, the builder exports content back to the main editor.
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'AJAX Save endpoint reached']);
+        exit;
+    }
+
+    public static function injectFrontendJS()
+    {
+        $siteUrl = rtrim(Site::$url, '/') . '/';
         $isSmartUrl = SMART_URL ? '1' : '0';
         ob_start();
-        ?>
+?>
         <script>
         function gx_load_dynamic_content() {
             var containers = document.querySelectorAll('.recent-posts-container');
@@ -39,8 +57,8 @@ class DynamicBuilder {
             containers.forEach(function(container) {
                 if (container.getAttribute('data-loaded') === 'true') return;
                 
-                var siteUrl = '<?=rtrim(Site::$url, "/");?>/';
-                var isSmartUrl = '<?=SMART_URL ? "1" : "0";?>' === '1';
+                var siteUrl = '<?= rtrim(Site::$url, "/"); ?>/';
+                var isSmartUrl = '<?= SMART_URL ? "1" : "0"; ?>' === '1';
                 var apiUrl = isSmartUrl 
                     ? siteUrl + 'ajax/api/public?action=recent_posts&num=3' 
                     : siteUrl + 'index.php?ajax=api&token=public&action=recent_posts&num=3';
@@ -104,7 +122,8 @@ class DynamicBuilder {
         echo ob_get_clean();
     }
 
-    public static function injectToggle() {
+    public static function injectToggle()
+    {
         echo '
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 mt-4 bg-primary text-white">
             <div class="card-body p-4 d-flex align-items-center justify-content-between">
@@ -121,9 +140,10 @@ class DynamicBuilder {
         ';
     }
 
-    public static function injectStatic() {
+    public static function injectStatic()
+    {
         if (isset($_GET['page']) && $_GET['page'] == 'pages' && (isset($_GET['act']) && ($_GET['act'] == 'add' || $_GET['act'] == 'edit'))) {
-            ?>
+?>
             <!-- Dynamic Builder Core -->
             <link href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.10/dist/css/grapes.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/grapesjs@0.21.10/dist/grapes.min.js"></script>
@@ -336,8 +356,8 @@ class DynamicBuilder {
                                         } else {
                                             // Fallback for direct execution in editor if global script not loaded yet
                                             const container = this;
-                                            const siteUrl = '<?=rtrim(Site::$url, "/");?>/';
-                                            const isSmartUrl = '<?=SMART_URL ? "1" : "0";?>' === '1';
+                                            const siteUrl = '<?= rtrim(Site::$url, "/"); ?>/';
+                                            const isSmartUrl = '<?= SMART_URL ? "1" : "0"; ?>' === '1';
                                             const apiUrl = isSmartUrl 
                                                 ? siteUrl + 'ajax/api/public?action=recent_posts&num=3' 
                                                 : siteUrl + 'index.php?ajax=api&token=public&action=recent_posts&num=3';
@@ -656,9 +676,20 @@ class DynamicBuilder {
                         });
 
 
-                        // Ambil konten lama dari textarea jika ada
-                        let currentContent = $('#primary_editor').summernote('code');
-                        if (!currentContent) currentContent = $('.editor').first().val();
+                        // Get old content safely
+                        let currentContent = '';
+                        if ($.fn.summernote) {
+                            if ($('#primary_editor').length) currentContent = $('#primary_editor').summernote('code');
+                            else if ($('.editor').length) currentContent = $('.editor').first().summernote('code');
+                        } else if (window.__gxEditors) {
+                            var keys = Object.keys(window.__gxEditors);
+                            if (keys.length > 0 && window.__gxEditors[keys[0]]._textarea) {
+                                currentContent = window.__gxEditors[keys[0]]._textarea.value;
+                            }
+                        }
+                        if (!currentContent) {
+                            currentContent = $('#primary_editor').length ? $('#primary_editor').val() : $('.editor').first().val();
+                        }
                         
                         editor.setComponents(currentContent);
                     }
@@ -670,11 +701,20 @@ class DynamicBuilder {
                         const css = editor.getCss();
                         const fullContent = `<style>${css}</style>${html}`;
                         
-                        // Masukkan ke editor utama (Summernote atau textarea)
-                        if ($('#primary_editor').length) {
-                             $('#primary_editor').summernote('code', fullContent);
-                        } else if ($('.editor').length) {
-                             $('.editor').first().summernote('code', fullContent);
+                        // Insert back to active editor safely
+                        if ($.fn.summernote) {
+                            if ($('#primary_editor').length) $('#primary_editor').summernote('code', fullContent);
+                            else if ($('.editor').length) $('.editor').first().summernote('code', fullContent);
+                        } else if (window.__gxEditors) {
+                            var keys = Object.keys(window.__gxEditors);
+                            if (keys.length > 0) {
+                                window.__gxEditors[keys[0]].blocks.render({
+                                    blocks: [{ type: 'paragraph', data: { text: fullContent } }]
+                                });
+                            }
+                        } else {
+                            if ($('#primary_editor').length) $('#primary_editor').val(fullContent);
+                            else if ($('.editor').length) $('.editor').first().val(fullContent);
                         }
                         
                         toastr.success("Layout exported successfully to editor.");
@@ -701,4 +741,3 @@ class DynamicBuilder {
 }
 
 DynamicBuilder::init();
-

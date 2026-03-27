@@ -53,8 +53,7 @@ if (User::access(1)) {
 
                 //print_r($_POST);
                 $flip = array_flip($_POST);
-                $sql = "SELECT * FROM `options` WHERE `value` = 'on'";
-                $q = Db::result($sql);
+                $q = Query::table('options')->where('value', 'on')->get();
                 $input = array('is_logourl', 'use_jquery', 'use_bootstrap', 'use_fontawesome',
                     'use_editor', 'use_bsvalidator', 'ppsandbox', 'google_captcha_enable', 'pinger_enable', );
                 foreach ($q as $ob) {

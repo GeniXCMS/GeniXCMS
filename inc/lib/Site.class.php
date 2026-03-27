@@ -579,23 +579,31 @@ class Site
         });
 
         function sendFile(file,editor,welEditable) {
-          data = new FormData();
-          data.append("file", file);
-            $.ajax({
-                url: "'.$url.'",
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: \'POST\',
-                success: function(data) {
-                //alert(data);
-                  $(\'.editor\').summernote(\'editor.insertImage\', data);
-                },
-               error: function(jqXHR, textStatus, errorThrown) {
-                 console.log(textStatus+" "+errorThrown);
-               }
-            });
+            var elfinderUrl = \''.Url::ajax("elfinder").'\';
+            var sep = elfinderUrl.indexOf(\'?\') === -1 ? \'?\' : \'&\';
+            $.ajax({ url: elfinderUrl + sep + \'cmd=open&init=1&target=\', type: \'GET\', dataType: \'json\' })
+             .done(function(initData) {
+                 if (!initData || !initData.cwd) return console.log(\'Failed to init elfinder API\');
+                 var target = initData.cwd.hash;
+                 var fd = new FormData();
+                 fd.append(\'cmd\', \'upload\');
+                 fd.append(\'target\', target);
+                 fd.append(\'upload[]\', file);
+                 $.ajax({
+                     url: elfinderUrl, data: fd, cache: false, contentType: false, processData: false, type: \'POST\',
+                     success: function(data) {
+                         var parsed = typeof data === \'string\' ? JSON.parse(data) : data;
+                         if (parsed.added && parsed.added.length > 0) {
+                             $(\'.editor\').summernote(\'editor.insertImage\', parsed.added[0].url);
+                         } else if (parsed.error) {
+                             console.error(parsed.error);
+                         }
+                     },
+                     error: function(jqXHR, textStatus, errorThrown) {
+                         console.log(textStatus+" "+errorThrown);
+                     }
+                 });
+             });
           }
 
       });

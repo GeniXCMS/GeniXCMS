@@ -74,7 +74,7 @@ define('DB_HOST', '".Session::val('dbhost')."');
 define('DB_NAME', '".Session::val('dbname')."');
 define('DB_PASS', '".Session::val('dbpass')."');
 define('DB_USER', '".Session::val('dbuser')."');
-!defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
+define('DB_DRIVER', '".Session::val('dbdriver')."');
 
 define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
 define('GX_URL_PREFIX', '.html');
@@ -128,172 +128,46 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
     {
         require_once GX_PATH.'/inc/config/config.php';
         $db = new Db();
-        $cat = 'CREATE TABLE IF NOT EXISTS `cat` (
-                `id` int(11) NOT NULL,
-                  `name` text NOT NULL,
-                  `slug` text NOT NULL,
-                  `parent` text DEFAULT NULL,
-                  `desc` text DEFAULT  NULL,
-                  `type` text NOT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ';
-        $db->query($cat);
+        $driver = DB_DRIVER;
 
-        $pr = 'ALTER TABLE `cat` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
+        $tables = [];
 
-        $pr = 'ALTER TABLE `cat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
+        if ($driver == 'pgsql') {
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id SERIAL PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, \"desc\" TEXT, type TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat_param (id SERIAL PRIMARY KEY, cat_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS menus (id SERIAL PRIMARY KEY, name VARCHAR(64) NOT NULL, menuid VARCHAR(32) NOT NULL, parent VARCHAR(11), sub CHAR(1) CHECK (sub IN ('0','1')) NOT NULL, type VARCHAR(8) NOT NULL, value TEXT NOT NULL, class VARCHAR(64), \"order\" VARCHAR(4))";
+            $tables[] = "CREATE TABLE IF NOT EXISTS options (id SERIAL PRIMARY KEY, name TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS posts (id BIGSERIAL PRIMARY KEY, date TIMESTAMP NOT NULL, title TEXT NOT NULL, slug TEXT NOT NULL, content TEXT NOT NULL, author TEXT NOT NULL, type TEXT NOT NULL, cat VARCHAR(11), modified TIMESTAMP, status CHAR(1) CHECK (status IN ('0','1','2')) NOT NULL, views INTEGER DEFAULT 0)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS posts_param (id BIGSERIAL PRIMARY KEY, post_id BIGINT NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS \"user\" (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), \"group\" VARCHAR(1) CHECK (\"group\" IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TIMESTAMP NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate DATE, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS comments (id BIGSERIAL PRIMARY KEY, date TIMESTAMP NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
+        } elseif ($driver == 'sqlite') {
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, [desc] TEXT, type TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat_param (id INTEGER PRIMARY KEY AUTOINCREMENT, cat_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS menus (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(64) NOT NULL, menuid VARCHAR(32) NOT NULL, parent VARCHAR(11), sub TEXT CHECK (sub IN ('0','1')) NOT NULL, type VARCHAR(8) NOT NULL, value TEXT NOT NULL, class VARCHAR(64), [order] VARCHAR(4))";
+            $tables[] = "CREATE TABLE IF NOT EXISTS options (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, title TEXT NOT NULL, slug TEXT NOT NULL, content TEXT NOT NULL, author TEXT NOT NULL, type TEXT NOT NULL, cat VARCHAR(11), modified TEXT, status TEXT CHECK (status IN ('0','1','2')) NOT NULL, views INTEGER DEFAULT 0)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS posts_param (id INTEGER PRIMARY KEY AUTOINCREMENT, post_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), [group] TEXT CHECK ([group] IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TEXT NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate TEXT, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
+        } else {
+            // Default to MySQL
+            $tables[] = "CREATE TABLE IF NOT EXISTS `cat` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `slug` text NOT NULL, `parent` text DEFAULT NULL, `desc` text DEFAULT NULL, `type` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `cat_param` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `cat_id` int(11) NOT NULL, `param` text NOT NULL, `value` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `menus` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` varchar(64) NOT NULL, `menuid` varchar(32) NOT NULL, `parent` varchar(11) DEFAULT NULL, `sub` enum('0','1') NOT NULL, `type` varchar(8) NOT NULL, `value` text NOT NULL, `class` varchar(64) DEFAULT NULL, `order` varchar(4) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `options` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `value` longtext NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `posts` (`id` bigint(32) NOT NULL PRIMARY KEY AUTO_INCREMENT, `date` datetime NOT NULL, `title` text NOT NULL, `slug` text NOT NULL, `content` longtext NOT NULL, `author` text NOT NULL, `type` text NOT NULL, `cat` varchar(11) DEFAULT NULL, `modified` datetime DEFAULT NULL, `status` enum('0','1','2') NOT NULL, `views` int(11) NOT NULL DEFAULT '0') ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `posts_param` (`id` bigint(32) NOT NULL PRIMARY KEY AUTO_INCREMENT, `post_id` bigint(32) NOT NULL, `param` text NOT NULL, `value` longtext NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `user` (`id` bigint(32) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `pass` varchar(255) NOT NULL, `confirm` varchar(255) DEFAULT NULL, `group` enum('0','1','2','3','4','5','6') NOT NULL, `email` varchar(255) NOT NULL, `join_date` datetime NOT NULL, `status` enum('0','1') NOT NULL, `activation` text, `ipaddress` text) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `user_detail` (`id` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `fname` varchar(32) DEFAULT NULL, `lname` varchar(255) DEFAULT NULL, `sex` varchar(2) DEFAULT NULL, `birthplace` varchar(32) DEFAULT NULL, `birthdate` date DEFAULT NULL, `addr` varchar(255) DEFAULT NULL, `city` varchar(255) DEFAULT NULL, `state` varchar(255) DEFAULT NULL, `country` varchar(255) DEFAULT NULL, `postcode` varchar(32) DEFAULT NULL, `avatar` text, `balance` float DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `comments` (`id` bigint(22) NOT NULL PRIMARY KEY AUTO_INCREMENT, `date` datetime NOT NULL, `userid` text NOT NULL, `name` text NOT NULL, `email` text NOT NULL, `url` text NOT NULL, `comment` longtext NOT NULL, `post_id` int(11) NOT NULL, `parent` int(11) NOT NULL, `status` enum('0','1','2') NOT NULL, `type` text NOT NULL, `ipaddress` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        }
 
-        $cat_param = 'CREATE TABLE IF NOT EXISTS `cat_param` (
-                    `id` int(11) NOT NULL,
-                      `cat_id` int(11) NOT NULL,
-                      `param` text CHARACTER SET utf8 NOT NULL,
-                      `value` text CHARACTER SET utf8 NOT NULL
-                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
-        $db->query($cat_param);
-
-        $pr = 'ALTER TABLE `cat_param` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `cat_param` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $menu = "CREATE TABLE IF NOT EXISTS `menus` (
-                `id` int(11) NOT NULL,
-                  `name` varchar(64) NOT NULL,
-                  `menuid` varchar(32) NOT NULL,
-                  `parent` varchar(11) DEFAULT  NULL,
-                  `sub` enum('0','1') NOT NULL,
-                  `type` varchar(8) NOT NULL,
-                  `value` text NOT NULL,
-                  `class` varchar(64) DEFAULT NULL,
-                  `order` varchar(4) DEFAULT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
-
-        $db->query($menu);
-
-        $pr = 'ALTER TABLE `menus` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `menus` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $options = 'CREATE TABLE IF NOT EXISTS `options` (
-                    `id` int(11) NOT NULL,
-                      `name` text CHARACTER SET utf8 NOT NULL,
-                      `value` longtext CHARACTER SET utf8 NOT NULL
-                    ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
-        $db->query($options);
-
-        $pr = 'ALTER TABLE `options` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `options` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $posts = "CREATE TABLE IF NOT EXISTS `posts` (
-                `id` bigint(32) NOT NULL,
-                  `date` datetime NOT NULL,
-                  `title` text NOT NULL,
-                  `slug` text NOT NULL,
-                  `content` longtext NOT NULL,
-                  `author` text NOT NULL,
-                  `type` text NOT NULL,
-                  `cat` varchar(11) DEFAULT NULL,
-                  `modified` datetime DEFAULT NULL,
-                  `status` enum('0','1','2') NOT NULL,
-                  `views` int(11) NOT NULL DEFAULT '0'
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
-        $db->query($posts);
-
-        $pr = 'ALTER TABLE `posts` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `posts` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $post_param = 'CREATE TABLE IF NOT EXISTS `posts_param` (
-                `id` bigint(32) NOT NULL,
-                  `post_id` BIGINT(32) NOT NULL,
-                  `param` TEXT NOT NULL,
-                  `value` LONGTEXT NOT NULL
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8';
-        $db->query($post_param);
-
-        $pr = 'ALTER TABLE `posts_param` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `posts_param` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $user = "CREATE TABLE IF NOT EXISTS `user` (
-                `id` bigint(32) NOT NULL,
-                  `userid` varchar(32) NOT NULL,
-                  `pass` varchar(255) NOT NULL,
-                  `confirm` varchar(255) DEFAULT NULL,
-                  `group` enum('0','1','2','3','4','5','6') NOT NULL,
-                  `email` varchar(255) NOT NULL,
-                  `join_date` datetime NOT NULL,
-                  `status` enum('0','1') NOT NULL,
-                  `activation` text,
-                  `ipaddress` text
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
-        $db->query($user);
-
-        $pr = 'ALTER TABLE `user` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `user` MODIFY `id` bigint(32) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $user_detail = 'CREATE TABLE IF NOT EXISTS `user_detail` (
-                  `id` bigint(20) NOT NULL,
-                  `userid` varchar(32)  NOT NULL,
-                  `fname` varchar(32)  DEFAULT NULL,
-                  `lname` varchar(255)  DEFAULT NULL,
-                  `sex` varchar(2)  DEFAULT NULL,
-                  `birthplace` varchar(32)  DEFAULT NULL,
-                  `birthdate` date DEFAULT NULL,
-                  `addr` varchar(255)  DEFAULT NULL,
-                  `city` varchar(255)  DEFAULT NULL,
-                  `state` varchar(255)  DEFAULT NULL,
-                  `country` varchar(255)  DEFAULT NULL,
-                  `postcode` varchar(32)  DEFAULT NULL,
-                  `avatar` text,
-                  `balance` float DEFAULT 0
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8';
-        $db->query($user_detail);
-
-        $pr = 'ALTER TABLE `user_detail` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `user_detail` MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        $comments = "CREATE TABLE IF NOT EXISTS `comments` (
-                  `id` bigint(22) NOT NULL,
-                  `date` datetime NOT NULL,
-                  `userid` text NOT NULL,
-                  `name` text NOT NULL,
-                  `email` text NOT NULL,
-                  `url` text NOT NULL,
-                  `comment` longtext NOT NULL,
-                  `post_id` int(11) NOT NULL,
-                  `parent` int(11) NOT NULL,
-                  `status` enum('0','1','2') NOT NULL,
-                  `type` text NOT NULL,
-                  `ipaddress` text NOT NULL
-                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
-        $db->query($comments);
-
-        $pr = 'ALTER TABLE `comments` ADD PRIMARY KEY (`id`)';
-        $db->query($pr);
-
-        $pr = 'ALTER TABLE `comments` MODIFY `id` bigint(22) NOT NULL AUTO_INCREMENT';
-        $db->query($pr);
-
-        
-
+        foreach ($tables as $sql) {
+            $db->query($sql);
+        }
     }
 
     /**

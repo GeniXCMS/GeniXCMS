@@ -142,31 +142,39 @@ if (User::access(1)) {
         $act = '';
     }
 
-    // search query
-    $where = '';
-    $qpage = '';
+    // Build query conditions
+    $q_builder = Query::table('comments')->where('type', 'post');
+    $whereBindings = [];
+    $whereRaws = [];
+    $qpage = "";
+
     if (isset($_GET['q']) && $_GET['q'] != '') {
         $q = Typo::cleanX($_GET['q']);
-        $where .= "AND (`comment` LIKE '%{$q}%' OR `email` LIKE '%{$q}%') ";
+        $whereRaws[] = "(`comment` LIKE ? OR `email` LIKE ?)"; 
+        $whereBindings[] = "%{$q}%";
+        $whereBindings[] = "%{$q}%";
         $qpage .= "&q={$_GET['q']}";
     }
     if (isset($_GET['from']) && $_GET['from'] != '') {
         $from = Typo::cleanX($_GET['from']);
-        $where .= "AND `date` >= '{$from}' ";
+        $whereRaws[] = "`date` >= ?";
+        $whereBindings[] = $from;
         $qpage .= "&from={$from}";
     }
     if (isset($_GET['to']) && $_GET['to'] != '') {
         $to = Typo::cleanX($_GET['to']);
-        $where .= "AND `date` <= '{$to}' ";
+        $whereRaws[] = "`date` <= ?";
+        $whereBindings[] = $to;
         $qpage .= "&to={$to}";
     }
     if (isset($_GET['status']) && $_GET['status'] != '') {
         $status = Typo::cleanX($_GET['status']);
-        $where .= "AND `status` LIKE '%{$status}%' ";
+        $whereRaws[] = "`status` LIKE ?";
+        $whereBindings[] = "%{$status}%";
         $qpage .= "&status={$status}";
     }
-
-    $max = '15';
+    
+    $max = 15;
     if (isset($_GET['paging'])) {
         $paging = Typo::int($_GET['paging']);
         $offset = ($paging - 1) * $max;
@@ -175,17 +183,19 @@ if (User::access(1)) {
         $offset = 0;
     }
 
-    $data['posts'] = Db::result(
-        sprintf("SELECT * FROM `comments`
-                    WHERE `type` = 'post' %s
-                    ORDER BY `date` DESC
-                    LIMIT %d, %d", $where, $offset, $max)
-    );
-    $data['num'] = Db::$num_rows;
+    if (!empty($whereRaws)) {
+        $q_builder->whereRaw(implode(' AND ', $whereRaws), $whereBindings);
+    }
+
+    $countQuery = clone $q_builder;
+    $totalCount = $countQuery->count();
+
+    $data['posts'] = $q_builder->orderBy('date', 'DESC')->limit($max, $offset)->get();
+    $data['num'] = count($data['posts']);
     $page = array(
                 'paging' => $paging,
                 'table' => 'comments',
-                'where' => "`type` = 'post' ".$where,
+                'total' => $totalCount,
                 'max' => $max,
                 'url' => 'index.php?page=comments'.$qpage,
                 'type' => 'number',

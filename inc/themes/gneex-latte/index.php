@@ -257,8 +257,8 @@
                                             {if $p->cat}<span><i class="fa fa-folder-open-o me-1 text-primary"></i> <a href="{Url::cat($p->cat)}" class="text-muted text-decoration-none">{Categories::name($p->cat)}</a></span>{/if}
                                         </div>
                                         <h2 class="post-title h3 mt-2"><a href="{Url::post($p->id)}" class="text-dark text-decoration-none fw-bold">{$p->title}</a></h2>
-                                        <div class="entry-content text-muted mb-4 small">
-                                            {$p->content|stripHtml|truncate:200}
+                                        <div class="entry-content mb-4 text-muted">
+                                            {Typo::Xclean($p->content)|stripHtml|truncate:300}
                                         </div>
                                         <div class="post-footer d-flex justify-content-between align-items-center">
                                             <a href="{Url::post($p->id)}" class="btn btn-read-more">Read Article</a>

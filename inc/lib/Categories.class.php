@@ -65,59 +65,29 @@ class Categories
     public static function dropdown($vars)
     {
         if (is_array($vars)) {
-            //print_r($vars);
-            $name = Typo::cleanX($vars['name']);
-            $where = 'WHERE 1 ';
+            $q = Query::table('cat');
             if (isset($vars['parent'])) {
-                $where .= " AND `parent` = '".Typo::int($vars['parent'])."' ";
-            } else {
-                $where .= '';
+                $q->where('parent', $vars['parent']);
             }
             if (isset($vars['type'])) {
-                $type = Typo::cleanX($vars['type']);
-                if ($type == 'tag') {
-                    $where .= " AND `type` = '".$type."' ";
-                } else {
-                    $where .= " AND `type` = '".$type."' AND `type` != 'tag' ";
-                }
-
+                $q->where('type', $vars['type']);
             } else {
-                $where .= " AND `type` != 'tag' ";
+                $q->where('type', '!=', 'tag');
             }
-            $where .= ' ';
-            $order_by = 'ORDER BY ';
-            if (isset($vars['order_by'])) {
-                $order_by .= ' '.Typo::cleanX($vars['order_by']).' ';
-            } else {
-                $order_by .= ' `name` ';
-            }
-            if (isset($vars['sort'])) {
-                $sort = " ".Typo::cleanX($vars['sort'])." ";
-            } else {
-                $sort = ' ASC';
-            }
-
-            // $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
-            $cat = Db::result('SELECT * FROM `cat` '.$where.' '.$order_by.' '.$sort);
-            // print_r($cat);
-            $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
-            if (Db::$num_rows > 0) {
+            $cat = $q->orderBy($vars['order_by'] ?? 'name', $vars['sort'] ?? 'ASC')->get();
+            $name = Typo::cleanX($vars['name'] ?? 'cat');
+            $class = isset($vars['class']) ? $vars['class'] : 'form-control';
+            $id = isset($vars['id']) ? "id=\"{$vars['id']}\"" : "";
+            $drop = "<select name=\"{$name}\" {$id} class=\"{$class}\"><option value=\"0\">None</option>";
+            if (!empty($cat) && is_array($cat)) {
                 foreach ($cat as $c) {
-                    if ($c->parent == null || $c->parent == '0') {
-                        if (isset($vars['selected']) && $c->id == $vars['selected']) {
-                            $sel = 'SELECTED';
-                        } else {
-                            $sel = '';
-                        }
+                    if (is_object($c) && ($c->parent == null || $c->parent == '0')) {
+                        $sel = (isset($vars['selected']) && $c->id == $vars['selected']) ? 'selected' : '';
                         $drop .= "<option value=\"{$c->id}\" $sel style=\"padding-left: 10px;\">{$c->name}</option>";
                         foreach ($cat as $c2) {
-                            if ($c2->parent == $c->id) {
-                                if (isset($vars['selected']) && $c2->id == $vars['selected']) {
-                                    $sel = 'SELECTED';
-                                } else {
-                                    $sel = '';
-                                }
-                                $drop .= "<option value=\"{$c2->id}\" $sel style=\"padding-left: 10px;\">
+                            if (is_object($c2) && $c2->parent == $c->id) {
+                                $sel2 = (isset($vars['selected']) && $c2->id == $vars['selected']) ? 'selected' : '';
+                                $drop .= "<option value=\"{$c2->id}\" $sel2 style=\"padding-left: 10px;\">
                                     &nbsp;&nbsp;&nbsp;{$c2->name}</option>";
                             }
                         }
@@ -125,7 +95,8 @@ class Categories
                 }
             }
             $drop .= '</select>';
-        } else {
+        }
+        else {
             $drop = _('Category config not in Array');
         }
 
@@ -140,41 +111,55 @@ class Categories
 
             $where = 'WHERE 1';
             if (isset($vars['parent'])) {
-                $where .= " AND `parent` = '".Typo::int($vars['parent'])."' ";
-            } else {
+                $where .= " AND `parent` = '" . Typo::int($vars['parent']) . "' ";
+            }
+            else {
                 $where .= '';
             }
             if (isset($vars['type'])) {
                 $type = Typo::cleanX($vars['type']);
                 if ($type == 'tag') {
-                    $where .= " AND `type` = '".$type."' ";
-                } else {
-                    $where .= " AND `type` = '".$type."' AND `type` != 'tag' ";
+                    $where .= " AND `type` = '" . $type . "' ";
+                }
+                else {
+                    $where .= " AND `type` = '" . $type . "' AND `type` != 'tag' ";
                 }
 
-            } else {
+            }
+            else {
                 $where .= " AND `type` != 'tag' ";
             }
 
             $order_by = ' ORDER BY ';
             if (isset($vars['order_by'])) {
                 $order_by .= " {$vars['order_by']} ";
-            } else {
+            }
+            else {
                 $order_by .= ' `name` ';
             }
             if (isset($vars['sort'])) {
                 $sort = " {$vars['sort']}";
-            } else {
+            }
+            else {
                 $sort = ' ASC';
             }
         }
-        $cat = Db::result("SELECT * FROM `cat` {$where} {$order_by} {$sort}");
+        $q = Query::table('cat');
+        if (isset($vars['parent'])) {
+            $q->where('parent', $vars['parent']);
+        }
+        if (isset($vars['type'])) {
+            $q->where('type', $vars['type']);
+        } else {
+            $q->where('type', '!=', 'tag');
+        }
+        $cat = $q->orderBy($vars['order_by'] ?? 'name', $vars['sort'] ?? 'ASC')->get();
         //print_r($cat);
         $html = '<div class="panel-group" id="accordion" role="tablist">
             ';
-        if (Db::$num_rows > 0) {
+        if (!empty($cat) && is_array($cat)) {
             foreach ($cat as $c) {
-                if ($c->parent == null || $c->parent == '0') {
+                if (is_object($c) && ($c->parent == null || $c->parent == '0')) {
                     //if (isset($vars['selected']) && $c->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
                     if (isset($_GET['cat'])) {
                         $catparent = self::getParent($_GET['cat']);
@@ -182,7 +167,8 @@ class Categories
                         $collapseHeading = ($catparent[0]->parent === $c->id) ? "collapseListGroupHeading{$c->id}" : '';
                         $href = ($catparent[0]->parent === $c->id) ? "#collapse-{$c->id}" : Url::cat($c->id);
                         $data_toggle = ($catparent[0]->parent === $c->id) ? 'collapse' : '';
-                    } else {
+                    }
+                    else {
                         $catparent = '';
                         $in = '';
                         $collapseHeading = '';
@@ -199,9 +185,9 @@ class Categories
                     <div class=\"panel-collapse collapse {$in}\" role=\"tabpanel\" id=\"collapse-{$c->id}\" aria-labelledby=\"collapseListGroupHeading{$c->id}\">
                     <ul class=\"nav nav-pills nav-stacked \" >";
                     foreach ($cat as $c2) {
-                        if ($c2->parent == $c->id) {
+                        if (is_object($c2) && $c2->parent == $c->id) {
                             //if (isset($vars['selected']) && $c2->id == $vars['selected']) $sel = "SELECTED"; else $sel = "";
-                            $html .= '<li><a href="'.Url::cat($c2->id)."\">{$c2->name}</a></li>";
+                            $html .= '<li><a href="' . Url::cat($c2->id) . "\">{$c2->name}</a></li>";
                         }
                     }
                     $html .= '</ul></div></div>';
@@ -233,21 +219,21 @@ class Categories
             error_log("DEBUG: Categories::name received an ARRAY: " . json_encode($id));
             return _('Multiple Categories');
         }
-        $id = sprintf('%d', $id);
         if (isset($id)) {
-            $cat = Db::result("SELECT `name` FROM `cat`
-                                WHERE `id` = '{$id}' LIMIT 1");
+            $cat = Query::table('cat')->where('id', $id)->first();
             //print_r($cat);
-            if (isset($cat['error'])) {
+            if (!$cat) {
                 return '';
-            } else {
-                return $cat[0]->name;
             }
-        } else {
+            else {
+                return $cat->name;
+            }
+        }
+        else {
             return _('No ID Selected');
         }
 
-        //print_r($cat);
+    //print_r($cat);
     }
 
     /**
@@ -267,9 +253,8 @@ class Categories
     public static function getParent($id = '')
     {
         $id = sprintf('%d', $id);
-        $sql = sprintf("SELECT `parent` FROM `cat`
-                        WHERE `id` = '%d'", $id);
-        $cat = Db::result($sql);
+        $sql = 'SELECT ' . Db::quoteIdentifier('parent') . ' FROM ' . Db::quoteIdentifier('cat') . ' WHERE ' . Db::quoteIdentifier('id') . ' = ?';
+        $cat = Db::result($sql, [$id]);
 
         return $cat;
     }
@@ -297,29 +282,18 @@ class Categories
         $id = sprintf('%d', $id);
         $parent = self::getParent($id);
 
-        $sql = array(
-                    'table' => 'cat',
-                    'where' => array(
-                                    'id' => $id,
-                                ),
-                );
-        $cat = Db::delete($sql);
+        $cat = Query::table('cat')->where('id', $id)->delete();
         if ($cat) {
-            return true;
-        } else {
-            return false;
-        }
-        // check all posts with this category and move to parent categories
-        $post = Db::result("SELECT `id` FROM `posts`
-                            WHERE `cat` = '{$id}'");
-        $npost = Db::$num_rows;
+            // check all posts with this category and move to parent categories
+            $postCount = Query::table('posts')->where('cat', $id)->count();
 
-        //print_r($parent);
-        if ($npost > 0) {
-            $sql = "UPDATE `posts`
-                    SET `cat` = '{$parent[0]->parent}'
-                    WHERE `cat` = '{$id}'";
-            Db::query($sql);
+            if ($postCount > 0) {
+                Query::table('posts')->where('cat', $id)->update(['cat' => $parent[0]->parent ?? 0]);
+            }
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -327,15 +301,16 @@ class Categories
     {
         $id = sprintf('%d', $id);
         if (isset($id)) {
-            $cat = Db::result("SELECT `type` FROM `cat`
-                                WHERE `id` = '{$id}' LIMIT 1");
+            $cat = Db::result('SELECT ' . Db::quoteIdentifier('type') . ' FROM ' . Db::quoteIdentifier('cat') . ' WHERE ' . Db::quoteIdentifier('id') . ' = ? LIMIT 1', [$id]);
             //print_r($cat);
             if (isset($cat['error'])) {
                 return '';
-            } else {
+            }
+            else {
                 return $cat[0]->type;
             }
-        } else {
+        }
+        else {
             return _('No ID Selected');
         }
     }
@@ -344,50 +319,42 @@ class Categories
     {
         $name = sprintf('%s', $name);
         if (isset($name)) {
-            $cat = Db::result("SELECT `id` FROM `cat`
-                                WHERE `name` = '{$name}'
-                                OR `slug` = '{$name}' LIMIT 1");
+            $cat = Db::result('SELECT ' . Db::quoteIdentifier('id') . ' FROM ' . Db::quoteIdentifier('cat') . ' WHERE ' . Db::quoteIdentifier('name') . ' = ? OR ' . Db::quoteIdentifier('slug') . ' = ? LIMIT 1', [$name, $name]);
             // print_r($cat);
             if (isset($cat['error'])) {
                 return '';
-            } else {
+            }
+            else {
                 return $cat[0]->id;
             }
-        } else {
+        }
+        else {
             return _('No Name Selected');
         }
     }
 
     public static function exist($cat)
     {
-        $cat = Typo::int($cat);
-        $sql = "SELECT `id` FROM `cat` WHERE `id` = '{$cat}'";
-        $q = Db::result($sql);
-        // echo Db::$num_rows;
-        if (Db::$num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $id = Typo::int($cat);
+        $q = Query::table('cat')->where('id', $id)->first();
+
+        return ($q) ? true : false;
     }
 
     public static function slug($id)
     {
-        $id = sprintf('%d', $id);
         if (isset($id)) {
-            $cat = Db::result("SELECT `slug` FROM `cat`
-                                WHERE `id` = '{$id}' LIMIT 1");
-            //print_r($cat);
-            if (isset($cat['error'])) {
+            $cat = Query::table('cat')->where('id', $id)->first();
+            if (!$cat) {
                 return '';
-            } else {
-                return $cat[0]->slug;
             }
-        } else {
+            else {
+                return $cat->slug;
+            }
+        }
+        else {
             return _('No ID Selected');
         }
-
-        //print_r($cat);
     }
 }
 

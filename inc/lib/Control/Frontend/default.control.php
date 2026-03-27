@@ -20,18 +20,13 @@ class DefaultControl extends BaseControl
         $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
         $data['sitetitle'] = Site::$slogan . $pagingtitle;
-        $posts = Db::result(
-            sprintf(
-                "SELECT * FROM `posts`
-                    WHERE `type` = 'post'
-                    AND `status` = '1'
-                    ORDER BY `date`
-                    DESC LIMIT %d, %d",
-                $offset,
-                $data['max']
-            )
-        );
-        $data['num'] = Db::$num_rows;
+        $posts = Query::table('posts')
+            ->where('type', 'post')
+            ->where('status', '1')
+            ->orderBy('date', 'DESC')
+            ->limit($data['max'], $offset)
+            ->get();
+        $data['num'] = count($posts);
         $data['posts'] = Posts::prepare($posts);
 
         $url = (SMART_URL) ? Site::$url : Site::$url . '/index.php?';

@@ -9,19 +9,15 @@ if (User::access(1)) {
         if (!Token::validate($_POST['token'])) {
             $data['alertDanger'][] = _("Invalid token.");
         } else {
-            $vars = [
-                'table' => 'widgets',
-                'key' => [
-                    'name' => Typo::cleanX($_POST['name']),
-                    'title' => Typo::cleanX($_POST['title']),
-                    'type' => Typo::cleanX($_POST['type']),
-                    'location' => Typo::cleanX($_POST['location']),
-                    'content' => $_POST['content'], 
-                    'status' => 1,
-                    'sorting' => (int)$_POST['sorting']
-                ]
-            ];
-            Db::insert($vars);
+            Query::table('widgets')->insert([
+                'name'     => Typo::cleanX($_POST['name']),
+                'title'    => Typo::cleanX($_POST['title']),
+                'type'     => Typo::cleanX($_POST['type']),
+                'location' => Typo::cleanX($_POST['location']),
+                'content'  => $_POST['content'],
+                'status'   => 1,
+                'sorting'  => (int)$_POST['sorting'],
+            ]);
             $data['alertSuccess'][] = _("Widget created successfully.");
         }
         System::alert($data);
@@ -31,19 +27,14 @@ if (User::access(1)) {
         if (!Token::validate($_POST['token'])) {
             $data['alertDanger'][] = _("Invalid token.");
         } else {
-            $vars = [
-                'table' => 'widgets',
-                'id' => (int)$_POST['id'],
-                'key' => [
-                    'name' => Typo::cleanX($_POST['name']),
-                    'title' => Typo::cleanX($_POST['title']),
-                    'type' => Typo::cleanX($_POST['type']),
-                    'location' => Typo::cleanX($_POST['location']),
-                    'content' => $_POST['content'],
-                    'sorting' => (int)$_POST['sorting']
-                ]
-            ];
-            Db::update($vars);
+            Query::table('widgets')->where('id', (int)$_POST['id'])->update([
+                'name'     => Typo::cleanX($_POST['name']),
+                'title'    => Typo::cleanX($_POST['title']),
+                'type'     => Typo::cleanX($_POST['type']),
+                'location' => Typo::cleanX($_POST['location']),
+                'content'  => $_POST['content'],
+                'sorting'  => (int)$_POST['sorting'],
+            ]);
             $data['alertSuccess'][] = _("Widget updated.");
         }
         System::alert($data);
@@ -51,20 +42,20 @@ if (User::access(1)) {
 
     if (isset($_GET['act'])) {
         if ($_GET['act'] == 'del') {
-            Db::delete(['table' => 'widgets', 'where' => ['id' => $_GET['id']]]);
+            Query::table('widgets')->where('id', Typo::int($_GET['id']))->delete();
             $data['alertSuccess'][] = _("Widget deleted.");
         } elseif ($_GET['act'] == 'activate') {
-            Db::update(['table' => 'widgets', 'key' => ['status' => 1], 'id' => $_GET['id']]);
+            Query::table('widgets')->where('id', Typo::int($_GET['id']))->update(['status' => 1]);
         } elseif ($_GET['act'] == 'deactivate') {
-            Db::update(['table' => 'widgets', 'key' => ['status' => 0], 'id' => $_GET['id']]);
+            Query::table('widgets')->where('id', Typo::int($_GET['id']))->update(['status' => 0]);
         } elseif ($_GET['act'] == 'edit') {
-            $data['widget'] = Db::result("SELECT * FROM `widgets` WHERE `id` = '".(int)$_GET['id']."' LIMIT 1");
+            $data['widget'] = Query::table('widgets')->where('id', Typo::int($_GET['id']))->first();
         }
         System::alert($data);
     }
 
-    $data['widgets'] = Db::result("SELECT * FROM `widgets` ORDER BY `location`, `sorting` ASC");
-    $data['num'] = Db::$num_rows;
+    $data['widgets'] = Query::table('widgets')->orderBy('location', 'ASC')->get();
+    $data['num'] = count($data['widgets']);
 
     Theme::admin('header', $data);
     System::inc('widgets', $data);
