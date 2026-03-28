@@ -9,19 +9,22 @@ class Archives
         self::generate();
     }
 
-    public static function list($max,$type = 'post') 
+    public static function list($max, $type = 'post')
     {
-        $dates = Typo::Xclean(Options::v('archives_list'));
-        $dates = json_decode($dates, true);
-        
-        $html = "<ul class='list-unstyled mb-0'>";        
-        foreach( $dates[$type] as $k => $v ) {
-            // print_r($k);
-            foreach( $v as $k2 => $v2 ) {
+        $raw   = Options::v('archives_list');
+        $dates = ($raw !== null && $raw !== '') ? json_decode(Typo::Xclean($raw), true) : null;
+
+        // archives_list may not exist yet on a fresh install
+        if (!is_array($dates) || !isset($dates[$type])) {
+            return "<ul class='list-unstyled mb-0'></ul>";
+        }
+
+        $html = "<ul class='list-unstyled mb-0'>";
+        foreach ($dates[$type] as $k => $v) {
+            foreach ($v as $k2 => $v2) {
                 $monthName = Date::monthName($v2);
                 $html .= "<li><a href=\"".Url::archive($v2, $k)."\">{$monthName} {$k}</a></li>";
             }
-            
         }
         $html .= "</ul>";
 
@@ -78,22 +81,21 @@ class Archives
 
     public static function optUpdate($data)
     {
-        if( TRUE === Options::isExist('archives_list')) {
+        if (TRUE === Options::isExist('archives_list')) {
             $archives_list = Options::v('archives_list');
-            $arch_db = json_decode(Typo::Xclean($archives_list), true);
+            $arch_db  = json_decode(Typo::Xclean($archives_list ?? ''), true);
             $arch_res = json_decode($data, true);
-            $arch_res = is_array($arch_db) ? array_merge($arch_db, $arch_res): $arch_res;
+            $arch_res = is_array($arch_db) ? array_merge($arch_db, $arch_res) : $arch_res;
             $arch_fin = json_encode($arch_res);
-            $time = time();
+            $time     = time();
 
             Options::update('archives_list', $arch_fin);
             Options::update('archives_last_update', $time);
-
         } else {
-            $arch = json_encode($data);
+            // $data is already JSON-encoded from fetchData(); store it directly.
             $time = time();
-            Options::insert([ 
-                'archives_list' => $arch, 
+            Options::insert([
+                'archives_list'        => $data,
                 'archives_last_update' => $time
             ]);
         }

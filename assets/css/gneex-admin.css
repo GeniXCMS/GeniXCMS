@@ -12,6 +12,7 @@
     --gx-warning: #f59e0b;
     --gx-danger: #ef4444;
     --gx-radius: 10px;
+    --gx-header-height: 56px;
 }
 
 /* Custom Scrollbar */
@@ -171,7 +172,7 @@ body {
     justify-content: space-between;
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 1050;
 }
 
 .content-body {

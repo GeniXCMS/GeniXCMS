@@ -1,0 +1,26 @@
+{foreach $data['posts'] as $p}
+<!-- Page Header -->
+<header class="intro-header" style="background-image: url('{Posts::getPostImage($p->id) ?: $theme_url . '/img/about-bg.jpg'}')">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>{$p->title}</h1>
+                    <span class="subheading">{$data['p_desc'] ?? 'Explore our content.'}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {Posts::content($p->content)|noescape}
+            </div>
+        </div>
+    </div>
+</main>
+{/foreach}

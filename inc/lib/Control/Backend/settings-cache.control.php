@@ -62,7 +62,6 @@ if (User::access(1)) {
             $data['alertDanger'] = $alertDanger;
         }
 
-        System::alert($data);
     }
 
     $data['cache_enabled'] = Options::v('cache_enabled');

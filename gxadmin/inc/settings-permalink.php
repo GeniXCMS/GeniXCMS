@@ -12,8 +12,8 @@ $schema = [
         'subtitle' => _('Configure permalink structures and internal routing protocols for optimal SEO performance.'),
         'icon' => 'bi bi-signpost-2',
         'button' => [
-            'type' => 'button', 'label' => _('Apply Route Configuration'), 'icon' => 'bi bi-check2-circle',
-            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'name="change" value="Change"'
+            'type' => 'button', 'name' => 'change', 'label' => _('Apply Route Configuration'), 'icon' => 'bi bi-check2-circle',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'value="Change"'
         ],
     ],
     'card_wrapper' => false,

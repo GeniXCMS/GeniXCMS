@@ -1,78 +1,67 @@
-<?php
-$gneex = Gneex::$opt;
-?>
-
-    <section id="blog">
-        <div class="container">
-            
-            <div class="col-md-8">
-                <h2 class="category-title"><?=$data['author'];?></h2>
-                <hr />
-                <div class=" blog-lists clearfix">
-                <?php
-                if (Gneex::opt('adsense') != '') {
-                    echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
-                } else {
-                    echo '<div class="col-md-12">&nbsp;</div>';
-                }
-                ?>
-                <?php
-                if ($data['num'] > 0) {
-                    foreach ($data['posts'] as $p) {
-                        if ($gneex['category_layout'] == 'magazine') {
-                            # code...
-                            $img = Posts::getImage(Posts::content($p->content));
-                            if ($img != '') {
-                                $im = '<img src="'.Url::thumb($img, '', 300).'" class="img-responsive">';
-                            } else {
-                                $im = '<img src="'.Url::thumb('assets/images/noimage.png', '', 300).'" class="img-responsive">';
-                            }
-                            echo '
-                            <article class="blog-post magazine col-md-12 clearfix">
-                            <div class="col-sm-4 col-md-4">
-                            '.$im.'
-                            </div>
-                            <div class="col-sm-8 col-md-8">
-                                <h3 class="title"><a href="'.Url::post($p->id).'">'.$p->title.'</a></h3>
-                                <div class="blog-meta"><small>published at '.Date::format($p->date, 'd M Y');
-                            if ($p->type != 'page') {
-                                echo " in <a href=\"" . Url::cat($p->cat) . "\">" . Categories::name($p->cat) . "</a>";
-                            }
-                            echo "
-                                by <a href=\"".Url::author($p->author)."\">{$p->author}</a></small><br /><br /></div>
-                                ".substr(Typo::strip(Posts::content($p->content)), 0, 350).'
-                            </div>
-                            <div class="col-sm-12 col-md-12 clearfix">
-                                <hr />
-                            </div>
-                            </article>
-                                ';
-                        } else {
-                            echo '
-                            <article class="blog-post col-md-12">
-                                <h2 class="title"><a href="'.Url::post($p->id)."\">$p->title</a></h2>
-                                <hr />
-                                ".Posts::format($p->content, $p->id).'
-                                <div class="blog-footer">posted in '.Categories::name($p->cat).', 
-                                at '.Date::format($p->date)." by <a href=\"".Url::author($p->author)."\">{$p->author}</a></div>
-                            </article>
-                                ";
-                        }
-                    }
-                } else {
-                    echo 'No Post to Show';
-                }
-                ?>
-                <?php
-                if (Gneex::opt('adsense') != '') {
-                    echo '<div class="row"><div class="col-md-12">'.Gneex::opt('adsense').'</div></div><hr />';
-                }
-                ?>
+<section id="blog" class="py-5 bg-light min-vh-100">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8 col-md-12">
+                <div class="author-header mb-4 bg-white p-4 shadow-sm border-0 d-flex align-items-center">
+                    <div class="author-avatar-large bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-3 me-4" style="width: 70px; height: 70px; border-radius: 50%;">
+                        {substr($author, 0, 1)}
+                    </div>
+                    <div>
+                        <h1 class="author-title fw-bold h3 m-0 text-dark">Articles by {$author}</h1>
+                        <p class="text-muted small m-0 mt-1">Showing all stories published by this author</p>
+                    </div>
                 </div>
-                <?=$data['paging'];?>
-            </div>
-            <?php Theme::theme('rightside', $data); ?>
-                
 
+                <div class="blog-lists">
+                    {if Gneex::opt('adsense')}
+                        <div class="text-center mb-4">{Gneex::opt('adsense')|noescape}</div>
+                    {/if}
+
+                    {if $num > 0}
+                        {foreach $posts as $p}
+                            {var $p_content = Posts::content($p->content)}
+                            {var $p_img = Gneex::getImage($p_content, $p->id)}
+                            
+                            <article class="blog-post p-0 overflow-hidden shadow-sm bg-white border-0 mb-4" data-aos="fade-up">
+                                <div class="row g-0 align-items-center">
+                                    {if $p_img}
+                                        <div class="col-md-5">
+                                            <a href="{Url::post($p->id)}">
+                                                <img src="{Url::thumb($p_img, 'large')}" class="img-fluid h-100" style="object-fit: cover; min-height: 200px;">
+                                            </a>
+                                        </div>
+                                    {/if}
+                                    <div class="col-md-{$p_img ? '7' : '12'} p-4">
+                                        <div class="post-meta mb-2">
+                                            <span class="text-primary small fw-bold"><i class="fa-regular fa-calendar me-1"></i> {Date::format($p->date, 'd M Y')}</span>
+                                            {if $p->type != 'page' && $p->cat}
+                                                <span class="ms-3 small text-muted"><i class="fa-solid fa-folder-open me-1"></i> {Categories::name($p->cat)}</span>
+                                            {/if}
+                                        </div>
+                                        <h3 class="post-title h5 fw-bold mb-3"><a href="{Url::post($p->id)}" class="text-dark text-decoration-none">{$p->title|truncate:80}</a></h3>
+                                        <div class="excerpt text-muted mb-3 small">
+                                            {$p_content|stripHtml|truncate:120}
+                                        </div>
+                                        <a href="{Url::post($p->id)}" class="btn btn-read-more btn-sm py-2">Read More</a>
+                                    </div>
+                                </div>
+                            </article>
+                        {/foreach}
+                        
+                        <div class="pagination-wrapper mt-5 d-flex justify-content-center">
+                            {$paging|noescape}
+                        </div>
+                    {else}
+                        <div class="text-center py-5 bg-white shadow-sm">
+                            <i class="fa-regular fa-circle-user fa-4x text-light mb-4"></i>
+                            <h3 class="text-muted fw-bold">Author has no public posts</h3>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                {include 'rightside.php'}
+            </div>
         </div>
-    </section>
+    </div>
+</section>

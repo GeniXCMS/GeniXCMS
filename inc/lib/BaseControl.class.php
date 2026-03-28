@@ -30,7 +30,7 @@ abstract class BaseControl
             $lang,
         ));
         $this->latte->setTempDirectory(GX_CACHE . '/temp');
-        $this->latte->setautoRefresh();
+        $this->latte->setAutoRefresh(true);
         
         // Add common filters
         $this->latte->addFilter('nl2br', fn($s) => is_string($s) ? nl2br($s) : $s);
@@ -45,7 +45,9 @@ abstract class BaseControl
         $this->data['site_footer'] = Site::footer();
         $this->data['site_url'] = Site::$url;
         $this->data['site_cdn'] = Site::$cdn;
-        $this->data['site_logo'] = Site::logo(width:'200px', class: "img-fluid");
+        $mdo_opt = json_decode(Options::get('default_theme_options_v2'), true) ?: [];
+        $logo_h = !empty($mdo_opt['logo_height']) ? $mdo_opt['logo_height'] . 'px' : '40px';
+        $this->data['site_logo'] = Site::logo(height: $logo_h, class: "img-fluid");
         $this->data['theme_url'] = Url::theme();
         $this->data['p_type'] = '';
         $this->data['token'] = TOKEN;
@@ -59,12 +61,23 @@ abstract class BaseControl
     protected function render($view, $data = [])
     {
         $this->data = array_merge($this->data, $data);
+        $this->data['data'] = $this->data;
         $this->data['site_meta'] = Site::meta($this->data);
         
-        Cache::start();
-        $this->latte->render(GX_THEME . Theme::$active . '/header.php', $this->data);
-        $this->latte->render(GX_THEME . Theme::$active . '/' . $view . '.php', $this->data);
-        $this->latte->render(GX_THEME . Theme::$active . '/footer.php', $this->data);
-        Cache::end();
+        $theme_dir = rtrim(GX_THEME, '/\\') . DIRECTORY_SEPARATOR . Theme::$active . DIRECTORY_SEPARATOR;
+        
+        $v_file = file_exists($theme_dir . $view . '.latte') ? $view . '.latte' : $view . '.php';
+        $h_file = file_exists($theme_dir . 'header.latte') ? 'header.latte' : 'header.php';
+        $f_file = file_exists($theme_dir . 'footer.latte') ? 'footer.latte' : 'footer.php';
+
+        $h_out = $this->latte->renderToString($theme_dir . $h_file, $this->data);
+        $v_out = $this->latte->renderToString($theme_dir . $v_file, $this->data);
+        $f_out = $this->latte->renderToString($theme_dir . $f_file, $this->data);
+        
+        echo $h_out;
+        echo $v_out;
+        echo $f_out;
+        
+        flush();
     }
 }

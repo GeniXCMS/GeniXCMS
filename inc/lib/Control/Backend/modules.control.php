@@ -90,7 +90,6 @@ if (User::access(0)) {
             Token::remove(Typo::cleanX($_POST['token']));
         }
     }
-    System::alert($data);
     $data['mods'] = Mod::modList();
     Theme::admin('header', $data);
     System::inc('modules', $data);

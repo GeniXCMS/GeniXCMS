@@ -134,7 +134,6 @@ if (User::access(1)) {
         }
     }
 
-    System::alert($data);
 
     if (isset($_GET['act'])) {
         $act = $_GET['act'];

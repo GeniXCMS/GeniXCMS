@@ -50,6 +50,11 @@ class Install
      */
     public static function makeConfig($file)
     {
+        // Generate SECURITY_KEY once so we can use it both in the
+        // written file and define it in the current request scope.
+        $securityKey = Typo::getToken(200);
+        $siteId      = Typo::getToken(20);
+
         $config = "<?php if (defined('GX_LIB') === false) die(\"Direct Access Not Allowed!\");
 /**
  * GeniXCMS - Content Management System
@@ -70,28 +75,23 @@ class Install
 error_reporting(E_ALL);
 
 // DB CONFIG
-define('DB_HOST', '".Session::val('dbhost')."');
-define('DB_NAME', '".Session::val('dbname')."');
-define('DB_PASS', '".Session::val('dbpass')."');
-define('DB_USER', '".Session::val('dbuser')."');
-define('DB_DRIVER', '".Session::val('dbdriver')."');
+!defined('DB_HOST')        ? define('DB_HOST',        '".Session::val('dbhost')."') : null;
+!defined('DB_NAME')        ? define('DB_NAME',        '".Session::val('dbname')."') : null;
+!defined('DB_PASS')        ? define('DB_PASS',        '".Session::val('dbpass')."') : null;
+!defined('DB_USER')        ? define('DB_USER',        '".Session::val('dbuser')."') : null;
+!defined('DB_DRIVER')      ? define('DB_DRIVER',      '".Session::val('dbdriver')."') : null;
 
-define('SMART_URL', false); //set 'true' if you want use SMART URL (SEO Friendly URL)
-define('GX_URL_PREFIX', '.html');
+!defined('SMART_URL')      ? define('SMART_URL',      false) : null;
+!defined('GX_URL_PREFIX')  ? define('GX_URL_PREFIX',  '.html') : null;
 
-define('ADMIN_DIR', 'gxadmin');
-define('USE_MEMCACHED', false);
-define('SITE_ID', '".Typo::getToken(20)."');
+!defined('ADMIN_DIR')      ? define('ADMIN_DIR',      'gxadmin') : null;
+!defined('USE_MEMCACHED')  ? define('USE_MEMCACHED',  false) : null;
+!defined('SITE_ID')        ? define('SITE_ID',        '{$siteId}') : null;
 
-define('DEBUG', false);
+!defined('DEBUG')          ? define('DEBUG',          false) : null;
 
-
-
-
-
-
-
-
+!defined('SESSION_EXPIRES') ? define('SESSION_EXPIRES', 1) : null;
+!defined('SESSION_DB')      ? define('SESSION_DB',      false) : null;
 
 ##################################// 
 # DON't REMOVE or EDIT THIS. 
@@ -99,18 +99,23 @@ define('DEBUG', false);
 # YOU WON'T BE ABLE TO LOG IN 
 # IF IT CHANGED. PLEASE BE AWARE
 ##################################//
-define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will be used for creating password
+!defined('SECURITY_KEY') ? define('SECURITY_KEY', '{$securityKey}') : null;
 
         ";
         try {
             $f = fopen($file, 'w');
-            $c = fwrite($f, $config);
+            fwrite($f, $config);
             fclose($f);
         } catch (Exception $e) {
             echo $e->getMessage();
         }
 
-        return $config;
+        // Return both the config string and the generated security key
+        // so the installer can define it in the current request scope.
+        return [
+            'config'       => $config,
+            'security_key' => $securityKey,
+        ];
     }
 
     /**
@@ -126,14 +131,25 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      */
     public static function createTable()
     {
-        require_once GX_PATH.'/inc/config/config.php';
+        // Reconnect explicitly using session credentials.
+        // We cannot use require_once here because config.php may already be
+        // loaded (or the constants already defined by aaaconfig.php), so
+        // Db::$pdo would still be null.
+        Db::$pdo = null; // force a fresh connection
+        Db::connect(
+            Session::val('dbhost'),
+            Session::val('dbuser'),
+            Session::val('dbpass'),
+            Session::val('dbname'),
+            Session::val('dbdriver')
+        );
         $db = new Db();
-        $driver = DB_DRIVER;
+        $driver = Session::val('dbdriver') ?: (defined('DB_DRIVER') ? DB_DRIVER : 'mysql');
 
         $tables = [];
 
         if ($driver == 'pgsql') {
-            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id SERIAL PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, \"desc\" TEXT, type TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id SERIAL PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, image TEXT, \"desc\" TEXT, type TEXT NOT NULL)";
             $tables[] = "CREATE TABLE IF NOT EXISTS cat_param (id SERIAL PRIMARY KEY, cat_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
             $tables[] = "CREATE TABLE IF NOT EXISTS menus (id SERIAL PRIMARY KEY, name VARCHAR(64) NOT NULL, menuid VARCHAR(32) NOT NULL, parent VARCHAR(11), sub CHAR(1) CHECK (sub IN ('0','1')) NOT NULL, type VARCHAR(8) NOT NULL, value TEXT NOT NULL, class VARCHAR(64), \"order\" VARCHAR(4))";
             $tables[] = "CREATE TABLE IF NOT EXISTS options (id SERIAL PRIMARY KEY, name TEXT NOT NULL, value TEXT NOT NULL)";
@@ -142,8 +158,10 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             $tables[] = "CREATE TABLE IF NOT EXISTS \"user\" (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), \"group\" VARCHAR(1) CHECK (\"group\" IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TIMESTAMP NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
             $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate DATE, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
             $tables[] = "CREATE TABLE IF NOT EXISTS comments (id BIGSERIAL PRIMARY KEY, date TIMESTAMP NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id SERIAL PRIMARY KEY, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS permissions (id SERIAL PRIMARY KEY, group_id INTEGER NOT NULL, permission VARCHAR(100) NOT NULL, status SMALLINT NOT NULL DEFAULT 0)";
         } elseif ($driver == 'sqlite') {
-            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, [desc] TEXT, type TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS cat (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, image TEXT, [desc] TEXT, type TEXT NOT NULL)";
             $tables[] = "CREATE TABLE IF NOT EXISTS cat_param (id INTEGER PRIMARY KEY AUTOINCREMENT, cat_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL)";
             $tables[] = "CREATE TABLE IF NOT EXISTS menus (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(64) NOT NULL, menuid VARCHAR(32) NOT NULL, parent VARCHAR(11), sub TEXT CHECK (sub IN ('0','1')) NOT NULL, type VARCHAR(8) NOT NULL, value TEXT NOT NULL, class VARCHAR(64), [order] VARCHAR(4))";
             $tables[] = "CREATE TABLE IF NOT EXISTS options (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, value TEXT NOT NULL)";
@@ -152,9 +170,11 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             $tables[] = "CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), [group] TEXT CHECK ([group] IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TEXT NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
             $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate TEXT, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
             $tables[] = "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS permissions (id INTEGER PRIMARY KEY AUTOINCREMENT, group_id INTEGER NOT NULL, permission TEXT NOT NULL, status INTEGER NOT NULL DEFAULT 0)";
         } else {
             // Default to MySQL
-            $tables[] = "CREATE TABLE IF NOT EXISTS `cat` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `slug` text NOT NULL, `parent` text DEFAULT NULL, `desc` text DEFAULT NULL, `type` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `cat` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `slug` text NOT NULL, `parent` text DEFAULT NULL, `image` text DEFAULT NULL, `desc` text DEFAULT NULL, `type` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `cat_param` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `cat_id` int(11) NOT NULL, `param` text NOT NULL, `value` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `menus` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` varchar(64) NOT NULL, `menuid` varchar(32) NOT NULL, `parent` varchar(11) DEFAULT NULL, `sub` enum('0','1') NOT NULL, `type` varchar(8) NOT NULL, `value` text NOT NULL, `class` varchar(64) DEFAULT NULL, `order` varchar(4) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `options` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `value` longtext NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
@@ -163,6 +183,8 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
             $tables[] = "CREATE TABLE IF NOT EXISTS `user` (`id` bigint(32) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `pass` varchar(255) NOT NULL, `confirm` varchar(255) DEFAULT NULL, `group` enum('0','1','2','3','4','5','6') NOT NULL, `email` varchar(255) NOT NULL, `join_date` datetime NOT NULL, `status` enum('0','1') NOT NULL, `activation` text, `ipaddress` text) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `user_detail` (`id` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `fname` varchar(32) DEFAULT NULL, `lname` varchar(255) DEFAULT NULL, `sex` varchar(2) DEFAULT NULL, `birthplace` varchar(32) DEFAULT NULL, `birthdate` date DEFAULT NULL, `addr` varchar(255) DEFAULT NULL, `city` varchar(255) DEFAULT NULL, `state` varchar(255) DEFAULT NULL, `country` varchar(255) DEFAULT NULL, `postcode` varchar(32) DEFAULT NULL, `avatar` text, `balance` float DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `comments` (`id` bigint(22) NOT NULL PRIMARY KEY AUTO_INCREMENT, `date` datetime NOT NULL, `userid` text NOT NULL, `name` text NOT NULL, `email` text NOT NULL, `url` text NOT NULL, `comment` longtext NOT NULL, `post_id` int(11) NOT NULL, `parent` int(11) NOT NULL, `status` enum('0','1','2') NOT NULL, `type` text NOT NULL, `ipaddress` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `widgets` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `title` text NOT NULL, `content` longtext NOT NULL, `type` text NOT NULL, `location` text NOT NULL, `sorting` int(11) NOT NULL, `status` enum('0','1') NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `permissions` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `group_id` int(11) NOT NULL, `permission` varchar(100) NOT NULL, `status` tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB DEFAULT CHARSET=utf8";
         }
 
         foreach ($tables as $sql) {
@@ -182,7 +204,15 @@ define('SECURITY_KEY', '".Typo::getToken(200)."'); // for security purpose, will
      */
     public static function insertData()
     {
-        require_once GX_PATH.'/inc/config/config.php';
+        // Same reconnect approach as createTable().
+        Db::$pdo = null;
+        Db::connect(
+            Session::val('dbhost'),
+            Session::val('dbuser'),
+            Session::val('dbpass'),
+            Session::val('dbname'),
+            Session::val('dbdriver')
+        );
         $db = new Db();
         $url = Session::val('siteurl');
         $domain = Session::val('sitedomain');

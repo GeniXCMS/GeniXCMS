@@ -381,7 +381,6 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                 'type' => 'pager',
             );
     $data['paging'] = Paging::create($page);
-    System::alert($data);
     Theme::admin('header', $data);
     System::inc('user', $data);
     Theme::admin('footer');

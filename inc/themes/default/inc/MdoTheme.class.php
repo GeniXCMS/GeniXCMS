@@ -8,41 +8,61 @@
 class MdoTheme
 {
     public static $opt;
+    public static $optionKey = 'default_theme_options_v2';
 
     public function __construct()
     {
-        $mdo_opt = Options::v('mdo_theme_options');
-        $mdo_opt = ($mdo_opt == "") ? json_encode(['error' => 'Data Not Found']): $mdo_opt;
-        self::$opt = json_decode($mdo_opt, true);
+        $mdo_opt = Options::get(self::$optionKey);
+        self::$opt = json_decode($mdo_opt, true) ?: [];
 
-        $mdo_adsense = (key_exists("mdo_adsense", self::$opt)) ? self::$opt['mdo_adsense']: "";
-        if ($mdo_adsense != '') {
-            Hooks::attach('footer_load_lib', array('MdoTheme', 'loadAdsenseJs'));
+        $isAdmin = defined('GX_ADMIN') || strpos($_SERVER['SCRIPT_FILENAME'], 'gxadmin') !== false;
+
+        if (!$isAdmin) {
+            if (!empty(self::$opt['mdo_adsense'])) {
+                Hooks::attach('footer_load_lib', array(__CLASS__, 'loadAdsenseJs'));
+            }
+            
+            Hooks::attach('header_load_meta', array(__CLASS__, 'loadThemeCSS'));
         }
     }
 
     public static function opt($var)
     {
         $opt = self::$opt;
-        if (key_exists($var, $opt)) {
-            if ($var == 'mdo_adsense') {
-                return self::isAdsense($opt[$var]);
-            } else {
-                return urldecode(self::$opt[$var]);
-            }
+        if (isset($opt[$var])) {
+            return ($var == 'mdo_adsense' || $var == 'mdo_analytics' || $var == 'custom_css') ? $opt[$var] : htmlspecialchars_decode($opt[$var]);
         }
-    }
-
-    public static function isAdsense($adc)
-    {
-        if ($adc != '') {
-            return str_replace('<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>', '', urldecode($adc));
-        }
+        return '';
     }
 
     public static function loadAdsenseJs()
     {
-        echo '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
+        echo '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
+    }
+
+    public static function loadThemeCSS()
+    {
+        if (class_exists('OptionsBuilder')) {
+            echo OptionsBuilder::generateFrontendCSS(self::$opt, [
+                'themeUrl' => Url::theme(),
+                'minify' => true
+            ]);
+        }
+        
+        // Custom Inline CSS for Default Theme Specifics
+        $primary = self::opt('link_color') ?: '#0085A1';
+        $nav_bg = self::opt('background_color_navbar');
+        $footer_bg = self::opt('background_color_footer');
+        $body_bg = self::opt('body_background_color');
+
+        echo "<style>
+            :root { --primary-color: {$primary}; }
+            " . ($nav_bg ? ".blog-masthead { background-color: {$nav_bg} !important; }" : "") . "
+            " . ($footer_bg ? ".blog-footer { background-color: {$footer_bg} !important; }" : "") . "
+            " . ($body_bg ? "body { background-color: {$body_bg} !important; }" : "") . "
+            .blog-title a:hover { color: {$primary} !important; }
+            .btn-primary { background-color: {$primary} !important; border-color: {$primary} !important; }
+        </style>";
     }
 
     public static function loadAnalytics()

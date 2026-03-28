@@ -94,7 +94,7 @@ class Stats
             }
         }
         if (!$isBot) {
-            $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = ? LIMIT 1";
+            $sql = "UPDATE `posts` SET `views` = `views`+1 WHERE `id` = ?";
             Db::query($sql, [$id]);
         }
     }

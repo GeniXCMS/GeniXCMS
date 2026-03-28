@@ -20,7 +20,6 @@ if (User::access(1)) {
             ]);
             $data['alertSuccess'][] = _("Widget created successfully.");
         }
-        System::alert($data);
     }
 
     if (isset($_POST['edit_widget'])) {
@@ -37,7 +36,6 @@ if (User::access(1)) {
             ]);
             $data['alertSuccess'][] = _("Widget updated.");
         }
-        System::alert($data);
     }
 
     if (isset($_GET['act'])) {
@@ -51,7 +49,6 @@ if (User::access(1)) {
         } elseif ($_GET['act'] == 'edit') {
             $data['widget'] = Query::table('widgets')->where('id', Typo::int($_GET['id']))->first();
         }
-        System::alert($data);
     }
 
     $data['widgets'] = Query::table('widgets')->orderBy('location', 'ASC')->get();

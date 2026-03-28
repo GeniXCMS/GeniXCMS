@@ -100,7 +100,6 @@ if (User::access(1)) {
             Token::remove($token);
         }
     }
-    System::alert($data);
     $data['cat'] = Query::table('cat')->where('type', 'tag')->orderBy('id', 'DESC')->get();
     $data['num'] = count($data['cat']);
     Theme::admin('header', $data);

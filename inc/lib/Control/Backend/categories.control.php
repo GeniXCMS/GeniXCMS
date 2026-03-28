@@ -109,7 +109,6 @@ if (User::access(1)) {
         }
     }
 
-    System::alert($data);
     $data['cat'] = Query::table('cat')->where('type', 'post')->orderBy('id', 'DESC')->get();
     $data['num'] = count($data['cat']);
     Theme::admin('header', $data);

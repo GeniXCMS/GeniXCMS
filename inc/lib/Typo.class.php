@@ -69,6 +69,10 @@ class Typo
 
     public static function Xclean($vars)
     {
+        if ($vars === null) {
+            return '';
+        }
+        $vars = (string) $vars;
         $var = htmlspecialchars_decode($vars, ENT_QUOTES | ENT_HTML5);
         // $var = html_entity_decode($vars);
         $var = str_replace('\\\\', '\\', $var);

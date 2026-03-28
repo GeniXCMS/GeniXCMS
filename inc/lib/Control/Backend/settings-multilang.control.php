@@ -121,7 +121,6 @@ if (User::access(0)) {
     }
     $data['default_lang'] = Options::v('multilang_default');
     $data['list_lang'] = json_decode(Options::v('multilang_country'), true);
-    System::alert($data);
     Theme::admin('header', $data);
     System::inc('settings-multilang', $data);
     Theme::admin('footer');

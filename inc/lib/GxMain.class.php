@@ -49,6 +49,7 @@ class GxMain
             new System();
         } else {
             $this->install();
+            exit;
         }
     }
 

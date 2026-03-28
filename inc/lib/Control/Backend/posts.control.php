@@ -449,7 +449,6 @@ if (User::access(3)) {
                         'type' => 'number',
                     );
             $data['paging'] = Paging::create($page);
-            System::alert($data);
             Theme::admin('header', $data);
             System::inc('posts', $data);
             Theme::admin('footer');

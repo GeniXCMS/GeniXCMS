@@ -25,6 +25,7 @@ class CatControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post in : ' . Categories::name($cat) . $pagingtitle;
+            $data['title'] = Categories::name($cat);
             $posts = Query::table('posts')
                 ->where('type', $type)
                 ->where('cat', Typo::int($cat))

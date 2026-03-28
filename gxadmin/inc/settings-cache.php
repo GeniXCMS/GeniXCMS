@@ -13,8 +13,8 @@ $schema = [
         'subtitle' => _('Manage temporary data storage to significantly boost platform performance and responsiveness.'),
         'icon' => 'bi bi-lightning-charge-fill',
         'button' => [
-            'type' => 'button', 'label' => _('Apply Persistence Protocols'), 'icon' => 'bi bi-cpu-fill',
-            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'name="change" value="Change"'
+            'type' => 'button', 'name' => 'change', 'label' => _('Apply Persistence Protocols'), 'icon' => 'bi bi-cpu-fill',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'value="Change"'
         ],
     ],
     'card_wrapper' => false,

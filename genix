@@ -1,0 +1,377 @@
+#!/usr/bin/env php
+<?php
+/**
+ * GeniXCMS CLI Console - "genix"
+ *
+ * Modernized CLI for GeniXCMS management.
+ */
+
+if (PHP_SAPI !== 'cli') {
+    die("This script can only be run from the command line.");
+}
+
+define('GX_PATH', realpath(__DIR__ . '/'));
+define('GX_LIB', GX_PATH . '/inc/lib/');
+define('GX_MOD', GX_PATH . '/inc/mod/');
+define('GX_THEME', GX_PATH . '/inc/themes/');
+define('GX_ASSET', GX_PATH . '/assets/');
+define('GX_CACHE', GX_PATH . '/assets/cache/');
+
+// Bypass Direct Access check for libraries
+define('GX_LIB_LOADED', true);
+
+require 'autoload.php';
+
+// Include DB config
+if (file_exists(GX_PATH . '/inc/config/config.php')) {
+    require_once GX_PATH . '/inc/config/config.php';
+    Db::connect();
+    define('DB_CONNECTED', true);
+} else {
+    define('DB_CONNECTED', false);
+}
+
+class GenixCLI {
+    public function run($argv) {
+        $cmd = isset($argv[1]) ? $argv[1] : 'help';
+        $args = array_slice($argv, 2);
+
+        echo "\n\033[1;34m[ GeniXCMS Engine Console ]\033[0m\n";
+        echo "--------------------------------------\n";
+
+        $noDbCommands = ['help', 'serve', 'make:theme', 'make:module', 'sys:info', 'cache:clear'];
+        if (!DB_CONNECTED && !in_array($cmd, $noDbCommands)) {
+            die("\033[1;31mError: Config file not found or Database not connected. Please install GeniXCMS first.\033[0m\n");
+        }
+
+        switch ($cmd) {
+            case 'migrate':
+                Migration::run();
+                break;
+            case 'migrate:rollback':
+                Migration::rollback();
+                break;
+            case 'migrate:create':
+                $this->createMigration($args);
+                break;
+            case 'user:create':
+                $this->createUser($args);
+                break;
+            case 'user:list':
+                $this->listUsers();
+                break;
+            case 'user:delete':
+                $this->deleteUser($args);
+                break;
+            case 'options:list':
+                $this->listOptions();
+                break;
+            case 'options:set':
+                $this->setOption($args);
+                break;
+            case 'theme:list':
+                $this->listThemes();
+                break;
+            case 'theme:activate':
+                $this->activateTheme($args);
+                break;
+            case 'module:list':
+                $this->listModules();
+                break;
+            case 'module:activate':
+                $this->activateModule($args);
+                break;
+            case 'module:deactivate':
+                $this->deactivateModule($args);
+                break;
+            case 'cache:clear':
+                $this->clearCache();
+                break;
+            case 'serve':
+                $this->serveApp($args);
+                break;
+            case 'sys:info':
+                $this->sysInfo();
+                break;
+            case 'make:theme':
+                $this->makeTheme($args);
+                break;
+            case 'make:module':
+                $this->makeModule($args);
+                break;
+            case 'help':
+            default:
+                $this->showHelp();
+                break;
+        }
+        echo "\n\033[1;32mOperation Finished.\033[0m\n\n";
+    }
+
+    private function showHelp() {
+        echo "Usage: php genix <command> [arguments]\n\n";
+        echo "\033[1;33mCore Commands:\033[0m\n";
+        echo "  migrate            \033[0;37mRun all pending database migrations\033[0m\n";
+        echo "  migrate:rollback   \033[0;37mRollback the last batch of migrations\033[0m\n";
+        echo "  migrate:create <N> \033[0;37mCreate a new migration boilerplate file\033[0m\n\n";
+        
+        echo "\033[1;33mUser Management:\033[0m\n";
+        echo "  user:create <u> <e> <p> [g] \033[0;37mCreate a new user (group 0-6)\033[0m\n";
+        echo "  user:list                   \033[0;37mList all registered users\033[0m\n";
+        echo "  user:delete <id>            \033[0;37mDelete a user permanently\033[0m\n\n";
+        
+        echo "\033[1;33mTheme & Module:\033[0m\n";
+        echo "  theme:list                  \033[0;37mList all installed themes\033[0m\n";
+        echo "  theme:activate <name>       \033[0;37mActivate a theme by directory name\033[0m\n";
+        echo "  module:list                 \033[0;37mList all installed modules\033[0m\n";
+        echo "  module:activate <name>      \033[0;37mActivate a specific module\033[0m\n";
+        echo "  module:deactivate <name>    \033[0;37mDeactivate a specific module\033[0m\n\n";
+
+        echo "\033[1;33mSystem Utility:\033[0m\n";
+        echo "  serve [port]       \033[0;37mStart the PHP built-in development server\033[0m\n";
+        echo "  options:list       \033[0;37mList all configuration options\033[0m\n";
+        echo "  options:set <k> <v> \033[0;37mUpdate or insert a system option\033[0m\n";
+        echo "  cache:clear        \033[0;37mFlush the application and template cache\033[0m\n";
+        echo "  sys:info           \033[0;37mShow system and environment information\033[0m\n";
+        echo "  make:theme <name>  \033[0;37mScaffold a new theme structure\033[0m\n";
+        echo "  make:module <name> \033[0;37mScaffold a new module structure\033[0m\n";
+        echo "  help               \033[0;37mShow this manual\033[0m\n";
+    }
+
+    private function listThemes() {
+        $themes = Theme::thmList();
+        echo str_repeat("-", 60) . "\n";
+        printf("| %-25s | %-10s | %-15s |\n", "Theme Folder", "Version", "Status");
+        echo str_repeat("-", 60) . "\n";
+        foreach ($themes as $t) {
+            $data = Theme::data($t);
+            $status = Theme::isActive($t) ? "\033[1;32mACTIVE\033[0m" : "Inactive";
+            printf("| %-25s | %-10s | %-15s |\n", $t, $data['version'] ?? 'N/A', $status);
+        }
+        echo str_repeat("-", 60) . "\n";
+    }
+
+    private function activateTheme($args) {
+        if (empty($args)) die("\033[1;31mError: Provide theme folder name\033[0m\n");
+        if (Theme::activate($args[0])) {
+            echo "Success: Theme \033[1;36m'{$args[0]}'\033[0m is now active.\n";
+        } else {
+            echo "Error: Could not activate theme.\n";
+        }
+    }
+
+    private function listModules() {
+        $modules = Mod::modList();
+        echo str_repeat("-", 60) . "\n";
+        printf("| %-25s | %-10s | %-15s |\n", "Module Folder", "Version", "Status");
+        echo str_repeat("-", 60) . "\n";
+        foreach ($modules as $m) {
+            $data = Mod::data($m);
+            $status = Mod::isActive($m) ? "\033[1;32mACTIVE\033[0m" : "Inactive";
+            printf("| %-25s | %-10s | %-15s |\n", $m, $data['version'] ?? 'N/A', $status);
+        }
+        echo str_repeat("-", 60) . "\n";
+    }
+
+    private function activateModule($args) {
+        if (empty($args)) die("\033[1;31mError: Provide module folder name\033[0m\n");
+        if (Mod::activate($args[0])) {
+            echo "Success: Module \033[1;36m'{$args[0]}'\033[0m activated.\n";
+        } else {
+            echo "Error: Could not activate module.\n";
+        }
+    }
+
+    private function deactivateModule($args) {
+        if (empty($args)) die("\033[1;31mError: Provide module folder name\033[0m\n");
+        if (Mod::deactivate($args[0])) {
+            echo "Success: Module \033[1;31m'{$args[0]}'\033[0m deactivated.\n";
+        } else {
+            echo "Error: Could not deactivate module.\n";
+        }
+    }
+
+    private function createMigration($args) {
+        if (empty($args)) {
+            die("\033[1;31mError: Migration name required (e.g. CreatePostTable)\033[0m\n");
+        }
+        $name = date('Ymd_His') . '_' . $args[0];
+        $file = GX_PATH . '/inc/migrations/' . $name . '.php';
+        $class = 'Migration_' . str_replace('-', '_', $name);
+        $content = "<?php\n\nclass $class extends Migration\n{\n    public function up()\n    {\n        // \$sql = \"CREATE TABLE ... \"; \n        // Db::query(\$sql);\n    }\n\n    public function down()\n    {\n        // \$sql = \"DROP TABLE ... \";\n        // Db::query(\$sql);\n    }\n}\n";
+        if (!is_dir(GX_PATH . '/inc/migrations')) mkdir(GX_PATH . '/inc/migrations', 0777, true);
+        file_put_contents($file, $content);
+        echo "Generated: \033[1;36m$file\033[0m\n";
+    }
+
+    private function createUser($args) {
+        if (count($args) < 3) {
+            die("\033[1;31mUsage: user:create <username> <email> <password> [group]\033[0m\n");
+        }
+        $username = $args[0];
+        $email = $args[1];
+        $pass = $args[2];
+        $group = $args[3] ?? '4';
+        
+        $vars = [
+            'user' => [
+                'userid' => $username,
+                'email' => $email,
+                'passwd' => User::randpass(['passwd' => $pass, 'userid' => $username]),
+                'group' => $group,
+                'join_date' => date('Y-m-d H:i:s'),
+                'status' => '1'
+            ]
+        ];
+        
+        if (User::create($vars)) {
+            echo "Success: User \033[1;35m$username\033[0m has been created.\n";
+        } else {
+            echo "Error: Database failure while creating user.\n";
+        }
+    }
+
+    private function listUsers() {
+        $users = Query::table('user')->get();
+        echo str_repeat("-", 80) . "\n";
+        printf("| %-4s | %-20s | %-30s | %-12s |\n", "ID", "Username", "Email", "Group");
+        echo str_repeat("-", 80) . "\n";
+        foreach ($users as $u) {
+            $grpName = User::$group[$u->group] ?? $u->group;
+            printf("| %-4d | %-20s | %-30s | %-12s |\n", $u->id, $u->userid, $u->email, $grpName);
+        }
+        echo str_repeat("-", 80) . "\n";
+    }
+
+    private function deleteUser($args) {
+        if (empty($args)) die("\033[1;31mError: Missing User ID\033[0m\n");
+        User::delete($args[0]);
+        echo "Action: User ID \033[1;31m{$args[0]}\033[0m has been removed.\n";
+    }
+
+    private function listOptions() {
+        $opts = Options::load();
+        echo str_repeat("-", 85) . "\n";
+        printf("| %-35s | %-40s |\n", "Option Key", "Value (Truncated)");
+        echo str_repeat("-", 85) . "\n";
+        foreach ($opts as $o) {
+            $val = (strlen($o->value) > 40) ? substr($o->value, 0, 37) . '...' : $o->value;
+            printf("| %-35s | %-40s |\n", $o->name, $val);
+        }
+        echo str_repeat("-", 85) . "\n";
+    }
+
+    private function setOption($args) {
+        if (count($args) < 2) die("\033[1;31mUsage: options:set <key> <value>\033[0m\n");
+        Options::update($args[0], $args[1]);
+        echo "Success: Configuration \033[1;36m'{$args[0]}'\033[0m updated.\n";
+    }
+
+    private function clearCache() {
+        $files = glob(GX_CACHE . '/*');
+        $count = 0;
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+                $count++;
+            }
+        }
+        // Latte temp directory
+        $latte_temp = GX_CACHE . '/temp';
+        if (is_dir($latte_temp)) {
+            $lfiles = array_diff(scandir($latte_temp), array('.', '..'));
+            foreach ($lfiles as $lf) {
+                $lp = $latte_temp . '/' . $lf;
+                if (is_file($lp)) {
+                    @unlink($lp);
+                    $count++;
+                }
+            }
+        }
+        echo "Cache: \033[1;35m$count\033[0m temporary files purged.\n";
+    }
+
+    private function serveApp($args) {
+        $port = isset($args[0]) ? (int)$args[0] : 8000;
+        $host = 'localhost';
+        echo "\033[1;32mStarting GeniXCMS Development Server on http://$host:$port\033[0m\n";
+        echo "Press Ctrl-C to quit.\n";
+        
+        $docroot = escapeshellarg(GX_PATH);
+        passthru("php -S $host:$port -t $docroot");
+    }
+
+    private function sysInfo() {
+        echo str_repeat("-", 50) . "\n";
+        echo "\033[1;36mSystem Information\033[0m\n";
+        echo str_repeat("-", 50) . "\n";
+        
+        $phpVer = phpversion();
+        $os = php_uname('s') . ' ' . php_uname('r') . ' (' . php_uname('m') . ')';
+        $time = date('Y-m-d H:i:s P');
+
+        printf("%-20s: %s\n", "PHP Version", $phpVer);
+        printf("%-20s: %s\n", "OS", $os);
+        printf("%-20s: %s\n", "Server Time", $time);
+        
+        if (DB_CONNECTED) {
+            $dbVer = Db::$pdo instanceof PDO ? Db::$pdo->getAttribute(PDO::ATTR_SERVER_VERSION) . ' (' . Db::$pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . ')' : 'Unknown DB';
+            printf("%-20s: %s\n", "Database Client", $dbVer);
+        } else {
+            printf("%-20s: \033[1;31m%s\033[0m\n", "Database Status", "Not Connected");
+        }
+        echo str_repeat("-", 50) . "\n";
+    }
+
+    private function makeTheme($args) {
+        if (empty($args)) die("\033[1;31mError: Provide a theme name (e.g. make:theme MyTheme)\033[0m\n");
+        $name = $args[0];
+        $dir = GX_THEME . $name;
+        
+        if (is_dir($dir)) {
+            die("\033[1;31mError: Theme directory '$name' already exists.\033[0m\n");
+        }
+        
+        mkdir($dir, 0777, true);
+        mkdir($dir . '/assets/css', 0777, true);
+        mkdir($dir . '/assets/js', 0777, true);
+        mkdir($dir . '/assets/images', 0777, true);
+        
+        $themeInfo = "<?php\n/*\n * Name: $name\n * Desc: A custom GeniXCMS Latte Theme\n * Version: 1.0.0\n * Build: 1.0.0\n * Developer: Your Name\n * URI: #\n * License: MIT License\n * Icon: bi bi-palette\n*/\n";
+        $headerHtml = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <title>{Site::\$name}</title>\n    {Site::meta(\$data)|noescape}\n</head>\n<body>\n    <header>\n        <h1><a href=\"{Site::\$url}\">{Site::\$name}</a></h1>\n    </header>\n    <div class=\"container\">\n";
+        $footerHtml = "    </div>\n    <footer>\n        <p>&copy; {date('Y')} {Site::\$name}</p>\n        {Site::footer()|noescape}\n    </footer>\n</body>\n</html>\n";
+        $indexHtml = "<div class=\"content\">\n    {if isset(\$data['num']) && \$data['num'] > 0}\n        {foreach \$data['posts'] as \$p}\n            <article>\n                <h2><a href=\"{Url::post(\$p->id)}\">{\$p->title}</a></h2>\n                <div>{Posts::format(\$p->content, \$p->id)|noescape}</div>\n            </article>\n        {/foreach}\n        {if isset(\$data['paging'])}{\$data['paging']|noescape}{/if}\n    {else}\n        <p>No posts found.</p>\n    {/if}\n</div>\n";
+        $singleHtml = "<div class=\"content\">\n    {if isset(\$data['posts'][0]->title)}\n        {foreach \$data['posts'] as \$p}\n            <article>\n                <h2>{\$p->title}</h2>\n                <div>{Posts::content(\$p->content)|noescape}</div>\n            </article>\n        {/foreach}\n    {else}\n        <p>Content not found.</p>\n    {/if}\n</div>\n";
+        
+        file_put_contents($dir . '/themeinfo.php', $themeInfo);
+        file_put_contents($dir . '/header.php', $headerHtml);
+        file_put_contents($dir . '/footer.php', $footerHtml);
+        file_put_contents($dir . '/index.php', $indexHtml);
+        file_put_contents($dir . '/single.php', $singleHtml);
+        file_put_contents($dir . '/page.php', $singleHtml);
+        
+        echo "Success: Theme \033[1;36m'$name'\033[0m scaffolded at $dir\n";
+    }
+
+    private function makeModule($args) {
+        if (empty($args)) die("\033[1;31mError: Provide a module folder name (e.g. make:module my_module)\033[0m\n");
+        $name = strtolower($args[0]);
+        $dir = GX_MOD . $name;
+        
+        if (is_dir($dir)) {
+            die("\033[1;31mError: Module directory '$name' already exists.\033[0m\n");
+        }
+        
+        mkdir($dir, 0777, true);
+        
+        $className = str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
+        
+        $content = "<?php\n/**\n * Name: $className\n * Desc: A custom GeniXCMS Module\n * Version: 1.0.0\n * Build: 1.0.0\n * Developer: Your Name\n * URI: #\n * License: MIT License\n * Icon: bi bi-puzzle\n */\n\ndefined('GX_LIB') or die('Direct Access Not Allowed!');\n\nclass $className {\n    public function __construct() {\n        // Constructor\n    }\n}\n";
+        
+        file_put_contents($dir . '/index.php', $content);
+        
+        echo "Success: Module \033[1;36m'$name'\033[0m scaffolded at $dir\n";
+    }
+}
+
+$cli = new GenixCLI();
+$cli->run($argv);

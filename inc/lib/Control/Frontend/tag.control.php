@@ -28,6 +28,7 @@ class TagControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post in : Tags - ' . $name . $pagingtitle;
+            $data['title'] = "Tag: " . $name;
             $posts = Query::table('posts')
                 ->select('`posts`.*,`posts`.`id` as `id`')
                 ->join('posts_param AS B', '`posts`.`id`', '=', 'B.`post_id`')

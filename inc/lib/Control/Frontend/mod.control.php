@@ -7,7 +7,22 @@ class ModControl extends BaseControl
     public function run($param)
     {
         $route = Router::scrap($param);
-        $data['mod'] = (SMART_URL) ? $route['mod'] : Typo::cleanX($_GET['mod']);
+        $mod_raw = (SMART_URL) ? $route['mod'] : Typo::cleanX($_GET['mod']);
+
+        $mod_parts = explode('/', $mod_raw);
+        $mod_name = $mod_parts[0];
+        
+        // If the first part is NOT a valid module folder, use 'mod' as default
+        if (!Mod::exist($mod_name)) {
+            $mod_name = 'mod';
+            $mod_params = $mod_parts; 
+        } else {
+            array_shift($mod_parts); // Remove mod name, keep params
+            $mod_params = $mod_parts;
+        }
+
+        $data['mod'] = $mod_name;
+        $data['mod_params'] = $mod_params;
         $data['p_type'] = 'mod';
         $data['max'] = Options::v('post_perpage');
 
@@ -27,9 +42,13 @@ class ModControl extends BaseControl
             ]
         ]);
 
-        $data['sitetitle'] = Mod::getTitle($data['mod']);
+        $data['sitetitle'] = Mod::getTitle($mod_name);
+        if ($data['sitetitle'] == "" && isset($mod_params[0])) {
+            $data['sitetitle'] = Mod::getTitle($mod_params[0]);
+        }
+        $data['title'] = $data['sitetitle'];
 
-        if (Hooks::exist($data['mod'], 'mod_control')) {
+        if (Mod::exist($mod_name)) {
             $this->render('mod', $data);
             exit();
         } else {

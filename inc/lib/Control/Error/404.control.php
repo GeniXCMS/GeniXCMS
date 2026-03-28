@@ -50,6 +50,7 @@ $data['archives_list'] = Archives::list(10);
 $data['platform_name'] = "GeniXCMS";
 $data['platform_version'] = System::v();
 $data['platform_fullname'] = $data['platform_name'] . " " . $data['platform_version'];
+$data['p_type'] = 'error';
 
 $data['site_meta'] = Site::meta($data);
 
@@ -73,7 +74,7 @@ if (Theme::exist('404')) {
 ?>
     <div class="container">
         <div class="alert alert-danger">
-        <?=$val; ?>
+        <?=is_string($val) ? $val : ''; ?>
         </div>
     </div>
 <?php

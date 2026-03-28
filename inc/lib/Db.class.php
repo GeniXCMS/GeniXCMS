@@ -101,7 +101,10 @@ class Db
                     self::$pdo = new PDO($dsn, $dbuser, $dbpass);
                     break;
                 case 'sqlite':
-                    // For SQLite, dbname is the path to the database file
+                    // Make path absolute if it is relative to ensure gxadmin accesses the same DB
+                    if (!preg_match('#^(/|[A-Za-z]:\\\\)#', $dbname)) {
+                        $dbname = GX_PATH . '/' . $dbname;
+                    }
                     $dsn = "sqlite:$dbname";
                     self::$pdo = new PDO($dsn);
                     break;

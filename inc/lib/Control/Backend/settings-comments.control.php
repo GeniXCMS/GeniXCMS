@@ -61,7 +61,6 @@ if (User::access(1)) {
             $data['alertDanger'] = $alertDanger;
         }
 
-        System::alert($data);
     }
 
     $data['comments_enable'] = Options::v('comments_enable');

@@ -27,6 +27,7 @@ date_default_timezone_set('UTC');
  * @since 0.0.1
  */
 define('GX_PATH', realpath(__DIR__.'/../'));
+define('GX_ADMIN', true);
 define('GX_LIB', GX_PATH.'/inc/lib/');
 define('GX_MOD', GX_PATH.'/inc/mod/');
 define('GX_THEME', GX_PATH.'/inc/themes/');

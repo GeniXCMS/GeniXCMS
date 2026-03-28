@@ -69,11 +69,14 @@ class Acl
         }
 
         // Check if DB has explicit setting
-        $sql = "SELECT `status` FROM `permissions` WHERE `group_id` = ? AND `permission` = ? LIMIT 1";
-        $res = Db::result($sql, [$group, $permission]);
+        $res = Query::table('permissions')
+            ->select('status')
+            ->where('group_id', $group)
+            ->where('permission', $permission)
+            ->first();
 
-        if (Db::$num_rows > 0 && isset($res[0]->status) && !isset($res[0]->error)) {
-            return (int)$res[0]->status === 1;
+        if ($res && isset($res->status)) {
+            return (int) $res->status === 1;
         }
 
         // Fallback to defaults defined in code
@@ -130,15 +133,23 @@ class Acl
     {
         self::init();
         // Check if exists
-        $sql = "SELECT id FROM `permissions` WHERE `group_id` = ? AND `permission` = ? LIMIT 1";
-        $res = Db::result($sql, [$group_id, $permission]);
-        if (Db::$num_rows > 0) {
-            $sql = "UPDATE `permissions` SET `status` = ? WHERE `group_id` = ? AND `permission` = ?";
-            return Db::query($sql, [(int)$status, $group_id, $permission]);
-        }
-        else {
-            $sql = "INSERT INTO `permissions` (`group_id`, `permission`, `status`) VALUES (?, ?, ?)";
-            return Db::query($sql, [$group_id, $permission, (int)$status]);
+        $res = Query::table('permissions')
+            ->select('id')
+            ->where('group_id', $group_id)
+            ->where('permission', $permission)
+            ->first();
+
+        if ($res && isset($res->id)) {
+            return Query::table('permissions')
+                ->where('group_id', $group_id)
+                ->where('permission', $permission)
+                ->update(['status' => (int) $status]);
+        } else {
+            return Query::table('permissions')->insert([
+                'group_id' => $group_id,
+                'permission' => $permission,
+                'status' => (int) $status
+            ]);
         }
     }
 }

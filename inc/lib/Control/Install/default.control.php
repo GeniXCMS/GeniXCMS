@@ -26,7 +26,8 @@ new Http();
 
 !defined('DB_DRIVER') ? define('DB_DRIVER', 'mysqli') : '';
 
-echo '<h2>Install Page</h2>';
+// echo '<h2>Install Page</h2>'; // Removed redundant header
+
 if (isset($_GET['step'])) {
     $step = $_GET['step'];
 } else {
@@ -34,17 +35,15 @@ if (isset($_GET['step'])) {
 }
 switch ($step) {
     case '1':
-        if ($_POST['dbuser'] == '') {
+        if (empty($_POST['dbuser'])) {
             $data['alertDanger'][] = 'Database User Empty!';
         }
-        if ($_POST['dbname'] == '') {
+        if (empty($_POST['dbname'])) {
             $data['alertDanger'][] = 'Database Name Empty!';
         }
-        if (isset($data['alertDanger'])) {
-            Control::error('db', $data);
 
-            echo 'Please Press <a href="?" 
-                class="btn btn-danger">Back Button</a>.';
+        if (isset($data['alertDanger'])) {
+            Theme::install('step_error');
         } else {
             $dbhost = (isset($_POST['dbhost']) ? Typo::cleanX($_POST['dbhost']) : '');
             $dbuser = (isset($_POST['dbuser']) ? Typo::strip(Typo::cleanX($_POST['dbuser'])) : '');
@@ -64,12 +63,9 @@ switch ($step) {
                 Theme::install('step1');
             } else {
                 $data['alertDanger'][] = "Database connection failed! Please check your configuration.";
-                Control::error('db', $data);
-                echo 'Please Press <a href="?" 
-                class="btn btn-danger">Back Button</a>.';
+                Theme::install('step_error');
             }
         }
-
         break;
 
     case '2':
@@ -96,7 +92,13 @@ switch ($step) {
     case '4':
         try {
             $file = GX_PATH.'/inc/config/config.php';
-            $config = Install::makeConfig($file);
+            $result = Install::makeConfig($file);
+            // makeConfig() now returns an array with 'config' and 'security_key'.
+            // Define SECURITY_KEY in the current request scope so User::randpass()
+            // can use it without re-including the newly written config file.
+            if (!defined('SECURITY_KEY')) {
+                define('SECURITY_KEY', $result['security_key']);
+            }
             if (System::existConf()) {
                 Install::createTable();
                 Install::insertData();
@@ -116,28 +118,21 @@ switch ($step) {
                         );
                 User::create($vars);
 
-                echo 'Installation Success. Go to <a href="gxadmin">Admin Page</a>.';
+                Theme::install('step4'); // Success
             } else {
-                echo '<h2>Error !! Config File Not Found.</h2>
-                Please make sure you had permission to write on the config directory. 
-                Do ftp to the server and CHMOD 777 the config directory. After 
-                config file is created, you can chmod it back to 755.
-                <br>
-                <br>
-                After You had set the permission, please refresh this page. 
-                <br>
-                <br>
-                or <a href="?step=4" class="btn btn-primary">Click Here</a>';
+                $data['alertDanger'][] = "Config File Not Found. Please CHMOD 777 the config directory.";
+                Theme::install('step_error');
             }
         } catch (exception $e) {
-            echo $e->getMessage();
+             $data['alertDanger'][] = $e->getMessage();
+             Theme::install('step_error');
         }
 
         break;
 
     default:
         if (System::existConf()) {
-            echo 'Config File Already Exist';
+            echo '<div class="alert alert-info border-0 rounded-4">Configuration detected. System is established.</div>';
         } else {
             Theme::install('step0');
         }

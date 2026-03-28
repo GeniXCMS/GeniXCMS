@@ -121,7 +121,6 @@ if (User::access(0)) {
                     $data['alertDanger'] = $alertDanger;
                 }
             }
-            System::alert($data);
         }
         
 

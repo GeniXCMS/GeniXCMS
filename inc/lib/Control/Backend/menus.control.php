@@ -119,7 +119,7 @@ if (User::access(1)) {
                 default:
                     break;
             }
-            System::alert($data);
+
                 //$data['abc'] = "abc";
             if (isset($_GET['id'])) {
                 $menuid = Typo::cleanX(Typo::filterXss($_POST['id']));
@@ -178,7 +178,7 @@ if (User::access(1)) {
                 default:
                     break;
             }
-            System::alert($data);
+
             if (isset($_GET['id'])) {
                 $menuid = Typo::cleanX(Typo::filterXss($_GET['id']));
             } else {
@@ -239,7 +239,7 @@ if (User::access(1)) {
                     $data['alertDanger'][] = _('No ID Selected.');
                 }
             }
-            System::alert($data);
+
             $data['menus'] = Options::get('menus');
             Theme::admin('header', $data);
             System::inc('menus', $data);
@@ -271,7 +271,7 @@ if (User::access(1)) {
             } else {
                 $data['alertDanger'][] = _('No ID Selected.');
             }
-            System::alert($data);
+
             $data['menus'] = Options::get('menus');
             Theme::admin('header', $data);
             System::inc('menus', $data);
@@ -408,7 +408,7 @@ if (User::access(1)) {
             }
 
                 // CHANGE ORDER END
-            System::alert($data);
+
             $data['menus'] = Options::get('menus', false);
             Theme::admin('header', $data);
             System::inc('menus', $data);

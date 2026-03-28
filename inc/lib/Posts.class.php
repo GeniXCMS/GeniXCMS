@@ -422,11 +422,13 @@ class Posts extends Model
         }
         $post_type = self::type($id);
         
+        $randFn = (defined('DB_DRIVER') && DB_DRIVER === 'mysql') ? 'RAND()' : 'RANDOM()';
+        
         $post = Query::table('posts')
             ->select("DISTINCT B.`post_id`, `posts`.`id`, `posts`.`date`, `posts`.`title`, `posts`.`content`, `posts`.`author`, `posts`.`cat`, `posts`.`type`")
             ->join('posts_param AS B', '`posts`.`id`', '=', 'B.`post_id`')
             ->whereRaw("(`posts`.`cat` = ? $where_tag) AND `posts`.`id` != ? AND `posts`.`status` = '1' AND `posts`.`type` = ?", [$cat, $id, $post_type])
-            ->orderByRaw('RAND()')
+            ->orderByRaw($randFn)
             ->limit($num, 0)
             ->get();
             

@@ -95,7 +95,7 @@ class Mod
     public static function modMenu()
     {
         $json = Options::v('modules');
-        $mod = json_decode($json, true);
+        $mod = json_decode($json ?? '', true);
         if (is_array($mod)) {
             $list = '';
             asort($mod);
@@ -123,15 +123,25 @@ class Mod
     public static function inc($vars, $data, $dir)
     {
         $file = $dir.'/'.$vars.'.php';
+        $content = '';
         if (file_exists($file)) {
+            ob_start();
+            $d = $data;
+            if (is_array($data)) {
+                extract($data);
+            }
+            $data = $d;
             include $file;
+            $content = ob_get_clean();
         }
+
+        return $content;
     }
 
     public static function activate($mod)
     {
         $json = Options::v('modules');
-        $mods = json_decode($json, true);
+        $mods = json_decode($json ?? '', true);
         //print_r($mods);
         if (!is_array($mods) || $mods == '') {
             $mods = array();
@@ -155,7 +165,7 @@ class Mod
     public static function deactivate($mod)
     {
         $mods = Options::v('modules');
-        $mods = json_decode($mods, true);
+        $mods = json_decode($mods ?? '', true);
         if (!is_array($mods) || $mods == '') {
             $mods = array();
         }
@@ -184,7 +194,7 @@ class Mod
     public static function isActive($mod)
     {
         $json = Options::v('modules');
-        $mods = json_decode($json, true);
+        $mods = json_decode($json ?? '', true);
         //print_r($mods);
         if (!is_array($mods) || $mods == '') {
             $mods = array();
@@ -253,7 +263,7 @@ class Mod
             }
         }
         $json = Options::v('modules');
-        $mods = json_decode($json, true);
+        $mods = json_decode($json ?? '', true);
         if (!is_array($mods) || $mods == '') {
             $mods = array();
         }

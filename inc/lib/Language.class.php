@@ -88,7 +88,7 @@ class Language
     public static function getDefaultLang()
     {
         $def = Options::v('multilang_default');
-        $lang = json_decode(Options::v('multilang_country'), true);
+        $lang = json_decode(Options::v('multilang_country') ?? '', true);
         $deflang = $lang[$def];
 
         return $deflang;
@@ -116,8 +116,7 @@ class Language
 
     public static function setActive($lang = '')
     {
-        $lg = Options::v('multilang_country');
-        $lg = json_decode($lg, true);
+        $lg = json_decode(Options::v('multilang_country') ?? '', true);
 
         if (isset($_GET['lang']) && $_GET['lang'] != '' && $lang == '') {
             $getLang = Typo::cleanX($_GET['lang']);
@@ -171,7 +170,7 @@ class Language
 
     public static function flagList()
     {
-        $lang = json_decode(Options::v('multilang_country'), true);
+        $lang = json_decode(Options::v('multilang_country') ?? '', true);
         $multilang_enable = Options::v('multilang_enable');
         // print_r($lang);
         $html = '';

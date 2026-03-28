@@ -25,8 +25,10 @@ class Mods
         //     $data = $_GET;
         // }
         // print_r($data);
-        if (isset($data[0]) && $data[0] == 'page') {
-            Mod::inc('frontpage', $data, realpath(__DIR__.'/../layout/'));
+        $params = $data[0]['mod_params'] ?? [];
+        $mod_name = $data[0]['mod'] ?? '';
+        if ((isset($params[0]) && $params[0] == 'page') || $mod_name == 'page') {
+            return Mod::inc('frontpage', $data[0], realpath(__DIR__ . '/../layout/'));
         }
     }
 }

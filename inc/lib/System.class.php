@@ -190,7 +190,7 @@ class System
             "img-src" => ["'self'", "data:", "https:", "*"],
             "font-src" => ["'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             "connect-src" => ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-            "frame-src" => ["'self'"],
+            "frame-src" => ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com", "https://www.dailymotion.com"],
             "object-src" => ["'none'"]
         ];
 

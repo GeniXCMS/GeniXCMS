@@ -46,7 +46,7 @@ $activeThemeHtml = "
                 </div>
 
                 <div class='d-flex flex-wrap gap-3'>
-                    <a href='index.php?page=themes&act=options' class='btn btn-primary rounded-pill px-5 py-2 shadow-lg hover-up'>
+                    <a href='index.php?page=themes&view=options' class='btn btn-primary rounded-pill px-5 py-2 shadow-lg hover-up'>
                         <i class='bi bi-magic me-2'></i> "._("Customize Look")."
                     </a>
                     <a href='".Site::$url."' target='_blank' class='btn btn-white border rounded-pill px-4 py-2 shadow-sm hover-up'>

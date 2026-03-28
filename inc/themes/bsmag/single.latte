@@ -1,0 +1,96 @@
+<div class="row g-5 mb-5">
+    <div class="col-md-8">
+        {if !isset($posts['error'])}
+            {var $p = $posts[0]}
+            <article class="blog-post mb-5">
+                <h1 class="display-3 fw-bold link-body-emphasis mb-4">{$p->title}</h1>
+                
+                <div class="blog-post-meta mb-5 p-3 bg-light rounded-3 d-flex align-items-center gap-3 shadow-sm">
+                    <span class="text-secondary small fw-bold text-uppercase tracking-wider">
+                        <i class="bi bi-folder me-1"></i>
+                        <a href="{Url::cat($p->cat)}" class="badge text-bg-primary text-decoration-none px-3 py-2">
+                            {Categories::name($p->cat)}
+                        </a>
+                    </span>
+                    <span class="text-secondary opacity-25">|</span>
+                    <span class="small text-muted"><i class="bi bi-clock me-1"></i> {Date::format($p->date)}</span>
+                    <span class="text-secondary opacity-25">|</span>
+                    <span class="small text-muted"><i class="bi bi-person me-1"></i> By <a href="{Url::author($p->author)}" class="fw-bold">{$p->author}</a></span>
+                </div>
+
+                {var $post_image = Posts::getPostImage($p->id)}
+                {if !empty($post_image)}
+                    <div class="post-featured-image-wrap mb-5 rounded-4 overflow-hidden shadow-lg border">
+                        <img src="{Url::thumb($post_image, 'large', 850)|noescape}" class="img-fluid w-100 object-fit-cover" alt="{$p->title}" loading="lazy" style="max-height: 500px;">
+                    </div>
+                {/if}
+
+                <div class="blog-post-content fs-5 lh-lg text-secondary-emphasis">
+                    {Hooks::run('post_content_before_action', $data)|noescape}
+                    {Posts::content($p->content)|noescape}
+                    {Hooks::run('post_content_after_action', $data)|noescape}
+                </div>
+
+                {var $rawTags = Posts::getParam('tags', $p->id)}
+                {if !empty($rawTags)}
+                    <div class="post-tags mt-5 pt-4 border-top">
+                        <span class="text-muted fw-bold me-2 small"><i class="bi bi-tags"></i> TAGS:</span>
+                        {foreach explode(',', $rawTags) as $tag}
+                            {var $cleanTag = trim($tag)}
+                            {if $cleanTag}
+                                <a href="{Url::tag($cleanTag)}" class="btn btn-sm btn-light border rounded-pill px-3 m-1 shadow-sm font-monospace">#{$cleanTag}</a>
+                            {/if}
+                        {/foreach}
+                    </div>
+                {/if}
+            </article>
+
+            <section class="related-posts-section mt-5 pt-5 border-top">
+                <h3 class="fw-bold mb-4 font-display"><i class="bi bi-grid-3x3-gap me-2 text-primary"></i> {_'Related Articles'}</h3>
+                <div class="row g-4">
+                    {var $relPosts = Query::table('posts')->where('cat', $p->cat)->where('id', '!=', $p->id)->where('status', '1')->orderBy('date', 'DESC')->limit(4)->get()}
+                    {var $relItems = Posts::prepare($relPosts)}
+                    {if !empty($relItems) && !isset($relItems['error'])}
+                        {foreach $relItems as $rel}
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-up bg-white transition-base">
+                                    <div class="card-img-top-wrap" style="height: 160px; overflow: hidden;">
+                                        {var $relImg = Posts::getPostImage($rel->id)}
+                                        <img src="{$relImg ? Url::thumb($relImg, 'medium', 400) : Url::thumb(Site::$cdn . 'assets/images/noimage.png', 'medium', 400)|noescape}" 
+                                             class="card-img-top w-100 h-100 object-fit-cover" alt="{$rel->title}">
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <h6 class="card-title fw-bold mb-2">
+                                            <a href="{Url::post($rel->id)}" class="text-dark text-decoration-none stretched-link">{$rel->title|truncate:60}</a>
+                                        </h6>
+                                        <p class="card-text text-muted x-small mt-2"><i class="bi bi-calendar3 me-1"></i> {Date::format($rel->date)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+                    {/if}
+                </div>
+            </section>
+
+            <section class="comments-section mt-5 pt-5 border-top" id="comments">
+                <h3 class="fw-bold mb-4 font-display text-center"><i class="bi bi-chat-right-quote me-3 text-primary opacity-50"></i>{_'Reader Discussions'}</h3>
+                <div class="custom-comment-wrap bg-white p-3 p-md-4 rounded-4 shadow-sm border border-light-subtle">
+                    {Comments::form()|noescape}
+                    <div class="mt-2 comments-list-wrapper">
+                        {Comments::showList(['offset' => 0, 'max' => 5, 'parent' => 0])|noescape}
+                    </div>
+                </div>
+            </section>
+        {/if}
+    </div>
+
+    <aside class="col-md-4">
+        {include 'sidebar.latte'}
+    </aside>
+</div>
+
+<style>
+    .hover-up:hover { transform: translateY(-5px); box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important; }
+    .x-small { font-size: 0.75rem; }
+    .font-display { font-family: 'Playfair Display', serif; }
+</style>

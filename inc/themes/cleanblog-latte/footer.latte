@@ -1,0 +1,79 @@
+    <!-- Footer -->
+    <footer class="bg-light py-5 mt-auto border-top">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <ul class="list-inline text-center mb-4">
+                        <li class="list-inline-item">
+                            <a href="#!" class="text-secondary text-decoration-none">
+                                <span class="fa-stack small">
+                                    <i class="fas fa-circle fa-stack-2x text-opacity-10 text-dark"></i>
+                                    <i class="fab fa-twitter fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!" class="text-secondary text-decoration-none">
+                                <span class="fa-stack small">
+                                    <i class="fas fa-circle fa-stack-2x text-opacity-10 text-dark"></i>
+                                    <i class="fab fa-facebook-f fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!" class="text-secondary text-decoration-none">
+                                <span class="fa-stack small">
+                                    <i class="fas fa-circle fa-stack-2x text-opacity-10 text-dark"></i>
+                                    <i class="fab fa-github fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <p class="text-muted small mb-0">Copyright &copy; <span class="fw-bold">{$site_name}</span> {date('Y')}</p>
+                        <p class="text-muted-50 x-small mb-0 mt-1" style="font-size: 0.7rem;">Powered by GeniXCMS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .fa-stack.small { font-size: 0.8em; }
+        .fa-stack:hover i.fa-stack-2x { color: #0085A1 !important; transition: all 0.3s ease; }
+        .fa-stack:hover i.fa-stack-1x { color: #fff !important; transition: all 0.3s ease; }
+        .x-small { font-size: 0.75rem; color: #adb5bd; }
+    </style>
+    <!-- Core theme JS-->
+    <script src="{$theme_url}/js/clean-blog.min.js"></script>
+    <script>
+        // Shrink navbar script for BS5
+        window.addEventListener('DOMContentLoaded', () => {
+            let scrollPos = 0;
+            const mainNav = document.getElementById('mainNav');
+            if (!mainNav) return;
+            const headerHeight = mainNav.clientHeight;
+            window.addEventListener('scroll', function() {
+                const currentTop = document.body.getBoundingClientRect().top * -1;
+                if ( currentTop < scrollPos) {
+                    // Scrolling Up
+                    if (currentTop > 0 && mainNav.classList.contains('is-fixed')) {
+                        mainNav.classList.add('is-visible');
+                    } else {
+                        mainNav.classList.remove('is-visible', 'is-fixed');
+                    }
+                } else {
+                    // Scrolling Down
+                    mainNav.classList.remove(['is-visible']);
+                    if (currentTop > headerHeight && !mainNav.classList.contains('is-fixed')) {
+                        mainNav.classList.add('is-fixed');
+                    }
+                }
+                scrollPos = currentTop;
+            });
+        })
+    </script>
+</body>
+</html>

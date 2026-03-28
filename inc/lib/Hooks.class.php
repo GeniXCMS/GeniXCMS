@@ -83,7 +83,8 @@ class Hooks
             'theme_install_action' => array(),
             'mod_control' => array(),
             'login_form_header' => array(),
-            'login_form_footer' => array()
+            'login_form_footer' => array(),
+            'admin_dashboard_schema' => array(), // dashboard schema filter
             );
 
         return $hooks;
@@ -153,7 +154,7 @@ class Hooks
         $hook_name = array_shift($args);
 
         if (!isset($hooks[$hook_name])) {
-            return;
+            return $args[0];
         } // No plugins have registered this hook
         // print_r($args[0]);
         // $args = (is_array($args))?$args[0]: $args;

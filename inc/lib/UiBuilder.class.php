@@ -28,7 +28,7 @@ class UiBuilder
             $title = $h['title'] ?? 'Module';
             $subtitle = $h['subtitle'] ?? '';
 
-            echo '<div class="row align-items-center mb-4 sticky-top bg-white py-3 shadow-sm border-bottom gx-module-header transition-all" style="top: 50px; z-index: 1020; margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px;">';
+            echo '<div class="row align-items-center mb-4 sticky-top bg-white py-3 shadow-sm border-bottom gx-module-header transition-all" style="top: 60px; z-index: 1020; margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px;">';
             echo '    <div class="col-md-6">';
             echo "        <h3 class=\"fw-bold text-dark mb-0 module-title transition-all\">{$icon}{$title}</h3>";
             if ($subtitle) {
@@ -54,7 +54,8 @@ class UiBuilder
                 $btnType = $btn['type'] ?? 'link';
 
                 if ($btnType === 'button') {
-                    echo "<button type=\"submit\" name=\"submit\" class=\"{$btnClass} module-action-btn transition-all\" {$btnAttr}>{$btnIcon}{$btnLabel}</button> ";
+                    $btnName = $btn['name'] ?? 'submit';
+                    echo "<button type=\"submit\" name=\"{$btnName}\" class=\"{$btnClass} module-action-btn transition-all\" {$btnAttr}>{$btnIcon}{$btnLabel}</button> ";
                 } else {
                     echo "<a href=\"{$btnUrl}\" class=\"{$btnClass} module-action-btn transition-all\" {$btnAttr}>{$btnIcon}{$btnLabel}</a> ";
                 }
@@ -641,6 +642,44 @@ class UiBuilder
                 echo "</div>";
                 break;
 
+            case 'chart':
+                $id = $el['id'] ?? 'chart-'.rand(100, 999);
+                $height = $el['height'] ?? '300px';
+                $data = is_array($el['chart_data']) ? json_encode($el['chart_data']) : $el['chart_data'];
+                $options = json_encode($el['chart_options'] ?? [
+                    'responsive' => true,
+                    'maintainAspectRatio' => false
+                ]);
+                $chartType = $el['chart_type'] ?? 'line';
+                echo "<div class='chart-container mb-4' style='position: relative; height:{$height}; width:100%'>
+                        <canvas id='{$id}'></canvas>
+                      </div>";
+                echo "<script>
+                    (function() {
+                        const initChart = function() {
+                            if (typeof Chart === 'undefined') {
+                                setTimeout(initChart, 200);
+                                return;
+                            }
+                            new Chart(document.getElementById('{$id}'), {
+                                type: '{$chartType}',
+                                data: {$data},
+                                options: {$options}
+                            });
+                        };
+                        if (typeof Chart === 'undefined' && !window.chartJsLoading) {
+                            window.chartJsLoading = true;
+                            const script = document.createElement('script');
+                            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                            script.onload = initChart;
+                            document.head.appendChild(script);
+                        } else {
+                            setTimeout(initChart, 50);
+                        }
+                    })();
+                </script>";
+                break;
+ 
             case 'grid':
                 $cls = $el['class'] ?? 'row g-4';
                 echo "<div class=\"{$cls}\">";

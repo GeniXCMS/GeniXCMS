@@ -15,3 +15,10 @@ error.txt
 check*
 db_*
 front*
+genixcms-docs*
+gd_*
+genixcms.db_
+tmp*
+upload*
+reset*
+reproduce*

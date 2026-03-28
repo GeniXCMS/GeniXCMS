@@ -11,15 +11,9 @@ if (isset($_POST['installdb'])) {
     Options::insert(['themusk_options' => json_encode($arr)]);
 }
 
+// Handle Saving
 if (isset($_POST['themusk_options_update'])) {
-    unset($_POST['themusk_options_update']);
-    $data = [];
-    foreach ($_POST as $k => $v) { $data[$k] = $v; }
-    Options::update('themusk_options', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
-    echo '<div id="gneex-saved-notice" style="position:fixed;top:20px;right:20px;z-index:9999;background:#10b981;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;box-shadow:0 10px 30px rgba(16,185,129,.4);">
-        <i class="fa fa-check-circle me-2"></i> Settings saved!
-    </div>
-    <script>setTimeout(()=>document.getElementById("gneex-saved-notice")?.remove(),3000)</script>';
+    // Handled below after builder init
 }
 
 if (Themusk::checkDB()) {
@@ -175,6 +169,18 @@ if (Themusk::checkDB()) {
         'saveKey'    => 'themusk_options_update',
     ];
     $builder = new OptionsBuilder($o, $presets, $panel_palettes, $config);
+
+    // Save Logic
+    if (isset($_POST['themusk_options_update'])) {
+        unset($_POST['themusk_options_update']);
+        $builder->renderCSS();
+        $data = [];
+        foreach ($_POST as $k => $v) { $data[$k] = $v; }
+        Options::update('themusk_options', json_encode($data, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS));
+        echo '<div id="gx-toast"><i class="fa fa-check-circle"></i> The Musk Settings saved!</div>';
+        echo '<script>setTimeout(() => document.getElementById("gx-toast")?.remove(), 4000);</script>';
+    }
+
     $builder->render($schema);
 
 } else {

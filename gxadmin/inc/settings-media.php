@@ -12,8 +12,8 @@ $schema = [
         'subtitle' => _('Manage where and how your website images are stored and optimized.'),
         'icon' => 'bi bi-images',
         'button' => [
-            'type' => 'button', 'label' => _('Save Media Settings'), 'icon' => 'bi bi-check-circle',
-            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'name="change" value="Change"'
+            'type' => 'button', 'name' => 'change', 'label' => _('Sync Media Parameters'), 'icon' => 'bi bi-hdd-fill',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'value="Change"'
         ],
     ],
     'card_wrapper' => true, 'tab_mode' => 'js', 'tab_style' => 'modern',

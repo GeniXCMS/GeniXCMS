@@ -8,10 +8,10 @@ $username = Session::val('username');
 
 // ── PREPARE DATA ──────────────────────────────────────────────────
 $stats = [
-    'posts'    => Stats::totalPost('post'),
-    'pages'    => Stats::totalPost('page'),
+    'posts' => Stats::totalPost('post'),
+    'pages' => Stats::totalPost('page'),
     'comments' => Stats::pendingComments(),
-    'users'    => Stats::totalUser()
+    'users' => Stats::totalUser()
 ];
 
 // Recent Posts Data
@@ -25,7 +25,7 @@ if (!isset($recentPosts['error'])) {
                 <a href=\"" . Url::post($p->id) . "\" target=\"_blank\" class=\"btn btn-white btn-sm rounded-circle border p-1\"><i class=\"bi bi-eye text-primary\"></i></a>
                 <a href=\"index.php?page=posts&act=edit&id={$p->id}\" class=\"btn btn-white btn-sm rounded-circle border p-1 ms-1\"><i class=\"bi bi-pencil-square text-dark\"></i></a>
             </div>";
-        
+
         $postRows[] = [
             "<div class='fw-bold text-dark fs-7 mb-0'>" . htmlspecialchars($p->title) . "</div><div class='extra-small text-muted opacity-75'>" . Date::format($p->date) . "</div>",
             "<div class='d-flex align-items-center gap-2'><div class='bg-light rounded-circle p-1 d-flex align-items-center justify-content-center' style='width: 24px; height: 24px;'><i class='bi bi-person extra-small'></i></div><span class='small fw-semibold text-muted'>" . htmlspecialchars($p->author) . "</span></div>",
@@ -65,7 +65,7 @@ $schema = [
                 <div class="col-lg-8 text-start">
                     <h2 class="fw-black text-dark mb-1 d-flex align-items-center gap-2">
                         <span>' . _("Welcome back") . ',</span>
-                        <span class="text-primary text-gradient">' . htmlspecialchars((string)$username) . '!</span>
+                        <span class="text-primary text-gradient">' . htmlspecialchars((string) $username) . '!</span>
                         <span class="wave-emoji fs-3">👋</span>
                     </h2>
                     <p class="text-muted fw-medium fs-6 mb-0">
@@ -73,21 +73,21 @@ $schema = [
                         ' . Date::local(date('Y-m-d H:i:s'), 'EEEE, d MMMM yyyy') . ' · <span class="text-dark fw-bold" id="dashboard-clock">' . date('H:i') . '</span>
                     </p>
                 </div>
-                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">' . 
-                    (new UiBuilder())->renderElement([
-                        'type' => 'dropdown_button',
-                        'label' => '<i class="bi bi-speedometer2 text-primary me-1"></i> ' . _("System Status") . ' <span class="pulse-success ms-1"></span>',
-                        'class' => 'btn btn-white shadow-sm rounded-pill px-4 border py-2 fw-bold d-flex align-items-center gap-2',
-                        'align' => 'end',
-                        'items' => [
-                            ['type' => 'header', 'label' => _("Server Vitals")],
-                            ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between mb-2"><span class="small text-muted">' . _("PHP Version") . '</span><span class="badge bg-light text-dark fw-bold">' . PHP_VERSION . '</span></div>'],
-                            ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between mb-2"><span class="small text-muted">' . _("OS") . '</span><span class="badge bg-light text-dark fw-bold">' . PHP_OS . '</span></div>'],
-                            ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between"><span class="small text-muted">' . _("Engine") . '</span><span class="badge bg-primary bg-opacity-10 text-primary fw-bold">v' . System::$version . '</span></div>'],
-                            ['type' => 'divider'],
-                            ['label' => _('Manage Configuration'), 'url' => 'index.php?page=settings', 'icon' => 'bi bi-gear-fill']
-                        ]
-                    ], true) . '
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">' .
+                (new UiBuilder())->renderElement([
+                    'type' => 'dropdown_button',
+                    'label' => '<i class="bi bi-speedometer2 text-primary me-1"></i> ' . _("System Status") . ' <span class="pulse-success ms-1"></span>',
+                    'class' => 'btn btn-white shadow-sm rounded-pill px-4 border py-2 fw-bold d-flex align-items-center gap-2',
+                    'align' => 'end',
+                    'items' => [
+                        ['type' => 'header', 'label' => _("Server Vitals")],
+                        ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between mb-2"><span class="small text-muted">' . _("PHP Version") . '</span><span class="badge bg-light text-dark fw-bold">' . PHP_VERSION . '</span></div>'],
+                        ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between mb-2"><span class="small text-muted">' . _("OS") . '</span><span class="badge bg-light text-dark fw-bold">' . PHP_OS . '</span></div>'],
+                        ['type' => 'raw', 'label' => '<div class="d-flex justify-content-between"><span class="small text-muted">' . _("Engine") . '</span><span class="badge bg-primary bg-opacity-10 text-primary fw-bold">v' . System::$version . '</span></div>'],
+                        ['type' => 'divider'],
+                        ['label' => _('Manage Configuration'), 'url' => 'index.php?page=settings', 'icon' => 'bi bi-gear-fill']
+                    ]
+                ], true) . '
                 </div>
             </div>'
         ],
@@ -96,10 +96,10 @@ $schema = [
         [
             'type' => 'stat_cards',
             'items' => [
-                ['label' => _('Articles'), 'value' => (string)$stats['posts'], 'icon' => 'bi bi-journal-text', 'color' => 'primary', 'footer_link' => 'index.php?page=posts', 'footer_text' => _('View All')],
-                ['label' => _('Pages'), 'value' => (string)$stats['pages'], 'icon' => 'bi bi-stack', 'color' => 'success', 'footer_link' => 'index.php?page=pages', 'footer_text' => _('Manage')],
-                ['label' => _('Engagement'), 'value' => (string)$stats['comments'], 'icon' => 'bi bi-chat-left-dots', 'color' => 'warning', 'footer_link' => 'index.php?page=comments', 'footer_text' => _('Verify')],
-                ['label' => _('Entities'), 'value' => (string)$stats['users'], 'icon' => 'bi bi-people', 'color' => 'info', 'footer_link' => 'index.php?page=users', 'footer_text' => _('Analyze')]
+                ['label' => _('Articles'), 'value' => (string) $stats['posts'], 'icon' => 'bi bi-journal-text', 'color' => 'primary', 'footer_link' => 'index.php?page=posts', 'footer_text' => _('View All')],
+                ['label' => _('Pages'), 'value' => (string) $stats['pages'], 'icon' => 'bi bi-stack', 'color' => 'success', 'footer_link' => 'index.php?page=pages', 'footer_text' => _('Manage')],
+                ['label' => _('Engagement'), 'value' => (string) $stats['comments'], 'icon' => 'bi bi-chat-left-dots', 'color' => 'warning', 'footer_link' => 'index.php?page=comments', 'footer_text' => _('Verify')],
+                ['label' => _('Entities'), 'value' => (string) $stats['users'], 'icon' => 'bi bi-people', 'color' => 'info', 'footer_link' => 'index.php?page=users', 'footer_text' => _('Analyze')]
             ]
         ],
 
@@ -135,7 +135,7 @@ $schema = [
                         'body_elements' => [
                             [
                                 'type' => 'raw',
-                                'html' => '<div class="row g-4 text-center">' . (function() {
+                                'html' => '<div class="row g-4 text-center">' . (function () {
                                     $html = '';
                                     $users = Db::result("SELECT * FROM `user` ORDER BY `join_date` DESC LIMIT 6");
                                     if (Db::$num_rows > 0) {
@@ -205,16 +205,94 @@ $schema = [
 // ── CUSTOM CSS ────────────────────────────────────────────────────
 ?>
 <style>
-    .fw-black { font-weight: 900 !important; }
-    .text-gradient { background: linear-gradient(45deg, #0d6efd, #0dcaf0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .wave-emoji { display: inline-block; animation: wave 2.5s infinite; transform-origin: 70% 70%; }
-    .member-card:hover { background-color: #f8f9fa; transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .pulse-success { display: inline-block; width: 8px; height: 8px; background: #198754; border-radius: 50%; animation: pulse 1.5s infinite; }
-    @keyframes wave { 0%, 60%, 100% { transform: rotate(0.0deg) } 10% { transform: rotate(14.0deg) } 20% { transform: rotate(-8.0deg) } 30% { transform: rotate(14.0deg) } 40% { transform: rotate(-4.0deg) } 50% { transform: rotate(10.0deg) } }
-    @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(25, 135, 84, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); } }
-    .fs-7 { font-size: 0.9rem !important; }
-    .fs-8 { font-size: 0.8rem !important; }
-    .extra-small { font-size: 0.7rem !important; }
+    .fw-black {
+        font-weight: 900 !important;
+    }
+
+    .text-gradient {
+        background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .wave-emoji {
+        display: inline-block;
+        animation: wave 2.5s infinite;
+        transform-origin: 70% 70%;
+    }
+
+    .member-card:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .pulse-success {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #198754;
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes wave {
+
+        0%,
+        60%,
+        100% {
+            transform: rotate(0.0deg)
+        }
+
+        10% {
+            transform: rotate(14.0deg)
+        }
+
+        20% {
+            transform: rotate(-8.0deg)
+        }
+
+        30% {
+            transform: rotate(14.0deg)
+        }
+
+        40% {
+            transform: rotate(-4.0deg)
+        }
+
+        50% {
+            transform: rotate(10.0deg)
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(25, 135, 84, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+        }
+    }
+
+    .fs-7 {
+        font-size: 0.9rem !important;
+    }
+
+    .fs-8 {
+        font-size: 0.8rem !important;
+    }
+
+    .extra-small {
+        font-size: 0.7rem !important;
+    }
 </style>
 
 <script>
@@ -227,7 +305,7 @@ $schema = [
     }
     setInterval(updateClock, 30000);
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         if (document.getElementById('world-map')) {
             new jsVectorMap({
                 selector: "#world-map",
@@ -270,8 +348,15 @@ echo Hooks::run('admin_page_notif_action', $data);
 echo Hooks::run('admin_page_top_action', $data);
 echo '</div>';
 
+// Allow modules and themes to modify the dashboard structure
+$schema = Hooks::filter('admin_dashboard_schema', $schema);
+
 $builder = new UiBuilder($schema);
 // Set header visibility to false because we handled it with our custom 'Welcome' raw block 
 // to maintain the specific animations and style of the dashboard.
 $builder->render();
+
+echo '<div class="col-md-12">';
+echo Hooks::run('admin_page_bottom_action', $data);
+echo '</div>';
 ?>

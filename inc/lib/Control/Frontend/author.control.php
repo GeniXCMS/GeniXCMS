@@ -27,6 +27,7 @@ class AuthorControl extends BaseControl
             $pagingtitle = ($paging > 1) ? " - Page {$paging}" : '';
 
             $data['sitetitle'] = 'Post by : ' . $author . $pagingtitle;
+            $data['title'] = $author;
             $q = Query::table('posts')
                 ->where('author', $author)
                 ->where('status', '1')

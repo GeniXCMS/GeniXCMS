@@ -12,8 +12,8 @@ $schema = [
         'subtitle' => _('Manage user interactions, comment moderation, and anti-spam protocols.'),
         'icon' => 'bi bi-chat-quote',
         'button' => [
-            'type' => 'button', 'label' => _('Save Setup'), 'icon' => 'bi bi-save',
-            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'name="change" value="Change"'
+            'type' => 'button', 'name' => 'change', 'label' => _('Save Setup'), 'icon' => 'bi bi-save',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'value="Change"'
         ],
     ],
     'card_wrapper' => false,

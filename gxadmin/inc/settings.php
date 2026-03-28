@@ -17,8 +17,8 @@ $schema = [
         'subtitle' => _('Core architectural control center for high-performance deployment and digital identity.'),
         'icon' => 'bi bi-command',
         'button' => [
-            'type' => 'button', 'label' => _('Update Framework'), 'icon' => 'bi bi-magic',
-            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'name="change" value="Change"'
+            'type' => 'button', 'name' => 'change', 'label' => _('Update Framework'), 'icon' => 'bi bi-magic',
+            'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold', 'attr' => 'value="Change"'
         ],
     ],
     'card_wrapper' => true, 'tab_mode' => 'js', 'tab_style' => 'modern',
@@ -37,6 +37,7 @@ $schema = [
                         ]],
                         ['type' => 'input', 'label' => _('Discovery Keywords'), 'name' => 'sitekeywords', 'value' => Options::v('sitekeywords')],
                         ['type' => 'textarea', 'label' => _('Meta Description for Search Engines'), 'name' => 'sitedesc', 'value' => Options::v('sitedesc'), 'rows' => 3],
+                        ['type' => 'select', 'label' => _('Admin Navigation Layout'), 'name' => 'admin_layout_type', 'selected' => Options::v('admin_layout_type') ?: 'sidebar', 'options' => ['sidebar' => _('Classic Sidebar'), 'top' => _('Top Navigation')]],
                     ]],
                     ['width' => 4, 'content' => [
                         ['type' => 'card', 'title' => _('Performance Meta'), 'icon' => 'bi bi-cpu', 'body_elements' => [
@@ -154,7 +155,8 @@ $schema = [
                             ['type' => 'input', 'label' => _('Favicon Icon Path'), 'name' => 'siteicon', 'value' => Options::v('siteicon'), 'placeholder' => 'favicon.ico']
                         ]]
                     ]]
-                ]]
+                ]],
+                ['type' => 'textarea', 'label' => _('Admin Custom CSS'), 'name' => 'admin_custom_css', 'value' => Options::v('admin_custom_css'), 'rows' => 6, 'class' => 'form-control bg-dark text-light font-monospace fs-8 border', 'placeholder' => '/* Inject custom CSS for the dashboard here */']
             ]
         ],
         'assets' => [

@@ -1,9 +1,9 @@
 <?php
 /*
- * Name: GneeX Theme
- * Desc: Default GeniXCMS Themes
- * Version: 1.1.3
- * Build: 1.1.11
+ * Name: GneeX
+ * Desc: GneeX Theme by GeniXCMS
+ * Version: 2.0.0-alpha
+ * Build: 2.0.0-alpha
  * Developer: GeniXCMS
  * URI: https://github.com/GeniXCMS
  * License: MIT License
