@@ -17,7 +17,7 @@
             <div class="swiper featured-swiper overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-outline-variant/10">
                 <div class="swiper-wrapper">
                     {foreach $f_ids as $f_id}
-                        {var $p_feat = Db::result("SELECT * FROM `posts` WHERE `id` = '$f_id' LIMIT 1")}
+                        {var $p_feat = Db::result("SELECT * FROM `posts` WHERE `id` = ? LIMIT 1", [$f_id])}
                         {if is_array($p_feat) && !isset($p_feat['error'])}
                             {var $fp = $p_feat[0]}
                             {var $fp_img_raw = Posts::getPostImage($fp->id) ?: Themusk::getImage($fp->content)}

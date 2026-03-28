@@ -21,7 +21,7 @@
             <div class="row g-4">
                 {var $feat = explode(',', $opt['featured_posts'])}
                 {foreach $feat as $id}
-                    {var $p = Db::result("SELECT * FROM `posts` WHERE `id` = '$id' LIMIT 1")}
+                    {var $p = Db::result("SELECT * FROM `posts` WHERE `id` = ? LIMIT 1", [$id])}
                     {if !isset($p['error'])}
                         {var $p = $p[0]}
                         {var $p_img = Gneex::getImage($p->content, $p->id)}

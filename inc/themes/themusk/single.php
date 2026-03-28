@@ -40,7 +40,7 @@
         <h4 class="font-headline text-2xl font-black uppercase tracking-widest text-on-surface mb-12">Related Essays</h4>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
             {var $randFn = (defined('DB_DRIVER') && DB_DRIVER === 'mysql') ? 'RAND()' : 'RANDOM()'}
-            {var $related = Db::result("SELECT * FROM `posts` WHERE `cat` = '$p->cat' AND `id` != '$p->id' AND `status` = '1' ORDER BY $randFn LIMIT 3")}
+            {var $related = Db::result("SELECT * FROM `posts` WHERE `cat` = ? AND `id` != ? AND `status` = '1' ORDER BY $randFn LIMIT 3", [$p->cat, $p->id])}
             {if is_array($related) && !isset($related['error'])}
                 {foreach $related as $rp}
                     <article class="flex flex-col group">
