@@ -17,24 +17,26 @@
                             {var $p_content = Posts::content($p->content)}
                             {var $p_img = Gneex::getImage($p_content, $p->id)}
                             
-                            <article class="blog-post p-0 overflow-hidden shadow-sm bg-white border-0 mb-4" data-aos="fade-up">
+                            <article class="blog-post blog-post-card p-0 overflow-hidden shadow-sm bg-white rounded-4 border-0 mb-4" data-aos="fade-up">
                                 <div class="row g-0 align-items-center">
                                     {if $p_img}
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <a href="{Url::post($p->id)}">
-                                                <img src="{Url::thumb($p_img, 'large')}" class="img-fluid h-100" style="object-fit: cover; min-height: 200px;">
+                                                <div class="post-img overflow-hidden" style="min-height: 200px; height: 100%;">
+                                                    <img src="{Url::thumb($p_img, 'large', '600')}" class="img-fluid w-100 h-100 object-fit-cover transition-base" alt="{$p->title}">
+                                                </div>
                                             </a>
                                         </div>
                                     {/if}
-                                    <div class="col-md-{$p_img ? '7' : '12'} p-4">
-                                        <div class="post-meta mb-2">
-                                            <span class="text-primary small fw-bold"><i class="fa-regular fa-calendar me-1"></i> {Date::format($p->date, 'd M Y')}</span>
+                                    <div class="col-md-{$p_img ? '8' : '12'} p-4">
+                                        <div class="post-meta mb-2 small opacity-50">
+                                            <span class="text-primary fw-bold"><i class="fa-regular fa-calendar me-1"></i> {Date::format($p->date, 'd M Y')}</span>
                                         </div>
-                                        <h3 class="post-title h5 fw-bold mb-3"><a href="{Url::post($p->id)}" class="text-dark text-decoration-none">{$p->title|truncate:80}</a></h3>
-                                        <div class="excerpt text-muted mb-3 small">
-                                            {$p_content|stripHtml|truncate:120}
+                                        <h3 class="post-title h5 fw-bold mb-2"><a href="{Url::post($p->id)}" class="text-dark text-decoration-none lh-base">{$p->title}</a></h3>
+                                        <div class="excerpt text-muted mb-3 extra-small lh-lg">
+                                            {$p_content|stripHtml|truncate:180}
                                         </div>
-                                        <a href="{Url::post($p->id)}" class="btn btn-read-more btn-sm py-2">Read More</a>
+                                        <a href="{Url::post($p->id)}" class="text-primary text-decoration-none small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 1px;">Read More <i class="fa fa-chevron-right ms-1" style="font-size: 9px;"></i></a>
                                     </div>
                                 </div>
                             </article>
