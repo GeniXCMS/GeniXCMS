@@ -1,29 +1,92 @@
 server {
-        listen 80;
-        server_name xxxxxx.com;
-        root /home/xxxxxx/public_html/blog;
-        index index.php;
+    listen 80;
+    server_name example.com;
+    root /var/www/genixcms;
+    index index.php index.html index.htm;
 
-        location / {
-                try_files $uri  $uri/ /index.php?$args;
+    charset utf-8;
+
+    # ----------------------------------------------------------------------
+    # 1. Security Headers
+    # ----------------------------------------------------------------------
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
+
+    # ----------------------------------------------------------------------
+    # 2. Core Routing
+    # ----------------------------------------------------------------------
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # ----------------------------------------------------------------------
+    # 3. PHP Processing
+    # ----------------------------------------------------------------------
+    location ~ \.php$ {
+        # Adjust fastcgi_pass to your version (e.g., php8.2-fpm)
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+        
+        # Ensure fastcgi_split_path_info is used correctly
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        
+        # Mitigate httpoxy vulnerability
+        fastcgi_param HTTP_PROXY "";
+    }
+
+    # ----------------------------------------------------------------------
+    # 4. Security Restrictions
+    # ----------------------------------------------------------------------
+    
+    # Deny access to hidden files/folders (starting with a dot)
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    # Deny access to sensitive system directories but allow static assets for themes/mods
+    location /inc/ {
+        location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+            allow all;
         }
+        deny all;
+    }
 
-
+    # Disable PHP execution in the uploads directory (Major security win)
+    location /assets/images/uploads/ {
         location ~ \.php$ {
-                try_files $uri =404;
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        #       # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
-        #
-        #       # With php5-cgi alone:
-        #       fastcgi_pass 127.0.0.1:9000;
-        #       # With php5-fpm:
-                fastcgi_pass unix:/var/run/php5-fpm.sock;
-                fastcgi_index index.php;
-                fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                include fastcgi_params;
+            deny all;
         }
+    }
 
+    # Protect configuration and database files
+    location ~ \.(db|sql|ini|log|conf|lock|json)$ {
+        deny all;
+    }
 
-        # include /etc/nginx/cache_expires.conf;
+    # ----------------------------------------------------------------------
+    # 5. Performance & Caching
+    # ----------------------------------------------------------------------
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|pdf|woff|woff2|ttf|svg)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+    }
 
+    # Disable access log for robots.txt and favicon
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    # ----------------------------------------------------------------------
+    # 6. Error Pages
+    # ----------------------------------------------------------------------
+    error_page 404 /index.php;
+
+    # Log files
+    access_log /var/log/nginx/genixcms_access.log;
+    error_log  /var/log/nginx/genixcms_error.log error;
 }
