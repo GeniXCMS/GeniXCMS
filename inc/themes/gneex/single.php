@@ -57,9 +57,7 @@
                     {if Comments::isEnable()}
                         <div class="comments-container mb-5">
                             <h3 class="fw-bold mb-4">Post Comments</h3>
-                            <div class="card border-0 shadow-sm p-4 p-md-5 mb-5">
-                                {Comments::form()|noescape}
-                            </div>
+                            {Comments::form()|noescape}
                             <div class="comment-list-wrapper mt-5">
                                 {Comments::showList(['offset' => 0, 'max' => Options::v('comments_perpage'), 'parent' => 0])|noescape}
                             </div>

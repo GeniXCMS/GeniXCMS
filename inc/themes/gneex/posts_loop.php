@@ -1,4 +1,4 @@
-<article class="blog-post p-0 overflow-hidden shadow-sm bg-white rounded-4 border-0 mb-4 h-100 d-flex flex-column" data-aos="fade-up">
+<article class="blog-post blog-post-card p-0 overflow-hidden shadow-sm bg-white rounded-4 border-0 mb-4 h-100 d-flex flex-column" data-aos="fade-up">
     {var $ft_img = Posts::getPostImage($p->id)}
     {var $p_img = ($ft_img != "") ? $ft_img : Gneex::getImage($p->content)}
     {var $im_url = ($p_img != "") ? Url::thumb($p_img, 'large', '800') : Url::theme() . 'assets/images/noimage.png'}
