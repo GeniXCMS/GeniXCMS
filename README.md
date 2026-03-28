@@ -1,128 +1,83 @@
-# GeniXCMS
-> Update Notice: Please Update to version v1.1.11.
+# GeniXCMS v2.0.0-alpha
+> **Latest Update**: Unified Database Support (MySQL, PostgreSQL, SQLite) & Modern Premium Themes.
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FGeniXCMS%2FGeniXCMS.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2FGeniXCMS%2FGeniXCMS?ref=badge_shield&issueType=license) [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![Total Downloads](https://poser.pugx.org/genix/cms/downloads)](https://packagist.org/packages/genix/cms) [![Latest Unstable Version](https://poser.pugx.org/genix/cms/v/unstable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
+[![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
+**GeniXCMS** is a powerful, lightweight PHP-based Content Management System and Framework (**CMSF**). Re-engineered for the modern web with a focus on speed, security, and premium editorial aesthetics.
 
-**GeniXCMS** is a PHP Based Content Management System and Framework (*CMSF*). It's a simple and lightweight of CMSF. Very suitable for **Intermediate PHP developer** to **Advanced Developer**. Some manual configurations are needed to make this application to work.
+---
 
-### Why GeniXCMS
+### 🌟 Key Features in v2.x
 
-This CMSF is a starter point to build your own online applications. With already build User manager, Content manager (Post, Pages), Menu manager, etc made you easy to add your own code and build your own custom web applications.
+- **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3** (Perfect for zero-config deployments).
+- **Latte Template Engine**: Fully integrated [Latte](https://latte.nette.org/) for secure, clean, and blazingly fast templating.
+- **Premium Editorial Themes**:
+  - **GneeX**: Industrial-modern design with Glassmorphism, premium magazine layouts, and responsive typography.
+  - **TheMusk**: Minimalist, high-contrast bento-grid layout using **Tailwind CSS**.
+- **Enhanced Security**:
+  - Out of the box **Prepared Statements** for SQL Injection prevention.
+  - Hardened `.htaccess` and `nginx.conf` configurations included.
+  - **HTMLPurifier** integration for robust XSS protection.
+- **Modern UI Components**: Refined comments section with nesting, sleek sidebar widgets, and full-width magazine panels.
+- **Developer-Friendly**: Modular architecture with **Hooks/Filters** system and **OptionsBuilder** for programmable dashboards.
 
-### Credits
+---
 
-**GeniXCMS** is using some of **FOSS** (free and opensource software) like :
-- Twitter **Bootstrap**,
-- **Summernote** Text Editor,
-- **JQuery**,
-- **PHP**,
-- **MySQL**,
-- **AdminLTE**,
-- **elFinder** File Manager
-- etc.
+### 🛠 Tech Stack
 
-### Requirements
+**GeniXCMS** leverages industry-standard FOSS tools:
+- **Framework Core**: PHP 8.1+
+- **Templating**: Latte 3.1+
+- **Styling**: Bootstrap 5.3, Tailwind CSS (for modern themes), Vanilla CSS (Design Tokens).
+- **Image Processing**: Intervention Image v3.
+- **Components**: Summernote, elFinder, AOS (Animate on Scroll), Swiper.js.
 
-* Webserver - Apache/Nginx
-* PHP >=8 
-    - PHP-GD
-    - PHP-cURL
-    - PHP-OpenSSL
-    - PHP-imagick
-    - PHP-intl
-    - PHP-mysqli
-    - PHP-XML
-* MySQL 4
+### 📋 Requirements
 
-### Recommended
+* **Webserver**: Apache (with mod_rewrite) or Nginx.
+* **PHP**: 8.1 or newer.
+    - Extensions: GD, cURL, OpenSSL, Imagick, Intl, mbstring, XML, PDO (with mysql/sqlite/pgsql drivers).
+* **Database**: MySQL 5.7+, MariaDB 10.3+, PostgreSQL 12+, or SQLite 3.
 
-* Nginx Server - for webserver
-* MariaDB Server - for database
-* PngQuant - for image compression
+### 🚀 Installation & Setup
 
-### Installation
+#### 1. Quick Start (Manual)
+1. Clone or upload the repository to your root directory.
+2. Ensure the following directories are writable (**775** or **777**):
+   - `inc/config`
+   - `inc/themes`
+   - `inc/mods`
+   - `assets/images/uploads`
+   - `assets/cache`
+3. Visit your domain in the browser (e.g., `http://yoursite.com`).
+4. Follow the **Installation Wizard** to set up your site and database.
 
-GeniXCMS can be installed on Custom Server like VPS/Dedicated Server or on Shared Hosting.
+#### 2. Advanced Security (Optional)
+- **Apache**: The provided `.htaccess` is pre-configured with security headers and folder protection.
+- **Nginx**: Refer to `nginx.conf.txt` for the recommended secure server-block configuration.
 
+---
 
-#### Manual Upload
+### ⬆️ Upgrading to v2.x
 
-Upload all files to your site.
+Upgrading from v1.x involves significant core changes.
+1. Backup your `inc/config/config.php` and database.
+2. In your `config.php`, ensure `SITE_ID` is defined.
+3. Replace all files with the v2.x version.
+4. Run `upgrade.php` from your browser.
+5. Review theme migrations if using custom templates.
 
-Set this directory permission to **777** (writable) :
+---
 
-- inc/config
-- inc/themes
-- inc/mods
-- assets/images
-- assets/images/uploads
-- assets/images/uploads/thumbs
-- assets/cache
-- assets/cache/thumbs
-- assets/cache/pages
+### 📄 License
 
+**GeniXCMS** is released under the [**MIT License**](LICENSE).
 
-After upload is done. Open your site at the browser. eg: http://yoursite.com
+### 🌐 Links & Community
 
-The installation wizard will appear, just follow all the instructions.
+- **Official Website**: [genixcms.web.id](https://genixcms.web.id/)
+- **Documentation**: [docs.genixcms.web.id](https://docs.genixcms.web.id/)
+- **GitHub**: [GeniXCMS Organization](https://github.com/GeniXCMS)
 
-
-#### Using Composer
-
-We are now ready for composer installation. Run this command at your server.
-
-`php composer.phar create-project genix/cms`
-
-more detail about composer, please read the documentation at http://getcomposer.org
-
-more details of installation :
-http://docs.genixcms.web.id/user-guide/installation/
-
-
-### Upgrading
-
-- Upload all files, except `inc/config/config.php`.
-- edit your site's config.php, 
-- add this new configuration if not exist
-```php
-define('SITE_ID', 'type-random-chars');
-define('ADMIN_DIR', 'gxadmin');
-define('USE_MEMCACHED', false);
-```
-
-- rename `SECURITY` become `SECURITY_KEY`
-- Run at your browser `http://yourwebsite.com/upgrade.php`.
-- Choose the previous version of your GeniXCMS version.
-
-- Don't forget to create Cache directory if want to use Cache System
-
-
-### Showcase
-
-Showcase URL :
-- [https://demo.genixcms.web.id/](https://demo.genixcms.web.id/)
-
-
-### License
-
-**GeniXCMS** License : [**MIT License**](LICENSE)
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsemplon%2FGeniXCMS?ref=badge_large)
-
-### Website
-
-Link : [https://genixcms.web.id/](https://genixcms.web.id/)
-
-
-### Donate
-
-Contact us for Donation. 
-
-
-### Developer
-
-Developed by : GeniXCMS - [https://github.com/GeniXCMS](https://github.com/GeniXCMS)
-
-### Supported By 
-
+---
+*Developed with ❤️ by the GeniXCMS Community.*
