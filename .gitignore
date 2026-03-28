@@ -10,6 +10,8 @@ test*
 temp*
 opt.txt
 out*.txt
+out.json
+output.*
 error_log.txt
 error.txt
 check*
@@ -17,7 +19,7 @@ db_*
 front*
 genixcms-docs*
 gd_*
-genixcms.db_
+genixcms.db
 tmp*
 upload*
 reset*
