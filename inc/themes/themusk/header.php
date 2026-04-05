@@ -1,1 +1,0 @@
-{layout 'layouts/header.latte'}
