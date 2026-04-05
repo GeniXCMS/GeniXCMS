@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.2 build date 20150313
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -26,12 +26,11 @@ class Files
         try {
             $files = array_diff(scandir($dir), array('.', '..'));
             foreach ($files as $file) {
-                (is_dir("$dir/$file")) ?self::delTree("$dir/$file") : @unlink("$dir/$file");
+                (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : @unlink("$dir/$file");
             }
             rmdir($dir);
             return true;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -63,8 +62,7 @@ class Files
             if (!self::remoteExist($file)) {
                 return false;
             }
-        }
-        elseif (!file_exists($file)) {
+        } elseif (!file_exists($file)) {
             return false;
         }
 
@@ -78,8 +76,7 @@ class Files
             if (self::remoteExist($file)) {
                 $contents = fread($handle, 9064);
             }
-        }
-        else {
+        } else {
             if (file_exists($file)) {
                 $contents = fread($handle, 9064);
             }
@@ -89,35 +86,25 @@ class Files
 
         if (preg_match('/(base64_|eval|system|shell_|exec|php_)/i', $contents)) {
             return false;
-        }
-        elseif (preg_match("#&\#x([0-9a-f]+);#i", $contents)) {
+        } elseif (preg_match("#&\#x([0-9a-f]+);#i", $contents)) {
             return false;
-        }
-        elseif (preg_match('#&\#([0-9]+);#i', $contents)) {
+        } elseif (preg_match('#&\#([0-9]+);#i', $contents)) {
             return false;
-        }
-        elseif (preg_match("#([a-z]*)=([\`\'\"]*)script:#iU", $contents)) {
+        } elseif (preg_match("#([a-z]*)=([\`\'\"]*)script:#iU", $contents)) {
             return false;
-        }
-        elseif (preg_match("#([a-z]*)=([\`\'\"]*)javascript:#iU", $contents)) {
+        } elseif (preg_match("#([a-z]*)=([\`\'\"]*)javascript:#iU", $contents)) {
             return false;
-        }
-        elseif (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $contents)) {
+        } elseif (preg_match("#([a-z]*)=([\'\"]*)vbscript:#iU", $contents)) {
             return false;
-        }
-        elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $contents)) {
+        } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $contents)) {
             return false;
-        }
-        elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $contents)) {
+        } elseif (preg_match("#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU", $contents)) {
             return false;
-        }
-        elseif (preg_match('#</*(applet|link|style|script|iframe|frame|frameset|html|body|title|div|p|form)*>#i', $contents)) {
+        } elseif (preg_match('#</*(applet|link|style|script|iframe|frame|frameset|html|body|title|div|p|form)*>#i', $contents)) {
             return false;
-        }
-        elseif (preg_match('#<\?(.*)\?>#i', $contents)) {
+        } elseif (preg_match('#<\?(.*)\?>#i', $contents)) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -154,12 +141,10 @@ class Files
         if (strpos($path, '//') !== false) {
             if (strpos($path, '//') >= max(strpos($path, '.'), strpos($path, '/'))) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }

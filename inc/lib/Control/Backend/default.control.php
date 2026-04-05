@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,12 +20,12 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-    // echo(Options::v('sitename'));
-    $data['sitetitle'] = _('Dashboard');
-    Theme::admin('header', $data);
-    System::inc('dashboard', $data);
-    // Mod::Options('genixmarket-dg');
-    Theme::admin('footer');
+// echo(Options::v('sitename'));
+$data['sitetitle'] = _('Dashboard');
+Theme::admin('header', $data);
+System::inc('dashboard', $data);
+// Mod::Options('genixmarket-dg');
+Theme::admin('footer');
 
 /* End of file default.control.php */
 /* Location: ./inc/lib/Control/Backend/default.control.php */

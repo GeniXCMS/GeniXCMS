@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -23,23 +23,23 @@ $f_file = file_exists(GX_THEME . Theme::$active . '/footer.latte') ? '/footer.la
 
 if (Theme::exist('noaccess')) {
     $v_file = file_exists(GX_THEME . Theme::$active . '/noaccess.latte') ? '/noaccess.latte' : '/noaccess.php';
-    $latte->render(GX_THEME . Theme::$active . $v_file, $data );
+    $latte->render(GX_THEME . Theme::$active . $v_file, $data);
 } else {
     ?>
     <div class="container-fluid">
         <section class="app-content-header">
-        <div class="col-sm-12">
-            <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
-            <hr>
-            
-        </div>
+            <div class="col-sm-12">
+                <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
+                <hr>
+
+            </div>
 
         </section>
         <section class="app-content">
-        <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
-        href="<?=Site::$url;?>">frontpage</a> or just <a href="<?=Site::$url;?>logout/">Logout</a></div>
+            <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
+                    href="<?= Site::$url; ?>">frontpage</a> or just <a href="<?= Site::$url; ?>logout/">Logout</a></div>
         </section>
-        
+
     </div>
 
     <?php

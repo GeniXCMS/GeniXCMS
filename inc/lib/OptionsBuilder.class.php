@@ -13,14 +13,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * - Notifications: Integrated global AJAX toast system.
  *
  * @package GeniXCMS
- * @since 1.1.5
+ * @since 2.0.0
  */
 class OptionsBuilder
 {
     // ── Instance properties ────────────────────────────────────
-    private array  $opt;
-    private array  $presets;
-    private array  $panel_palettes;
+    private array $opt;
+    private array $presets;
+    private array $panel_palettes;
 
     // Brand / panel identity
     private string $brandName;
@@ -34,31 +34,31 @@ class OptionsBuilder
 
     /** Font-family value → human label (for dropdowns) */
     public static array $FONTS = [
-        'inherit'                     => 'Inherit (Default)',
-        '"Inter", sans-serif'         => 'Inter (Sans-Serif)',
-        '"Roboto", sans-serif'        => 'Roboto',
-        '"Open Sans", sans-serif'     => 'Open Sans',
-        '"Lato", sans-serif'          => 'Lato',
-        '"Poppins", sans-serif'       => 'Poppins',
-        '"Nunito", sans-serif'        => 'Nunito',
+        'inherit' => 'Inherit (Default)',
+        '"Inter", sans-serif' => 'Inter (Sans-Serif)',
+        '"Roboto", sans-serif' => 'Roboto',
+        '"Open Sans", sans-serif' => 'Open Sans',
+        '"Lato", sans-serif' => 'Lato',
+        '"Poppins", sans-serif' => 'Poppins',
+        '"Nunito", sans-serif' => 'Nunito',
         '"Material Symbols Outlined", sans-serif' => 'Material Icons',
-        '"Merriweather", serif'       => 'Merriweather (Serif)',
-        '"Playfair Display", serif'   => 'Playfair Display (Serif)',
-        '"Georgia", serif'            => 'Georgia (Serif)',
+        '"Merriweather", serif' => 'Merriweather (Serif)',
+        '"Playfair Display", serif' => 'Playfair Display (Serif)',
+        '"Georgia", serif' => 'Georgia (Serif)',
         '"JetBrains Mono", monospace' => 'JetBrains Mono (Monospace)',
     ];
 
     /** Font-family value → Google Fonts API parameter string */
     public static array $GF_MAP = [
-        '"Inter", sans-serif'         => 'Inter:wght@300;400;500;600;700;800;900',
-        '"Roboto", sans-serif'        => 'Roboto:wght@300;400;500;700;900',
-        '"Open Sans", sans-serif'     => 'Open+Sans:wght@300;400;500;600;700;800',
-        '"Lato", sans-serif'          => 'Lato:wght@300;400;700;900',
-        '"Poppins", sans-serif'       => 'Poppins:wght@300;400;500;600;700;800;900',
-        '"Nunito", sans-serif'        => 'Nunito:wght@300;400;500;600;700;800;900',
-        '"Merriweather", serif'       => 'Merriweather:wght@300;400;700;900',
-        '"Playfair Display", serif'   => 'Playfair+Display:wght@400;500;600;700;800;900',
-        '"Georgia", serif'            => '', // web-safe, no import needed
+        '"Inter", sans-serif' => 'Inter:wght@300;400;500;600;700;800;900',
+        '"Roboto", sans-serif' => 'Roboto:wght@300;400;500;700;900',
+        '"Open Sans", sans-serif' => 'Open+Sans:wght@300;400;500;600;700;800',
+        '"Lato", sans-serif' => 'Lato:wght@300;400;700;900',
+        '"Poppins", sans-serif' => 'Poppins:wght@300;400;500;600;700;800;900',
+        '"Nunito", sans-serif' => 'Nunito:wght@300;400;500;600;700;800;900',
+        '"Merriweather", serif' => 'Merriweather:wght@300;400;700;900',
+        '"Playfair Display", serif' => 'Playfair+Display:wght@400;500;600;700;800;900',
+        '"Georgia", serif' => '', // web-safe, no import needed
         '"JetBrains Mono", monospace' => 'JetBrains+Mono:wght@400;700',
     ];
 
@@ -85,25 +85,25 @@ class OptionsBuilder
      *   - saveKey    (string)  POST key for save button, default 'gneex_options_update'
      */
     public function __construct(
-        array  $opt,
-        array  $presets        = [],
-        array  $panel_palettes = [],
-        array  $config         = []
+        array $opt,
+        array $presets = [],
+        array $panel_palettes = [],
+        array $config = []
     ) {
-        $this->opt            = $opt;
-        $this->presets        = $presets;
+        $this->opt = $opt;
+        $this->presets = $presets;
         $this->panel_palettes = $panel_palettes;
-        $this->brandName      = $config['brandName']  ?? 'GeniXCMS Theme';
-        $this->brandVer       = $config['brandVer']   ?? 'v2.1';
-        $this->brandAbbr      = $config['brandAbbr']  ?? 'GX';
-        $this->brandIcon      = $config['brandIcon']  ?? '';
-        $this->brandColor     = $config['brandColor'] ?? '#3b82f6';
-        $this->saveKey        = $config['saveKey']    ?? 'theme_options_update';
+        $this->brandName = $config['brandName'] ?? 'GeniXCMS Theme';
+        $this->brandVer = $config['brandVer'] ?? 'v2.1';
+        $this->brandAbbr = $config['brandAbbr'] ?? 'GX';
+        $this->brandIcon = $config['brandIcon'] ?? '';
+        $this->brandColor = $config['brandColor'] ?? '#3b82f6';
+        $this->saveKey = $config['saveKey'] ?? 'theme_options_update';
     }
 
     private function getValue(string $key, $default = ''): string
     {
-        $v = (string)($this->opt[$key] ?? $default);
+        $v = (string) ($this->opt[$key] ?? $default);
         return htmlspecialchars_decode($v, ENT_QUOTES | ENT_HTML5);
     }
 
@@ -112,19 +112,29 @@ class OptionsBuilder
      */
     public static function generateFrontendCSS(array $opt, array $config = []): string
     {
-        $themeUrl  = $config['themeUrl']  ?? '';
-        $minify    = $config['minify']    ?? false;
-        $extraCSS  = $config['extraCssRules'] ?? ($opt['custom_css'] ?? '');
+        $themeUrl = $config['themeUrl'] ?? '';
+        $minify = $config['minify'] ?? false;
+        $extraCSS = $config['extraCssRules'] ?? ($opt['custom_css'] ?? '');
 
         // ── Google Fonts ──────────────────────────────────────────────────
         $typoKeys = $config['typoKeys'] ?? [
-            'typo_body_font', 'typo_nav_font',
-            'typo_h1_font', 'typo_h2_font', 'typo_h3_font', 'typo_h4_font',
-            'typo_post_title_font', 'typo_meta_font',
-            'typo_single_title_font', 'typo_content_font', 'typo_post_meta_font',
-            'typo_blockquote_font', 'typo_breadcrumb_font',
-            'typo_comment_title_font', 'typo_comment_body_font',
-            'typo_hero_title_font', 'typo_hero_text_font',
+            'typo_body_font',
+            'typo_nav_font',
+            'typo_h1_font',
+            'typo_h2_font',
+            'typo_h3_font',
+            'typo_h4_font',
+            'typo_post_title_font',
+            'typo_meta_font',
+            'typo_single_title_font',
+            'typo_content_font',
+            'typo_post_meta_font',
+            'typo_blockquote_font',
+            'typo_breadcrumb_font',
+            'typo_comment_title_font',
+            'typo_comment_body_font',
+            'typo_hero_title_font',
+            'typo_hero_text_font',
         ];
         $fontsToLoad = [];
         foreach ($typoKeys as $k) {
@@ -159,16 +169,20 @@ class OptionsBuilder
         $root .= "  --transition: all 0.3s ease;\n";
         $root .= "}\n";
 
-        $typo = function($prefix, $selector) use ($opt) {
-            $f = $opt[$prefix . '_font']   ?? '';
-            $s = $opt[$prefix . '_size']   ?? '';
+        $typo = function ($prefix, $selector) use ($opt) {
+            $f = $opt[$prefix . '_font'] ?? '';
+            $s = $opt[$prefix . '_size'] ?? '';
             $w = $opt[$prefix . '_weight'] ?? '';
-            $c = $opt[$prefix . '_color']  ?? '';
+            $c = $opt[$prefix . '_color'] ?? '';
             $out = "{$selector} {\n";
-            if ($f && $f !== 'inherit') $out .= "  font-family: {$f} !important;\n";
-            if ($s) $out .= "  font-size: {$s}px !important;\n";
-            if ($w) $out .= "  font-weight: {$w} !important;\n";
-            if ($c) $out .= "  color: {$c} !important;\n";
+            if ($f && $f !== 'inherit')
+                $out .= "  font-family: {$f} !important;\n";
+            if ($s)
+                $out .= "  font-size: {$s}px !important;\n";
+            if ($w)
+                $out .= "  font-weight: {$w} !important;\n";
+            if ($c)
+                $out .= "  color: {$c} !important;\n";
             $out .= "}\n";
             return $out;
         };
@@ -177,26 +191,35 @@ class OptionsBuilder
 
         // Global Layout & Sizes - Strictly Conditional
         $layoutCss = "";
-        if (isset($opt['typo_body_color'])) $layoutCss .= "body { color: " . $opt['typo_body_color'] . "; }\n";
-        if (isset($opt['body_background_color'])) $layoutCss .= "body { background-color: var(--bg-body) !important; }\n";
-        if (isset($opt['container_width'])) $layoutCss .= ".container { max-width: var(--container-width) !important; }\n";
-        if (isset($opt['background_color_navbar'])) $layoutCss .= ".navbar { background-color: " . $opt['background_color_navbar'] . " !important; }\n";
-        
+        if (isset($opt['typo_body_color']))
+            $layoutCss .= "body { color: " . $opt['typo_body_color'] . "; }\n";
+        if (isset($opt['body_background_color']))
+            $layoutCss .= "body { background-color: var(--bg-body) !important; }\n";
+        if (isset($opt['container_width']))
+            $layoutCss .= ".container { max-width: var(--container-width) !important; }\n";
+        if (isset($opt['background_color_navbar']))
+            $layoutCss .= ".navbar { background-color: " . $opt['background_color_navbar'] . " !important; }\n";
+
         if (isset($opt['background_color_header']) || isset($opt['background_header'])) {
             $layoutCss .= ".hero-bg { ";
-            if (isset($opt['background_color_header'])) $layoutCss .= "background-color: " . $opt['background_color_header'] . " !important; ";
-            if (isset($opt['background_header'])) $layoutCss .= "background-image: url('" . $opt['background_header'] . "'); background-size: cover; background-position: center; ";
+            if (isset($opt['background_color_header']))
+                $layoutCss .= "background-color: " . $opt['background_color_header'] . " !important; ";
+            if (isset($opt['background_header']))
+                $layoutCss .= "background-image: url('" . $opt['background_header'] . "'); background-size: cover; background-position: center; ";
             $layoutCss .= "}\n";
         }
 
         if (isset($opt['content_background_color_body']) || isset($opt['content_border_width']) || isset($opt['content_border_color'])) {
             $layoutCss .= ".card, .post-card { ";
-            if (isset($opt['content_background_color_body'])) $layoutCss .= "background-color: var(--bg-card) !important; ";
-            if (isset($opt['content_border_width'])) $layoutCss .= "border-width: " . $opt['content_border_width'] . "px !important; border-style: solid !important; ";
-            if (isset($opt['content_border_color'])) $layoutCss .= "border-color: " . $opt['content_border_color'] . " !important; ";
+            if (isset($opt['content_background_color_body']))
+                $layoutCss .= "background-color: var(--bg-card) !important; ";
+            if (isset($opt['content_border_width']))
+                $layoutCss .= "border-width: " . $opt['content_border_width'] . "px !important; border-style: solid !important; ";
+            if (isset($opt['content_border_color']))
+                $layoutCss .= "border-color: " . $opt['content_border_color'] . " !important; ";
             $layoutCss .= "}\n";
         }
-        
+
         $parts[] = $layoutCss;
 
         // Typography orchestration
@@ -230,7 +253,9 @@ class OptionsBuilder
         .page-item.active .page-link, .blog-pagination span { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
         ";
 
-        if ($extraCSS) { $parts[] = $extraCSS; }
+        if ($extraCSS) {
+            $parts[] = $extraCSS;
+        }
 
         $css = implode("\n", $parts);
         if ($minify && class_exists('Site') && method_exists('Site', 'minifyCSS')) {
@@ -247,7 +272,7 @@ class OptionsBuilder
         $this->renderCSS();
         $this->renderJS(); // Define function globally BEFORE use
         echo '<form method="post" id="gxOptionsForm">';
-        echo '<input type="hidden" name="token" value="'.TOKEN.'">';
+        echo '<input type="hidden" name="token" value="' . TOKEN . '">';
         echo '<div class="gx-wrap">';
         $this->renderTopbar();
         echo '<div class="gx-layout">';
@@ -262,9 +287,9 @@ class OptionsBuilder
 
     private function renderTopbar(): void
     {
-        $name  = htmlspecialchars($this->brandName);
-        $ver   = htmlspecialchars($this->brandVer);
-        $key   = htmlspecialchars($this->saveKey);
+        $name = htmlspecialchars($this->brandName);
+        $ver = htmlspecialchars($this->brandVer);
+        $key = htmlspecialchars($this->saveKey);
         $color = htmlspecialchars($this->brandColor);
         $color2 = $this->shiftColor($this->brandColor, 30);
 
@@ -294,32 +319,63 @@ HTML;
     {
         $hex = ltrim($hex, '#');
         if (strlen($hex) === 3) {
-            $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
         }
-        if (strlen($hex) !== 6) return '#6366f1';
+        if (strlen($hex) !== 6)
+            return '#6366f1';
         $r = hexdec(substr($hex, 0, 2)) / 255;
         $g = hexdec(substr($hex, 2, 2)) / 255;
         $b = hexdec(substr($hex, 4, 2)) / 255;
-        $max = max($r,$g,$b); $min = min($r,$g,$b); $delta = $max - $min;
-        $h = 0; $s = 0; $l = ($max + $min) / 2;
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+        $delta = $max - $min;
+        $h = 0;
+        $s = 0;
+        $l = ($max + $min) / 2;
         if ($delta > 0) {
             $s = $delta / (1 - abs(2 * $l - 1));
-            if ($max === $r) $h = 60 * fmod(($g - $b) / $delta, 6);
-            elseif ($max === $g) $h = 60 * (($b - $r) / $delta + 2);
-            else $h = 60 * (($r - $g) / $delta + 4);
+            if ($max === $r)
+                $h = 60 * fmod(($g - $b) / $delta, 6);
+            elseif ($max === $g)
+                $h = 60 * (($b - $r) / $delta + 2);
+            else
+                $h = 60 * (($r - $g) / $delta + 4);
         }
         $h = fmod($h + $degrees + 360, 360);
         $c = (1 - abs(2 * $l - 1)) * $s;
         $x = $c * (1 - abs(fmod($h / 60, 2) - 1));
         $m = $l - $c / 2;
-        if ($h < 60)      { $r2=$c; $g2=$x; $b2=0; }
-        elseif ($h < 120) { $r2=$x; $g2=$c; $b2=0; }
-        elseif ($h < 180) { $r2=0; $g2=$c; $b2=$x; }
-        elseif ($h < 240) { $r2=0; $g2=$x; $b2=$c; }
-        elseif ($h < 300) { $r2=$x; $g2=0; $b2=$c; }
-        else              { $r2=$c; $g2=0; $b2=$x; }
-        return sprintf('#%02x%02x%02x',
-            round(($r2+$m)*255), round(($g2+$m)*255), round(($b2+$m)*255));
+        if ($h < 60) {
+            $r2 = $c;
+            $g2 = $x;
+            $b2 = 0;
+        } elseif ($h < 120) {
+            $r2 = $x;
+            $g2 = $c;
+            $b2 = 0;
+        } elseif ($h < 180) {
+            $r2 = 0;
+            $g2 = $c;
+            $b2 = $x;
+        } elseif ($h < 240) {
+            $r2 = 0;
+            $g2 = $x;
+            $b2 = $c;
+        } elseif ($h < 300) {
+            $r2 = $x;
+            $g2 = 0;
+            $b2 = $c;
+        } else {
+            $r2 = $c;
+            $g2 = 0;
+            $b2 = $x;
+        }
+        return sprintf(
+            '#%02x%02x%02x',
+            round(($r2 + $m) * 255),
+            round(($g2 + $m) * 255),
+            round(($b2 + $m) * 255)
+        );
     }
 
     private function renderSidebar(array $schema): void
@@ -336,11 +392,11 @@ HTML;
             echo '<div class="gx-nav-group">';
             echo '<span class="gx-nav-label">' . htmlspecialchars($groupLabel) . '</span>';
             foreach ($tabs as $tab) {
-                $id     = htmlspecialchars($tab['id']);
-                $label  = htmlspecialchars($tab['label']);
-                $icon   = htmlspecialchars($tab['icon'] ?? 'fa fa-circle');
+                $id = htmlspecialchars($tab['id']);
+                $label = htmlspecialchars($tab['label']);
+                $icon = htmlspecialchars($tab['icon'] ?? 'fa fa-circle');
                 $active = ($first || !empty($tab['active'])) ? ' active' : '';
-                $first  = false;
+                $first = false;
                 echo "<button type=\"button\" class=\"gx-nav-item{$active}\" data-tab=\"{$id}\"><i class=\"{$icon}\"></i> {$label}</button>";
             }
             echo '</div>';
@@ -352,13 +408,15 @@ HTML;
     {
         $first = true;
         foreach ($schema as $tab) {
-            $id     = htmlspecialchars($tab['id']);
+            $id = htmlspecialchars($tab['id']);
             $active = ($first || !empty($tab['active'])) ? ' active' : '';
-            $first  = false;
+            $first = false;
 
             echo "<div class=\"gx-panel{$active}\" id=\"{$id}\">";
-            if (!empty($tab['title'])) echo '<div class="gx-section-title">' . $tab['title'] . '</div>';
-            if (!empty($tab['subtitle'])) echo '<div class="gx-section-sub">' . htmlspecialchars($tab['subtitle']) . '</div>';
+            if (!empty($tab['title']))
+                echo '<div class="gx-section-title">' . $tab['title'] . '</div>';
+            if (!empty($tab['subtitle']))
+                echo '<div class="gx-section-sub">' . htmlspecialchars($tab['subtitle']) . '</div>';
 
             $type = $tab['type'] ?? 'standard';
             if ($type === 'presets') {
@@ -369,7 +427,8 @@ HTML;
                 $this->renderStandardPanel($tab);
             }
 
-            if (!empty($tab['raw'])) echo $tab['raw'];
+            if (!empty($tab['raw']))
+                echo $tab['raw'];
             echo '</div>';
         }
     }
@@ -377,11 +436,15 @@ HTML;
     private function renderStandardPanel(array $tab): void
     {
         foreach ($tab['sections'] ?? [] as $section) {
-            if (!empty($section['title'])) echo '<div class="gx-section-title" style="margin-top:1.5rem;font-size:1rem;border-top:1px solid #e2e8f0;padding-top:1.5rem;">' . $section['title'] . '</div>';
-            if (!empty($section['subtitle'])) echo '<div class="gx-section-sub text-muted extra-small mb-4">' . $section['subtitle'] . '</div>';
-            foreach ($section['cards'] ?? [] as $card) $this->renderCard($card);
+            if (!empty($section['title']))
+                echo '<div class="gx-section-title" style="margin-top:1.5rem;font-size:1rem;border-top:1px solid #e2e8f0;padding-top:1.5rem;">' . $section['title'] . '</div>';
+            if (!empty($section['subtitle']))
+                echo '<div class="gx-section-sub text-muted extra-small mb-4">' . $section['subtitle'] . '</div>';
+            foreach ($section['cards'] ?? [] as $card)
+                $this->renderCard($card);
         }
-        foreach ($tab['cards'] ?? [] as $card) $this->renderCard($card);
+        foreach ($tab['cards'] ?? [] as $card)
+            $this->renderCard($card);
     }
 
     private function renderPresets(): void
@@ -402,13 +465,13 @@ HTML;
     {
         echo '<div class="gx-grid-1">';
         for ($i = 1; $i <= 5; $i++) {
-            $catVal    = $this->opt["panel_{$i}"] ?? '';
-            $colorVal  = $this->opt["panel_{$i}_color"] ?? '#3b82f6';
-            $fontVal   = $this->opt["panel_{$i}_font_color"] ?? '#ffffff';
-            $bgVal     = $this->opt["panel_{$i}_bg"] ?? '';
+            $catVal = $this->opt["panel_{$i}"] ?? '';
+            $colorVal = $this->opt["panel_{$i}_color"] ?? '#3b82f6';
+            $fontVal = $this->opt["panel_{$i}_font_color"] ?? '#ffffff';
+            $bgVal = $this->opt["panel_{$i}_bg"] ?? '';
             $txtColVal = $this->opt["panel_{$i}_text_color"] ?? '';
-            $ffVal     = $this->opt["panel_{$i}_font_family"] ?? 'inherit';
-            $fsVal     = $this->opt["panel_{$i}_font_size"] ?? '1';
+            $ffVal = $this->opt["panel_{$i}_font_family"] ?? 'inherit';
+            $fsVal = $this->opt["panel_{$i}_font_size"] ?? '1';
 
             echo "<div class=\"gx-card gx-panel-builder\">
                 <div class=\"gx-panel-header\">
@@ -447,10 +510,10 @@ HTML;
                             <div class=\"gx-field\">
                                 <label>Font Family</label>
                                 <select name=\"panel_{$i}_font_family\" class=\"gx-input\">";
-                                foreach (self::$FONTS as $f => $l) {
-                                    $sel = ($ffVal == $f) ? 'selected' : '';
-                                    echo "<option value='{$f}' {$sel}>{$l}</option>";
-                                }
+            foreach (self::$FONTS as $f => $l) {
+                $sel = ($ffVal == $f) ? 'selected' : '';
+                echo "<option value='{$f}' {$sel}>{$l}</option>";
+            }
             echo "              </select>
                             </div>
                         </div>
@@ -463,86 +526,136 @@ HTML;
 
     private function renderCard(array $card): void
     {
-        if (isset($card['type']) && $card['type'] === 'typo_row') { echo $this->fieldTypoRow($card['label'] ?? '', $card['prefix'] ?? ''); return; }
-        if (isset($card['type']) && $card['type'] === 'raw') { echo $card['html'] ?? ''; return; }
-        $title = $card['title'] ?? ''; $cols = (int)($card['cols'] ?? 1); $grid = $cols > 1 ? "gx-grid-{$cols}" : ''; $wrap = $cols > 1;
+        if (isset($card['type']) && $card['type'] === 'typo_row') {
+            echo $this->fieldTypoRow($card['label'] ?? '', $card['prefix'] ?? '');
+            return;
+        }
+        if (isset($card['type']) && $card['type'] === 'raw') {
+            echo $card['html'] ?? '';
+            return;
+        }
+        $title = $card['title'] ?? '';
+        $cols = (int) ($card['cols'] ?? 1);
+        $grid = $cols > 1 ? "gx-grid-{$cols}" : '';
+        $wrap = $cols > 1;
         echo '<div class="gx-card">';
-        if ($title) echo '<div class="gx-card-title">' . htmlspecialchars($title) . '</div>';
-        if ($wrap) echo "<div class=\"{$grid}\">";
-        foreach ($card['fields'] ?? [] as $field) $this->renderField($field, $wrap);
-        if ($wrap) echo '</div>';
+        if ($title)
+            echo '<div class="gx-card-title">' . htmlspecialchars($title) . '</div>';
+        if ($wrap)
+            echo "<div class=\"{$grid}\">";
+        foreach ($card['fields'] ?? [] as $field)
+            $this->renderField($field, $wrap);
+        if ($wrap)
+            echo '</div>';
         echo '</div>';
     }
 
     private function renderField(array $field, bool $inGrid = false): void
     {
         $type = $field['type'] ?? 'text';
-        if ($type === 'raw') { echo $field['html'] ?? ''; return; }
-        if ($type === 'divider') { echo '<hr style="border:none;border-top:1px solid #e2e8f0;margin:12px 0;">'; return; }
-        if ($type === 'heading') { echo '<h6 style="font-size:11px;font-weight:800;text-transform:uppercase;color:#94a3b8;margin:12px 0 8px;">' . htmlspecialchars($field['text'] ?? '') . '</h6>'; return; }
-        if ($type === 'typo_row') { echo $this->fieldTypoRow($field['label'] ?? '', $field['prefix'] ?? ''); return; }
+        if ($type === 'raw') {
+            echo $field['html'] ?? '';
+            return;
+        }
+        if ($type === 'divider') {
+            echo '<hr style="border:none;border-top:1px solid #e2e8f0;margin:12px 0;">';
+            return;
+        }
+        if ($type === 'heading') {
+            echo '<h6 style="font-size:11px;font-weight:800;text-transform:uppercase;color:#94a3b8;margin:12px 0 8px;">' . htmlspecialchars($field['text'] ?? '') . '</h6>';
+            return;
+        }
+        if ($type === 'typo_row') {
+            echo $this->fieldTypoRow($field['label'] ?? '', $field['prefix'] ?? '');
+            return;
+        }
         $wrapStyle = !$inGrid && !empty($field['style']) ? ' style="' . htmlspecialchars($field['style']) . '"' : '';
         echo "<div class=\"gx-field\"{$wrapStyle}>";
-        if (!empty($field['label'])) echo '<label>' . $field['label'] . '</label>';
+        if (!empty($field['label']))
+            echo '<label>' . $field['label'] . '</label>';
         switch ($type) {
-            case 'text':     $this->fieldText($field);     break;
-            case 'password': $this->fieldPassword($field); break;
-            case 'textarea': $this->fieldTextarea($field); break;
-            case 'color':    $this->fieldColor($field);    break;
-            case 'number':   $this->fieldNumber($field);   break;
-            case 'range':    $this->fieldRange($field);    break;
-            case 'select':   $this->fieldSelect($field);   break;
-            case 'toggle':   $this->fieldToggle($field);   break;
+            case 'text':
+                $this->fieldText($field);
+                break;
+            case 'password':
+                $this->fieldPassword($field);
+                break;
+            case 'textarea':
+                $this->fieldTextarea($field);
+                break;
+            case 'color':
+                $this->fieldColor($field);
+                break;
+            case 'number':
+                $this->fieldNumber($field);
+                break;
+            case 'range':
+                $this->fieldRange($field);
+                break;
+            case 'select':
+                $this->fieldSelect($field);
+                break;
+            case 'toggle':
+                $this->fieldToggle($field);
+                break;
         }
-        if (!empty($field['hint'])) echo '<span class="hint">' . htmlspecialchars($field['hint']) . '</span>';
+        if (!empty($field['hint']))
+            echo '<span class="hint">' . htmlspecialchars($field['hint']) . '</span>';
         echo '</div>';
     }
 
     private function fieldText(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); 
+        $name = htmlspecialchars($f['name'] ?? '');
         $val = htmlspecialchars($this->getValue($f['name'] ?? ''));
-        $ph = htmlspecialchars($f['placeholder'] ?? ''); 
+        $ph = htmlspecialchars($f['placeholder'] ?? '');
         $id = !empty($f['id']) ? ' id="' . htmlspecialchars($f['id']) . '"' : '';
         echo "<input type=\"text\" name=\"{$name}\"{$id} class=\"gx-input\" value=\"{$val}\" placeholder=\"{$ph}\">";
     }
 
     private function fieldPassword(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); 
+        $name = htmlspecialchars($f['name'] ?? '');
         $val = htmlspecialchars($this->getValue($f['name'] ?? ''));
-        $ph = htmlspecialchars($f['placeholder'] ?? ''); 
+        $ph = htmlspecialchars($f['placeholder'] ?? '');
         $id = !empty($f['id']) ? ' id="' . htmlspecialchars($f['id']) . '"' : '';
         echo "<input type=\"password\" name=\"{$name}\"{$id} class=\"gx-input\" value=\"{$val}\" placeholder=\"{$ph}\">";
     }
 
     private function fieldTextarea(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); 
+        $name = htmlspecialchars($f['name'] ?? '');
         $val = htmlspecialchars($this->getValue($f['name'] ?? ''));
-        $rows = (int)($f['rows'] ?? 4); 
+        $rows = (int) ($f['rows'] ?? 4);
         echo "<textarea name=\"{$name}\" class=\"gx-input\" rows=\"{$rows}\">{$val}</textarea>";
     }
 
     private function fieldColor(array $f): void
     {
-        $name = $f['name'] ?? ''; $val = (string)($this->opt[$name] ?? ''); $id = $f['id'] ?? '';
+        $name = $f['name'] ?? '';
+        $val = (string) ($this->opt[$name] ?? '');
+        $id = $f['id'] ?? '';
         echo self::colorField($name, $val, $id);
     }
 
     private function fieldNumber(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); 
+        $name = htmlspecialchars($f['name'] ?? '');
         $val = htmlspecialchars($this->getValue($f['name'] ?? '', '0'));
-        $min = $f['min'] ?? 0; $max = $f['max'] ?? 99999999;
+        $min = $f['min'] ?? 0;
+        $max = $f['max'] ?? 99999999;
         $step = $f['step'] ?? 'any';
         echo "<input type=\"number\" name=\"{$name}\" class=\"gx-input\" value=\"{$val}\" min=\"{$min}\" max=\"{$max}\" step=\"{$step}\">";
     }
 
     private function fieldRange(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); $val = (int)($this->opt[$f['name'] ?? ''] ?? ($f['default'] ?? 0));
-        $min = $f['min'] ?? 0; $max = $f['max'] ?? 100; $step = $f['step'] ?? 1; $unit = $f['unit'] ?? 'px';
+        $name = htmlspecialchars($f['name'] ?? '');
+        $val = (int) ($this->opt[$f['name'] ?? ''] ?? ($f['default'] ?? 0));
+        $min = $f['min'] ?? 0;
+        $max = $f['max'] ?? 100;
+        $step = $f['step'] ?? 1;
+        $unit = $f['unit'] ?? 'px';
         $id = !empty($f['id']) ? htmlspecialchars($f['id']) : "range_" . rand(100, 999);
         echo "<div class=\"gx-range-wrap\">";
         echo "<input type=\"range\" name=\"{$name}\" id=\"{$id}\" class=\"gx-range\" value=\"{$val}\" min=\"{$min}\" max=\"{$max}\" step=\"{$step}\" oninput=\"document.getElementById('{$id}_val').innerText=this.value\">";
@@ -552,13 +665,13 @@ HTML;
 
     private function fieldSelect(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); 
+        $name = htmlspecialchars($f['name'] ?? '');
         $selected = $this->getValue($f['name'] ?? '');
         $id = !empty($f['id']) ? ' id="' . htmlspecialchars($f['id']) . '"' : '';
         echo "<select name=\"{$name}\"{$id} class=\"gx-input\">";
         foreach ($f['options'] ?? [] as $v => $label) {
-            $val_attr = htmlspecialchars((string)$v);
-            $sel = (string)$v === $selected ? ' selected' : '';
+            $val_attr = htmlspecialchars((string) $v);
+            $sel = (string) $v === $selected ? ' selected' : '';
             echo "<option value=\"{$val_attr}\"{$sel}>" . htmlspecialchars($label) . "</option>";
         }
         echo "</select>";
@@ -566,8 +679,10 @@ HTML;
 
     private function fieldToggle(array $f): void
     {
-        $name = htmlspecialchars($f['name'] ?? ''); $val = $this->opt[$f['name'] ?? ''] ?? 'off';
-        $yes = htmlspecialchars($f['yes'] ?? 'On'); $no = htmlspecialchars($f['no'] ?? 'Off');
+        $name = htmlspecialchars($f['name'] ?? '');
+        $val = $this->opt[$f['name'] ?? ''] ?? 'off';
+        $yes = htmlspecialchars($f['yes'] ?? 'On');
+        $no = htmlspecialchars($f['no'] ?? 'Off');
         $isYes = $val === 'on';
         echo "<div class=\"gx-toggle\">";
         echo "<input type=\"radio\" name=\"{$name}\" id=\"{$name}_off\" value=\"off\" " . (!$isYes ? 'checked' : '') . ">";
@@ -579,21 +694,25 @@ HTML;
 
     private function fieldTypoRow(string $label, string $prefix): string
     {
-        $font  = $prefix . '_font'; $size  = $prefix . '_size'; $weight = $prefix . '_weight'; $color = $prefix . '_color';
+        $font = $prefix . '_font';
+        $size = $prefix . '_size';
+        $weight = $prefix . '_weight';
+        $color = $prefix . '_color';
         echo '<div class="gx-card gx-typo-card">';
         echo "<div class=\"gx-typo-label\">{$label}</div>";
         echo '<div class="gx-typo-grid">';
         $this->renderField(['type' => 'select', 'name' => $font, 'label' => 'Family', 'options' => self::$FONTS], true);
         $this->renderField(['type' => 'number', 'name' => $size, 'label' => 'Size (px)'], true);
         $this->renderField(['type' => 'select', 'name' => $weight, 'label' => 'Weight', 'options' => self::$WEIGHTS], true);
-        $this->renderField(['type' => 'color',  'name' => $color, 'label' => 'Color'], true);
+        $this->renderField(['type' => 'color', 'name' => $color, 'label' => 'Color'], true);
         echo '</div></div>';
         return '';
     }
 
     public static function colorField(string $name, string $value, string $id = ''): string
     {
-        $id = $id ?: "color_" . rand(100, 999); $value = htmlspecialchars($value);
+        $id = $id ?: "color_" . rand(100, 999);
+        $value = htmlspecialchars($value);
         return "<div class=\"gx-color-field\"><input type=\"color\" id=\"{$id}\" value=\"{$value}\" oninput=\"document.getElementById('{$id}_txt').value=this.value\"><input type=\"text\" name=\"{$name}\" id=\"{$id}_txt\" value=\"{$value}\" placeholder=\"#000000\" oninput=\"document.getElementById('{$id}').value=this.value\"></div>";
     }
 

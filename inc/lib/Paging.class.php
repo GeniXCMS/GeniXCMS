@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -44,8 +44,16 @@ class Paging
     {
         $r = '';
         if (is_array($vars)) {
+            // Stability fix: capture 'type' from URL if present and not already in base URL
+            // Or use the one from control if provided as 'post_type' fallback
+            if (!$smart && isset($_GET['type']) && !str_contains($vars['url'] ?? '', 'type=')) {
+                $vars['url'] .= '&type=' . urlencode($_GET['type']);
+            } elseif (!$smart && isset($vars['post_type']) && !str_contains($vars['url'] ?? '', 'type=')) {
+                $vars['url'] .= '&type=' . urlencode($vars['post_type']);
+            }
+
             if (isset($vars['where'])) {
-                $where = ' WHERE '.$vars['where'];
+                $where = ' WHERE ' . $vars['where'];
             } else {
                 $where = '';
             }
@@ -57,19 +65,19 @@ class Paging
                     $i = 0;
                     foreach ($vars['table'] as $k => $v) {
                         $i = $i + 1;
-                        $join = ($i < $total_table) ? $v[1]: '';
+                        $join = ($i < $total_table) ? $v[1] : '';
                         $table .= "`{$k}` AS {$v[0]} {$join} ";
                         $on .= " {$v[0]}.`{$v[2]}` =";
                     }
                     $on = substr($on, 0, -1);
-                    $table = $table.$on;
+                    $table = $table . $on;
                     $sel = $vars['select'];
                 } else {
-                    $table = "`".Typo::cleanX($vars['table'])."`";
+                    $table = "`" . Typo::cleanX($vars['table']) . "`";
                     $sel = '`id`';
                 }
-                
-//                echo $table;
+
+                //                echo $table;
                 $count = Query::table($vars['table'] ?? '');
                 if (isset($vars['where'])) {
                     // whereRaw for complex legacy WHERE strings
@@ -111,11 +119,11 @@ class Paging
                     $limit = $curr + floor($maxpage / 2);
                 }
 
-                for ($i = $p; $i <= $limit /*ceil($total/$vars['max'])+1*/; ++$i) {
+                for ($i = $p; $i <= $limit /*ceil($total/$vars['max'])+1*/ ; ++$i) {
                     if ($smart == true) {
-                        $url = $vars['url'].'paging/'.$i.'/';
+                        $url = $vars['url'] . 'paging/' . $i . '/';
                     } else {
-                        $url = $vars['url'].'&paging='.$i;
+                        $url = $vars['url'] . '&paging=' . $i;
                     }
                     if ($curr == $i) {
                         $sel = 'active';
@@ -133,26 +141,26 @@ class Paging
 
                 if ($curr == 1) {
                     $prev = $curr + 1;
-                } elseif ($curr < $limit  || $curr = $limit) {
+                } elseif ($curr < $limit || $curr = $limit) {
                     $prev = ($curr) - 1;
                     if ($smart == true) {
-                        $url = $vars['url'].'paging/'.$prev.'/';
+                        $url = $vars['url'] . 'paging/' . $prev . '/';
                     } else {
-                        $url = $vars['url'].'&paging='.$prev;
+                        $url = $vars['url'] . '&paging=' . $prev;
                     }
-                    $r .= "<li class=\"pull-left\"><a class='page-link' href=\"{$url}\">"._('Previous')."</a></li>";
+                    $r .= "<li class=\"pull-left\"><a class='page-link' href=\"{$url}\">" . _('Previous') . "</a></li>";
                 }
 
                 if ($curr < $limit) {
                     $next = ($curr) + 1;
 
                     if ($smart == true) {
-                        $url = $vars['url'].'paging/'.$next.'/';
+                        $url = $vars['url'] . 'paging/' . $next . '/';
                     } else {
-                        $url = $vars['url'].'&paging='.$next;
+                        $url = $vars['url'] . '&paging=' . $next;
                     }
                     $r .= "
-                    <li class=\"pull-right\"><a class=\"page-link\"  href=\"{$url}\">"._('Next')."</a></li>";
+                    <li class=\"pull-right\"><a class=\"page-link\"  href=\"{$url}\">" . _('Next') . "</a></li>";
                 }
                 $r .= '</ul></nav>';
             }

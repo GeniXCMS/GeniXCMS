@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -96,8 +96,7 @@ class Categories
                 }
             }
             $drop .= '</select>';
-        }
-        else {
+        } else {
             $drop = _('Category config not in Array');
         }
 
@@ -113,35 +112,30 @@ class Categories
             $where = 'WHERE 1';
             if (isset($vars['parent'])) {
                 $where .= " AND `parent` = '" . Typo::int($vars['parent']) . "' ";
-            }
-            else {
+            } else {
                 $where .= '';
             }
             if (isset($vars['type'])) {
                 $type = Typo::cleanX($vars['type']);
                 if ($type == 'tag') {
                     $where .= " AND `type` = '" . $type . "' ";
-                }
-                else {
+                } else {
                     $where .= " AND `type` = '" . $type . "' AND `type` != 'tag' ";
                 }
 
-            }
-            else {
+            } else {
                 $where .= " AND `type` != 'tag' ";
             }
 
             $order_by = ' ORDER BY ';
             if (isset($vars['order_by'])) {
                 $order_by .= " {$vars['order_by']} ";
-            }
-            else {
+            } else {
                 $order_by .= ' `name` ';
             }
             if (isset($vars['sort'])) {
                 $sort = " {$vars['sort']}";
-            }
-            else {
+            } else {
                 $sort = ' ASC';
             }
         }
@@ -168,8 +162,7 @@ class Categories
                         $collapseHeading = ($catparent[0]->parent === $c->id) ? "collapseListGroupHeading{$c->id}" : '';
                         $href = ($catparent[0]->parent === $c->id) ? "#collapse-{$c->id}" : Url::cat($c->id);
                         $data_toggle = ($catparent[0]->parent === $c->id) ? 'collapse' : '';
-                    }
-                    else {
+                    } else {
                         $catparent = '';
                         $in = '';
                         $collapseHeading = '';
@@ -225,16 +218,14 @@ class Categories
             //print_r($cat);
             if (!$cat) {
                 return '';
-            }
-            else {
+            } else {
                 return $cat->name;
             }
-        }
-        else {
+        } else {
             return _('No ID Selected');
         }
 
-    //print_r($cat);
+        //print_r($cat);
     }
 
     /**
@@ -292,8 +283,7 @@ class Categories
                 Query::table('posts')->where('cat', $id)->update(['cat' => $parent[0]->parent ?? 0]);
             }
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -306,12 +296,10 @@ class Categories
             //print_r($cat);
             if (isset($cat['error'])) {
                 return '';
-            }
-            else {
+            } else {
                 return $cat[0]->type;
             }
-        }
-        else {
+        } else {
             return _('No ID Selected');
         }
     }
@@ -324,12 +312,10 @@ class Categories
             // print_r($cat);
             if (isset($cat['error'])) {
                 return '';
-            }
-            else {
+            } else {
                 return $cat[0]->id;
             }
-        }
-        else {
+        } else {
             return _('No Name Selected');
         }
     }
@@ -348,12 +334,10 @@ class Categories
             $cat = Query::table('cat')->where('id', $id)->first();
             if (!$cat) {
                 return '';
-            }
-            else {
+            } else {
                 return $cat->slug;
             }
-        }
-        else {
+        } else {
             return _('No ID Selected');
         }
     }

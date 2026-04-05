@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -115,6 +115,7 @@ class Theme
         System::toolbarMode($mode);
         System::toolbar($mode);
         $GLOBALS['editor_height'] = $height;
+        Editor::init();
         //return $editor;
     }
 

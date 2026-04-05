@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -66,9 +66,9 @@ class Menus
             $q->where('menuid', $menuid);
         }
         if (isset($parent) && $parent !== '') {
-            $q->where('parent', (string)$parent);
+            $q->where('parent', (string) $parent);
         }
-        
+
         return $q->get();
     }
 
@@ -93,7 +93,7 @@ class Menus
         if ($n > 0) {
             $menu = "<ul class=\"menu-{$menuid} {$class}\">";
             foreach ($menus as $m) {
-                
+
                 if ($m->parent == '0') {
                     $parent = self::isHadParent($m->id, $menuid);
                     $n = count($parent);
@@ -106,9 +106,9 @@ class Menus
                     }
                     $type = $m->type;
                     $menu .= "<li class='$class'>";
-                    $menu .= "<a href='".Url::$type($m->value)."' class=\"{$m->class} {$aclass}\">".$m->name.'</a>';
+                    $menu .= "<a href='" . Url::$type($m->value) . "' class=\"{$m->class} {$aclass}\">" . $m->name . '</a>';
                     $parent = $m->id;
-//                    echo $parent;
+                    //                    echo $parent;
 
                     if ($n > 0) {
                         $class = 'dropdown-menu';
@@ -125,9 +125,9 @@ class Menus
                                     $aclass = 'dropdown-item';
                                 }
                                 $type = $m2->type;
-//                                print_r($m2);
+                                //                                print_r($m2);
                                 $menu .= "<li $class>";
-                                $menu .= "<a href='".Url::$type($m2->value)."' class=\"{$m2->class} {$aclass}\">".$m2->name.'</a>';
+                                $menu .= "<a href='" . Url::$type($m2->value) . "' class=\"{$m2->class} {$aclass}\">" . $m2->name . '</a>';
 
                                 if ($n > 0) {
                                     $class = 'dropdown-menu';
@@ -145,8 +145,8 @@ class Menus
                                             }
                                             $type = $m3->type;
                                             $menu .= "<li $class>";
-                                                    //$menu .= "<li>";
-                                                    $menu .= "<a href='".Url::$type($m3->value)."' class=\"{$m3->class} {$aclass}\">".$m3->name.'</a>';
+                                            //$menu .= "<li>";
+                                            $menu .= "<a href='" . Url::$type($m3->value) . "' class=\"{$m3->class} {$aclass}\">" . $m3->name . '</a>';
 
                                             if ($n > 0) {
                                                 $class = 'dropdown-menu';
@@ -164,7 +164,7 @@ class Menus
                                                         }
                                                         $type = $m4->type;
                                                         $menu .= "<li $class>";
-                                                        $menu .= "<a href='".Url::$type($m4->value)."' class=\"{$m4->class} {$aclass}\">".$m4->name.'</a>';
+                                                        $menu .= "<a href='" . Url::$type($m4->value) . "' class=\"{$m4->class} {$aclass}\">" . $m4->name . '</a>';
                                                         $menu .= '</li>';
                                                     }
                                                 }
@@ -202,16 +202,17 @@ class Menus
     public static function getMenuAdmin($menuid, $class = '')
     {
         $menus = self::getMenuRaw($menuid);
-        if (count($menus) == 0) return '<div class="text-center py-5 text-muted"><i class="bi bi-folder2-open display-4 mb-3 d-block"></i>'._("This menu is currently empty. Start by adding your first link below.").'</div>';
+        if (count($menus) == 0)
+            return '<div class="text-center py-5 text-muted"><i class="bi bi-folder2-open display-4 mb-3 d-block"></i>' . _("This menu is currently empty. Start by adding your first link below.") . '</div>';
 
         $html = '<form action="" method="post" class="menu-admin-form">';
         $html .= '<div class="list-group list-group-flush border-0 rounded-4 overflow-hidden mb-4 shadow-sm">';
         $html .= self::renderAdminMenuItems($menus, '0', $menuid);
         $html .= '</div>';
         $html .= '<div class="d-flex justify-content-end p-3 bg-light border-top rounded-bottom-4">
-                    <input type="hidden" name="token" value="'.TOKEN.'">
+                    <input type="hidden" name="token" value="' . TOKEN . '">
                     <button name="changeorder" type="submit" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
-                        <i class="bi bi-sort-numeric-down me-2"></i> '._('Save Navigation Order').'
+                        <i class="bi bi-sort-numeric-down me-2"></i> ' . _('Save Navigation Order') . '
                     </button>
                 </div>';
         $html .= '</form>';
@@ -223,11 +224,11 @@ class Menus
     {
         $html = '';
         $indent = $level * 30;
-        
+
         foreach ($menus as $m) {
             if ($m->parent == $parentId) {
                 $html .= "
-                <div class='list-group-item border-0 py-3 px-4 position-relative hover-bg-light transition-all' style='padding-left: ".($level == 0 ? 24 : 24 + $indent)."px !important;'>
+                <div class='list-group-item border-0 py-3 px-4 position-relative hover-bg-light transition-all' style='padding-left: " . ($level == 0 ? 24 : 24 + $indent) . "px !important;'>
                     <div class='d-flex align-items-center'>
                         <div class='me-3 text-muted opacity-50'><i class='bi bi-grip-vertical fs-5'></i></div>
                         <div class='flex-grow-1'>
@@ -242,19 +243,19 @@ class Menus
                                 <input type='number' value='{$m->order}' name='order[{$m->id}][order]' class='form-control form-control-sm text-center rounded-pill border-light bg-light'>
                             </div>
                             <div class='btn-group shadow-sm rounded-pill overflow-hidden'>
-                                <a href='index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}&token=".TOKEN."' class='btn btn-white btn-sm px-3 border-end' title='Edit'><i class='bi bi-pencil-square text-primary'></i></a>
-                                <a href='index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}&token=".TOKEN."' class='btn btn-white btn-sm px-3' title='Delete' onclick=\"return confirm('"._("Delete this menu item?")."');\"><i class='bi bi-trash text-danger'></i></a>
+                                <a href='index.php?page=menus&act=edit&id={$menuid}&itemid={$m->id}&token=" . TOKEN . "' class='btn btn-white btn-sm px-3 border-end' title='Edit'><i class='bi bi-pencil-square text-primary'></i></a>
+                                <a href='index.php?page=menus&act=del&id={$menuid}&itemid={$m->id}&token=" . TOKEN . "' class='btn btn-white btn-sm px-3' title='Delete' onclick=\"return confirm('" . _("Delete this menu item?") . "');\"><i class='bi bi-trash text-danger'></i></a>
                             </div>
                         </div>
                     </div>";
-                
+
                 // Recursive call for children
                 $html .= self::renderAdminMenuItems($menus, $m->id, $menuid, $level + 1);
-                
+
                 $html .= "</div>";
             }
         }
-        
+
         return $html;
     }
 

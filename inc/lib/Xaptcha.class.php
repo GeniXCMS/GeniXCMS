@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.4-patch build date 20150702
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -48,9 +48,9 @@ class Xaptcha
     {
         new self();
         $html = '<div class="form-group">
-            <div class="g-recaptcha" data-sitekey="'.self::$key.'"></div></div>
+            <div class="g-recaptcha" data-sitekey="' . self::$key . '"></div></div>
             <script type="text/javascript"
-                    src="https://www.google.com/recaptcha/api.js?hl='.self::$lang.'" async defer>
+                    src="https://www.google.com/recaptcha/api.js?hl=' . self::$lang . '" async defer>
             </script>';
         if (self::isEnable()) {
             return $html;

@@ -1,4 +1,4 @@
-# GeniXCMS v2.0.0
+# GeniXCMS v2.0.1
 > **Latest Update**: Unified Database Support (MySQL, PostgreSQL, SQLite) & Modern Premium Themes.
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)

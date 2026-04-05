@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150718
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -38,10 +38,10 @@ if (User::access(0)) {
             // print_r($_POST);
             $lang = array(
                 $_POST['multilang_country_code'] => array(
-                        'country' => Typo::jsonFormat($_POST['multilang_country_name']),
-                        'system_lang' => Typo::jsonFormat($_POST['multilang_system_lang']),
-                        'flag' => Typo::jsonFormat($_POST['multilang_country_flag']),
-                    ),
+                    'country' => Typo::jsonFormat($_POST['multilang_country_name']),
+                    'system_lang' => Typo::jsonFormat($_POST['multilang_system_lang']),
+                    'flag' => Typo::jsonFormat($_POST['multilang_country_flag']),
+                ),
             );
             $langs = json_decode(Options::v('multilang_country'), true);
             $langs = array_merge((array) $langs, $lang);
@@ -65,7 +65,7 @@ if (User::access(0)) {
             if (array_key_exists($_GET['del'], $langs)) {
                 unset($langs[$_GET['del']]);
                 $langs = json_encode($langs);
-            // print_r($langs);
+                // print_r($langs);
                 Options::update('multilang_country', $langs);
                 new Options();
                 $data['alertSuccess'][] = _('Language Removed');
@@ -99,7 +99,7 @@ if (User::access(0)) {
                     }
                 }
             }
-            
+
             unset($_POST['token']);
             unset($_POST['change']);
             foreach ($_POST as $key => $val) {
@@ -107,13 +107,13 @@ if (User::access(0)) {
             }
 
             try {
-                if( count($vars) > 0 )
+                if (count($vars) > 0)
                     Options::update($vars);
-                    $data['alertSuccess'][] = _("Settings Updated");
+                $data['alertSuccess'][] = _("Settings Updated");
             } catch (\Throwable $th) {
                 throw $th;
             }
-            
+
             new Options();
         } else {
             $data['alertDanger'] = $alertDanger;

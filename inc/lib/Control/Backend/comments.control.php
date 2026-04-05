@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -120,7 +120,7 @@ if (User::access(1)) {
                 if ($del !== true) {
                     $data['alertDanger'][] = (is_string($del)) ? $del : _("Failed to remove comment");
                 } else {
-                    $data['alertSuccess'][] = _("Comments").'  '._("Removed Successfully");
+                    $data['alertSuccess'][] = _("Comments") . '  ' . _("Removed Successfully");
                     Hooks::run('post_delete_action', $_GET);
                 }
             }
@@ -148,7 +148,7 @@ if (User::access(1)) {
 
     if (isset($_GET['q']) && $_GET['q'] != '') {
         $q = Typo::cleanX($_GET['q']);
-        $whereRaws[] = "(`comment` LIKE ? OR `email` LIKE ?)"; 
+        $whereRaws[] = "(`comment` LIKE ? OR `email` LIKE ?)";
         $whereBindings[] = "%{$q}%";
         $whereBindings[] = "%{$q}%";
         $qpage .= "&q={$_GET['q']}";
@@ -171,7 +171,7 @@ if (User::access(1)) {
         $whereBindings[] = "%{$status}%";
         $qpage .= "&status={$status}";
     }
-    
+
     $max = 15;
     if (isset($_GET['paging'])) {
         $paging = Typo::int($_GET['paging']);
@@ -191,13 +191,13 @@ if (User::access(1)) {
     $data['posts'] = $q_builder->orderBy('date', 'DESC')->limit($max, $offset)->get();
     $data['num'] = count($data['posts']);
     $page = array(
-                'paging' => $paging,
-                'table' => 'comments',
-                'total' => $totalCount,
-                'max' => $max,
-                'url' => 'index.php?page=comments'.$qpage,
-                'type' => 'number',
-            );
+        'paging' => $paging,
+        'table' => 'comments',
+        'total' => $totalCount,
+        'max' => $max,
+        'url' => 'index.php?page=comments' . $qpage,
+        'type' => 'number',
+    );
     $data['paging'] = Paging::create($page);
 
     Theme::admin('header', $data);

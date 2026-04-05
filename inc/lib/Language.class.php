@@ -9,7 +9,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -29,10 +29,10 @@ class Language
 
     public static function getList()
     {
-        $handle = glob(GX_PATH.'/inc/lang/locale/*', GLOB_ONLYDIR);
+        $handle = glob(GX_PATH . '/inc/lang/locale/*', GLOB_ONLYDIR);
         // print_r($handle);
         $lang = [];
-        foreach( $handle as $k => $v ) {
+        foreach ($handle as $k => $v) {
             $lang[] = basename($v);
         }
         // while (false !== ($entry = $handle->read())) {
@@ -52,10 +52,10 @@ class Language
 
     public static function getList2()
     {
-        $handle = dir(GX_PATH.'/inc/lang/');
+        $handle = dir(GX_PATH . '/inc/lang/');
         while (false !== ($entry = $handle->read())) {
             if ($entry != '.' && $entry != '..') {
-                $file = GX_PATH.'/inc/lang/'.$entry;
+                $file = GX_PATH . '/inc/lang/' . $entry;
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
                 if (is_file($file) == true && $ext == 'php') {
                     $lang[] = $entry;
@@ -179,7 +179,7 @@ class Language
             foreach ($lang as $key => $value) {
                 $flag = strtolower($value['flag']);
                 $html .= '
-                <li class=""><a href="'.Url::flag($key)."\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
+                <li class=""><a href="' . Url::flag($key) . "\" class=\"flag-icon flag-icon-{$flag}\"></a></li>
                 ";
             }
             $html .= '</ul>';

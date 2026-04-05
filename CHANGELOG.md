@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-04-05
+
+### Fixed
+- **elFinder Initialization Conflict**: Resolved a critical naming conflict in the `Asset` manager where the Summernote editor's internal script ID was overwriting global file manager utilities, causing "ReferenceError: elfinderDialog2 is not defined" when selecting featured images.
+- **Featured Image (Hero Asset) URL**: Fixed a hardcoded, insecure URL for the featured image file manager in `pages_form.php`. It now correctly uses the system-standard `Url::ajax('elfinder')` with session-based tokens.
+- **Dependency Loading Order**: Optimized the loading sequence for elFinder components, ensuring `jquery-ui` and the core file manager JavaScript are fully available before initializing custom UI buttons.
+- **Global Function Scoping**: Migrated editor and file manager helper functions (`elfinderDialog`, `elfinderDialog2`, `gxcodeBtn`) to the global `window` scope for reliable accessibility across all admin forms.
+- **Admin UI Polish**: Corrected inconsistent spacing and border rendering in the page and post creation forms for a more unified "GeniXCMS 2.0" aesthetic.
+
+### Changed
+- **Version Bump**: Officially updated core version to **2.0.1** to reflect these critical stability fixes in the 2.0 series.
+- **Asset Registration**: Moved elFinder helper utilities to the page header to ensure core JS functions are defined before any user interaction occurs.
+
 ## [2.0.0] - 2026-04-05
 
 ### Added

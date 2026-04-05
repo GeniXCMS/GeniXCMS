@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.3 build date 20150322
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -27,21 +27,21 @@ class Vendor
     }
     public static function loadonce($var)
     {
-        require_once GX_LIB.'Vendor/'.$var;
+        require_once GX_LIB . 'Vendor/' . $var;
     }
 
     public static function autoload()
     {
-        include GX_LIB.'Vendor/autoload.php';
+        include GX_LIB . 'Vendor/autoload.php';
     }
 
     public static function url()
     {
-        return rtrim(Site::$url, '/').'/inc/lib/Vendor';
+        return rtrim(Site::$url, '/') . '/inc/lib/Vendor';
     }
 
     public static function path($var)
     {
-        return GX_LIB.'Vendor/'.$var.'/';
+        return GX_LIB . 'Vendor/' . $var . '/';
     }
 }

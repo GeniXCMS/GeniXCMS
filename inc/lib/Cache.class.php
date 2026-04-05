@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.1.2 build date 20170912
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -21,8 +21,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 /**
-* 
-*/
+ * 
+ */
 class Cache
 {
     private static $enabled;
@@ -42,22 +42,23 @@ class Cache
         self::$type = Options::v('cache_type') ?: 'file';
         self::$path = Options::v('cache_path');
         self::$timeout = (int) Options::v('cache_timeout') ?: 3600;
-        
+
         self::$redis_host = Options::v('redis_host') ?: '127.0.0.1';
         self::$redis_port = Options::v('redis_port') ?: 6379;
         self::$redis_pass = Options::v('redis_pass');
         self::$redis_db = Options::v('redis_db') ?: 0;
 
-        $url = 'http://'.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $_SERVER['QUERY_STRING'];
-        self::$cache_key = 'gx_cache_'.md5($url);
-        self::$cache_file = GX_PATH.self::$path.md5($url).'.cache';
+        $url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $_SERVER['QUERY_STRING'];
+        self::$cache_key = 'gx_cache_' . md5($url);
+        self::$cache_file = GX_PATH . self::$path . md5($url) . '.cache';
     }
 
-    public static function start() {
+    public static function start()
+    {
         if (self::$enabled == 'on') {
             ob_start();
             ob_implicit_flush(0);
-            
+
             if (self::$type == 'redis' && extension_loaded('redis')) {
                 try {
                     $redis = new Redis();
@@ -77,20 +78,21 @@ class Cache
                 }
             } else {
                 $cachefile = self::$cache_file;
-                $cachetime = self::$timeout; 
+                $cachetime = self::$timeout;
 
-                if(file_exists($cachefile) && time()-$cachetime <= filemtime($cachefile)){
-                  $c = @file_get_contents($cachefile);
-                  echo $c;
-                  exit;
-                }else{
-                  @unlink($cachefile);
+                if (file_exists($cachefile) && time() - $cachetime <= filemtime($cachefile)) {
+                    $c = @file_get_contents($cachefile);
+                    echo $c;
+                    exit;
+                } else {
+                    @unlink($cachefile);
                 }
             }
-        } 
+        }
     }
 
-    public static function end() {
+    public static function end()
+    {
         if (self::$enabled == 'on') {
             $content = ob_get_contents();
             if ($content) {
@@ -104,7 +106,8 @@ class Cache
                             $redis->select(self::$redis_db);
                             $redis->setex(self::$cache_key, self::$timeout, $content);
                         }
-                    } catch (Exception $e) { }
+                    } catch (Exception $e) {
+                    }
                 } else {
                     $cachefile = self::$cache_file;
                     @file_put_contents($cachefile, $content);

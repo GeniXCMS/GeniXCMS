@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -44,10 +44,10 @@ if (User::access(0)) {
             $path = '/inc/mod/';
             $allowed = array('zip');
             $mod = Upload::go('module', $path, $allowed);
-            
+
             // SECURITY SCAN (Pre-Extraction)
             $scanResult = Security::scanZip($mod['filepath']);
-            
+
             if ($scanResult['status'] === true) {
                 $zip = new ZipArchive();
                 if ($zip->open($mod['filepath']) === true) {
@@ -60,7 +60,7 @@ if (User::access(0)) {
                     } else {
                         $zip->extractTo(GX_MOD);
                         $zip->close();
-                        
+
                         Hooks::run('module_install_action', $mod);
                         $data['alertSuccess'][] = _("Module Installed Successfully.");
                     }

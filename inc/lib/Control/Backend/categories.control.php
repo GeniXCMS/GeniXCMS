@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -22,7 +22,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (User::access(1)) {
     $catType = Typo::cleanX($_GET['type'] ?? 'post');
-    
+
     $data['sitetitle'] = _('Categories') . ' - ' . ucfirst(str_replace('_', ' ', $catType));
     switch (isset($_POST['addcat'])) {
         case true:
@@ -43,16 +43,16 @@ if (User::access(1)) {
                 $image = Typo::cleanX($_POST['image'] ?? '');
                 $desc = Typo::cleanX($_POST['desc'] ?? '');
                 $parent = Typo::int($_POST['parent'] ?? 0);
-                
+
                 Query::table('cat')->insert([
-                    'name'   => $cat,
-                    'slug'   => $slug,
+                    'name' => $cat,
+                    'slug' => $slug,
                     'parent' => $parent,
-                    'image'  => $image,
-                    'desc'   => $desc,
-                    'type'   => $catType,
+                    'image' => $image,
+                    'desc' => $desc,
+                    'type' => $catType,
                 ]);
-                $data['alertSuccess'][] = _("Category Added").' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Category Added") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);
@@ -77,13 +77,13 @@ if (User::access(1)) {
                 $data['alertDanger'] = $alertDanger;
             } else {
                 Query::table('cat')->where('id', Typo::int($_POST['id']))->update([
-                    'name'   => $cat,
-                    'slug'   => $slug,
+                    'name' => $cat,
+                    'slug' => $slug,
                     'parent' => Typo::int($_POST['parent'] ?? 0),
-                    'image'  => Typo::cleanX($_POST['image'] ?? ''),
-                    'desc'   => Typo::cleanX($_POST['desc'] ?? ''),
+                    'image' => Typo::cleanX($_POST['image'] ?? ''),
+                    'desc' => Typo::cleanX($_POST['desc'] ?? ''),
                 ]);
-                $data['alertSuccess'][] = _("Category Updated").' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Category Updated") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);
@@ -111,8 +111,8 @@ if (User::access(1)) {
         }
     }
 
-    $data['cat']  = Query::table('cat')->where('type', $catType)->orderBy('id', 'DESC')->get();
-    $data['num']  = count($data['cat'] ?? []);
+    $data['cat'] = Query::table('cat')->where('type', $catType)->orderBy('id', 'DESC')->get();
+    $data['num'] = count($data['cat'] ?? []);
     $data['type'] = $catType;
     Theme::admin('header', $data);
     System::inc('categories', $data);

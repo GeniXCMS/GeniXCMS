@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.2 build date 20150309
- * @version 2.0.0
+ * @version 2.0.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author GenixCMS <genixcms@gmail.com>
@@ -53,7 +53,8 @@ class Token
         }
 
         $token = $_SESSION['gx_token'];
-        if (!defined('TOKEN')) define('TOKEN', $token);
+        if (!defined('TOKEN'))
+            define('TOKEN', $token);
         return $token;
     }
 

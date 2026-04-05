@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -23,12 +23,12 @@ class Session implements SessionHandlerInterface
 {
     public function __construct()
     {
-        if(SESSION_DB == true) {
+        if (SESSION_DB == true) {
             // Set handler to overide SESSION
             session_set_save_handler($this, true);
             // Start the session
             // session_start();
-            $this->gc((int)(SESSION_EXPIRES*3600));
+            $this->gc((int) (SESSION_EXPIRES * 3600));
         }
         $this::start(SESSION_EXPIRES);
     }
@@ -37,28 +37,28 @@ class Session implements SessionHandlerInterface
     {
         $url = Site::$url;
         $site_id = !defined('SITE_ID') ? 'Installation' : SITE_ID;
-        $expires = (int)(isset($duration) ? $duration * 3600: 1 * 3600);
+        $expires = (int) (isset($duration) ? $duration * 3600 : 1 * 3600);
         $path = '/';
         $domain = (empty(Site::$domain) || Site::$domain == 'localhost' || Site::$domain == '127.0.0.1') ? null : Site::$domain;
-        
+
         $cookie_params = [
-            'lifetime' => (int)$expires,
+            'lifetime' => (int) $expires,
             'path' => '/',
             'secure' => false,
             'httponly' => true,
             'samesite' => 'Lax'
         ];
-        
+
         if ($domain !== null) {
             $cookie_params['domain'] = $domain;
         }
 
         session_set_cookie_params($cookie_params);
-        
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         if (!isset($_SESSION['gxsess']) || $_SESSION['gxsess'] == '') {
             $_SESSION['gxsess'] = array(
                 'key' => self::sesKey(),
@@ -76,26 +76,26 @@ class Session implements SessionHandlerInterface
     private static function sesKey()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $browser = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT']: '';
+        $browser = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $dt = date('Y-m-d H');
 
-        $key = md5($ip.$browser.$dt);
+        $key = md5($ip . $browser . $dt);
 
         return $key;
     }
 
     /*
-    *    Session Handler
-    *
-    *    $gxsess = array (
-    *                    'key' => 'sesskey_val',
-    *                    'time' => 'sesstime_val',
-    *                    'val' => array (
-    *                                   'sessval1_key' => 'sessval1_val',
-    *                                   'sessval2_key' => 'sessval2_val',
-    *                                 )
-    *                )
-    */
+     *    Session Handler
+     *
+     *    $gxsess = array (
+     *                    'key' => 'sesskey_val',
+     *                    'time' => 'sesstime_val',
+     *                    'val' => array (
+     *                                   'sessval1_key' => 'sessval1_val',
+     *                                   'sessval2_key' => 'sessval2_val',
+     *                                 )
+     *                )
+     */
     public static function get_session($vars)
     {
     }
@@ -106,7 +106,7 @@ class Session implements SessionHandlerInterface
         if (is_array($val)) {
             # code...
             foreach ($val as $k => $v) {
-                if( $k == $vars ) {
+                if ($k == $vars) {
                     return $v;
                 }
             }
@@ -138,7 +138,7 @@ class Session implements SessionHandlerInterface
         // setcookie(session_name(),session_id(), time()+3600,$uri['path']);
     }
 
-    public static function set($vars, $val ='')
+    public static function set($vars, $val = '')
     {
         self::set_session($vars, $val);
     }
@@ -153,11 +153,12 @@ class Session implements SessionHandlerInterface
     {
         unset($_SESSION['gxsess']['val'][$var]);
     }
-    
+
     /**
      * Open
      */
-    public function open($path, $name): bool {
+    public function open($path, $name): bool
+    {
         // If successful
         if (Db::connect()) {
             // Return True
@@ -170,7 +171,8 @@ class Session implements SessionHandlerInterface
     /**
      * Close
      */
-    public function close(): bool {
+    public function close(): bool
+    {
         // Close the database connection
         // If successful
         if (Db::close()) {
@@ -185,15 +187,16 @@ class Session implements SessionHandlerInterface
      * Read
      */
     #[\ReturnTypeWillChange]
-    public function read($id) {
+    public function read($id)
+    {
         // Set query
         $q = Db::result("SELECT `data` FROM `sessions` WHERE `id` = ?", [$id]);
         // Attempt execution
         // If successful
         if ($q) {
             // Return the data
-            return isset($q[0]->data) ? $q[0]->data: "";
-        }else{
+            return isset($q[0]->data) ? $q[0]->data : "";
+        } else {
             // Return an empty string
             return "";
         }
@@ -202,7 +205,8 @@ class Session implements SessionHandlerInterface
     /**
      * Write
      */
-    public function write($id, $data): bool {
+    public function write($id, $data): bool
+    {
         // Create time stamp
         $access = time();
 
@@ -224,7 +228,8 @@ class Session implements SessionHandlerInterface
     /**
      * Destroy
      */
-    public function destroy($id): bool {
+    public function destroy($id): bool
+    {
         // Set query
         $q = Db::query("DELETE FROM `sessions` WHERE `id` = ?", [$id]);
 
@@ -244,14 +249,15 @@ class Session implements SessionHandlerInterface
      * Garbage Collection
      */
     #[\ReturnTypeWillChange]
-    public function gc($max) {
+    public function gc($max)
+    {
         // Calculate what is to be deemed old
         $old = time() - $max;
         $q = Db::query("DELETE FROM `sessions` WHERE `access` < ?", [$old]);
         if ($q) {
             return (int) Db::$num_rows;
         }
-        
+
         // Return False
         return false;
     }

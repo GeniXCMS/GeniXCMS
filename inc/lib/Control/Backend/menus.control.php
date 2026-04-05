@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -52,7 +52,7 @@ if (User::access(1)) {
                     } else {
                         $menus = Options::v('menus');
                         $menus = json_decode($menus, true);
-                       //echo "<pre>"; print_r($menus); echo "</pre>";
+                        //echo "<pre>"; print_r($menus); echo "</pre>";
                         // $menu = array(
                         //                 $_POST['id']  =>  array(
                         //                             'name' => $menus[$_POST['id']]['name'],
@@ -78,20 +78,20 @@ if (User::access(1)) {
                         $class = Typo::cleanX(Typo::filterXss($_POST['class']));
                         $menu[$menuid]['menu'] = $menus[$menuid]['menu'];
                         $menu[$menuid]['menu'][] = array(
-                                                    'parent' => $parent,
-                                                    'menuid' => $menuid,
-                                                    'name' => $name,
-                                                    'type' => $type,
-                                                    'value' => Typo::cleanX($_POST[$type]),
-                                                    'sub' => '',
-                                                );
+                            'parent' => $parent,
+                            'menuid' => $menuid,
+                            'name' => $name,
+                            'type' => $type,
+                            'value' => Typo::cleanX($_POST[$type]),
+                            'sub' => '',
+                        );
                         $menu = array(
-                                $menuid => array(
-                                            'name' => $menus[$menuid]['name'],
-                                            'class' => $menus[$menuid]['class'],
-                                            'menu' => $menu[$menuid]['menu'],
-                                        ),
-                                );
+                            $menuid => array(
+                                'name' => $menus[$menuid]['name'],
+                                'class' => $menus[$menuid]['class'],
+                                'menu' => $menu[$menuid]['menu'],
+                            ),
+                        );
                         if (is_array($menus)) {
                             $menu = array_merge($menus, $menu);
                         }
@@ -120,17 +120,17 @@ if (User::access(1)) {
                     break;
             }
 
-                //$data['abc'] = "abc";
+            //$data['abc'] = "abc";
             if (isset($_GET['id'])) {
                 $menuid = Typo::cleanX(Typo::filterXss($_POST['id']));
             } else {
                 $menuid = '';
             }
-                $data['parent'] = Menus::isHadParent(0, $menuid);
-                //echo "<pre>"; print_r($data); echo "</pre>";
-                Theme::admin('header', $data);
-                System::inc('menus_form', $data);
-                Theme::admin('footer');
+            $data['parent'] = Menus::isHadParent(0, $menuid);
+            //echo "<pre>"; print_r($data); echo "</pre>";
+            Theme::admin('header', $data);
+            System::inc('menus_form', $data);
+            Theme::admin('footer');
             break;
 
         case 'edit':
@@ -184,11 +184,11 @@ if (User::access(1)) {
             } else {
                 $menuid = '';
             }
-                $data['menus'] = Menus::getId($itemid);
-                $data['parent'] = Menus::isHadParent(0, $menuid);
-                Theme::admin('header', $data);
-                System::inc('menus_form_edit', $data);
-                Theme::admin('footer');
+            $data['menus'] = Menus::getId($itemid);
+            $data['parent'] = Menus::isHadParent(0, $menuid);
+            Theme::admin('header', $data);
+            System::inc('menus_form_edit', $data);
+            Theme::admin('footer');
             break;
         case 'del':
             if (isset($_POST['additem'])) {
@@ -207,13 +207,13 @@ if (User::access(1)) {
                     $data['alertDanger'] = $alertDanger;
                 } else {
                     $vars = array(
-                            'parent' => Typo::int($_POST['parent']),
-                            'menuid' => Typo::strip($_POST['id']),
-                            'name' => Typo::cleanX($_POST['name']),
-                            'class' => Typo::cleanX($_POST['class']),
-                            'type' => Typo::strip($_POST['type']),
-                            'value' => Typo::cleanX($_POST[$_POST['type']]),
-                        );
+                        'parent' => Typo::int($_POST['parent']),
+                        'menuid' => Typo::strip($_POST['id']),
+                        'name' => Typo::cleanX($_POST['name']),
+                        'class' => Typo::cleanX($_POST['class']),
+                        'type' => Typo::strip($_POST['type']),
+                        'value' => Typo::cleanX($_POST[$_POST['type']]),
+                    );
                     Menus::insert($vars);
                     $data['alertSuccess'][] = _('Menu Item Added');
                     Token::remove($token);
@@ -305,12 +305,12 @@ if (User::access(1)) {
                         $name = Typo::jsonFormat(Typo::strip($_POST['name']));
                         $class = Typo::jsonFormat(Typo::strip($_POST['class']));
                         $menu = array(
-                                $menuid => array(
-                                            'name' => $name,
-                                            'class' => $class,
-                                            'menu' => array(),
-                                        ),
-                                );
+                            $menuid => array(
+                                'name' => $name,
+                                'class' => $class,
+                                'menu' => array(),
+                            ),
+                        );
                         $menus = json_decode(Options::v('menus'), true);
                         if (is_array($menus)) {
                             $menu = array_merge($menus, $menu);
@@ -331,7 +331,7 @@ if (User::access(1)) {
                     break;
             }
 
-                // ADD MENU ITEM START
+            // ADD MENU ITEM START
             if (isset($_POST['additem'])) {
                 $submit = true;
             } else {
@@ -372,9 +372,9 @@ if (User::access(1)) {
                     break;
             }
 
-                // ADD MENU ITEM END
+            // ADD MENU ITEM END
 
-                // CHANGE ORDER START
+            // CHANGE ORDER START
             if (isset($_POST['changeorder'])) {
                 $submit = true;
             } else {
@@ -407,7 +407,7 @@ if (User::access(1)) {
                     break;
             }
 
-                // CHANGE ORDER END
+            // CHANGE ORDER END
 
             $data['menus'] = Options::get('menus', false);
             Theme::admin('header', $data);

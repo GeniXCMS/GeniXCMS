@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -44,8 +44,8 @@ class Typo
         $val = self::strip_tags_content($c, '<script>', true);
         $val = preg_replace_callback(
             '#\<pre\>(.+?)\<\/pre\>#',
-            function($matches) {
-                return "<pre>".str_replace('"', '&quot;', $matches[1])."</pre>";
+            function ($matches) {
+                return "<pre>" . str_replace('"', '&quot;', $matches[1]) . "</pre>";
             },
             $val
         );
@@ -84,19 +84,19 @@ class Typo
         // strip tags
         $text = strip_tags($text);
 
-      // replace non letter or digits by -
+        // replace non letter or digits by -
         $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
-      // trim
+        // trim
         $text = trim($text, '-');
 
-      // transliterate
-        setlocale(LC_CTYPE, Options::v('country').'.utf8');
+        // transliterate
+        setlocale(LC_CTYPE, Options::v('country') . '.utf8');
         $text = iconv('utf-8', 'utf-8//TRANSLIT', $text);
-      // lowercase
+        // lowercase
         $text = strtolower($text);
 
-      // remove unwanted characters
+        // remove unwanted characters
         $text = preg_replace('~[^-\w]+~', '', $text);
 
         if (empty($text)) {
@@ -119,12 +119,12 @@ class Typo
         if (is_array($tags) and count($tags) > 0) {
             if ($invert == false) {
                 /*return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text); */
-                $text = preg_replace('@<(?!(?:'.implode('|', $tags).')\b)(\w+)\b.*?>@si', '', $text);
-                $text = preg_replace('@</(?!(?:'.implode('|', $tags).')\b)(\w+)\b.*?>@si', '', $text);
+                $text = preg_replace('@<(?!(?:' . implode('|', $tags) . ')\b)(\w+)\b.*?>@si', '', $text);
+                $text = preg_replace('@</(?!(?:' . implode('|', $tags) . ')\b)(\w+)\b.*?>@si', '', $text);
             } else {
                 /*return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text); */
-                $text = preg_replace('@<('.implode('|', $tags).')\b.*?>@si', '', $text);
-                $text = preg_replace('@</('.implode('|', $tags).')\b.*?>@si', '', $text);
+                $text = preg_replace('@<(' . implode('|', $tags) . ')\b.*?>@si', '', $text);
+                $text = preg_replace('@</(' . implode('|', $tags) . ')\b.*?>@si', '', $text);
             }
         } elseif ($invert == false) {
             /*return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text); */
@@ -148,9 +148,9 @@ class Typo
 
         if (is_array($tags) and count($tags) > 0) {
             if ($invert == false) {
-                return preg_replace('@<(?!(?:'.implode('|', $tags).')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
+                return preg_replace('@<(?!(?:' . implode('|', $tags) . ')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
             } else {
-                return preg_replace('@<('.implode('|', $tags).')\b.*?>.*?</\1>@si', '', $text);
+                return preg_replace('@<(' . implode('|', $tags) . ')\b.*?>.*?</\1>@si', '', $text);
             }
         } elseif ($invert == false) {
             return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text);
@@ -189,22 +189,23 @@ class Typo
         return $token;
     }
 
-    public static function createToken($length, $capAlphabet=true, $lowAlphabet=true, $number=true, $symbol=false) {
+    public static function createToken($length, $capAlphabet = true, $lowAlphabet = true, $number = true, $symbol = false)
+    {
         $token = '';
         $codeAlphabet = '';
-        if( $capAlphabet ) {
+        if ($capAlphabet) {
             $codeAlphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         }
-        if( $lowAlphabet ) {
+        if ($lowAlphabet) {
             $codeAlphabet .= 'abcdefghijklmnopqrstuvwxyz';
         }
-        if( $number ) {
+        if ($number) {
             $codeAlphabet .= '0123456789';
         }
-        if( $symbol ) {
+        if ($symbol) {
             $codeAlphabet .= '!@#$%^&*()_-+=|;:.<>~';
         }
-        
+
         for ($i = 0; $i < $length; ++$i) {
             $token .= $codeAlphabet[self::crypto_rand_secure(0, strlen($codeAlphabet))];
         }
@@ -244,17 +245,17 @@ class Typo
         // It is conceivable that people might still want single line-breaks
         // without breaking into a new paragraph.
         if ($line_breaks == true) {
-            return '<p>'.preg_replace(
+            return '<p>' . preg_replace(
                 array("/([\n]{2,})/i", "/([^>])\n([^<])/i"),
-                array("</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'),
+                array("</p>\n<p>", '$1<br' . ($xml == true ? ' /' : '') . '>$2'),
                 trim($string)
-            ).'</p>';
+            ) . '</p>';
         } else {
-            return '<p>'.preg_replace(
+            return '<p>' . preg_replace(
                 array("/([\n]{2,})/i", "/([\r\n]{3,})/i", "/([^>])\n([^<])/i"),
-                array("</p>\n<p>", "</p>\n<p>", '$1<br'.($xml == true ? ' /' : '').'>$2'),
+                array("</p>\n<p>", "</p>\n<p>", '$1<br' . ($xml == true ? ' /' : '') . '>$2'),
                 trim($string)
-            ).'</p>';
+            ) . '</p>';
         }
     }
 
@@ -314,7 +315,7 @@ class Typo
         $var = str_replace('/>', ' />', $var);
         $var = str_replace('</', '<\/', $var);
 
-        
+
         $var = str_replace('\&', '&', $var);
 
         return $var;
@@ -327,17 +328,16 @@ class Typo
 
     public static function validateEmail($email)
     {
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     public static function filterXss($str)
     {
-//        $str = preg_replace('#on.*=["|\'](.*)["|\']#', '', $str);
+        //        $str = preg_replace('#on.*=["|\'](.*)["|\']#', '', $str);
         $str = preg_replace('#(?!<pre>.*?)(onload|onerror|onblur|onchange|onscroll|oninput|
         onfocus|onbeforescriptexecute|ontoggle|onratechange|onreadystatechange|onpropertychange|
         onqt_error|onpageshow|onclick|onmouseover|onunload|event|formaction|actiontype|background|oncut)=("|\')(.*)("|\')(?!.*?</pre>)#', '', $str);
@@ -349,9 +349,10 @@ class Typo
         return $str;
     }
 
-    public static function translate (string $original) {
+    public static function translate(string $original)
+    {
         $translated = _($original);
-        
+
         return $translated;
     }
 }

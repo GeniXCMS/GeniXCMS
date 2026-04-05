@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -101,11 +101,11 @@ class User
         if (is_array($vars)) {
             $vars = Hooks::filter('user_pre_insert_filter', $vars);
             //print_r($vars['user']);
-            $ip = [ 'ipaddress' => $_SERVER['REMOTE_ADDR'] ];
-            $ipCountry = (!Http::isLocal($_SERVER['REMOTE_ADDR'])) ? Http::getIpCountry($_SERVER['REMOTE_ADDR']): '';
+            $ip = ['ipaddress' => $_SERVER['REMOTE_ADDR']];
+            $ipCountry = (!Http::isLocal($_SERVER['REMOTE_ADDR'])) ? Http::getIpCountry($_SERVER['REMOTE_ADDR']) : '';
             $u = $vars['user'];
             $u = array_merge($ip, $u);
-            
+
             $db = Query::table('user')->insert($u);
 
             if (!isset($vars['detail']) || $vars['detail'] == '') {
@@ -183,9 +183,9 @@ class User
     public static function randpass($vars)
     {
         if (is_array($vars)) {
-            $hash = sha1($vars['passwd'].SECURITY_KEY.$vars['userid']);
+            $hash = sha1($vars['passwd'] . SECURITY_KEY . $vars['userid']);
         } else {
-            $hash = sha1($vars.SECURITY_KEY);
+            $hash = sha1($vars . SECURITY_KEY);
         }
 
         $hash = substr($hash, 5, 16);
@@ -196,14 +196,14 @@ class User
 
     public static function generatePass()
     {
-        $vars = microtime().Site::$name.rand();
-        $hash = sha1($vars.SECURITY_KEY);
+        $vars = microtime() . Site::$name . rand();
+        $hash = sha1($vars . SECURITY_KEY);
         $pass = substr($hash, 5, 8);
 
         return $pass;
     }
 
-    public static function validate($user, $except='')
+    public static function validate($user, $except = '')
     {
         $q = Query::table('user')->where('userid', Typo::cleanX(Typo::strip($user)));
         if ($except != '') {
@@ -222,7 +222,7 @@ class User
         }
     }
 
-    public static function isEmail($vars, $id='')
+    public static function isEmail($vars, $id = '')
     {
         $q = Query::table('user')->where('email', Typo::cleanX($vars));
         if ($id != '') {
@@ -307,15 +307,15 @@ class User
     {
         $class = (isset($vars['class'])) ? $vars['class'] : 'form-control';
         $attr = (isset($vars['attr'])) ? $vars['attr'] : '';
-        $html = '<select name="'.$vars['name'].'" class="'.$class.'" '.$attr.'>';
-        $html .= (!isset($vars['selected']) && !isset($vars['update'])) ? '<option value="">'._('All Group').'</option>' : '';
+        $html = '<select name="' . $vars['name'] . '" class="' . $class . '" ' . $attr . '>';
+        $html .= (!isset($vars['selected']) && !isset($vars['update'])) ? '<option value="">' . _('All Group') . '</option>' : '';
         foreach (self::$group as $key => $value) {
             $selected = (isset($vars['selected']) && $vars['selected'] == $key) ? 'selected' : '';
             $ugroup = Session::val('group');
             if ($ugroup <= $key && isset($vars['update']) && $vars['update'] == true) {
-                $html .= '<option value="'.$key.'" '.$selected.'>'._($value).'</option>';
+                $html .= '<option value="' . $key . '" ' . $selected . '>' . _($value) . '</option>';
             } else {
-                $html .= '<option value="'.$key.'" '.$selected.'>'._($value).'</option>';
+                $html .= '<option value="' . $key . '" ' . $selected . '>' . _($value) . '</option>';
             }
         }
         $html .= '</select>';
@@ -323,18 +323,18 @@ class User
         return $html;
     }
 
-    public static function listRecentBox($max=10)
+    public static function listRecentBox($max = 10)
     {
         $q = Query::table('user')->orderBy('join_date', 'DESC')->limit($max)->get();
         if ($q) {
             foreach ($q as $k => $v) {
                 echo "
                 <div class=\"col-3 p-2\">
-                    <img class=\"img-fluid rounded-circle\" src=\"".Image::getGravatar($v->email)."\" alt=\"User Image\">
+                    <img class=\"img-fluid rounded-circle\" src=\"" . Image::getGravatar($v->email) . "\" alt=\"User Image\">
                     <a class=\"btn fw-bold fs-7 text-secondary text-truncate w-100 p-0\" href=\"#\">
                         {$v->userid}
                     </a>
-                    <div class=\"fs-8\">".Date::format($v->join_date)."</div>
+                    <div class=\"fs-8\">" . Date::format($v->join_date) . "</div>
                 </div>
                 ";
             }
@@ -356,25 +356,25 @@ class User
         return json_encode($ctr);
     }
 
-    public static function checkLastRequestPassword() 
+    public static function checkLastRequestPassword()
     {
         $reqPass = Session::val('reqPass');
-        $lastReq = !empty($reqPass) ? $reqPass['time']: 0;
+        $lastReq = !empty($reqPass) ? $reqPass['time'] : 0;
 
         return $lastReq;
     }
 
-    public static function setLastRequestPassword() 
+    public static function setLastRequestPassword()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
         $time = time();
-        
+
         $vars = array(
             'reqPass' => array(
-                    'time' => $time,
-                    'ip'    => $ip
-                )
-            );
+                'time' => $time,
+                'ip' => $ip
+            )
+        );
         Session::set($vars);
     }
 
@@ -385,7 +385,7 @@ class User
         $lastReq = self::checkLastRequestPassword();
         $reqTime = time() - $lastReq;
 
-        if ($lastReq == 0 || $reqTime > $limit ) {
+        if ($lastReq == 0 || $reqTime > $limit) {
             self::setLastRequestPassword();
 
             return true;

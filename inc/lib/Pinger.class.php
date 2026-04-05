@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150202
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -38,7 +38,7 @@ class Pinger
     {
         new self();
         //require_once( GX_LIB.'/Vendor/IXR_Library.php' );
-        $url = 'http://'.$url;
+        $url = 'http://' . $url;
         $client = new IXR\Client\Client($url, false, 80, 3);
         // $client->getTimeoutIO = 3;
         // $client->useragent .= ' -- PingTool/1.0.0';

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.7 build date 20150711
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -116,19 +116,17 @@ class Router
      */
     public static function run()
     {
-        $m = self::match (); //         print_r($m);
+        $m = self::match(); //         print_r($m);
         if (is_array($m)) {
             $val = self::extract($m[0], $m[1]); //             print_r($val);
             if (isset($val) && $val != null) {
                 return $val;
-            }
-            else {
+            } else {
                 $val['error'] = '';
 
                 return $val;
             }
-        }
-        else {
+        } else {
             $val = array();
             $val['error'] = '';
 
@@ -141,7 +139,7 @@ class Router
      *
      * @return array|false
      */
-    public static function match ()
+    public static function match()
     {
         $uri = self::getURI();
 
@@ -149,8 +147,7 @@ class Router
             $result = [self::$_route[$uri], $uri];
 
             return $result;
-        }
-        else {
+        } else {
             foreach (self::$_route as $k => $v) {
                 $regx = str_replace('/', '\/', $k);
                 if (preg_match('/^' . $regx . '$/Us', $uri, $m)) {
@@ -183,11 +180,9 @@ class Router
                 if (is_int($v2)) {
                     $va[] = [$k2 => $m[$v2]];
                 }
-            }
-            elseif (is_int($k2)) {
+            } elseif (is_int($k2)) {
                 $va[] = [$v2];
-            }
-            else {
+            } else {
                 $va = array($v2);
             }
         }
@@ -213,17 +208,16 @@ class Router
         // print_r($uri[0]);
         if (self::inFolder()) {
             $uri = self::stripFolder($uri[0]);
-        // echo $uri;
-        }
-        else {
+            // echo $uri;
+        } else {
             $uri2 = explode('/', $uri[0]);
             unset($uri2[0]);
             $uri = implode('/', $uri2);
-        // echo $uri;
+            // echo $uri;
         }
         // echo $uri;
 
-        $uri = (Options::v('permalink_use_index_php') == 'on') ? 
+        $uri = (Options::v('permalink_use_index_php') == 'on') ?
             str_replace('index.php/', '', $uri) : $uri;
         // echo $uri;
 
@@ -239,8 +233,7 @@ class Router
         // print_r($uri);
         if (count($uri) > 4) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -262,9 +255,8 @@ class Router
                     foreach ($v as $k2 => $v2) {
                         $data[$k2] = $v2;
                     }
-                // print_r($data);
-                }
-                else {
+                    // print_r($data);
+                } else {
                     $data = [$v];
                 }
             }
@@ -300,8 +292,7 @@ class Router
             }
 
             return $uris;
-        }
-        else {
+        } else {
             return '/';
         }
     }

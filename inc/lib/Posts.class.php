@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -50,7 +50,7 @@ class Posts extends Model
             $vars = Hooks::filter('post_pre_insert_filter', $vars);
             $slug = self::createSlug($vars['title']);
             $vars = array_merge($vars, array('slug' => $slug));
-            
+
             $post = Query::table('posts')->insert($vars);
             self::$last_id = Db::$last_id; // Db class still maintains the last_id property
             // Auto-generate and cache excerpt on insert
@@ -160,7 +160,7 @@ class Posts extends Model
         //print_r($more);
         if (count($more) > 1) {
             // $post = explode('[[--readmore--]]', $post);
-            $post = $more[0].' <a href="'.Url::post($id).'">'._("Read More").'</a>';
+            $post = $more[0] . ' <a href="' . Url::post($id) . '">' . _("Read More") . '</a>';
         }
 
         $post = Hooks::filter('post_content_filter', $post);
@@ -178,7 +178,7 @@ class Posts extends Model
     {
         $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
         $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
-        
+
         $q = Query::table('posts')->where('type', $type)->where('status', '1');
         if (isset($vars['cat'])) {
             $q->where('cat', Typo::int($vars['cat']));
@@ -233,7 +233,7 @@ class Posts extends Model
             $orderBy = isset($vars['order_by']) ? Typo::cleanX($vars['order_by']) : 'name';
             $sort = isset($vars['sort']) ? Typo::cleanX($vars['sort']) : 'ASC';
             $cat = $q->orderBy($orderBy, $sort)->get();
-            
+
             $drop = "<select name=\"{$name}\" class=\"form-control\"><option></option>";
             if (!empty($cat) && is_array($cat)) {
                 foreach ($cat as $c) {
@@ -312,7 +312,7 @@ class Posts extends Model
             'param' => Typo::cleanX($param),
             'value' => Typo::cleanX($value)
         ]);
-        
+
         return $q ? true : false;
     }
 
@@ -322,7 +322,7 @@ class Posts extends Model
             ->where('post_id', Typo::int($post_id))
             ->where('param', Typo::cleanX($param))
             ->update(['value' => Typo::cleanX($value)]);
-            
+
         return $q ? true : false;
     }
 
@@ -332,7 +332,7 @@ class Posts extends Model
             ->where('post_id', Typo::int($post_id))
             ->where('param', Typo::cleanX($param))
             ->first();
-            
+
         if ($q) {
             return Typo::Xclean($q->value);
         } else {
@@ -346,7 +346,7 @@ class Posts extends Model
             ->where('post_id', Typo::int($post_id))
             ->where('param', Typo::cleanX($param))
             ->delete();
-            
+
         return $q ? true : false;
     }
 
@@ -357,7 +357,7 @@ class Posts extends Model
             ->where('post_id', Typo::int($post_id))
             ->where('param', Typo::cleanX($param))
             ->first();
-            
+
         return $q ? true : false;
     }
 
@@ -367,8 +367,10 @@ class Posts extends Model
             $langs = Language::isActive();
             if ($langs != '') {
                 foreach ($post as $p) {
-                    if (self::existParam('multilang', $p->id)
-                        && Options::v('multilang_default') !== $langs) {
+                    if (
+                        self::existParam('multilang', $p->id)
+                        && Options::v('multilang_default') !== $langs
+                    ) {
                         $lang = Language::getLangParam($langs, $p->id);
                         $posts = get_object_vars($p);
                         $posts = is_array($lang) ? array_merge($posts, $lang) : $posts;
@@ -425,32 +427,32 @@ class Posts extends Model
             $pcat = self::prepare($pcat);
             $html = "";
             foreach ($pcat as $p) {
-                $html .= '<div class="recent-list-item d-flex align-items-center mb-3 '.$ulClass.'">';
+                $html .= '<div class="recent-list-item d-flex align-items-center mb-3 ' . $ulClass . '">';
                 // Use pre-cached excerpt param; fall back to on-the-fly generation (auto-caches too)
                 if (isset($vars['excerpt']) && $vars['excerpt'] === true) {
-                    $content = self::excerpt($p->id, $p->content, (int)$excerptMax);
+                    $content = self::excerpt($p->id, $p->content, (int) $excerptMax);
                 } else {
                     $content = '';
                 }
                 if (isset($vars['image']) && $vars['image'] == true) {
                     $post_image = Posts::getPostImage($p->id);
-                    $img = ( $post_image != "" ) ? $post_image: self::getImage(Typo::Xclean($p->content), 1);
+                    $img = ($post_image != "") ? $post_image : self::getImage(Typo::Xclean($p->content), 1);
                     if ($img != '') {
                         $img = Url::thumb($img, 'square', $imgSize);
                     } else {
                         $img = Url::thumb('assets/images/noimage.png', 'square', $imgSize);
                     }
                     $html .= '<div class="flex-shrink-0">
-                        <a href="'.Url::post($p->id).'">
-                          <img class="'.$imgClass.'" src="'.$img.'" alt="'.$p->title.'" width="'.$imgSize.'" height="'.$imgSize.'" style="object-fit: cover;">
+                        <a href="' . Url::post($p->id) . '">
+                          <img class="' . $imgClass . '" src="' . $img . '" alt="' . $p->title . '" width="' . $imgSize . '" height="' . $imgSize . '" style="object-fit: cover;">
                         </a>
                       </div>';
                 }
-                $html .= '<div class="flex-grow-1 ms-3 '.$liClass.'">';
-                $html .= (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading mb-1 '.$h4Class.'"><a href="'.Url::post($p->id)."\">{$p->title}</a></h4>" : '';
-                $html .= (isset($vars['date']) && $vars['date'] === true) ? '<small class="text-muted '.$dateClass.'">'.Date::local($p->date).' </small> ' : '';
-                $html .= (isset($vars['author']) && $vars['author'] === true) ? '<small class="text-muted">by : '.$p->author.'</small>' : '';
-                $html .= (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="mb-0 '.$pClass.'">'.$content.'</p>' : '';
+                $html .= '<div class="flex-grow-1 ms-3 ' . $liClass . '">';
+                $html .= (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading mb-1 ' . $h4Class . '"><a href="' . Url::post($p->id) . "\">{$p->title}</a></h4>" : '';
+                $html .= (isset($vars['date']) && $vars['date'] === true) ? '<small class="text-muted ' . $dateClass . '">' . Date::local($p->date) . ' </small> ' : '';
+                $html .= (isset($vars['author']) && $vars['author'] === true) ? '<small class="text-muted">by : ' . $p->author . '</small>' : '';
+                $html .= (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="mb-0 ' . $pClass . '">' . $content . '</p>' : '';
                 $html .= '</div>';
                 $html .= '</div>';
             }
@@ -465,14 +467,14 @@ class Posts extends Model
         $tags_x = explode(',', $tags);
         $tag = [];
         foreach ($tags_x as $t) {
-            $tag[] = '<a href="'.Url::tag($t)."\">{$t}</a>";
+            $tag[] = '<a href="' . Url::tag($t) . "\">{$t}</a>";
         }
         $tag = implode(', ', $tag);
 
-        return $title.' : '.$tag;
+        return $title . ' : ' . $tag;
     }
 
-    public static function related($id, $num, $cat, $mode = 'list', $limit=20)
+    public static function related($id, $num, $cat, $mode = 'list', $limit = 20)
     {
         $id = Typo::int($id);
         if (self::existParam('tags', $id)) {
@@ -480,15 +482,15 @@ class Posts extends Model
             $tag = explode(',', $tag);
             $where_tag = ''; //"AND B.`param` = 'tags' ";
             foreach ($tag as $t) {
-                $where_tag .= " OR B.`value` LIKE '%%".$t."%%' ";
+                $where_tag .= " OR B.`value` LIKE '%%" . $t . "%%' ";
             }
         } else {
             $where_tag = '';
         }
         $post_type = self::type($id);
-        
+
         $randFn = (defined('DB_DRIVER') && DB_DRIVER === 'mysql') ? 'RAND()' : 'RANDOM()';
-        
+
         $post = Query::table('posts')
             ->select("DISTINCT B.post_id, posts.id, posts.date, posts.title, posts.content, posts.author, posts.cat, posts.type")
             ->join('posts_param AS B', 'posts.id', '=', 'B.post_id')
@@ -496,20 +498,21 @@ class Posts extends Model
             ->orderByRaw($randFn)
             ->limit($num, 0)
             ->get();
-            
+
         if (empty($post)) {
             $post = ['error' => _('No Related Post(s)')];
         }
         if (isset($post['error'])) {
-            $related = '<div class="col-sm-12">'._('No Related Post(s)').'</div>';
+            $related = '<div class="col-sm-12">' . _('No Related Post(s)') . '</div>';
         } else {
             $related = '';
             if ($mode == 'list') {
                 $related .= '<ul class="list-group list-group-flush related">';
                 foreach ($post as $p) {
-                    if (!is_object($p)) continue;
+                    if (!is_object($p))
+                        continue;
                     if ($p->id != $id) {
-                        $related .= '<li class="list-group-item"><a href="'.Url::post($p->id)."\">$p->title</a></li>";
+                        $related .= '<li class="list-group-item"><a href="' . Url::post($p->id) . "\">$p->title</a></li>";
                     } else {
                         $related .= '';
                     }
@@ -518,21 +521,22 @@ class Posts extends Model
             } elseif ($mode == 'box') {
                 $related .= '<div class="row related-box">';
                 foreach ($post as $p) {
-                    if (!is_object($p)) continue;
+                    if (!is_object($p))
+                        continue;
                     if ($p->id != $id) {
-                        $title = (strlen($p->title) > $limit) ? substr($p->title, 0, $limit-2).'...' : $p->title;
+                        $title = (strlen($p->title) > $limit) ? substr($p->title, 0, $limit - 2) . '...' : $p->title;
                         $post_image = Posts::getPostImage($p->id);
-                        $img = ( $post_image != "" ) ? $post_image: Posts::getImage(Typo::Xclean($p->content), 1);
-                        $imgurl = $img == "" ? Url::thumb(Site::$url."assets/images/noimage.png", 'large', 400): Url::thumb($img, 'large', 400);
+                        $img = ($post_image != "") ? $post_image : Posts::getImage(Typo::Xclean($p->content), 1);
+                        $imgurl = $img == "" ? Url::thumb(Site::$url . "assets/images/noimage.png", 'large', 400) : Url::thumb($img, 'large', 400);
 
                         $related .= '<div class="col-6 col-sm-4 mb-4">
                             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden related-card transition-base">
-                                <a href="'.Url::post($p->id).'" class="text-decoration-none text-dark h-100 d-flex flex-column">
+                                <a href="' . Url::post($p->id) . '" class="text-decoration-none text-dark h-100 d-flex flex-column">
                                     <div class="ratio ratio-16x9">
-                                        <img src="'.$imgurl.'" class="card-img-top object-fit-cover" alt="'.$p->title.'">
+                                        <img src="' . $imgurl . '" class="card-img-top object-fit-cover" alt="' . $p->title . '">
                                     </div>
                                     <div class="card-body p-3">
-                                        <h6 class="card-title fw-bold mb-0" style="font-size: 0.9rem; line-height: 1.4;">'.$title.'</h6>
+                                        <h6 class="card-title fw-bold mb-0" style="font-size: 0.9rem; line-height: 1.4;">' . $title . '</h6>
                                     </div>
                                 </a>
                             </div>
@@ -638,7 +642,7 @@ class Posts extends Model
             ->orderBy('date', 'DESC')
             ->limit($max, 0)
             ->get();
-            
+
         if (!empty($q)) {
             $r = $q;
         } else {
@@ -659,7 +663,7 @@ class Posts extends Model
         return $image;
     }
 
-    public static function getImage($post, $number=1)
+    public static function getImage($post, $number = 1)
     {
         preg_match_all('/<img .*?src=[\'"]([^\'"]+)[\'"].*?>/si', $post, $im);
         // print_r($im);
@@ -668,13 +672,14 @@ class Posts extends Model
         }
     }
 
-    public static function setImage($im, $number) {
-        if(isset($number)) {
-            $num = $number-1;
-            if(isset($im[1][$num])) {
+    public static function setImage($im, $number)
+    {
+        if (isset($number)) {
+            $num = $number - 1;
+            if (isset($im[1][$num])) {
                 return $im[1][$num];
             } else {
-                return isset($im[1][0]) ? $im[1][0]: "";
+                return isset($im[1][0]) ? $im[1][0] : "";
             }
         } else {
             for ($i = 1; $i <= count($im); $i += 2) {
@@ -714,14 +719,14 @@ class Posts extends Model
         if ($post) {
             $arrA = [];
             foreach ($post as $a => $b) {
-                $arrA []= [ $a => $b ];
+                $arrA[] = [$a => $b];
             }
             // get params
             $r = Query::table('posts_param')->where('post_id', Typo::int($vars['id']))->get();
             if (!empty($r)) {
                 $arr = [];
                 foreach ($r as $v) {
-                    $arr[] = [ $v->param => $v->value ];
+                    $arr[] = [$v->param => $v->value];
                 }
 
                 $arrM = array_merge($arrA, $arr);
@@ -729,15 +734,15 @@ class Posts extends Model
                 foreach ($arrM as $l) {
                     $p = array_merge($l, $p);
                 }
-                $res[0] = (object)$p;
+                $res[0] = (object) $p;
             } else {
                 $p = [];
                 foreach ($arrA as $l) {
                     $p = array_merge($l, $p);
                 }
-                $res[0] = (object)$p;
+                $res[0] = (object) $p;
             }
-            
+
         } else {
             $res['error'] = _("Data not found");
         }
@@ -751,8 +756,8 @@ class Posts extends Model
         $slug = Typo::slugify($str);
         // check if slug is exist
         if (self::slugExist($slug)) {
-            $slnum = (int) self::getLastSlug($slug)+1;
-            $slug = $slug.'-'.$slnum;
+            $slnum = (int) self::getLastSlug($slug) + 1;
+            $slug = $slug . '-' . $slnum;
         }
 
         return $slug;
@@ -767,7 +772,7 @@ class Posts extends Model
     {
         $slug = Typo::cleanX($slug);
         $q = Query::table('posts')->select('id')->where('slug', 'LIKE', "%{$slug}%")->first();
-        
+
         return $q ? true : false;
     }
 
@@ -778,7 +783,7 @@ class Posts extends Model
 
         if ($q) {
             $slnum = str_replace($slug, '', $q->slug);
-            $slnum = ($slnum !== '') ? str_replace('-', '', $slnum): 0;
+            $slnum = ($slnum !== '') ? str_replace('-', '', $slnum) : 0;
             return $slnum;
         }
         return 0;

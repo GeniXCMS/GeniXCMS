@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -309,7 +309,7 @@ class Db
                 implode(', ', $cols),
                 implode(', ', $placeholders)
             );
-            
+
             $stmt = self::query($sql, $params);
             if ($stmt) {
                 self::$last_id = self::$pdo->lastInsertId();
@@ -340,7 +340,7 @@ class Db
         $quote = ($driver == 'mysql' || $driver == 'mysqli') ? '`' : '"';
         // Handle dotted (table.column) notation
         if (strpos($identifier, '.') !== false) {
-            return implode('.', array_map(function($part) use ($quote) {
+            return implode('.', array_map(function ($part) use ($quote) {
                 return $quote . trim($part, $quote) . $quote;
             }, explode('.', $identifier)));
         }

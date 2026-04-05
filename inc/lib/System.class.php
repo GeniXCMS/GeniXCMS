@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -26,7 +26,7 @@ class System
      *
      * @return float
      */
-    public static $version = '2.0.0';
+    public static $version = '2.0.1';
 
     /**
      * GeniXCMS Version Release.
@@ -51,7 +51,7 @@ class System
      */
     public function __construct()
     {
-        if(array_key_exists("HTTP_X_FORWARDED_PROTO", $_SERVER) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
+        if (array_key_exists("HTTP_X_FORWARDED_PROTO", $_SERVER) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
             $_SERVER["HTTPS"] = "on";
         }
 
@@ -134,7 +134,7 @@ class System
      */
     public static function lib($var)
     {
-        $file = GX_LIB.$var.'.class.php';
+        $file = GX_LIB . $var . '.class.php';
         if (file_exists($file)) {
             include $file;
         }
@@ -142,7 +142,7 @@ class System
 
     public static function lang($vars)
     {
-        $dir = GX_PATH.'/inc/lang/locale';
+        $dir = GX_PATH . '/inc/lang/locale';
         if (defined('LC_MESSAGES')) {
             setlocale(LC_MESSAGES, $vars); // Linux
             bindtextdomain("genixcms", $dir);
@@ -150,18 +150,18 @@ class System
             putenv("LC_ALL={$vars}"); // windows
             bindtextdomain("genixcms", $dir);
         }
-        
-        
+
+
         textdomain("genixcms");
     }
 
     public static function lang2($vars)
     {
-        $file = GX_PATH.'/inc/lang/'.$vars.'.lang.php';
+        $file = GX_PATH . '/inc/lang/' . $vars . '.lang.php';
         if (file_exists($file)) {
             include $file;
         } else {
-            include GX_PATH.'/inc/lang/id_ID.lang.php';
+            include GX_PATH . '/inc/lang/id_ID.lang.php';
         }
     }
 
@@ -224,7 +224,7 @@ class System
 
     public static function config($var)
     {
-        $file = GX_PATH.'/inc/config/'.$var.'.php';
+        $file = GX_PATH . '/inc/config/' . $var . '.php';
         if (file_exists($file)) {
             include $file;
         }
@@ -232,7 +232,7 @@ class System
 
     public static function existConf()
     {
-        if (file_exists(GX_PATH.'/inc/config/config.php')) {
+        if (file_exists(GX_PATH . '/inc/config/config.php')) {
             return true;
         } else {
             return false;
@@ -247,11 +247,11 @@ class System
         } else {
             ob_start();
         }
-            #ob_start(ob_gzhandler);
-            // ob_start('Site::minifyHTML');
-            // ob_start('Site::minifIed');
+        #ob_start(ob_gzhandler);
+        // ob_start('Site::minifyHTML');
+        // ob_start('Site::minifIed');
 
-            ob_implicit_flush(0);
+        ob_implicit_flush(0);
     }
 
     // Call this function to output everything as gzipped content.
@@ -259,7 +259,7 @@ class System
     {
         // global $_SERVER['HTTP_ACCEPT_ENCODING'];
         if (!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
-            $encoding = false;          
+            $encoding = false;
         } else {
             if (headers_sent()) {
                 $encoding = false;
@@ -271,12 +271,12 @@ class System
                 $encoding = false;
             }
         }
-        
+
 
         if ($encoding) {
             $contents = ob_get_contents();
             ob_end_clean();
-            header('Content-Encoding: '.$encoding);
+            header('Content-Encoding: ' . $encoding);
             header('Vary: Accept-Encoding');
             echo "\x1f\x8b\x08\x00\x00\x00\x00\x00";
             $size = strlen($contents);
@@ -297,7 +297,7 @@ class System
     public static function inc($vars, $data = '')
     {
         $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
-        $file = GX_PATH.'/'.$admin_dir.'/inc/'.$vars.'.php';
+        $file = GX_PATH . '/' . $admin_dir . '/inc/' . $vars . '.php';
 
         if (file_exists($file)) {
             include $file;
@@ -306,7 +306,7 @@ class System
 
     public static function v()
     {
-        return self::$version.' '.self::$v_release;
+        return self::$version . ' ' . self::$v_release;
     }
 
 
@@ -319,8 +319,8 @@ class System
 
         $types = [
             'alertSuccess' => 'success',
-            'alertDanger'  => 'error',
-            'alertInfo'    => 'info',
+            'alertDanger' => 'error',
+            'alertInfo' => 'info',
             'alertWarning' => 'warning',
             'alertDefault' => 'info'
         ];
@@ -339,7 +339,7 @@ class System
 
         if (!empty($scripts)) {
             $html = '<script>' . implode('', $scripts) . '</script>';
-            
+
             // To ensure compatibility across both direct-echo systems 
             // and the admin footer queueing system:
             static $footer_hook_attached = false;
@@ -347,17 +347,17 @@ class System
                 $footer_hook_attached = true;
                 static $accumulated_scripts = '';
                 $accumulated_scripts .= $html;
-                
+
                 Hooks::attach('admin_footer_action', function () use (&$accumulated_scripts) {
                     echo $accumulated_scripts;
                     $accumulated_scripts = '';
                 });
                 return ''; // Admin handles via footer
             }
-            
+
             return $html; // Frontend or mid-page call: return directly
         }
-        
+
         return '';
     }
 
@@ -391,7 +391,7 @@ class System
                     ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                     ['fontsize', ['fontsize']],
                     ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode', 'elfinder']],
                     ['view', ['fullscreen']]";
         } elseif ($mode == 'full') {
             $toolbar = "['style', ['style']],
@@ -402,8 +402,7 @@ class System
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode']],
-                    ['genixcms', ['elfinder']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'readmore', 'gxcode', 'elfinder']],
                     ['view', ['fullscreen', 'codeview']],
                     ['help', ['help']]";
         } else {

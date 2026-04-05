@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -90,27 +90,23 @@ class Mail
                     $mail->ContentType = 'text/plain';
                     $mail->IsHTML(false);
                     $mail->Body = $message;
-                }
-                else {
+                } else {
                     $mail->msgHTML($message);
                 }
 
                 $mail->send();
-            }
-            catch (PHPMailer\Exception $e) {
+            } catch (PHPMailer\Exception $e) {
                 return $e->errorMessage(); //Pretty error messages from PHPMailer
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 return $e->getMessage(); //Boring error messages from anything else!
             }
-        //send the message, check for errors
-        // if (!$mail->send()) {
-        //     $mailer = "Mailer Error: " . $mail->ErrorInfo;
-        // } else {
-        //     $mailer = "Message sent!";
-        // }
-        }
-        elseif ($type == 1) {
+            //send the message, check for errors
+            // if (!$mail->send()) {
+            //     $mailer = "Mailer Error: " . $mail->ErrorInfo;
+            // } else {
+            //     $mailer = "Message sent!";
+            // }
+        } elseif ($type == 1) {
             //Create a new PHPMailer instance
             $mail = new PHPMailer\PHPMailer(true);
             try {
@@ -147,27 +143,24 @@ class Mail
                     $mail->ContentType = 'text/plain';
                     $mail->IsHTML(false);
                     $mail->Body = $message;
-                }
-                else {
+                } else {
                     $mail->msgHTML($message);
                 }
                 $mail->send();
-            }
-            catch (PHPMailer\Exception $e) {
+            } catch (PHPMailer\Exception $e) {
                 return $e->errorMessage(); //Pretty error messages from PHPMailer
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 return $e->getMessage(); //Boring error messages from anything else!
             }
-        // //send the message, check for errors
-        // if (!$mail->send()) {
-        //     $mailer = "Mailer Error: " . $mail->ErrorInfo;
-        // } else {
-        //     $mailer = "Message sent!";
-        // }
+            // //send the message, check for errors
+            // if (!$mail->send()) {
+            //     $mailer = "Mailer Error: " . $mail->ErrorInfo;
+            // } else {
+            //     $mailer = "Message sent!";
+            // }
         }
 
-    //return $mailer;
+        //return $mailer;
     }
 }
 

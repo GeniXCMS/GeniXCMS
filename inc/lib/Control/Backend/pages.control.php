@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -67,14 +67,14 @@ if (User::access(1)) {
                             $date = Typo::cleanX($_POST['date']);
                         }
                         $vars = array(
-                                    'title' => $title,
-                                    'content' => $content,
-                                    'date' => $date,
-                                    'modified' => $date,
-                                    'type' => 'page',
-                                    'author' => Session::val('username'),
-                                    'status' => Typo::int($_POST['status']),
-                                );
+                            'title' => $title,
+                            'content' => $content,
+                            'date' => $date,
+                            'modified' => $date,
+                            'type' => 'page',
+                            'author' => Session::val('username'),
+                            'status' => Typo::int($_POST['status']),
+                        );
 
                         Posts::insert($vars);
                         $post_id = Posts::$last_id;
@@ -83,18 +83,18 @@ if (User::access(1)) {
                             unset($_POST['title'][$def]);
                             foreach ($_POST['title'] as $key => $value) {
                                 $multilang[] = array(
-                                                $key => array(
-                                                        'title' => Typo::cleanX($_POST['title'][$key]),
-                                                        'content' => Typo::cleanX($_POST['content'][$key]),
-                                                    ),
-                                            );
+                                    $key => array(
+                                        'title' => Typo::cleanX($_POST['title'][$key]),
+                                        'content' => Typo::cleanX($_POST['content'][$key]),
+                                    ),
+                                );
                             }
                             $multilang = json_encode($multilang);
                             Posts::addParam('multilang', $multilang, $post_id);
                             // print_r($multilang);
                         }
 
-                        if (isset($_POST['param'])){
+                        if (isset($_POST['param'])) {
                             foreach ($_POST['param'] as $k => $v) {
                                 Posts::addParam($k, $v, $post_id);
                             }
@@ -102,9 +102,9 @@ if (User::access(1)) {
                         $post_image = Typo::cleanX($_POST['post_image']);
                         Posts::addParam('post_image', $post_image, $post_id);
 
-                        $data['alertSuccess'][] = _("Page")." {$title} "._("Added Successfully");
+                        $data['alertSuccess'][] = _("Page") . " {$title} " . _("Added Successfully");
                         Hooks::run('post_submit_add_action', $_POST);
-                        isset($_POST['token']) ? Token::remove($token): '';
+                        isset($_POST['token']) ? Token::remove($token) : '';
                     }
 
                     break;
@@ -119,7 +119,7 @@ if (User::access(1)) {
 
         case 'edit':
             //echo "edit";
-            $id = isset($_GET['id']) ? Typo::int($_GET['id']): '';
+            $id = isset($_GET['id']) ? Typo::int($_GET['id']) : '';
             switch (isset($_POST['submit'])) {
                 case true:
                     $token = Typo::cleanX($_POST['token']);
@@ -156,12 +156,12 @@ if (User::access(1)) {
                         }
                         $moddate = date('Y-m-d H:i:s');
                         $vars = array(
-                                    'title' => $title,
-                                    'content' => $content,
-                                    'modified' => $moddate,
-                                    'date' => $date,
-                                    'status' => Typo::int($_POST['status']),
-                                );
+                            'title' => $title,
+                            'content' => $content,
+                            'modified' => $moddate,
+                            'date' => $date,
+                            'status' => Typo::int($_POST['status']),
+                        );
                         //print_r($vars);
                         Posts::update($vars);
                         if (Options::v('multilang_enable') === 'on') {
@@ -169,11 +169,11 @@ if (User::access(1)) {
                             unset($_POST['title'][$def]);
                             foreach ($_POST['title'] as $key => $value) {
                                 $multilang[] = array(
-                                                $key => array(
-                                                        'title' => Typo::cleanX($_POST['title'][$key]),
-                                                        'content' => Typo::cleanX($_POST['content'][$key]),
-                                                    ),
-                                            );
+                                    $key => array(
+                                        'title' => Typo::cleanX($_POST['title'][$key]),
+                                        'content' => Typo::cleanX($_POST['content'][$key]),
+                                    ),
+                                );
                             }
                             $multilang = json_encode($multilang);
                             if (Posts::existParam('multilang', $id)) {
@@ -185,7 +185,7 @@ if (User::access(1)) {
                             // print_r($multilang);
                         }
 
-                        if (isset($_POST['param'])){
+                        if (isset($_POST['param'])) {
                             foreach ($_POST['param'] as $k => $v) {
                                 if (!Posts::existParam($k, $id)) {
                                     Posts::addParam($k, $v, $id);
@@ -201,7 +201,7 @@ if (User::access(1)) {
                             Posts::addParam('post_image', $post_image, $id);
                         }
 
-                        $data['alertSuccess'][] = _("Page")."  {$title} "._("Updated Successfully");
+                        $data['alertSuccess'][] = _("Page") . "  {$title} " . _("Updated Successfully");
                         Token::remove($token);
                     }
 
@@ -237,7 +237,7 @@ if (User::access(1)) {
                         if ($del !== true) {
                             $data['alertDanger'][] = (is_string($del)) ? $del : _("Failed to remove page");
                         } else {
-                            $data['alertSuccess'][] = _("Page")." {$title} "._("Removed Successfully");
+                            $data['alertSuccess'][] = _("Page") . " {$title} " . _("Removed Successfully");
                         }
                     }
                     if (isset($_GET['token'])) {
@@ -379,10 +379,10 @@ if (User::access(1)) {
             if (!empty($whereRaws)) {
                 $q_builder->whereRaw(implode(' AND ', $whereRaws), $whereBindings);
             }
-            
+
             $countQuery = clone $q_builder;
             $totalCount = $countQuery->count();
-            
+
             $data['posts'] = $q_builder->orderBy('date', 'DESC')->limit($max, $offset)->get();
             $data['num'] = count($data['posts']);
 
@@ -391,7 +391,7 @@ if (User::access(1)) {
                 'table' => 'posts',
                 'total' => $totalCount,
                 'max' => $max,
-                'url' => 'index.php?page=pages'.$qpage,
+                'url' => 'index.php?page=pages' . $qpage,
                 'type' => 'pager',
             );
             $data['paging'] = Paging::create($page);

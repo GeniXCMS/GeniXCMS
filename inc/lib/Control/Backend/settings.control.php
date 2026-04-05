@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -53,16 +53,25 @@ if (User::access(1)) {
             //print_r($_POST);
             $flip = array_flip($_POST);
             $q = Query::table('options')->where('value', 'on')->get();
-            $input = array('is_logourl', 'use_jquery', 'use_bootstrap', 'use_fontawesome',
-                'use_editor', 'use_bsvalidator', 'ppsandbox', 'google_captcha_enable', 'pinger_enable', );
+            $input = array(
+                'is_logourl',
+                'use_jquery',
+                'use_bootstrap',
+                'use_fontawesome',
+                'use_editor',
+                'use_bsvalidator',
+                'ppsandbox',
+                'google_captcha_enable',
+                'pinger_enable',
+            );
             foreach ($q as $ob) {
                 if (in_array($ob->name, $input)) {
                     if (isset($flip[$ob->name])) {
                         $vars[$ob->name] = 'on';
-                            //echo $ob->name;
+                        //echo $ob->name;
                     } else {
                         $vars[$ob->name] = 'off';
-                            //echo $ob->name;
+                        //echo $ob->name;
                     }
                 }
             }

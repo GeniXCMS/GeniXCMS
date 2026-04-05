@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -43,10 +43,10 @@ if (User::access(0)) {
                 $path = '/inc/themes/';
                 $allowed = array('zip');
                 $theme = Upload::go('theme', $path, $allowed);
-                
+
                 // SECURITY SCAN (Pre-Extraction)
                 $scanResult = Security::scanZip($theme['filepath']);
-                
+
                 if ($scanResult['status'] === true) {
                     $zip = new ZipArchive();
                     if ($zip->open($theme['filepath']) === true) {
@@ -59,7 +59,7 @@ if (User::access(0)) {
                         } else {
                             $zip->extractTo(GX_THEME);
                             $zip->close();
-                            
+
                             Hooks::run('theme_install_action', $theme);
                             $data['alertSuccess'][] = _("Theme Installed Successfully.");
                         }
@@ -103,7 +103,7 @@ if (User::access(0)) {
                     $alertDanger[] = _("Theme is Active. Please deactivate first.");
                 }
                 if (!isset($alertDanger)) {
-                    if (Files::delTree(GX_THEME.'/'.$_GET['themes'])) {
+                    if (Files::delTree(GX_THEME . '/' . $_GET['themes'])) {
                         $data['alertSuccess'][] = _("Themes removed.");
                     } else {
                         $data['alertDanger'][] = _("Theme Cannot removed. Please check if You had permission to remove the files.");
@@ -113,7 +113,7 @@ if (User::access(0)) {
                 }
             }
         }
-        
+
 
         $data['sitetitle'] = _("Themes");
         $data['themes'] = Theme::thmList();

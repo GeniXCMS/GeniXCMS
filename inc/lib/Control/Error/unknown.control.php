@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -19,19 +19,19 @@
  */
 ?>
 <div class="col-sm-12">
-<h2><i class="fa fa-warning text-danger"></i> <?=_("Unknown Error Occured");?></h2>
-<?php if (isset($val) && $val != '') {
-    ?>
-    <div class="container-fluid">
-        <div class="alert alert-danger">
-            <?=$val; ?>
+    <h2><i class="fa fa-warning text-danger"></i> <?= _("Unknown Error Occured"); ?></h2>
+    <?php if (isset($val) && $val != '') {
+        ?>
+        <div class="container-fluid">
+            <div class="alert alert-danger">
+                <?= $val; ?>
+            </div>
         </div>
-    </div>
 
 
-<?php
-}
+        <?php
+    }
     Site::footer();
-?>
+    ?>
 
 </div>

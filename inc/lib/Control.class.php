@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -68,7 +68,7 @@ class Control
     {
         // print_r($param);
         // echo $vars;
-        $file = GX_PATH.'/inc/lib/Control/Frontend/'.$vars.'.control.php';
+        $file = GX_PATH . '/inc/lib/Control/Frontend/' . $vars . '.control.php';
         if (file_exists($file)) {
             include $file;
         } else {
@@ -90,7 +90,7 @@ class Control
      */
     public static function incBack($vars)
     {
-        $file = GX_PATH.'/inc/lib/Control/Backend/'.$vars.'.control.php';
+        $file = GX_PATH . '/inc/lib/Control/Backend/' . $vars . '.control.php';
         if (file_exists($file)) {
             include $file;
         } else {
@@ -111,17 +111,34 @@ class Control
      */
     public static function frontend()
     {
-        $arr = array('api', 'ajax', 'post', 'page', 'cat', 'mod', 'sitemap', 'rss',
-                'account', 'search', 'author', 'tag', 'thumb', 'default',
-                'login', 'register', 'forgotpass', 'logout', 'archive'
-            );
+        $arr = array(
+            'api',
+            'ajax',
+            'post',
+            'page',
+            'cat',
+            'mod',
+            'sitemap',
+            'rss',
+            'account',
+            'search',
+            'author',
+            'tag',
+            'thumb',
+            'default',
+            'login',
+            'register',
+            'forgotpass',
+            'logout',
+            'archive'
+        );
         if (defined('SMART_URL') && SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
                 (SMART_URL && isset($_GET)) ? self::route($arr) : self::get($arr);
             } else {
                 self::route($arr);
             }
-        } elseif (!SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0 ) {
+        } elseif (!SMART_URL && isset($_GET) && $_GET != '' && count($_GET) > 0) {
             self::get($arr);
         } else {
             self::incFront('default');
@@ -132,12 +149,14 @@ class Control
     {
         $get = 0;
         foreach ($_GET as $k => $v) {
-            if (in_array($k, $arr)
+            if (
+                in_array($k, $arr)
                 || $k == 'api'
                 || $k == 'paging'
                 || $k == 'error'
                 || $k == 'ajax'
-                || $k == 'lang') {
+                || $k == 'lang'
+            ) {
                 $get = (int) $get + 1;
             } else {
                 $get = (int) $get;
@@ -158,7 +177,7 @@ class Control
                         if (empty($res) && !empty($_GET['api']) && $_GET['api'] !== '1' && $_GET['api'] !== 'true') {
                             $apiParts = explode('/', $_GET['api']);
                             $res = $apiParts[0] ?? '';
-                            $id  = $apiParts[1] ?? '';
+                            $id = $apiParts[1] ?? '';
                             $act = $apiParts[2] ?? '';
                         }
 
@@ -184,7 +203,7 @@ class Control
     public static function route($arr)
     {
         $var = Router::run();
-// fallbacks to get array
+        // fallbacks to get array
         if ((isset($var['error']) || (isset($var[0]) && $var[0] == 'error')) && count($_GET) > 0) {
             self::get($arr);
             return;
@@ -206,18 +225,23 @@ class Control
                     self::ajax($v, $var);
                 } elseif ($k == 'api' || $v == 'api') {
 
-                    $res = ''; $id = ''; $act = '';
-                    foreach($var as $vk => $vv) {
-                      if(isset($vv['resource'])) $res = $vv['resource'];
-                      if(isset($vv['identifier'])) $id = $vv['identifier'];
-                      if(isset($vv['action'])) $act = $vv['action'];
+                    $res = '';
+                    $id = '';
+                    $act = '';
+                    foreach ($var as $vk => $vv) {
+                        if (isset($vv['resource']))
+                            $res = $vv['resource'];
+                        if (isset($vv['identifier']))
+                            $id = $vv['identifier'];
+                        if (isset($vv['action']))
+                            $act = $vv['action'];
                     }
 
                     // Fallback in case the smart router fell back to $_GET
                     if (empty($res) && !empty($_GET['api']) && $_GET['api'] !== '1' && $_GET['api'] !== 'true') {
                         $apiParts = explode('/', $_GET['api']);
                         $res = $apiParts[0] ?? '';
-                        $id  = $apiParts[1] ?? '';
+                        $id = $apiParts[1] ?? '';
                         $act = $apiParts[2] ?? '';
                     }
 
@@ -233,7 +257,8 @@ class Control
         }
     }
 
-    public static function api($resource = '', $identifier = '', $action = '') {
+    public static function api($resource = '', $identifier = '', $action = '')
+    {
         Api::dispatch($resource, $identifier, $action);
     }
 
@@ -270,12 +295,12 @@ class Control
     public static function error($vars = '', $val = '')
     {
         if (isset($vars) && $vars != '') {
-            $file = GX_PATH.'/inc/lib/Control/Error/'.$vars.'.control.php';
+            $file = GX_PATH . '/inc/lib/Control/Error/' . $vars . '.control.php';
             if (file_exists($file)) {
                 include $file;
             }
         } else {
-            include GX_PATH.'/inc/lib/Control/Error/unknown.control.php';
+            include GX_PATH . '/inc/lib/Control/Error/unknown.control.php';
         }
     }
 
@@ -289,14 +314,14 @@ class Control
      */
     public static function install()
     {
-        include GX_PATH.'/inc/lib/Control/Install/default.control.php';
+        include GX_PATH . '/inc/lib/Control/Install/default.control.php';
     }
 
     public static function ajax($vars = '', $param = '')
     {
         if (isset($vars) && $vars != '') {
             $page = "ajax";
-            $file = GX_PATH.'/inc/lib/Control/Ajax/'.$vars.'-ajax.control.php';
+            $file = GX_PATH . '/inc/lib/Control/Ajax/' . $vars . '-ajax.control.php';
             if (file_exists($file)) {
                 include $file;
             } else {

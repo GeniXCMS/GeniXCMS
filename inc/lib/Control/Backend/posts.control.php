@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -73,15 +73,15 @@ if (User::access(3)) {
                             $date = Typo::cleanX($_POST['date']);
                         }
                         $vars = array(
-                                        'title' => $title,
-                                        'cat' => Typo::int($_POST['cat']),
-                                        'content' => $content,
-                                        'date' => $date,
-                                        'modified' => $date,
-                                        'type' => $postType,
-                                        'author' => Session::val('username'),
-                                        'status' => Typo::int($_POST['status']),
-                                    );
+                            'title' => $title,
+                            'cat' => Typo::int($_POST['cat']),
+                            'content' => $content,
+                            'date' => $date,
+                            'modified' => $date,
+                            'type' => $postType,
+                            'author' => Session::val('username'),
+                            'status' => Typo::int($_POST['status']),
+                        );
                         // print_r($vars);
                         Posts::insert($vars);
                         $post_id = Posts::$last_id;
@@ -96,11 +96,11 @@ if (User::access(3)) {
                                 $content = Hooks::filter('post_submit_content_filter', $content);
 
                                 $multilang[] = array(
-                                                    $key => array(
-                                                            'title' => $title,
-                                                            'content' => Typo::jsonFormat($content),
-                                                        ),
-                                                );
+                                    $key => array(
+                                        'title' => $title,
+                                        'content' => Typo::jsonFormat($content),
+                                    ),
+                                );
                             }
                             $multilang = json_encode($multilang, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                             Posts::addParam('multilang', $multilang, $post_id);
@@ -114,13 +114,13 @@ if (User::access(3)) {
                         $post_image = Typo::cleanX($_POST['post_image']);
                         Posts::addParam('post_image', $post_image, $post_id);
 
-                        if (isset($_POST['param'])){
+                        if (isset($_POST['param'])) {
                             foreach ($_POST['param'] as $k => $v) {
                                 Posts::addParam($k, $v, $post_id);
                             }
                         }
 
-                        $data['alertSuccess'][] = _("Post")." {$title} "._("Added Successfully");
+                        $data['alertSuccess'][] = _("Post") . " {$title} " . _("Added Successfully");
                         Hooks::run('post_submit_add_action', $_POST);
                         // Token::remove($_POST['token']);
                     }
@@ -138,8 +138,8 @@ if (User::access(3)) {
         case 'edit':
             $id = Typo::int($_GET['id']);
             $author = Posts::author($id);
-            $accessEdit = $group <= 2 ? 1: ($author == $username ? 1 : 0);
-            if(!$accessEdit)
+            $accessEdit = $group <= 2 ? 1 : ($author == $username ? 1 : 0);
+            if (!$accessEdit)
                 header("Location: index.php?page=posts");
 
             switch (isset($_POST['submit'])) {
@@ -177,13 +177,13 @@ if (User::access(3)) {
                     } else {
                         $moddate = date('Y-m-d H:i:s');
                         $vars = array(
-                                        'title' => $title,
-                                        'cat' => Typo::int($_POST['cat']),
-                                        'content' => $content,
-                                        'modified' => $moddate,
-                                        'date' => $_POST['date'],
-                                        'status' => Typo::int($_POST['status']),
-                                    );
+                            'title' => $title,
+                            'cat' => Typo::int($_POST['cat']),
+                            'content' => $content,
+                            'modified' => $moddate,
+                            'date' => $_POST['date'],
+                            'status' => Typo::int($_POST['status']),
+                        );
                         Posts::update($vars);
 
                         if (Options::v('multilang_enable') === 'on') {
@@ -194,23 +194,25 @@ if (User::access(3)) {
                                 $title = !empty($_POST['title'][$key]) ? Typo::cleanX($_POST['title'][$key]) : $title;
                                 $title = Hooks::filter('post_submit_title_filter', $title);
                                 // $_POST['content'][$key] = str_replace("<br>","",$_POST['content'][$key]);
-                                if (!empty($_POST['content'][$key]) ||
+                                if (
+                                    !empty($_POST['content'][$key]) ||
                                     $_POST['content'][$key] != ''
                                 ) {
-                                    if ($_POST['content'][$key] != '<p><br></p>' ||
+                                    if (
+                                        $_POST['content'][$key] != '<p><br></p>' ||
                                         $_POST['content'][$key] != '<br>'
                                     ) {
                                         $content = $_POST['content'][$key];
                                     }
-                                } 
+                                }
                                 $content = Hooks::filter('post_submit_content_filter', $content);
 
                                 $multilang[] = array(
-                                                    $key => array(
-                                                            'title' => $title,
-                                                            'content' => Typo::jsonFormat($content),
-                                                        ),
-                                                );
+                                    $key => array(
+                                        'title' => $title,
+                                        'content' => Typo::jsonFormat($content),
+                                    ),
+                                );
                             }
                             $multilang = json_encode($multilang, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                             if (!Posts::existParam('multilang', $id)) {
@@ -236,9 +238,9 @@ if (User::access(3)) {
                         } else {
                             Posts::editParam('post_image', $post_image, $id);
                         }
-                        
 
-                        if (isset($_POST['param'])){
+
+                        if (isset($_POST['param'])) {
                             foreach ($_POST['param'] as $k => $v) {
                                 if (!Posts::existParam($k, $id)) {
                                     Posts::addParam($k, $v, $id);
@@ -248,7 +250,7 @@ if (User::access(3)) {
                             }
                         }
 
-                        $data['alertSuccess'][] = _("Post")." {$title} "._("Updated Successfully");
+                        $data['alertSuccess'][] = _("Post") . " {$title} " . _("Updated Successfully");
                         Hooks::run('post_submit_edit_action', $_POST);
                         // Token::remove($token);
 
@@ -280,7 +282,7 @@ if (User::access(3)) {
                         // VALIDATE ALL
                         $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                     }
-                    $accessDelete = $group < 2 ? 1: 0;
+                    $accessDelete = $group < 2 ? 1 : 0;
                     if (!$accessDelete) {
                         $alertDanger[] = _("You don't have permission to delete the post.");
                     }
@@ -292,7 +294,7 @@ if (User::access(3)) {
                         if ($del !== true) {
                             $data['alertDanger'][] = (is_string($del)) ? $del : _("Failed to remove post");
                         } else {
-                            $data['alertSuccess'][] = _("Post")." {$title} "._("Removed Successfully");
+                            $data['alertSuccess'][] = _("Post") . " {$title} " . _("Removed Successfully");
                             Hooks::run('post_delete_action', $_GET);
                         }
                     }
@@ -435,20 +437,20 @@ if (User::access(3)) {
             if (!empty($whereRaws)) {
                 $q_builder->whereRaw(implode(' AND ', $whereRaws), $whereBindings);
             }
-            
+
             $countQuery = clone $q_builder;
             $totalCount = $countQuery->count();
-            
+
             $data['posts'] = $q_builder->orderBy('date', 'DESC')->limit($max, $offset)->get();
             $data['num'] = count($data['posts']);
             $page = array(
-                        'paging' => $paging,
-                        'table' => 'posts',
-                        'total' => $totalCount,
-                        'max' => $max,
-                        'url' => 'index.php?page=posts'.$qpage,
-                        'type' => 'number',
-                    );
+                'paging' => $paging,
+                'table' => 'posts',
+                'total' => $totalCount,
+                'max' => $max,
+                'url' => 'index.php?page=posts' . $qpage,
+                'type' => 'number',
+            );
             $data['paging'] = Paging::create($page);
             Theme::admin('header', $data);
             System::inc('posts', $data);

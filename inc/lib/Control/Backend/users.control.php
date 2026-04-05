@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150312
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -99,28 +99,28 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
 
                     if (!isset($alertDanger)) {
 
-                        
+
                         $group = (User::access(1)) ? Typo::int($_POST['group']) : Session::val('group');
                         $userid = (User::access(0)) ? Typo::cleanX($_POST['userid']) : User::id($id);
 
                         $vars = array(
-                                        'id' => $id,
-                                        'user' => array(
-                                                        'userid' => $userid,
-                                                        'email' => Typo::cleanX($_POST['email']),
-                                                        'group' => $group,
-                                                    ),
+                            'id' => $id,
+                            'user' => array(
+                                'userid' => $userid,
+                                'email' => Typo::cleanX($_POST['email']),
+                                'group' => $group,
+                            ),
 
-                                    );
+                        );
                         if (!empty($_POST['pass']) || $_POST['pass'] != '') {
                             $pass = array(
-                                        'pass' => User::randpass($_POST['pass']),
-                                    );
+                                'pass' => User::randpass($_POST['pass']),
+                            );
                             $vars['user'] = array_merge($vars['user'], $pass);
                             //print_r($vars);
                         }
                         User::update($vars);
-                        $alertSuccess[] = 'User : '.User::userid($id).' Updated';
+                        $alertSuccess[] = 'User : ' . User::userid($id) . ' Updated';
 
                         if (isset($alertSuccess)) {
                             $data['alertSuccess'] = $alertSuccess;
@@ -153,7 +153,7 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     } else {
                         User::delete($id);
                         Hooks::run('user_delete_action', $_GET);
-                        $data['alertSuccess'][] = _("User").' '.$user.' '._("Removed Successfully");
+                        $data['alertSuccess'][] = _("User") . ' ' . $user . ' ' . _("Removed Successfully");
                     }
                     if (isset($_GET['token'])) {
                         Token::remove($token);
@@ -172,9 +172,9 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 } else {
                     if (User::activate($id)) {
-                        $data['alertSuccess'][] = _("User").' '.User::userid($id).' '._("Activated Successfully.");
+                        $data['alertSuccess'][] = _("User") . ' ' . User::userid($id) . ' ' . _("Activated Successfully.");
                     } else {
-                        $data['alertDanger'][] = _("User").' '.User::userid($id).' '._("Activation fail.");
+                        $data['alertDanger'][] = _("User") . ' ' . User::userid($id) . ' ' . _("Activation fail.");
                     }
                 }
                 if (isset($_GET['token'])) {
@@ -192,9 +192,9 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                     $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
                 } else {
                     if (User::deactivate($id)) {
-                        $data['alertSuccess'][] = _("User").' '.User::userid($id).' '._("Deactivated Successfully.");
+                        $data['alertSuccess'][] = _("User") . ' ' . User::userid($id) . ' ' . _("Deactivated Successfully.");
                     } else {
-                        $data['alertDanger'][] = _("User").' '.User::userid($id).' '._("Deactivation fail.");
+                        $data['alertDanger'][] = _("User") . ' ' . User::userid($id) . ' ' . _("Deactivation fail.");
                     }
                 }
                 if (isset($_GET['token'])) {
@@ -247,20 +247,20 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
 
                         if (!isset($alertDanger)) {
                             $vars = array(
-                                            'user' => array(
-                                                            'userid' => $userid,
-                                                            'pass' => User::randpass($_POST['pass1']),
-                                                            'email' => $email,
-                                                            'group' => $group,
-                                                            'status' => '1',
-                                                            'join_date' => date('Y-m-d H:i:s'),
-                                                        ),
+                                'user' => array(
+                                    'userid' => $userid,
+                                    'pass' => User::randpass($_POST['pass1']),
+                                    'email' => $email,
+                                    'group' => $group,
+                                    'status' => '1',
+                                    'join_date' => date('Y-m-d H:i:s'),
+                                ),
 
-                                        );
+                            );
                             User::create($vars);
                             Hooks::run('user_submit_add_action', $_POST);
                             Token::remove($token);
-                            $data['alertSuccess'][] = _("User")." {$userid}, "._("Added Successfully");
+                            $data['alertSuccess'][] = _("User") . " {$userid}, " . _("Added Successfully");
                         } else {
                             $data['alertDanger'] = $alertDanger;
                         }
@@ -346,8 +346,8 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
                         break;
                 }
 
-                
-                
+
+
             }
             break;
     }
@@ -356,30 +356,30 @@ if (User::access(1) || (isset($_GET['id']) && User::id(Session::val('username'))
     if (!empty($whereRaws)) {
         $userSql .= " WHERE " . implode(' AND ', $whereRaws);
     }
-    
+
     // Calculate total for paging
     $countSql = "SELECT COUNT(A.`id`) as total FROM `user` AS A LEFT JOIN `user_detail` AS B ON A.`userid` = B.`userid`";
     if (!empty($whereRaws)) {
         $countSql .= " WHERE " . implode(' AND ', $whereRaws);
     }
     $countRes = Db::result($countSql, $whereBindings);
-    $totalCount = isset($countRes[0]) ? (int)$countRes[0]->total : 0;
+    $totalCount = isset($countRes[0]) ? (int) $countRes[0]->total : 0;
 
-    $userSql .= " ORDER BY A.`userid` ASC LIMIT " . (int)$offset . ", " . (int)$max;
+    $userSql .= " ORDER BY A.`userid` ASC LIMIT " . (int) $offset . ", " . (int) $max;
     $data['usr'] = Db::result($userSql, $whereBindings);
     $data['num'] = count($data['usr']);
     $page = array(
-                'paging' => $paging,
-                'table' => [
-                    'user' => ['A', 'LEFT JOIN', 'userid'],
-                    'user_detail' => ['B', 'LEFT JOIN', 'userid']
-                ],
-                'select' => 'A.`id` ',
-                'total' => $totalCount,
-                'max' => $max,
-                'url' => 'index.php?page=users'.$qpage,
-                'type' => 'pager',
-            );
+        'paging' => $paging,
+        'table' => [
+            'user' => ['A', 'LEFT JOIN', 'userid'],
+            'user_detail' => ['B', 'LEFT JOIN', 'userid']
+        ],
+        'select' => 'A.`id` ',
+        'total' => $totalCount,
+        'max' => $max,
+        'url' => 'index.php?page=users' . $qpage,
+        'type' => 'pager',
+    );
     $data['paging'] = Paging::create($page);
     Theme::admin('header', $data);
     System::inc('user', $data);

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,7 +20,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-$mod = isset( $_GET['mod'] ) ? Typo::cleanX($_GET['mod']): header("location: index.php");
+$mod = isset($_GET['mod']) ? Typo::cleanX($_GET['mod']) : header("location: index.php");
 $data['sitetitle'] = Mod::name($mod);
 Theme::admin('header', $data);
 Mod::options($mod, $data);

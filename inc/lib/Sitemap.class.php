@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141005
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @link https://genix.id
@@ -28,14 +28,14 @@ class Sitemap
         self::$_map = self::map();
     }
 
-    public static function create( $type = 'post', $count = 20, $url = 'post', $class = 'Url', $cat = '')
+    public static function create($type = 'post', $count = 20, $url = 'post', $class = 'Url', $cat = '')
     {
         $cat = ($cat != '') ? ['cat' => $cat] : '';
         $var = array(
             'num' => $count,
             'type' => $type
         );
-        $var = is_array($cat) ? array_merge($var, $cat): $var;
+        $var = is_array($cat) ? array_merge($var, $cat) : $var;
 
         $posts = Posts::recent($var);
         header('Content-Type: text/xml');
@@ -48,8 +48,8 @@ class Sitemap
             foreach ($posts as $p) {
                 $xml .= '
                     <url>
-                        <loc>'.$class::$url($p->id).'</loc>
-                        <lastmod>'.date('Y-m-d').'</lastmod>
+                        <loc>' . $class::$url($p->id) . '</loc>
+                        <lastmod>' . date('Y-m-d') . '</lastmod>
                         <changefreq>daily</changefreq>
                         <priority>1</priority>
                     </url>
@@ -70,11 +70,11 @@ class Sitemap
         echo '<?xml version="1.0" encoding="UTF-8"?>
    <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         foreach ($q as $k => $v) {
-//            print_r($v);
-            echo'
+            //            print_r($v);
+            echo '
         <sitemap>
-            <loc>'.Url::sitemap($v->slug).'</loc>
-            <lastmod>'.date("Y-m-d").'</lastmod>
+            <loc>' . Url::sitemap($v->slug) . '</loc>
+            <lastmod>' . date("Y-m-d") . '</lastmod>
         </sitemap>
    ';
         }
@@ -88,7 +88,7 @@ class Sitemap
                 'class' => 'Url',
                 'url' => 'post'
             ]
-            ];
+        ];
 
         return $map;
     }

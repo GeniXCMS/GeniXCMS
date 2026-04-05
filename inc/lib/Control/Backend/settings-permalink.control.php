@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20160313
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -32,7 +32,7 @@ if (User::access(0)) {
         if (!isset($alertDanger)) {
             $vars = array();
             $flip = array_flip($_POST);
-        // print_r($_POST);
+            // print_r($_POST);
             $q = Query::table('options')->where('value', 'on')->get();
             $input = array('permalink_use_index_php');
 
@@ -48,14 +48,14 @@ if (User::access(0)) {
 
             unset($_POST['token']);
             unset($_POST['change']);
-        // print_r($vars);
+            // print_r($vars);
             foreach ($_POST as $key => $val) {
                 $vars[$key] = Typo::cleanX($val);
             }
-        // print_r($vars);
-            if( count($vars) > 0 )
+            // print_r($vars);
+            if (count($vars) > 0)
                 Options::update($vars);
-                $data['alertSuccess'][] = _("Settings Updated");
+            $data['alertSuccess'][] = _("Settings Updated");
             new Options();
         } else {
             $data['alertDanger'] = $alertDanger;

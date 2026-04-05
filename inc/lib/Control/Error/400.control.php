@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -23,8 +23,8 @@ $lang = Options::v('system_lang');
 $latte = new Latte\Engine;
 $latte->addExtension(new Latte\Essential\RawPhpExtension);
 $latte->addExtension(new Latte\Essential\TranslatorExtension(
-	Typo::translate(...),
-	$lang,
+    Typo::translate(...),
+    $lang,
 ));
 // Set the temporary directory for compiled templates
 $latte->setTempDirectory(GX_CACHE . '/temp');
@@ -36,7 +36,7 @@ $data['site_name'] = Site::$name;
 $data['site_footer'] = Site::footer();
 $data['site_url'] = Site::$url;
 $data['site_cdn'] = Site::$cdn;
-$data['site_logo'] = Site::logo(width:'200px', class: "img-fluid");
+$data['site_logo'] = Site::logo(width: '200px', class: "img-fluid");
 $data['theme_url'] = Url::theme();
 $data['token'] = TOKEN;
 $data['tag_cloud'] = Tags::cloud();
@@ -52,18 +52,18 @@ $h_file = file_exists(GX_THEME . Theme::$active . '/header.latte') ? '/header.la
 $f_file = file_exists(GX_THEME . Theme::$active . '/footer.latte') ? '/footer.latte' : '/footer.php';
 
 if (Theme::exist('400')) {
-    $latte->render(GX_THEME . Theme::$active . $h_file, $data );
+    $latte->render(GX_THEME . Theme::$active . $h_file, $data);
     $v_file = file_exists(GX_THEME . Theme::$active . '/400.latte') ? '/400.latte' : '/400.php';
-    $latte->render(GX_THEME . Theme::$active . $v_file, $data );
-    $latte->render(GX_THEME . Theme::$active . $f_file, $data );
+    $latte->render(GX_THEME . Theme::$active . $v_file, $data);
+    $latte->render(GX_THEME . Theme::$active . $f_file, $data);
 } else {
-    $latte->render(GX_THEME . Theme::$active . $h_file, $data );
+    $latte->render(GX_THEME . Theme::$active . $h_file, $data);
     echo '<center class="mb-5 mt-5">
         <h1>Ooops!!</h1>
         <h2 style="font-size: 20em">400</h2>
         <h3>Bad Request</h3>
-        Back to <a href="'.Options::v('siteurl').'">'.Options::v('sitename').'</a>
+        Back to <a href="' . Options::v('siteurl') . '">' . Options::v('sitename') . '</a>
         </center>
         ';
-    $latte->render(GX_THEME . Theme::$active . $f_file, $data );
+    $latte->render(GX_THEME . Theme::$active . $f_file, $data);
 }

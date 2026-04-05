@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20160830
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -39,10 +39,10 @@ class Comments
             if (isset($_POST['addComment'])) {
                 $data_result = self::addComment($_POST);
                 if (isset($data_result['alertDanger'])) {
-                    $html .= '<div class="alert alert-danger rounded-0 border-0 shadow-sm mb-4"><strong>'._('Error').':</strong><br>'.implode('<br>', $data_result['alertDanger']).'</div>';
+                    $html .= '<div class="alert alert-danger rounded-0 border-0 shadow-sm mb-4"><strong>' . _('Error') . ':</strong><br>' . implode('<br>', $data_result['alertDanger']) . '</div>';
                 }
                 if (isset($data_result['alertSuccess'])) {
-                    $html .= '<div class="alert alert-success rounded-0 border-0 shadow-sm mb-4">'.implode('<br>', $data_result['alertSuccess']).'</div>';
+                    $html .= '<div class="alert alert-success rounded-0 border-0 shadow-sm mb-4">' . implode('<br>', $data_result['alertSuccess']) . '</div>';
                 }
             }
 
@@ -54,24 +54,24 @@ class Comments
                 $html .= '
             
                 <div class="form-group col-md-6">
-                    <label class="">'._("Name").'</label>
+                    <label class="">' . _("Name") . '</label>
                     <input type="text" id="name" name="comments-name" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">'._("Email").'</label>
+                    <label class="">' . _("Email") . '</label>
                     <input type="email" id="email" name="comments-email" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">'._("Website").'</label>
+                    <label class="">' . _("Website") . '</label>
                     <input type="text" id="url" name="comments-url" class="form-control">
                 </div>';
             } else {
-                $html .= '<div class="form-group col-md-12"><i class="fa fa-user"></i> '.Session::val('username').'</div>';
+                $html .= '<div class="form-group col-md-12"><i class="fa fa-user"></i> ' . Session::val('username') . '</div>';
             }
             $html .= '
                 <div class="form-group col-md-12">
-                    <label>'._("Comments").'</label>
-                    <textarea class="form-control editor" name="comments-msg" id="message" data-blocks=\''.json_encode(Hooks::filter('comment_allowed_blocks', ['paragraph', 'quote', 'code', 'ul', 'ol'])).'\'></textarea>
+                    <label>' . _("Comments") . '</label>
+                    <textarea class="form-control editor" name="comments-msg" id="message" data-blocks=\'' . json_encode(Hooks::filter('comment_allowed_blocks', ['paragraph', 'quote', 'code', 'ul', 'ol'])) . '\'></textarea>
                     <small class="input-help">allowed html tag : <code>&lt;b&gt;&lt;i&gt;&lt;ul&gt;&lt;li&gt;&lt;ol&gt;&lt;u&gt;&lt;s&gt;</code></small>
                 </div>
                 ';
@@ -80,18 +80,18 @@ class Comments
                 $html .= Xaptcha::html();
                 $html .= '</div>';
             }
-            
+
             global $data;
             $current_post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? Typo::int($data['posts'][0]->id) : 0;
-            
+
             $html .= '
                 <div class="col-md-12">
                     <input type="hidden" name="addComment" value="1">
-                    <input type="hidden" name="post_id" value="'.$current_post_id.'">
+                    <input type="hidden" name="post_id" value="' . $current_post_id . '">
                     <button class="btn btn-success" type="submit" name="submitComment" value="1">
-                    '._("Send Comments").'
+                    ' . _("Send Comments") . '
                     </button>
-                    <input type="hidden" name="token" value="'.TOKEN.'">
+                    <input type="hidden" name="token" value="' . TOKEN . '">
                     <input type="hidden" name="comments-parent" id="parentComment" value="0">
                 </div>
             </div>
@@ -114,13 +114,13 @@ class Comments
         if (!isset($vars['token']) && !Token::validate($token)) {
             $alertDanger[] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
         }
-        
+
         $msg_raw = $vars['comments-msg'] ?? '';
         $msg_clean = trim($msg_raw);
         if (empty($msg_clean) || $msg_clean == '<p><br></p>') {
             $alertDanger[] = _('Nothing to send.');
         }
-        
+
         if ((!isset($vars['comments-name']) || null == $vars['comments-name']) && null === Session::val('username')) {
             $alertDanger[] = _('Who are you ?');
         }
@@ -152,32 +152,32 @@ class Comments
                 Typo::url2link(
                     Typo::p2br(
                         Typo::strip($vars['comments-msg'], '<br><p><pre><code><b><i><ul><li><ol><u><s>')
-                        )
                     )
-                );
+                )
+            );
             $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? Typo::int($data['posts'][0]->id) : (isset($_POST['post_id']) && is_numeric($_POST['post_id']) ? Typo::int($_POST['post_id']) : 0);
             $parent = Typo::int($vars['comments-parent']);
             $status = (null !== Session::val('username')) ? '1' : '2';
             $type = Posts::type($post_id);
             $userid = (null !== Session::val('username')) ? Session::val('username') : '';
             $insert_data = array(
-                    'date' => $date,
-                    'userid' => $userid,
-                    'name' => $name,
-                    'email' => $email,
-                    'url' => $url,
-                    'comment' => $comment,
-                    'post_id' => $post_id,
-                    'parent' => $parent,
-                    'status' => $status,
-                    'type' => $type,
-                    'ipaddress' => $_SERVER['REMOTE_ADDR'],
-                );
+                'date' => $date,
+                'userid' => $userid,
+                'name' => $name,
+                'email' => $email,
+                'url' => $url,
+                'comment' => $comment,
+                'post_id' => $post_id,
+                'parent' => $parent,
+                'status' => $status,
+                'type' => $type,
+                'ipaddress' => $_SERVER['REMOTE_ADDR'],
+            );
             if (Query::table('comments')->insert($insert_data)) {
                 $data['alertSuccess'][] = _('Comments Sent.');
                 $sess = array(
-                        'lastcomment' => time(),
-                    );
+                    'lastcomment' => time(),
+                );
                 Session::set($sess);
             } else {
                 $data['alertDanger'][] = _('Trouble sending Comment. DB Error: ' . (Db::$last_error ?? 'Unknown'));
@@ -195,14 +195,15 @@ class Comments
         $offset = Typo::int($vars['offset'] ?? 0);
         $max = Typo::int($vars['max'] ?? 10);
         $parent = Typo::int($vars['parent'] ?? 0);
-        
+
         if (isset($vars['post_id'])) {
             $post_id = Typo::int($vars['post_id']);
         } else {
             $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? $data['posts'][0]->id : 0;
         }
-        if ($post_id == 0) return '';
-        
+        if ($post_id == 0)
+            return '';
+
         $cmn = Query::table('comments')
             ->where('post_id', $post_id)
             ->where('status', '1')
@@ -219,25 +220,25 @@ class Comments
                 $html .= '
 						    <div class="d-flex">
                                 <div class="flex-shrink-0">
-						      <a href="'.$url.'">
-						        <img class="media-object img-thumbnail" src="'.$avatar.'" alt="'.$v->name.'">
+						      <a href="' . $url . '">
+						        <img class="media-object img-thumbnail" src="' . $avatar . '" alt="' . $v->name . '">
 						      </a>
                               
 						      <div class="text-center">
-						      <a href="#commentform" onclick="setParent('.$v->id.')" class="badge text-bg-primary" style="width: 100%"><i class="bi bi-reply"></i> reply</a>
+						      <a href="#commentform" onclick="setParent(' . $v->id . ')" class="badge text-bg-primary" style="width: 100%"><i class="bi bi-reply"></i> reply</a>
 						      </div>
                               </div>
 						    
 						    <div class="flex-grow-1 ms-3">
-						      <h4 class="">'.$v->name.'<small class="meta-desc float-end">'.Date::format($v->date, 'd M Y H:i:s T').'</small></h4>
-						      '.$v->comment;
+						      <h4 class="">' . $v->name . '<small class="meta-desc float-end">' . Date::format($v->date, 'd M Y H:i:s T') . '</small></h4>
+						      ' . $v->comment;
                 $html .= '<div class="">&nbsp;</div>';
                 $vars = array(
-                                    'offset' => 0,
-                                    'max' => 10,
-                                    'parent' => $v->id,
-                                    'post_id' => $post_id,
-                                  );
+                    'offset' => 0,
+                    'max' => 10,
+                    'parent' => $v->id,
+                    'post_id' => $post_id,
+                );
                 $html .= self::listC($vars);
                 $html .= '
 						      <hr />
@@ -268,25 +269,26 @@ class Comments
                 $offset = 0;
             }
             $vars['offset'] = $offset;
-            
+
             if (isset($vars['post_id'])) {
                 $post_id = Typo::int($vars['post_id']);
             } else {
                 $post_id = (isset($data['posts'][0]) && is_object($data['posts'][0])) ? $data['posts'][0]->id : 0;
             }
-            
+
             $html .= self::listC($vars);
-            if ($post_id == 0) return '';
+            if ($post_id == 0)
+                return '';
             $where = "AND `post_id` = '{$post_id}' AND `status` = '1' AND `parent` = '0' ";
             $page = array(
-                    'paging' => $paging,
-                    'table' => 'comments',
-                    'where' => "`type` = 'post' ".$where,
-                    'max' => $max,
-                    'url' => (SMART_URL) ? Url::post($post_id).'?comments=yes' : Url::post($post_id).'&comments=yes',
-                    'type' => 'number',
-                );
-            $html .= "<div class='col-sm-12'>".Paging::create($page)."</div>";
+                'paging' => $paging,
+                'table' => 'comments',
+                'where' => "`type` = 'post' " . $where,
+                'max' => $max,
+                'url' => (SMART_URL) ? Url::post($post_id) . '?comments=yes' : Url::post($post_id) . '&comments=yes',
+                'type' => 'number',
+            );
+            $html .= "<div class='col-sm-12'>" . Paging::create($page) . "</div>";
         } else {
             $html = '';
         }
@@ -356,11 +358,11 @@ class Comments
     {
         $post_id = Typo::int($post_id);
         $var = array(
-                'table' => 'comments',
-                'where' => array(
-                    'post_id' => $post_id,
-                    ),
-            );
+            'table' => 'comments',
+            'where' => array(
+                'post_id' => $post_id,
+            ),
+        );
         return Db::delete($var);
     }
 
@@ -382,7 +384,8 @@ class Comments
         if (is_array($spams)) {
             foreach ($spams as $s) {
                 $s = trim($s);
-                if (empty($s)) continue; // Prevent PHP 8 empty needle returning 0
+                if (empty($s))
+                    continue; // Prevent PHP 8 empty needle returning 0
                 if (stripos($vars, $s) !== false) {
                     $spam = true;
                     break;
@@ -431,9 +434,9 @@ class Comments
      *
      */
 
-    public static function recent($vars='')
+    public static function recent($vars = '')
     {
-        $postID = isset($vars['post_id']) ? " AND `post_id` = '".Typo::int($vars['post_id'])."'" : '';
+        $postID = isset($vars['post_id']) ? " AND `post_id` = '" . Typo::int($vars['post_id']) . "'" : '';
         $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
         $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
         $sql = "SELECT * FROM `comments`
@@ -447,9 +450,9 @@ class Comments
             $html = "<ol class='list-unstyled'>";
             foreach ($comments as $key => $value) {
                 $comment = substr(Typo::strip($value->comment), 0, 30);
-                $author = !empty($value->userid) ? $value->userid: $value->name;
+                $author = !empty($value->userid) ? $value->userid : $value->name;
                 $date = Date::format($value->date, "d M Y");
-                 $html .= "<li><a href='".Url::$type($value->post_id)."'>{$comment}</a> <br/><small>&nbsp;<i>by {$author} on {$date}</i></small></li>";
+                $html .= "<li><a href='" . Url::$type($value->post_id) . "'>{$comment}</a> <br/><small>&nbsp;<i>by {$author} on {$date}</i></small></li>";
             }
             $html .= "</ol>";
         }

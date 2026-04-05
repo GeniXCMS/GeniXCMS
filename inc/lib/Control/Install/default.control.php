@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -50,15 +50,15 @@ switch ($step) {
             $dbpass = (isset($_POST['dbpass']) ? Typo::strip(Typo::cleanX($_POST['dbpass'])) : '');
             $dbname = (isset($_POST['dbname']) ? Typo::cleanX($_POST['dbname']) : '');
             $dbdriver = (isset($_POST['dbdriver']) ? Typo::cleanX($_POST['dbdriver']) : 'mysql');
-            
+
             if (Db::connect($dbhost, $dbuser, $dbpass, $dbname, $dbdriver)) {
                 $vars = array(
-                        'dbhost' => $dbhost,
-                        'dbname' => $dbname,
-                        'dbuser' => $dbuser,
-                        'dbpass' => $dbpass,
-                        'dbdriver' => $dbdriver,
-                    );
+                    'dbhost' => $dbhost,
+                    'dbname' => $dbname,
+                    'dbuser' => $dbuser,
+                    'dbpass' => $dbpass,
+                    'dbdriver' => $dbdriver,
+                );
                 Session::set_session($vars);
                 Theme::install('step1');
             } else {
@@ -70,28 +70,28 @@ switch ($step) {
 
     case '2':
         $vars = array(
-                    'sitename' => (isset($_POST['sitename']) ? Typo::cleanX($_POST['sitename']) : ''),
-                    'siteslogan' => (isset($_POST['siteslogan']) ? Typo::cleanX($_POST['siteslogan']) : ''),
-                    'sitedomain' => (isset($_POST['sitedomain']) ? Typo::cleanX($_POST['sitedomain']) : ''),
-                    'siteurl' => (isset($_POST['siteurl']) ? Typo::cleanX($_POST['siteurl']) : ''),
-                );
+            'sitename' => (isset($_POST['sitename']) ? Typo::cleanX($_POST['sitename']) : ''),
+            'siteslogan' => (isset($_POST['siteslogan']) ? Typo::cleanX($_POST['siteslogan']) : ''),
+            'sitedomain' => (isset($_POST['sitedomain']) ? Typo::cleanX($_POST['sitedomain']) : ''),
+            'siteurl' => (isset($_POST['siteurl']) ? Typo::cleanX($_POST['siteurl']) : ''),
+        );
         Session::set_session($vars);
         Theme::install('step2');
         break;
 
     case '3':
         $vars = array(
-                    'adminname' => (isset($_POST['adminname']) ? Typo::cleanX(Typo::strip($_POST['adminname'])) : ''),
-                    'adminuser' => (isset($_POST['adminuser']) ? Typo::cleanX(Typo::strip($_POST['adminuser'])) : ''),
-                    'adminpass' => (isset($_POST['adminpass']) ? Typo::strip(Typo::strip($_POST['adminpass'])) : ''),
-                );
+            'adminname' => (isset($_POST['adminname']) ? Typo::cleanX(Typo::strip($_POST['adminname'])) : ''),
+            'adminuser' => (isset($_POST['adminuser']) ? Typo::cleanX(Typo::strip($_POST['adminuser'])) : ''),
+            'adminpass' => (isset($_POST['adminpass']) ? Typo::strip(Typo::strip($_POST['adminpass'])) : ''),
+        );
         Session::set_session($vars);
         Theme::install('step3');
         break;
 
     case '4':
         try {
-            $file = GX_PATH.'/inc/config/config.php';
+            $file = GX_PATH . '/inc/config/config.php';
             $result = Install::makeConfig($file);
             // makeConfig() now returns an array with 'config' and 'security_key'.
             // Define SECURITY_KEY in the current request scope so User::randpass()
@@ -103,19 +103,19 @@ switch ($step) {
                 Install::createTable();
                 Install::insertData();
                 $vars = array(
-                        'user' => array(
-                            'userid' => Session::val('adminuser'),
-                            'pass' => User::randpass(Session::val('adminpass')),
-                            'email' => Session::val('adminuser') . '@' . Session::val('sitedomain'),
-                            'group' => '0',
-                            'join_date' => date('Y-m-d H:i:s'),
-                            'status' => '1'
-                            ),
-                        'detail' => array(
-                            'userid' => Session::val('adminuser'),
-                            'fname' => Session::val('adminname')
-                            )
-                        );
+                    'user' => array(
+                        'userid' => Session::val('adminuser'),
+                        'pass' => User::randpass(Session::val('adminpass')),
+                        'email' => Session::val('adminuser') . '@' . Session::val('sitedomain'),
+                        'group' => '0',
+                        'join_date' => date('Y-m-d H:i:s'),
+                        'status' => '1'
+                    ),
+                    'detail' => array(
+                        'userid' => Session::val('adminuser'),
+                        'fname' => Session::val('adminname')
+                    )
+                );
                 User::create($vars);
 
                 Theme::install('step4'); // Success
@@ -124,8 +124,8 @@ switch ($step) {
                 Theme::install('step_error');
             }
         } catch (exception $e) {
-             $data['alertDanger'][] = $e->getMessage();
-             Theme::install('step_error');
+            $data['alertDanger'][] = $e->getMessage();
+            Theme::install('step_error');
         }
 
         break;

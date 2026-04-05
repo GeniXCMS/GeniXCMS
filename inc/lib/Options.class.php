@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141001
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -89,9 +89,9 @@ class Options
     {
         $vars = Typo::cleanX($vars);
         $op = Query::table('options')->where('name', $vars)->first();
-        
+
         if ($op) {
-            return ($decode == true ) ? Typo::Xclean($op->value): $op->value;
+            return ($decode == true) ? Typo::Xclean($op->value) : $op->value;
         } else {
             return false;
         }
@@ -107,13 +107,13 @@ class Options
         $opt = self::$_data;
         if (is_array($opt)) {
             foreach ($opt as $k => $v) {
-                if ($v->name == $vars ) {
-                    if( $v->value != "" && $v->value != NULL ) {
+                if ($v->name == $vars) {
+                    if ($v->value != "" && $v->value != NULL) {
                         return Typo::Xclean($v->value);
                     } else {
                         return '';
                     }
-                    
+
                 }
             }
         }
@@ -132,7 +132,8 @@ class Options
         }
     }
 
-    public static function isExist($var) {
+    public static function isExist($var)
+    {
         return self::validate($var);
     }
 

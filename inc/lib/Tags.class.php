@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.8 build date 20160317
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -208,9 +208,9 @@ class Tags
             arsort($tags);
             $cloud = "";
             foreach ($tags as $key => $value) {
-                $cloud .= "<a class='tag-item' href='".Url::tag($key)."'>{$key} <span class='tag-count'>{$value}</span></a> ";
+                $cloud .= "<a class='tag-item' href='" . Url::tag($key) . "'>{$key} <span class='tag-count'>{$value}</span></a> ";
             }
-            
+
         } else {
             $cloud = '';
         }

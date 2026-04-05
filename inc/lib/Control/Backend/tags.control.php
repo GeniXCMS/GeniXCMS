@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141006
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -46,7 +46,7 @@ if (User::access(1)) {
                     'type' => 'tag',
                 ]);
                 //print_r($cat);
-                $data['alertSuccess'][] = _("Tag Added").' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Tag Added") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);
@@ -72,7 +72,7 @@ if (User::access(1)) {
                 Query::table('cat')->where('id', Typo::int($_POST['id']))->update([
                     'name' => $cat,
                 ]);
-                $data['alertSuccess'][] = _("Tag Updated").' '.$_POST['cat'];
+                $data['alertSuccess'][] = _("Tag Updated") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {
                 Token::remove($token);

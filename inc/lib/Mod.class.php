@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -38,7 +38,7 @@ class Mod
      */
     public static function options($var, $data = array())
     {
-        $file = GX_MOD.$var.'/options.php';
+        $file = GX_MOD . $var . '/options.php';
         if (file_exists($file)) {
             include($file);
         }
@@ -50,9 +50,9 @@ class Mod
         $handle = dir(GX_MOD);
         while (false !== ($entry = $handle->read())) {
             if ($entry != '.' && $entry != '..') {
-                $dir = GX_MOD.$entry;
+                $dir = GX_MOD . $entry;
                 if (is_dir($dir) == true) {
-                    (file_exists($dir.'/index.php')) ? $mod[] = basename($dir) : '';
+                    (file_exists($dir . '/index.php')) ? $mod[] = basename($dir) : '';
                 }
             }
         }
@@ -64,7 +64,7 @@ class Mod
 
     public static function data($vars)
     {
-        $file = GX_MOD.'/'.$vars.'/index.php';
+        $file = GX_MOD . '/' . $vars . '/index.php';
         if (file_exists($file)) {
             $handle = fopen($file, 'r');
             $data = fread($handle, filesize($file));
@@ -107,7 +107,7 @@ class Mod
                     $list .= "
                     <li class=\"{$class}\">
                         <a href=\"index.php?page=mods&mod={$m}\">
-                            <i class=\"{$icon}\"></i> <span>".$data['name']."</span>
+                            <i class=\"{$icon}\"></i> <span>" . $data['name'] . "</span>
                         </a>
                     </li>
                     ";
@@ -122,7 +122,7 @@ class Mod
 
     public static function inc($vars, $data, $dir)
     {
-        $file = $dir.'/'.$vars.'.php';
+        $file = $dir . '/' . $vars . '.php';
         $content = '';
         if (file_exists($file)) {
             ob_start();
@@ -212,8 +212,8 @@ class Mod
         $data = [];
         if (User::access(0)) {
             if (isset($_GET['page']) && $_GET['page'] == 'modules') {
-                $token = isset($_GET['token']) ? Typo::cleanX($_GET['token']): '';
-                $modules = isset($_GET['modules']) ? Typo::cleanX($_GET['modules']): '';
+                $token = isset($_GET['token']) ? Typo::cleanX($_GET['token']) : '';
+                $modules = isset($_GET['modules']) ? Typo::cleanX($_GET['modules']) : '';
                 if (isset($_GET['act'])) {
                     if ($_GET['act'] == 'activate') {
                         if (!Token::validate($token, true)) {
@@ -249,7 +249,7 @@ class Mod
                         }
                         if (!isset($alertDanger)) {
                             self::deactivate($modules);
-                            if (false != Files::delTree(GX_MOD.$_GET['modules'])) {
+                            if (false != Files::delTree(GX_MOD . $_GET['modules'])) {
                                 $GLOBALS['alertSuccess'] = _('Module Deleted');
                             } else {
                                 $GLOBALS['alertDanger'][] = _("Can't delete module files");
@@ -277,7 +277,7 @@ class Mod
 
     public static function load($mod)
     {
-        $file = GX_MOD.'/'.$mod.'/index.php';
+        $file = GX_MOD . '/' . $mod . '/index.php';
         if (file_exists($file)) {
             include $file;
         }
@@ -285,14 +285,14 @@ class Mod
 
     public static function url($mod)
     {
-        $url = Site::$url.'/inc/mod/'.$mod;
+        $url = Site::$url . '/inc/mod/' . $mod;
 
         return $url;
     }
 
     public static function exist($mod)
     {
-        $file = GX_MOD.'/'.$mod.'/options.php';
+        $file = GX_MOD . '/' . $mod . '/options.php';
         if (file_exists($file)) {
             return true;
         } else {
@@ -303,7 +303,7 @@ class Mod
     public static function name($mod)
     {
         $data = self::data($mod);
-        $name = isset($data['name']) ? $data['name']: '';
+        $name = isset($data['name']) ? $data['name'] : '';
         return $name;
     }
 
@@ -337,7 +337,7 @@ class Mod
     public static function getTitle($mod)
     {
         $title = self::$listMenu;
-        $titlemenu = array_key_exists($mod, $title) ? $title[$mod]: "";
+        $titlemenu = array_key_exists($mod, $title) ? $title[$mod] : "";
         return $titlemenu;
     }
 }

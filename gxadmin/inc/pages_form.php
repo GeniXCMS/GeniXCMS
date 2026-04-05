@@ -214,22 +214,4 @@ $ui = new UiBuilder([
     .media-drop-zone:hover { border-color: var(--gx-primary); background-color: rgba(59, 130, 246, 0.05) !important; }
 </style>
 
-<script>
-    // Link elfinder selection to preview image
-    function elfinderDialog2() {
-        var fm = $('<div/>').dialogelfinder({
-            url : '<?=Site::$url;?>inc/lib/elfinder/php/connector.minimal.php',
-            lang : 'en',
-            width : 840,
-            destroyOnClose : true,
-            getFileCallback : function(files, fm) {
-                $('#post_image').val(files.url);
-                $('#post_image_preview').attr('src', files.url).removeClass('d-none');
-                $('#post_image_placeholder').addClass('d-none');
-            },
-            commandsOptions : {
-                getfile : { oncomplete : 'close', folders : false }
-            }
-        }).dialogelfinder('instance');
-    }
 </script>

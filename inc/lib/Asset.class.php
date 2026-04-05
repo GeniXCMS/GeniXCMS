@@ -219,7 +219,7 @@ class Asset
             .elfinder-contextmenu-separator { background-color: #f1f5f9 !important; height: 1px !important; margin: 5px 0 !important; }
         </style>', "header", ["elfinder-theme"], 12);
 
-        self::register('elfinder-js', 'js', $vendorUrl . '/studio-42/elfinder/js/elfinder.min.js', 'footer', [], 10);
+        self::register('elfinder-js', 'js', $vendorUrl . '/studio-42/elfinder/js/elfinder.min.js', 'footer', ['jquery', 'jquery-ui'], 10);
         self::register('elfinder-proxy', 'js', $vendorUrl . '/studio-42/elfinder/js/proxy/elFinderSupportVer1.js', 'footer', ['elfinder-js'], 11);
 
         // GeniXCMS Admin UI Tools - Header to support inline scripts
@@ -291,42 +291,42 @@ class Asset
                 }
             });
 
-            function elfinderDialog() {
+            window.elfinderDialog = function() {
                 var gxEditorType = "' . $editorType . '";
                 var fm = $("<div/>").dialogelfinder({
                     url : ' . $elfinderUrl . ',
                     lang : "en", width : 840, height: 450,
                     destroyOnClose : true,
-                    getFileCallback : function(files, fm) {
+                    getFileCallback : function(file, fm) {
                         if (gxEditorType === "editorjs" || gxEditorType === "gxeditor") {
                             if (window.__gxEditors) {
                                 var idx = Object.keys(window.__gxEditors)[0];
                                 if (window.__gxEditors[idx]) {
-                                    window.__gxEditors[idx].blocks.insert("image", { file: { url: files.url } });
+                                    window.__gxEditors[idx].blocks.insert("image", { file: { url: file.url } });
                                 }
                             }
                         } else {
-                            $(".editor").summernote("editor.insertImage", files.url);
+                            $(".editor").summernote("editor.insertImage", file.url);
                         }
                     },
                     commandsOptions : { getfile : { oncomplete : "close", folders : false } }
                 }).dialogelfinder("instance");
-            }
+            };
 
-            function elfinderDialog2() {
+            window.elfinderDialog2 = function() {
                 var fm = $("<div/>").dialogelfinder({
                     url: ' . $elfinderUrl . ',
                     lang: "en", width : 840, height: 450,
                     destroyOnClose: true,
-                    getFileCallback: function (files, fm) {
-                        $("#post_image").val(files.url);
-                        $("#post_image_preview").attr("src", files.url).removeClass("d-none");
+                    getFileCallback: function (file, fm) {
+                        $("#post_image").val(file.url);
+                        $("#post_image_preview").attr("src", file.url).removeClass("d-none");
                         $("#post_image_placeholder").addClass("d-none");
                     },
                     commandsOptions: { getfile: { oncomplete: "close", folders: false } }
                 }).dialogelfinder("instance");
-            }
-        </script>', 'footer', ['elfinder-proxy', 'elfinder-css-custom'], 15);
+            };
+        </script>', 'header', [], 15);
 
         // Auto-enqueue based on options
         if (Options::v('use_jquery') == 'on') {

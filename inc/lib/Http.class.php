@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -35,29 +35,29 @@ class Http
     public static function validateUrl($url)
     {
         $prot = self::validateProtocol($url, array('http', 'https'));
-        if ($prot){
+        if ($prot) {
             // echo "prot";
             //check if host is same with config
-             $url_p = @parse_url($url);
-             $url_c = @parse_url(Site::$url);
-             $host_same = self::sameAsSite($url);
+            $url_p = @parse_url($url);
+            $url_c = @parse_url(Site::$url);
+            $host_same = self::sameAsSite($url);
 
-             if (!$host_same) {
-                 if (self::validatePort($url))
-                     return true;
+            if (!$host_same) {
+                if (self::validatePort($url))
+                    return true;
 
-                 if (self::isLocal($url))
-                     return true;
+                if (self::isLocal($url))
+                    return true;
 
-                 if ( $url_c && $host_same && isset( $url_c['port'] ) && $url_c['port'] === $url_p['port'] )
-                     return true;
+                if ($url_c && $host_same && isset($url_c['port']) && $url_c['port'] === $url_p['port'])
+                    return true;
 
-                 return false;
+                return false;
 
-             } else {
+            } else {
                 // echo "host same";
-                 return true;
-             }
+                return true;
+            }
         } else {
             return false;
         }
@@ -76,11 +76,11 @@ class Http
     public static function validatePort($url, $ports = [80, 443, 8080])
     {
         $purl = @parse_url($url);
-        if ( isset($purl['port']) && in_array($purl['port'], $ports)) {
+        if (isset($purl['port']) && in_array($purl['port'], $ports)) {
             return true;
         } /* elseif($purl['port'] == ''){
-            return true;
-        } */ else {
+           return true;
+       } */ else {
             return false;
         }
     }
@@ -100,30 +100,31 @@ class Http
 
     public static function isLocal($url)
     {
-        if( $url != "::1") {
+        if ($url != "::1") {
             $data['url'] = $url;
             $url_p = @parse_url($url);
-            $host = @trim( $url_p['host'], '.' );
-            if ( filter_var($host, FILTER_VALIDATE_IP)) {
+            $host = @trim($url_p['host'], '.');
+            if (filter_var($host, FILTER_VALIDATE_IP)) {
                 $ip = $host;
             } else {
-                $ip = gethostbyname( $host );
-                if ( $ip === $host ) {
+                $ip = gethostbyname($host);
+                if ($ip === $host) {
                     $ip = false;
                 }
             }
 
             if ($ip) {
-                $parts = array_map( 'intval', explode( '.', $ip ) );
-                if ( 127 === $parts[0] || 10 === $parts[0] || 0 === $parts[0]
-                    || ( 172 === $parts[0] && 16 <= $parts[1] && 31 >= $parts[1] )
-                    || ( 192 === $parts[0] && 168 === $parts[1] )
+                $parts = array_map('intval', explode('.', $ip));
+                if (
+                    127 === $parts[0] || 10 === $parts[0] || 0 === $parts[0]
+                    || (172 === $parts[0] && 16 <= $parts[1] && 31 >= $parts[1])
+                    || (192 === $parts[0] && 168 === $parts[1])
                 ) {
-                        return false;
+                    return false;
                 }
             }
         }
-        
+
     }
 
     /**
@@ -136,10 +137,10 @@ class Http
      */
     public static function fetch($vars)
     {
-        if (is_array($vars)){
-            $url = isset($vars['url']) ? $vars['url']: '';
-            $curl = isset($vars['curl']) ? $vars['curl']: '';
-            $c_options[] = isset($vars['curl_options']) ? $vars['curl_options']: [];
+        if (is_array($vars)) {
+            $url = isset($vars['url']) ? $vars['url'] : '';
+            $curl = isset($vars['curl']) ? $vars['curl'] : '';
+            $c_options[] = isset($vars['curl_options']) ? $vars['curl_options'] : [];
         } else {
             $url = $vars;
             $curl = false;
@@ -147,21 +148,21 @@ class Http
 
         if ($curl) {
             $ch = @curl_init();
-//            $opt = '';
+            //            $opt = '';
             $c_options[] = array(
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_URL => $url
             );
-//            $options = array_merge($options, $c_options);
+            //            $options = array_merge($options, $c_options);
 //            print_r($c_options);
             $options = [];
             foreach ($c_options as $k => $v) {
-                foreach ($v as $k2 => $v2){
+                foreach ($v as $k2 => $v2) {
                     $options[$k2] = $v2;
                 }
 
             }
-//            print_r($options);
+            //            print_r($options);
             @curl_setopt_array($ch, $options);
             $fetch = @curl_exec($ch);
             @curl_close($ch);
@@ -176,7 +177,7 @@ class Http
     {
 
         $ipApi = self::randIpApi();
-        $detail = self::fetch($ipApi.$ip);
+        $detail = self::fetch($ipApi . $ip);
 
         return $detail;
     }
@@ -226,7 +227,7 @@ class Http
             $newAgent = array_merge($agent, self::$agent);
         } else {
             $newAgent = array($agent);
-            $newAgent = array_merge($newAgent,self::$agent);
+            $newAgent = array_merge($newAgent, self::$agent);
         }
 
         return $newAgent;
@@ -248,7 +249,8 @@ class Http
         return self::$ipApi[$rnd];
     }
 
-    public static function getBearerToken() {
+    public static function getBearerToken()
+    {
         $headers = self::getAuthorizationHeader();
         // HEADER: Get the access token from the header
         if (!empty($headers)) {
@@ -259,12 +261,12 @@ class Http
         return null;
     }
 
-    public static function getAuthorizationHeader(){
+    public static function getAuthorizationHeader()
+    {
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
             $headers = trim($_SERVER["Authorization"]);
-        }
-        else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
+        } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
             $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
         } elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();

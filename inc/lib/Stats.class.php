@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150125
  *
- * @version 2.0.0
+ * @version 2.0.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -102,37 +102,37 @@ class Stats
     public static function botList()
     {
         $botlist = array(
-                'Teoma',
-                'alexa',
-                'froogle',
-                'inktomi',
-                'looksmart',
-                'URL_Spider_SQL',
-                'Firefly',
-                'NationalDirectory',
-                'Ask Jeeves',
-                'TECNOSEEK',
-                'InfoSeek',
-                'WebFindBot',
-                'girafabot',
-                'crawler',
-                'www.galaxy.com',
-                'Googlebot',
-                'Scooter',
-                'Slurp',
-                'appie',
-                'FAST',
-                'WebBug',
-                'Spade',
-                'ZyBorg',
-                'rabaz',
-                'Twitterbot',
-                'MJ12bot',
-                'AhrefsBot',
-                'bingbot',
-                'YandexBot',
-                'spbot',
-                        );
+            'Teoma',
+            'alexa',
+            'froogle',
+            'inktomi',
+            'looksmart',
+            'URL_Spider_SQL',
+            'Firefly',
+            'NationalDirectory',
+            'Ask Jeeves',
+            'TECNOSEEK',
+            'InfoSeek',
+            'WebFindBot',
+            'girafabot',
+            'crawler',
+            'www.galaxy.com',
+            'Googlebot',
+            'Scooter',
+            'Slurp',
+            'appie',
+            'FAST',
+            'WebBug',
+            'Spade',
+            'ZyBorg',
+            'rabaz',
+            'Twitterbot',
+            'MJ12bot',
+            'AhrefsBot',
+            'bingbot',
+            'YandexBot',
+            'spbot',
+        );
 
         return $botlist;
     }

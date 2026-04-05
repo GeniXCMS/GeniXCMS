@@ -77,8 +77,60 @@ class Editor
         $elfinderUrl = Url::ajax('elfinder');
 
         // Register Summernote Assets
-        Asset::register('summernote-css', 'css', 'https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.css', 'header');
-        Asset::register('summernote-js', 'js', 'https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.js', 'footer');
+        Asset::register('summernote-css', 'css', 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css', 'header');
+        Asset::register('summernote-js', 'js', 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js', 'footer');
+
+        // Register and enqueue jQuery UI CSS for elfinder dialog
+        Asset::register('jquery-ui-css', 'css', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css', 'header');
+        Asset::enqueue('jquery-ui-css');
+
+        // summernote-elfinder-button
+        Asset::register('summernote-elfinder-button', 'raw', '
+        <script>
+            window.elfinderDialog = function(context) {
+                var ui = $.summernote.ui;
+                var button = ui.button({
+                    contents: \'<i class="bi bi-folder2-open"></i>\',
+                    tooltip: "File Manager",
+                    click: function() {
+                        var elfinderUrl = "' . $elfinderUrl . '";
+                        var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
+                        var context_btn = context;
+                        
+                        if (typeof $.fn.dialogelfinder === "undefined") {
+                            console.error("elFinder dialogelfinder is not loaded!");
+                            alert("File Manager Error: elFinder components not loaded correctly.");
+                            return;
+                        }
+
+                        setTimeout(function() {
+                            $("<div />").appendTo("body").dialogelfinder({
+                                url: elfinderUrl + sep + "token=' . TOKEN . '",
+                                lang: "en",
+                                width: 840,
+                                destroyOnClose: true,
+                                getFileCallback: function(file, fm) {
+                                    context_btn.invoke("editor.insertImage", file.url);
+                                },
+                            }).dialogelfinder("instance");
+                        }, 10);
+                    }
+                });
+                return button.render();
+            };
+
+            window.gxcodeBtn = function(context) {
+                var ui = $.summernote.ui;
+                var button = ui.button({
+                    contents: \'<i class="bi bi-code-slash"></i>\',
+                    tooltip: "Add Code Snippet",
+                    click: function() {
+                        context.invoke("editor.insertText", " [code] [/code] ");
+                    }
+                });
+                return button.render();
+            };
+        </script>', 'footer', ['elfinder-js', 'elfinder-theme', 'elfinder-css-custom', 'jquery-ui-css']);
 
         // Summernote Init Script
         Asset::register('summernote-init', 'raw', '
@@ -87,7 +139,11 @@ class Editor
                 function sendFile(file, editor, welEditable) {
                     var elfinderUrl = "' . $elfinderUrl . '";
                     var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
-                    $.ajax({ url: elfinderUrl + sep + "cmd=open&init=1&target=", type: "GET", dataType: "json" })
+                    $.ajax({ 
+                        url: elfinderUrl + sep + "cmd=open&init=1&target=", 
+                        type: "GET", 
+                        dataType: "json" 
+                    })
                     .done(function(initData) {
                         if (!initData || !initData.cwd) return console.log("Failed to init elfinder API");
                         var target = initData.cwd.hash;
@@ -116,6 +172,10 @@ class Editor
                         minHeight: 300,
                         maxHeight: ($(window).height() - 150),
                         toolbar: [' . System::$toolbar . '],
+                        buttons: {
+                            elfinder: window.elfinderDialog,
+                            gxcode: window.gxcodeBtn
+                        },
                         callbacks: {
                             onImageUpload: function(files) { sendFile(files[0]); },
                             onPaste: function (e) {
@@ -127,10 +187,11 @@ class Editor
                     }); 
                 });
             });
-        </script>', 'footer', ['summernote-js', 'elfinder-helper']);
+        </script>', 'footer', ['summernote-js', 'summernote-elfinder-button']);
 
         // Enqueue everything
         Asset::enqueue('summernote-css');
+        Asset::enqueue('elfinder-helper');
         Asset::enqueue('summernote-init');
     }
 
