@@ -1,0 +1,13 @@
+language: php
+php:
+  - 7.2.5
+  
+services:
+  - mysql
+  
+before_install:
+  - mysql -e 'CREATE DATABASE db_test;'
+
+
+
+script: phpunit

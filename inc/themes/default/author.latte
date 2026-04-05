@@ -1,0 +1,49 @@
+<div class="col-lg-8 blog-main px-lg-4">
+    <div class="author-archive-header mb-5 p-4 bg-white border border-secondary-subtle rounded-4 shadow-sm text-center">
+        <img src="https://ui-avatars.com/api/?name={$data['author']|escapeUrl}&background=0085A1&color=fff&size=120" class="rounded-circle shadow mb-3 border border-3 border-white" alt="{$data['author']}">
+        <h2 class="display-6 fw-bold mb-1 font-display">{$data['author']}</h2>
+        <p class="text-muted mb-0">Discover all stories by this author.</p>
+    </div>
+
+    {if !empty($mdo_adsense)}
+        <div class="row mb-4">
+            <div class="col-md-12">{$mdo_adsense|noescape}</div>
+        </div>
+        <hr class="mb-5">
+    {/if}
+
+    {if $data['num'] > 0}
+        {foreach $data['posts'] as $p}
+            <article class="blog-post mb-5 pb-5 border-bottom border-light-subtle px-0">
+                <h2 class="blog-post-title fs-2 fw-bold mb-3">
+                    <a href="{Url::post($p->id)}" class="text-dark text-decoration-none transition-base">{$p->title}</a>
+                </h2>
+                <div class="blog-post-meta text-muted mb-4 fs-6">
+                    <i class="bi bi-calendar3 me-1"></i> {Date::format($p->date)} 
+                    <span class="mx-2 text-secondary opacity-50">|</span> 
+                    <i class="bi bi-person me-1"></i> By <a href="{Url::author($p->author)}" class="text-dark fw-medium text-decoration-none">{$p->author}</a>
+                </div>
+                
+                <div class="blog-post-content fs-5 text-dark lh-lg">
+                    {Posts::format($p->content, $p->id)|noescape}
+                </div>
+            </article>
+        {/foreach}
+        
+        <nav class="blog-pagination d-flex justify-content-center py-4">
+            {$data['paging']|noescape}
+        </nav>
+    {else}
+        <div class="alert alert-info shadow-sm rounded-4">
+            <i class="bi bi-info-circle me-2"></i> {_'No articles found by this author.'}
+        </div>
+    {/if}
+</div>
+
+<aside class="col-lg-4 blog-sidebar">
+    {include 'rightside.latte', data: $data}
+</aside>
+
+<style>
+    .font-display { font-family: 'Gloock', serif; }
+</style>

@@ -1,0 +1,1773 @@
+# Language File for GeniXCMS.
+# Copyright (C) 2025
+# This file is distributed under the same license as the PACKAGE package.
+# GeniXCMS <genixcms@gmail.com>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: GeniXCMS 2.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-04 08:43+0700\n"
+"PO-Revision-Date: 2025-01-04 10:52+0700\n"
+"Last-Translator: GeniXCMS <genixcms@gmail.com>\n"
+"Language-Team: GeniXCMS Lang\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#: cache.php:37 header.php:397
+msgid "Cache Settings"
+msgstr ""
+
+#: cache.php:43 comments-settings.php:37 comments-settings.php:39
+#: multilang.php:39 permalink.php:39 settings.php:38
+msgid "Change"
+msgstr ""
+
+#: cache.php:47 comments-settings.php:43 menus_form.php:37
+#: menus_form_edit.php:56 multilang.php:43 pages_form.php:111 permalink.php:43
+#: posts_form.php:99 settings.php:42 user_form.php:42
+msgid "Cancel"
+msgstr ""
+
+#: cache.php:64 comments-settings.php:58
+msgid "Settings Cache"
+msgstr ""
+
+#: cache.php:76
+msgid "Enable <code>cache</code> ?"
+msgstr ""
+
+#: cache.php:85 comments-settings.php:79
+msgid "Check here if you want to enable comment system"
+msgstr ""
+
+#: cache.php:85
+msgid "Enable Cache"
+msgstr ""
+
+#: cache.php:88
+msgid "Check this if you want to enable Cache system"
+msgstr ""
+
+#: cache.php:91
+msgid "Cache Timeout"
+msgstr ""
+
+#: cache.php:93
+msgid "Cache file timeout, in <kbd>seconds</kbd>"
+msgstr ""
+
+#: cache.php:101
+msgid "Cache Path"
+msgstr ""
+
+#: cache.php:103
+msgid "Cache path, don't forget it to <code>chmod</code> it <kbd>777</kbd>"
+msgstr ""
+
+#: categories.php:33 menus_form.php:121 menus_form_edit.php:173 header.php:306
+msgid "Categories"
+msgstr ""
+
+#: categories.php:39 categories.php:143
+msgid "Add Category"
+msgstr ""
+
+#: categories.php:57 comments.php:50 pages.php:52 posts.php:54 tags.php:54
+#: user.php:53
+msgid "total"
+msgstr ""
+
+#: categories.php:81 categories.php:100 comments.php:163 tags.php:78
+msgid "Are you sure you want to delete this item?"
+msgstr ""
+
+#: categories.php:87 categories.php:106 tags.php:84
+msgid "Go!"
+msgstr ""
+
+#: categories.php:121
+msgid "No Categories Found"
+msgstr ""
+
+#: categories.php:149
+msgid "Category Parent"
+msgstr ""
+
+#: categories.php:162
+msgid "Category Name"
+msgstr ""
+
+#: categories.php:169 menus.php:147 modules.php:142 multilang.php:189
+#: tags.php:131 themes.php:201 user.php:279
+msgid "Close"
+msgstr ""
+
+#: categories.php:170 menus_form.php:33 menus_form_edit.php:52
+#: multilang.php:190 pages_form.php:106 posts_form.php:94 tags.php:132
+#: user.php:280 register.php:187
+msgid "Submit"
+msgstr ""
+
+#: comments-settings.php:33 header.php:391
+msgid "Comments Settings"
+msgstr ""
+
+#: comments-settings.php:70
+msgid "Enable <code>comments</code> ?"
+msgstr ""
+
+#: comments-settings.php:79
+msgid "Enable Comment"
+msgstr ""
+
+#: comments-settings.php:82
+msgid "Check this if you want to enable commenting system"
+msgstr ""
+
+#: comments-settings.php:85
+msgid "Comments Per Page"
+msgstr ""
+
+#: comments-settings.php:87
+msgid "Comments Count per page"
+msgstr ""
+
+#: comments-settings.php:95
+msgid "SpamWords"
+msgstr ""
+
+#: comments-settings.php:97
+msgid "one word per line. you can get spamwords blacklist from <code><a href=\"https://github.com/splorp/wordpress-comment-blacklist\" target=\"_blank\">here</a></code>"
+msgstr ""
+
+#: comments.php:32 comments.php:126 comments.php:184 Comments.class.php:66
+#: header.php:326
+msgid "Comments"
+msgstr ""
+
+#: comments.php:51 user.php:54
+msgid "active"
+msgstr ""
+
+#: comments.php:52 user.php:55
+msgid "pending"
+msgstr ""
+
+#: comments.php:53 user.php:56
+msgid "inactive"
+msgstr ""
+
+#: comments.php:68 comments.php:109
+msgid "Find Comments"
+msgstr ""
+
+#: comments.php:72
+msgid "Search Comments"
+msgstr ""
+
+#: comments.php:99 comments.php:146 pages.php:104 pages.php:146
+#: pages_form.php:279 posts.php:126 posts.php:173
+msgid "Published"
+msgstr ""
+
+#: comments.php:100 comments.php:149
+msgid "Pending"
+msgstr ""
+
+#: comments.php:101 comments.php:143 pages.php:105 pages.php:144
+#: pages_form.php:279 posts.php:127 posts.php:169
+msgid "Unpublished"
+msgstr ""
+
+#: comments.php:125 comments.php:183 pages.php:128 pages.php:177 posts.php:151
+#: posts.php:207 user.php:143 user.php:205
+msgid "ID"
+msgstr ""
+
+#: comments.php:127 comments.php:185 user_form.php:86 Comments.class.php:54
+#: register.php:183
+msgid "Email"
+msgstr ""
+
+#: comments.php:128 comments.php:186 pages.php:130 pages.php:179 posts.php:154
+#: posts.php:210
+msgid "Date"
+msgstr ""
+
+#: comments.php:129 comments.php:187 pages.php:131 pages.php:180
+#: pages_form.php:272 posts.php:155 posts.php:211 posts_form.php:263
+#: user.php:146 user.php:208
+msgid "Status"
+msgstr ""
+
+#: comments.php:130 dashboard.php:137 pages.php:132 posts.php:156 user.php:168
+msgid "Author"
+msgstr ""
+
+#: comments.php:131 modules.php:65 pages.php:133 posts.php:157 user.php:150
+msgid "Action"
+msgstr ""
+
+#: comments.php:132 pages.php:134 posts.php:158 user.php:151
+msgid "All"
+msgstr ""
+
+#: comments.php:175 posts.php:199
+msgid "No Post Found"
+msgstr ""
+
+#: comments.php:190 pages.php:183 pages_form.php:275 posts.php:214
+#: posts_form.php:265
+msgid "Publish"
+msgstr ""
+
+#: comments.php:191 pages.php:184 pages_form.php:277 posts.php:215
+#: posts_form.php:266
+msgid "Unpublish"
+msgstr ""
+
+#: comments.php:192 pages.php:185 posts.php:216 user.php:215
+msgid "Delete"
+msgstr ""
+
+#: dashboard.php:32 dashboard.php:36 header.php:285
+msgid "Dashboard"
+msgstr ""
+
+#: dashboard.php:35
+msgid "Home"
+msgstr ""
+
+#: dashboard.php:59
+msgid "Total Post"
+msgstr ""
+
+#: dashboard.php:65 dashboard.php:82 dashboard.php:99 dashboard.php:116
+msgid "More info"
+msgstr ""
+
+#: dashboard.php:76
+msgid "Total Page"
+msgstr ""
+
+#: dashboard.php:93
+msgid "Pending Comments"
+msgstr ""
+
+#: dashboard.php:110
+msgid "Total Users"
+msgstr ""
+
+#: dashboard.php:130
+msgid "Latest Post"
+msgstr ""
+
+#: dashboard.php:136 dashboard.php:180 pages.php:129 pages.php:178
+#: pages_form.php:171 pages_form.php:250 posts.php:152 posts.php:208
+#: posts_form.php:160 posts_form.php:226
+msgid "Title"
+msgstr ""
+
+#: dashboard.php:174
+msgid "Statistic"
+msgstr ""
+
+#: dashboard.php:181
+msgid "Hits"
+msgstr ""
+
+#: dashboard.php:221
+msgid "Latest Members"
+msgstr ""
+
+#: dashboard.php:223
+msgid "8 New Members"
+msgstr ""
+
+#: dashboard.php:235
+msgid "View All Users"
+msgstr ""
+
+#: dashboard.php:247
+msgid "Registered Users Location"
+msgstr ""
+
+#: media.php:32
+msgid "Media File Manager"
+msgstr ""
+
+#: menus.php:31 header.php:344
+msgid "Menus"
+msgstr ""
+
+#: menus.php:37 menus.php:117 menus.php:148 menus_form.php:29
+msgid "Add Menu"
+msgstr ""
+
+#: menus.php:64
+msgid "del"
+msgstr ""
+
+#: menus.php:72
+msgid "Menu Items"
+msgstr ""
+
+#: menus.php:75
+msgid "Add Menu Item"
+msgstr ""
+
+#: menus.php:124 menus_form.php:78 menus_form_edit.php:121
+msgid "Menu ID"
+msgstr ""
+
+#: menus.php:126
+msgid "ID of the menu, eg. <code>mainmenu</code>"
+msgstr ""
+
+#: menus.php:131 menus_form.php:85 menus_form_edit.php:128
+msgid "Menu Name"
+msgstr ""
+
+#: menus.php:133
+msgid "Name of the menu"
+msgstr ""
+
+#: menus.php:138 menus_form.php:92 menus_form_edit.php:135
+msgid "Menu CLass"
+msgstr ""
+
+#: menus.php:140
+msgid "Class Style of the menu. <code>.class</code> means menu class is <em>class</em>"
+msgstr ""
+
+#: menus_form.php:47 menus_form.php:73 menus_form_edit.php:74
+msgid "Parent Menu"
+msgstr ""
+
+#: menus_form.php:80
+msgid "Your Menu ID, eg. <code>mainmenu</code>"
+msgstr ""
+
+#: menus_form.php:87 menus_form_edit.php:130
+msgid "Your Menu Name"
+msgstr ""
+
+#: menus_form.php:94 menus_form_edit.php:137
+msgid "Class Style of the menu, <code>.class</code> means menu class is <em>class</em>"
+msgstr ""
+
+#: menus_form.php:98 menus_form_edit.php:142
+msgid "Menu Type"
+msgstr ""
+
+#: menus_form.php:101 menus_form_edit.php:145 pages_form.php:83
+msgid "Page"
+msgstr ""
+
+#: menus_form.php:116 menus_form_edit.php:168
+msgid "Choose This if you want menu for Pages. Pick Page Name"
+msgstr ""
+
+#: menus_form.php:135 menus_form_edit.php:195
+msgid "Choose This if you want menu for Categories. Pick Category Name"
+msgstr ""
+
+#: menus_form.php:140 menus_form_edit.php:200 modules.php:31 header.php:356
+msgid "Modules"
+msgstr ""
+
+#: menus_form.php:149 menus_form_edit.php:218
+msgid "Choose This if you want menu for Modules(Mod). Pick Module Name"
+msgstr ""
+
+#: menus_form.php:154 menus_form_edit.php:223
+msgid "Custom Link"
+msgstr ""
+
+#: menus_form.php:161 menus_form_edit.php:239
+msgid "Choose This if you want menu with Custom Link Categories. Insert Custom Link"
+msgstr ""
+
+#: menus_form_edit.php:46
+msgid "Edit Menu"
+msgstr ""
+
+#: menus_form_edit.php:116
+msgid "Choose Parent Menu"
+msgstr ""
+
+#: menus_form_edit.php:123
+msgid "Your Menu ID, eg. <code>mainmenu</code> "
+msgstr ""
+
+#: modules.php:36
+msgid "Upload Modules"
+msgstr ""
+
+#: modules.php:53
+msgid "Modules List"
+msgstr ""
+
+#: modules.php:63 Comments.class.php:50
+msgid "Name"
+msgstr ""
+
+#: modules.php:64
+msgid "Description"
+msgstr ""
+
+#: modules.php:74 user.php:214
+msgid "Deactivate"
+msgstr ""
+
+#: modules.php:75
+msgid "deactivate"
+msgstr ""
+
+#: modules.php:78 themes.php:92 themes.php:152 user.php:213
+msgid "Activate"
+msgstr ""
+
+#: modules.php:79
+msgid "activate"
+msgstr ""
+
+#: modules.php:85
+msgid "Version"
+msgstr ""
+
+#: modules.php:85
+msgid "License"
+msgstr ""
+
+#: modules.php:95 pages.php:158 posts.php:187
+msgid "Are you sure you want to delete this?"
+msgstr ""
+
+#: modules.php:95 themes.php:98 themes.php:158
+msgid "Remove"
+msgstr ""
+
+#: modules.php:103
+msgid "No Modules Found"
+msgstr ""
+
+#: modules.php:128 modules.php:143
+msgid "Upload Module"
+msgstr ""
+
+#: modules.php:134
+msgid "Browse Modules"
+msgstr ""
+
+#: modules.php:136
+msgid "choose the module file. in zip compression"
+msgstr ""
+
+#: multilang.php:33 header.php:379
+msgid "Multilanguage"
+msgstr ""
+
+#: multilang.php:60
+msgid "Settings Multilanguage"
+msgstr ""
+
+#: multilang.php:71
+msgid "Enable Multilanguage"
+msgstr ""
+
+#: multilang.php:81
+msgid "Enable Multilanguage ?"
+msgstr ""
+
+#: multilang.php:84
+msgid "Check this if you want to enable multilanguage"
+msgstr ""
+
+#: multilang.php:87
+msgid "Default Language"
+msgstr ""
+
+#: multilang.php:102
+msgid "Add Language"
+msgstr ""
+
+#: multilang.php:106
+msgid "Multilanguage default country. Choose one."
+msgstr ""
+
+#: multilang.php:110
+msgid "Available Language"
+msgstr ""
+
+#: multilang.php:157
+msgid "Add Language Country"
+msgstr ""
+
+#: multilang.php:163
+msgid "Country Language"
+msgstr ""
+
+#: multilang.php:165
+msgid "Type Full country language, eg: English, Japanese, etc."
+msgstr ""
+
+#: multilang.php:168
+msgid "Country Language Code"
+msgstr ""
+
+#: multilang.php:170
+msgid "Set the country code, in lowecase. eg: en, id, jp, etc."
+msgstr ""
+
+#: multilang.php:173
+msgid "Country Flag"
+msgstr ""
+
+#: multilang.php:177
+msgid "Set the country flag code, in lowecase. eg: us, id, jp, etc."
+msgstr ""
+
+#: multilang.php:180
+msgid "System Language"
+msgstr ""
+
+#: multilang.php:184
+msgid "Choose the system language for prefered language."
+msgstr ""
+
+#: pages.php:31 header.php:320
+msgid "Pages"
+msgstr ""
+
+#: pages.php:36
+msgid "Add New Page"
+msgstr ""
+
+#: pages.php:53 posts.php:55 posts_form.php:268
+msgid "published"
+msgstr ""
+
+#: pages.php:54 posts.php:56 posts_form.php:268
+msgid "unpublished"
+msgstr ""
+
+#: pages.php:68 pages.php:113
+msgid "Find Pages"
+msgstr ""
+
+#: pages.php:72
+msgid "Search Pages"
+msgstr ""
+
+#: pages.php:80
+msgid "From"
+msgstr ""
+
+#: pages.php:92
+msgid "To"
+msgstr ""
+
+#: pages.php:170
+msgid "No Page Found"
+msgstr ""
+
+#: pages_form.php:100
+msgid "Add Page"
+msgstr ""
+
+#: pages_form.php:148 pages_form.php:175 pages_form.php:254 posts_form.php:164
+#: posts_form.php:230
+msgid "Content"
+msgstr ""
+
+#: pages_form.php:251 posts_form.php:134
+msgid "Post Title"
+msgstr ""
+
+#: pages_form.php:267 posts_form.php:242
+msgid "Options"
+msgstr ""
+
+#: pages_form.php:283 posts_form.php:272
+msgid "Post Date"
+msgstr ""
+
+#: pages_form.php:290 posts_form.php:281
+msgid "left it blank to make it now"
+msgstr ""
+
+#: pages_form.php:297 posts_form.php:289 tags.php:31 header.php:312
+msgid "Tags"
+msgstr ""
+
+#: pages_form.php:301 posts_form.php:294
+msgid "write tags separated by comma."
+msgstr ""
+
+#: permalink.php:33 header.php:385
+msgid "Permalink"
+msgstr ""
+
+#: permalink.php:60
+msgid "Settings Permalink"
+msgstr ""
+
+#: permalink.php:71
+msgid "Use <code>index.php</code>"
+msgstr ""
+
+#: permalink.php:80 settings.php:397
+msgid "Check here if you want to use URL"
+msgstr ""
+
+#: permalink.php:80
+msgid "Use Index.php for Rewrite Rule ?"
+msgstr ""
+
+#: permalink.php:83
+msgid "Check this if you want to use <code>index.php</code> for rewrite rule"
+msgstr ""
+
+#: posts.php:31 settings.php:64 header.php:292 header.php:300
+msgid "Posts"
+msgstr ""
+
+#: posts.php:38
+msgid "Add New Post"
+msgstr ""
+
+#: posts.php:70 posts.php:135
+msgid "Find Posts"
+msgstr ""
+
+#: posts.php:79
+msgid "Search Posts"
+msgstr ""
+
+#: posts.php:153 posts.php:209 posts_form.php:246
+msgid "Category"
+msgstr ""
+
+#: posts_form.php:72
+msgid "Post"
+msgstr ""
+
+#: posts_form.php:88
+msgid "Add Post"
+msgstr ""
+
+#: settings.php:32 header.php:365
+msgid "Settings"
+msgstr ""
+
+#: settings.php:58
+msgid "General"
+msgstr ""
+
+#: settings.php:59 settings.php:143
+msgid "Localization"
+msgstr ""
+
+#: settings.php:60 user.php:145 user.php:207 user.php:266
+msgid "E-Mail"
+msgstr ""
+
+#: settings.php:61
+msgid "Social"
+msgstr ""
+
+#: settings.php:62
+msgid "Logo"
+msgstr ""
+
+#: settings.php:63
+msgid "Library"
+msgstr ""
+
+#: settings.php:65 settings.php:608
+msgid "Payment"
+msgstr ""
+
+#: settings.php:66
+msgid "Security"
+msgstr ""
+
+#: settings.php:75
+msgid "Website Detail"
+msgstr ""
+
+#: settings.php:81
+msgid "Website Name"
+msgstr ""
+
+#: settings.php:83
+msgid "your website name"
+msgstr ""
+
+#: settings.php:86
+msgid "Website Slogan"
+msgstr ""
+
+#: settings.php:88
+msgid "your website slogan"
+msgstr ""
+
+#: settings.php:97
+msgid "Website Domain"
+msgstr ""
+
+#: settings.php:99
+msgid "Your Domain, eg: example.org"
+msgstr ""
+
+#: settings.php:102
+msgid "Website URL"
+msgstr ""
+
+#: settings.php:104
+msgid "Your Website URL, eg: http://www.example.org/"
+msgstr ""
+
+#: settings.php:113
+msgid "Website Keywords"
+msgstr ""
+
+#: settings.php:115
+msgid "Your Website Keywords, type your website main keywords."
+msgstr ""
+
+#: settings.php:118
+msgid "Website Description"
+msgstr ""
+
+#: settings.php:120
+msgid "Your Website Description, describe your website."
+msgstr ""
+
+#: settings.php:128
+msgid "Website E-mail"
+msgstr ""
+
+#: settings.php:130
+msgid "Website E-mail address to communicate."
+msgstr ""
+
+#: settings.php:152 user.php:149
+msgid "Country"
+msgstr ""
+
+#: settings.php:156
+msgid "Your Website Country."
+msgstr ""
+
+#: settings.php:159
+msgid "Timezone"
+msgstr ""
+
+#: settings.php:163
+msgid "Your Website Timezone."
+msgstr ""
+
+#: settings.php:171
+msgid "Website Language"
+msgstr ""
+
+#: settings.php:175
+msgid "Your Website System Language."
+msgstr ""
+
+#: settings.php:178
+msgid "Default Charset"
+msgstr ""
+
+#: settings.php:180
+msgid "Your Website Charset/Encoding."
+msgstr ""
+
+#: settings.php:195
+msgid "Email Settings"
+msgstr ""
+
+#: settings.php:199
+msgid "Mail/SMTP"
+msgstr ""
+
+#: settings.php:213
+msgid "Choose using Mail or SMTP"
+msgstr ""
+
+#: settings.php:216
+msgid "SMTP Port"
+msgstr ""
+
+#: settings.php:219
+msgid "Fill in with the SMTP Port Number"
+msgstr ""
+
+#: settings.php:228
+msgid "SMTP MailServer"
+msgstr ""
+
+#: settings.php:230
+msgid "Your mailserver, eg: mail.example.org. This will used when using SMTP"
+msgstr ""
+
+#: settings.php:233
+msgid "SMTP Username"
+msgstr ""
+
+#: settings.php:235
+msgid "our SMTP Username, eg: user@example.org. This will used when using SMTP"
+msgstr ""
+
+#: settings.php:244
+msgid "SMTP Password"
+msgstr ""
+
+#: settings.php:246
+msgid "Your SMTP Password. This will used when using SMTP"
+msgstr ""
+
+#: settings.php:258
+msgid "Social Networking"
+msgstr ""
+
+#: settings.php:262
+msgid "Facebook Account"
+msgstr ""
+
+#: settings.php:264
+msgid "Your Facebook Account"
+msgstr ""
+
+#: settings.php:267
+msgid "Facebook Page"
+msgstr ""
+
+#: settings.php:269
+msgid "Your Facebook Page"
+msgstr ""
+
+#: settings.php:278
+msgid "Twitter Account"
+msgstr ""
+
+#: settings.php:283
+msgid "Your Twitter Account"
+msgstr ""
+
+#: settings.php:286
+msgid "LinkedIn Account"
+msgstr ""
+
+#: settings.php:288
+msgid "Your LinkedIn Account"
+msgstr ""
+
+#: settings.php:298
+msgid "Website Logo"
+msgstr ""
+
+#: settings.php:302
+msgid "Current Logo"
+msgstr ""
+
+#: settings.php:319
+msgid "Your Website Logo"
+msgstr ""
+
+#: settings.php:328
+msgid "Browse Image Logo"
+msgstr ""
+
+#: settings.php:331
+msgid "Browse images if You want to upload your logo."
+msgstr ""
+
+#: settings.php:336
+msgid "Use Image URL"
+msgstr ""
+
+#: settings.php:351
+msgid "Your Website Logo URL"
+msgstr ""
+
+#: settings.php:359
+msgid "Website Favicon"
+msgstr ""
+
+#: settings.php:361
+msgid "Your Website Favicon URL"
+msgstr ""
+
+#: settings.php:370
+msgid "Assets Library"
+msgstr ""
+
+#: settings.php:374
+msgid "CDN Url"
+msgstr ""
+
+#: settings.php:383
+msgid "write down the url of the CDN, if you don't use cdn, just write the site url."
+msgstr ""
+
+#: settings.php:387
+msgid "Enable JQuery"
+msgstr ""
+
+#: settings.php:405 settings.php:458
+msgid "CDN"
+msgstr ""
+
+#: settings.php:409
+msgid "Check this if you want to use Jquery. Fill the version of Jquery. Default version is 1.12.0"
+msgstr ""
+
+#: settings.php:413
+msgid "Enable Bootstrap"
+msgstr ""
+
+#: settings.php:432 settings.php:511
+msgid "LOCAL"
+msgstr ""
+
+#: settings.php:436
+msgid "Check this if you want to use Bootstrap. Bootstrap Version is not available, left it blank"
+msgstr ""
+
+#: settings.php:439
+msgid "Enable Fontawesome"
+msgstr ""
+
+#: settings.php:450
+msgid "Check here if you want to use FontAwesome."
+msgstr ""
+
+#: settings.php:453
+msgid "Fontawesome Version"
+msgstr ""
+
+#: settings.php:462
+msgid "Check this if you want to use Fontawesome. Fontawesome Version is not available, left it blank"
+msgstr ""
+
+#: settings.php:465
+msgid "Enable Editor"
+msgstr ""
+
+#: settings.php:476
+msgid "Check here if you want to use Editor"
+msgstr ""
+
+#: settings.php:479
+msgid "Editor Version"
+msgstr ""
+
+#: settings.php:485
+msgid "Summernote"
+msgstr ""
+
+#: settings.php:489
+msgid "Check this if you want to use Editor. Editor Version is not available, left it blank"
+msgstr ""
+
+#: settings.php:492
+msgid "Enable Bootstrap Validator"
+msgstr ""
+
+#: settings.php:503
+msgid "Check here if you want to use Bootstrap Validator"
+msgstr ""
+
+#: settings.php:515
+msgid "Check this if you want to use Bootstrap Validator. Bootstrap Validator Version is not available, left it blank"
+msgstr ""
+
+#: settings.php:524
+msgid "Posts Configuraton"
+msgstr ""
+
+#: settings.php:528
+msgid "Post per Page"
+msgstr ""
+
+#: settings.php:530
+msgid "Number of Posts to show per page. "
+msgstr ""
+
+#: settings.php:534
+msgid "Pagination Type"
+msgstr ""
+
+#: settings.php:549
+msgid "Number"
+msgstr ""
+
+#: settings.php:551
+msgid "Pager"
+msgstr ""
+
+#: settings.php:553
+msgid "Default Type of Pagination. Number : Number : <code>[1][2][3]</code>, Pager : <code>[Prev] [Next]</code>"
+msgstr ""
+
+#: settings.php:556
+msgid "Pinger"
+msgstr ""
+
+#: settings.php:569
+msgid "Enable pinger ?"
+msgstr ""
+
+#: settings.php:573
+msgid "http://"
+msgstr ""
+
+#: settings.php:577
+msgid "Set the Pinger of Search Engine. Use {{domain}} for your domain"
+msgstr ""
+
+#: settings.php:610
+msgid "PayPal Configuration"
+msgstr ""
+
+#: settings.php:613
+msgid "Currency Symbol"
+msgstr ""
+
+#: settings.php:619
+msgid "Pick a Currency, default is USD"
+msgstr ""
+
+#: settings.php:623 settings.php:639
+msgid "Enable Sandbox"
+msgstr ""
+
+#: settings.php:637
+msgid "Enable Sandbox ?"
+msgstr ""
+
+#: settings.php:642
+msgid "PayPal API Username"
+msgstr ""
+
+#: settings.php:645
+msgid "API Username of Your Paypal Account, eg: email login"
+msgstr ""
+
+#: settings.php:648
+msgid "PayPal API Password"
+msgstr ""
+
+#: settings.php:651
+msgid "Your API Password"
+msgstr ""
+
+#: settings.php:654
+msgid "PayPal Signature"
+msgstr ""
+
+#: settings.php:657
+msgid "Your PayPal Signature"
+msgstr ""
+
+#: settings.php:663
+msgid "Attention, please fill these API Credentials from Your PayPal Account website. See the documentations at <a href='https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/' target='_blank'>https://developer.paypal.com</a>"
+msgstr ""
+
+#: settings.php:679 settings.php:683
+msgid "Google reCaptcha"
+msgstr ""
+
+#: settings.php:695
+msgid "Enable Google Recaptcha ?"
+msgstr ""
+
+#: settings.php:696
+msgid "Check this if you want to enable Google reCaptcha"
+msgstr ""
+
+#: settings.php:701
+msgid "Google reCaptcha Language"
+msgstr ""
+
+#: settings.php:705
+msgid "type the language you want to use"
+msgstr ""
+
+#: settings.php:709
+msgid "Google reCaptcha SiteKey"
+msgstr ""
+
+#: settings.php:713
+msgid "type the google recaptcha sitekey."
+msgstr ""
+
+#: settings.php:717
+msgid "Google reCaptcha Secret"
+msgstr ""
+
+#: settings.php:721
+msgid "type the google recaptcha secret."
+msgstr ""
+
+#: settings.php:726
+msgid "<i class=\"fa fa-warning\"></i> To get Google reCaptcha <strong>SiteKey</strong> and <strong>Secret</strong>, go to <a target=\"_blank\" href=\"https://www.google.com/recaptcha/intro/index.html\">https://www.google.com/recaptcha</a>"
+msgstr ""
+
+#: tags.php:37 tags.php:119
+msgid "Add New Tag"
+msgstr ""
+
+#: tags.php:95
+msgid "No Tags Found"
+msgstr ""
+
+#: tags.php:124
+msgid "Tag Name"
+msgstr ""
+
+#: themes.php:31 header.php:350
+msgid "Themes"
+msgstr ""
+
+#: themes.php:37 themes.php:202
+msgid "Upload Theme"
+msgstr ""
+
+#: themes.php:55
+msgid "Active Theme"
+msgstr ""
+
+#: themes.php:112
+msgid "Available Themes"
+msgstr ""
+
+#: themes.php:165
+msgid "No Themes Found"
+msgstr ""
+
+#: themes.php:188
+msgid "Install Themes"
+msgstr ""
+
+#: themes.php:193
+msgid "Browse Themes"
+msgstr ""
+
+#: themes.php:195
+msgid "choose the theme file. in zip compression"
+msgstr ""
+
+#: user.php:31 header.php:338
+msgid "Users"
+msgstr ""
+
+#: user.php:37 user.php:248
+msgid "Add User"
+msgstr ""
+
+#: user.php:70 user.php:129
+msgid "Find User"
+msgstr ""
+
+#: user.php:74
+msgid "Search User"
+msgstr ""
+
+#: user.php:120 user.php:179
+msgid "Active"
+msgstr ""
+
+#: user.php:121 user.php:177
+msgid "Inactive"
+msgstr ""
+
+#: user.php:144 user.php:206 user.php:254 login.php:143 register.php:171
+msgid "Username"
+msgstr ""
+
+#: user.php:147 user.php:209 user.php:270
+msgid "Group"
+msgstr ""
+
+#: user.php:148 user.php:210
+msgid "Join Date"
+msgstr ""
+
+#: user.php:162
+msgid "Administrator"
+msgstr ""
+
+#: user.php:164
+msgid "Supervisor"
+msgstr ""
+
+#: user.php:166
+msgid "Editor"
+msgstr ""
+
+#: user.php:170
+msgid "Contributor"
+msgstr ""
+
+#: user.php:172
+msgid "VIP Member"
+msgstr ""
+
+#: user.php:174
+msgid "General Member"
+msgstr ""
+
+#: user.php:194
+msgid "Are you sure you want to delete this ?"
+msgstr ""
+
+#: user.php:258 user_form.php:93 login.php:149 register.php:175
+msgid "Password"
+msgstr ""
+
+#: user.php:262 register.php:179
+msgid "Retype Password"
+msgstr ""
+
+#: user_form.php:32
+msgid "Edit User"
+msgstr ""
+
+#: user_form.php:38
+msgid "Update"
+msgstr ""
+
+#: user_form.php:58
+msgid "Modify User"
+msgstr ""
+
+#: user_form.php:81
+msgid "Only Admin can edit userid"
+msgstr ""
+
+#: user_form.php:88
+msgid "Email must be different with another."
+msgstr ""
+
+#: user_form.php:95
+msgid "Type password to change it. Left it blank to use old password."
+msgstr ""
+
+#: user_form.php:102
+msgid "Group Level"
+msgstr ""
+
+#: user_form.php:111
+msgid "Group Level of the user."
+msgstr ""
+
+#: cache.control.php:30 categories.control.php:33 categories.control.php:68
+#: categories.control.php:96 comments-settings.control.php:29
+#: comments.control.php:44 comments.control.php:64 comments.control.php:84
+#: comments.control.php:114 menus.control.php:41 menus.control.php:148
+#: menus.control.php:197 menus.control.php:226 menus.control.php:252
+#: menus.control.php:290 menus.control.php:343 menus.control.php:389
+#: modules.control.php:36 multilang.control.php:29 multilang.control.php:60
+#: multilang.control.php:83 pages.control.php:39 pages.control.php:125
+#: pages.control.php:225 pages.control.php:260 pages.control.php:280
+#: pages.control.php:300 permalink.control.php:29 posts.control.php:41
+#: posts.control.php:138 posts.control.php:259 posts.control.php:296
+#: posts.control.php:316 posts.control.php:336 settings.control.php:30
+#: tags.control.php:33 tags.control.php:68 tags.control.php:96
+#: themes.control.php:34 themes.control.php:96 themes.control.php:108
+#: users.control.php:78 users.control.php:257 users.control.php:326
+#: users.control.php:343 users.control.php:360 Comments.class.php:102
+#: Mod.class.php:218 Mod.class.php:230 Mod.class.php:242 forgotpassword.php:38
+#: login.php:51 register.php:42
+msgid "Token not exist, or your time has expired. Please refresh your browser to get a new token."
+msgstr ""
+
+#: Categories.class.php:129
+msgid "Category config not in Array"
+msgstr ""
+
+#: Categories.class.php:243 Categories.class.php:335 Categories.class.php:383
+msgid "No ID Selected"
+msgstr ""
+
+#: Categories.class.php:353
+msgid "No Name Selected"
+msgstr ""
+
+#: Comments.class.php:58
+msgid "Website"
+msgstr ""
+
+#: Comments.class.php:79
+msgid "Send Comments"
+msgstr ""
+
+#: Comments.class.php:105
+msgid "Nothing to send."
+msgstr ""
+
+#: Comments.class.php:108
+msgid "Who are you ?"
+msgstr ""
+
+#: Comments.class.php:111
+msgid "How we contact you ?"
+msgstr ""
+
+#: Comments.class.php:114
+msgid "Spam Word Detected!!"
+msgstr ""
+
+#: Comments.class.php:117
+msgid "You are commenting too fast!!"
+msgstr ""
+
+#: Comments.class.php:122 login.php:55 register.php:46
+msgid "Please insert the Captcha"
+msgstr ""
+
+#: Comments.class.php:125 login.php:58 register.php:49
+msgid "Your Captcha is not correct."
+msgstr ""
+
+#: Comments.class.php:164
+msgid "Comments Sent."
+msgstr ""
+
+#: Comments.class.php:170
+msgid "Trouble sending Comment."
+msgstr ""
+
+#: Comments.class.php:278 Comments.class.php:281
+msgid "Name is required"
+msgstr ""
+
+#: Comments.class.php:286
+msgid "Name must be more than 6 and less than 30 characters long"
+msgstr ""
+
+#: Comments.class.php:290
+msgid "Name can only consist of alphabetical, number, dot and underscore"
+msgstr ""
+
+#: Comments.class.php:295 Comments.class.php:298
+msgid "Email is required"
+msgstr ""
+
+#: Comments.class.php:301 register.php:267
+msgid "The input is not a valid email address"
+msgstr ""
+
+#: Comments.class.php:306 Comments.class.php:309
+msgid "Message is required"
+msgstr ""
+
+#: Comments.class.php:313
+msgid "The message must be less than 700 characters long"
+msgstr ""
+
+#: Comments.class.php:472
+msgid "No Comments found."
+msgstr ""
+
+#: Db.class.php:227 Posts.class.php:660
+msgid "Data not found"
+msgstr ""
+
+#: Menus.class.php:325
+msgid "Change Order"
+msgstr ""
+
+#: Options.class.php:53
+msgid "Format not Found, please in array"
+msgstr ""
+
+#: Paging.class.php:136
+msgid "Previous"
+msgstr ""
+
+#: Paging.class.php:148
+msgid "Next"
+msgstr ""
+
+#: Paging.class.php:153
+msgid "<alert>Query Error, in Array Please</alert>"
+msgstr ""
+
+#: Posts.class.php:206
+msgid "Error: No Posts found."
+msgstr ""
+
+#: Posts.class.php:425
+msgid "No Post(s) found."
+msgstr ""
+
+#: Posts.class.php:511
+msgid "No Related Post(s)"
+msgstr ""
+
+#: Posts.class.php:577
+msgid "Error: No Post to Show"
+msgstr ""
+
+#: Theme.class.php:43
+msgid "Theme file is missing."
+msgstr ""
+
+#: User.class.php:404
+msgid "All Group"
+msgstr ""
+
+#: login.php:102
+msgid "You Are Logged In Now"
+msgstr ""
+
+#: login.php:105
+msgid "Password Didn't Match With Our Records. Please check Your password and try again."
+msgstr ""
+
+#: login.php:110
+msgid "Your Account is not active. Please activate it first. Check your email for the activation link."
+msgstr ""
+
+#: login.php:112
+msgid "Your Account is not active. Please contact Support for this problems."
+msgstr ""
+
+#: login.php:116
+msgid "Username is incorrect, No such user available. Please check your username."
+msgstr ""
+
+#: login.php:134
+msgid "Member Login"
+msgstr ""
+
+#: login.php:155
+msgid "Forgot Password"
+msgstr ""
+
+#: login.php:159
+msgid "Sign In"
+msgstr ""
+
+#: register.php:53
+msgid "User Exist! Choose Another Username"
+msgstr ""
+
+#: register.php:56
+msgid "Password Did Not Match, Retype Your Password Again."
+msgstr ""
+
+#: register.php:59
+msgid "Email Already Used. Please Use Another E-Mail:"
+msgstr ""
+
+#: register.php:62
+msgid "Your email is not Valid !!"
+msgstr ""
+
+#: register.php:85 register.php:110 register.php:148
+msgid "Thank You for Registering with Us. Please Activate Your Account to login"
+msgstr ""
+
+#: register.php:87
+msgid "We can not create your account"
+msgstr ""
+
+#: register.php:93
+msgid "Account Activation Needed at "
+msgstr ""
+
+#: register.php:94 register.php:132
+msgid ""
+"\n"
+"                            Hi "
+msgstr ""
+
+#: register.php:95
+msgid ""
+",\n"
+"\n"
+"                            Thank You for Registering with Us. Please activate your account by clicking this link :\n"
+"                            "
+msgstr ""
+
+#: register.php:127
+msgid "Your Account activated successfully. You can now Login with your Username and Password."
+msgstr ""
+
+#: register.php:131
+msgid "Welcome to "
+msgstr ""
+
+#: register.php:133
+msgid ""
+",\n"
+"\n"
+"                            Thank You for Registering with Us. Your Account is Activated.\n"
+"                            You can now login : "
+msgstr ""
+
+#: register.php:152
+msgid "Activation Failed."
+msgstr ""
+
+#: register.php:155
+msgid "Activation Failed. No such code, or maybe already activated."
+msgstr ""
+
+#: register.php:161
+msgid "You are Already Registered and Logged In!"
+msgstr ""
+
+#: register.php:168
+msgid "Register"
+msgstr ""
+
+#: register.php:208
+msgid "The username is not valid"
+msgstr ""
+
+#: register.php:211
+msgid "The username is required and cannot be empty"
+msgstr ""
+
+#: register.php:216
+msgid "The username must be more than 6 and less than 30 characters long"
+msgstr ""
+
+#: register.php:220
+msgid "The username can only consist of alphabetical, number and underscore"
+msgstr ""
+
+#: register.php:224
+msgid "The username and password cannot be the same as each other"
+msgstr ""
+
+#: register.php:229 register.php:232 register.php:236 register.php:240
+#: register.php:245
+msgid "The password is not valid"
+msgstr ""
+
+#: register.php:248
+msgid "The password is required and cannot be empty"
+msgstr ""
+
+#: register.php:252
+msgid "The password cannot be the same as username"
+msgstr ""
+
+#: register.php:256
+msgid "The password and its confirm are not the same"
+msgstr ""
+
+#: register.php:264
+msgid "The email is required and cannot be empty"
+msgstr ""
+
+#: footer.php:11
+msgid "Copyright &copy; 2014-"
+msgstr ""
+
+#: footer.php:11
+msgid "All rights reserved."
+msgstr ""
+
+#: footer.php:17
+msgid "Page generated in "
+msgstr ""
+
+#: footer.php:17
+msgid " seconds."
+msgstr ""
+
+#: header.php:332
+msgid "Media"
+msgstr ""
+
+#: header.php:373
+msgid "Global Settings"
+msgstr ""
+
+#: header.php:408
+msgid "Logout"
+msgstr ""
+
+#: categories.control.php:36
+msgid "Category cannot be empty."
+msgstr ""
+
+#: categories.control.php:50
+msgid "Category Added"
+msgstr ""
+
+#: categories.control.php:81
+msgid "Category Updated"
+msgstr ""
+
+#: categories.control.php:102
+msgid "Category Removed"
+msgstr ""
+
+#: comments.control.php:124 pages.control.php:236 posts.control.php:270
+#: users.control.php:149
+msgid "Removed Successfully"
+msgstr ""
+
+#: menus.control.php:44 menus.control.php:293
+msgid "MenuID cannot be empty."
+msgstr ""
+
+#: menus.control.php:47 menus.control.php:296
+msgid "Menu Name cannot be empty."
+msgstr ""
+
+#: menus.control.php:112 menus.control.php:321
+msgid "Menu Added"
+msgstr ""
+
+#: menus.control.php:171
+msgid "Menu Updated"
+msgstr ""
+
+#: menus.control.php:200 menus.control.php:346
+msgid "Menu Name Cannot be Empty"
+msgstr ""
+
+#: menus.control.php:203 menus.control.php:349
+msgid "Menu Type Cannot be Empty"
+msgstr ""
+
+#: menus.control.php:217 menus.control.php:363
+msgid "Menu Item Added"
+msgstr ""
+
+#: menus.control.php:232 menus.control.php:265
+msgid "Menu Deleted"
+msgstr ""
+
+#: menus.control.php:397
+msgid "Menu Order Changed"
+msgstr ""
+
+#: modules.control.php:39 themes.control.php:37
+msgid "No Files Uploaded."
+msgstr ""
+
+#: modules.control.php:55 modules.control.php:73
+msgid "Failed to Install your module"
+msgstr ""
+
+#: modules.control.php:75 modules.control.php:81
+msgid "Module Installed Successfully."
+msgstr ""
+
+#: modules.control.php:83 themes.control.php:81
+msgid "Cannot extract files."
+msgstr ""
+
+#: multilang.control.php:32
+msgid "Please insert Country Name"
+msgstr ""
+
+#: multilang.control.php:35
+msgid "Please insert Country Code"
+msgstr ""
+
+#: multilang.control.php:70
+msgid "Work"
+msgstr ""
+
+#: multilang.control.php:73
+msgid "Error!"
+msgstr ""
+
+#: pages.control.php:59 pages.control.php:144 posts.control.php:61
+#: posts.control.php:159
+msgid "Title cannot be empty."
+msgstr ""
+
+#: pages.control.php:102 posts.control.php:115 users.control.php:298
+msgid "Added Successfully"
+msgstr ""
+
+#: pages.control.php:195 posts.control.php:229
+msgid "Updated Successfully"
+msgstr ""
+
+#: settings.control.php:79
+msgid "New Settings Saved Successfully."
+msgstr ""
+
+#: tags.control.php:36
+msgid "Tag Name Cannot be Empty"
+msgstr ""
+
+#: tags.control.php:50
+msgid "Tag Added"
+msgstr ""
+
+#: tags.control.php:81
+msgid "Tag Updated"
+msgstr ""
+
+#: tags.control.php:103
+msgid "Tag Removed"
+msgstr ""
+
+#: themes.control.php:73
+msgid "Theme Installed Successfully."
+msgstr ""
+
+#: themes.control.php:101
+msgid "Themes activated."
+msgstr ""
+
+#: themes.control.php:111
+msgid "Theme is Active. Please deactivate first."
+msgstr ""
+
+#: themes.control.php:115
+msgid "Themes removed."
+msgstr ""
+
+#: themes.control.php:117
+msgid "Theme Cannot removed. Please check if You had permission to remove the files."
+msgstr ""
+
+#: users.control.php:182
+msgid "Activated Successfully."
+msgstr ""
+
+#: users.control.php:184
+msgid "Activation fail."
+msgstr ""
+
+#: users.control.php:216
+msgid "Deactivated Successfully."
+msgstr ""
+
+#: users.control.php:218
+msgid "Deactivation fail."
+msgstr ""
+
+#: users.control.php:262
+msgid "Username cannot be empty."
+msgstr ""
+
+#: users.control.php:266
+msgid "Password 1 cannot be empty."
+msgstr ""
+
+#: users.control.php:270
+msgid "Password 2 cannot be empty."
+msgstr ""

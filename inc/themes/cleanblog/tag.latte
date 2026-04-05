@@ -1,0 +1,49 @@
+<!-- Page Header -->
+<header class="intro-header" style="background-image: url('{$theme['url']}/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Tag: {$data['tag_name'] ?: 'Tag Listing'}</h1>
+                    <hr class="small">
+                    <span class="subheading">Showing posts tagged with: {$data['tag_name'] ?: 'Posts'}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            {if $data['num'] > 0}
+                {foreach $data['posts'] as $p}
+                    <div class="post-preview">
+                        <a href="{Url::post($p->id)}">
+                            <h2 class="post-title">
+                                {$p->title}
+                            </h2>
+                            <h3 class="post-subtitle">
+                                {Posts::format($p->content, $p->id)|striptags|truncate:150}
+                            </h3>
+                        </a>
+                        <p class="post-meta">Posted by <a href="#">{$p->author}</a> on {Date::local($p->date)}</p>
+                    </div>
+                    <hr>
+                {/foreach}
+                
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="next">
+                        {$data['paging']|noescape}
+                    </li>
+                </ul>
+            {else}
+                <div class="post-preview">
+                    <h2 class="post-title">No entries found for this tag.</h2>
+                </div>
+            {/if}
+        </div>
+    </div>
+</div>

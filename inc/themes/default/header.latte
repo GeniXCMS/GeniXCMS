@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$data['sitetitle'] ?? $site_name}</title>
+    <meta name="description" content="{$data['p_desc'] ?? ''}">
+    
+    {$site_meta|noescape}
+    {Site::loadLibHeader()|noescape}
+
+    <!-- Fallback/Base CSS if needed -->
+    <link href="{$theme_url}/css/blog.css" rel="stylesheet">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Premium Integrated Navbar -->
+    <header class="blog-masthead sticky-top shadow-sm">
+        <div class="container">
+            <nav class="navbar navbar-expand-xl py-0">
+                <div class="container-fluid px-0">
+                    <!-- Brand Section -->
+                    <a class="navbar-brand d-flex align-items-center py-3" href="{$site_url}">
+                        {if !empty($site_logo)}
+                            {$site_logo|noescape}
+                        {else}
+                            <div class="brand-badge bg-primary me-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                <span class="text-white fw-black" style="font-size: 14px; font-family: 'Poppins';">G</span>
+                            </div>
+                            <span class="fs-4 fw-black text-dark tracking-tighter">{$site_name}</span>
+                        {/if}
+                    </a>
+
+                    <!-- Toggle Button for Mobile -->
+                    <button class="navbar-toggler border-0 shadow-none p-0" type="button" data-bs-toggle="collapse" data-bs-target="#premiumNavbar" aria-controls="premiumNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <div class="btn-hamburger">
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
+
+                    <!-- Navigation Content -->
+                    <div class="collapse navbar-collapse" id="premiumNavbar">
+                        <div class="navbar-content-wrapper d-flex flex-column flex-xl-row align-items-xl-center w-100 ps-xl-5">
+                            <!-- Main Menu -->
+                            <div class="ms-xl-auto">
+                                {Menus::getMenu('mainmenu', 'navbar-nav gap-xl-3 mb-2 mb-xl-0 small fw-bold text-uppercase tracking-wider', true)|noescape}
+                            </div>
+
+                            <!-- Integrated Search & Actions -->
+                            <div class="ms-xl-4 d-flex align-items-center gap-3 py-3 py-xl-0">
+                                <form class="navbar-search position-relative d-none d-md-block" action="{$site_url}search" method="get">
+                                    <input type="text" name="q" class="form-control form-control-sm rounded-pill px-4 bg-light border-0" placeholder="Browse topics..." style="width: 200px; font-size: 12px;">
+                                    <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y pe-3 text-muted" style="font-size: 12px;">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {var $hero_bg = MdoTheme::opt('hero_bg')}
+    {if ($p_type ?? '') != 'error'}
+    <div class="blog-header py-5 mb-5 text-center transition-base {if !empty($hero_bg)}hero-bg text-white shadow-lg{else}bg-white border-bottom shadow-sm{/if}" 
+         style="{if !empty($hero_bg)}background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{$hero_bg|noescape}'); background-size: cover; background-position: center; min-height: 400px; display: flex; flex-direction: column; justify-content: center;{/if}">
+        <div class="container">
+            <h1 class="blog-title display-2 fw-bolder mb-2 tracking-tight">{$site_name}</h1>
+            <p class="lead blog-description opacity-75 font-monospace">{Options::v('siteslogan')}</p>
+        </div>
+    </div>
+    {/if}
+
+    <main class="main-content-wrapper flex-grow-1" style="min-height: 60vh;">
+        <div class="container mb-5">
+            <div class="row g-4">

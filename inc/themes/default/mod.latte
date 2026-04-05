@@ -1,0 +1,23 @@
+<div class="col-lg-8 blog-main px-lg-4">
+    {var $mdo_adsense = MdoTheme::opt('mdo_adsense')}
+    {if !empty($mdo_adsense)}
+        <div class="row mb-4">
+            <div class="col-md-12">{$mdo_adsense|noescape}</div>
+        </div>
+        <hr class="mb-5">
+    {/if}
+
+    <div class="blog-post mb-5 pb-5">
+        <h1 class="blog-post-title display-4 fw-bolder mb-5 border-bottom border-secondary-subtle pb-3">
+            {Mod::getTitle($data['mod'])}
+        </h1>
+        
+        <div class="blog-post-content text-dark lh-lg p-4 bg-white rounded-4 shadow-sm border-0 module-content-wrapper">
+            {Hooks::run('mod_control', $data)|noescape}
+        </div>
+    </div>
+</div>
+
+<aside class="col-lg-4 blog-sidebar">
+    {include 'rightside.latte', data: $data}
+</aside>

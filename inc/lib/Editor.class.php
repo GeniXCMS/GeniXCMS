@@ -1,0 +1,263 @@
+<?php
+
+/**
+ * GeniXCMS - Content Management System
+ * 
+ * PHP Based Content Management System and Framework
+ * 
+ * @package GeniXCMS
+ * @author  GeniXCMS <genixcms@gmail.com>
+ * @license MIT License
+ */
+
+class Editor
+{
+    private static $editors = [];
+
+    public static function init()
+    {
+        // Default editors are registered via its own methods
+        self::register('summernote', 'Summernote Classic', [self::class, 'summernote']);
+        self::register('editorjs', 'Editor.js (Blocks)', [self::class, 'editorjs']);
+
+        // Allow modules to register/override editors via hook
+        // We pass the simplified [id => name] list to the filter
+        $filtered_options = Hooks::filter('editor_type_options', self::getEditors());
+
+        // Merge back the filtered options
+        foreach ($filtered_options as $id => $name) {
+            if (isset(self::$editors[$id])) {
+                // If it's already an array, just update the name
+                if (is_array(self::$editors[$id])) {
+                    self::$editors[$id]['name'] = $name;
+                } else {
+                    // It was a string, now it's a string, do nothing
+                    self::$editors[$id] = $name;
+                }
+            } else {
+                // New editor from legacy hook format
+                self::$editors[$id] = $name;
+            }
+        }
+
+        // Load active editor assets
+        $active = Options::v('editor_type') ?: 'summernote';
+        if (isset(self::$editors[$active])) {
+            $callback = self::$editors[$active];
+            if (is_array($callback) && isset($callback['callback'])) {
+                $callback = $callback['callback'];
+            }
+
+            if (is_callable($callback)) {
+                call_user_func($callback);
+            }
+        }
+    }
+
+    public static function register($id, $name, $callback)
+    {
+        self::$editors[$id] = [
+            'name' => $name,
+            'callback' => $callback
+        ];
+    }
+
+    public static function getEditors()
+    {
+        $options = [];
+        foreach (self::$editors as $id => $data) {
+            $options[$id] = is_array($data) ? $data['name'] : $data;
+        }
+        return $options;
+    }
+
+    public static function summernote()
+    {
+        $siteUrl = rtrim(Site::$url, '/');
+        $elfinderUrl = Url::ajax('elfinder');
+
+        // Register Summernote Assets
+        Asset::register('summernote-css', 'css', 'https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.css', 'header');
+        Asset::register('summernote-js', 'js', 'https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs5.min.js', 'footer');
+
+        // Summernote Init Script
+        Asset::register('summernote-init', 'raw', '
+        <script>
+            $(document).ready(function() {
+                function sendFile(file, editor, welEditable) {
+                    var elfinderUrl = "' . $elfinderUrl . '";
+                    var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
+                    $.ajax({ url: elfinderUrl + sep + "cmd=open&init=1&target=", type: "GET", dataType: "json" })
+                    .done(function(initData) {
+                        if (!initData || !initData.cwd) return console.log("Failed to init elfinder API");
+                        var target = initData.cwd.hash;
+                        var fd = new FormData();
+                        fd.append("cmd", "upload");
+                        fd.append("target", target);
+                        fd.append("upload[]", file);
+                        var sep2 = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
+                        $.ajax({
+                            url: elfinderUrl + sep2 + "auto_sort=1", data: fd, cache: false, contentType: false, processData: false, type: "POST",
+                            success: function(data) { 
+                                var parsed = typeof data === "string" ? JSON.parse(data) : data;
+                                if (parsed.added && parsed.added.length > 0) {
+                                    $(".editor").summernote("editor.insertImage", parsed.added[0].url);
+                                } else if(parsed.error) {
+                                    if (typeof window.showGxToast === "function") window.showGxToast(parsed.error, "error");
+                                    else alert(parsed.error);
+                                }
+                            }
+                        });
+                    });
+                }
+
+                $(".editor").each(function(i, obj) { 
+                    $(obj).summernote({
+                        minHeight: 300,
+                        maxHeight: ($(window).height() - 150),
+                        toolbar: [' . System::$toolbar . '],
+                        callbacks: {
+                            onImageUpload: function(files) { sendFile(files[0]); },
+                            onPaste: function (e) {
+                                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData("Text");
+                                e.preventDefault();
+                                document.execCommand("insertText", false, bufferText);
+                            }
+                        }
+                    }); 
+                });
+            });
+        </script>', 'footer', ['summernote-js', 'elfinder-helper']);
+
+        // Enqueue everything
+        Asset::enqueue('summernote-css');
+        Asset::enqueue('summernote-init');
+    }
+
+    public static function editorjs()
+    {
+        // Register EditorJS Core & Tools
+        Asset::register('editorjs-core', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.30.6/dist/editorjs.umd.min.js', 'footer');
+        Asset::register('editorjs-header', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.7/dist/header.umd.min.js', 'footer', ['editorjs-core']);
+        Asset::register('editorjs-list', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/list@2.0.9/dist/editorjs-list.umd.min.js', 'footer', ['editorjs-core']);
+        Asset::register('editorjs-image', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/image@2.10.1/dist/image.umd.min.js', 'footer', ['editorjs-core']);
+        Asset::register('editorjs-quote', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/quote@2.7.6/dist/quote.umd.min.js', 'footer', ['editorjs-core']);
+        Asset::register('editorjs-table', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/table@2.4.3/dist/table.umd.min.js', 'footer', ['editorjs-core']);
+        Asset::register('editorjs-delimiter', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.3.0/dist/bundle.min.js', 'footer', ['editorjs-core']);
+
+        // EditorJS Init logic
+        $url = Url::ajax('saveimage');
+        $elfinderUrl = Url::ajax('elfinder');
+        $encodedUrl = json_encode($url);
+        $encodedElfinderUrl = json_encode($elfinderUrl);
+
+        Asset::register('editorjs-init', 'raw', '
+        <style>
+            .editorjs-wrapper { border: 1px solid #dee2e6; border-radius: 0.5rem; min-height: 400px; padding: 16px; background: #fff; }
+            .ce-block__content, .ce-toolbar__content { max-width: 100%; }
+        </style>
+        <script>
+            window.addEventListener("load", function() {
+                var editors = {};
+                window.__gxEditors = editors;
+                var elfinderUrlRaw = ' . $encodedElfinderUrl . ';
+
+                document.querySelectorAll(".editor").forEach(function(textarea, idx) {
+                    var editorId = "editorjs-holder-" + idx;
+                    var wrapper = document.createElement("div");
+                    wrapper.id = editorId; wrapper.className = "editorjs-wrapper";
+                    textarea.parentNode.insertBefore(wrapper, textarea);
+                    textarea.style.display = "none";
+
+                    var tools = {
+                        header: { class: Header, inlineToolbar: true },
+                        list: { class: EditorjsList, inlineToolbar: true },
+                        quote: { class: Quote, inlineToolbar: true },
+                        table: { class: Table, inlineToolbar: true },
+                        delimiter: Delimiter,
+                        image: {
+                            class: ImageTool,
+                            config: {
+                                uploader: {
+                                    uploadByFile: function(file) {
+                                        return new Promise(function(resolve, reject) {
+                                            fetch(elfinderUrlRaw + (elfinderUrlRaw.indexOf("?") === -1 ? "?" : "&") + "cmd=open&init=1&target=")
+                                            .then(function(res) { return res.json(); })
+                                            .then(function(initData) {
+                                                if (!initData || !initData.cwd) return reject("Failed to init elfinder API");
+                                                var target = initData.cwd.hash;
+                                                var fd = new FormData();
+                                                fd.append("cmd", "upload");
+                                                fd.append("target", target);
+                                                fd.append("upload[]", file);
+                                                fetch(elfinderUrlRaw + (elfinderUrlRaw.indexOf("?") === -1 ? "?" : "&") + "auto_sort=1", { method: "POST", body: fd })
+                                                .then(function(r) { return r.json(); })
+                                                .then(function(upRes) {
+                                                    if (upRes.added && upRes.added.length > 0) resolve({ success: 1, file: { url: upRes.added[0].url } });
+                                                    else reject(upRes.error || "Upload failed");
+                                                }).catch(reject);
+                                            }).catch(reject);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                    var initData = { blocks: [] };
+                    var existing = textarea.value.trim();
+                    if (existing) {
+                        try {
+                            var parserDiv = document.createElement("div");
+                            parserDiv.innerHTML = existing;
+                            Array.from(parserDiv.childNodes).forEach(function(node) {
+                                if (node.nodeType === 1) {
+                                    var tag = node.tagName;
+                                    if (tag === "P") initData.blocks.push({ type: "paragraph", data: { text: node.innerHTML } });
+                                    else if (tag.match(/^H[1-6]$/)) initData.blocks.push({ type: "header", data: { text: node.innerText, level: parseInt(tag[1]) } });
+                                    else if (tag === "UL" || tag === "OL") initData.blocks.push({ type: "list", data: { style: tag === "OL" ? "ordered" : "unordered", items: Array.from(node.querySelectorAll("li")).map(li => li.innerHTML) } });
+                                    else if (node.querySelector("img")) initData.blocks.push({ type: "image", data: { file: { url: node.querySelector("img").src }, caption: (node.innerText || "").trim() } });
+                                }
+                            });
+                        } catch(e) { console.error(e); }
+                    }
+
+                    editors[idx] = new EditorJS({
+                        holder: editorId, tools: tools, data: initData
+                    });
+                    editors[idx]._textarea = textarea;
+                });
+
+                document.querySelectorAll("form").forEach(function(form) {
+                    form.addEventListener("submit", function(e) {
+                        var promises = Object.keys(editors).map(function(idx) {
+                            return editors[idx].save().then(function(data) {
+                                var html = "";
+                                data.blocks.forEach(function(block) {
+                                    switch (block.type) {
+                                        case "header": html += "<h" + block.data.level + ">" + block.data.text + "</h" + block.data.level + ">"; break;
+                                        case "paragraph": html += "<p>" + block.data.text + "</p>"; break;
+                                        case "list":
+                                            var tag = block.data.style === "ordered" ? "ol" : "ul";
+                                            html += "<" + tag + ">" + block.data.items.map(i => "<li>"+i+"</li>").join("") + "</" + tag + ">";
+                                            break;
+                                        case "image": html += "<div class=\'text-center mb-3\'><img src=\'"+block.data.file.url+"\' class=\'img-fluid rounded\'></div>"; break;
+                                    }
+                                });
+                                editors[idx]._textarea.value = html;
+                            });
+                        });
+                        e.preventDefault();
+                        Promise.all(promises).then(function() { 
+                            var s = document.createElement("input"); s.type="hidden"; s.name="submit"; s.value="1"; form.appendChild(s);
+                            HTMLFormElement.prototype.submit.call(form);
+                        });
+                    });
+                });
+            });
+        </script>', 'footer', ['editorjs-delimiter', 'elfinder-helper']);
+
+        // Enqueue everything
+        Asset::enqueue('editorjs-init');
+    }
+}

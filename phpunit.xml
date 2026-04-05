@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="Tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="GeniXCMS Test Suite">
+            <directory>./Tests/</directory>
+        </testsuite>
+    </testsuites>   
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_HOST" value="localhost"/>
+        <env name="DB_DRIVER" value="mysqli"/>
+        <env name="DB_USER" value="root"/>
+        <env name="DB_PASS" value=""/>
+        <env name="DB_NAME" value="db_test"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="MAIL_DRIVER" value="log"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+    </php>
+</phpunit>
