@@ -1,5 +1,5 @@
-# GeniXCMS v2.0.1
-> **Latest Update**: Unified Database Support (MySQL, PostgreSQL, SQLite) & Modern Premium Themes.
+# GeniXCMS v2.1.0
+> **Latest Update**: Professional Dynamic Builder Integration & High-Performance Madxion Theme.
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
@@ -9,9 +9,10 @@
 
 ### 🌟 Key Features in v2.x
 
-- **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3** (Perfect for zero-config deployments).
+- **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3**.
+- **Dynamic Builder (v2.1.0+)**: A professional-grade visual editor with drag-and-drop mechanics, premium block library, and real-time layout synchronization.
 - **GxEditor Modular Engine**: A next-gen block-based editor allowing for custom visual blocks, Elementor-style **Nested Containers**, and a distraction-free **Classic Mode**.
-- **Centralized Asset Management**: Robust `Asset` class for programmatic enqueuing with **Automatic Dependency Resolution** (ensures jQuery/Bootstrap load in correct order).
+- **Centralized Asset Management**: Robust `Asset` class for programmatic enqueuing with **Automatic Dependency Resolution**.
 - **Latte Template Engine**: Fully integrated [Latte](https://latte.nette.org/) for secure, clean, and blazingly fast templating.
 - **Premium Editorial Themes**:
   - **GneeX**: Industrial-modern design with Glassmorphism, premium magazine layouts, and responsive typography.
@@ -80,7 +81,8 @@ Upgrading from v1.x involves significant core changes.
 ### 🌐 Links & Community
 
 - **Official Website**: [genixcms.web.id](https://genixcms.web.id/)
-- **Documentation**: [docs.genixcms.web.id](https://genixcms.web.id/mod/docs.html)
+- **Documentation**: [genixcms.web.id/mod/docs.html](https://genixcms.web.id/mod/docs.html)
+- **Demo**: [demo.genixcms.web.id](https://demo.genixcms.web.id/)
 - **GitHub**: [GeniXCMS Organization](https://github.com/GeniXCMS)
 
 ---
