@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-04-07
+
+### Added
+- **9 Customizable Admin Sections**: Hero, Expertise (4 cards), Advantages (3 items), Validation (3 testimonials), Posts, Colors, Typography, Social, and Advanced settings.
+- **CSS Variables System**: Dynamic color injection via CSS custom properties for seamless theme customization.
+- **Extended Menu System**: New `itemClass` parameter in `Menus::getMenu()` for custom menu item styling per-theme.
+- **Bootstrap CSS Dequeue**: Frontend now loads TailwindCSS exclusively, preventing Bootstrap style conflicts.
+- **Dynamic Builder Pro Upgrade**: Overhauled the visual editor with a premium dark theme, integrated elFinder asset manager, and a new high-quality block library (Hero, Pricing, FAQ, Features).
+- **Responsive Builder Workspace**: Added device simulation toggles (Desktop, Tablet, Mobile) to the builder header for effortless responsive design.
+- **Team Section Widget**: A premium, responsive 4-column grid with custom 3:4 aspect ratio containers and grayscale-to-color hover transitions.
+- **Dynamic Builder Documentation**: Comprehensive User and Developer guides integrated into the official GeniXCMS documentation site.
+- **Heading Component Integration**: Upgraded static headings in standard sections to use the dynamic `heading-component`, allowing on-the-fly H1-H6 level adjustment.
+
+### Changed - Core Asset & Menu Systems
+- **Asset::dequeue() Method**: Added new method to the Asset class for removing assets from the current page queue dynamically.
+- **Menu Generation Logic**: Updated `Menus::getMenu()` to conditionally apply Bootstrap classes only when `$bsnav = true`, supporting theme-specific styling.
+- **Bootstrap Frontend Loading**: Bootstrap CSS is now conditional and not loaded on the frontend by default (configurable per theme).
+
+### Fixed - Dynamic Builder UI/UX
+- **Block Category Toggle**: Resolved a major UI bug where block categories would not collapse; fixed by removing an `!important` CSS override in `builder.css`.
+- **Image & Text Editability**: Standardized Team and Hero images as `type: 'image'` and explicitly defined sub-elements in "Hero Cyber Frontier" as `type: 'text'` for reliable editor interaction.
+- **Canvas Aspect Ratios**: Implemented a dedicated `canvas.css` layer for the editor iframe to ensure custom ratios (like 3:4) and interactive hover effects are rendered accurately.
+- **Image Widget Defaults**: Standardized the core Image block to be full-width, float-none, and border-radius: 0 for a cleaner "out-of-the-box" design experience.
+
+### Fixed - Theme Styling & UI
+- **Validation Card Variables**: Fixed undefined Latte variables for validation card styling (changed from snake_case to camelCase for consistency).
+- **Posts Card Border Styling**: Border styling now applied via CSS instead of relying on Tailwind arbitrary opacity syntax.
+- **Card Border Radius Consistency**: Posts cards now use `rounded-3xl` matching validation and expertise cards for unified design.
+
+
 ## [2.0.1] - 2026-04-05
 
 ### Fixed
