@@ -290,8 +290,22 @@ class Editor
                 });
 
                 document.querySelectorAll("form").forEach(function(form) {
+                    var formEditors = [];
+                    Object.keys(editors).forEach(function(idx) {
+                        if (form.contains(editors[idx]._textarea)) {
+                            formEditors.push(idx);
+                        }
+                    });
+
+                    if (formEditors.length === 0) return;
+
                     form.addEventListener("submit", function(e) {
-                        var promises = Object.keys(editors).map(function(idx) {
+                        if (form.dataset.gxEditorSaved === "true") {
+                            return; // Allow submission to proceed naturally
+                        }
+
+                        e.preventDefault();
+                        var promises = formEditors.map(function(idx) {
                             return editors[idx].save().then(function(data) {
                                 var html = "";
                                 data.blocks.forEach(function(block) {
@@ -308,10 +322,17 @@ class Editor
                                 editors[idx]._textarea.value = html;
                             });
                         });
-                        e.preventDefault();
+                        
                         Promise.all(promises).then(function() { 
+                            form.dataset.gxEditorSaved = "true";
                             var s = document.createElement("input"); s.type="hidden"; s.name="submit"; s.value="1"; form.appendChild(s);
-                            HTMLFormElement.prototype.submit.call(form);
+                            
+                            // Let jQuery handle the AJAX submit natively if it exists
+                            if (window.jQuery) {
+                                window.jQuery(form).trigger("submit");
+                            } else {
+                                HTMLFormElement.prototype.submit.call(form);
+                            }
                         });
                     });
                 });

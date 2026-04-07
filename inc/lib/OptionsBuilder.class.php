@@ -598,6 +598,9 @@ HTML;
             case 'toggle':
                 $this->fieldToggle($field);
                 break;
+            case 'checkbox':
+                $this->fieldCheckbox($field);
+                break;
         }
         if (!empty($field['hint']))
             echo '<span class="hint">' . htmlspecialchars($field['hint']) . '</span>';
@@ -661,6 +664,15 @@ HTML;
         echo "<input type=\"range\" name=\"{$name}\" id=\"{$id}\" class=\"gx-range\" value=\"{$val}\" min=\"{$min}\" max=\"{$max}\" step=\"{$step}\" oninput=\"document.getElementById('{$id}_val').innerText=this.value\">";
         echo "<span class=\"gx-range-badge\"><span id=\"{$id}_val\">{$val}</span>{$unit}</span>";
         echo "</div>";
+    }
+
+    private function fieldCheckbox(array $f): void
+    {
+        $name = htmlspecialchars($f['name'] ?? '');
+        $value = $this->opt[$f['name'] ?? ''] ?? 'off';
+        $checked = ($value === 'on') ? ' checked' : '';
+        echo "<input type=\"hidden\" name=\"{$name}\" value=\"off\">";
+        echo "<input type=\"checkbox\" name=\"{$name}\" value=\"on\"{$checked} class=\"gx-checkbox-input\">";
     }
 
     private function fieldSelect(array $f): void
@@ -833,6 +845,9 @@ HTML;
             transition: all 0.3s ease; 
         }
         .gx-input:focus { background: #fff; border-color: #0f172a; outline: none; box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05); }
+
+        .gx-field input[type="checkbox"] { margin-top: 0.25rem; transform: scale(1.1); }
+        .gx-field label + .gx-checkbox-input { margin-left: 0; }
 
         .gx-color-field { display: flex; background: #f8fafc; border: 2px solid #f1f5f9; border-radius: 14px; overflow: hidden; height: 52px; }
         .gx-color-field input[type="color"] { width: 52px; height: 100%; border: none; background: none; cursor: pointer; padding: 4px; }

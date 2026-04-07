@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.6 build date 20150706
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -79,6 +79,10 @@ class Hooks
             'admin_page_dashboard_action' => array(),
             'admin_page_dashboard_statslist_action' => array(),
             'admin_footer_action' => array(),
+            'dynamic_builder_blocks' => array(),
+            'dynamic_builder_layout' => array(),
+            'dynamic_builder_css' => array(),
+            'dynamic_builder_js' => array(),
             'module_install_action' => array(),
             'theme_install_action' => array(),
             'mod_control' => array(),

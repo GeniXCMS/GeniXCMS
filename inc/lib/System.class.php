@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -26,7 +26,7 @@ class System
      *
      * @return float
      */
-    public static $version = '2.0.1';
+    public static $version = '2.1.0';
 
     /**
      * GeniXCMS Version Release.
@@ -198,11 +198,11 @@ class System
          */
         $csp_rules = [
             "default-src" => ["'self'"],
-            "script-src" => ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://static.cloudflareinsights.com"],
-            "style-src" => ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://code.jquery.com", "https://cdnjs.cloudflare.com"],
+            "script-src" => ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://static.cloudflareinsights.com", "https://unpkg.com"],
+            "style-src" => ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://unpkg.com"],
             "img-src" => ["'self'", "data:", "https:", "*"],
-            "font-src" => ["'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-            "connect-src" => ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://cloudflareinsights.com"],
+            "font-src" => ["'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://unpkg.com"],
+            "connect-src" => ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://cloudflareinsights.com", "https://unpkg.com"],
             "frame-src" => ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com", "https://www.dailymotion.com"],
             "object-src" => ["'none'"]
         ];
@@ -213,10 +213,18 @@ class System
             $csp_rules = $csp_rules_filtered;
         }
 
-        // Complie and send CSP header
+        // Compile and send CSP header
         $csp_string = "";
         foreach ($csp_rules as $directive => $sources) {
-            $csp_string .= "{$directive} " . implode(' ', $sources) . "; ";
+            if (is_array($sources)) {
+                // Ensure we only have strings in the array to prevent warnings
+                $clean_sources = array_filter($sources, function ($v) {
+                    return is_string($v);
+                });
+                $csp_string .= "{$directive} " . implode(' ', $clean_sources) . "; ";
+            } else {
+                $csp_string .= "{$directive} {$sources}; ";
+            }
         }
 
         header("Content-Security-Policy: " . trim($csp_string));

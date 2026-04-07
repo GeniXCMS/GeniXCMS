@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -20,12 +20,12 @@
 error_reporting(-1);
 date_default_timezone_set('UTC');
 
-define('GX_PATH', realpath(__DIR__.'/'));
-define('GX_LIB', GX_PATH.'/inc/lib/');
-define('GX_MOD', GX_PATH.'/inc/mod/');
-define('GX_THEME', GX_PATH.'/inc/themes/');
-define('GX_ASSET', GX_PATH.'/assets/');
-define('GX_CACHE', GX_PATH.'/assets/cache/');
+define('GX_PATH', realpath(__DIR__ . '/'));
+define('GX_LIB', GX_PATH . '/inc/lib/');
+define('GX_MOD', GX_PATH . '/inc/mod/');
+define('GX_THEME', GX_PATH . '/inc/themes/');
+define('GX_ASSET', GX_PATH . '/assets/');
+define('GX_CACHE', GX_PATH . '/assets/cache/');
 
 
 
@@ -33,14 +33,14 @@ require 'autoload.php';
 
 try {
     $gx = new GxMain();
-    
+
     // Temporary Cleanup: Reset Archives cache because of data structure change
     if (isset($_GET['clean_archives'])) {
         Db::query("DELETE FROM `options` WHERE `name` IN ('archives_list', 'archives_last_update')");
         echo "Archives Cache Reset Successful!";
         exit;
     }
-    
+
     $gx->index();
 } catch (Exception $e) {
     echo $e->getMessage();

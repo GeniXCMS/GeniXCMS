@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.2 build date 20150309
- * @version 2.0.1
+ * @version 2.1.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author GenixCMS <genixcms@gmail.com>

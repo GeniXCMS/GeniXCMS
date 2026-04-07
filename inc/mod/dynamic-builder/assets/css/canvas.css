@@ -1,0 +1,156 @@
+html {
+    background-color: #f1f3f6 !important; /* Subtle desk background */
+    height: 100%;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    background-color: #ffffff !important;
+    
+    /* Boundary indicator without physical margin */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Hard Reset for Bootstrap Row in Editor */
+.row {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Subtle Dropzone Info at the bottom */
+body::after {
+    content: "END OF PAGE CONTENT — DROP NEW BLOCKS BELOW";
+    display: block;
+    text-align: center;
+    padding: 100px 0;
+    color: rgba(0, 0, 0, 0.15);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    pointer-events: none;
+    text-transform: uppercase;
+}
+.gjs-dashed * {
+    outline: 1px dashed rgba(0, 0, 0, 0.05) !important;
+    outline-offset: -1px;
+}
+
+/* Better typography rendering in editor */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grid Helper: Make empty columns visible and droppable */
+[class*="col-"] {
+    min-height: 70px !important;
+}
+
+/* Reset Bootstrap Row Negative Margins for Editor Precision */
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.row:empty, [class*="col-"]:empty {
+    outline: 1px dashed rgba(37, 99, 235, 0.2) !important;
+    outline-offset: -2px;
+    background-color: rgba(37, 99, 235, 0.02) !important;
+}
+
+/* Hover highlight for major wrappers to help selection */
+section:hover, header:hover, footer:hover, .container:hover {
+    outline: 1px solid rgba(14, 165, 233, 0.4) !important;
+    outline-offset: -1px;
+}
+
+/* Ensure selected element has a strong border */
+.gjs-selected {
+    outline: 2px solid #0ea5e9 !important;
+    outline-offset: -2px;
+}
+
+/* Tabs System Modern Styling */
+.tabs-container .nav-tabs .nav-link {
+    transition: all 0.3s ease;
+    border-radius: 0;
+    color: #6c757d;
+}
+
+.tabs-container .nav-tabs .nav-link.active {
+    color: #0d6efd !important;
+    border-bottom: 3px solid #0d6efd !important;
+    background: transparent !important;
+}
+
+/* Vertical Pills Styling */
+.tabs-container .nav-pills .nav-link {
+    transition: all 0.2s ease;
+    border-radius: 12px;
+    color: #495057;
+    margin-bottom: 8px;
+    text-align: left;
+    padding: 12px 20px;
+}
+
+.tabs-container .nav-pills .nav-link.active {
+    background: #0d6efd !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.tabs-container .nav-pills .nav-link:hover:not(.active) {
+    background-color: rgba(13, 110, 253, 0.08);
+    color: #0d6efd;
+}
+
+.tabs-container .tab-pane {
+    transition: opacity 0.3s linear;
+}
+
+/* Custom Ratios for Team & Media Sections */
+.ratio-3x4 {
+    --bs-aspect-ratio: 133.33%;
+}
+
+.ratio > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Team Component Interactions */
+.gx-team-card {
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+
+.gx-team-card:hover {
+    transform: translateY(-5px);
+}
+
+.transition-700 {
+    transition: all 0.7s ease-in-out !important;
+}
+
+/* Ensure grayscale works and is reversible on hover */
+img.grayscale {
+    filter: grayscale(1);
+}
+
+.gx-team-card:hover img.grayscale {
+    filter: grayscale(0) !important;
+    transform: scale(1.05);
+}

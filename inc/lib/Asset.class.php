@@ -75,6 +75,35 @@ class Asset
         }
     }
 
+    /**
+     * Remove an asset from the current page's queue
+     */
+    public static function dequeue($id)
+    {
+        if (is_array($id)) {
+            foreach ($id as $i) {
+                self::dequeue($i);
+            }
+            return;
+        }
+
+        // Remove from both header and footer queues
+        if (isset(self::$queue['header'][$id])) {
+            unset(self::$queue['header'][$id]);
+        }
+        if (isset(self::$queue['footer'][$id])) {
+            unset(self::$queue['footer'][$id]);
+        }
+
+        // Also remove from rendered cache to allow re-enqueueing if needed
+        if (isset(self::$rendered['header'][$id])) {
+            unset(self::$rendered['header'][$id]);
+        }
+        if (isset(self::$rendered['footer'][$id])) {
+            unset(self::$rendered['footer'][$id]);
+        }
+    }
+
     private static $rendered = [
         "header" => [],
         "footer" => []
@@ -153,11 +182,13 @@ class Asset
             return self::get('footer'); });
 
         // Auto-enqueue Core Assets globally (Context handled by registration)
-        self::enqueue(['jquery', 'jquery-ui', 'bootstrap-css', 'bootstrap-js', 'bootstrap-icons', 'fontawesome']);
+        self::enqueue(['jquery', 'jquery-ui', 'bootstrap-js', 'bootstrap-icons', 'fontawesome']);
         self::enqueue(['gx-toast-css', 'gx-toast-js']);
 
+        // Only enqueue Bootstrap CSS on admin, not frontend
         // Auto-enqueue elFinder for all Admin pages
         if (defined('GX_ADMIN') && GX_ADMIN) {
+            self::enqueue('bootstrap-css');
             self::enqueue('elfinder-helper');
         }
     }
@@ -334,7 +365,10 @@ class Asset
             self::enqueue('jquery-ui');
         }
         if (Options::v('use_bootstrap') == 'on') {
-            self::enqueue('bootstrap-css');
+            // Only enqueue Bootstrap CSS on admin, not frontend (to prevent conflicts with TailwindCSS)
+            if (defined('GX_ADMIN') && GX_ADMIN) {
+                self::enqueue('bootstrap-css');
+            }
             self::enqueue('bootstrap-js');
             self::enqueue('bootstrap-icons');
             // self::enqueue('toastr-init'); // Skip legacy toastr if gx-toast is used

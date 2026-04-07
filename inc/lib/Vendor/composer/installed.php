@@ -1,7 +1,7 @@
 <?php return array(
     'root' => array(
         'name' => 'genix/cms',
-        'pretty_version' => '2.0.0',
+        'pretty_version' => '2.0.0-alpha',
         'version' => '2.0.0.0-alpha',
         'reference' => null,
         'type' => 'project',
@@ -20,7 +20,7 @@
             'dev_requirement' => false,
         ),
         'genix/cms' => array(
-            'pretty_version' => '2.0.0',
+            'pretty_version' => '2.0.0-alpha',
             'version' => '2.0.0.0-alpha',
             'reference' => null,
             'type' => 'project',

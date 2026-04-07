@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20141007
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -86,7 +86,7 @@ class Menus
      *
      * @since 0.0.1pre
      */
-    public static function getMenu($menuid, $class = '', $bsnav = false)
+    public static function getMenu($menuid, $class = '', $bsnav = false, $itemClass = '')
     {
         $menus = self::getMenuRaw($menuid);
         $n = count($menus);
@@ -101,17 +101,17 @@ class Menus
                         $class = 'nav-item dropdown';
                         $aclass = 'nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"';
                     } else {
-                        $class = 'nav-item';
-                        $aclass = 'nav-link';
+                        $class = $bsnav ? 'nav-item' : '';
+                        $aclass = $bsnav ? 'nav-link' : '';
                     }
                     $type = $m->type;
                     $menu .= "<li class='$class'>";
-                    $menu .= "<a href='" . Url::$type($m->value) . "' class=\"{$m->class} {$aclass}\">" . $m->name . '</a>';
+                    $menu .= "<a href='" . Url::$type($m->value) . "' class=\"{$m->class} {$aclass} {$itemClass}\">" . $m->name . '</a>';
                     $parent = $m->id;
                     //                    echo $parent;
 
                     if ($n > 0) {
-                        $class = 'dropdown-menu';
+                        $class = $bsnav ? 'dropdown-menu' : '';
                         $menu .= "<ul class=\" {$class}\" role=\"dropdown\">";
                         foreach ($menus as $m2) {
                             if ($m2->parent == $m->id) {
@@ -122,12 +122,12 @@ class Menus
                                     $aclass = '" data-bs-toggle="dropdown" aria-expanded="false"';
                                 } else {
                                     $class = '';
-                                    $aclass = 'dropdown-item';
+                                    $aclass = $bsnav ? 'dropdown-item' : '';
                                 }
                                 $type = $m2->type;
                                 //                                print_r($m2);
                                 $menu .= "<li $class>";
-                                $menu .= "<a href='" . Url::$type($m2->value) . "' class=\"{$m2->class} {$aclass}\">" . $m2->name . '</a>';
+                                $menu .= "<a href='" . Url::$type($m2->value) . "' class=\"{$m2->class} {$aclass} {$itemClass}\">" . $m2->name . '</a>';
 
                                 if ($n > 0) {
                                     $class = 'dropdown-menu';
@@ -141,15 +141,15 @@ class Menus
                                                 $aclass = 'dropdown-item';
                                             } else {
                                                 $class = '';
-                                                $aclass = 'dropdown-item';
+                                                $aclass = $bsnav ? 'dropdown-item' : '';
                                             }
                                             $type = $m3->type;
                                             $menu .= "<li $class>";
                                             //$menu .= "<li>";
-                                            $menu .= "<a href='" . Url::$type($m3->value) . "' class=\"{$m3->class} {$aclass}\">" . $m3->name . '</a>';
+                                            $menu .= "<a href='" . Url::$type($m3->value) . "' class=\"{$m3->class} {$aclass} {$itemClass}\">" . $m3->name . '</a>';
 
                                             if ($n > 0) {
-                                                $class = 'dropdown-menu';
+                                                $class = $bsnav ? 'dropdown-menu' : '';
                                                 $menu .= "<ul class=\" {$class}\">";
                                                 foreach ($menus as $m4) {
                                                     if ($m4->parent == $m3->id) {
@@ -160,11 +160,11 @@ class Menus
                                                             $aclass = 'dropdown-item';
                                                         } else {
                                                             $class = '';
-                                                            $aclass = 'dropdown-item';
+                                                            $aclass = $bsnav ? 'dropdown-item' : '';
                                                         }
                                                         $type = $m4->type;
                                                         $menu .= "<li $class>";
-                                                        $menu .= "<a href='" . Url::$type($m4->value) . "' class=\"{$m4->class} {$aclass}\">" . $m4->name . '</a>';
+                                                        $menu .= "<a href='" . Url::$type($m4->value) . "' class=\"{$m4->class} {$aclass} {$itemClass}\">" . $m4->name . '</a>';
                                                         $menu .= '</li>';
                                                     }
                                                 }

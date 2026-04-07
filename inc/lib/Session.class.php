@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140925
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -53,6 +53,7 @@ class Session implements SessionHandlerInterface
             $cookie_params['domain'] = $domain;
         }
 
+        ini_set('session.gc_maxlifetime', $expires);
         session_set_cookie_params($cookie_params);
 
         if (session_status() === PHP_SESSION_NONE) {

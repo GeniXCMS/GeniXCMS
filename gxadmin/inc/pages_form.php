@@ -203,15 +203,5 @@ $ui = new UiBuilder([
     <input type="hidden" name="token" value="<?=$token;?>">
 </form>
 
-<style>
-    .nav-pills-custom .nav-link { color: #64748b; font-weight: 600; font-size: 0.85rem; border: 1px solid #f1f5f9; margin-right: 8px; transition: all 0.3s ease; }
-    .nav-pills-custom .nav-link:hover { background-color: #f8fafc; border-color: #e2e8f0; }
-    .nav-pills-custom .nav-link.active { background-color: var(--gx-primary); color: #fff; border-color: var(--gx-primary); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
-    .form-control-lg:focus { background-color: #fff !important; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-    .extra-small { font-size: 0.75rem; }
-    .card-header h6 { letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.8rem; }
-    .media-drop-zone { transition: all 0.3s ease; border: 2px dashed #e2e8f0; }
-    .media-drop-zone:hover { border-color: var(--gx-primary); background-color: rgba(59, 130, 246, 0.05) !important; }
 </style>
 
-</script>

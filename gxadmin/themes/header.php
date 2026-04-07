@@ -8,7 +8,7 @@
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- GeniXCMS Asset Manager -->
     <?= Site::loadLibHeader(); ?>
     <?php echo Hooks::run('admin_header_action'); ?>
@@ -54,7 +54,7 @@
                 <?php echo AdminMenu::renderSidebar('external'); ?>
 
                 <li>
-                    <a href="<?= Site::$url; ?>logout/" class="text-danger"><i class="bi bi-power"></i>
+                    <a href="<?= Url::logout(); ?>" class=" text-danger"><i class="bi bi-power"></i>
                         <span><?= _("Logout"); ?></span></a>
                 </li>
                 <?php Hooks::run('admin_sidebar_end'); ?>
@@ -232,8 +232,8 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item text-danger" href="<?= Site::$url; ?>logout/"><i
-                                    class="bi bi-power me-2"></i> <?= _("Logout"); ?></a></li>
+                        <li><a class="dropdown-item text-danger" href="<?= Url::logout(); ?>"><i
+                                    class=" bi bi-power me-2"></i> <?= _("Logout"); ?></a></li>
                     </ul>
                 </div>
             </div>

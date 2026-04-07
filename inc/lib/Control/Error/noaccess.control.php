@@ -6,7 +6,7 @@
  *
  * @since 0.0.1 build date 20150219
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 

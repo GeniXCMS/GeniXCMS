@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20150126
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -63,7 +63,7 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 2.0.1
+ * @version 2.1.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto (www.metalgenix.com)
@@ -90,7 +90,7 @@ error_reporting(E_ALL);
 
 !defined('DEBUG')          ? define('DEBUG',          false) : null;
 
-!defined('SESSION_EXPIRES') ? define('SESSION_EXPIRES', 1) : null;
+!defined('SESSION_EXPIRES') ? define('SESSION_EXPIRES', 720) : null;
 !defined('SESSION_DB')      ? define('SESSION_DB',      false) : null;
 
 ##################################// 

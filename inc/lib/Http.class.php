@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 1.0.0 build date 20170118
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -79,8 +79,8 @@ class Http
         if (isset($purl['port']) && in_array($purl['port'], $ports)) {
             return true;
         } /* elseif($purl['port'] == ''){
-           return true;
-       } */ else {
+          return true;
+      } */ else {
             return false;
         }
     }

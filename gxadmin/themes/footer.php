@@ -1,5 +1,5 @@
     </main>
-    <footer class="admin-footer d-flex justify-content-between align-items-center">
+    <footer class="admin-footer mt-auto d-flex justify-content-between align-items-center">
         <div>
             <strong>Copyright &copy; 2014-<?=date('Y');?> <a href="https://genixcms.web.id" target="_blank" class="text-decoration-none">GeniXCMS</a>.</strong>
             <?=_("All rights reserved.");?>

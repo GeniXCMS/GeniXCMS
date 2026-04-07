@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * @since 0.0.1 build date 20140930
  *
- * @version 2.0.1
+ * @version 2.1.0
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
@@ -307,16 +307,27 @@ class Url
      *
      * @since 1.0.0
      */
-    public static function ajax($vars)
+    public static function ajax($vars, $params = [])
     {
+        $queryString = '';
+        if (!empty($params)) {
+            $queryString = '?' . http_build_query($params);
+        }
+
         switch (SMART_URL) {
             case true:
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
                 $url = Site::$url . $inFold . 'ajax/' . $vars . '/' . TOKEN;
+                if ($queryString !== '') {
+                    $url .= $queryString;
+                }
                 break;
 
             default:
                 $url = Site::$url . "?ajax={$vars}&token=" . TOKEN;
+                if (!empty($params)) {
+                    $url .= '&' . http_build_query($params);
+                }
                 break;
         }
 
@@ -529,6 +540,24 @@ class Url
             default:
                 $param = ($var != '') ? "&" . $var : "";
                 $url = Site::$url . "?login" . $param;
+                break;
+        }
+
+        return $url;
+    }
+
+    public static function logout($var = '')
+    {
+        switch (SMART_URL) {
+            case true:
+                $param = ($var != '') ? "?" . $var : "";
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url . $inFold . 'logout/' . $param;
+                break;
+
+            default:
+                $param = ($var != '') ? "&" . $var : "";
+                $url = Site::$url . "?logout" . $param;
                 break;
         }
 
