@@ -1,5 +1,5 @@
 # GeniXCMS v2.1.1
-> **Latest Update**: Professional Dynamic Builder Integration & High-Performance Madxion Theme.
+> **Latest Update**: Professional Dynamic Builder Integration
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
