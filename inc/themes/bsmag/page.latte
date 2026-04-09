@@ -1,0 +1,27 @@
+<div class="row g-5 mb-5">
+    <div class="col-md-8">
+        {if !isset($posts['error'])}
+            {var $p = $posts[0]}
+            <article class="blog-post mb-5">
+                <h1 class="display-3 fw-bold link-body-emphasis mb-4">{$p->title}</h1>
+                
+                {var $post_image = Posts::getPostImage($p->id)}
+                {if !empty($post_image)}
+                    <div class="post-featured-image-wrap mb-5 rounded-4 overflow-hidden shadow-lg border">
+                        <img src="{Url::thumb($post_image, 'large', 850)|noescape}" class="img-fluid w-100 object-fit-cover" alt="{$p->title}" loading="lazy" style="max-height: 400px;">
+                    </div>
+                {/if}
+
+                <div class="blog-post-content fs-5 lh-lg text-secondary-emphasis">
+                    {Hooks::run('post_content_before_action', $data)|noescape}
+                    {Posts::content($p->content)|noescape}
+                    {Hooks::run('post_content_after_action', $data)|noescape}
+                </div>
+            </article>
+        {/if}
+    </div>
+
+    <aside class="col-md-4">
+        {include 'sidebar.latte'}
+    </aside>
+</div>

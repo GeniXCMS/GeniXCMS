@@ -1,0 +1,47 @@
+<div class="col-lg-12">
+    <div class="row align-items-center justify-content-center py-5">
+        <div class="col-md-9 text-center">
+            <!-- Modern 404 Illustration placeholder or large text -->
+            <div class="error-visual mb-5 position-relative">
+                <h1 class="display-1 fw-black text-primary opacity-10 position-absolute top-50 start-50 translate-middle" style="font-size: 15rem; z-index: -1;">404</h1>
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/404-error-3702359-3119148.png" alt="404 Error" class="img-fluid position-relative" style="max-height: 400px;">
+            </div>
+
+            <div class="error-content px-4">
+                <h2 class="h1 fw-black text-dark mb-3 tracking-tighter">Lost in Cyberspace?</h2>
+                <p class="lead text-muted mb-5 mw-500 mx-auto">
+                    The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. 
+                </p>
+
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-5">
+                    <a href="{$site_url}" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
+                        <i class="bi bi-house-door me-2"></i> Take me Home
+                    </a>
+                </div>
+                
+                <div class="mt-5 pt-5 border-top border-light">
+                    <p class="text-uppercase tracking-widest text-muted small fw-black mb-3">Try searching instead</p>
+                    <form class="navbar-search position-relative mx-auto" action="{$site_url}search" method="get" style="max-width: 400px;">
+                        <input type="text" name="q" class="form-control form-control-lg rounded-pill px-4 bg-white shadow-sm border" placeholder="Search for content..." style="font-size: 14px;">
+                        <button type="submit" class="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-1 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .mw-500 { max-width: 500px; }
+    .error-visual img {
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+    }
+</style>

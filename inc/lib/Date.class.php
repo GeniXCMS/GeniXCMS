@@ -1,0 +1,470 @@
+<?php
+
+defined('GX_LIB') or die('Direct Access Not Allowed!');
+/**
+ * GeniXCMS - Content Management System.
+ *
+ * PHP Based Content Management System and Framework
+ * @since 0.0.3 build date 20150126
+ * @version 2.2.0
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
+class Date
+{
+    public static $timezone;
+
+    /**
+     * Date Constructor.
+     * Initializes the system timezone from options or defaults to UTC.
+     */
+    public function __construct()
+    {
+        $timezone = Options::v('timezone');
+        self::$timezone = ($timezone == '') ? 'UTC' : $timezone;
+        date_default_timezone_set(self::$timezone);
+    }
+
+    /**
+     * Formats a date string according to the system timezone and specified format.
+     *
+     * @param string|null $date   The date string to format.
+     * @param string      $format PHP date format (default: 'j F Y H:i A T').
+     * @return string The formatted date string.
+     */
+    public static function format($date, $format = '')
+    {
+        $timezone = new DateTimeZone(self::$timezone); //Options::v('timezone');
+        // $time = date_create_from_format( $format, $date ?? '', $timezone);
+        $format = (empty($format)) ? 'j F Y H:i A T' : $format;
+        $date = new DateTime($date ?? '');
+        $date->setTimezone($timezone);
+        $newdate = $date->format($format);
+
+        return $newdate;
+    }
+
+
+    /**
+     * Formats a date string according to a specific locale/country identifier.
+     * Uses IntlDateFormatter for localized date names.
+     *
+     * @param string $date   The date string to format.
+     * @param string $format ICU date format pattern.
+     * @return string The localized and formatted date string.
+     */
+    public static function local($date, $format = '')
+    {
+        setlocale(LC_TIME, Options::v('country_id'));
+        $format = (empty($format)) ? 'MMMM d, Y H:m:s' : $format;
+        $date = new DateTime($date);
+        $date->setTimezone(new DateTimeZone(self::$timezone));
+        $newdate = $date->format('Y/m/j h:i:s');
+        $fmt = new IntlDateFormatter(
+            Options::v('country_id'),
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL,
+            self::$timezone,
+            IntlDateFormatter::GREGORIAN,
+            $format
+        );
+
+        $newdate = $fmt->format(strtotime($newdate));
+
+        return $newdate . ' ' . $date->format('T');
+    }
+
+    /**
+     * Retrieves a list of globally supported timezones, filtered for common geographic areas.
+     *
+     * @return array Associative array of timezone IDs.
+     */
+    public static function timeZone()
+    {
+        $timezones = DateTimeZone::listAbbreviations();
+        //        $timezones = DateTimeZone::listAbbreviations(DateTimeZone::ALL);
+
+        $cities = array();
+        foreach ($timezones as $key => $zones) {
+            foreach ($zones as $id => $zone) {
+                //print_r($zone);
+                /*
+                 * Only get timezones explicitely not part of "Others".
+                 * @see http://www.php.net/manual/en/timezones.others.php
+                 */
+                if (
+                    $zone['timezone_id'] != "" && preg_match('/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id'])
+                    && $zone['timezone_id']
+                ) {
+                    $cities[$zone['timezone_id']][] = $key;
+                }
+            }
+        }
+
+        // For each city, have a comma separated list of all possible timezones for that city.
+        foreach ($cities as $key => $value) {
+            $cities[$key] = implode(', ', $value);
+        }
+
+        // Only keep one city (the first and also most important) for each set of possibilities.
+        $cities = array_unique($cities);
+
+        // Sort by area/city name.
+        ksort($cities);
+
+        return $cities;
+    }
+
+    /**
+     * Renders an HTML dropdown list of timezones.
+     *
+     * @param string $val The currently selected timezone ID.
+     * @return string The HTML option tags.
+     */
+    public static function optTimeZone($val = '')
+    {
+        $tz = self::timeZone();
+        $opt = '';
+        foreach ($tz as $t => $z) {
+            ($t == $val) ? $sel = 'SELECTED' : $sel = '';
+            $opt .= "<option value=\"{$t}\" $sel>{$t}</option>";
+        }
+
+        return $opt;
+    }
+
+    /**
+     * Gets the full name of a month from its numeric representation.
+     *
+     * @param int|string $month Month number (1-12).
+     * @return string Month name (e.g., 'January').
+     */
+    public static function monthName($month)
+    {
+        $dateObj = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('F');
+
+        return $monthName;
+    }
+
+    /**
+     * Renders an HTML dropdown list of countries.
+     *
+     * @param string $val The currently selected country code.
+     * @return string The HTML option tags.
+     */
+    public static function optCountry($val = '')
+    {
+        $countries = self::countryList();
+        $opt = '';
+        foreach ($countries as $key => $value) {
+            ($key == $val) ? $sel = 'SELECTED' : $sel = '';
+            $opt .= "<option value=\"{$key}\" title=\"" . htmlspecialchars($value) . "\" {$sel}>" . htmlspecialchars($value) . '</option>';
+        }
+
+        return $opt;
+    }
+
+    /**
+     * Retrieves a comprehensive list of countries and their ISO 3166-1 alpha-2 codes.
+     *
+     * @return array Associative array of country codes and names.
+     */
+    public static function countryList()
+    {
+        $countries = array(
+            'AF' => 'Afghanistan',
+            'AX' => 'Åland Islands',
+            'AL' => 'Albania',
+            'DZ' => 'Algeria',
+            'AS' => 'American Samoa',
+            'AD' => 'Andorra',
+            'AO' => 'Angola',
+            'AI' => 'Anguilla',
+            'AQ' => 'Antarctica',
+            'AG' => 'Antigua and Barbuda',
+            'AR' => 'Argentina',
+            'AM' => 'Armenia',
+            'AW' => 'Aruba',
+            'AU' => 'Australia',
+            'AT' => 'Austria',
+            'AZ' => 'Azerbaijan',
+            'BS' => 'Bahamas',
+            'BH' => 'Bahrain',
+            'BD' => 'Bangladesh',
+            'BB' => 'Barbados',
+            'BY' => 'Belarus',
+            'BE' => 'Belgium',
+            'BZ' => 'Belize',
+            'BJ' => 'Benin',
+            'BM' => 'Bermuda',
+            'BT' => 'Bhutan',
+            'BO' => 'Bolivia',
+            'BA' => 'Bosnia and Herzegovina',
+            'BW' => 'Botswana',
+            'BV' => 'Bouvet Island',
+            'BR' => 'Brazil',
+            'IO' => 'British Indian Ocean Territory',
+            'BN' => 'Brunei Darussalam',
+            'BG' => 'Bulgaria',
+            'BF' => 'Burkina Faso',
+            'BI' => 'Burundi',
+            'KH' => 'Cambodia',
+            'CM' => 'Cameroon',
+            'CA' => 'Canada',
+            'CV' => 'Cape Verde',
+            'KY' => 'Cayman Islands',
+            'CF' => 'Central African Republic',
+            'TD' => 'Chad',
+            'CL' => 'Chile',
+            'CN' => 'China',
+            'CX' => 'Christmas Island',
+            'CC' => 'Cocos (Keeling) Islands',
+            'CO' => 'Colombia',
+            'KM' => 'Comoros',
+            'CG' => 'Congo',
+            'CD' => 'Congo, The Democratic Republic of The',
+            'CK' => 'Cook Islands',
+            'CR' => 'Costa Rica',
+            'CI' => "Cote D'ivoire",
+            'HR' => 'Croatia',
+            'CU' => 'Cuba',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czech Republic',
+            'DK' => 'Denmark',
+            'DJ' => 'Djibouti',
+            'DM' => 'Dominica',
+            'DO' => 'Dominican Republic',
+            'EC' => 'Ecuador',
+            'EG' => 'Egypt',
+            'SV' => 'El Salvador',
+            'GQ' => 'Equatorial Guinea',
+            'ER' => 'Eritrea',
+            'EE' => 'Estonia',
+            'ET' => 'Ethiopia',
+            'FK' => 'Falkland Islands (Malvinas)',
+            'FO' => 'Faroe Islands',
+            'FJ' => 'Fiji',
+            'FI' => 'Finland',
+            'FR' => 'France',
+            'GF' => 'French Guiana',
+            'PF' => 'French Polynesia',
+            'TF' => 'French Southern Territories',
+            'GA' => 'Gabon',
+            'GM' => 'Gambia',
+            'GE' => 'Georgia',
+            'DE' => 'Germany',
+            'GH' => 'Ghana',
+            'GI' => 'Gibraltar',
+            'GR' => 'Greece',
+            'GL' => 'Greenland',
+            'GD' => 'Grenada',
+            'GP' => 'Guadeloupe',
+            'GU' => 'Guam',
+            'GT' => 'Guatemala',
+            'GG' => 'Guernsey',
+            'GN' => 'Guinea',
+            'GW' => 'Guinea-bissau',
+            'GY' => 'Guyana',
+            'HT' => 'Haiti',
+            'HM' => 'Heard Island and Mcdonald Islands',
+            'VA' => 'Holy See (Vatican City State)',
+            'HN' => 'Honduras',
+            'HK' => 'Hong Kong',
+            'HU' => 'Hungary',
+            'IS' => 'Iceland',
+            'IN' => 'India',
+            'ID' => 'Indonesia',
+            'IR' => 'Iran, Islamic Republic of',
+            'IQ' => 'Iraq',
+            'IE' => 'Ireland',
+            'IM' => 'Isle of Man',
+            'IL' => 'Israel',
+            'IT' => 'Italy',
+            'JM' => 'Jamaica',
+            'JP' => 'Japan',
+            'JE' => 'Jersey',
+            'JO' => 'Jordan',
+            'KZ' => 'Kazakhstan',
+            'KE' => 'Kenya',
+            'KI' => 'Kiribati',
+            'KP' => "Korea, Democratic People's Republic of",
+            'KR' => 'Korea, Republic of',
+            'KW' => 'Kuwait',
+            'KG' => 'Kyrgyzstan',
+            'LA' => "Lao People's Democratic Republic",
+            'LV' => 'Latvia',
+            'LB' => 'Lebanon',
+            'LS' => 'Lesotho',
+            'LR' => 'Liberia',
+            'LY' => 'Libyan Arab Jamahiriya',
+            'LI' => 'Liechtenstein',
+            'LT' => 'Lithuania',
+            'LU' => 'Luxembourg',
+            'MO' => 'Macao',
+            'MK' => 'Macedonia, The Former Yugoslav Republic of',
+            'MG' => 'Madagascar',
+            'MW' => 'Malawi',
+            'MY' => 'Malaysia',
+            'MV' => 'Maldives',
+            'ML' => 'Mali',
+            'MT' => 'Malta',
+            'MH' => 'Marshall Islands',
+            'MQ' => 'Martinique',
+            'MR' => 'Mauritania',
+            'MU' => 'Mauritius',
+            'YT' => 'Mayotte',
+            'MX' => 'Mexico',
+            'FM' => 'Micronesia, Federated States of',
+            'MD' => 'Moldova, Republic of',
+            'MC' => 'Monaco',
+            'MN' => 'Mongolia',
+            'ME' => 'Montenegro',
+            'MS' => 'Montserrat',
+            'MA' => 'Morocco',
+            'MZ' => 'Mozambique',
+            'MM' => 'Myanmar',
+            'NA' => 'Namibia',
+            'NR' => 'Nauru',
+            'NP' => 'Nepal',
+            'NL' => 'Netherlands',
+            'AN' => 'Netherlands Antilles',
+            'NC' => 'New Caledonia',
+            'NZ' => 'New Zealand',
+            'NI' => 'Nicaragua',
+            'NE' => 'Niger',
+            'NG' => 'Nigeria',
+            'NU' => 'Niue',
+            'NF' => 'Norfolk Island',
+            'MP' => 'Northern Mariana Islands',
+            'NO' => 'Norway',
+            'OM' => 'Oman',
+            'PK' => 'Pakistan',
+            'PW' => 'Palau',
+            'PS' => 'Palestinian Territory, Occupied',
+            'PA' => 'Panama',
+            'PG' => 'Papua New Guinea',
+            'PY' => 'Paraguay',
+            'PE' => 'Peru',
+            'PH' => 'Philippines',
+            'PN' => 'Pitcairn',
+            'PL' => 'Poland',
+            'PT' => 'Portugal',
+            'PR' => 'Puerto Rico',
+            'QA' => 'Qatar',
+            'RE' => 'Reunion',
+            'RO' => 'Romania',
+            'RU' => 'Russian Federation',
+            'RW' => 'Rwanda',
+            'SH' => 'Saint Helena',
+            'KN' => 'Saint Kitts and Nevis',
+            'LC' => 'Saint Lucia',
+            'PM' => 'Saint Pierre and Miquelon',
+            'VC' => 'Saint Vincent and The Grenadines',
+            'WS' => 'Samoa',
+            'SM' => 'San Marino',
+            'ST' => 'Sao Tome and Principe',
+            'SA' => 'Saudi Arabia',
+            'SN' => 'Senegal',
+            'RS' => 'Serbia',
+            'SC' => 'Seychelles',
+            'SL' => 'Sierra Leone',
+            'SG' => 'Singapore',
+            'SK' => 'Slovakia',
+            'SI' => 'Slovenia',
+            'SB' => 'Solomon Islands',
+            'SO' => 'Somalia',
+            'ZA' => 'South Africa',
+            'GS' => 'South Georgia and The South Sandwich Islands',
+            'ES' => 'Spain',
+            'LK' => 'Sri Lanka',
+            'SD' => 'Sudan',
+            'SR' => 'Suriname',
+            'SJ' => 'Svalbard and Jan Mayen',
+            'SZ' => 'Swaziland',
+            'SE' => 'Sweden',
+            'CH' => 'Switzerland',
+            'SY' => 'Syrian Arab Republic',
+            'TW' => 'Taiwan, Province of China',
+            'TJ' => 'Tajikistan',
+            'TZ' => 'Tanzania, United Republic of',
+            'TH' => 'Thailand',
+            'TL' => 'Timor-leste',
+            'TG' => 'Togo',
+            'TK' => 'Tokelau',
+            'TO' => 'Tonga',
+            'TT' => 'Trinidad and Tobago',
+            'TN' => 'Tunisia',
+            'TR' => 'Turkey',
+            'TM' => 'Turkmenistan',
+            'TC' => 'Turks and Caicos Islands',
+            'TV' => 'Tuvalu',
+            'UG' => 'Uganda',
+            'UA' => 'Ukraine',
+            'AE' => 'United Arab Emirates',
+            'GB' => 'United Kingdom',
+            'US' => 'United States',
+            'UM' => 'United States Minor Outlying Islands',
+            'UY' => 'Uruguay',
+            'UZ' => 'Uzbekistan',
+            'VU' => 'Vanuatu',
+            'VE' => 'Venezuela',
+            'VN' => 'Viet Nam',
+            'VG' => 'Virgin Islands, British',
+            'VI' => 'Virgin Islands, U.S.',
+            'WF' => 'Wallis and Futuna',
+            'EH' => 'Western Sahara',
+            'YE' => 'Yemen',
+            'ZM' => 'Zambia',
+            'ZW' => 'Zimbabwe',
+        );
+
+        return $countries;
+    }
+    /**
+     * Calculates and returns a relative human-readable time (e.g., '5 minutes ago').
+     *
+     * @param string $ptime The past time string.
+     * @return string Human-readable relative time string.
+     */
+    public static function rel($ptime)
+    {
+        $etime = time() - strtotime($ptime);
+
+        if ($etime < 1) {
+            return 'just now';
+        }
+
+        $a = array(
+            365 * 24 * 60 * 60 => 'year',
+            30 * 24 * 60 * 60 => 'month',
+            7 * 24 * 60 * 60 => 'week',
+            24 * 60 * 60 => 'day',
+            60 * 60 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
+        $a_plural = array(
+            'year' => 'years',
+            'month' => 'months',
+            'week' => 'weeks',
+            'day' => 'days',
+            'hour' => 'hours',
+            'minute' => 'minutes',
+            'second' => 'seconds'
+        );
+
+        foreach ($a as $secs => $str) {
+            $d = $etime / $secs;
+            if ($d >= 1) {
+                $r = round($d);
+                return $r . ' ' . ($r > 1 ? $a_plural[$str] : $str) . ' ago';
+            }
+        }
+        return 'just now';
+    }
+}

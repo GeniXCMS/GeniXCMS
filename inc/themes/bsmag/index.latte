@@ -1,0 +1,51 @@
+{if isset($p_type) && $p_type == 'index'}
+    {include 'intro.latte'}
+    {include 'featured.latte'}
+{/if}
+
+<div class="row g-5">
+    <div class="col-md-8">
+        <h3 class="pb-4 mb-4 fst-italic border-bottom">
+            {if isset($p_type)}
+                {if $p_type == 'index'}From the {$site_name}
+                {elseif $p_type == 'archive'}Archive From {$dateName}
+                {elseif $p_type == 'cat'}Posts of {Categories::name($cat)}
+                {elseif $p_type == 'author'}Posts by {$author}
+                {elseif $p_type == 'tag'}#{$tag}
+                {elseif $p_type == 'search'}Keyword: {$q}
+                {else}From the {$site_name}
+                {/if}
+            {else}
+                From the {$site_name}
+            {/if}
+        </h3>
+
+        {if !isset($posts['error'])}
+            {foreach $posts as $p}
+                {var $styles = ['success', 'primary', 'danger', 'warning']}
+                {var $rn = rand(0, 3)}
+                <article class="blog-post mb-5">
+                    <h2 class="display-5 link-body-emphasis mb-1">
+                        <a href="{Url::post($p->id)}" class="link-body-emphasis text-decoration-none">{$p->title}</a>
+                    </h2>
+                    <p class="blog-post-meta">
+                        Posted Inside <a href="{Url::cat($p->cat)}" class="badge text-bg-{$styles[$rn]} text-decoration-none">{Categories::name($p->cat)}</a> 
+                        {Date::format($p->date)} by <a href="{Url::author($p->author)}">{$p->author}</a>
+                    </p>
+
+                    <div class="blog-post-content mb-4">
+                        {Posts::format(Typo::Xclean($p->content), $p->id)|noescape}
+                    </div>
+                </article>
+            {/foreach}
+        {/if}
+
+        <nav class="blog-pagination pb-5">
+            {$paging|noescape}
+        </nav>
+    </div>
+
+    <aside class="col-md-4">
+        {include 'sidebar.latte'}
+    </aside>
+</div>

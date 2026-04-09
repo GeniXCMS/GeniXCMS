@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-04 08:46+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Categories.class.php:129
+msgid "Category config not in Array"
+msgstr ""
+
+#: Categories.class.php:243 Categories.class.php:335 Categories.class.php:383
+msgid "No ID Selected"
+msgstr ""
+
+#: Categories.class.php:353
+msgid "No Name Selected"
+msgstr ""
+
+#: Comments.class.php:50
+msgid "Name"
+msgstr ""
+
+#: Comments.class.php:54
+msgid "Email"
+msgstr ""
+
+#: Comments.class.php:58
+msgid "Website"
+msgstr ""
+
+#: Comments.class.php:66
+msgid "Comments"
+msgstr ""
+
+#: Comments.class.php:79
+msgid "Send Comments"
+msgstr ""
+
+#: Comments.class.php:102 Mod.class.php:218 Mod.class.php:230 Mod.class.php:242
+msgid ""
+"Token not exist, or your time has expired. Please refresh your browser to "
+"get a new token."
+msgstr ""
+
+#: Comments.class.php:105
+msgid "Nothing to send."
+msgstr ""
+
+#: Comments.class.php:108
+msgid "Who are you ?"
+msgstr ""
+
+#: Comments.class.php:111
+msgid "How we contact you ?"
+msgstr ""
+
+#: Comments.class.php:114
+msgid "Spam Word Detected!!"
+msgstr ""
+
+#: Comments.class.php:117
+msgid "You are commenting too fast!!"
+msgstr ""
+
+#: Comments.class.php:122
+msgid "Please insert the Captcha"
+msgstr ""
+
+#: Comments.class.php:125
+msgid "Your Captcha is not correct."
+msgstr ""
+
+#: Comments.class.php:164
+msgid "Comments Sent."
+msgstr ""
+
+#: Comments.class.php:170
+msgid "Trouble sending Comment."
+msgstr ""
+
+#: Comments.class.php:278 Comments.class.php:281
+msgid "Name is required"
+msgstr ""
+
+#: Comments.class.php:286
+msgid "Name must be more than 6 and less than 30 characters long"
+msgstr ""
+
+#: Comments.class.php:290
+msgid "Name can only consist of alphabetical, number, dot and underscore"
+msgstr ""
+
+#: Comments.class.php:295 Comments.class.php:298
+msgid "Email is required"
+msgstr ""
+
+#: Comments.class.php:301
+msgid "The input is not a valid email address"
+msgstr ""
+
+#: Comments.class.php:306 Comments.class.php:309
+msgid "Message is required"
+msgstr ""
+
+#: Comments.class.php:313
+msgid "The message must be less than 700 characters long"
+msgstr ""
+
+#: Comments.class.php:472
+msgid "No Comments found."
+msgstr ""
+
+#: Db.class.php:227 Posts.class.php:660
+msgid "Data not found"
+msgstr ""
+
+#: Menus.class.php:325
+msgid "Change Order"
+msgstr ""
+
+#: Options.class.php:53
+msgid "Format not Found, please in array"
+msgstr ""
+
+#: Paging.class.php:136
+msgid "Previous"
+msgstr ""
+
+#: Paging.class.php:148
+msgid "Next"
+msgstr ""
+
+#: Paging.class.php:153
+msgid "<alert>Query Error, in Array Please</alert>"
+msgstr ""
+
+#: Posts.class.php:206
+msgid "Error: No Posts found."
+msgstr ""
+
+#: Posts.class.php:425
+msgid "No Post(s) found."
+msgstr ""
+
+#: Posts.class.php:511
+msgid "No Related Post(s)"
+msgstr ""
+
+#: Posts.class.php:577
+msgid "Error: No Post to Show"
+msgstr ""
+
+#: Theme.class.php:43
+msgid "Theme file is missing."
+msgstr ""
+
+#: User.class.php:404
+msgid "All Group"
+msgstr ""
