@@ -297,7 +297,41 @@ $schema['tabs']['howto']['content'][] = [
                         <li>Save your changes.</li>
                         <li>Copy the shortcode generated for your slider. It will look something like this: <code>[nixslider id="home"]</code></li>
                         <li>Paste that shortcode anywhere on your Pages, Posts, or Widgets!</li>
-                    </ol>']
+                    </ol>
+                    <h6 class="fw-bold mt-4 pt-4 border-top text-primary"><i class="bi bi-palette2 me-2"></i> Customizing Appearance</h6>
+                    <p class="mt-3">Nixslider is designed to be highly customizable. You can override its styles directly in your theme\'s CSS file (e.g., <code>style.css</code> or <code>blog.css</code>) using the classes below:</p>
+                    <div class="bg-dark text-white p-3 rounded-3 shadow-sm mt-3 overflow-auto" style="max-height: 250px;">
+                        <pre class="mb-0 fs-7" style="color: #cbd5e1;"><code>/* Container Styling */
+.nixslider-container {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Caption Customization */
+.nixslider-caption {
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+}
+
+/* Title and Description */
+.nixslider-caption h3 {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* Control Buttons */
+.nixslider-prev, .nixslider-next {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+}
+
+/* Fix Theme Style Conflict (border/padding) */
+.nixslider-slide img {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}</code></pre>
+                    </div>']
                 ],
             ],
         ],

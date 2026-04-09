@@ -30,17 +30,38 @@ class Nixslider
         Hooks::attach('footer_load_lib', array('Nixslider', 'loadAssets'));
     }
 
+    /**
+     * Parses the [nixslider] shortcode within the content.
+     *
+     * @param string|array $content The content to filter.
+     * @return string Modified content with slider HTML.
+     */
     public static function parseShortcode($content)
     {
+        // Handle array if passed from Hooks::filter (GeniXCMS standard)
         if (is_array($content)) {
             $content = isset($content[0]) ? $content[0] : '';
         }
-        
+
+        // Basic validation
         if (!is_string($content) || empty($content)) {
             return $content;
         }
 
-        return Shortcode::parse('nixslider', $content, function ($attrs) {
+        // Pre-processing: Support common encoded brackets or quotes that might exist 
+        // if the theme calls filters in a non-standard order.
+        $tag = 'nixslider';
+        if (strpos($content, '[' . $tag) === false && strpos($content, '&#91;' . $tag) === false) {
+            return $content;
+        }
+
+        // Ensure Shortcode library is active
+        if (!class_exists('Shortcode')) {
+            return $content;
+        }
+
+        // Use core Shortcode parser
+        return Shortcode::parse($tag, $content, function ($attrs) {
             $id = isset($attrs['id']) ? $attrs['id'] : '';
             if (empty($id)) return '';
 
@@ -63,11 +84,11 @@ class Nixslider
             foreach ($slider['images'] as $index => $img) {
                 $active = $index === 0 ? 'active' : '';
                 $html .= '<div class="nixslider-slide ' . $active . '">';
-                $html .= '<img src="' . Typo::cleanX($img['url']) . '" alt="' . Typo::cleanX($img['title']) . '" style="height: ' . $imgHeight . ';">';
+                $html .= '<img src="' . Typo::cleanX($img['url']) . '" alt="' . Typo::Xclean($img['title']) . '">';
                 if (!empty($img['title']) || !empty($img['caption'])) {
                     $html .= '<div class="nixslider-caption">';
-                    if (!empty($img['title'])) $html .= '<h3>' . Typo::cleanX($img['title']) . '</h3>';
-                    if (!empty($img['caption'])) $html .= '<p>' . Typo::cleanX($img['caption']) . '</p>';
+                    if (!empty($img['title'])) $html .= '<h3>' . Typo::Xclean($img['title']) . '</h3>';
+                    if (!empty($img['caption'])) $html .= '<p>' . Typo::Xclean($img['caption']) . '</p>';
                     $html .= '</div>';
                 }
                 $html .= '</div>';
