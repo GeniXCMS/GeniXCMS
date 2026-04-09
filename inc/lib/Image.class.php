@@ -7,16 +7,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20150214
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -27,32 +22,27 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class will run the image modifier.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class Image
 {
+    /**
+     * Image Constructor.
+     */
     public function __construct()
     {
     }
 
     /**
-     * Image Resize function.
+     * Resizes and optionally crops an image using GD library.
+     * Supports BMP, GIF, JPG, and PNG formats.
      *
-     * This function will resize and crop images.
-     *
-     * @param string $src    The source of the images.
-     * @param string $dst    The destination of the output image.
-     * @param int    $width  The width dimension of the output images.
-     * @param int    $height The height dimension of the output images.
-     * @param bool   $crop   0 or 1, 0 for not cropped. and 1 for cropped.
-     *
-     * @return true
-     *
-     * @author promaty@gmail.com
-     *
+     * @param string $src    The source image file path.
+     * @param string $dst    The destination file path for the output.
+     * @param int    $width  Target width of the output image.
+     * @param int    $height Target height of the output image.
+     * @param bool   $crop   Whether to crop the image to fit dimensions (default: 0).
+     * @return bool          True on success, false on failure (e.g., source not found or too small).
      * @link http://php.net/manual/en/function.imagecopyresampled.php#104028
      */
     public static function resize($src, $dst, $width, $height, $crop = 0)
@@ -130,6 +120,11 @@ class Image
         return true;
     }
 
+    /**
+     * Compresses a PNG image using GD's high compression (quality 9).
+     *
+     * @param string $img Path to the PNG image.
+     */
     public static function compressPng($img)
     {
         $im = imagecreatefrompng($img);
@@ -140,6 +135,13 @@ class Image
         imagedestroy($im);
     }
 
+    /**
+     * Compresses a PNG image using pngquant shell command if available.
+     *
+     * @param string $path        Path to the PNG image.
+     * @param int    $max_quality Maximum quality threshold (default: 80).
+     * @return bool               True if compression succeeded.
+     */
     public static function compressPng2($path, $max_quality = 80)
     {
         $check = function_exists("shell_exec") ? shell_exec('pngquant --version') : false;
@@ -165,6 +167,12 @@ class Image
         }
     }
 
+    /**
+     * Compresses a JPEG image using Imagick extension if loaded.
+     *
+     * @param string $path    Path to the JPEG image.
+     * @param int    $quality Target compression quality (default: 80).
+     */
     public static function compressJpg($path, $quality = 80)
     {
         if (extension_loaded('imagick')) {
@@ -177,22 +185,48 @@ class Image
         }
     }
 
+    /**
+     * Checks if a file path has a .jpg extension.
+     *
+     * @param string $pict Reference to the image file path.
+     * @return bool        True if extension matches, false otherwise.
+     */
     public static function isJpg(&$pict)
     {
         $type = strtolower(substr(strrchr($pict, '.'), 1));
         if ($type == 'jpg') {
             return true;
         }
+        return false;
     }
 
+    /**
+     * Checks if a file path has a .png extension.
+     *
+     * @param string $pict Reference to the image file path.
+     * @return bool        True if extension matches, false otherwise.
+     */
     public static function isPng(&$pict)
     {
         $type = strtolower(substr(strrchr($pict, '.'), 1));
         if ($type == 'png') {
             return true;
         }
+        return false;
     }
 
+    /**
+     * Retrieves a Gravatar URL or HTML image tag for a given email address.
+     * Supports offline mode fallback.
+     *
+     * @param string $email The email address.
+     * @param int    $s     Size of the avatar in pixels (default: 60).
+     * @param string $d     Default image set (default: 'mm').
+     * @param string $r     Maximum rating (default: 'g').
+     * @param bool   $img   Whether to return a full <img> tag (default: false).
+     * @param array  $atts  Optional HTML attributes for the <img> tag.
+     * @return string       The URL or HTML tag.
+     */
     public static function getGravatar($email, $s = 60, $d = 'mm', $r = 'g', $img = false, $atts = array())
     {
 
@@ -214,6 +248,12 @@ class Image
         return $url;
     }
 
+    /**
+     * Converts an image file to WebP format using Intervention Image.
+     *
+     * @param string $img Absolute path to the source image.
+     * @return string|bool The path to the new WebP file or false on failure.
+     */
     public static function convertWebp($img)
     {
         $manager = new ImageManager(
@@ -237,6 +277,15 @@ class Image
         return false;
     }
 
+    /**
+     * Generates and serves a thumbnail "on-the-fly" with caching support.
+     * Uses Intervention Image for modern processing and watermarking.
+     *
+     * @param string|array $img   Source image (URL or local path).
+     * @param string       $type  Type of thumbnail: 'square', 'large', 'small'.
+     * @param int|string   $size  The dimension value.
+     * @param string       $align Alignment configuration for cropping.
+     */
     public static function thumbFly($img, $type, $size, $align)
     {
         $manager = new ImageManager(
@@ -377,6 +426,13 @@ class Image
     }
 
     /**
+     * Legacy "On-the-fly" thumbnail generation using GD library.
+     * Maintains precise alignment and manual resampling logic.
+     * 
+     * @param string|array $img   Source image.
+     * @param string       $type  Type: 'square', 'large', 'small'.
+     * @param string       $size  Size parameter.
+     * @param string       $align Cropping alignment.
      * @link http://1stwebmagazine.com/generate-thumbnail-on-the-fly-with-php
      */
     public static function thumbFly2($img, $type = 'square', $size = '', $align = '')

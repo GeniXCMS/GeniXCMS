@@ -249,6 +249,108 @@ class Gxeditor
             return $html;
         });
 
+        // Parse [pricing_table]
+        $content = Shortcode::parse('pricing_table', $content, function ($attrs) {
+            $currency = $attrs['currency'] ?? '$';
+            $p1_m = $attrs['p1_monthly'] ?? '19';
+            $p1_y = $attrs['p1_yearly'] ?? '190';
+            $p2_m = $attrs['p2_monthly'] ?? '49';
+            $p2_y = $attrs['p2_yearly'] ?? '490';
+            $p3_m = $attrs['p3_monthly'] ?? '99';
+            $p3_y = $attrs['p3_yearly'] ?? '990';
+
+            $id = 'gx-pricing-' . rand(100, 999);
+
+            $html = '
+            <div class="gx-pricing-wrapper py-4" id="' . $id . '">
+                <div class="gx-pricing-switcher d-flex justify-content-center mb-5 align-items-center gap-3">
+                    <span class="fw-bold small text-muted">MONTHLY</span>
+                    <div class="form-check form-switch p-0 m-0" style="min-height: auto;">
+                        <input class="form-check-input gx-pricing-toggle" type="checkbox" role="switch" style="width: 3.2em; height: 1.6em; cursor: pointer; margin-left: 0;">
+                    </div>
+                    <span class="fw-bold small text-muted">YEARLY <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 ms-1" style="font-size: 0.65rem;">SAVE 20%</span></span>
+                </div>
+
+                <div class="row g-4 gx-pricing-cards">
+                    <div class="col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                            <div class="mb-3"><span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold">BASIC</span></div>
+                            <div class="h1 fw-bold mb-1">
+                                <span class="gx-price-monthly">' . $currency . $p1_m . '</span>
+                                <span class="gx-price-yearly d-none">' . $currency . $p1_y . '</span>
+                            </div>
+                            <div class="text-muted small mb-4">per user / month</div>
+                            <ul class="list-unstyled mb-4 text-start small">
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> 1 Active Project</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Community Support</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Basic Analytics</li>
+                            </ul>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-bold py-2">Select Plan</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100 border-0 shadow-lg rounded-4 p-4 text-center position-relative overflow-hidden" style="border: 2px solid #6366f1 !important;">
+                            <div class="position-absolute top-0 end-0 bg-primary text-white px-3 py-1 small fw-bold" style="border-bottom-left-radius: 12px;">POPULAR</div>
+                            <div class="mb-3"><span class="badge bg-primary px-3 py-2 rounded-pill fw-bold">PROFESSIONAL</span></div>
+                            <div class="h1 fw-bold mb-1">
+                                <span class="gx-price-monthly">' . $currency . $p2_m . '</span>
+                                <span class="gx-price-yearly d-none">' . $currency . $p2_y . '</span>
+                            </div>
+                            <div class="text-muted small mb-4">per user / month</div>
+                            <ul class="list-unstyled mb-4 text-start small">
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> 10 Active Projects</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Priority Support</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Advanced Reports</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Custom Branding</li>
+                            </ul>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-primary btn-sm rounded-pill w-100 fw-bold py-2 shadow-sm text-white">Get Started</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                            <div class="mb-3"><span class="badge bg-dark bg-opacity-10 text-dark px-3 py-2 rounded-pill fw-bold">ENTERPRISE</span></div>
+                            <div class="h1 fw-bold mb-1">
+                                <span class="gx-price-monthly">' . $currency . $p3_m . '</span>
+                                <span class="gx-price-yearly d-none">' . $currency . $p3_y . '</span>
+                            </div>
+                            <div class="text-muted small mb-4">per user / month</div>
+                            <ul class="list-unstyled mb-4 text-start small">
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Unlimited Projects</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Dedicated Manager</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> Custom Integration</li>
+                                <li class="mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> SLA Guarantee</li>
+                            </ul>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold py-2">Contact Sales</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    (function() {
+                        var wrap = document.getElementById("' . $id . '");
+                        var toggle = wrap.querySelector(".gx-pricing-toggle");
+                        toggle.addEventListener("change", function() {
+                            var monthly = wrap.querySelectorAll(".gx-price-monthly");
+                            var yearly = wrap.querySelectorAll(".gx-price-yearly");
+                            if (this.checked) {
+                                monthly.forEach(function(el) { el.classList.add("d-none"); });
+                                yearly.forEach(function(el) { el.classList.remove("d-none"); });
+                            } else {
+                                monthly.forEach(function(el) { el.classList.remove("d-none"); });
+                                yearly.forEach(function(el) { el.classList.add("d-none"); });
+                            }
+                        });
+                    })();
+                </script>
+            </div>';
+            return $html;
+        });
+
         // Parse [table border="..." striped="..." hover="..." head="..."] ... [/table]
         $content = Shortcode::parse('table', $content, function ($attrs, $inner) {
             $border = ($attrs['border'] ?? 'yes') === 'yes' ? 'table-bordered' : '';
@@ -261,6 +363,17 @@ class Gxeditor
             $html .= $inner;
             $html .= '</table></div>';
             return $html;
+        });
+        // Parse [raw_html] ... [/raw_html]
+        $content = Shortcode::parse('raw_html', $content, function ($attrs, $inner) {
+            $inner = trim($inner);
+            if (strpos($inner, 'base64:') === 0) {
+                // Remove prefix and any potential whitespace/characters injected by filters
+                $b64 = substr($inner, 7);
+                $b64 = preg_replace('/[^A-Za-z0-9\+\/=]/', '', $b64);
+                return base64_decode($b64);
+            }
+            return $inner;
         });
 
         return $content;
@@ -280,27 +393,28 @@ class Gxeditor
         $editorStyle = Options::v("gxeditor_style") ?: "block";
 
         $blockMeta = [
-            'paragraph' => ['label' => 'Text', 'icon' => 'bi bi-justify-left', 'desc' => 'Pure text content'],
-            'h1' => ['label' => 'Heading 1', 'icon' => 'bi bi-type-h1', 'desc' => 'Main section title'],
-            'h2' => ['label' => 'Heading 2', 'icon' => 'bi bi-type-h2', 'desc' => 'Secondary title'],
-            'h3' => ['label' => 'Heading 3', 'icon' => 'bi bi-type-h3', 'desc' => 'Small section title'],
-            'image' => ['label' => 'Image', 'icon' => 'bi bi-image', 'desc' => 'Photo or illustration'],
-            'button' => ['label' => 'Button', 'icon' => 'bi bi-hand-index-thumb', 'desc' => 'Call to action button'],
-            'grid2' => ['label' => '2 Columns', 'icon' => 'bi bi-layout-split', 'desc' => 'Side-by-side content'],
-            'grid2x2' => ['label' => 'Grid 2x2', 'icon' => 'bi bi-grid-3x3-gap', 'desc' => 'Four cells layout'],
-            'card' => ['label' => 'Card', 'icon' => 'bi bi-card-text', 'desc' => 'Boxed content with header/footer'],
-            'quote' => ['label' => 'Quote', 'icon' => 'bi bi-quote', 'desc' => 'Blockquote styling'],
-            'ul' => ['label' => 'Bulleted List', 'icon' => 'bi bi-list-ul', 'desc' => 'Unordered list'],
-            'ol' => ['label' => 'Numbered List', 'icon' => 'bi bi-list-ol', 'desc' => 'Ordered list'],
-            'table' => ['label' => 'Table', 'icon' => 'bi bi-table', 'desc' => 'Data grid'],
-            'icon' => ['label' => 'Icon Block', 'icon' => 'bi bi-stars', 'desc' => 'Stylized bootstrap icon'],
-            'icon_list' => ['label' => 'Icon List', 'icon' => 'bi bi-check2-square', 'desc' => 'List with custom icon markers'],
-            'single_post' => ['label' => 'Post Embed', 'icon' => 'bi bi-file-earmark-richtext', 'desc' => 'Embed post by ID'],
-            'toc' => ['label' => 'Table of Contents', 'icon' => 'bi bi-list-nested', 'desc' => 'Auto-generated page links'],
-            'divider' => ['label' => 'Divider', 'icon' => 'bi bi-hr', 'desc' => 'Horizontal separator'],
-            'code' => ['label' => 'Code Block', 'icon' => 'bi bi-code-slash', 'desc' => 'Syntax highlighted code'],
-            'recent_posts' => ['label' => 'Recent Posts', 'icon' => 'bi bi-clock-history', 'desc' => 'List of latest posts'],
-            'random_posts' => ['label' => 'Random Posts', 'icon' => 'bi bi-shuffle', 'desc' => 'List of random posts']
+            'paragraph' => ['label' => 'Text', 'icon' => 'bi bi-justify-left', 'desc' => 'Pure text content', 'cat' => 'Basic'],
+            'h1' => ['label' => 'Heading 1', 'icon' => 'bi bi-type-h1', 'desc' => 'Main section title', 'cat' => 'Basic'],
+            'h2' => ['label' => 'Heading 2', 'icon' => 'bi bi-type-h2', 'desc' => 'Secondary title', 'cat' => 'Basic'],
+            'h3' => ['label' => 'Heading 3', 'icon' => 'bi bi-type-h3', 'desc' => 'Small section title', 'cat' => 'Basic'],
+            'image' => ['label' => 'Image', 'icon' => 'bi bi-image', 'desc' => 'Photo or illustration', 'cat' => 'Basic'],
+            'button' => ['label' => 'Button', 'icon' => 'bi bi-hand-index-thumb', 'desc' => 'Call to action button', 'cat' => 'Basic'],
+            'grid2' => ['label' => '2 Columns', 'icon' => 'bi bi-layout-split', 'desc' => 'Side-by-side content', 'cat' => 'Layout'],
+            'grid2x2' => ['label' => 'Grid 2x2', 'icon' => 'bi bi-grid-3x3-gap', 'desc' => 'Four cells layout', 'cat' => 'Layout'],
+            'card' => ['label' => 'Card', 'icon' => 'bi bi-card-text', 'desc' => 'Boxed content with header/footer', 'cat' => 'Layout'],
+            'quote' => ['label' => 'Quote', 'icon' => 'bi bi-quote', 'desc' => 'Blockquote styling', 'cat' => 'Basic'],
+            'ul' => ['label' => 'Bulleted List', 'icon' => 'bi bi-list-ul', 'desc' => 'Unordered list', 'cat' => 'Basic'],
+            'ol' => ['label' => 'Numbered List', 'icon' => 'bi bi-list-ol', 'desc' => 'Ordered list', 'cat' => 'Basic'],
+            'table' => ['label' => 'Table', 'icon' => 'bi bi-table', 'desc' => 'Data grid', 'cat' => 'Basic'],
+            'icon' => ['label' => 'Icon Block', 'icon' => 'bi bi-stars', 'desc' => 'Stylized bootstrap icon', 'cat' => 'Basic'],
+            'icon_list' => ['label' => 'Icon List', 'icon' => 'bi bi-check2-square', 'desc' => 'List with custom icon markers', 'cat' => 'Basic'],
+            'single_post' => ['label' => 'Post Embed', 'icon' => 'bi bi-file-earmark-richtext', 'desc' => 'Embed post by ID', 'cat' => 'Standard Sections'],
+            'toc' => ['label' => 'Table of Contents', 'icon' => 'bi bi-list-nested', 'desc' => 'Auto-generated page links', 'cat' => 'Standard Sections'],
+            'divider' => ['label' => 'Divider', 'icon' => 'bi bi-hr', 'desc' => 'Horizontal separator', 'cat' => 'Basic'],
+            'code' => ['label' => 'Code Block', 'icon' => 'bi bi-code-slash', 'desc' => 'Syntax highlighted code', 'cat' => 'Basic'],
+            'pricing' => ['label' => 'Price Comparison', 'icon' => 'bi bi-tags', 'desc' => 'Pricing table with monthly/yearly switch', 'cat' => 'Standard Sections'],
+            'recent_posts' => ['label' => 'Recent Posts', 'icon' => 'bi bi-clock-history', 'desc' => 'List of latest posts', 'cat' => 'Standard Sections'],
+            'random_posts' => ['label' => 'Random Posts', 'icon' => 'bi bi-shuffle', 'desc' => 'List of random posts', 'cat' => 'Standard Sections']
         ];
 
         $coreBlocks = array_keys($blockMeta);
@@ -633,8 +747,8 @@ class Gxeditor
         Asset::register("gxeditor-ui", "raw", $uiHtml, "footer", [], 21);
         Asset::enqueue("gxeditor-ui");
 
-        // 3. JS Modules (Footer)
-        Asset::register("gxeditor-utils", "js", $siteUrl . "/inc/mod/gxeditor/assets/js/gxeditor-utils.js", "footer", ["jquery"], 22);
+        // 3. JS Modules (Footer) - Critical: utils must load before builder-js (v21)
+        Asset::register("gxeditor-utils", "js", $siteUrl . "/inc/mod/gxeditor/assets/js/gxeditor-utils.js", "footer", ["jquery"], 15);
         Asset::register("gxeditor-ui-js", "js", $siteUrl . "/inc/mod/gxeditor/assets/js/gxeditor-ui.js", "footer", ["gxeditor-utils"], 23);
         Asset::register("gxeditor-parser", "js", $siteUrl . "/inc/mod/gxeditor/assets/js/gxeditor-parser.js", "footer", ["gxeditor-ui-js"], 24);
         Asset::register("gxeditor-renderer", "js", $siteUrl . "/inc/mod/gxeditor/assets/js/gxeditor-renderer.js", "footer", ["gxeditor-parser"], 25);

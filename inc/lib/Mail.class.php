@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20150126
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -33,6 +28,10 @@ class Mail
     public static $siteemail = '';
     public static $sitename = '';
 
+    /**
+     * Mail Constructor.
+     * Initializes the SMTP and site email settings from the Options registry.
+     */
     public function __construct()
     {
         self::$smtphost = Options::v('smtphost');
@@ -43,15 +42,17 @@ class Mail
         self::$sitename = Options::v('sitename');
     }
 
-    ## SEND MAIL
-    // $vars = array (
-    //             'to'         => $to,
-    //             'to_name'    => $to_name,
-    //             'subject'    => $subject,
-    //             'message'    => $message,
-    //             'msgtype'    => $msgtype,
-    //         );
-
+    /**
+     * Sends an email using the configured delivery method (PHP mail or SMTP).
+     *
+     * @param array $vars Configuration for the email:
+     *                    - 'to': Recipient email address.
+     *                    - 'to_name': Recipient name.
+     *                    - 'subject': Email subject line.
+     *                    - 'message': Email body (text or HTML).
+     *                    - 'msgtype': Type of body, 'text' or 'html' (default: 'html').
+     * @return string|void Returns an error message string on failure, or void on success.
+     */
     public static function send($vars)
     {
         self::$smtphost = Options::v('smtphost');

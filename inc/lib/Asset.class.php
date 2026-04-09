@@ -1,10 +1,22 @@
 <?php
-/**
- * GeniXCMS - Asset Management Class
- * Handles registration and enqueuing of JS/CSS assets
- */
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
+
+/**
+ * GeniXCMS - Asset Management Class
+ *
+ * Handles registration and enqueuing of JS/CSS assets
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
+
+
 
 class Asset
 {
@@ -15,9 +27,15 @@ class Asset
     ];
 
     /**
-     * Register a new asset for later use
-     * Priority: Lower numbers load earlier (0-100, default 20)
-     * Context: 'admin', 'frontend', or 'all'
+     * Registers a new asset in the system registry for later enqueuing.
+     *
+     * @param string $id       Unique identifier for the asset.
+     * @param string $type     Asset type: 'js', 'css', or 'raw'.
+     * @param string $src      The URL or raw HTML content of the asset.
+     * @param string $pos      Target position: 'header' or 'footer' (default 'footer').
+     * @param array  $deps     List of asset IDs that must be loaded before this one.
+     * @param int    $priority Loading priority (0-100, common: 1-9 Frameworks, 10-19 Core, 20+ Plugins).
+     * @param string $context  Availability context: 'admin', 'frontend', or 'all'.
      */
     public static function register($id, $type, $src, $pos = "footer", $deps = [], $priority = 20, $context = "admin")
     {
@@ -32,7 +50,10 @@ class Asset
     }
 
     /**
-     * Add an asset to the current page's queue
+     * Adds one or more registered assets to the current page's loading queue.
+     * Automatically resolves and enqueues dependencies.
+     *
+     * @param string|array $id The ID of the asset or an array of asset IDs.
      */
     public static function enqueue($id)
     {
@@ -76,7 +97,10 @@ class Asset
     }
 
     /**
-     * Remove an asset from the current page's queue
+     * Removes an asset from the current page's queue.
+     * Also clears any rendered cache for this asset to allow re-rendering.
+     *
+     * @param string|array $id The ID of the asset or an array of asset IDs.
      */
     public static function dequeue($id)
     {
@@ -110,7 +134,10 @@ class Asset
     ];
 
     /**
-     * Render all queued assets for a specific position
+     * Renders all queued assets for a specific position (header/footer).
+     * Outputs the HTML tags directly to the browser.
+     *
+     * @param string $pos The position to render ('header' or 'footer').
      */
     public static function render($pos)
     {
@@ -118,7 +145,10 @@ class Asset
     }
 
     /**
-     * Get all queued assets for a specific position as string
+     * Retrieves all queued assets for a specific position as a string.
+     *
+     * @param string $pos The position to retrieve ('header' or 'footer').
+     * @return string The combined HTML tags for all queued assets.
      */
     public static function get($pos)
     {
@@ -153,7 +183,16 @@ class Asset
     }
 
     /**
-     * Short-hand to register AND enqueue immediately
+     * Shorthand method to register and immediately enqueue an asset.
+     * If only the ID is provided, it enqueues an already registered asset.
+     *
+     * @param string $id       Unique identifier.
+     * @param string $type     Asset type (optional).
+     * @param string $src      The asset source (optional).
+     * @param string $pos      Target position ('header' or 'footer').
+     * @param array  $deps     Dependencies list.
+     * @param int    $priority Priority level.
+     * @param string $context  Context ('admin', 'frontend', or 'all').
      */
     public static function load($id, $type = null, $src = null, $pos = 'footer', $deps = [], $priority = 20, $context = 'admin')
     {
@@ -164,22 +203,27 @@ class Asset
     }
 
     /**
-     * Hook into GeniXCMS header/footer automatically
+     * Initializes the asset manager, registers core libraries, and attaches hooks.
+     * Automatically enqueues critical global assets like jQuery and Bootstrap.
      */
     public static function init()
     {
         self::registerCore();
         // These hooks echo directly to output
         Hooks::attach('admin_header_action', function () {
-            return self::get('header'); });
+            return self::get('header');
+        });
         Hooks::attach('admin_footer_action', function () {
-            return self::get('footer'); });
+            return self::get('footer');
+        });
 
         // Frontend hooks
         Hooks::attach('header_load_lib', function () {
-            return self::get('header'); });
+            return self::get('header');
+        });
         Hooks::attach('footer_load_lib', function () {
-            return self::get('footer'); });
+            return self::get('footer');
+        });
 
         // Auto-enqueue Core Assets globally (Context handled by registration)
         self::enqueue(['jquery', 'jquery-ui', 'bootstrap-js', 'bootstrap-icons', 'fontawesome']);
@@ -194,7 +238,8 @@ class Asset
     }
 
     /**
-     * Register core system libraries for dependency management
+     * Registers all core system libraries into the registry.
+     * Includes frameworks (jQuery, Bootstrap), icons (FontAwesome, BI), and internal tools (elFinder).
      */
     public static function registerCore()
     {
@@ -207,6 +252,7 @@ class Asset
         $jquery_v = Options::v('jquery_v') ?: '3.7.1';
         self::register('jquery', 'js', "https://code.jquery.com/jquery-{$jquery_v}.min.js", 'header', [], 1, 'all');
         self::register('jquery-ui', 'js', "https://code.jquery.com/ui/1.13.2/jquery-ui.min.js", 'header', ['jquery'], 2, 'all');
+        self::register('jquery-ui-css', 'css', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css', 'header', [], 2, 'all');
 
         // Bootstrap (Priority 3)
         self::register('bootstrap-css', 'css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', 'header', [], 3, 'all');
@@ -357,7 +403,7 @@ class Asset
                     commandsOptions: { getfile: { oncomplete: "close", folders: false } }
                 }).dialogelfinder("instance");
             };
-        </script>', 'header', [], 15);
+        </script>', 'header', ['elfinder-proxy', 'elfinder-css-custom', 'jquery-ui-css'], 15);
 
         // Auto-enqueue based on options
         if (Options::v('use_jquery') == 'on') {

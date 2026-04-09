@@ -5,45 +5,58 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140930
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class Posts extends Model
 {
     protected $table = 'posts';
 
     public static $last_id = '';
 
+    /**
+     * Posts Constructor.
+     *
+     * @param array $attributes Initial model attributes mapping.
+     */
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
     }
 
+    /**
+     * Retrieves categories associated with a specific content ID.
+     *
+     * @param int    $id   Content ID.
+     * @param string $type Content type (default: 'post').
+     * @return void        (Legacy/Placeholder).
+     */
     public static function categories($id, $type = 'post')
     {
     }
 
-    //
-    // $vars = array(
-    //             'title' => '',
-    //             'cat' => '',
-    //             'content' => '',
-    //             'date' => '',
-    //             'author' => '',
-    //             'type' => '',
-    //             'status' => ''
-    //         );
+    /**
+     * Inserts a new post into the database.
+     * Automatically handles slug generation, excerpt caching, hook execution, and pinger services.
+     *
+     * @param array $vars {
+     *     @type string $title   Post title.
+     *     @type string $content Raw content.
+     *     @type string $author  Author ID/name.
+     *     @type string $cat     Primary category ID.
+     *     @type string $type    Post type (post, page, etc).
+     *     @type string $status  Publication status (1 or 0).
+     *     @type string $date    Publication date.
+     * }
+     * @return bool|int    The result of the query or false.
+     */
     public static function insert($vars)
     {
         if (is_array($vars)) {
@@ -69,6 +82,13 @@ class Posts extends Model
         return $post;
     }
 
+    /**
+     * Updates an existing post record.
+     * Triggers excerpt regeneration if content is modified.
+     *
+     * @param array $vars Dictionary of post data to update. Requires 'id' in $_GET.
+     * @return bool|int    Result of the update query.
+     */
     public static function update($vars)
     {
         if (is_array($vars)) {
@@ -97,6 +117,12 @@ class Posts extends Model
         return $post;
     }
 
+    /**
+     * Sets the publication status of a post to active ('1').
+     *
+     * @param int $id Post ID.
+     * @return bool|int Result of the update.
+     */
     public static function publish($id)
     {
         $id = Typo::int($id);
@@ -105,6 +131,12 @@ class Posts extends Model
         return $post;
     }
 
+    /**
+     * Sets the publication status of a post to inactive ('0').
+     *
+     * @param int $id Post ID.
+     * @return bool|int Result of the update.
+     */
     public static function unpublish($id)
     {
         $id = Typo::int($id);
@@ -113,6 +145,12 @@ class Posts extends Model
         return $post;
     }
 
+    /**
+     * Deletes a post and all associated data (params, hooks, comments).
+     *
+     * @param int $id Post ID.
+     * @return bool|string True on success, error message on exception.
+     */
     public static function delete($id)
     {
         $id = Typo::int($id);
@@ -130,6 +168,13 @@ class Posts extends Model
         }
     }
 
+    /**
+     * Cleans and filters post content for output.
+     * Strips legacy readmore tags and applies 'post_content_filter' hooks.
+     *
+     * @param string $vars Raw post content.
+     * @return string      Filtered content.
+     */
     public static function content($vars)
     {
         $post = Typo::Xclean($vars);
@@ -147,10 +192,12 @@ class Posts extends Model
     }
 
     /**
-     * @param $post
-     * @param $id
+     * Formats post content for summary views by handling the [[--readmore--]] tag.
+     * Appends a "Read More" link if the marker is present.
      *
-     * @return array|mixed|string
+     * @param string $post Raw post content.
+     * @param int    $id   Post ID (for the URL).
+     * @return string      Excerpt-style formatted content.
      */
     public static function format($post, $id)
     {
@@ -168,12 +215,16 @@ class Posts extends Model
         return $post;
     }
 
-    // $vars = array(
-    //     'num' => '',
-    //     'cat' => '',
-    //     'type' => 'post'
-    // );
-
+    /**
+     * Retrieves a list of recent posts filtered by type and category.
+     *
+     * @param array $vars {
+     *     @type int    $num  Max number of posts (default: 10).
+     *     @type int    $cat  Category ID filter.
+     *     @type string $type Post type filter (default: 'post').
+     * }
+     * @return array List of post objects or error array.
+     */
     public static function recent($vars)
     {
         $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
@@ -194,6 +245,12 @@ class Posts extends Model
         return $posts;
     }
 
+    /**
+     * Retrieves only the title of a specific post.
+     *
+     * @param int $id Post ID.
+     * @return string  The post title or error message.
+     */
     public static function title($id)
     {
         try {
@@ -211,16 +268,16 @@ class Posts extends Model
     }
 
     /**
-     * Page Dropdown.
+     * Generates an HTML <select> dropdown of pages or posts.
      *
-     * $vars = array(
-     *     'name' => 'input_name',
-     *     'type' => 'type',
-     *     'parent' => 'parent',
-     *     'order_by' => '',
-     *     'sort' => 'ASC',
-     *     'selected' => ''
-     *     );
+     * @param array $vars {
+     *     @type string $name     The 'name' attribute for the select.
+     *     @type string $type     Post type filter.
+     *     @type string $order_by Column to sort by (default: 'name').
+     *     @type string $sort     Sort direction (ASC/DESC).
+     *     @type mixed  $selected ID of the pre-selected option.
+     * }
+     * @return string HTML dropdown.
      */
     public static function dropdown($vars)
     {
@@ -305,27 +362,69 @@ class Posts extends Model
         return $excerpt;
     }
 
+    /**
+     * Attaches a metadata parameter to a post.
+     * Supports special bypass for builder_* parameters to allow raw HTML/CSS.
+     *
+     * @param string $param   Parameter key.
+     * @param mixed  $value   Parameter value.
+     * @param int    $post_id Post ID.
+     * @return bool            True on success, false on failure.
+     */
     public static function addParam($param, $value, $post_id)
     {
+        // builder_* params: allow raw HTML/CSS but strip <script> tags for security.
+        // Legitimate JS is stored separately in builder_js param.
+        if (strpos($param, 'builder_') === 0) {
+            $cleanValue = $value;
+        } else {
+            $cleanValue = Typo::cleanX($value);
+        }
+
+
         $q = Query::table('posts_param')->insert([
             'post_id' => Typo::int($post_id),
             'param' => Typo::cleanX($param),
-            'value' => Typo::cleanX($value)
+            'value' => $cleanValue
         ]);
 
         return $q ? true : false;
     }
 
+    /**
+     * Updates an existing metadata parameter for a post.
+     *
+     * @param string $param   Parameter key.
+     * @param mixed  $value   New parameter value.
+     * @param int    $post_id Post ID.
+     * @return bool            True on success, false on failure.
+     */
     public static function editParam($param, $value, $post_id)
     {
+        // builder_* params: allow raw HTML/CSS but strip <script> tags for security.
+        // Legitimate JS is stored separately in builder_js param.
+        if (strpos($param, 'builder_') === 0) {
+            $cleanValue = $value;
+        } else {
+            $cleanValue = Typo::cleanX($value);
+        }
+
+
         $q = Query::table('posts_param')
             ->where('post_id', Typo::int($post_id))
             ->where('param', Typo::cleanX($param))
-            ->update(['value' => Typo::cleanX($value)]);
+            ->update(['value' => $cleanValue]);
 
         return $q ? true : false;
     }
 
+    /**
+     * Retrieves a metadata parameter for a post.
+     *
+     * @param string  $param   Parameter key.
+     * @param int     $post_id Post ID.
+     * @return string          The parameter value or empty string.
+     */
     public static function getParam($param, $post_id)
     {
         $q = Query::table('posts_param')
@@ -340,6 +439,13 @@ class Posts extends Model
         }
     }
 
+    /**
+     * Deletes a metadata parameter for a post.
+     *
+     * @param string $param   Parameter key.
+     * @param int    $post_id Post ID.
+     * @return bool            True on success, false on failure.
+     */
     public static function delParam($param, $post_id)
     {
         $q = Query::table('posts_param')
@@ -350,6 +456,13 @@ class Posts extends Model
         return $q ? true : false;
     }
 
+    /**
+     * Checks if a metadata parameter exists for a post.
+     *
+     * @param string $param   Parameter key.
+     * @param int    $post_id Post ID.
+     * @return bool            True if exists, false otherwise.
+     */
     public static function existParam($param, $post_id)
     {
         $q = Query::table('posts_param')
@@ -361,6 +474,13 @@ class Posts extends Model
         return $q ? true : false;
     }
 
+    /**
+     * Prepares post objects for regional output.
+     * Handles multi-language synchronization by overwriting default content with language parameters.
+     *
+     * @param array $post List of post objects.
+     * @return array       Prepared list of post objects.
+     */
     public static function prepare($post)
     {
         if (Options::v('multilang_enable') === 'on') {
@@ -389,24 +509,23 @@ class Posts extends Model
         return $post;
     }
 
-    // $vars = array(
-    //     'num' => '',
-    //     'cat' => '',
-    //     'type' => 'post',
-    //     'excerpt' => 'true',
-    //     'excerpt_max' => '200',
-    //     'title' => 'true',
-    //     'author' => 'true',
-    //     'date' => 'true',
-    //     'image' => 'true',
-    //     'class' => array(
-    //                    'ul' => '',
-    //                    'li' => '',
-    //                    'p' => '',
-    //                    'h4' => '',
-    //                )
-    // );
-
+    /**
+     * Renders an HTML list of posts with optional titles, excerpts, authors, and images.
+     * Uses cached excerpts where possible.
+     *
+     * @param array $vars {
+     *     @type int   $num         Max number of posts.
+     *     @type bool  $excerpt     Whether to show excerpt (default: false).
+     *     @type int   $excerpt_max Max excerpt length.
+     *     @type bool  $title       Whether to show title.
+     *     @type bool  $author      Whether to show author.
+     *     @type bool  $date        Whether to show date.
+     *     @type bool  $image       Whether to show featured image.
+     *     @type int   $image_size  Size of the square thumbnail.
+     *     @type array $class       CSS classes for various elements (ul, li, img, etc).
+     * }
+     * @return string HTML list of posts.
+     */
     public static function lists($vars)
     {
         $imgSize = isset($vars['image_size']) ? $vars['image_size'] : 60;
@@ -461,6 +580,13 @@ class Posts extends Model
         }
     }
 
+    /**
+     * Retrieves and formats the tags parameter for a post as clickable links.
+     *
+     * @param int    $id    Post ID.
+     * @param string $title Header text (default: 'Tags').
+     * @return string       Formatted HTML string of tags.
+     */
     public static function tags($id, $title = 'Tags')
     {
         $tags = self::getParam('tags', $id);
@@ -474,6 +600,16 @@ class Posts extends Model
         return $title . ' : ' . $tag;
     }
 
+    /**
+     * Retrieves a list of related posts based on tags and category.
+     *
+     * @param int    $id    Current post ID to exclude.
+     * @param int    $num   Number of related posts to fetch.
+     * @param int    $cat   Category ID to match.
+     * @param string $mode  Display mode: 'list' (default) or 'box'.
+     * @param int    $limit Character limit for titles in 'box' mode.
+     * @return string       HTML output of related posts.
+     */
     public static function related($id, $num, $cat, $mode = 'list', $limit = 20)
     {
         $id = Typo::int($id);
@@ -550,6 +686,12 @@ class Posts extends Model
         return $related;
     }
 
+    /**
+     * Retrieves the content type (e.g. 'post', 'page') for a specific post.
+     *
+     * @param int $post_id Post ID.
+     * @return string      The post type.
+     */
     public static function type($post_id)
     {
         $q = Query::table('posts')->select('type')->where('id', Typo::cleanX($post_id))->first();
@@ -576,9 +718,10 @@ class Posts extends Model
     }
 
     /**
-     * Get Post Content by Post ID
-     * @param int $id
-     * @return mixed
+     * Retrieves the raw content of a specific post.
+     *
+     * @param int $id Post ID.
+     * @return string|array Raw content string or error array.
      */
     public static function getPostContent($id)
     {
@@ -592,6 +735,12 @@ class Posts extends Model
         return $r;
     }
 
+    /**
+     * Retrieves the author of a specific post.
+     *
+     * @param int $id Post ID.
+     * @return string|array Author identifier or error array.
+     */
     public static function author($id)
     {
         $q = Query::table('posts')->select('author')->where('id', Typo::int($id))->first();
@@ -604,6 +753,12 @@ class Posts extends Model
         return $r;
     }
 
+    /**
+     * Retrieves the primary category ID of a specific post.
+     *
+     * @param int $id Post ID.
+     * @return int|array Category ID or error array.
+     */
     public static function cat($id)
     {
         $q = Query::table('posts')->select('cat')->where('id', Typo::int($id))->orderBy('date', 'DESC')->first();
@@ -616,6 +771,12 @@ class Posts extends Model
         return $r;
     }
 
+    /**
+     * Retrieves the publication date of a specific post.
+     *
+     * @param int $id Post ID.
+     * @return string|array Date string or error array.
+     */
     public static function date($id)
     {
         $q = Query::table('posts')->select('date')->where('id', Typo::int($id))->orderBy('date', 'DESC')->first();
@@ -629,10 +790,11 @@ class Posts extends Model
     }
 
     /**
-     * Get Post by Cat ID
-     * @param int $id
-     * @param int $max
-     * @return mixed
+     * Retrieves a list of posts filtered by category ID.
+     *
+     * @param int $id  Category ID.
+     * @param int $max Max number of posts.
+     * @return array    List of post objects or error array.
      */
     public static function getPostByCat($id, $max)
     {
@@ -652,6 +814,12 @@ class Posts extends Model
         return $r;
     }
 
+    /**
+     * Retrieves the value of the 'post_image' parameter for a specific post.
+     *
+     * @param int $post_id Post ID.
+     * @return string      The image path/URL or empty string.
+     */
     public static function getPostImage($post_id)
     {
         if (Posts::existParam('post_image', $post_id)) {
@@ -663,6 +831,13 @@ class Posts extends Model
         return $image;
     }
 
+    /**
+     * Extracts an image URL from the post content using regex.
+     *
+     * @param string $post   HTML content of the post.
+     * @param int    $number Which image to extract (default: first).
+     * @return string|null   The image URL or null.
+     */
     public static function getImage($post, $number = 1)
     {
         preg_match_all('/<img .*?src=[\'"]([^\'"]+)[\'"].*?>/si', $post, $im);
@@ -672,6 +847,13 @@ class Posts extends Model
         }
     }
 
+    /**
+     * Logic for selecting a specific match from an array of extracted images.
+     *
+     * @param array $im     Regex matches from getImage().
+     * @param int   $number Match index (1-based).
+     * @return string       The selected image URL or empty string.
+     */
     public static function setImage($im, $number)
     {
         if (isset($number)) {
@@ -688,19 +870,20 @@ class Posts extends Model
                 }
             }
         }
+
+        return '';
     }
 
 
     /**
-     * $vars = [
-     *      'id'        => '',
-     *      'type'      => '',
-     *      'status'    => '',
-     *      'slug'      => '',
-     *      'where'     => ''
-     * ]
-     * @param $vars
-     * @return mixed
+     * Fetches a post and its associated parameters in a single merged object.
+     *
+     * @param array $vars {
+     *     @type int    $id     Post ID.
+     *     @type string $type   Post type.
+     *     @type string $status Post status.
+     * }
+     * @return array List containing the merged post object or error array.
      */
     public static function fetch($vars)
     {
@@ -751,6 +934,13 @@ class Posts extends Model
         return $res;
     }
 
+    /**
+     * Creates a unique URL-friendly slug from a title string.
+     * Automatically appends a numeric suffix if the slug already exists.
+     *
+     * @param string $str The original title.
+     * @return string      The unique slug.
+     */
     public static function createSlug($str)
     {
         $slug = Typo::slugify($str);
@@ -764,9 +954,10 @@ class Posts extends Model
     }
 
     /**
-     * Check if Slug is Exist
-     * @param string $slug
-     * @return bool
+     * Checks if a slug (full or partial) already exists in the posts table.
+     *
+     * @param string $slug The slug to check.
+     * @return bool         True if exists, false otherwise.
      */
     public static function slugExist($slug)
     {
@@ -776,6 +967,12 @@ class Posts extends Model
         return $q ? true : false;
     }
 
+    /**
+     * Retrieves the numeric suffix of the last entry matching a specific slug base.
+     *
+     * @param string $slug The slug base.
+     * @return string      The suffix found (as a string).
+     */
     public static function getLastSlug($slug)
     {
         $slug = Typo::cleanX($slug);

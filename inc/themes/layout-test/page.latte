@@ -1,0 +1,18 @@
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">{$title}</h1>
+        <p class="lead opacity-75">Layout: {ifset $layout_header}Custom{else}Standard{/ifset}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm p-5 rounded-4 bg-white">
+                <article>
+                    {$content|noescape}
+                </article>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,17 @@
 <?php
 /**
- * GeniXCMS - Content Management System.
+ * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
+ * 
+ * @since 0.0.1
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 // ── PREPARE DATA ──────────────────────────────────────────────────
@@ -19,7 +28,8 @@ if (count($data['mods']) > 0) {
         $icon = (isset($m['icon']) ? $m['icon'] : 'bi bi-puzzle');
 
         $rows[] = [
-            ['content' => "
+            [
+                'content' => "
                 <div class='d-flex align-items-center ps-4 py-3'>
                     <div class='bg-{$statusClass} bg-opacity-10 p-3 rounded-4 text-{$statusClass} me-3 shadow-sm'>
                         <i class='{$icon} fs-4'></i>
@@ -31,26 +41,31 @@ if (count($data['mods']) > 0) {
                             <span class='extra-small text-muted opacity-50 fw-bold text-uppercase ls-1'>{$m['license']}</span>
                         </div>
                     </div>
-                </div>", 'class' => 'p-0'],
+                </div>",
+                'class' => 'p-0'
+            ],
             "<div>
-                <p class='text-muted small mb-1 lh-base' style='max-width: 400px;'>".(strlen($m['desc']) > 140 ? substr($m['desc'], 0, 137).'...' : $m['desc'])."</p>
+                <p class='text-muted small mb-1 lh-base' style='max-width: 400px;'>" . (strlen($m['desc']) > 140 ? substr($m['desc'], 0, 137) . '...' : $m['desc']) . "</p>
                 <div class='extra-small text-muted d-flex align-items-center gap-1'>
-                    <i class='bi bi-person-circle'></i> "._("Authored by").": <a href='{$m['url']}' target='_blank' class='text-primary fw-bold text-decoration-none'>{$m['developer']}</a>
+                    <i class='bi bi-person-circle'></i> " . _("Authored by") . ": <a href='{$m['url']}' target='_blank' class='text-primary fw-bold text-decoration-none'>{$m['developer']}</a>
                 </div>
              </div>",
-            ['content' => "
+            [
+                'content' => "
                 <div class='btn-group gap-2'>
-                    <a href='index.php?page=modules&act={$actUri}&modules={$mod}&token=".TOKEN."' 
+                    <a href='index.php?page=modules&act={$actUri}&modules={$mod}&token=" . TOKEN . "' 
                        class='btn btn-{$btnClass} btn-sm rounded-pill px-4 shadow-sm d-inline-flex align-items-center fw-bold'>
                         <i class='bi {$actIcon} me-2'></i> {$actLabel}
                     </a>
                     " . (!$isActive ? "
-                    <a href='index.php?page=modules&act=remove&modules={$mod}&token=".TOKEN."' 
+                    <a href='index.php?page=modules&act=remove&modules={$mod}&token=" . TOKEN . "' 
                        class='btn btn-light btn-sm rounded-circle border p-2' 
-                       onclick=\"return confirm('"._("Permanent removal of this module?")."');\" title='Remove Module'>
+                       onclick=\"return confirm('" . _("Permanent removal of this module?") . "');\" title='Remove Module'>
                         <i class='bi bi-trash text-danger'></i>
                     </a>" : "") . "
-                </div>", 'class' => 'text-end pe-4']
+                </div>",
+                'class' => 'text-end pe-4'
+            ]
         ];
     }
 }
@@ -60,20 +75,20 @@ $marketplaceHtml = "
 <div id='marketplace-container'>
     <div class='row mb-4 mt-2 align-items-center'>
         <div class='col-md-6'>
-            <h6 class='text-muted extra-small fw-bold text-uppercase tracking-widest mb-0'>"._("Module Marketplace")."</h6>
+            <h6 class='text-muted extra-small fw-bold text-uppercase tracking-widest mb-0'>" . _("Module Marketplace") . "</h6>
         </div>
         <div class='col-md-6 text-end'>
             <div class='input-group shadow-sm rounded-pill overflow-hidden border bg-white'>
                 <span class='input-group-text bg-white border-0 ps-3'><i class='bi bi-search text-muted'></i></span>
                 <input type='text' id='marketplaceSearch' class='form-control border-0 ps-2 bg-white' placeholder='Search plugins...'>
-                <button class='btn btn-primary px-4 fw-bold rounded-pill m-1' id='btnMarketplaceSearch'>"._("Find Plugins")."</button>
+                <button class='btn btn-primary px-4 fw-bold rounded-pill m-1' id='btnMarketplaceSearch'>" . _("Find Plugins") . "</button>
             </div>
         </div>
     </div>
     <div id='marketplaceResults' class='row g-4'>
         <div class='col-12 text-center py-5'>
             <div class='spinner-border text-primary' role='status' style='width: 3rem; height: 3rem;'></div>
-            <p class='mt-3 text-muted fw-medium'>"._("Connecting to Marketplace Repo...")."</p>
+            <p class='mt-3 text-muted fw-medium'>" . _("Connecting to Marketplace Repo...") . "</p>
         </div>
     </div>
     <div id='marketplacePagination' class='mt-5'></div>
@@ -82,10 +97,10 @@ $marketplaceHtml = "
 // JS Component for Marketplace
 $marketplaceJs = "
 <script>
-    const GX_TOKEN = '".TOKEN."';
+    const GX_TOKEN = '" . TOKEN . "';
     const GX_TYPE = 'module';
-    const GX_AJAX_URL = '".Url::ajax('marketplace')."';
-    const GX_DOMAIN = '".$_SERVER['HTTP_HOST']."';
+    const GX_AJAX_URL = '" . Url::ajax('marketplace') . "';
+    const GX_DOMAIN = '" . $_SERVER['HTTP_HOST'] . "';
     let mpPage = 1;
 
     function loadMarketplace(q = '', page = 1) {
@@ -118,7 +133,7 @@ $marketplaceJs = "
         let html = '';
         items.forEach(item => {
             let screenshots = JSON.parse(item.screenshots || item.mp_screenshots || '[]');
-            let thumb = (screenshots.length > 0 && screenshots[0]) ? screenshots[0] : '".Site::$url."/assets/images/noimagetheme.png';
+            let thumb = (screenshots.length > 0 && screenshots[0]) ? screenshots[0] : '" . Site::$url . "/assets/images/noimagetheme.png';
             let priceVal = parseFloat(item.price || item.mp_price || 0);
             let price = (priceVal > 0) ? '$'+priceVal : 'FREE';
             
@@ -145,7 +160,7 @@ $marketplaceJs = "
                             data-id='\${item.id}'
                             data-price='\${priceVal}'
                             data-name='\${item.title}'>
-                            <i class='bi bi-cloud-download-fill me-1'></i> "._("Install plugin")."
+                            <i class='bi bi-cloud-download-fill me-1'></i> " . _("Install plugin") . "
                         </button>
                     </div>
                 </div>
@@ -190,15 +205,15 @@ $marketplaceJs = "
         let license = '';
 
         if (price > 0) {
-            license = prompt('"._("This is a Paid Plugin. Please enter your License Key for")." ' + name + ':', '');
+            license = prompt('" . _("This is a Paid Plugin. Please enter your License Key for") . " ' + name + ':', '');
             if (license === null) return; // Cancel
             if (license.trim() === '') {
-                alert('"._("License Key is required for paid items.")."');
+                alert('" . _("License Key is required for paid items.") . "');
                 return;
             }
         }
         
-        if (confirm('"._("Install this Plugin from Marketplace? This will download and extract it to your repository.")."')) {
+        if (confirm('" . _("Install this Plugin from Marketplace? This will download and extract it to your repository.") . "')) {
             const originalHtml = btn.html();
             btn.prop('disabled', true).html('<span class=\"spinner-border spinner-border-sm\" role=\"status\"></span> Installing...');
             
@@ -207,15 +222,15 @@ $marketplaceJs = "
                 .then(res => res.json())
                 .then(res => {
                     if (res.status === true) {
-                        alert('"._("Success! Plugin has been installed.")."');
+                        alert('" . _("Success! Plugin has been installed.") . "');
                         location.reload();
                     } else {
-                        alert(res.message || '"._("Failed to install plugin.")."');
+                        alert(res.message || '" . _("Failed to install plugin.") . "');
                         btn.prop('disabled', false).html(originalHtml);
                     }
                 })
                 .catch(err => {
-                    alert('"._("Error! Could not connect to API.")."');
+                    alert('" . _("Error! Could not connect to API.") . "');
                     btn.prop('disabled', false).html(originalHtml);
                 });
         }
@@ -269,7 +284,7 @@ $schema = [
                     'footer' => '
                         <div class="extra-small text-muted text-uppercase tracking-widest fw-bold d-flex align-items-center mx-3 my-1">
                             <i class="bi bi-info-circle-fill me-2 text-primary fs-5"></i>
-                            '._("Activated modules may add new operational nodes to your administrative sidebar.").'
+                            ' . _("Activated modules may add new operational nodes to your administrative sidebar.") . '
                         </div>'
                 ]
             ]
@@ -294,11 +309,13 @@ $schema = [
                     'type' => 'form',
                     'action' => 'index.php?page=modules',
                     'fields' => [
-                        ['type' => 'raw', 'html' => '
+                        [
+                            'type' => 'raw',
+                            'html' => '
                             <div class="upload-zone border-2 border-dashed rounded-5 p-5 mb-4 bg-light text-center">
                                 <i class="bi bi-plugin text-success fs-1 mb-3 d-block"></i>
-                                <h6 class="fw-bold text-dark">'._("Upload Module Archive").'</h6>
-                                <p class="extra-small text-muted mb-4">'._("Select the .zip package to expand and install").'</p>
+                                <h6 class="fw-bold text-dark">' . _("Upload Module Archive") . '</h6>
+                                <p class="extra-small text-muted mb-4">' . _("Select the .zip package to expand and install") . '</p>
                                 <input type="file" name="module" id="modFile" class="form-control border-0 bg-white rounded-pill px-4 py-2 border shadow-sm">
                             </div>
                             <div class="alert bg-info bg-opacity-10 border-0 rounded-4 p-3 extra-small mb-4 d-flex">
@@ -307,7 +324,8 @@ $schema = [
                                     <strong>Installation Note:</strong> Modules are executed with core system privileges. Ensure your package is from a verified developer or the official marketplace.
                                 </div>
                             </div>
-                            <input type="hidden" name="token" value="'.TOKEN.'">'],
+                            <input type="hidden" name="token" value="' . TOKEN . '">'
+                        ],
                         ['type' => 'button', 'name' => 'upload', 'label' => _("Initialize Installation"), 'class' => 'btn btn-primary rounded-pill px-5 fw-bold w-100 shadow-sm']
                     ]
                 ]
@@ -327,12 +345,34 @@ echo $marketplaceJs;
 ?>
 
 <style>
-    .upload-zone { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); border-color: #e2e8f0 !important; }
-    .upload-zone:hover { background-color: #fff !important; border-color: var(--gx-primary) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-    .ls-1 { letter-spacing: 0.5px; }
-    .tracking-widest { letter-spacing: 0.1em; }
-    .hover-up-small:hover { transform: translateY(-5px); transition: transform 0.3s ease; }
-    .border-hover-primary:hover { border-color: var(--bs-primary) !important; }
+    .upload-zone {
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        border-color: #e2e8f0 !important;
+    }
+
+    .upload-zone:hover {
+        background-color: #fff !important;
+        border-color: var(--gx-primary) !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .ls-1 {
+        letter-spacing: 0.5px;
+    }
+
+    .tracking-widest {
+        letter-spacing: 0.1em;
+    }
+
+    .hover-up-small:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
+
+    .border-hover-primary:hover {
+        border-color: var(--bs-primary) !important;
+    }
+
     /* Tab Modern Styling */
     .nav-pills .nav-link {
         color: var(--gx-primary, #0d6efd);
@@ -345,15 +385,18 @@ echo $marketplaceJs;
         align-items: center;
         gap: 0.5rem;
     }
+
     .nav-pills .nav-link:hover {
         background-color: rgba(13, 110, 253, 0.05);
     }
+
     .nav-pills .nav-link.active {
         background-color: var(--gx-primary, #0d6efd) !important;
         color: #fff !important;
         box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
     }
-    .nav-pills .nav-link.active i, 
+
+    .nav-pills .nav-link.active i,
     .nav-pills .nav-link.active svg {
         color: #fff !important;
     }

@@ -43,11 +43,11 @@ if (User::access(0)) {
         $opt = json_decode($opt_raw, true) ?: [];
 
         $builder = new OptionsBuilder($opt, [], [], [
-            'brandName'  => 'BS-Mag Premium',
-            'brandVer'   => 'v3.0.0',
-            'brandAbbr'  => 'BM',
+            'brandName' => 'BS-Mag Premium',
+            'brandVer' => 'v2.1.0',
+            'brandAbbr' => 'BM',
             'brandColor' => '#dc3545', // Editorial Red
-            'saveKey'    => 'bsmag_save_options'
+            'saveKey' => 'bsmag_save_options'
         ]);
 
         $schema = [
@@ -234,8 +234,8 @@ if (User::access(0)) {
         echo '<div class="container-fluid mt-4"><div class="alert alert-warning shadow-sm border-0 d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
             <div>
-                <strong>' . _("Settings Missing!") . '</strong><br>' . 
-                _("BS-Mag Theme Options are not installed yet.") . '
+                <strong>' . _("Settings Missing!") . '</strong><br>' .
+            _("BS-Mag Theme Options are not installed yet.") . '
                 <form action="" method="post" class="mt-3">
                     <button class="btn btn-primary btn-sm px-4" name="install_bsmag_options">
                         <i class="bi bi-tools me-1"></i> ' . _("Install Configuration") . '

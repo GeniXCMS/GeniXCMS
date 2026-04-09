@@ -1,20 +1,14 @@
 <?php
-
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140930
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,26 +20,25 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class will create all the URL format automatically for Posts, Categories,
  * pages, sitemap, rss.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class Url
 {
+    /**
+     * Url Constructor.
+     */
     public function __construct()
     {
     }
 
     /**
-     * Post URL Function.
+     * Generates a URL for a post.
      *
-     * This will create the posts url automatically based on
-     * the SMART_URL will formatted as friendly url if SMART_URL is set to true.
+     * Formats the URL as friendly (Smart URL) if enabled, otherwise uses a query string.
+     * Supports multilingual pathing and applies the 'post_url' filter.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $vars Total ID of the post.
+     * @return string The generated Post URL.
      * @since 0.0.1
      */
     public static function post($vars)
@@ -88,14 +81,12 @@ class Url
     }
 
     /**
-     * Page URL Function.
+     * Generates a URL for a page.
      *
-     * This will create the pages url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
+     * Formats the URL based on SMART_URL setting. Supports multilingual paths.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $vars Total ID or slug of the page.
+     * @return string The generated Page URL.
      * @since 0.0.1
      */
     public static function page($vars)
@@ -128,14 +119,10 @@ class Url
     }
 
     /**
-     * Categories URL Function.
+     * Generates a URL for a category.
      *
-     * This will create the categories url automatically based on the SMART_URL
-     * will formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $vars Category ID.
+     * @return string The generated Category URL.
      * @since 0.0.1
      */
     public static function cat($vars)
@@ -159,13 +146,10 @@ class Url
     }
 
     /**
-     * Custom URL Function.
+     * Returns a custom URL as provided.
      *
-     * This will create the custom url. It will result as is.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param string $vars The raw URL.
+     * @return string
      * @since 0.0.1
      */
     public static function custom($vars)
@@ -176,14 +160,10 @@ class Url
     }
 
     /**
-     * Sitemap URL Function.
+     * Generates a URL for the sitemap.
      *
-     * This will create the sitemap url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param string|null $var Specific sitemap section.
+     * @return string
      * @since 0.0.1
      */
     public static function sitemap($var)
@@ -204,14 +184,9 @@ class Url
     }
 
     /**
-     * RSS URL Function.
+     * Generates a URL for the RSS feed.
      *
-     * This will create the rss url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @return string
      * @since 0.0.1
      */
     public static function rss()
@@ -231,13 +206,10 @@ class Url
     }
 
     /**
-     * URL Slug Function.
+     * Retrieves the URL slug for a post ID.
      *
-     * This will load the url slug from the database according to the posts id.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int $vars Post ID.
+     * @return string The slug string.
      * @since 0.0.1
      */
     public static function slug($vars)
@@ -249,14 +221,10 @@ class Url
     }
 
     /**
-     * FLag URL Function.
+     * Generates a URL for switching languages.
      *
-     * This will create the flag url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param string $vars Language code.
+     * @return string
      * @since 0.0.7
      */
     public static function flag($vars)
@@ -297,14 +265,12 @@ class Url
     }
 
     /**
-     * Ajax URL Function.
+     * Generates a URL for Internal Ajax calls.
+     * Includes the security TOKEN automatically.
      *
-     * This will create the ajax url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param string $vars Ajax method/resource.
+     * @param array $params Additional query parameters.
+     * @return string
      * @since 1.0.0
      */
     public static function ajax($vars, $params = [])
@@ -335,14 +301,11 @@ class Url
     }
 
     /**
-     * API URL Function.
+     * Generates a URL for the RESTful API.
      *
-     * This will create the API url automatically based on the SMART_URL configuration.
-     *
-     * @param string $resource e.g., 'marketplace'
-     * @param string $identifier e.g., 'validate-license' (optional)
-     * @param array $params Additional GET parameters (optional)
-     *
+     * @param string $resource API resource name.
+     * @param string $identifier Specific resource ID.
+     * @param array $params Additional query parameters.
      * @return string
      */
     public static function api($resource, $identifier = '', $params = [])
@@ -378,14 +341,10 @@ class Url
     }
 
     /**
-     * Tag URL Function.
+     * Generates a URL for a tag.
      *
-     * This will create the tags url automatically based on the SMART_URL will
-     * formatted as friendly url if SMART_URL is set to true.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param string $vars Tag name or ID.
+     * @return string
      * @since 1.0.0
      */
     public static function tag($vars)
@@ -404,6 +363,14 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates a URL for a module.
+     *
+     * @param string $vars Module name.
+     * @param string $act Module action.
+     * @param array $params Additional parameters.
+     * @return string
+     */
     public static function mod($vars, $act = '', $params = [])
     {
         switch (SMART_URL) {
@@ -440,6 +407,17 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates a URL for a dynamic image thumbnail.
+     *
+     * Processes parameters like type, size, and alignment to generate a ThumbFly path.
+     *
+     * @param string $vars Image source path.
+     * @param string $type Resize type (e.g., 'crop').
+     * @param string $size Target dimensions (e.g., '300x300').
+     * @param string $align Alignment for cropping.
+     * @return string
+     */
     public static function thumb($vars, $type = '', $size = '', $align = '')
     {
         // $vars = urlencode($vars);
@@ -459,7 +437,13 @@ class Url
                 break;
 
             default:
-                $url = Site::$cdn . "?thumb={$vars}&type={$type}&size={$size}&align={$align}";
+                $url = Site::$cdn . "?thumb={$vars}";
+                if ($type != '')
+                    $url .= "&type={$type}";
+                if ($size != '')
+                    $url .= "&size={$size}";
+                if ($align != '')
+                    $url .= "&align={$align}";
                 break;
         }
 
@@ -467,6 +451,11 @@ class Url
         return $url;
     }
 
+    /**
+     * Returns the base directory URL for the currently active theme.
+     *
+     * @return string
+     */
     public static function theme()
     {
         $theme = Options::v('themes');
@@ -474,6 +463,13 @@ class Url
         return Site::$cdn . 'inc/themes/' . $theme . '/';
     }
 
+    /**
+     * Generates a URL for an author profile page.
+     *
+     * @param string $vars Author username or ID.
+     * @param string $type Sub-view type.
+     * @return string
+     */
     public static function author($vars, $type = '')
     {
         switch (SMART_URL) {
@@ -492,6 +488,11 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates a URL for the search results page.
+     *
+     * @return string
+     */
     public static function search()
     {
         switch (SMART_URL) {
@@ -511,6 +512,13 @@ class Url
     }
 
 
+    /**
+     * Generates a URL for an archive page (Year/Month).
+     *
+     * @param int|string $month
+     * @param int|string $year
+     * @return string
+     */
     public static function archive($month, $year)
     {
         $month = str_pad($month, 2, '0', STR_PAD_LEFT);
@@ -528,6 +536,12 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates a URL for the login page.
+     *
+     * @param string $var Optional parameters.
+     * @return string
+     */
     public static function login($var = '')
     {
         switch (SMART_URL) {
@@ -546,6 +560,12 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates a URL for the logout page.
+     *
+     * @param string $var Optional parameters.
+     * @return string
+     */
     public static function logout($var = '')
     {
         switch (SMART_URL) {
@@ -564,6 +584,12 @@ class Url
         return $url;
     }
 
+    /**
+     * Generates HTML breadcrumbs based on the current context or provided data.
+     *
+     * @param array $data Contextual data for manual injection.
+     * @return string HTML output.
+     */
     public static function breadcrumbs($data = [])
     {
         $out = '<nav aria-label="breadcrumb">

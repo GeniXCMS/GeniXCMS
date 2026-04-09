@@ -2,8 +2,8 @@
 /**
  * Name: Page Dynamic Builder
  * Desc: Module builder drag & drop mirip Elementor untuk membuat halaman yang menakjubkan.
- * Version: 1.0.0
- * Build: 1.0.0
+ * Version: 1.1.0
+ * Build: 2.0.0
  * Developer: GeniXCMS
  * URI: https://genixcms.web.id
  * License: MIT License
@@ -22,6 +22,7 @@ class DynamicBuilder
 
         // Automatic Font Queuing on Frontend
         Hooks::attach('header_load_lib', array('DynamicBuilder', 'enqueueFonts'));
+        Hooks::attach('header_load_lib', array('DynamicBuilder', 'injectMeta'));
         Hooks::attach('admin_header_action', array('DynamicBuilder', 'handleAssets'));
 
         // Register Assets
@@ -134,6 +135,13 @@ class DynamicBuilder
 
     public static function injectToggle()
     {
+        $id = Typo::int($_GET['id'] ?? 0);
+        $css = Posts::getParam('builder_css', $id);
+        $js = Posts::getParam('builder_js', $id);
+        $html = Posts::getParam('builder_html', $id);
+        echo '<textarea name="param[builder_css]" id="gx_builder_css" style="display:none;">' . htmlspecialchars($css ?? '') . '</textarea>';
+        echo '<textarea name="param[builder_js]" id="gx_builder_js" style="display:none;">' . htmlspecialchars($js ?? '') . '</textarea>';
+        echo '<textarea name="param[builder_html]" id="gx_builder_html" style="display:none;">' . htmlspecialchars($html ?? '') . '</textarea>';
         echo '
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 mt-4 bg-primary text-white">
             <div class="card-body p-4 d-flex align-items-center justify-content-between">
@@ -147,6 +155,22 @@ class DynamicBuilder
             </div>
         </div>
         ';
+    }
+
+    public static function injectMeta()
+    {
+        global $data;
+        if (isset($data['posts'][0]->id)) {
+            $id = $data['posts'][0]->id;
+            $css = Posts::getParam('builder_css', $id);
+            $js = Posts::getParam('builder_js', $id);
+            if ($css) {
+                echo "<!-- Dynamic Builder CSS -->\n<style>\n{$css}\n</style>\n";
+            }
+            if ($js) {
+                echo "<!-- Dynamic Builder JS -->\n<script>\n{$js}\n</script>\n";
+            }
+        }
     }
 
     public static function injectStatic()

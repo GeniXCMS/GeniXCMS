@@ -5,15 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 2.0.0
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -24,6 +20,9 @@ class Acl
     public static $perms = [];
     private static $_table_checked = false;
 
+    /**
+     * Initializes the ACL system and ensures core permissions are registered.
+     */
     public static function init()
     {
         if (self::$_table_checked)
@@ -35,6 +34,13 @@ class Acl
         self::registerCore();
     }
 
+    /**
+     * Registers a new permission key into the system.
+     *
+     * @param string $key            The unique permission identifier (e.g., 'POSTS_DELETE').
+     * @param string $label          A human-readable label for the permission.
+     * @param array  $default_groups Numeric IDs of user groups that have this permission by default.
+     */
     public static function register($key, $label, $default_groups = [0, 1, 2])
     {
         self::$perms[$key] = [
@@ -43,6 +49,12 @@ class Acl
         ];
     }
 
+    /**
+     * Verifies if the currently logged-in user has a specific permission.
+     *
+     * @param string $permission The permission key to verify.
+     * @return bool              True if the user is authorized, false otherwise.
+     */
     public static function check($permission)
     {
         self::init();
@@ -59,6 +71,14 @@ class Acl
         return self::checkGroup($permission, $group);
     }
 
+    /**
+     * Verifies if a specific user group has a given permission.
+     * Checks database overrides first, then falls back to code-defined defaults.
+     *
+     * @param string     $permission The permission key to verify.
+     * @param int|string $group      The user group ID to check.
+     * @return bool                  True if authorized.
+     */
     public static function checkGroup($permission, $group)
     {
         self::init();
@@ -87,6 +107,9 @@ class Acl
         return false;
     }
 
+    /**
+     * Registers all core system permissions for posts, pages, media, and settings.
+     */
     private static function registerCore()
     {
         // Posts
@@ -123,12 +146,25 @@ class Acl
         self::register('USERS_DELETE', 'Delete User Accounts', [0]);
     }
 
+    /**
+     * Retrieves all registered permissions.
+     *
+     * @return array Map of all permission definitions.
+     */
     public static function getAllPermissions()
     {
         self::init();
         return self::$perms;
     }
 
+    /**
+     * Explicitly sets or updates a permission status for a user group in the database.
+     *
+     * @param int|string $group_id    The user group ID.
+     * @param string     $permission  The permission identifier.
+     * @param int|bool   $status      1/true for enabled, 0/false for disabled.
+     * @return bool                   Result of the database operation.
+     */
     public static function set($group_id, $permission, $status)
     {
         self::init();

@@ -1,114 +1,85 @@
 /**
- * GxEditor Utils Library
- * Pure helper functions extracted from main editor
+ * GxEditor Utils Library - Enhanced Multi-Attribute Protection
  */
 
-/**
- * Escape HTML special characters
- */
 function escHtml(s) {
-    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    if (!s) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
+window.escHtml = escHtml;
 
-/**
- * Split text into lines, removing empty ones
- */
-function splitLines(s) {
-    return (s || '').split(/\n+/).filter(Boolean);
+function utob(str) {
+    try { return btoa(unescape(encodeURIComponent(str))); } catch(e) { return ""; }
 }
+window.utob = utob;
 
-/**
- * Place cursor (caret) at the end of an element
- */
-function placeCaretAtEnd(el) {
-    var range = document.createRange();
-    var sel = window.getSelection();
-    range.selectNodeContents(el);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
+function btou(str) {
+    try { return decodeURIComponent(escape(atob(str))); } catch (e) { return str; }
 }
+window.btou = btou;
 
-/**
- * Place cursor (caret) at the start of an element
- */
-function placeCaretAtStart(el) {
-    var range = document.createRange();
-    var sel = window.getSelection();
-    range.setStart(el, 0);
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-}
-
-/**
- * Convert dynamic HTML content (like images) back to shortcodes for storage
- */
 function htmlToShortcode(html) {
     if (!html) return '';
     var div = document.createElement('div');
     div.innerHTML = html;
-    div.querySelectorAll('img').forEach(function(img) {
-        var cl = img.classList;
-        var sc = '[image src="' + img.getAttribute('src') + '"';
+    
+    var foundCount = 0;
+    
+    // Scan all possible elements for the container class
+    var containers = Array.from(div.querySelectorAll('*')).filter(function(el) {
+        return el.classList && el.classList.contains('custom-code-container');
+    });
+    
+    // Check root level
+    Array.from(div.children).forEach(function(c) {
+        if (c.classList.contains('custom-code-container') && !containers.includes(c)) containers.push(c);
+    });
+
+    containers.forEach(function(el) {
+        var code = '';
+        var attrVal = el.getAttribute('data-gx-code') || el.getAttribute('data-code') || '';
         
-        if (cl.contains('w-25')) sc += ' width="w-25"';
-        else if (cl.contains('w-50')) sc += ' width="w-50"';
-        else if (cl.contains('w-75')) sc += ' width="w-75"';
-        else if (cl.contains('w-100')) sc += ' width="w-100"';
-
-        if (cl.contains('float-start')) sc += ' align="float-start"';
-        else if (cl.contains('float-end')) sc += ' align="float-end"';
-        else if (cl.contains('mx-auto')) sc += ' align="mx-auto d-block"';
-
-        if (cl.contains('img-thumbnail')) sc += ' style="img-thumbnail"';
-        else if (cl.contains('rounded-circle')) sc += ' style="rounded-circle"';
-        else if (cl.contains('rounded')) sc += ' style="rounded"';
-        else sc += ' style=""';
-
-        var altText = img.getAttribute('alt') || '';
-        var capText = '';
-        var wrap = img.closest('.gx-image-wrap, .mb-3, .gx-image-rendered, .gxb-inline-img-wrap');
-        var capSpan = wrap ? wrap.querySelector('.gxb-caption-text') : null;
-        if (capSpan) capText = capSpan.textContent;
-
-        sc += ' alt="' + altText + '"';
-        sc += ' caption="' + capText + '"';
-        sc += ']';
-        
-        if (wrap && wrap.querySelector('img') === img) {
-            wrap.outerHTML = sc;
-        } else {
-            img.outerHTML = sc;
+        if (attrVal) {
+            var b64Data = (attrVal.indexOf('base64:') === 0) ? attrVal.substring(7) : utob(attrVal);
+            el.outerHTML = '[raw_html]base64:' + b64Data + '[/raw_html]';
+            foundCount++;
         }
     });
-    return div.innerHTML;
-}
 
-/**
- * Convert shortcodes from storage back into interactive HTML for the editor
- */
+    var result = div.innerHTML;
+    
+    // Regex fallback
+    if (foundCount === 0 && result.toLowerCase().includes('custom-code-container')) {
+        var pattern = /<div\b[^>]*class=['"][^'"]*custom-code-container[^'"]*['"][^>]*>([\s\S]*?)<\/div>/gi;
+        result = result.replace(pattern, function(match, inner) {
+             var attrMatch = match.match(/data-(gx-)?code=['"]([^'"]*)['"]/i);
+             var code = attrMatch ? attrMatch[2] : '';
+             if (code) {
+                var b64Data = (code.indexOf('base64:') === 0) ? code.substring(7) : utob(code.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'));
+                foundCount++;
+                return '[raw_html]base64:' + b64Data + '[/raw_html]';
+             }
+             return match;
+        });
+    }
+
+    return result;
+}
+window.htmlToShortcode = htmlToShortcode;
+
 function shortcodeToHtml(html) {
     if (!html) return '';
-    return html.replace(/\[image\b([^\]]*)\]/ig, function(match, attrStr) {
-        var src = (attrStr.match(/src="([^"]*)"/) || [0, ''])[1];
-        var w   = (attrStr.match(/width="([^"]*)"/) || [0, ''])[1] || '';
-        var a   = (attrStr.match(/align="([^"]*)"/) || [0, ''])[1] || '';
-        var s   = (attrStr.match(/style="([^"]*)"/) || [0, ''])[1] || 'rounded';
-        var alt = (attrStr.match(/alt="([^"]*)"/) || [0, ''])[1] || '';
-        var c   = (attrStr.match(/caption="([^"]*)"/) || [0, ''])[1] || '';
-
-        var cls = 'img-fluid ' + s + ' ' + w + ' ' + a;
-        var wrapCls = 'mb-1';
-        if (a === 'mx-auto d-block') wrapCls += ' text-center';
-        if (a === 'float-start' || a === 'float-end') wrapCls += ' clearfix';
-
-        if (c) {
-            var out = '<span class="gxb-inline-img-wrap d-block ' + wrapCls + '"><img src="' + src + '" class="' + cls + '" alt="' + alt + '">';
-            out += '<span class="gxb-caption-text d-block text-muted small mt-1">' + c + '</span></span>';
-            return out;
-        } else {
-            return '<img src="' + src + '" class="' + cls + '" alt="' + alt + '">';
-        }
+    var out = html;
+    out = out.replace(/\[raw_html\]([\s\S]*?)\[\/raw_html\]/ig, function(match, inner) {
+        var code = inner.trim();
+        var b64 = (code.indexOf('base64:') === 0) ? code : 'base64:' + code;
+        return '<div class="custom-code-container" data-gjs-type="gx-custom-code" data-gx-code="' + b64 + '">' +
+                 '<div class="p-4 bg-dark text-white rounded-3 text-center" style="border: 3px dashed rgba(255,255,255,0.4); cursor:pointer;">' +
+                   '<i class="bi bi-code-square fs-1 d-block mb-2 text-warning"></i>' +
+                   '<span class="small fw-bold">RAW HTML CONTENT</span>' +
+                 '</div>' +
+               '</div>';
     });
+    return out;
 }
+window.shortcodeToHtml = shortcodeToHtml;

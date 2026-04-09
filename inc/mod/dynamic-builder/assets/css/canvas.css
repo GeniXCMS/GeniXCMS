@@ -19,12 +19,6 @@ body {
     box-sizing: border-box;
 }
 
-/* Hard Reset for Bootstrap Row in Editor */
-.row {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
 /* Subtle Dropzone Info at the bottom */
 body::after {
     content: "END OF PAGE CONTENT — DROP NEW BLOCKS BELOW";
@@ -39,6 +33,7 @@ body::after {
     pointer-events: none;
     text-transform: uppercase;
 }
+
 .gjs-dashed * {
     outline: 1px dashed rgba(0, 0, 0, 0.05) !important;
     outline-offset: -1px;
@@ -53,12 +48,6 @@ body {
 /* Grid Helper: Make empty columns visible and droppable */
 [class*="col-"] {
     min-height: 70px !important;
-}
-
-/* Reset Bootstrap Row Negative Margins for Editor Precision */
-.row {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
 }
 
 .row:empty, [class*="col-"]:empty {

@@ -93,10 +93,10 @@ textarea.editor { display: none !important; }
 .gxb-content:focus { background: #fafafa; }
 
 /* ── Block-type styles ───────────────────────────── */
-.gxb-block[data-type="h1"] .gxb-content { font-size: 1.8rem; font-weight: 700; line-height: 1.2; color: #0f172a; margin: 0; padding: 2px 6px; }
-.gxb-block[data-type="h2"] .gxb-content { font-size: 1.4rem; font-weight: 700; line-height: 1.3; color: #0f172a; margin: 0; padding: 2px 6px; }
-.gxb-block[data-type="h3"] .gxb-content { font-size: 1.15rem; font-weight: 700; line-height: 1.4; color: #0f172a; margin: 0; padding: 2px 6px; }
-.gxb-block[data-type="quote"] .gxb-content {
+.gxb-block[data-type="h1"] .gxb-content, .gxb-content h1 { font-size: 1.8rem; font-weight: 700; line-height: 1.2; color: #0f172a; margin: 1rem 0; padding: 2px 6px; }
+.gxb-block[data-type="h2"] .gxb-content, .gxb-content h2 { font-size: 1.4rem; font-weight: 700; line-height: 1.3; color: #0f172a; margin: 0.8rem 0; padding: 2px 6px; }
+.gxb-block[data-type="h3"] .gxb-content, .gxb-content h3 { font-size: 1.15rem; font-weight: 700; line-height: 1.4; color: #0f172a; margin: 0.6rem 0; padding: 2px 6px; }
+.gxb-block[data-type="quote"] .gxb-content, .gxb-content blockquote {
     border-left: 4px solid #6366f1;
     padding: 12px 20px;
     background: #f8fafc;
@@ -104,6 +104,7 @@ textarea.editor { display: none !important; }
     color: #475569;
     border-radius: 0 6px 6px 0;
 }
+.gxb-content p { margin-bottom: 1rem; }
 .gxb-block[data-type="code"] .gxb-content {
     background: #1e293b;
     color: #e2e8f0;
@@ -247,6 +248,19 @@ textarea.editor { display: none !important; }
 }
 .gxb-picker-label { font-weight: 600; font-size: 0.875rem; color: #1e293b; }
 .gxb-picker-desc  { font-size: 0.72rem; color: #94a3b8; }
+.gxb-picker-cat-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 10px 4px;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.gxb-picker-cat-header:first-child { padding-top: 4px; }
 
 /* ── Image Block Upload Zone ─────────────────────── */
 .gxb-img-drop {
@@ -372,12 +386,12 @@ textarea.editor { display: none !important; }
     border-bottom: 1px solid #e2e8f0 !important;
     padding: 4px 10px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 2px;
     position: sticky;
     top: 121px; /* Safely below BOTH headers */
     z-index: 1000; /* High enough to float, but lower than System UI (1020+) */
-    background: #f8fafc;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Floating shadow */
@@ -502,6 +516,26 @@ textarea.editor { display: none !important; }
     background: #f1f5f9;
     color: #6366f1;
     border-radius: 4px;
+}
+
+/* ── Placeholders for Dynamic Builder compatibility ── */
+.gx-toc-placeholder, .gx-post-placeholder {
+    user-select: none;
+    -webkit-user-modify: read-only;
+    cursor: default;
+    border: 2px dashed #cbd5e1 !important;
+    background-color: #f8fafc !important;
+    color: #64748b !important;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 1rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 8px;
+    display: block;
+}
+.gx-toc-placeholder strong, .gx-post-placeholder strong {
+    color: #334155;
+    margin-right: 5px;
 }
 
 

@@ -1,8 +1,16 @@
 <?php
 /**
  * GeniXCMS - Content Management System
- * 
+ *
  * PHP Based Content Management System and Framework
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
@@ -12,7 +20,13 @@ class Marketplace
     public static $apiUrl = 'https://genixcms.web.id/api/v1/marketplace/';
 
     /**
-     * Search marketplace items
+     * Searches for items in the official GeniXCMS marketplace.
+     * Supports filtering by query string, item type, and pagination.
+     *
+     * @param string $q    Search query string (optional).
+     * @param string $type Item type filter: 'theme' or 'module' (default: 'theme').
+     * @param int    $page Page number for results (default: 1).
+     * @return array       Status and results from the API, or an error message on failure.
      */
     public static function search($q = '', $type = 'theme', $page = 1)
     {
@@ -48,7 +62,14 @@ class Marketplace
     }
 
     /**
-     * Install item from marketplace
+     * Downloads and installs a theme or module from the marketplace.
+     * Includes automated security scanning and hook execution during extraction.
+     *
+     * @param int|string $id      The marketplace item ID.
+     * @param string     $type    The item type: 'theme' or 'module'.
+     * @param string     $license Optional license key for premium items.
+     * @param string     $domain  Optional domain name for license validation.
+     * @return array              Detailed status of the installation process.
      */
     public static function install($id, $type, $license = '', $domain = '')
     {

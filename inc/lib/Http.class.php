@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 1.0.0 build date 20170118
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,12 +21,23 @@ class Http
 
     public static $ipApi;
 
+    /**
+     * Http Constructor.
+     * Initializes the user agent list and IP API endpoints.
+     */
     public function __construct()
     {
         self::$agent = self::varAgent();
         self::$ipApi = self::varIPApi();
     }
 
+    /**
+     * Validates a URL to ensure it has a proper protocol and host.
+     * Checks against site configuration and local/port constraints.
+     *
+     * @param string $url The URL to validate.
+     * @return bool       True if the URL is valid.
+     */
     public static function validateUrl($url)
     {
         $prot = self::validateProtocol($url, array('http', 'https'));
@@ -63,6 +69,13 @@ class Http
         }
     }
 
+    /**
+     * Validates if a URL uses one of the specified protocols.
+     *
+     * @param string $url      The URL string.
+     * @param array  $protocol Array of allowed protocols (e.g., ['http', 'https']).
+     * @return bool            True if protocol matches.
+     */
     public static function validateProtocol($url, $protocol)
     {
         $url_p = @parse_url($url);
@@ -73,18 +86,31 @@ class Http
         }
     }
 
+    /**
+     * Checks if the URL's port is within an allowed list.
+     *
+     * @param string $url   The URL string.
+     * @param array  $ports List of allowed port integers.
+     * @return bool         True if port is allowed.
+     */
     public static function validatePort($url, $ports = [80, 443, 8080])
     {
         $purl = @parse_url($url);
         if (isset($purl['port']) && in_array($purl['port'], $ports)) {
             return true;
         } /* elseif($purl['port'] == ''){
-          return true;
-      } */ else {
+      return true;
+  } */ else {
             return false;
         }
     }
 
+    /**
+     * Checks if the host component of a URL matches the current site's host.
+     *
+     * @param string $url The URL to check.
+     * @return bool       True if hosts match.
+     */
     public static function sameAsSite($url)
     {
         $purl = @parse_url(urldecode($url));
@@ -98,6 +124,12 @@ class Http
 
     }
 
+    /**
+     * Determines if a URL refers to a local network address.
+     *
+     * @param string $url The URL or IP address.
+     * @return bool|void  True if local, false if definitely external, void if check skipped.
+     */
     public static function isLocal($url)
     {
         if ($url != "::1") {
@@ -128,41 +160,34 @@ class Http
     }
 
     /**
-     * $vars = [
-     *      'url' => '',
-     *      'curl' => 'true/false',
-     *      'curl_options' => [],
-     *      'curl_param' => []
-     * ]
+     * Fetches content from a URL using either cURL (if requested) or file_get_contents.
+     *
+     * @param string|array $vars Can be a plain URL string or a configuration array.
+     * @return string|bool       The fetched content or false on failure.
      */
     public static function fetch($vars)
     {
         if (is_array($vars)) {
             $url = isset($vars['url']) ? $vars['url'] : '';
             $curl = isset($vars['curl']) ? $vars['curl'] : '';
-            $c_options[] = isset($vars['curl_options']) ? $vars['curl_options'] : [];
+            $c_options = isset($vars['curl_options']) ? $vars['curl_options'] : [];
         } else {
             $url = $vars;
             $curl = false;
+            $c_options = [];
         }
 
         if ($curl) {
             $ch = @curl_init();
-            //            $opt = '';
-            $c_options[] = array(
+            $options = [
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_URL => $url
-            );
-            //            $options = array_merge($options, $c_options);
-//            print_r($c_options);
-            $options = [];
-            foreach ($c_options as $k => $v) {
-                foreach ($v as $k2 => $v2) {
-                    $options[$k2] = $v2;
-                }
+            ];
 
+            foreach ($c_options as $k => $v) {
+                $options[$k] = $v;
             }
-            //            print_r($options);
+
             @curl_setopt_array($ch, $options);
             $fetch = @curl_exec($ch);
             @curl_close($ch);
@@ -173,6 +198,12 @@ class Http
         return $fetch;
     }
 
+    /**
+     * Retrieves geographic and detailed info about an IP address from an API.
+     *
+     * @param string $ip The IP address to look up.
+     * @return mixed      JSON-decoded API response.
+     */
     public static function ipDetail($ip)
     {
 
@@ -182,6 +213,12 @@ class Http
         return $detail;
     }
 
+    /**
+     * Retrieves the country code associated with an IP address.
+     *
+     * @param string $ip The IP address.
+     * @return string    The country code (e.g., 'US', 'ID').
+     */
     public static function getIpCountry($ip)
     {
         $ip = json_decode(self::ipDetail($ip), true);
@@ -189,6 +226,11 @@ class Http
         return $ip['country_code'];
     }
 
+    /**
+     * Provides a list of common valid User Agent strings.
+     *
+     * @return array List of user agent strings.
+     */
     public static function varAgent()
     {
         $agent = [
@@ -214,6 +256,11 @@ class Http
         return $agent;
     }
 
+    /**
+     * Picks a random User Agent string from the registry.
+     *
+     * @return string A random user agent.
+     */
     public static function randAgent()
     {
         $rnd = array_rand(self::$agent, 1);
@@ -221,6 +268,12 @@ class Http
         return self::$agent[$rnd];
     }
 
+    /**
+     * Appends a new User Agent or an array of agents to the current registry.
+     *
+     * @param string|array $agent The agent(s) to add.
+     * @return array              The updated user agent list.
+     */
     public static function addAgent($agent)
     {
         if (is_array($agent)) {
@@ -233,6 +286,11 @@ class Http
         return $newAgent;
     }
 
+    /**
+     * Provides a list of supported IP Geolocation API endpoints.
+     *
+     * @return array List of API URLs.
+     */
     public static function varIpApi()
     {
         $ipApi = array(
@@ -242,6 +300,11 @@ class Http
         return $ipApi;
     }
 
+    /**
+     * Picks a random IP API endpoint from the registry.
+     *
+     * @return string A random API URL.
+     */
     public static function randIpApi()
     {
         $rnd = array_rand(self::$ipApi, 1);
@@ -249,6 +312,11 @@ class Http
         return self::$ipApi[$rnd];
     }
 
+    /**
+     * Extracts the Bearer token from the Authorization header.
+     *
+     * @return string|null The token if found, otherwise null.
+     */
     public static function getBearerToken()
     {
         $headers = self::getAuthorizationHeader();
@@ -261,6 +329,12 @@ class Http
         return null;
     }
 
+    /**
+     * Retrieves the raw Authorization header from the server environment.
+     * Supports various server configurations (Apache, Nginx, CGI).
+     *
+     * @return string|null The authorization header value or null.
+     */
     public static function getAuthorizationHeader()
     {
         $headers = null;

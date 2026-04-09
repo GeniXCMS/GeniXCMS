@@ -2,27 +2,46 @@
 
 /**
  * GeniXCMS - Content Management System
- * 
+ *
  * PHP Based Content Management System and Framework
- * 
- * @package GeniXCMS
- * @author  GeniXCMS <genixcms@gmail.com>
- * @license MIT License
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 class Editor
 {
     private static $editors = [];
 
-    public static function init()
+    private static $defaultsLoaded = false;
+
+    /**
+     * Internal method to load default editors (Summernote and EditorJS) into the registry.
+     * Also processes the 'editor_type_options' hook for third-party extensions.
+     */
+    private static function loadDefaults()
     {
+        if (self::$defaultsLoaded)
+            return;
+        self::$defaultsLoaded = true;
+
         // Default editors are registered via its own methods
         self::register('summernote', 'Summernote Classic', [self::class, 'summernote']);
         self::register('editorjs', 'Editor.js (Blocks)', [self::class, 'editorjs']);
 
+        $options = [];
+        foreach (self::$editors as $id => $data) {
+            $options[$id] = is_array($data) ? $data['name'] : $data;
+        }
+
         // Allow modules to register/override editors via hook
         // We pass the simplified [id => name] list to the filter
-        $filtered_options = Hooks::filter('editor_type_options', self::getEditors());
+        $filtered_options = Hooks::filter('editor_type_options', $options);
 
         // Merge back the filtered options
         foreach ($filtered_options as $id => $name) {
@@ -39,6 +58,15 @@ class Editor
                 self::$editors[$id] = $name;
             }
         }
+    }
+
+    /**
+     * Initializes the editor system by loading defaults and executing the active editor's callback.
+     * Enqueues necessary assets based on the 'editor_type' option.
+     */
+    public static function init()
+    {
+        self::loadDefaults();
 
         // Load active editor assets
         $active = Options::v('editor_type') ?: 'summernote';
@@ -54,6 +82,13 @@ class Editor
         }
     }
 
+    /**
+     * Registers a new editor type into the system.
+     *
+     * @param string   $id       Unique identifier for the editor (e.g., 'summernote').
+     * @param string   $name     Human-readable name for the editor.
+     * @param callable $callback The function that enqueues assets and initializes the editor.
+     */
     public static function register($id, $name, $callback)
     {
         self::$editors[$id] = [
@@ -62,8 +97,14 @@ class Editor
         ];
     }
 
+    /**
+     * Retrieves a list of all registered editors.
+     *
+     * @return array Associative array [id => name].
+     */
     public static function getEditors()
     {
+        self::loadDefaults();
         $options = [];
         foreach (self::$editors as $id => $data) {
             $options[$id] = is_array($data) ? $data['name'] : $data;
@@ -71,6 +112,10 @@ class Editor
         return $options;
     }
 
+    /**
+     * Callback for the Summernote (Classic WYSIWYG) editor.
+     * Registers and enqueues Summernote assets and initializes it with elFinder support.
+     */
     public static function summernote()
     {
         $siteUrl = rtrim(Site::$url, '/');
@@ -80,8 +125,7 @@ class Editor
         Asset::register('summernote-css', 'css', 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css', 'header');
         Asset::register('summernote-js', 'js', 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js', 'footer');
 
-        // Register and enqueue jQuery UI CSS for elfinder dialog
-        Asset::register('jquery-ui-css', 'css', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css', 'header');
+        // Enqueue jQuery UI CSS for elfinder dialog
         Asset::enqueue('jquery-ui-css');
 
         // summernote-elfinder-button
@@ -195,6 +239,10 @@ class Editor
         Asset::enqueue('summernote-init');
     }
 
+    /**
+     * Callback for the Editor.js (Block-based) editor.
+     * Registers and enqueues Editor.js core, tools, and custom initialization logic.
+     */
     public static function editorjs()
     {
         // Register EditorJS Core & Tools

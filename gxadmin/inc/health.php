@@ -1,9 +1,19 @@
 <?php
 /**
- * GeniXCMS - Content Management System.
+ * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
+ * 
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 
 // ── DEFINE UI SCHEMA ──────────────────────────────────────────────
 $rows = [];
@@ -60,7 +70,7 @@ $schema = [
             'footer' => '
                 <div class="extra-small text-muted text-uppercase tracking-widest fw-bold d-flex align-items-center mx-3 my-1">
                     <i class="bi bi-info-circle-fill me-2 text-primary fs-5"></i>
-                    '._("Regular health checks ensure your site remains secure and high-performing.").'
+                    ' . _("Regular health checks ensure your site remains secure and high-performing.") . '
                 </div>'
         ]
     ]
@@ -72,7 +82,15 @@ $builder->render();
 ?>
 
 <style>
-    .font-primary { font-family: 'Outfit', sans-serif; }
-    .extra-small { font-size: 0.75rem; }
-    .tracking-widest { letter-spacing: 0.1em; }
+    .font-primary {
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .extra-small {
+        font-size: 0.75rem;
+    }
+
+    .tracking-widest {
+        letter-spacing: 0.1em;
+    }
 </style>

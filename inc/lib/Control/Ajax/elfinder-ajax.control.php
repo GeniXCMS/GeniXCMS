@@ -1,6 +1,17 @@
 <?php
-
 defined('GX_LIB') or die('Direct Access Not Allowed!');
+/**
+ * GeniXCMS - elFinder AJAX
+ * 
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 $data = Router::scrap($param);
 //print_r($data);
 

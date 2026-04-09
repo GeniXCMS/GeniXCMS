@@ -5,8 +5,16 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * Posts API Resource Controller.
  * 
- * @since 1.1.0
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class PostsApi
 {
     /**
@@ -17,7 +25,8 @@ class PostsApi
     {
         if ($id) {
             $post = Posts::find($id);
-            if (!$post) return Api::error(404, 'Post not found');
+            if (!$post)
+                return Api::error(404, 'Post not found');
             return Api::success($post);
         }
 
@@ -31,10 +40,12 @@ class PostsApi
     public function submit()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data) return Api::error(400, 'Invalid JSON input');
+        if (!$data)
+            return Api::error(400, 'Invalid JSON input');
 
         // Validation logic here...
-        if (empty($data['title'])) return Api::error(422, 'Title is required');
+        if (empty($data['title']))
+            return Api::error(422, 'Title is required');
 
         $res = Posts::create($data);
         if ($res) {
@@ -50,10 +61,12 @@ class PostsApi
     public function update($id)
     {
         $post = Posts::find($id);
-        if (!$post) return Api::error(404, 'Post not found');
+        if (!$post)
+            return Api::error(404, 'Post not found');
 
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data) return Api::error(400, 'Invalid JSON input');
+        if (!$data)
+            return Api::error(400, 'Invalid JSON input');
 
         foreach ($data as $k => $v) {
             $post->{$k} = $v;
@@ -72,7 +85,8 @@ class PostsApi
     public function delete($id)
     {
         $post = Posts::find($id);
-        if (!$post) return Api::error(404, 'Post not found');
+        if (!$post)
+            return Api::error(404, 'Post not found');
 
         if ($post->destroy()) {
             return Api::success(null, 'Post deleted successfully');

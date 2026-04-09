@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.3 build date 20150126
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -23,6 +18,10 @@ class Date
 {
     public static $timezone;
 
+    /**
+     * Date Constructor.
+     * Initializes the system timezone from options or defaults to UTC.
+     */
     public function __construct()
     {
         $timezone = Options::v('timezone');
@@ -30,6 +29,13 @@ class Date
         date_default_timezone_set(self::$timezone);
     }
 
+    /**
+     * Formats a date string according to the system timezone and specified format.
+     *
+     * @param string|null $date   The date string to format.
+     * @param string      $format PHP date format (default: 'j F Y H:i A T').
+     * @return string The formatted date string.
+     */
     public static function format($date, $format = '')
     {
         $timezone = new DateTimeZone(self::$timezone); //Options::v('timezone');
@@ -44,9 +50,12 @@ class Date
 
 
     /**
-     * Function : local date format
-     * 
-     * format pattern : https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table
+     * Formats a date string according to a specific locale/country identifier.
+     * Uses IntlDateFormatter for localized date names.
+     *
+     * @param string $date   The date string to format.
+     * @param string $format ICU date format pattern.
+     * @return string The localized and formatted date string.
      */
     public static function local($date, $format = '')
     {
@@ -69,6 +78,11 @@ class Date
         return $newdate . ' ' . $date->format('T');
     }
 
+    /**
+     * Retrieves a list of globally supported timezones, filtered for common geographic areas.
+     *
+     * @return array Associative array of timezone IDs.
+     */
     public static function timeZone()
     {
         $timezones = DateTimeZone::listAbbreviations();
@@ -105,6 +119,12 @@ class Date
         return $cities;
     }
 
+    /**
+     * Renders an HTML dropdown list of timezones.
+     *
+     * @param string $val The currently selected timezone ID.
+     * @return string The HTML option tags.
+     */
     public static function optTimeZone($val = '')
     {
         $tz = self::timeZone();
@@ -117,6 +137,12 @@ class Date
         return $opt;
     }
 
+    /**
+     * Gets the full name of a month from its numeric representation.
+     *
+     * @param int|string $month Month number (1-12).
+     * @return string Month name (e.g., 'January').
+     */
     public static function monthName($month)
     {
         $dateObj = DateTime::createFromFormat('!m', $month);
@@ -125,6 +151,12 @@ class Date
         return $monthName;
     }
 
+    /**
+     * Renders an HTML dropdown list of countries.
+     *
+     * @param string $val The currently selected country code.
+     * @return string The HTML option tags.
+     */
     public static function optCountry($val = '')
     {
         $countries = self::countryList();
@@ -137,6 +169,11 @@ class Date
         return $opt;
     }
 
+    /**
+     * Retrieves a comprehensive list of countries and their ISO 3166-1 alpha-2 codes.
+     *
+     * @return array Associative array of country codes and names.
+     */
     public static function countryList()
     {
         $countries = array(
@@ -389,7 +426,10 @@ class Date
         return $countries;
     }
     /**
-     * Relative time (Time ago)
+     * Calculates and returns a relative human-readable time (e.g., '5 minutes ago').
+     *
+     * @param string $ptime The past time string.
+     * @return string Human-readable relative time string.
      */
     public static function rel($ptime)
     {

@@ -8,10 +8,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * Centralizes ALL admin navigation items (core + module-registered).
  * Modules and themes can call AdminMenu::add() to inject menu items
  * without hardcoding HTML in any template file.
- *
  * @since 2.0.0
- * @author GeniXCMS
- * @license MIT
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class AdminMenu
 {
@@ -37,129 +41,129 @@ class AdminMenu
 
         // Posts (with children – requires Author access)
         self::add([
-            'id'       => 'posts',
-            'label'    => _('Posts'),
-            'icon'     => 'bi bi-file-earmark-richtext',
-            'url'      => 'index.php?page=posts',
-            'access'   => 4,
+            'id' => 'posts',
+            'label' => _('Posts'),
+            'icon' => 'bi bi-file-earmark-richtext',
+            'url' => 'index.php?page=posts',
+            'access' => 4,
             'position' => 'main',
-            'order'    => 20,
+            'order' => 20,
             'children' => [
-                ['label' => _('All Posts'),   'url' => 'index.php?page=posts',      'access' => 4],
-                ['label' => _('Categories'),  'url' => 'index.php?page=categories', 'access' => 1],
-                ['label' => _('Tags'),        'url' => 'index.php?page=tags',       'access' => 1],
+                ['label' => _('All Posts'), 'url' => 'index.php?page=posts', 'access' => 4],
+                ['label' => _('Categories'), 'url' => 'index.php?page=categories', 'access' => 1],
+                ['label' => _('Tags'), 'url' => 'index.php?page=tags', 'access' => 1],
             ],
         ]);
 
         // Pages (Editor+)
         self::add([
-            'id'       => 'pages',
-            'label'    => _('Pages'),
-            'icon'     => 'bi bi-journal-text',
-            'url'      => 'index.php?page=pages',
-            'access'   => 1,
+            'id' => 'pages',
+            'label' => _('Pages'),
+            'icon' => 'bi bi-journal-text',
+            'url' => 'index.php?page=pages',
+            'access' => 1,
             'position' => 'main',
-            'order'    => 30,
+            'order' => 30,
         ]);
 
         // Comments (Editor+)
         self::add([
-            'id'       => 'comments',
-            'label'    => _('Comments'),
-            'icon'     => 'bi bi-chat-left-dots',
-            'url'      => 'index.php?page=comments',
-            'access'   => 1,
+            'id' => 'comments',
+            'label' => _('Comments'),
+            'icon' => 'bi bi-chat-left-dots',
+            'url' => 'index.php?page=comments',
+            'access' => 1,
             'position' => 'main',
-            'order'    => 40,
+            'order' => 40,
         ]);
 
         // Media (all logged-in)
         self::add([
-            'id'       => 'media',
-            'label'    => _('Media'),
-            'icon'     => 'bi bi-images',
-            'url'      => 'index.php?page=media',
-            'access'   => 6,
+            'id' => 'media',
+            'label' => _('Media'),
+            'icon' => 'bi bi-images',
+            'url' => 'index.php?page=media',
+            'access' => 6,
             'position' => 'main',
-            'order'    => 50,
+            'order' => 50,
         ]);
 
         // ── MANAGEMENT ───────────────────────────────────────────────────
-        
+
         // User Management (Supervisor+)
         self::add([
-            'id'       => 'users',
-            'label'    => _('Users'),
-            'icon'     => 'bi bi-people',
-            'url'      => 'index.php?page=users',
-            'access'   => 1,
+            'id' => 'users',
+            'label' => _('Users'),
+            'icon' => 'bi bi-people',
+            'url' => 'index.php?page=users',
+            'access' => 1,
             'position' => 'management',
-            'order'    => 10,
+            'order' => 10,
             'children' => [
-                ['label' => _('All Users'),   'url' => 'index.php?page=users',       'access' => 1],
+                ['label' => _('All Users'), 'url' => 'index.php?page=users', 'access' => 1],
                 ['label' => _('ACL Manager'), 'url' => 'index.php?page=permissions', 'access' => 1],
             ],
         ]);
 
         // Appearance Group (Supervisor+)
         self::add([
-            'id'       => 'themes',
-            'label'    => _('Appearance'),
-            'icon'     => 'bi bi-palette',
-            'url'      => 'index.php?page=themes',
-            'access'   => 1,
+            'id' => 'themes',
+            'label' => _('Appearance'),
+            'icon' => 'bi bi-palette',
+            'url' => 'index.php?page=themes',
+            'access' => 1,
             'position' => 'management',
-            'order'    => 30,
+            'order' => 30,
             'children' => [
-                ['label' => _('Themes'),  'url' => 'index.php?page=themes',  'access' => 0],
-                ['label' => _('Menus'),   'url' => 'index.php?page=menus',   'access' => 1],
+                ['label' => _('Themes'), 'url' => 'index.php?page=themes', 'access' => 0],
+                ['label' => _('Menus'), 'url' => 'index.php?page=menus', 'access' => 1],
                 ['label' => _('Widgets'), 'url' => 'index.php?page=widgets', 'access' => 1],
             ],
         ]);
 
         // Modules (Admin only)
         self::add([
-            'id'       => 'modules',
-            'label'    => _('Modules'),
-            'icon'     => 'bi bi-plugin',
-            'url'      => 'index.php?page=modules',
-            'access'   => 0,
+            'id' => 'modules',
+            'label' => _('Modules'),
+            'icon' => 'bi bi-plugin',
+            'url' => 'index.php?page=modules',
+            'access' => 0,
             'position' => 'management',
-            'order'    => 60,
+            'order' => 60,
         ]);
 
         // System Group (Admin only)
         self::add([
-            'id'       => 'system',
-            'label'    => _('System'),
-            'icon'     => 'bi bi-shield-check',
-            'url'      => 'index.php?page=health',
-            'access'   => 0,
+            'id' => 'system',
+            'label' => _('System'),
+            'icon' => 'bi bi-shield-check',
+            'url' => 'index.php?page=health',
+            'access' => 0,
             'position' => 'management',
-            'order'    => 70,
+            'order' => 70,
             'children' => [
                 ['label' => _('System Health'), 'url' => 'index.php?page=health', 'access' => 0],
-                ['label' => _('Updates'),       'url' => 'index.php?page=updates', 'access' => 0],
+                ['label' => _('Updates'), 'url' => 'index.php?page=updates', 'access' => 0],
             ],
         ]);
 
         // ── SETTINGS ─────────────────────────────────────────────────────
 
         self::add([
-            'id'       => 'settings',
-            'label'    => _('Settings'),
-            'icon'     => 'bi bi-gear',
-            'url'      => 'index.php?page=settings',
-            'access'   => 1,
+            'id' => 'settings',
+            'label' => _('Settings'),
+            'icon' => 'bi bi-gear',
+            'url' => 'index.php?page=settings',
+            'access' => 1,
             'position' => 'settings',
-            'order'    => 10,
+            'order' => 10,
             'children' => [
-                ['label' => _('Global Settings'),       'url' => 'index.php?page=settings',            'access' => 1],
-                ['label' => _('Media Settings'),         'url' => 'index.php?page=settings-media',      'access' => 0],
-                ['label' => _('Multilanguage Settings'), 'url' => 'index.php?page=settings-multilang',  'access' => 0],
-                ['label' => _('Permalink Settings'),     'url' => 'index.php?page=settings-permalink',  'access' => 0],
-                ['label' => _('Comments Settings'),      'url' => 'index.php?page=settings-comments',   'access' => 1],
-                ['label' => _('Cache Settings'),         'url' => 'index.php?page=settings-cache',      'access' => 1],
+                ['label' => _('Global Settings'), 'url' => 'index.php?page=settings', 'access' => 1],
+                ['label' => _('Media Settings'), 'url' => 'index.php?page=settings-media', 'access' => 0],
+                ['label' => _('Multilanguage Settings'), 'url' => 'index.php?page=settings-multilang', 'access' => 0],
+                ['label' => _('Permalink Settings'), 'url' => 'index.php?page=settings-permalink', 'access' => 0],
+                ['label' => _('Comments Settings'), 'url' => 'index.php?page=settings-comments', 'access' => 1],
+                ['label' => _('Cache Settings'), 'url' => 'index.php?page=settings-cache', 'access' => 1],
             ],
         ]);
     }
@@ -185,13 +189,13 @@ class AdminMenu
     public static function add(array $item): void
     {
         $item = array_merge([
-            'id'       => 'menu_' . uniqid(),
-            'label'    => _('Menu Item'),
-            'icon'     => 'bi bi-circle',
-            'url'      => '#',
-            'access'   => 6,
+            'id' => 'menu_' . uniqid(),
+            'label' => _('Menu Item'),
+            'icon' => 'bi bi-circle',
+            'url' => '#',
+            'access' => 6,
             'position' => 'external',
-            'order'    => 50,
+            'order' => 50,
             'children' => [],
         ], $item);
 
@@ -268,18 +272,20 @@ class AdminMenu
     public static function renderSidebar(?string $position = null): string
     {
         $items = self::getItems($position);
-        if (empty($items)) return '';
+        if (empty($items))
+            return '';
 
         $currentPage = $_GET['page'] ?? '';
-        $currentMod  = $_GET['mod']  ?? '';
+        $currentMod = $_GET['mod'] ?? '';
         $currentView = $_GET['view'] ?? '';
-        $currentAct  = $_GET['act']  ?? '';
+        $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
 
         $html = '';
         foreach ($items as $item) {
             // Access check — skip children-level access check here (handled in render)
-            if (!User::access((string) $item['access'])) continue;
+            if (!User::access((string) $item['access']))
+                continue;
 
             $isActive = self::isActive($item, $currentPage, $currentMod);
 
@@ -295,9 +301,9 @@ class AdminMenu
                     $html .= "<a href=\"#\" class=\"has-tree\"><i class=\"{$item['icon']}\"></i> <span>{$item['label']}</span> <i class=\"bi bi-chevron-down ms-auto small\"></i></a>";
                     $html .= '<ul class="nav-tree">';
                     foreach ($visibleChildren as $child) {
-                        $cActive   = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType) ? 'text-white' : '';
-                        $cIcon     = isset($child['icon']) ? "<i class=\"{$child['icon']} me-1\"></i> " : '';
-                        $html     .= "<li><a href=\"{$child['url']}\" class=\"{$cActive}\">{$cIcon}{$child['label']}</a></li>";
+                        $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType) ? 'text-white' : '';
+                        $cIcon = isset($child['icon']) ? "<i class=\"{$child['icon']} me-1\"></i> " : '';
+                        $html .= "<li><a href=\"{$child['url']}\" class=\"{$cActive}\">{$cIcon}{$child['label']}</a></li>";
                     }
                     $html .= '</ul></li>';
                 } else {
@@ -331,19 +337,21 @@ class AdminMenu
     public static function renderTopNav(?string $position = null, bool $nested = false): string
     {
         $items = self::getItems($position);
-        if (empty($items)) return '';
+        if (empty($items))
+            return '';
 
         $currentPage = $_GET['page'] ?? '';
-        $currentMod  = $_GET['mod']  ?? '';
+        $currentMod = $_GET['mod'] ?? '';
         $currentView = $_GET['view'] ?? '';
-        $currentAct  = $_GET['act']  ?? '';
+        $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
 
         $html = '';
         foreach ($items as $item) {
-            if (!User::access((string) $item['access'])) continue;
+            if (!User::access((string) $item['access']))
+                continue;
 
-            $isActive    = self::isActive($item, $currentPage, $currentMod);
+            $isActive = self::isActive($item, $currentPage, $currentMod);
             $activeClass = $isActive
                 ? 'bg-primary bg-opacity-10 text-primary fw-bold'
                 : 'text-secondary hover-bg-light';
@@ -365,8 +373,8 @@ class AdminMenu
                     $html .= "<ul class=\"dropdown-menu border-0 shadow-sm mt-0 rounded-3\">";
                     foreach ($visibleChildren as $child) {
                         $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType) ? 'bg-primary bg-opacity-10 text-primary fw-bold' : '';
-                        $cIcon  = isset($child['icon']) ? "<i class=\"{$child['icon']} me-2 text-muted\"></i>" : '';
-                        $html  .= "<li><a class=\"dropdown-item py-2 {$cActive}\" href=\"{$child['url']}\">{$cIcon}{$child['label']}</a></li>";
+                        $cIcon = isset($child['icon']) ? "<i class=\"{$child['icon']} me-2 text-muted\"></i>" : '';
+                        $html .= "<li><a class=\"dropdown-item py-2 {$cActive}\" href=\"{$child['url']}\">{$cIcon}{$child['label']}</a></li>";
                     }
                     $html .= "</ul></li>";
                 } else {
@@ -406,20 +414,24 @@ class AdminMenu
     private static function isActive(array $item, string $page, string $mod): bool
     {
         $currentView = $_GET['view'] ?? '';
-        $currentAct  = $_GET['act']  ?? '';
+        $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
 
         // Exact ID match for simple pages
-        if ($page === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType)) return true;
-        if ($mod  === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType)) return true;
+        if ($page === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType))
+            return true;
+        if ($mod === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType))
+            return true;
 
         // Specific URL matching (handles parameters like page=themes&view=options)
-        if (self::isUrlActive($item['url'], $page, $mod, $currentView, $currentAct, $currentType)) return true;
+        if (self::isUrlActive($item['url'], $page, $mod, $currentView, $currentAct, $currentType))
+            return true;
 
         // Check if any child is active
         if (!empty($item['children'])) {
             foreach ($item['children'] as $child) {
-                if (self::isUrlActive($child['url'], $page, $mod, $currentView, $currentAct, $currentType)) return true;
+                if (self::isUrlActive($child['url'], $page, $mod, $currentView, $currentAct, $currentType))
+                    return true;
             }
         }
         return false;
@@ -436,22 +448,26 @@ class AdminMenu
         parse_str($query, $params);
 
         $itemPage = $params['page'] ?? '';
-        $itemMod  = $params['mod']  ?? '';
+        $itemMod = $params['mod'] ?? '';
         $itemView = $params['view'] ?? '';
-        $itemAct  = $params['act']  ?? '';
+        $itemAct = $params['act'] ?? '';
         $itemType = $params['type'] ?? '';
 
-        if (empty($itemPage) && empty($itemMod) && empty($page) && empty($mod)) return true;
+        if (empty($itemPage) && empty($itemMod) && empty($page) && empty($mod))
+            return true;
 
         $pageMatch = ($page === $itemPage);
-        $modMatch  = ($mod === $itemMod);
+        $modMatch = ($mod === $itemMod);
 
-        if (!$pageMatch && !$modMatch) return false;
-        if ($itemPage && !$pageMatch) return false;
-        if ($itemMod && !$modMatch) return false;
+        if (!$pageMatch && !$modMatch)
+            return false;
+        if ($itemPage && !$pageMatch)
+            return false;
+        if ($itemMod && !$modMatch)
+            return false;
 
         $viewMatch = ($itemView !== '') ? ($view === $itemView) : ($view === '' || $view === 'all');
-        $actMatch  = ($itemAct !== '')  ? ($act === $itemAct)   : ($act === '' || $act === 'index');
+        $actMatch = ($itemAct !== '') ? ($act === $itemAct) : ($act === '' || $act === 'index');
         $typeMatch = ($itemType !== '') ? ($type === $itemType) : ($type === '' || $type === 'post');
 
         return $viewMatch && $actMatch && $typeMatch;

@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140925
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -25,9 +20,6 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class is the main class for call all the necessary controller.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class GxMain
@@ -37,9 +29,6 @@ class GxMain
      *
      * This will check the config file at inc/config/config.php exist or not
      * if not exist, run the installation proccess.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -58,9 +47,6 @@ class GxMain
      *
      * This will load the frontpage controller.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public function index()
@@ -74,9 +60,6 @@ class GxMain
      *
      * This will load the backend controller. Secured, so to access it must be
      * logged in with a current privilege. Default privilege is 2.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -99,9 +82,6 @@ class GxMain
      * GxMain Install Function.
      *
      * This will load the install controller.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

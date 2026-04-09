@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140930
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -26,40 +21,33 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * This class will process the categories function. Including Create, Edit,
  * Delete the categories.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class Categories
 {
+    /**
+     * Categories Constructor.
+     */
     public function __construct()
     {
     }
 
     /**
-     * Categories Dropdown Function.
+     * Renders an HTML dropdown select for categories.
+     * Supports nested categories (one level deep) and various filtering options.
      *
-     * This will list the categories into the HTML Dropdown Below are how to use
-     * it :
-     * <code>
-     *     $vars = array(
-     *         'name' => 'catname',
-     *         'parent' => 'parent',
-     *         'order_by' => '',
-     *         'sort' => 'ASC',
-     *         'type' => ''
-     *      );
-     *      Categories::dropdown($vars);
-     * </code>
-     *
-     * @param array $vars the delivered data must be in array with above format
-     *
-     * @uses Db::result();
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param array $vars {
+     *     Configuration array.
+     *     @type string $name     Select element name.
+     *     @type int    $parent   Parent category ID filter.
+     *     @type string $type     Category type filter (default: not 'tag').
+     *     @type string $order_by Database column for sorting.
+     *     @type string $sort     Sort direction (ASC/DESC).
+     *     @type string $class    CSS class for the select element.
+     *     @type string $id       CSS ID for the select element.
+     *     @type int    $selected Initially selected category ID.
+     * }
+     * @return string The rendered HTML select element.
      * @since 0.0.1
      */
     public static function dropdown($vars)
@@ -104,6 +92,12 @@ class Categories
         return $drop;
     }
 
+    /**
+     * Renders a Bootstrap accordion list of categories.
+     *
+     * @param array $vars Configuration array (parent, type, order_by, sort).
+     * @return string The rendered HTML accordion.
+     */
     public static function lists($vars)
     {
         if (is_array($vars)) {
@@ -194,17 +188,10 @@ class Categories
     }
 
     /**
-     * Category Name function.
+     * Retrieves the name of a category by its ID.
      *
-     * This will get the specified ID category name
-     *
-     * @param int $id
-     *
-     * @uses Db::result();
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $id Category ID.
+     * @return string Category name or error message.
      * @since 0.0.1
      */
     public static function name($id)
@@ -229,17 +216,10 @@ class Categories
     }
 
     /**
-     * Category Get Parent function.
+     * Retrieves the parent ID data for a specified category.
      *
-     * This will get the specified ID category parent data
-     *
-     * @param int $id
-     *
-     * @uses Db::result();
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $id Category ID.
+     * @return array Array containing the parent ID object.
      * @since 0.0.1
      */
     public static function getParent($id = '')
@@ -252,21 +232,10 @@ class Categories
     }
 
     /**
-     * Category Delete function.
+     * Deletes a category and re-assigns its posts to the parent category (or root).
      *
-     * This will delete the specified ID category data
-     *
-     * @param int   $id
-     * @param array $sql
-     *
-     * @uses self::getParent();
-     * @uses Db::delete();
-     * @uses Db::result();
-     * @uses Db::$num_rows;
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
+     * @param int|string $id Category ID to delete.
+     * @return bool True if deleted successfully.
      * @since 0.0.1
      */
     public static function delete($id)
@@ -288,6 +257,12 @@ class Categories
         }
     }
 
+    /**
+     * Retrieves the type of a category by its ID.
+     *
+     * @param int|string $id Category ID.
+     * @return string Category type.
+     */
     public static function type($id)
     {
         $id = sprintf('%d', $id);
@@ -304,6 +279,12 @@ class Categories
         }
     }
 
+    /**
+     * Retrieves the ID of a category by its name or slug.
+     *
+     * @param string $name Category name or slug.
+     * @return int|string Category ID.
+     */
     public static function id($name)
     {
         $name = sprintf('%s', $name);
@@ -320,6 +301,12 @@ class Categories
         }
     }
 
+    /**
+     * Checks if a category exists by its ID.
+     *
+     * @param int|string $cat Category ID.
+     * @return bool True if exists.
+     */
     public static function exist($cat)
     {
         $id = Typo::int($cat);
@@ -328,6 +315,12 @@ class Categories
         return ($q) ? true : false;
     }
 
+    /**
+     * Retrieves the slug of a category by its ID.
+     *
+     * @param int|string $id Category ID.
+     * @return string Category slug.
+     */
     public static function slug($id)
     {
         if (isset($id)) {

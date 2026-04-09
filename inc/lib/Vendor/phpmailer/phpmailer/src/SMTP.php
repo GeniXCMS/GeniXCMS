@@ -60,7 +60,7 @@ class SMTP
 
     /**
      * The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
-     * *excluding* a trailing CRLF break.
+     *excluding* a trailing CRLF break.
      *
      * @see https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.6
      *
@@ -70,7 +70,7 @@ class SMTP
 
     /**
      * The maximum line length allowed for replies in RFC 5321 section 4.5.3.1.5,
-     * *including* a trailing CRLF line break.
+     *including* a trailing CRLF line break.
      *
      * @see https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.5
      *
@@ -116,11 +116,11 @@ class SMTP
     /**
      * Debug output level.
      * Options:
-     * * self::DEBUG_OFF (`0`) No debug output, default
-     * * self::DEBUG_CLIENT (`1`) Client commands
-     * * self::DEBUG_SERVER (`2`) Client commands and server responses
-     * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
-     * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages.
+     * self::DEBUG_OFF (`0`) No debug output, default
+     * self::DEBUG_CLIENT (`1`) Client commands
+     * self::DEBUG_SERVER (`2`) Client commands and server responses
+     * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
+     * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages.
      *
      * @var int
      */
@@ -129,9 +129,9 @@ class SMTP
     /**
      * How to handle debug output.
      * Options:
-     * * `echo` Output plain-text as-is, appropriate for CLI
-     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
-     * * `error_log` Output to error log as configured in php.ini
+     * `echo` Output plain-text as-is, appropriate for CLI
+     * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
+     * `error_log` Output to error log as configured in php.ini
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      *
      * ```php
@@ -216,7 +216,14 @@ class SMTP
      * @var array
      */
     public static $xclient_allowed_attributes = [
-        'NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'
+        'NAME',
+        'ADDR',
+        'PORT',
+        'PROTO',
+        'HELO',
+        'LOGIN',
+        'DESTADDR',
+        'DESTPORT'
     ];
 
     /**
@@ -319,17 +326,17 @@ class SMTP
                 //Normalize line breaks
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
-                "\t",
+                    "\t",
                     //Trim trailing space
-                trim(
-                    //Indent for readability, except for trailing break
-                    str_replace(
-                        "\n",
-                        "\n                   \t                  ",
-                        trim($str)
-                    )
-                ),
-                "\n";
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 
@@ -376,7 +383,7 @@ class SMTP
         //Get any announcement
         $this->last_reply = $this->get_lines();
         $this->edebug('SERVER -> CLIENT: ' . $this->last_reply, self::DEBUG_SERVER);
-        $responseCode = (int)substr($this->last_reply, 0, 3);
+        $responseCode = (int) substr($this->last_reply, 0, 3);
         if ($responseCode === 220) {
             return true;
         }
@@ -465,7 +472,7 @@ class SMTP
         //SMTP server can take longer to respond, give longer timeout for first read
         //Windows does not have support for this timeout function
         if (strpos(PHP_OS, 'WIN') !== 0) {
-            $max = (int)ini_get('max_execution_time');
+            $max = (int) ini_get('max_execution_time');
             //Don't bother if unlimited, or if set_time_limit is disabled
             if (0 !== $max && $timeout > $max && strpos(ini_get('disable_functions'), 'set_time_limit') === false) {
                 @set_time_limit($timeout);
@@ -498,9 +505,9 @@ class SMTP
         }
 
         //Begin encrypted connection
-            set_error_handler(function () {
-                call_user_func_array([$this, 'errorHandler'], func_get_args());
-            });
+        set_error_handler(function () {
+            call_user_func_array([$this, 'errorHandler'], func_get_args());
+        });
         $crypto_ok = stream_socket_enable_crypto(
             $this->smtp_conn,
             true,

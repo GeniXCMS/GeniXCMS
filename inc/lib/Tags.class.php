@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.8 build date 20160317
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -25,9 +20,6 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class will process the categories function. Including Create, Edit,
  * Delete the categories.
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
  *
  * @since 0.0.1
  */
@@ -57,9 +49,6 @@ class Tags
      *
      * @uses Db::result();
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public static function dropdown($vars)
@@ -81,9 +70,6 @@ class Tags
      *
      * @uses Db::result();
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public static function name($id)
@@ -99,9 +85,6 @@ class Tags
      * @param int $id
      *
      * @uses Db::result();
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -122,9 +105,6 @@ class Tags
      * @uses Db::delete();
      * @uses Db::result();
      * @uses Db::$num_rows;
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */

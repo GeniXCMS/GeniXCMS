@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20141004
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -33,6 +28,11 @@ class Site
     public static $slogan;
     public static $isOffline;
 
+    /**
+     * Site Constructor.
+     * Synchronizes global data buffers and initializes static site properties
+     * (URL, CDN, Name, Meta) from system options.
+     */
     public function __construct()
     {
         global $GLOBALS, $data;
@@ -58,8 +58,15 @@ class Site
         // Hooks::attach('footer_load_lib', array(__CLASS__, 'loadLibFooter'));
     }
 
-    /* Call all Website Meta at Header
+    /**
+     * Generates comprehensive suite of HTML meta tags for the header.
+     * Includes SEO, Social (OG/Twitter), and framework identity tags.
      *
+     * @param array  $data      Global buffer containing post/page data.
+     * @param string $location  Target context ('backend' or empty for frontend).
+     * @param string $cont_desc Fallback content description.
+     * @param string $pre       Optional title prefix.
+     * @return string            Generated HTML meta block.
      */
     public static function meta($data, $location = '', $cont_desc = '', $pre = '')
     {
@@ -142,6 +149,13 @@ class Site
         return $out;
     }
 
+    /**
+     * Generates JSON-LD structured data script for SEO improvement.
+     * Supports WebSite, WebPage, and BlogPosting types based on current object data.
+     *
+     * @param array $data Global buffer containing post/page data.
+     * @return string      JSON-LD <script> block.
+     */
     public static function jsonLD($data)
     {
         $payload = [];
@@ -179,6 +193,13 @@ class Site
     </script>';
     }
 
+    /**
+     * Determines the 'robots' indexing directive based on content type.
+     * Prevents indexing of search and archive pages while encouraging post/page indexing.
+     *
+     * @param array $data Global buffer.
+     * @return string      Indexing string (e.g. 'index, follow').
+     */
     public static function indexing($data)
     {
         $noindex = [
@@ -204,6 +225,13 @@ class Site
         return $indexing;
     }
 
+    /**
+     * Generates a concise SEO-optimised title string.
+     * Truncates titles to 70 characters (standard SEO limit) while accounting for the site name.
+     *
+     * @param array $data Global buffer.
+     * @return string      Formatted title.
+     */
     public static function title($data)
     {
         //        print_r($data);
@@ -228,6 +256,13 @@ class Site
         return $cont_title . $dotted;
     }
 
+    /**
+     * Renders the site footer.
+     * In DEBUG mode, outputs a comprehensive diagnostic dashboard including global buffers,
+     * session state, and full PHP system information.
+     *
+     * @return string Hook execution results for footer scripts.
+     */
     public static function footer()
     {
         global $data;
@@ -277,6 +312,13 @@ class Site
         return Hooks::run('footer_load_lib', $data);
     }
 
+    /**
+     * Generates an SEO-optimised description string.
+     * Truncates content to 150 characters and strips HTML/shortcodes.
+     *
+     * @param string $vars Specific content to summarize.
+     * @return string       Clean description string.
+     */
     public static function desc($vars)
     {
         if (!empty($vars)) {
@@ -289,6 +331,13 @@ class Site
         return $desc;
     }
 
+    /**
+     * Retrieves keywords for metadata.
+     * Falls back to global site keywords or post tags depending on current page type.
+     *
+     * @param array $data Global buffer.
+     * @return string      Comma-separated keywords.
+     */
     public static function keyWords($data)
     {
         // print_r($data);
@@ -303,8 +352,17 @@ class Site
             }
         }
 
+        return '';
     }
 
+    /**
+     * Renders the site logo based on user settings (URL or uploaded file).
+     *
+     * @param string $width  CSS width.
+     * @param string $height CSS height.
+     * @param string $class  CSS class.
+     * @return string        HTML <img> tag or framework logo span.
+     */
     public static function logo($width = '', $height = '', $class = '')
     {
         // check which logo is used, logourl or uploaded files.
@@ -321,6 +379,9 @@ class Site
         return $logo;
     }
 
+    /**
+     * Outputs a performance footprint showing page execution time.
+     */
     public static function generated()
     {
         $end_time = microtime(true);
@@ -329,6 +390,11 @@ class Site
         echo '<center><small>Page generated in ' . $time_taken . ' seconds.</small></center>';
     }
 
+    /**
+     * Generates a canonical URL for the current request.
+     *
+     * @return string Full canonical URL.
+     */
     public static function canonical()
     {
         $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
@@ -337,6 +403,13 @@ class Site
         return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
+    /**
+     * Minifies HTML input using regex-based orchestration.
+     * Strips whitespace, minifies inline CSS, and removes comments.
+     *
+     * @param string $input Raw HTML.
+     * @return string       Minified HTML.
+     */
     public static function minifyHTML($input)
     {
         if (trim($input) === '') {
@@ -388,6 +461,13 @@ class Site
         );
     }
 
+    /**
+     * Minifies CSS input by removing comments, compressing colors,
+     * and stripping unnecessary whitespace.
+     *
+     * @param string $input Raw CSS.
+     * @return string       Minified CSS.
+     */
     public static function minifyCSS($input)
     {
         if (trim($input) === '') {
@@ -435,6 +515,12 @@ class Site
         );
     }
     // JavaScript Minifier
+    /**
+     * Minifies JavaScript input by removing comments and shortening object attributes.
+     *
+     * @param string $input Raw JS.
+     * @return string       Minified JS.
+     */
     public static function minifyJS($input)
     {
         if (trim($input) === '') {
@@ -465,6 +551,12 @@ class Site
         );
     }
 
+    /**
+     * Master minifier that orchestrates HTML minification.
+     *
+     * @param string $input Raw HTML.
+     * @return string       Minified HTML.
+     */
     public static function minifIed($input)
     {
         // $input = self::minifyJS($input);
@@ -477,6 +569,11 @@ class Site
     private static $loading_header = false;
     private static $loading_footer = false;
 
+    /**
+     * Loads system and module assets for the header.
+     *
+     * @return string HTML script/link tags.
+     */
     public static function loadLibHeader()
     {
         if (self::$loading_header)
@@ -488,6 +585,11 @@ class Site
         return $out;
     }
 
+    /**
+     * Loads system and module assets for the footer.
+     *
+     * @return string HTML script tags.
+     */
     public static function loadLibFooter()
     {
         if (self::$loading_footer)

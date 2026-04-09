@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.6 build date 20150706
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -23,15 +18,28 @@ class Hooks
 {
     public static $hooks;
 
+    /**
+     * Hooks Constructor.
+     * Loads the initial hooks registry.
+     */
     public function __construct()
     {
         self::$hooks = self::load();
     }
 
+    /**
+     * @deprecated 2.0.0 Use attach() to register your functions to specific hooks.
+     */
     public static function add()
     {
     }
 
+    /**
+     * Returns the comprehensive list of registered hook points in the system.
+     * Hooks are divided into actions (execution points) and filters (data modification points).
+     *
+     * @return array Initialized hooks collection.
+     */
     public static function load()
     {
         $hooks = array(
@@ -97,6 +105,13 @@ class Hooks
         return $hooks;
     }
 
+    /**
+     * Attaches a callback function or method to a specific hook name.
+     *
+     * @param string   $hooks_name The name of the hook to attach to.
+     * @param callable $func       The callback function or method array.
+     * @return array               The updated hooks registry.
+     */
     public static function attach($hooks_name, $func)
     {
         global $data;
@@ -108,73 +123,59 @@ class Hooks
     }
 
     /**
-     * Run the hooks.
+     * Executes all functions attached to an action hook.
+     * Multiple arguments can be passed; the first one must always be the hook name.
      *
-     * @link http://stackoverflow.com/questions/42/best-way-to-allow-plugins-for-a-php-application/77#77
+     * @param string $hook_name The name of the hook to run.
+     * @param mixed  ...$args   Additional arguments passed to the hooked functions.
+     * @return string           Combined output from all hooked functions.
      */
-    public static function run()
+    public static function run($hook_name, ...$args)
     {
-        // print_r($data);
         $hooks = self::$hooks;
-        $num_args = func_num_args();
-        $args = func_get_args();
-        // print_r($args);
-        // if ($num_args < 2)
-        //     trigger_error("Insufficient arguments", E_USER_ERROR);
-
-        // Hook name should always be first argument
-        $hook_name = array_shift($args);
-        // echo $hook_name;
 
         if (!isset($hooks[$hook_name])) {
-            return;
-        } // No plugins have registered this hook
-        // print_r($args[0]);
-        // $args = (is_array($args))?$args[0]: $args;
+            return '';
+        }
+
         if (is_array($hooks[$hook_name])) {
             $val = '';
-            $func = $hooks[$hook_name];
-            for ($i = 0; $i < count($func); $i++) {
-                if ($func[$i] != '') {
-                    // $args = call_user_func_array($func, $args); //
-                    $val .= $func[$i]((array) $args);
-                } else {
-                    $val .= $args;
+            foreach ($hooks[$hook_name] as $func) {
+                if ($func != '') {
+                    $val .= $func($args);
                 }
             }
-
             return $val;
         }
+        return '';
     }
 
-    public static function filter()
+    /**
+     * Passes data through all filters attached to a specific hook name.
+     * The data is modified progressively by each attached function.
+     *
+     * @param string $hook_name The name of the filter hook.
+     * @param mixed  ...$args   The data to be filtered and additional context.
+     * @return mixed            The final filtered data.
+     */
+    public static function filter($hook_name, ...$args)
     {
-        //print_r(self::$hooks[$var]);
         $hooks = self::$hooks;
-        $num_args = func_num_args();
-        $args = func_get_args();
-        // print_r($args);
-        // if ($num_args < 2)
-        //     trigger_error("Insufficient arguments", E_USER_ERROR);
-
-        // Hook name should always be first argument
-        $hook_name = array_shift($args);
 
         if (!isset($hooks[$hook_name])) {
             return (isset($args[0])) ? $args[0] : '';
-        } // No plugins have registered this hook
-        // print_r($args[0]);
-        // $args = (is_array($args))?$args[0]: $args;
+        }
+
         if (is_array($hooks[$hook_name])) {
             foreach ($hooks[$hook_name] as $func) {
                 if ($func != '') {
-                    // $args = call_user_func_array($func, $args); //
                     $args = $func((array) $args);
+                    if (!is_array($args)) {
+                        $args = [$args];
+                    }
                 }
             }
-
         }
-
 
         if (is_array($args) && count($args) === 1 && isset($args[0])) {
             $args = $args[0];
@@ -183,11 +184,24 @@ class Hooks
         return $args;
     }
 
+    /**
+     * Retrieves all callbacks registered for a specific hook.
+     *
+     * @param string $var Hook name.
+     * @return array      List of attached callbacks.
+     */
     public static function getKey($var)
     {
         return self::$hooks[$var];
     }
 
+    /**
+     * Checks if a specific callback already exists for a given hook.
+     *
+     * @param string|array $val   The callback to look for.
+     * @param string       $hooks The hook name to check in.
+     * @return bool               True if the callback is already attached.
+     */
     public static function exist($val, $hooks)
     {
         //         print_r(self::getKey($hooks));
@@ -199,9 +213,10 @@ class Hooks
             }
         }
 
-        if ($n > 0)
+        if ($n > 0) {
             return true;
-        else
-            false;
+        } else {
+            return false;
+        }
     }
 }

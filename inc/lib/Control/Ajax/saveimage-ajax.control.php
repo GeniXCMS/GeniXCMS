@@ -1,21 +1,21 @@
 <?php
-
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
- * @package GeniXCMS
+
+ *
  * @since 0.0.1 build date 20141003
- * @version 2.1.0
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 $data = Router::scrap($param);
 $gettoken = (SMART_URL) ? $data['token'] : Typo::cleanX($_GET['token']);
 $token = (true === Token::validate($gettoken, true)) ? $gettoken : '';

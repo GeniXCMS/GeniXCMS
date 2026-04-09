@@ -6,17 +6,31 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
- * @since 1.1.0
- * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 abstract class Migration
 {
+    /**
+     * Executes the "up" migration logic to modify the database schema.
+     */
     abstract public function up();
+
+    /**
+     * Reverts the changes made by the "up" migration.
+     */
     abstract public function down();
 
+    /**
+     * Initializes the migrations table if it does not already exist.
+     */
     public static function init()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `migrations` (
@@ -28,14 +42,18 @@ abstract class Migration
         Db::query($sql);
     }
 
+    /**
+     * Scans the migrations directory and executes any pending migrations.
+     * Records executed migrations in the database with a new batch ID.
+     */
     public static function run()
     {
         self::init();
-        
+
         $ran = Db::result("SELECT `migration` FROM `migrations`") ?? [];
         $ran_list = [];
-        if(!isset($ran['error'])) {
-            foreach($ran as $r) {
+        if (!isset($ran['error'])) {
+            foreach ($ran as $r) {
                 $ran_list[] = $r->migration;
             }
         }
@@ -72,12 +90,20 @@ abstract class Migration
         }
     }
 
+    /**
+     * Retrieves the latest batch ID from the migrations table.
+     *
+     * @return int The last batch number or 0 if no migrations have run.
+     */
     public static function getLastBatch()
     {
         $res = Db::result("SELECT MAX(`batch`) as max_batch FROM `migrations` LIMIT 1");
-        return (isset($res[0]->max_batch)) ? (int)$res[0]->max_batch : 0;
+        return (isset($res[0]->max_batch)) ? (int) $res[0]->max_batch : 0;
     }
 
+    /**
+     * Reverts the last batch of migrations executed.
+     */
     public static function rollback()
     {
         self::init();

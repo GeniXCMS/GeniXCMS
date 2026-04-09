@@ -5,15 +5,19 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
- *
  * @since 1.1.0
- * @author Puguh Wijayanto <metalgenix@gmail.com>
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 if (User::access(0)) {
     $data['sitetitle'] = _('ACL Manager');
-    
+
     if (isset($_POST['save_acl'])) {
         $token = Typo::cleanX($_POST['token']);
         if (!Token::validate($token)) {
@@ -22,7 +26,7 @@ if (User::access(0)) {
             $perms = $_POST['perm'] ?? [];
             // Clear existing for these groups to be safe? 
             // Or just update. Our Acl::set handles it.
-            
+
             foreach ($perms as $group_id => $p_list) {
                 foreach ($p_list as $perm_key => $status) {
                     Acl::set($group_id, $perm_key, $status);

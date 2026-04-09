@@ -3,12 +3,13 @@
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.2 build date 20150309
- * @version 2.1.0
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
@@ -18,6 +19,10 @@
  */
 class Token
 {
+    /**
+     * Token Constructor.
+     * Initializes the token upon instantiation.
+     */
     public function __construct()
     {
         self::create();
@@ -104,16 +109,37 @@ class Token
         return false;
     }
 
+    /**
+     * Alias for validate().
+     * Checks if the provided token is valid.
+     * 
+     * @param string $token
+     * @return bool
+     */
     public static function isValid($token)
     {
         return self::validate($token);
     }
 
+    /**
+     * Alias for validate().
+     * Checks if the token exists and is valid.
+     * 
+     * @param string $token
+     * @param bool $is_ajax
+     * @return bool
+     */
     public static function isExist($token, $is_ajax = false)
     {
         return self::validate($token, $is_ajax);
     }
 
+    /**
+     * Removes the current session token.
+     * 
+     * @param string $token
+     * @return bool
+     */
     public static function remove($token)
     {
         // One-token-per-session is persistent, we only remove if explicitly asked to clear session
@@ -136,6 +162,13 @@ class Token
         return md5($ip . $ua . $site_id);
     }
 
+    /**
+     * Alias for validate() intended for URL token matching.
+     * 
+     * @param string $token
+     * @param bool $is_ajax
+     * @return bool
+     */
     public static function urlMatch($token, $is_ajax = false)
     {
         return self::validate($token, $is_ajax);

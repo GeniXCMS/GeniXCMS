@@ -6,13 +6,13 @@
  *
  * @since 0.0.1 build date 20140928
  *
- * @version 2.1.0
+ * @version 2.1.1
  *
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -22,8 +22,8 @@ date_default_timezone_set('UTC');
 /*
  * Set Directories. This will set the directories first before load all
  * libraries.
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @since 0.0.1
  */
 define('GX_PATH', realpath(__DIR__ . '/../'));
@@ -38,8 +38,8 @@ define('GX_CACHE', GX_PATH . '/assets/cache/');
  * Libraries Loader Function. This will load all libraries inside the inc/lib
  * directory.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  *
  * @since 0.0.1
  */
@@ -47,8 +47,8 @@ require '../autoload.php';
 
 /*
  * Run the Main caller at GxMain Class. This will call the Backend Controller.
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @since 0.0.1
  */
 try {

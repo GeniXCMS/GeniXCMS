@@ -69,6 +69,17 @@ window.createBlockEl = function(state, block) {
     } else if (block.type === 'divider') {
         content.innerHTML = '<hr>';
         content.contentEditable = 'false';
+    } else if (block.type === 'raw_html') {
+        var rawCode = block.content || '';
+        content.innerHTML = '<div class="custom-code-container">' +
+                              '<div class="p-4 bg-dark text-white rounded-3 text-center" style="border: 3px dashed rgba(255,255,255,0.4); cursor:pointer;">' +
+                                '<i class="bi bi-code-square fs-1 d-block mb-2 text-warning"></i>' +
+                                '<span class="small fw-bold">RAW HTML CONTENT</span><br>' +
+                                '<div class="mt-2 opacity-50 extra-small text-truncate" style="font-family: monospace; max-width: 200px; margin: 0 auto;">' + (rawCode ? escHtml(rawCode.substring(0, 50)) + '...' : 'Click & open Settings Panel to edit code') + '</div>' +
+                              '</div>' +
+                              '<script type="text/plain" class="raw-data">' + rawCode + '</script>' +
+                            '</div>';
+        content.contentEditable = 'false';
     } else if (block.type === 'image') {
         window.renderImageBlock(state, block, content);
     } else if (block.type === 'ul' || block.type === 'ol') {
@@ -184,6 +195,8 @@ window.createBlockEl = function(state, block) {
                             '<div class="fw-bold">' + (isRecent ? 'Recent Posts' : 'Random Posts') + ' Block</div>' +
                             '<div class="small opacity-75">This list will be automatically populated on the public site</div>';
         content.contentEditable = 'false';
+    } else if (block.type === 'pricing') {
+        window.renderPricingBlock(state, block, content);
     } else {
         content.contentEditable = 'true';
         content.innerHTML = shortcodeToHtml(block.content) || '<br>';
@@ -303,6 +316,23 @@ window.uploadImageFile = function(file, block, content, state) {
             else if (window.serializeToTextarea) window.serializeToTextarea(state);
         }
     });
+};
+
+window.renderPricingBlock = function(state, block, content) {
+    content.contentEditable = 'false';
+    content.innerHTML = `
+        <div class="gx-pricing-placeholder border rounded-4 p-4 bg-light text-center" style="border: 2px dashed #cbd5e1 !important;">
+            <div class="mb-3"><i class="bi bi-tags text-primary" style="font-size: 2.5rem;"></i></div>
+            <h5 class="fw-bold mb-1">Price Comparison Table</h5>
+            <p class="small text-muted mb-3">Includes 3 plans with monthly/yearly switch toggle.</p>
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 bg-white rounded-pill border shadow-sm">
+                <span class="small fw-bold text-muted">MONTHLY</span>
+                <div class="form-check form-switch p-0 m-0"><input class="form-check-input" type="checkbox" disabled style="width: 2.5em; height: 1.25em;"></div>
+                <span class="small fw-bold text-muted">YEARLY</span>
+            </div>
+            <div class="mt-3 small text-primary fw-bold" style="cursor: pointer;"><i class="bi bi-pencil-square me-1"></i> Click to see preview in frontend</div>
+        </div>
+    `;
 };
 
 window.refreshImageBlock = function(state, block) {

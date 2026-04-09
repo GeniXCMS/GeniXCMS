@@ -1,12 +1,21 @@
 <?php
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
- * CMS API Service for Dynamic Builder
+ * GeniXCMS - CMS API Service for Dynamic Builder
  * Provides access to posts, categories, authors, etc.
+ * 
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 $data = Router::scrap($param);
 $gettoken = (SMART_URL) ? ($data['token'] ?? '') : (isset($_GET['token']) ? Typo::cleanX($_GET['token']) : '');
-$token = (true === Token::validate($gettoken, true)) ? $gettoken: '';
+$token = (true === Token::validate($gettoken, true)) ? $gettoken : '';
 
 header('Content-Type: application/json');
 
@@ -16,7 +25,7 @@ $action = isset($_GET['action']) ? Typo::cleanX($_GET['action']) : 'recent_posts
 $public_actions = ['recent_posts', 'random_posts', 'custom_posts', 'categories'];
 
 if ($token != '' || in_array($action, $public_actions)) {
-    
+
     $result = [];
     $posts = [];
 
@@ -26,7 +35,8 @@ if ($token != '' || in_array($action, $public_actions)) {
             $type = isset($_GET['type']) ? Typo::cleanX($_GET['type']) : 'post';
             $cat = isset($_GET['cat']) ? Typo::int($_GET['cat']) : null;
             $args = ['num' => $num, 'type' => $type];
-            if ($cat) $args['cat'] = $cat;
+            if ($cat)
+                $args['cat'] = $cat;
             $posts = Posts::recent($args);
             break;
 
@@ -89,8 +99,9 @@ if ($token != '' || in_array($action, $public_actions)) {
     if (is_array($posts) && !isset($posts['error'])) {
         foreach ($posts as $p) {
             $img = Posts::getPostImage($p->id);
-            if ($img == "") $img = Posts::getImage(Typo::Xclean($p->content), 1);
-            
+            if ($img == "")
+                $img = Posts::getImage(Typo::Xclean($p->content), 1);
+
             $result[] = [
                 'id' => $p->id,
                 'title' => $p->title,

@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20150126
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -24,9 +19,6 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * Installation Class.
  *
  * This class will process the Installation Process.
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
  *
  * @since 0.0.1
  */
@@ -42,9 +34,6 @@ class Install
      * This will create config file at inc/config/config.php
      * during the installation process. Data is gathered
      * from the session.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -63,10 +52,11 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 2.1.0
- * @link https://github.com/GeniXCMS/GeniXCMS
+ * @version 2.1.1
  * 
- * @author Puguh Wijayanto (www.metalgenix.com)
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -123,9 +113,6 @@ error_reporting(E_ALL);
      *
      * This will create the SQL table on the
      * installation proccess.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -196,9 +183,6 @@ error_reporting(E_ALL);
      * Database Insertion Function.
      *
      * This will insert value on the SQL Table during the installation.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -309,9 +293,9 @@ error_reporting(E_ALL);
         $date = date('Y-m-d H:i:s');
 
         $post = "INSERT INTO `posts` (`id`, `date`, `title`, `slug`, `content`, `author`, `type`, `cat`, `modified`, `status`, `views`) VALUES
-        (null, '{$date}', 'Welcome to GeniXCMS 2.0', 'welcome-to-genixcms-2', '&lt;p&gt;Congratulations and welcome to the next generation of Content Management! &lt;strong&gt;GeniXCMS 2.0&lt;/strong&gt; has been completely rewritten from the ground up to offer unprecedented speed, security, and flexibility for your modern web projects.&lt;/p&gt;&lt;p&gt;Here are some of the fantastic features you can explore out of the box:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Dynamic Block Editor (GxEditor) for rich content creation.&lt;/li&gt;&lt;li&gt;Centralized Asset Management system ensuring clean HTML structures.&lt;/li&gt;&lt;li&gt;Powerful REST API module with OAuth2 integrations.&lt;/li&gt;&lt;li&gt;Session-based CSRF token strategy for unbeatable security.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;We hope you enjoy building with GeniXCMS. Feel free to explore the admin dashboard to start customizing your new site right away!&lt;/p&gt;', '{$admin}', 'post', '1', '{$date}', '1', 42),
-        (null, '{$date}', 'Discover the New Block Editor', 'discover-the-new-block-editor', '&lt;p&gt;Say goodbye to rigid text formatting! Our new &lt;strong&gt;GxEditor&lt;/strong&gt; enables you to build complex pages by dragging and dropping blocks seamlessly.&lt;/p&gt;&lt;p&gt;With GxEditor, you can:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Create nested HTML layouts effortlessly.&lt;/li&gt;&lt;li&gt;Embed raw HTML codes or syntax-highlighted code snippets.&lt;/li&gt;&lt;li&gt;Upload images programmatically in the background without popups.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;Go ahead and try editing this post to experience the power of our structured blocks.&lt;/p&gt;', '{$admin}', 'post', '2', NULL, '1', 15),
-        (null, '{$date}', 'Getting Started with Themes', 'getting-started-with-themes', '&lt;p&gt;Theming in GeniXCMS has never been easier. We leverage the ultra-fast &lt;strong&gt;Latte&lt;/strong&gt; templating engine to provide you with secure, readable, and highly dynamic views.&lt;/p&gt;&lt;p&gt;Dive into the &lt;code&gt;inc/themes/&lt;/code&gt; directory, copy the default template, and unleash your creativity. Do not forget to use the new &lt;code&gt;Asset::register()&lt;/code&gt; class to handle your CSS and JS dependencies beautifully.&lt;/p&gt;', '{$admin}', 'post', '2', NULL, '1', 8),
+        (null, '{$date}', 'Welcome to GeniXCMS 2.1.1', 'welcome-to-genixcms', '&lt;p&gt;Congratulations and welcome to the next generation of Content Management! &lt;strong&gt;GeniXCMS 2.1.1&lt;/strong&gt; is our most advanced release yet, featuring a professional-grade editor and a robust modular architecture.&lt;/p&gt;&lt;p&gt;Key features to explore:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Professional GxEditor with Math &amp; Table support.&lt;/li&gt;&lt;li&gt;Dynamic Page Layouts and Dark Mode aesthetics.&lt;/li&gt;&lt;li&gt;Powerful REST API and OAuth2 integrations.&lt;/li&gt;&lt;li&gt;Secure, session-based CSRF protection.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;We hope you enjoy building with GeniXCMS. Explore the dashboard to start customizing your site!&lt;/p&gt;', '{$admin}', 'post', '1', '{$date}', '1', 42),
+        (null, '{$date}', 'Professional Publishing: Math &amp; Tables', 'professional-publishing-math-tables', '&lt;p&gt;GeniXCMS 2.1.1 introduces professional publishing tools: &lt;strong&gt;Math Equations&lt;/strong&gt; and the &lt;strong&gt;Table Wizard&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;Write complex LaTeX formulas with real-time previews using the Sigma-Root icon, or build structured tables via our new Bootstrap-based modal interface. These tools make GeniXCMS perfect for technical and academic content.&lt;/p&gt;', '{$admin}', 'post', '2', '{$date}', '1', 25),
+        (null, '{$date}', 'Dynamic Layouts and Deep Dark Mode', 'dynamic-layouts-dark-mode', '&lt;p&gt;Themes now support &lt;strong&gt;Dynamic Page Layouts&lt;/strong&gt;—simply create a &lt;code&gt;layout-*.latte&lt;/code&gt; file and select it in the admin panel. Combined with our expanded &lt;strong&gt;Dark Mode&lt;/strong&gt; support, your site will look professional in any light.&lt;/p&gt;', '{$admin}', 'post', '2', '{$date}', '1', 18),
         (null, '{$date}', 'About Us', 'about-us', '&lt;p&gt;Hello and welcome to our website! We are a passionate team dedicated to delivering high-quality content and services to our incredible community.&lt;/p&gt;&lt;p&gt;This page is fully customizable. You can edit this text from the &lt;strong&gt;Pages&lt;/strong&gt; menu in your administration panel.&lt;/p&gt;', '{$admin}', 'page', NULL, NULL, '1', 12),
         (null, '{$date}', 'Privacy Policy', 'privacy-policy', '&lt;h2&gt;Cookies&lt;/h2&gt;&lt;p&gt;We gather information about visitors who visit our site. For anonymous visitors, we track non-identifying data for analytics to improve user experience. You can manage or delete cookies directly from your browser settings.&lt;/p&gt;&lt;h3&gt;Personal Information&lt;/h3&gt;&lt;p&gt;If you register on our site, we securely store information such as your Name and Email address. We do not sell or share this information to untrusted third parties. It is strictly used for platform communication.&lt;/p&gt;', '{$admin}', 'page', NULL, NULL, '1', 4);
         ";

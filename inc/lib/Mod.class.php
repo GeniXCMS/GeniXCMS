@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140928
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -23,18 +18,30 @@ class Mod
 {
     public static $listMenu = array();
 
+    /**
+     * Mod Constructor.
+     * Triggers the module loader to initialize active modules.
+     */
     public function __construct()
     {
         self::loader();
     }
 
+    /**
+     * Alias for self::load().
+     *
+     * @param string $var Module directory name.
+     */
     public static function mod($var)
     {
         self::load($var);
     }
 
     /**
-     * @param $var
+     * Includes the options file for a specific module.
+     *
+     * @param string $var  Module directory name.
+     * @param array  $data Optional data to pass to the options file (not explicitly used in base).
      */
     public static function options($var, $data = array())
     {
@@ -44,6 +51,12 @@ class Mod
         }
     }
 
+    /**
+     * Scans the GX_MOD directory and returns an array of valid modules.
+     * A module is considered valid if it contains an index.php file.
+     *
+     * @return array List of valid module directory names.
+     */
     public static function modList()
     {
         $mod = array();
@@ -62,6 +75,13 @@ class Mod
         return $mod;
     }
 
+    /**
+     * Parses the index.php file of a module to extract metadata.
+     * Uses regex to find tags like Name, Desc, Version, etc.
+     *
+     * @param string $vars Module directory name.
+     * @return array|string Array of metadata or empty string if file not found.
+     */
     public static function data($vars)
     {
         $file = GX_MOD . '/' . $vars . '/index.php';
@@ -92,6 +112,11 @@ class Mod
         return $d;
     }
 
+    /**
+     * Renders the HTML menu list for active modules in the admin sidebar.
+     *
+     * @return string Generated HTML <li> list.
+     */
     public static function modMenu()
     {
         $json = Options::v('modules');
@@ -120,6 +145,15 @@ class Mod
         return $list;
     }
 
+    /**
+     * Includes a module partial file and returns its buffered output.
+     * Automatically extracts the provided data array into local variables.
+     *
+     * @param string $vars Content filename (without .php).
+     * @param array  $data Data to extract into the file.
+     * @param string $dir  Directory containing the file.
+     * @return string      Captured HTML/content output.
+     */
     public static function inc($vars, $data, $dir)
     {
         $file = $dir . '/' . $vars . '.php';
@@ -138,6 +172,12 @@ class Mod
         return $content;
     }
 
+    /**
+     * Activates a module by adding it to the 'modules' option array.
+     *
+     * @param string $mod Module directory name.
+     * @return bool       True on success, false on failure.
+     */
     public static function activate($mod)
     {
         $json = Options::v('modules');
@@ -162,6 +202,12 @@ class Mod
         }
     }
 
+    /**
+     * Deactivates a module by removing it from the 'modules' option array.
+     *
+     * @param string $mod Module directory name.
+     * @return bool       True on success, false on failure.
+     */
     public static function deactivate($mod)
     {
         $mods = Options::v('modules');
@@ -191,6 +237,12 @@ class Mod
         }
     }
 
+    /**
+     * Checks if a specific module is currently activated.
+     *
+     * @param string $mod Module directory name.
+     * @return bool       True if active, false otherwise.
+     */
     public static function isActive($mod)
     {
         $json = Options::v('modules');
@@ -207,6 +259,13 @@ class Mod
         }
     }
 
+    /**
+     * Orchestrates the module lifecycle.
+     * - Handles activation/deactivation/removal requests via $_GET in the admin panel.
+     * - Iterates over all active modules and executes their index.php files.
+     *
+     * @return array Empty array (legacy return).
+     */
     public static function loader()
     {
         $data = [];
@@ -275,6 +334,11 @@ class Mod
         return $data;
     }
 
+    /**
+     * Includes the core entry point (index.php) for a specific module.
+     *
+     * @param string $mod Module directory name.
+     */
     public static function load($mod)
     {
         $file = GX_MOD . '/' . $mod . '/index.php';
@@ -283,6 +347,12 @@ class Mod
         }
     }
 
+    /**
+     * Generates the public URL for a specific module's assets/directory.
+     *
+     * @param string $mod Module directory name.
+     * @return string      The public URL.
+     */
     public static function url($mod)
     {
         $url = Site::$url . '/inc/mod/' . $mod;
@@ -290,6 +360,12 @@ class Mod
         return $url;
     }
 
+    /**
+     * Checks if a module's options file exists.
+     *
+     * @param string $mod Module directory name.
+     * @return bool       True if exists, false otherwise.
+     */
     public static function exist($mod)
     {
         $file = GX_MOD . '/' . $mod . '/options.php';
@@ -300,6 +376,12 @@ class Mod
         }
     }
 
+    /**
+     * Retrieves the display name of a module from its metadata.
+     *
+     * @param string $mod Module directory name.
+     * @return string      The module name.
+     */
     public static function name($mod)
     {
         $data = self::data($mod);
@@ -307,12 +389,12 @@ class Mod
         return $name;
     }
 
-    /*
-     * menulist
+    /**
+     * Outputs HTML <option> tags for the registered module menus.
+     * Used for selectors in the admin panel.
      *
-     *
+     * @param string $var Pre-selected menu key (optional).
      */
-
     public static function menuList($var = '')
     {
         $list = self::$listMenu;
@@ -327,6 +409,12 @@ class Mod
         }
     }
 
+    /**
+     * Registers new menu items into the module menu list.
+     *
+     * @param array $menus Array of menu keys and titles.
+     * @return bool        Always true.
+     */
     public static function addMenuList($menus)
     {
         self::$listMenu = array_merge(self::$listMenu, $menus);
@@ -334,6 +422,12 @@ class Mod
         return true;
     }
 
+    /**
+     * Retrieves the descriptive title for a specific registered module menu.
+     *
+     * @param string $mod Menu key.
+     * @return string      Title of the menu.
+     */
     public static function getTitle($mod)
     {
         $title = self::$listMenu;

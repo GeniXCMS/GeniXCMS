@@ -21,76 +21,88 @@
         if (window.jQuery && window.jQuery('.note-editable').length) {
             console.log('[Builder] Detecting Summernote (.note-editable)');
             content = window.jQuery('.note-editable').first().html();
-            console.log('[Builder] Extracted from Summernote:', content);
-            if (content && content !== '<p><br></p>') return content;
         }
 
         // 2. Check New GxEditor modular system
-        if (window.GxEditor && window.GxEditor._editors && window.GxEditor._editors.length > 0) {
+        else if (window.GxEditor && window.GxEditor._editors && window.GxEditor._editors.length > 0) {
             console.log('[Builder] Detecting GxEditor object');
             content = window.GxEditor._editors[0].textarea.value;
-            console.log('[Builder] Extracted from GxEditor:', content);
-            if (content) return content;
         }
 
-        // 3. Fallback to Old __gxEditors system
-        if (window.__gxEditors) {
-            console.log('[Builder] Detecting Legacy __gxEditors object');
-            const keys = Object.keys(window.__gxEditors);
-            if (keys.length > 0 && window.__gxEditors[keys[0]]._textarea) {
-                content = window.__gxEditors[keys[0]]._textarea.value;
-                console.log('[Builder] Extracted from Legacy __gxEditors:', content);
-                if (content) return content;
+        // 3. Fallback to Raw Textarea Value
+        else {
+            const primaryEl = document.getElementById('primary_editor') || document.querySelector('.editor');
+            if (primaryEl) {
+                console.log('[Builder] Detecting primary raw textarea:', primaryEl.id || primaryEl.className);
+                content = primaryEl.value;
             }
         }
 
-        // 4. Raw Textarea Value
-        const primaryEl = document.getElementById('primary_editor') || document.querySelector('.editor');
-        if (primaryEl) {
-            console.log('[Builder] Detecting primary raw textarea:', primaryEl.id || primaryEl.className);
-            content = primaryEl.value;
-            console.log('[Builder] Extracted from Raw Textarea:', content);
-        } else {
-            console.log('[Builder] No viable editor or textarea found!');
+        // Extract stored CSS/JS
+        const cssEl = document.getElementById('gx_builder_css');
+        const jsEl = document.getElementById('gx_builder_js');
+        const css = cssEl ? cssEl.value : '';
+        const js = jsEl ? jsEl.value : '';
+
+        // 4. Extract master HTML if available (Source of Truth for Builder)
+        const htmlMasterEl = document.getElementById('gx_builder_html');
+        const htmlMaster = (htmlMasterEl && htmlMasterEl.value.trim() !== '') ? htmlMasterEl.value : content;
+
+        console.log('[Builder] === Extraction Complete ===');
+        
+        let finalHtml = htmlMaster || '';
+        if (typeof window.shortcodeToHtml === 'function') {
+            finalHtml = window.shortcodeToHtml(finalHtml);
         }
 
-        console.log('[Builder] === Final Extracted Content ===', content);
-        return content || '';
+        return {
+            html: finalHtml,
+            css: css || '',
+            js: js || ''
+        };
     }
 
-    function exportContent(html) {
-        const fullContent = html;
+    function exportContent(html, css, js) {
+        // 1. Update Hidden Param Fields
+        const cssEl = document.getElementById('gx_builder_css');
+        const jsEl = document.getElementById('gx_builder_js');
+        const htmlMasterEl = document.getElementById('gx_builder_html');
 
-        // 1. Push to Summernote
+        if (cssEl) cssEl.value = css || '';
+        if (jsEl) jsEl.value = js || '';
+        if (htmlMasterEl) htmlMasterEl.value = html || '';
+
+        // 2. Clean HTML and convert to shortcodes if possible
+        var cleanHtml = (html || '')
+
+        // Convert to shortcodes FIRST so they can be protected if needed
+        if (typeof window.htmlToShortcode === 'function') {
+            cleanHtml = window.htmlToShortcode(cleanHtml);
+        }
+
+        cleanHtml = cleanHtml.trim();
+
+        // 3. Push Clean HTML/Shortcodes to Main Editor
+
+        // 3. Push Clean HTML/Shortcodes to Main Editor
         if (window.jQuery && window.jQuery('.note-editable').length) {
             try {
-                window.jQuery('.editor').first().summernote('code', fullContent);
+                window.jQuery('.editor').first().summernote('code', cleanHtml);
             } catch (e) {
-                window.jQuery('.note-editable').first().html(fullContent);
+                window.jQuery('.note-editable').first().html(cleanHtml);
             }
         }
-
-        // 2. Push to New GxEditor
         else if (window.GxEditor && window.GxEditor._editors && window.GxEditor._editors.length > 0) {
-            window.GxEditor._editors[0].textarea.value = fullContent;
-            window.GxEditor._editors[0].textarea.dispatchEvent(new Event('change'));
-        }
-
-        // 3. Push to Old EditorJS
-        else if (window.__gxEditors) {
-            const keys = Object.keys(window.__gxEditors);
-            if (keys.length > 0) {
-                const editorInstance = window.__gxEditors[keys[0]];
-                if (editorInstance._textarea) {
-                    editorInstance._textarea.value = fullContent;
-                }
-            }
+            window.GxEditor._editors.forEach(function(ed) {
+                ed.textarea.value = cleanHtml;
+                ed.textarea.dispatchEvent(new Event('change'));
+            });
         }
 
         // Always sync the underlying value
         const primaryEl = document.getElementById('primary_editor') || document.querySelector('.editor');
         if (primaryEl) {
-            primaryEl.value = fullContent;
+            primaryEl.value = cleanHtml;
         }
     }
 
@@ -107,13 +119,13 @@
                 id: 'text-paragraph',
                 label: '<i class="bi bi-justify-left fs-4 d-block mb-1"></i>Text block',
                 category: 'Basics',
-                content: '<p class="text-secondary lh-lg" style="padding: 15px; margin: 0 !important;">Insert your professional text content here. This block is designed for readability and clean layout.</p>'
+                content: '<p class="text-secondary lh-lg">Insert your professional text content here. This block is designed for readability and clean layout.</p>'
             },
             {
                 id: 'text-lead',
                 label: '<i class="bi bi-card-text fs-4 d-block mb-1"></i>Lead Text',
                 category: 'Basics',
-                content: '<p class="lead text-dark opacity-75 fw-medium" style="padding: 15px; margin: 0 !important;">An elegant lead paragraph for highlighting key information or summaries at the start of sections.</p>'
+                content: '<p class="lead text-dark opacity-75 fw-medium">An elegant lead paragraph for highlighting key information or summaries at the start of sections.</p>'
             },
             {
                 id: 'image-custom',
@@ -134,7 +146,7 @@
                 id: 'bs-button',
                 label: '<i class="bi bi-hand-index-thumb fs-4 d-block mb-1"></i>Action Button',
                 category: 'Basics',
-                content: '<a href="#" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-decoration-none d-inline-block" style="padding: 15px; margin: 0 !important;">Click Here</a>'
+                content: '<a href="#" class="btn btn-primary rounded-pill px-4 py-2 fw-bold text-decoration-none d-inline-block">Click Here</a>'
             },
             {
                 id: 'icon-material',
@@ -152,7 +164,7 @@
                 id: 'section-container',
                 label: '<i class="bi bi-layout-sidebar fs-4 d-block mb-1"></i>Section Wrapper',
                 category: 'Basics',
-                content: '<section class="py-5" style="padding: 15px; margin: 0 !important;"><div class="container"><div class="p-5 bg-light rounded-5 text-center">Your content goes here...</div></div></section>'
+                content: '<section class="py-5"><div class="container"><div class="p-5 bg-light rounded-5 text-center">Your content goes here...</div></div></section>'
             },
             {
                 id: 'grid-2-cols',
@@ -161,18 +173,18 @@
                 content: {
                     type: 'row',
                     attributes: { class: 'row g-4' },
-                    style: { padding: '15px', margin: '0 !important', 'min-height': '50px' },
+                    style: { 'min-height': '50px' },
                     components: [
                         {
                             type: 'column',
                             attributes: { class: 'col-md-6' },
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             components: [{ content: '<div class="p-4 bg-light rounded-4 text-center">Column 1</div>' }]
                         },
                         {
                             type: 'column',
                             attributes: { class: 'col-md-6' },
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             components: [{ content: '<div class="p-4 bg-light rounded-4 text-center">Column 2</div>' }]
                         }
                     ]
@@ -185,24 +197,24 @@
                 content: {
                     type: 'row',
                     attributes: { class: 'row g-4' },
-                    style: { padding: '15px', margin: '0 !important', 'min-height': '50px' },
+                    style: { 'min-height': '50px' },
                     components: [
                         {
                             type: 'column',
                             attributes: { class: 'col-md-4' },
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             components: [{ content: '<div class="p-4 bg-light rounded-4 text-center">Col 1</div>' }]
                         },
                         {
                             type: 'column',
                             attributes: { class: 'col-md-4' },
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             components: [{ content: '<div class="p-4 bg-light rounded-4 text-center">Col 2</div>' }]
                         },
                         {
                             type: 'column',
                             attributes: { class: 'col-md-4' },
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             components: [{ content: '<div class="p-4 bg-light rounded-4 text-center">Col 3</div>' }]
                         }
                     ]
@@ -241,7 +253,7 @@
                 label: '<i class="bi bi-check-circle fs-4 d-block mb-1"></i>Point Item',
                 category: 'Basics',
                 content: `
-                <div class="d-flex align-items-center" style="padding: 15px; margin: 0 !important;">
+                <div class="d-flex align-items-center">
                     <i class="bi bi-check2-circle text-primary fs-4 me-3"></i>
                     <p class="mb-0 text-dark fw-semibold">Key benefit or feature point goes here...</p>
                 </div>`
@@ -251,7 +263,7 @@
                 label: '<i class="bi bi-chat-quote fs-4 d-block mb-1"></i>Quote Block',
                 category: 'Basics',
                 content: `
-                <blockquote class="blockquote border-start border-4 border-primary ps-4 py-2 bg-light bg-opacity-50 rounded-end-4" style="padding: 15px; margin: 0 !important;">
+                <blockquote class="blockquote border-start border-4 border-primary ps-4 py-2 bg-light bg-opacity-50 rounded-end-4">
                     <p class="mb-2 italic fs-5 fw-bold text-dark">"Creativity is intelligence having fun."</p>
                     <footer class="blockquote-footer small">Albert Einstein</footer>
                 </blockquote>`
@@ -272,7 +284,7 @@
                 id: 'separator-custom',
                 label: '<i class="bi bi-hr fs-4 d-block mb-1"></i>Separator',
                 category: 'Basics',
-                content: '<hr class="border-2 opacity-25 w-100 mx-auto" style="padding: 15px; margin: 0 !important;">'
+                content: '<hr class="border-2 opacity-25 w-100 mx-auto">'
             },
             {
                 id: 'video-embed',
@@ -346,7 +358,7 @@
                 label: '<i class="bi bi-chat-left-quote fs-4 d-block mb-1"></i>Feedback Card',
                 category: 'Basics',
                 content: `
-                <div class="p-5 bg-white rounded-5 shadow-sm border border-light text-center h-100" style="padding: 15px; margin: 0 !important;">
+                <div class="p-5 bg-white rounded-5 shadow-sm border border-light text-center h-100">
                     <img src="https://i.pravatar.cc/150?u=antigravity" class="rounded-circle mb-4 border border-5 border-light shadow-sm" width="100" height="100">
                     <div class="mb-4 text-warning">
                         <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
@@ -378,7 +390,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'position-relative min-vh-100 d-flex align-items-center py-5 overflow-hidden bg-black text-white cyber-hero-section' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [
                         { 
                             tagName: 'style', 
@@ -475,7 +487,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'py-5 py-xl-8 background-light' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [{
                         tagName: 'div',
                         attributes: { class: 'container' },
@@ -509,7 +521,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'py-5' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [{
                         tagName: 'div',
                         attributes: { class: 'container' },
@@ -561,7 +573,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'py-5' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [{
                         tagName: 'div',
                         attributes: { class: 'container' },
@@ -617,7 +629,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'py-5' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [{
                         tagName: 'div',
                         attributes: { class: 'container' },
@@ -649,7 +661,7 @@
                 content: {
                     tagName: 'section',
                     attributes: { class: 'py-5 bg-light' },
-                    style: { padding: '15px', margin: '0 !important' },
+                    style: { },
                     components: [{
                         tagName: 'div',
                         attributes: { class: 'container' },
@@ -715,7 +727,7 @@
                 label: '<i class="bi bi-arrow-left-right fs-4 d-block mb-1"></i>Versus (Vs)',
                 category: 'Basics',
                 content: `
-                <div class="row align-items-center g-0 rounded-5 overflow-hidden shadow-sm border border-light" style="padding: 15px; margin: 0 !important;">
+                <div class="row align-items-center g-0 rounded-5 overflow-hidden shadow-sm border border-light">
                     <div class="col-md-5 p-5 bg-white text-center">
                         <i class="bi bi-x-diamond-fill text-danger display-4 mb-3"></i>
                         <h4 class="fw-bold text-dark">Competitor A</h4>
@@ -736,7 +748,7 @@
                 label: '<i class="bi bi-lightning fs-4 d-block mb-1"></i>Simple CTA',
                 category: 'Standard Sections',
                 content: `
-                <div class="p-4 bg-dark rounded-4 text-white d-flex align-items-center justify-content-between" style="padding: 15px; margin: 0 !important;">
+                <div class="p-4 bg-dark rounded-4 text-white d-flex align-items-center justify-content-between">
                     <div>
                         <h4 class="fw-bold mb-1 text-white">Start Building Today</h4>
                         <p class="mb-0 opacity-75 small">No credit card required for 14 days.</p>
@@ -889,47 +901,46 @@
                 id: 'image-slider-hero',
                 label: '<i class="bi bi-images fs-4 d-block mb-1"></i>Image Slider',
                 category: 'Interactive',
-                content: {
-                    type: 'bootstrap-carousel',
-                    attributes: { class: 'carousel slide rounded-5 overflow-hidden shadow-sm', 'data-bs-ride': 'carousel' },
-                    components: [
-                        {
-                            tagName: 'div',
-                            attributes: { class: 'carousel-indicators' },
-                            components: [
-                                { tagName: 'button', attributes: { type: 'button', class: 'active', 'data-bs-slide-to': '0' } }
-                            ]
-                        },
-                        {
-                            tagName: 'div',
-                            attributes: { class: 'carousel-inner' },
-                            components: [
-                                {
-                                    tagName: 'div',
-                                    attributes: { class: 'carousel-item active' },
-                                    components: [
-                                        {
-                                            type: 'image',
-                                            attributes: { 
-                                                src: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200', 
-                                                class: 'd-block w-100',
-                                                style: 'height: 450px; object-fit: cover;'
-                                            }
-                                        },
-                                        {
-                                            tagName: 'div',
-                                            attributes: { class: 'carousel-caption d-none d-md-block bg-black bg-opacity-50 rounded-4 p-4 mb-4' },
-                                            components: [
-                                                { type: 'text', tagName: 'h3', attributes: { class: 'fw-bold text-white' }, content: 'Innovation in Focus' },
-                                                { type: 'text', tagName: 'p', content: 'Leading the way in digital transformation.' }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
+                content: `
+                    <div id="gxSlider1" class="carousel slide rounded-5 overflow-hidden shadow-sm" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#gxSlider1" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                            <button type="button" data-bs-target="#gxSlider1" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#gxSlider1" data-bs-slide-to="2"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200" class="d-block w-100" style="height: 450px; object-fit: cover;" alt="Slide 1">
+                                <div class="carousel-caption d-none d-md-block bg-black bg-opacity-50 rounded-4 p-4 mb-4">
+                                    <h3 class="fw-bold text-white">Innovation in Focus</h3>
+                                    <p>Leading the way in digital transformation.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200" class="d-block w-100" style="height: 450px; object-fit: cover;" alt="Slide 2">
+                                <div class="carousel-caption d-none d-md-block bg-black bg-opacity-50 rounded-4 p-4 mb-4">
+                                    <h3 class="fw-bold text-white">Future Architecture</h3>
+                                    <p>Building tomorrow's infrastructure today.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1200" class="d-block w-100" style="height: 450px; object-fit: cover;" alt="Slide 3">
+                                <div class="carousel-caption d-none d-md-block bg-black bg-opacity-50 rounded-4 p-4 mb-4">
+                                    <h3 class="fw-bold text-white">Team Excellence</h3>
+                                    <p>Collaboration that drives results.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#gxSlider1" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#gxSlider1" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                `
             },
             {
                 id: 'image-carousel-grid',
@@ -1346,7 +1357,7 @@
                 id: 'html-code-widget',
                 label: '<i class="bi bi-code-slash fs-4 d-block mb-1"></i>Raw HTML',
                 category: 'Basics',
-                content: { type: 'custom-code' }
+                content: { type: 'gx-custom-code' }
             }
         ];
     }
@@ -1390,6 +1401,36 @@
                         }
                     }
                 });
+            });
+
+            // ============================================================
+            // CRITICAL FIX: Override 'row' and 'column' to use <div>
+            // GrapesJS defaults 'row' to <tr> and 'column' to <td>.
+            // When the HTML is serialized and reloaded, the browser's HTML
+            // parser strips orphan <tr> tags (outside a <table>), causing
+            // the entire .row wrapper to disappear and columns to lose
+            // their Bootstrap grid context — resulting in the "shift left" bug.
+            // ============================================================
+            editor.DomComponents.addType('row', {
+                model: {
+                    defaults: {
+                        tagName: 'div',
+                        draggable: true,
+                        droppable: true,
+                        attributes: { class: 'row' },
+                    }
+                }
+            });
+
+            editor.DomComponents.addType('column', {
+                model: {
+                    defaults: {
+                        tagName: 'div',
+                        draggable: true,
+                        droppable: true,
+                        attributes: { class: 'col' },
+                    }
+                }
             });
 
             // Recent Posts Component
@@ -1751,7 +1792,7 @@
                     defaults: {
                         tagName: 'h2',
                         classes: ['fw-bold'],
-                        style: { padding: '15px', margin: '0 !important' },
+                        style: { },
                         content: 'Section Title Here',
                         traits: [
                             {
@@ -1854,39 +1895,155 @@
                 }
             });
 
+            // ---- Bootstrap Carousel Component Type Registration ----
+            // This ensures GrapesJS recognizes the carousel when reloading saved HTML.
+            editor.DomComponents.addType('bootstrap-carousel', {
+                isComponent: el => el.classList && el.classList.contains('carousel') && el.classList.contains('slide'),
+                model: {
+                    defaults: {
+                        name: 'Image Slider',
+                        droppable: true,
+                        draggable: true,
+                    }
+                }
+            });
+
+            editor.DomComponents.addType('bootstrap-image-carousel', {
+                isComponent: el => el.classList && el.classList.contains('gx-img-carousel'),
+                model: {
+                    defaults: {
+                        name: 'Image Carousel',
+                        droppable: true,
+                        draggable: true,
+                    }
+                }
+            });
+
+            editor.DomComponents.addType('bootstrap-testi-carousel', {
+                isComponent: el => el.classList && el.classList.contains('gx-testi-carousel'),
+                model: {
+                    defaults: {
+                        name: 'Testimonial Carousel',
+                        droppable: true,
+                        draggable: true,
+                    }
+                }
+            });
+
+            // 0. Force Vertical Layout via Global CSS Injection (Targeting Exact HTML Structure)
+            if (!document.getElementById('gx-builder-custom-css')) {
+                const style = document.createElement('style');
+                style.id = 'gx-builder-custom-css';
+                style.innerHTML = `
+                    .gjs-trt-trait__wrp { display: block !important; padding: 10px 5px !important; }
+                    .gjs-trt-trait { display: block !important; width: 100% !important; }
+                    .gjs-label-wrp { display: block !important; width: 100% !important; margin-bottom: 8px !important; }
+                    .gjs-label { display: block !important; width: 100% !important; font-weight: bold !important; color: #ccc !important; text-align: left !important; }
+                    .gjs-field-wrp { display: block !important; width: 100% !important; }
+                    .gjs-field-textarea { min-height: 250px !important; width: 100% !important; border-radius: 4px !important; }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Custom Trait Type for Raw HTML
+            editor.TraitManager.addType('gx-code-textarea', {
+                noLabel: false,
+                event: 'keyup change', 
+                getInputEl() {
+                    if (!this.inputEl) {
+                        this.inputEl = document.createElement('textarea');
+                        this.inputEl.classList.add('gjs-field', 'gjs-field-textarea');
+                        this.inputEl.setAttribute('placeholder', 'Paste your code here...');
+                        this.inputEl.style.width = '100%';
+                        this.inputEl.style.minHeight = '250px';
+                        this.inputEl.style.display = 'block';
+                    }
+                    return this.inputEl;
+                },
+                onRender() {
+                    // CSS Injection handles this now based on exact HTML structure
+                },
+                onEvent({ elInput, component }) {
+                    const value = elInput.value || '';
+                    component.set('data-gx-code', value);
+                },
+                onUpdate({ elInput, component }) {
+                    // FORCE SYNC: Read directly from attribute if model is empty
+                    let val = component.get('data-gx-code') || component.getAttributes()['data-gx-code'] || '';
+                    let display = val;
+                    if (val.indexOf('base64:') === 0) {
+                        try { display = btou(val.substring(7)); } catch(e) {}
+                    }
+                    if (elInput.value !== display) {
+                        elInput.value = display;
+                    }
+                }
+            });
+
             // Custom Code Component for Raw HTML/JS/CSS
-            editor.DomComponents.addType('custom-code', {
+            editor.DomComponents.addType('gx-custom-code', {
                 isComponent: el => (el.getAttribute && el.getAttribute('class') && el.getAttribute('class').includes('custom-code-container')),
                 model: {
                     defaults: {
                         name: 'Raw HTML (Code)',
                         tagName: 'div',
-                        attributes: { class: 'custom-code-container', 'data-gjs-type': 'custom-code' },
+                        attributes: { class: 'custom-code-container', 'data-gjs-type': 'gx-custom-code', 'data-gx-code': '' },
                         droppable: false,
                         editable: false,
+                        code: '', // Internal property for transparency
+                        content: '<div class="p-4 bg-dark text-white rounded-3 text-center" style="border: 3px dashed rgba(255,255,255,0.4); cursor:pointer;"><i class="bi bi-code-square fs-1 d-block mb-2 text-warning"></i><span class="small fw-bold">RAW HTML CONTENT</span><br><span class="opacity-50 small">Click & open Settings Panel (Gear Icon) to edit code</span></div>',
                         traits: [
                             {
-                                type: 'textarea',
+                                type: 'gx-code-textarea',
                                 label: 'HTML/JS/CSS Code',
-                                name: 'data-code',
+                                name: 'data-gx-code',  // Unique name
                                 placeholder: 'Paste your HTML, <style> or <script> tags here...'
                             }
                         ],
                     },
                     init() {
-                        console.log('Raw HTML Component Initialized');
-                        // Secondary check to ensure traits are loaded
-                        if (this.getTraits().length === 0) {
-                            this.addTrait({
-                                type: 'textarea',
-                                label: 'HTML/JS/CSS Code',
-                                name: 'data-code',
-                                placeholder: 'Paste your HTML, <style> or <script> tags here...'
-                            });
+                    },
+                    updated(property, value, prev) {
+                        if (property === 'data-gx-code') {
+                            const code = value || '';
+                            if (code && code.indexOf('base64:') !== 0) {
+                                const b64 = 'base64:' + utob(code);
+                                this.addAttributes({ 'data-gx-code': b64 });
+                            }
+                            this.renderContent();
                         }
+                    },
+                    renderContent() {
+                        const code = this.get('data-gx-code') || '';
+                        let displayCode = code;
+                        if (code.indexOf('base64:') === 0) {
+                            try { displayCode = btou(code.substring(7)); } catch(e) {}
+                        }
+
+                        let preview = (displayCode || '').substring(0, 100).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        if (preview.length >= 100) preview += '...';
                         
-                        this.set('content', '<div class="p-4 bg-dark text-white rounded-3 text-center" style="border: 3px dashed rgba(255,255,255,0.4); cursor:pointer;"><i class="bi bi-code-square fs-1 d-block mb-2 text-warning"></i><span class="small fw-bold">RAW HTML CONTENT</span><br><span class="opacity-50 small">Click & open Settings Panel (Gear Icon) to edit code</span></div>');
+                        this.set('content', `
+                            <div class="p-4 bg-dark text-white rounded-3 text-center" style="border: 3px dashed rgba(255,255,255,0.4); cursor:pointer;">
+                                <i class="bi bi-code-square fs-1 d-block mb-2 text-warning"></i>
+                                <span class="small fw-bold">RAW HTML CONTENT</span><br>
+                                <div class="mt-2 opacity-50 extra-small text-truncate" style="font-family: monospace; max-width: 200px; margin: 0 auto;">${preview || 'Click to edit code'}</div>
+                            </div>
+                        `);
                     }
+                },
+                view: {
+                    init() {
+                        this.listenTo(this.model, 'change:content', this.render);
+                    }
+                }
+            });
+
+            // Global fallback watcher
+            editor.on('component:update:data-gx-code', (model) => {
+                const code = model.get('data-gx-code');
+                if (code && code.indexOf('base64:') !== 0) {
+                    model.addAttributes({ 'data-gx-code': 'base64:' + utob(code) });
                 }
             });
 
@@ -2530,7 +2687,7 @@
                     if (selected && selected.is('row')) {
                         selected.append({
                             type: 'column',
-                            style: { padding: '15px', margin: '0 !important' },
+                            style: { },
                             attributes: { class: 'col-md-4' } // Reasonable default size
                         });
                     }
@@ -3569,51 +3726,25 @@
                     console.log('[Builder] Modal is fully shown. Initializing editor...');
                     
                     const injectContent = () => {
-                        if (currentContent && currentContent.trim() !== '') {
-                            console.log('[Builder] Preparing to set components...');
+                        const data = currentContent;
+                        if (data && data.html) {
+                            console.log('[Builder] Preparing to set components and styles directly...');
                             
                             try {
                                 editor.CssComposer.clear();
-                                const wrapper = editor.DomComponents.getWrapper();
-                                wrapper.empty();
+                                editor.DomComponents.clear();
 
-                                console.log('[Builder] Using GrapesJS Native AST Parser...');
-                                const parsed = editor.Parser.parseHtml(currentContent);
-                                
-                                console.log('[Builder] Parsed HTML nodes:', parsed.html);
-                                console.log('[Builder] Parsed CSS rules:', parsed.css);
-
-                                if (parsed.css) {
-                                    editor.setStyle(parsed.css);
-                                    console.log('[Builder] Injected native CSS rules.');
+                                console.log('[Builder] Setting CSS Style...');
+                                if (data.css) {
+                                    editor.setStyle(data.css);
                                 }
 
-                                if (parsed.html) {
-                                    wrapper.append(parsed.html);
-                                    console.log('[Builder] Injected native HTML components.');
-                                }
+                                console.log('[Builder] Setting HTML Components...');
+                                editor.setComponents(data.html);
 
-                                // FORCE RELOAD DYNAMIC COMPONENTS
-                                setTimeout(() => {
-                                    console.log('[Builder] Forcing dynamic view updates...');
-                                    const components = editor.DomComponents.getWrapper().find('.recent-posts-container');
-                                    components.forEach(comp => {
-                                        if (comp.view && comp.view.onUpdate) {
-                                            comp.view.onUpdate();
-                                        } else {
-                                            // Fallback if view not ready: find the element in iframe and call loader
-                                            const el = comp.getAlp ? comp.getAlp() : comp.getEl();
-                                            if (el) window.loadDynamicBuilderContent(el);
-                                        }
-                                    });
-                                    editor.refresh();
-                                }, 300);
-                                
-                                const finalOutput = editor.getHtml();
-                                console.log('[Builder] Injection Success. Output Length: ' + finalOutput.length);
-                                console.log('[Builder] Final Check Output Content:\n', finalOutput);
+                                console.log('[Builder] Direct Injection Success.');
                             } catch (err) {
-                                console.error('[Builder] Native Parse Error:', err);
+                                console.error('[Builder] Direct Injection Error:', err);
                             }
                         } else {
                             console.log('[Builder] No content to inject. Setting empty canvas.');
@@ -3731,7 +3862,7 @@
                 const newRow = wrapper.append({
                     type: 'row',
                     attributes: { class: 'row' },
-                    style: { padding: '15px 0', margin: '0 !important' },
+                    style: { },
                     components: components
                 });
 
@@ -3765,7 +3896,16 @@
                     if (!editor) return;
 
                     if (editor) {
-                        // BEFORE SYNC: Clean up preloader artifacts from the canvas so they don't pollute the main editor
+                        // FORCE SYNC ALL CUSTOM CODE BLOCKS BEFORE EXPORT
+                        const customComps = editor.DomComponents.getWrapper().find('.custom-code-container');
+                        customComps.forEach(comp => {
+                            const code = comp.get('data-gx-code');
+                            if (code && code.indexOf('base64:') !== 0) {
+                                comp.addAttributes({ 'data-gx-code': 'base64:' + utob(code) });
+                            }
+                        });
+
+                        // BEFORE SYNC: Clean up preloader artifacts
                         const dynamicComps = editor.DomComponents.getWrapper().find('.recent-posts-container');
                         dynamicComps.forEach(comp => {
                             const el = comp.getEl();
@@ -3780,8 +3920,8 @@
 
                     const html = editor.getHtml();
                     const css = editor.getCss();
-                    const fullContent = '<style>' + css + '</style>' + html;
-                    exportContent(fullContent);
+                    const js = editor.getJs();
+                    exportContent(html, css, js);
 
                     if (window.toastr) window.toastr.success('Layout synchronized with main editor.');
                     

@@ -1,5 +1,19 @@
 <?php
 defined('GX_LIB') or die('Direct Access Not Allowed!');
+/**
+ * GeniXCMS - Content Management System
+ *
+ * PHP Based Content Management System and Framework
+ * 
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
+ */
 
 if (User::access(1)) {
     $data['sitetitle'] = "Widgets Management";
@@ -10,13 +24,13 @@ if (User::access(1)) {
             $data['alertDanger'][] = _("Invalid token.");
         } else {
             Query::table('widgets')->insert([
-                'name'     => Typo::cleanX($_POST['name']),
-                'title'    => Typo::cleanX($_POST['title']),
-                'type'     => Typo::cleanX($_POST['type']),
+                'name' => Typo::cleanX($_POST['name']),
+                'title' => Typo::cleanX($_POST['title']),
+                'type' => Typo::cleanX($_POST['type']),
                 'location' => Typo::cleanX($_POST['location']),
-                'content'  => $_POST['content'],
-                'status'   => 1,
-                'sorting'  => (int)$_POST['sorting'],
+                'content' => $_POST['content'],
+                'status' => 1,
+                'sorting' => (int) $_POST['sorting'],
             ]);
             $data['alertSuccess'][] = _("Widget created successfully.");
         }
@@ -26,13 +40,13 @@ if (User::access(1)) {
         if (!Token::validate($_POST['token'])) {
             $data['alertDanger'][] = _("Invalid token.");
         } else {
-            Query::table('widgets')->where('id', (int)$_POST['id'])->update([
-                'name'     => Typo::cleanX($_POST['name']),
-                'title'    => Typo::cleanX($_POST['title']),
-                'type'     => Typo::cleanX($_POST['type']),
+            Query::table('widgets')->where('id', (int) $_POST['id'])->update([
+                'name' => Typo::cleanX($_POST['name']),
+                'title' => Typo::cleanX($_POST['title']),
+                'type' => Typo::cleanX($_POST['type']),
                 'location' => Typo::cleanX($_POST['location']),
-                'content'  => $_POST['content'],
-                'sorting'  => (int)$_POST['sorting'],
+                'content' => $_POST['content'],
+                'sorting' => (int) $_POST['sorting'],
             ]);
             $data['alertSuccess'][] = _("Widget updated.");
         }

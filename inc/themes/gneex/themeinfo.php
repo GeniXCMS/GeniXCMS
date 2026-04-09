@@ -2,7 +2,7 @@
 /*
  * Name: GneeX
  * Desc: GneeX Theme by GeniXCMS
- * Version: 2.0.0
+ * Version: 2.1.0
  * Build: 2.0.0
  * Developer: GeniXCMS
  * URI: https://github.com/GeniXCMS

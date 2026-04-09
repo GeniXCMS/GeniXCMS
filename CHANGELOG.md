@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2026-04-08
+
+### Added
+- **GxEditor Math Equation Editor**: Integrated KaTeX for professional LaTeX-based mathematical rendering. Features a real-time preview, custom Sigma-Root (&Sigma;&radic;) toolbar icon, and double-click editing support.
+- **GxEditor Table Wizard**: Replaced legacy `prompt()` with a comprehensive Bootstrap-based modal for configurable table insertion (rows, columns, headers, and striped/bordered styles).
+- **Dynamic Builder & GxEditor Synchronization**: Implemented a robust `change` event listener and `htmlToShortcode` integration, ensuring seamless data transfer between visual building and textual editing without data loss.
+- **Improved Inline Toolbar**: Fixed and standardized the inline toolbar in "Classic Mode" for headings (H1-H3) and paragraphs using the correct `formatBlock` command architecture.
+- **Programmatic CSP Whitelisting**: Moved `System::securityHeaders()` to occur after theme and module initialization, enabling developers to dynamically modify Content Security Policy rules via the `system_security_headers_args` hook.
+- **BSMag Theme Dark Mode Extensions**: Implemented comprehensive dark mode support for `blog-post-meta` and the entire comments section (`custom-comment-wrap`), ensuring consistent editorial aesthetics across all color modes.
+- **Dynamic Page Layouts**: Implemented a robust per-page layout selection system. Theme developers can now create `layout-*.latte` templates which are automatically detected and selectable in the admin dashboard.
+- **Documentation**: Added comprehensive guide for creating custom theme layouts in `genixcms-docs/docs/how-to/create-theme.md`.
+
+### Fixed
+- **WYSIWYG Editor Registry**: Resolved a bug where `summernote` and `editorjs` would disappear from settings when the global editor toggle was off. Standardized initialization via a new `Editor::loadDefaults()` method.
+- **Asset Loading Lifecycle**: Fixed a critical bug in `BaseControl` where premature `Site::footer()` calls in the constructor would clear the asset queue before rendering, causing missing scripts (like Bootstrap JS) on the frontend.
+- **BSMag Theme Asset Paths**: Corrected broken path for `color-modes.js` (now v2.1.0) to correctly point to theme-internal assets, resolving MIME type errors and restoring theme switching functionality.
+- **Admin UI Polish**: Corrected inconsistent spacing and border rendering in the page and post creation forms for a more unified "GeniXCMS 2.0" aesthetic.
+- **Builder Compatibility (HTMLPurifier)**: Reconfigured `HTMLPurifier` in `Typo::cleanX()` to allow `<style>` tags and common CSS/Builder attributes (`class`, `id`, `style`, `data-*`). This prevents visual builders like GrapesJS from losing their styles upon saving.
+- **GxEditor Layout Refinement**: Streamlined the color picker UI and refined block margins for a more balanced and professional authoring workspace.
+
 ## [2.1.0] - 2026-04-07
 
 ### Added

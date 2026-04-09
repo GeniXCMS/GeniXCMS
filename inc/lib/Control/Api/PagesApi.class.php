@@ -5,8 +5,16 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * Pages API Resource Controller.
  * 
- * @since 1.1.0
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class PagesApi
 {
     /**
@@ -17,7 +25,8 @@ class PagesApi
     {
         if ($id) {
             $page = Pages::find($id);
-            if (!$page) return Api::error(404, 'Page not found');
+            if (!$page)
+                return Api::error(404, 'Page not found');
             return Api::success($page);
         }
 
@@ -31,9 +40,11 @@ class PagesApi
     public function submit()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data) return Api::error(400, 'Invalid JSON input');
+        if (!$data)
+            return Api::error(400, 'Invalid JSON input');
 
-        if (empty($data['title'])) return Api::error(422, 'Title is required');
+        if (empty($data['title']))
+            return Api::error(422, 'Title is required');
         $data['type'] = 'page';
 
         $res = Pages::create($data);
@@ -50,10 +61,12 @@ class PagesApi
     public function update($id)
     {
         $page = Pages::find($id);
-        if (!$page) return Api::error(404, 'Page not found');
+        if (!$page)
+            return Api::error(404, 'Page not found');
 
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data) return Api::error(400, 'Invalid JSON input');
+        if (!$data)
+            return Api::error(400, 'Invalid JSON input');
 
         foreach ($data as $k => $v) {
             $page->{$k} = $v;
@@ -72,7 +85,8 @@ class PagesApi
     public function delete($id)
     {
         $page = Pages::find($id);
-        if (!$page) return Api::error(404, 'Page not found');
+        if (!$page)
+            return Api::error(404, 'Page not found');
 
         if ($page->destroy()) {
             return Api::success(null, 'Page deleted successfully');

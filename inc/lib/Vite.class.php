@@ -1,15 +1,21 @@
 <?php
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
-
 /**
- * Vite Asset Bundler Helper for GeniXCMS.
- * 
+ * GeniXCMS - Vite Asset Bundler Helper.
+ *
  * Enables seamless integration with Vite dev server and production builds.
  * Supports hot module replacement (HMR) and manifest-based production assets.
- * 
- * @since 1.1.0
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class Vite
 {
     private static $dev_server = 'http://localhost:5173';
@@ -53,7 +59,7 @@ class Vite
             if (isset($manifest[$entry])) {
                 $file = $manifest[$entry]['file'];
                 echo "<script type=\"module\" src=\"" . Site::$url . "/assets/dist/{$file}\"></script>\n";
-                
+
                 // Load CSS chunks
                 if (isset($manifest[$entry]['css'])) {
                     foreach ($manifest[$entry]['css'] as $css) {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head>
-    <script src="{$site_url}assets/vendor/bootstrap/js/color-modes.js"></script>
+    <script src="{$theme_url}js/color-modes.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {$site_meta|noescape}
@@ -125,6 +125,28 @@
         /* Sidebar Widget Styling */
         .sidebar-widgets .widget { background: #fff; border-radius: 20px; padding: 30px; margin-bottom: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
         .sidebar-widgets .widget-title { font-weight: 900; letter-spacing: -0.5px; margin-bottom: 20px; border-bottom: 2px solid var(--primary-color); display: inline-block; }
+
+        /* Dark Mode Support Extensions */
+        [data-bs-theme=dark] .blog-post-meta { background-color: rgba(255,255,255,0.05) !important; color: #94a3b8 !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+        [data-bs-theme=dark] .blog-post-meta .text-muted, [data-bs-theme=dark] .blog-post-meta .text-secondary { color: #94a3b8 !important; }
+        [data-bs-theme=dark] .custom-comment-wrap { background-color: rgba(255,255,255,0.02) !important; border-color: rgba(255,255,255,0.1) !important; }
+        [data-bs-theme=dark] .comments-wrapper form, 
+        [data-bs-theme=dark] .comments-list-wrapper .d-flex { 
+            background-color: #1e293b !important; 
+            border-color: rgba(255,255,255,0.1) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+        }
+        [data-bs-theme=dark] .comments-list-wrapper h4 { color: #f1f5f9 !important; }
+        [data-bs-theme=dark] .comments-list-wrapper .flex-grow-1 { color: #cbd5e1 !important; }
+        [data-bs-theme=dark] .comments-list-wrapper .meta-desc { background: #334155 !important; color: #94a3b8 !important; }
+        [data-bs-theme=dark] .comments-list-wrapper img.media-object { border-color: #334155 !important; }
+        [data-bs-theme=dark] .comments-list-wrapper .badge.text-bg-primary { background: #334155 !important; color: #cbd5e1 !important; }
+        
+        /* Sidebar & Cards Dark Mode */
+        [data-bs-theme=dark] .sidebar-widgets .widget { background: #1e293b !important; border-color: rgba(255,255,255,0.1) !important; }
+        [data-bs-theme=dark] .card, [data-bs-theme=dark] .hover-up { background-color: #1e293b !important; border-color: rgba(255,255,255,0.1) !important; }
+        [data-bs-theme=dark] .card-title a { color: #f1f5f9 !important; }
+        [data-bs-theme=dark] .btn-light { background-color: #334155 !important; border-color: #475569 !important; color: #f1f5f9 !important; }
     "}
     {OptionsBuilder::generateFrontendCSS($opt, [
         'themeUrl' => $theme_url,

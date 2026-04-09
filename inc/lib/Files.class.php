@@ -5,22 +5,23 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.2 build date 20150313
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class Files
 {
+    /**
+     * Recursively deletes a directory and all of its contents (files and subdirectories).
+     *
+     * @param string $dir The absolute path to the directory.
+     * @return bool       True if deleted successfully.
+     */
     public static function delTree($dir)
     {
         try {
@@ -35,22 +36,21 @@ class Files
         }
     }
 
+    /**
+     * @deprecated 2.0.0 Assets are now managed via the Asset class.
+     * @return string
+     */
     public static function elfinderLib()
     {
-        /**
-         * @deprecated 2.0.0 - Assets are now managed via Asset class
-         * and automatically enqueued in admin via Asset::init()
-         */
         return '';
     }
 
     /**
-     * A simple function to check file from bad codes.
+     * Scans a file (local or remote) for potentially malicious code patterns.
+     * Checks for common PHP injection, base64 encoding, and dangerous HTML/JS tags.
      *
-     * @param (string) $file - file path.
-     * @return  (boolean)
-     *
-     * @author Yousef Ismaeil - Cliprz[at]gmail[dot]com.
+     * @param string $file Path to the file or URL.
+     * @return bool        True if the file is considered clean.
      */
     public static function isClean($file): bool
     {
@@ -109,6 +109,12 @@ class Files
         }
     }
 
+    /**
+     * Checks if a remote URL exists by performing a HEAD request via cURL.
+     *
+     * @param string $url The URL to check.
+     * @return bool       True if the server returns a 200 OK status.
+     */
     public static function remoteExist($url)
     {
         $curl = curl_init($url);
@@ -136,6 +142,12 @@ class Files
         return $ret;
     }
 
+    /**
+     * Determines if a given string is a remote URL or a local file path.
+     *
+     * @param string $path The path to check.
+     * @return bool        True if it is a remote path (contains //).
+     */
     public static function isRemote($path)
     {
         if (strpos($path, '//') !== false) {

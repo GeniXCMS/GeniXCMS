@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140925
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -44,9 +39,6 @@ class System
      * System Constructor.
      * Initializing the system, check the config file.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public function __construct()
@@ -57,9 +49,6 @@ class System
 
         /* Load config file */
         self::config('config');
-
-        /* Set Security Headers */
-        self::securityHeaders();
 
         /* Initiate core services in Container */
         Container::set('db', new Db());
@@ -106,13 +95,18 @@ class System
         Asset::init();
 
         /* Initiate Editor */
-        Editor::init();
+        if (Options::v('use_editor') == 'on') {
+            Editor::init();
+        }
 
         /* Run Cron : exec scheduled tasks */
         Cron::run();
 
         /* Load themes configuration (function.php may call AdminMenu::addChild()) */
         new Theme();
+
+        /* Set Security Headers (Moved here so Modules and Themes can hook into it) */
+        self::securityHeaders();
 
 
         /* Attach Hooks : admin_page_notif_action */
@@ -124,13 +118,9 @@ class System
     }
 
     /**
-     * System Library Loader.
-     * This will include library which is called.
+     * Includes a system library file from the GX_LIB directory.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
-     * @since 0.0.1
+     * @param string $var Class name to load (without extension).
      */
     public static function lib($var)
     {
@@ -140,6 +130,12 @@ class System
         }
     }
 
+    /**
+     * Initializes the system localization using Gettext.
+     * Handles differences between Linux (LC_MESSAGES) and Windows (putenv).
+     *
+     * @param string $vars Locale identifier (e.g. 'en_US', 'id_ID').
+     */
     public static function lang($vars)
     {
         $dir = GX_PATH . '/inc/lang/locale';
@@ -155,6 +151,11 @@ class System
         textdomain("genixcms");
     }
 
+    /**
+     * Legacy language file loader (PHP-based translations).
+     *
+     * @param string $vars Language identifier.
+     */
     public static function lang2($vars)
     {
         $file = GX_PATH . '/inc/lang/' . $vars . '.lang.php';
@@ -167,10 +168,10 @@ class System
 
     /**
      * Set System Security Headers.
-     * 
+     *
      * This method initializes various security headers to protect GeniXCMS from common web exploits.
      * It includes a central Content Security Policy (CSP) that can be extended by modules.
-     * 
+     *
      * @since 2.0.0
      * @hook system_security_headers_args (Filter) - Modifier of CSP mapping array.
      */
@@ -230,6 +231,11 @@ class System
         header("Content-Security-Policy: " . trim($csp_string));
     }
 
+    /**
+     * Includes a configuration file from the inc/config directory.
+     *
+     * @param string $var Config file name (without extension).
+     */
     public static function config($var)
     {
         $file = GX_PATH . '/inc/config/' . $var . '.php';
@@ -238,6 +244,11 @@ class System
         }
     }
 
+    /**
+     * Checks if the primary system configuration file exists.
+     *
+     * @return bool True if config.php is present.
+     */
     public static function existConf()
     {
         if (file_exists(GX_PATH . '/inc/config/config.php')) {
@@ -248,6 +259,11 @@ class System
     }
 
     // At the beginning of each page call these functions
+    /**
+     * Initializes output buffering with optional minification.
+     *
+     * @param bool $minify Whether to enable HTML minification (default: false).
+     */
     public static function gZip($minify = false)
     {
         if ($minify) {
@@ -262,7 +278,10 @@ class System
         ob_implicit_flush(0);
     }
 
-    // Call this function to output everything as gzipped content.
+    /**
+     * Flushes the output buffer with GZip compression if supported by the client.
+     * Automatically handles Vary headers and Content-Encoding.
+     */
     public static function Zipped()
     {
         // global $_SERVER['HTTP_ACCEPT_ENCODING'];
@@ -298,10 +317,19 @@ class System
         }
     }
 
+    /**
+     * Admin Dashboard Controller (Placeholder).
+     */
     public static function admin()
     {
     }
 
+    /**
+     * Includes an administrative PHP fragment.
+     *
+     * @param string $vars Fragment name (without extension).
+     * @param mixed  $data Optional data buffer to pass to the fragment.
+     */
     public static function inc($vars, $data = '')
     {
         $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
@@ -312,6 +340,11 @@ class System
         }
     }
 
+    /**
+     * Returns the full system version and release status.
+     *
+     * @return string Version string.
+     */
     public static function v()
     {
         return self::$version . ' ' . self::$v_release;
@@ -319,6 +352,14 @@ class System
 
 
 
+    /**
+     * Processes and renders administrative system alerts.
+     * Transforms alert arrays into Toast notifications. In administrative contexts,
+     * alerts are queued for execution in the footer.
+     *
+     * @param array $data Alert mapping array (Success, Danger, Info, Warning).
+     * @return string      JavaScript block containing toast triggers.
+     */
     public static function alert($data)
     {
         static $seen_msgs = [];
@@ -375,11 +416,19 @@ class System
     //     echo $data[$data['var']];
     // }
 
+    /**
+     * Echoes the accumulated administrative asset string.
+     */
     public static function loadAdminAsset()
     {
         echo self::$admin_asset;
     }
 
+    /**
+     * Appends an asset (JS/CSS) to the administrative asset queue.
+     *
+     * @param string $asset HTML markup for the asset.
+     */
     public static function adminAsset($asset)
     {
         $admin_asset = self::$admin_asset;
@@ -387,6 +436,12 @@ class System
         self::$admin_asset = $admin_asset;
     }
 
+    /**
+     * Returns a JSON-formatted toolbar configuration for the Summernote editor.
+     *
+     * @param string $mode Toolbar complexity ('mini', 'light', 'full').
+     * @return string      JS array fragment for Summernote toolbar.
+     */
     public static function toolbar($mode = 'mini')
     {
         if ($mode == 'mini') {
@@ -421,6 +476,12 @@ class System
         return $toolbar;
     }
 
+    /**
+     * Sets the global toolbar mode preference.
+     *
+     * @param string $mode Toolbar mode identifier.
+     * @return string      The set mode.
+     */
     public static function toolbarMode($mode)
     {
         self::$toolbar_mode = $mode;

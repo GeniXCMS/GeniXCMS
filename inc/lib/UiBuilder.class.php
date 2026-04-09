@@ -1,25 +1,42 @@
 <?php
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
- * UiBuilder Class
+ * GeniXCMS - UiBuilder Class
  *
  * A core class to build dynamic backend web elements based on arrays.
  * Operates similarly to OptionsBuilder but is designed for generic backend
  * module pages (dashboards, tables, forms, stat cards) rather than just options.
  *
- * @since 2.0.0
+ * @since 2.0.0 build date 2026
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class UiBuilder
 {
     private array $schema;
     private string $activeTab;
 
+    /**
+     * UiBuilder Constructor.
+     *
+     * @param array $schema The UI schema definition defining tabs, headers, and elements.
+     */
     public function __construct(array $schema = [])
     {
         $this->schema = $schema;
         $this->activeTab = isset($_GET['tab']) ? Typo::cleanX($_GET['tab']) : ($schema['default_tab'] ?? '');
     }
 
+    /**
+     * Renders the module header including title, subtitle, and action buttons.
+     * The header is styled as a sticky-top element consistent with GeniXCMS admin standards.
+     */
     public function renderHeader(): void
     {
         if (isset($this->schema['header'])) {
@@ -36,7 +53,7 @@ class UiBuilder
             }
             echo '    </div>';
             echo '    <div class="col-md-6 text-md-end">';
-            
+
             // Handle Multiple Buttons or Single Button
             $buttons = [];
             if (isset($h['buttons'])) {
@@ -87,6 +104,10 @@ class UiBuilder
         }
     }
 
+    /**
+     * Orchestrates the rendering of the entire module page.
+     * Handles containers, headers, tab navigation, and tab content.
+     */
     public function render(): void
     {
         echo '<div class="container-fluid py-4">';
@@ -98,14 +119,14 @@ class UiBuilder
         if (isset($this->schema['tabs']) && count($this->schema['tabs']) > 0) {
             $tabMode = $this->schema['tab_mode'] ?? 'link';
             $tabStyle = $this->schema['tab_style'] ?? 'pills';
-            
-            $tabClass = match($tabStyle) {
+
+            $tabClass = match ($tabStyle) {
                 'tabs' => 'nav-tabs border-0 px-4 pt-4',
                 'modern' => 'nav-tabs border-0 border-bottom mb-5 modern-tabs',
                 default => 'nav-pills gap-2 mb-4'
             };
-            
-            $linkClass = match($tabStyle) {
+
+            $linkClass = match ($tabStyle) {
                 'tabs' => 'rounded-top-4 px-4 py-3 bg-white border-bottom-0',
                 'modern' => 'border-0 border-bottom border-3 border-transparent bg-transparent px-4 py-3 text-muted',
                 default => 'rounded-pill px-4 mb-4'
@@ -130,12 +151,13 @@ class UiBuilder
                 if (empty($this->activeTab) && $first) {
                     $this->activeTab = $id;
                 }
-                
+
                 $activeClass = ($this->activeTab === $id) ? 'active shadow-none' : 'text-secondary';
-                if ($tabStyle === 'pills' && $this->activeTab === $id) $activeClass .= ' shadow-sm';
-                
+                if ($tabStyle === 'pills' && $this->activeTab === $id)
+                    $activeClass .= ' shadow-sm';
+
                 $icon = isset($tab['icon']) ? "<i class=\"{$tab['icon']} me-1\"></i> " : "";
-                
+
                 if ($tabMode === 'js') {
                     $selected = ($this->activeTab === $id) ? 'true' : 'false';
                     echo "<li class=\"nav-item\" role=\"presentation\">
@@ -146,20 +168,20 @@ class UiBuilder
                             </button>
                           </li>";
                 } else {
-                    $url = $tab['url'] ?? "index.php?page=" . ($_GET['page'] ?? '') . (isset($_GET['mod']) ? "&mod=".$_GET['mod'] : "") . "&tab={$id}";
+                    $url = $tab['url'] ?? "index.php?page=" . ($_GET['page'] ?? '') . (isset($_GET['mod']) ? "&mod=" . $_GET['mod'] : "") . "&tab={$id}";
                     echo "<li class=\"nav-item\"><a class=\"nav-link fw-bold {$linkClass} {$activeClass}\" href=\"{$url}\">{$icon}{$tab['label']}</a></li>";
                 }
                 $first = false;
             }
             echo '</ul>';
-            
+
             if (isset($this->schema['card_wrapper']) && $this->schema['card_wrapper']) {
                 if ($tabStyle !== 'modern') {
                     echo '    </div>';
                     echo '    <div class="card-body p-5 pt-4">';
                 } else {
-                   echo '    </div>';
-                   echo '    <div class="card-body p-5 pt-0">';
+                    echo '    </div>';
+                    echo '    <div class="card-body p-5 pt-0">';
                 }
             }
 
@@ -174,21 +196,21 @@ class UiBuilder
                     echo '</div>';
                 }
                 echo '</div>';
-                
+
                 if (isset($this->schema['card_wrapper']) && $this->schema['card_wrapper']) {
                     echo '    </div>';
                     echo '</div>';
                 }
-                
+
                 // Render direct content/modals even if tabs are used (for JS mode)
                 if (isset($this->schema['content'])) {
                     foreach ($this->schema['content'] as $element) {
                         $this->renderElement($element);
                     }
                 }
-                
+
                 echo '</div>'; // close container-fluid
-                return; 
+                return;
             }
         }
 
@@ -198,13 +220,13 @@ class UiBuilder
             foreach ($content as $element) {
                 $this->renderElement($element);
             }
-            
+
             if (isset($this->schema['card_wrapper']) && $this->schema['card_wrapper']) {
                 echo '    </div>';
                 echo '</div>';
             }
         }
-        
+
         // Render direct content/modals (for non-JS tab mode or no tabs)
         if (isset($this->schema['content'])) {
             foreach ($this->schema['content'] as $element) {
@@ -215,6 +237,14 @@ class UiBuilder
         echo '</div>'; // container-fluid
     }
 
+    /**
+     * Recursively renders a single UI element based on its type.
+     * Supports a wide variety of types including stats cards, tables, forms, charts, and layout containers.
+     *
+     * @param array $el The element definition.
+     * @param bool $return If true, returns the HTML as a string instead of echoing.
+     * @return string The rendered HTML if $return is true, otherwise an empty string.
+     */
     public function renderElement(array $el, bool $return = false): string
     {
         if ($return) {
@@ -248,14 +278,14 @@ class UiBuilder
                 echo '<div class="row g-4 mb-4">';
                 $colors = ['primary', 'success', 'warning', 'info', 'danger', 'secondary'];
                 $size = $el['size'] ?? 'normal';
-                
+
                 foreach ($el['items'] ?? [] as $i => $stat) {
                     $w = $stat['width'] ?? ($size === 'small' ? 2 : 3);
                     $color = $stat['color'] ?? $colors[$i % count($colors)];
                     $icon = $stat['icon'] ?? 'bi bi-reception-4';
                     $val = $stat['value'] ?? '0';
                     $lbl = $stat['label'] ?? '';
-                    
+
                     if ($size === 'small') {
                         echo "
                         <div class=\"col-xl-{$w} col-md-4 col-6\">
@@ -287,7 +317,7 @@ class UiBuilder
                                             <h2 class=\"fw-black m-0 mb-n1 counter-value\" style=\"font-weight:900;\">{$val}</h2>
                                         </div>
                                     </div>";
-                        
+
                         if (isset($stat['footer_link'])) {
                             $fl = $stat['footer_link'];
                             echo "<div class=\"d-flex align-items-center justify-content-between mt-3\">
@@ -310,7 +340,7 @@ class UiBuilder
             case 'card':
                 $h100 = (isset($el['full_height']) && $el['full_height']) ? 'h-100' : '';
                 echo '<div class="card border-0 shadow-sm rounded-5 overflow-hidden mb-4 ' . $h100 . (isset($el['class']) ? " " . $el['class'] : "") . '">';
-                
+
                 if (isset($el['title'])) {
                     $icon = isset($el['icon']) ? "<i class=\"{$el['icon']} me-2 text-primary\"></i> " : "";
                     $sub = isset($el['subtitle']) ? "<p class=\"extra-small text-muted mb-0\" style=\"font-size:0.75rem;\">{$el['subtitle']}</p>" : "";
@@ -338,7 +368,7 @@ class UiBuilder
                     echo "  </div>
                           </div>";
                 }
-                
+
                 $paddingClass = (isset($el['no_padding']) && $el['no_padding']) ? 'p-0' : 'p-4';
                 echo "<div class=\"card-body {$paddingClass}\">";
                 if (isset($el['body_elements'])) {
@@ -349,11 +379,11 @@ class UiBuilder
                     echo $el['html'];
                 }
                 echo "</div>";
-                
+
                 if (isset($el['footer'])) {
                     echo "<div class=\"card-footer bg-light bg-opacity-50 border-0 py-3 text-center border-top\">{$el['footer']}</div>";
                 }
-                
+
                 echo "</div>";
                 break;
 
@@ -361,14 +391,14 @@ class UiBuilder
                 $tabStyle = isset($el['style']) ? $el['style'] : 'pills';
                 $listClass = ($tabStyle === 'pills') ? 'nav-pills gap-2 mb-4' : 'nav-tabs mb-4';
                 $linkClass = ($tabStyle === 'pills') ? 'rounded-pill px-4 py-2 border' : '';
-                
+
                 echo "<ul class=\"nav {$listClass}\" id=\"{$el['id']}\" role=\"tablist\">";
                 $first = true;
                 foreach ($el['tabs'] as $tid => $tab) {
                     $activeClass = ($first) ? 'active' : '';
                     $selected = ($first) ? 'true' : 'false';
                     $icon = isset($tab['icon']) ? "<i class=\"{$tab['icon']} me-2\"></i> " : "";
-                    
+
                     echo "<li class=\"nav-item\" role=\"presentation\">
                             <button class=\"nav-link fw-black text-uppercase tracking-widest fs-9 {$linkClass} {$activeClass}\" 
                                     id=\"tab-{$tid}\" data-bs-toggle=\"tab\" data-bs-target=\"#content-{$tid}\" 
@@ -447,8 +477,8 @@ class UiBuilder
                 $lbl = isset($el['label']) ? "<label class=\"form-label fw-black text-muted extra-small text-uppercase tracking-wider\" style=\"font-size:0.65rem;\">{$el['label']}</label>" : '';
                 $type = $el['input_type'] ?? 'text';
                 $name = $el['name'] ?? '';
-                $val = htmlspecialchars((string)($el['value'] ?? ''));
-                $plc = htmlspecialchars((string)($el['placeholder'] ?? ''));
+                $val = htmlspecialchars((string) ($el['value'] ?? ''));
+                $plc = htmlspecialchars((string) ($el['placeholder'] ?? ''));
                 $req = !empty($el['required']) ? 'required' : '';
                 $help = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
                 echo "<div class=\"mb-4\">{$lbl}<input type=\"{$type}\" name=\"{$name}\" class=\"form-control rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold\" value=\"{$val}\" placeholder=\"{$plc}\" {$req}>{$help}</div>";
@@ -457,7 +487,7 @@ class UiBuilder
             case 'textarea':
                 $lbl = isset($el['label']) ? "<label class=\"form-label fw-black text-muted extra-small text-uppercase tracking-wider\" style=\"font-size:0.65rem;\">{$el['label']}</label>" : '';
                 $name = $el['name'] ?? '';
-                $val = htmlspecialchars((string)($el['value'] ?? ''));
+                $val = htmlspecialchars((string) ($el['value'] ?? ''));
                 $cls = $el['class'] ?? 'form-control bg-light shadow-none border py-2 px-3 fs-8 fw-bold';
                 $rows = $el['rows'] ?? 5;
                 $radius = strpos($cls, 'editor') !== false ? 'rounded-2' : 'rounded-4';
@@ -470,7 +500,7 @@ class UiBuilder
                 $name = $el['name'] ?? '';
                 echo "<div class=\"mb-4\">{$lbl}<select name=\"{$name}\" class=\"form-select rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold\">";
                 foreach ($el['options'] ?? [] as $v => $l) {
-                    $sel = (isset($el['selected']) && (string)$el['selected'] === (string)$v) ? 'selected' : '';
+                    $sel = (isset($el['selected']) && (string) $el['selected'] === (string) $v) ? 'selected' : '';
                     echo "<option value=\"{$v}\" {$sel}>{$l}</option>";
                 }
                 echo "</select>";
@@ -481,11 +511,11 @@ class UiBuilder
                 break;
 
             case 'checkbox':
-                $name    = $el['name'] ?? '';
-                $id      = $el['id'] ?? $name;
-                $label   = $el['label'] ?? '';
+                $name = $el['name'] ?? '';
+                $id = $el['id'] ?? $name;
+                $label = $el['label'] ?? '';
                 $checked = !empty($el['checked']) ? 'checked' : '';
-                $help    = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
+                $help = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
                 echo "<div class=\"mb-4\">
                         <div class=\"form-check form-switch\">
                             <input class=\"form-check-input\" type=\"checkbox\" name=\"{$name}\" id=\"{$id}\" value=\"on\" {$checked}>
@@ -598,12 +628,12 @@ class UiBuilder
             case 'search_group':
                 $action = $el['action'] ?? '';
                 $name = $el['name'] ?? 'q';
-                $val = htmlspecialchars((string)($el['value'] ?? ''));
-                $plc = htmlspecialchars((string)($el['placeholder'] ?? 'Search...'));
+                $val = htmlspecialchars((string) ($el['value'] ?? ''));
+                $plc = htmlspecialchars((string) ($el['placeholder'] ?? 'Search...'));
                 echo "<form method=\"get\" action=\"{$action}\" class=\"d-flex gap-2\">";
                 if (isset($el['hidden'])) {
                     foreach ($el['hidden'] as $hn => $hv) {
-                        echo "<input type=\"hidden\" name=\"".htmlspecialchars($hn)."\" value=\"".htmlspecialchars($hv)."\">";
+                        echo "<input type=\"hidden\" name=\"" . htmlspecialchars($hn) . "\" value=\"" . htmlspecialchars($hv) . "\">";
                     }
                 }
                 echo "  <div class=\"input-group shadow-sm rounded-pill overflow-hidden border bg-white\">
@@ -745,11 +775,11 @@ class UiBuilder
                 break;
 
             case 'chart':
-                $id = $el['id'] ?? 'chart-'.rand(100, 999);
+                $id = $el['id'] ?? 'chart-' . rand(100, 999);
                 $height = $el['height'] ?? '300px';
                 $chartType = $el['chart_type'] ?? 'line';
                 $data = is_array($el['chart_data']) ? json_encode($el['chart_data']) : $el['chart_data'];
-                
+
                 // Enhanced default options based on chart type
                 $defaultOptions = [
                     'responsive' => true,
@@ -808,18 +838,20 @@ class UiBuilder
                     })();
                 </script>";
                 break;
- 
+
             case 'grid':
                 $cls = $el['class'] ?? 'row g-4';
                 echo "<div class=\"{$cls}\">";
-                foreach ($el['content'] ?? [] as $cel) $this->renderElement($cel);
+                foreach ($el['content'] ?? [] as $cel)
+                    $this->renderElement($cel);
                 echo '</div>';
                 break;
             case 'column':
             case 'col':
                 $cls = $el['class'] ?? 'col-md-12';
                 echo "<div class=\"{$cls}\">";
-                foreach ($el['content'] ?? [] as $cel) $this->renderElement($cel);
+                foreach ($el['content'] ?? [] as $cel)
+                    $this->renderElement($cel);
                 echo '</div>';
                 break;
 

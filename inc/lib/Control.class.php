@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20141006
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -25,13 +20,13 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class will proccess the controller
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class Control
 {
+    /**
+     * Control Constructor.
+     */
     public function __construct()
     {
     }
@@ -42,9 +37,6 @@ class Control
      * be removed on the next update.
      *
      * @param string $vars
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -58,9 +50,6 @@ class Control
      * the Frontend directory.
      *
      * @param string $vars
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -83,9 +72,6 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public static function incBack($vars)
@@ -99,15 +85,11 @@ class Control
     }
 
     /**
-     * Control Frontend Handler Function. This will handle the controller which
-     * file will be included at the Frontend controller.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
+     * Entry point for frontend requests.
+     * Determines whether to use traditional GET routing or SMART_URL routing.
      *
      * @since 0.0.1
-     * Add New SMART URL handler for better and simple router.
-     * @since 0.0.7
+     * @since 0.0.7 Added SMART_URL support.
      */
     public static function frontend()
     {
@@ -145,6 +127,11 @@ class Control
         }
     }
 
+    /**
+     * Handles routing via traditional $_GET parameters.
+     *
+     * @param array $arr List of valid controller keys.
+     */
     public static function get($arr)
     {
         $get = 0;
@@ -200,6 +187,11 @@ class Control
         }
     }
 
+    /**
+     * Handles routing via SMART_URL (pretty URLs) using the Router class.
+     *
+     * @param array $arr List of valid controller keys.
+     */
     public static function route($arr)
     {
         $var = Router::run();
@@ -257,6 +249,13 @@ class Control
         }
     }
 
+    /**
+     * Dispatches the request to the API controller.
+     *
+     * @param string $resource   API resource name.
+     * @param string $identifier Resource identifier.
+     * @param string $action     Specific action to perform.
+     */
     public static function api($resource = '', $identifier = '', $action = '')
     {
         Api::dispatch($resource, $identifier, $action);
@@ -265,9 +264,6 @@ class Control
     /**
      * Control Backend Handler Function. This will handle the controller which
      * file will be included at the Backend controller.
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
      *
      * @since 0.0.1
      */
@@ -287,9 +283,6 @@ class Control
      *
      * @param string $vars
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public static function error($vars = '', $val = '')
@@ -307,9 +300,6 @@ class Control
     /**
      * Control Install Handler Function. This will handle the Install page.
      *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
      * @since 0.0.1
      */
     public static function install()
@@ -317,6 +307,12 @@ class Control
         include GX_PATH . '/inc/lib/Control/Install/default.control.php';
     }
 
+    /**
+     * Handles and dispatches Ajax requests to specific Ajax controller files.
+     *
+     * @param string $vars  The Ajax action/resource name.
+     * @param mixed  $param Additional data to pass.
+     */
     public static function ajax($vars = '', $param = '')
     {
         if (isset($vars) && $vars != '') {

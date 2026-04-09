@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20141007
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -25,37 +20,23 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * This class is for managing the menu at the dasboard.
  *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
- *
  * @since 0.0.1
  */
 class Menus
 {
     /**
      * Menus Constructor.
-     *
-     * Nothing to construct
-     *
-     * @since 0.0.1
      */
     public function __construct()
     {
     }
 
     /**
-     * isHadParent Function.
+     * Checks if a menu item has children or finds items by parent/menu ID.
      *
-     * This function is to get the list of parent in certain conditions. There
-     * are two paramaters to be inserted.
-     *
-     * @param int    $parent
-     * @param string $menuid
-     *
-     * @author Puguh Wijayanto <metalgenix@gmail.com>
-     * @author GenixCMS <genixcms@gmail.com>
-     *
-     * @since 0.0.1
+     * @param int|string $parent The parent item ID (optional).
+     * @param string     $menuid The menu identifier (optional).
+     * @return array              Array of menu items matching criteria.
      */
     public static function isHadParent($parent = '', $menuid = '')
     {
@@ -72,6 +53,12 @@ class Menus
         return $q->get();
     }
 
+    /**
+     * Retrieves the parent ID for a specific menu item.
+     *
+     * @param int $id The menu item ID.
+     * @return int|string The parent item ID.
+     */
     public static function getParent($id)
     {
         $q = self::getId($id);
@@ -80,11 +67,14 @@ class Menus
     }
 
     /**
-     * Menu for User Frontend.
+     * Renders an HTML menu for the frontend.
+     * Supports nested submenus up to 4 levels and optional Bootstrap 5 styling.
      *
-     * used for frontend interface. 4 level deep submenu.
-     *
-     * @since 0.0.1pre
+     * @param string $menuid    The menu group identifier.
+     * @param string $class     Custom CSS class for the root <ul>.
+     * @param bool   $bsnav     Whether to apply Bootstrap 5 navigation classes (default: false).
+     * @param string $itemClass Additional CSS class for anchor (<a>) elements.
+     * @return string            The generated HTML menu.
      */
     public static function getMenu($menuid, $class = '', $bsnav = false, $itemClass = '')
     {
@@ -193,11 +183,12 @@ class Menus
     }
 
     /**
-     * Menu for Admin Backeend.
+     * Renders the administrative interface for managing menu navigation.
+     * Includes order management forms and recursive item building.
      *
-     * so this won't make general menu messed up.
-     *
-     * @since 0.0.1-pre
+     * @param string $menuid The menu group identifier.
+     * @param string $class  Optional CSS class for the wrapper.
+     * @return string        The generated HTML admin interface.
      */
     public static function getMenuAdmin($menuid, $class = '')
     {
@@ -220,6 +211,15 @@ class Menus
         return $html;
     }
 
+    /**
+     * Recursively renders menu items for the admin interface list.
+     *
+     * @param array      $menus    The full array of menu data.
+     * @param int|string $parentId The current parent ID being rendered.
+     * @param string     $menuid   The menu group ID.
+     * @param int        $level    Current recursion depth level.
+     * @return string              Generated HTML list items.
+     */
     private static function renderAdminMenuItems($menus, $parentId, $menuid, $level = 0)
     {
         $html = '';
@@ -259,6 +259,12 @@ class Menus
         return $html;
     }
 
+    /**
+     * Retrieves all raw menu data for a specific menu group.
+     *
+     * @param string $menuid The menu group identifier.
+     * @return array        Array of menu objects.
+     */
     public static function getMenuRaw($menuid)
     {
         $menuid = Typo::cleanX($menuid);
@@ -267,6 +273,12 @@ class Menus
         return $menus;
     }
 
+    /**
+     * Retrieves a specific menu item by its database ID.
+     *
+     * @param int|string $id The menu item ID.
+     * @return array         Array containing the menu object or empty.
+     */
     public static function getId($id = '')
     {
         if (isset($id)) {
@@ -280,6 +292,11 @@ class Menus
         return $menus;
     }
 
+    /**
+     * Updates the display order for multiple menu items.
+     *
+     * @param array $vars Multi-dimensional array mapping item IDs to their order values.
+     */
     public static function updateMenuOrder($vars)
     {
         foreach ($vars as $k => $v) {
@@ -288,6 +305,11 @@ class Menus
         }
     }
 
+    /**
+     * Inserts a new menu item into the database.
+     *
+     * @param array $vars Key-value pairs matching database columns.
+     */
     public static function insert($vars)
     {
         if (is_array($vars)) {
@@ -298,6 +320,11 @@ class Menus
         }
     }
 
+    /**
+     * Updates an existing menu item's data.
+     *
+     * @param array $vars Dictionary containing 'id' and 'key' (data array).
+     */
     public static function update($vars)
     {
         if (is_array($vars)) {
@@ -305,6 +332,11 @@ class Menus
         }
     }
 
+    /**
+     * Deletes a menu item from the database.
+     *
+     * @param int|string $id The menu item ID.
+     */
     public static function delete($id)
     {
         $id = Typo::int($id);

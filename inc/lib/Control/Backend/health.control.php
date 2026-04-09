@@ -1,15 +1,24 @@
 <?php
 /**
  * GeniXCMS - Content Management System
- * 
+ *
  * PHP Based Content Management System and Framework
+ *
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (User::access(0)) {
     $data['sitetitle'] = _('System Health');
-    
+
     // System Requirements Check
     $req = [
         'PHP Version' => [
@@ -58,12 +67,12 @@ if (User::access(0)) {
             'status' => true // informative
         ]
     ];
-    
+
     // Allow modules to add their own requirements
     $req = Hooks::filter('system_health_requirements', $req);
-    
+
     $data['requirements'] = $req;
-    
+
     Theme::admin('header', $data);
     System::inc('health', $data);
     Theme::admin('footer');

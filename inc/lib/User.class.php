@@ -1,24 +1,19 @@
 <?php
-
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 /**
  * GeniXCMS - Content Management System.
  *
  * PHP Based Content Management System and Framework
- *
  * @since 0.0.1 build date 20140925
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
+
 class User
 {
     public static $group = array(
@@ -31,10 +26,19 @@ class User
         '6' => "General Member"
     );
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
     }
 
+    /**
+     * Secures the current page by ensuring the user is logged in.
+     * Redirects to the login page if the session is invalid.
+     *
+     * @return bool True if authorized.
+     */
     public static function secure()
     {
         if (!isset($_SESSION['gxsess']['val']['loggedin']) && !isset($_SESSION['gxsess']['val']['username'])) {
@@ -47,6 +51,12 @@ class User
         }
     }
 
+    /**
+     * Checks if the currently logged-in user has a specific minimum access level.
+     *
+     * @param string $grp Minimum required group level (0-6).
+     * @return bool       True if authorized.
+     */
     public static function access($grp = '6')
     {
         if (isset($_SESSION['gxsess']['val']['group'])) {
@@ -56,8 +66,14 @@ class User
                 return false;
             }
         }
+        return false;
     }
 
+    /**
+     * Verifies if a user session is active and logged in.
+     *
+     * @return bool True if logged in.
+     */
     public static function isLoggedin()
     {
         if (isset($_SESSION['gxsess']['val']['loggedin']) && $_SESSION['gxsess']['val']['loggedin'] == 1) {
@@ -168,6 +184,11 @@ class User
         }
     }
 
+    /**
+     * Deletes a user account and their associated profile details.
+     *
+     * @param int $id User ID to delete.
+     */
     public static function delete($id)
     {
         $id = Typo::int($id);
@@ -180,6 +201,12 @@ class User
     //                 'userid' => '',
     //                 'passwd' => ''
     //             );
+    /**
+     * Generates a truncated MD5 hash for password randomization or legacy verification.
+     *
+     * @param array|string $vars Dictionary containing 'userid' and 'passwd' or plain password.
+     * @return string             Modified password hash.
+     */
     public static function randpass($vars)
     {
         if (is_array($vars)) {
@@ -194,6 +221,11 @@ class User
         return $pass;
     }
 
+    /**
+     * Generates a random secure password string.
+     *
+     * @return string Random 8-character string.
+     */
     public static function generatePass()
     {
         $vars = microtime() . Site::$name . rand();
@@ -203,6 +235,13 @@ class User
         return $pass;
     }
 
+    /**
+     * Validates if a username exists in the system.
+     *
+     * @param string $user   Username to check.
+     * @param string $except Username to exclude from the check (for updates).
+     * @return bool           True if user exists.
+     */
     public static function validate($user, $except = '')
     {
         $q = Query::table('user')->where('userid', Typo::cleanX(Typo::strip($user)));
@@ -213,6 +252,13 @@ class User
         return ($usr) ? true : false;
     }
 
+    /**
+     * Compares two strings (e.g., password verification).
+     *
+     * @param string $p1 First string.
+     * @param string $p2 Second string.
+     * @return bool       True if identical.
+     */
     public static function isSame($p1, $p2)
     {
         if ($p1 == $p2) {
@@ -222,6 +268,13 @@ class User
         }
     }
 
+    /**
+     * Validates if an email address is already registered.
+     *
+     * @param string $vars Email address.
+     * @param string $id   Exclude user ID (for updates).
+     * @return bool         True if available (not found).
+     */
     public static function isEmail($vars, $id = '')
     {
         $q = Query::table('user')->where('email', Typo::cleanX($vars));
@@ -232,23 +285,47 @@ class User
         return ($e) ? false : true;
     }
 
+    /**
+     * Retrieves the numeric ID for a given username.
+     *
+     * @param string $userid Username.
+     * @return string|int    User ID.
+     */
     public static function id($userid)
     {
         $usr = Query::table('user')->where('userid', $userid)->first();
         return (isset($usr->id)) ? $usr->id : '';
     }
 
+    /**
+     * Retrieves the detail record ID for a given username.
+     *
+     * @param string $userid Username.
+     * @return string|int    Detail record ID.
+     */
     public static function idDetail($userid)
     {
         $usr = Query::table('user_detail')->where('userid', $userid)->first();
         return (isset($usr->id)) ? $usr->id : '';
     }
 
+    /**
+     * Fetches core user data by ID.
+     *
+     * @param int $id User ID.
+     * @return object  User database record.
+     */
     public static function v($id)
     {
         return Query::table('user')->where('id', Typo::int($id))->first();
     }
 
+    /**
+     * Fetches comprehensive user data including profile details.
+     *
+     * @param int $id User ID.
+     * @return object  Full user profile record.
+     */
     public static function userdata($id)
     {
         return Query::table('user')
@@ -258,41 +335,83 @@ class User
             ->first();
     }
 
+    /**
+     * Retrieves the Username string for a given ID.
+     *
+     * @param int $id User ID.
+     * @return string  Username.
+     */
     public static function userid($id)
     {
         $usr = self::v($id);
         return (isset($usr->userid)) ? $usr->userid : '';
     }
 
+    /**
+     * Retrieves the Email address for a given ID or Username.
+     *
+     * @param int|string $id User ID or Username.
+     * @return string         Email address.
+     */
     public static function email($id)
     {
         $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
         return (isset($usr->email)) ? $usr->email : '';
     }
 
+    /**
+     * Retrieves the Access Group ID for a given ID or Username.
+     *
+     * @param int|string $id User ID or Username.
+     * @return string         Group ID.
+     */
     public static function group($id)
     {
         $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
         return (isset($usr->group)) ? $usr->group : '';
     }
 
+    /**
+     * Retrieves the registration date for a given ID or Username.
+     *
+     * @param int|string $id User ID or Username.
+     * @return string         Registration date string.
+     */
     public static function regdate($id)
     {
         $usr = Query::table('user')->where('id', $id)->orWhere('userid', $id)->first();
         return (isset($usr->join_date)) ? $usr->join_date : '';
     }
 
+    /**
+     * Retrieves the avatar URL/path for a given ID or Username.
+     *
+     * @param int|string $id User ID or Username.
+     * @return string         Avatar content.
+     */
     public static function avatar($id)
     {
         $usr = Query::table('user_detail')->where('id', $id)->orWhere('userid', $id)->first();
         return (isset($usr->avatar)) ? $usr->avatar : '';
     }
 
+    /**
+     * Activates a user account (set status to 1).
+     *
+     * @param int $id User ID.
+     * @return bool    Result.
+     */
     public static function activate($id)
     {
         return Query::table('user')->where('id', $id)->update(['status' => '1']);
     }
 
+    /**
+     * Deactivates a user account (set status to 0).
+     *
+     * @param int $id User ID.
+     * @return bool    Result.
+     */
     public static function deactivate($id)
     {
         return Query::table('user')->where('id', $id)->update(['status' => '0']);
@@ -303,6 +422,17 @@ class User
     //         'selected' => '',
     //         'update' => true
     //     );
+    /**
+     * Generates an HTML dropdown (<select>) for user group selection.
+     *
+     * @param array $vars {
+     *     @type string $name     Select element name attribute.
+     *     @type string $selected Currently selected group ID.
+     *     @type string $class    CSS classes.
+     *     @type string $attr     Additional element attributes.
+     * }
+     * @return string              Generated HTML markup.
+     */
     public static function dropdown($vars)
     {
         $class = (isset($vars['class'])) ? $vars['class'] : 'form-control';
@@ -323,6 +453,11 @@ class User
         return $html;
     }
 
+    /**
+     * Renders a grid box of recent users (for dashboard display).
+     *
+     * @param int $max Maximum number of users to show.
+     */
     public static function listRecentBox($max = 10)
     {
         $q = Query::table('user')->orderBy('join_date', 'DESC')->limit($max)->get();
@@ -341,6 +476,11 @@ class User
         }
     }
 
+    /**
+     * Generates a JSON map of user counts by country.
+     *
+     * @return string JSON encoded array.
+     */
     public static function jsonUserLocation()
     {
         $q = Db::result("SELECT DISTINCT `country` FROM `user_detail` ");
@@ -356,6 +496,11 @@ class User
         return json_encode($ctr);
     }
 
+    /**
+     * Checks the timestamp of the last password reset request.
+     *
+     * @return int Unix timestamp.
+     */
     public static function checkLastRequestPassword()
     {
         $reqPass = Session::val('reqPass');
@@ -364,6 +509,9 @@ class User
         return $lastReq;
     }
 
+    /**
+     * Records the current timestamp and IP for a password reset request.
+     */
     public static function setLastRequestPassword()
     {
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -378,6 +526,12 @@ class User
         Session::set($vars);
     }
 
+    /**
+     * Validates if enough time has passed since the last password request.
+     * Limits requests to once per 20 minutes (1200 seconds).
+     *
+     * @return bool True if the request is allowed.
+     */
     public static function lastRequestPassword()
     {
         $limit = 1200;

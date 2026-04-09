@@ -1,18 +1,27 @@
 <?php
 /**
  * GeniXCMS - Content Management System
- * 
+ *
  * PHP Based Content Management System and Framework
+ *
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (User::access(0)) {
-    
+
     // AJAX REQUEST HANDLER
     if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         header('Content-Type: application/json');
-        
+
         // 1. Core Update Check
         $apiUrl = 'https://genixcms.web.id/api/v1/download/latest';
         $response = Http::fetch([
@@ -25,7 +34,7 @@ if (User::access(0)) {
         ]);
         $apiData = json_decode($response, true);
         $latestCore = $apiData['data'] ?? null;
-        
+
         $core = [
             'v_latest' => $latestCore['version'] ?? System::$version,
             'can_update' => ($latestCore && version_compare(System::$version, $latestCore['version'], '<')),
@@ -36,9 +45,13 @@ if (User::access(0)) {
         // 2. Batch Check: Modules & Themes
         $checkList = [];
         $mods = Mod::modList();
-        foreach ($mods as $mId) { $checkList[] = ['id' => $mId, 'type' => 'module']; }
+        foreach ($mods as $mId) {
+            $checkList[] = ['id' => $mId, 'type' => 'module'];
+        }
         $themes = Theme::thmList();
-        foreach ($themes as $tId) { $checkList[] = ['id' => $tId, 'type' => 'theme']; }
+        foreach ($themes as $tId) {
+            $checkList[] = ['id' => $tId, 'type' => 'theme'];
+        }
 
         $batchApiUrl = 'https://genixcms.web.id/api/v1/marketplace/check-update';
         $batchResponse = Http::fetch([
@@ -69,8 +82,8 @@ if (User::access(0)) {
                 $downloadUrl = $latest['download_url'] ?? '#';
             }
             $modUpdates[$mId] = [
-                'v_latest' => $v_latest, 
-                'can_update' => $canUpdate, 
+                'v_latest' => $v_latest,
+                'can_update' => $canUpdate,
                 'download_url' => $downloadUrl
             ];
         }
@@ -88,8 +101,8 @@ if (User::access(0)) {
                 $downloadUrl = $latest['download_url'] ?? '#';
             }
             $thmUpdates[$tId] = [
-                'v_latest' => $v_latest, 
-                'can_update' => $canUpdate, 
+                'v_latest' => $v_latest,
+                'can_update' => $canUpdate,
                 'download_url' => $downloadUrl
             ];
         }
@@ -109,14 +122,14 @@ if (User::access(0)) {
 
     // REGULAR PAGE LOAD
     $data['sitetitle'] = _('System Updates');
-    
+
     // Initial Local Data (No API calls here)
     $data['core'] = [
         'name' => 'GeniXCMS Core',
         'v_current' => System::$version,
         'icon' => 'bi bi-cpu'
     ];
-    
+
     $data['mods'] = [];
     foreach (Mod::modList() as $mId) {
         $m = Mod::data($mId);
@@ -127,7 +140,7 @@ if (User::access(0)) {
             'icon' => $m['icon'] ?? 'bi bi-puzzle'
         ];
     }
-    
+
     $data['themes'] = [];
     foreach (Theme::thmList() as $tId) {
         $data['themes'][] = [
@@ -137,7 +150,7 @@ if (User::access(0)) {
             'icon' => 'bi bi-palette'
         ];
     }
-    
+
     Theme::admin('header', $data);
     System::inc('updates', $data);
     Theme::admin('footer');

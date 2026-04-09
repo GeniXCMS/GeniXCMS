@@ -11,9 +11,14 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * - Admin UI: Tabbed sidebar, sticky topbar, glassmorphic headers.
  * - CSS Engine: Reactive typography and color mapping using standard prefixes.
  * - Notifications: Integrated global AJAX toast system.
- *
- * @package GeniXCMS
  * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 class OptionsBuilder
 {
@@ -73,16 +78,13 @@ class OptionsBuilder
     ];
 
     /**
-     * @param array $opt            Saved options key-value array
-     * @param array $presets        Preset color schemes (for Quick Presets tab)
-     * @param array $panel_palettes Panel color palettes
-     * @param array $config         Builder identity configuration:
-     *   - brandName  (string)  Display name shown in topbar, default 'GneeX Latte'
-     *   - brandVer   (string)  Version badge text, default 'v2.1'
-     *   - brandAbbr  (string)  Two-letter abbreviation for logo box, default 'GL'
-     *   - brandIcon  (string)  Font Awesome icon class instead of abbr (e.g. 'fa fa-cog')
-     *   - brandColor (string)  CSS gradient color for logo box, default '#3b82f6'
-     *   - saveKey    (string)  POST key for save button, default 'gneex_options_update'
+     * OptionsBuilder Constructor.
+     * Initializes the UI configuration for the theme/module options panel.
+     *
+     * @param array $opt            Currently saved options (key-value pairs).
+     * @param array $presets        Optional color scheme presets for quick application.
+     * @param array $panel_palettes Optional color palettes for specific panel blocks.
+     * @param array $config         Identity configuration (brand name, version, icons, etc).
      */
     public function __construct(
         array $opt,
@@ -101,6 +103,13 @@ class OptionsBuilder
         $this->saveKey = $config['saveKey'] ?? 'theme_options_update';
     }
 
+    /**
+     * Safely retrieves a value from the current options array.
+     *
+     * @param string $key     The option key.
+     * @param mixed  $default Default value if key is not found.
+     * @return string         The decoded option value.
+     */
     private function getValue(string $key, $default = ''): string
     {
         $v = (string) ($this->opt[$key] ?? $default);
@@ -108,7 +117,12 @@ class OptionsBuilder
     }
 
     /**
-     * Generate the full frontend <link>/<style> output driven by saved options.
+     * Generates the dynamic CSS and Google Fonts assets for the frontend.
+     * Automatically maps typography prefixes to CSS variables and selectors.
+     *
+     * @param array $opt    Combined options array.
+     * @param array $config Styling configuration (minify, themeUrl, etc).
+     * @return string       Generated <link> and <style> HTML tags.
      */
     public static function generateFrontendCSS(array $opt, array $config = []): string
     {
@@ -235,6 +249,7 @@ class OptionsBuilder
         $parts[] = $typo('typo_list', 'ul, ol, .entry-content ul, .entry-content ol');
         $parts[] = $typo('typo_blockquote', 'blockquote, .blockquote');
         $parts[] = $typo('typo_pagination', '.pagination, .page-link, .page-item a');
+        $parts[] = $typo('typo_pagination', '.pagination, .page-link, .page-item a');
         $parts[] = $typo('typo_meta', '.post-meta, .text-muted, .entry-meta');
         $parts[] = $typo('typo_hero_title', '.hero-section h1, .inner-hero-title, .display-4.fst-italic');
         $parts[] = $typo('typo_hero_text', '.hero-description, .lead.my-3');
@@ -265,7 +280,10 @@ class OptionsBuilder
     }
 
     /**
-     * Render the full options panel.
+     * Renders the complete options panel UI within an HTML form.
+     * Hooks into global CSS/JS assets and iterates through the provided schema.
+     *
+     * @param array $schema Multi-dimensional array defining tabs, sections, and fields.
      */
     public function render(array $schema): void
     {
@@ -285,6 +303,9 @@ class OptionsBuilder
         echo '</form>';
     }
 
+    /**
+     * Renders the administrative topbar containing brand identity and save button.
+     */
     private function renderTopbar(): void
     {
         $name = htmlspecialchars($this->brandName);
@@ -315,6 +336,14 @@ class OptionsBuilder
 HTML;
     }
 
+    /**
+     * Shifts a HEX color by a given number of degrees on the color wheel.
+     * Used for generating gradients from a single brand color.
+     *
+     * @param string $hex     Original HEX color.
+     * @param int    $degrees Degrees to shift (default 30).
+     * @return string         The shifted HEX color.
+     */
     private function shiftColor(string $hex, int $degrees = 30): string
     {
         $hex = ltrim($hex, '#');
@@ -378,6 +407,11 @@ HTML;
         );
     }
 
+    /**
+     * Renders the sidebar navigation containing tab groups and items.
+     *
+     * @param array $schema The builder schema definition.
+     */
     private function renderSidebar(array $schema): void
     {
         $groups = [];
@@ -404,6 +438,11 @@ HTML;
         echo '</div>';
     }
 
+    /**
+     * Iterates through the schema to render each individual panel container.
+     *
+     * @param array $schema The builder schema definition.
+     */
     private function renderAllPanels(array $schema): void
     {
         $first = true;
@@ -433,6 +472,11 @@ HTML;
         }
     }
 
+    /**
+     * Renders a standard panel containing sections and cards.
+     *
+     * @param array $tab Configuration for the individual tab.
+     */
     private function renderStandardPanel(array $tab): void
     {
         foreach ($tab['sections'] ?? [] as $section) {
@@ -447,6 +491,9 @@ HTML;
             $this->renderCard($card);
     }
 
+    /**
+     * Renders the presets panel showing quick color scheme options.
+     */
     private function renderPresets(): void
     {
         echo '<div class="gx-grid-3 mt-4">';
@@ -461,6 +508,9 @@ HTML;
         echo '</div>';
     }
 
+    /**
+     * Renders the dynamic panels builder for category-based content blocks.
+     */
     private function renderPanels(): void
     {
         echo '<div class="gx-grid-1">';
@@ -524,6 +574,12 @@ HTML;
         echo '</div>';
     }
 
+    /**
+     * Renders a layout card which acts as a container for multiple input fields.
+     * Supports multi-column grid layouts and row-based typography groups.
+     *
+     * @param array $card Configuration array for the card and its children.
+     */
     private function renderCard(array $card): void
     {
         if (isset($card['type']) && $card['type'] === 'typo_row') {
@@ -550,6 +606,12 @@ HTML;
         echo '</div>';
     }
 
+    /**
+     * Entry point for rendering individual configuration fields based on their type.
+     *
+     * @param array $field  Field configuration (type, name, label, etc).
+     * @param bool  $inGrid Whether the field is currently nested inside a grid card.
+     */
     private function renderField(array $field, bool $inGrid = false): void
     {
         $type = $field['type'] ?? 'text';
@@ -607,6 +669,9 @@ HTML;
         echo '</div>';
     }
 
+    /**
+     * Renders a standard single-line text input.
+     */
     private function fieldText(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -616,6 +681,9 @@ HTML;
         echo "<input type=\"text\" name=\"{$name}\"{$id} class=\"gx-input\" value=\"{$val}\" placeholder=\"{$ph}\">";
     }
 
+    /**
+     * Renders a password input field.
+     */
     private function fieldPassword(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -625,6 +693,9 @@ HTML;
         echo "<input type=\"password\" name=\"{$name}\"{$id} class=\"gx-input\" value=\"{$val}\" placeholder=\"{$ph}\">";
     }
 
+    /**
+     * Renders a multi-line auto-expanding textarea.
+     */
     private function fieldTextarea(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -633,6 +704,9 @@ HTML;
         echo "<textarea name=\"{$name}\" class=\"gx-input\" rows=\"{$rows}\">{$val}</textarea>";
     }
 
+    /**
+     * Renders a premium color picker with integrated HEX text support.
+     */
     private function fieldColor(array $f): void
     {
         $name = $f['name'] ?? '';
@@ -641,6 +715,9 @@ HTML;
         echo self::colorField($name, $val, $id);
     }
 
+    /**
+     * Renders a numeric input field with min/max validation.
+     */
     private function fieldNumber(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -651,6 +728,9 @@ HTML;
         echo "<input type=\"number\" name=\"{$name}\" class=\"gx-input\" value=\"{$val}\" min=\"{$min}\" max=\"{$max}\" step=\"{$step}\">";
     }
 
+    /**
+     * Renders a range slider with a dynamic value badge unit.
+     */
     private function fieldRange(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -666,6 +746,9 @@ HTML;
         echo "</div>";
     }
 
+    /**
+     * Renders a single checkbox switch.
+     */
     private function fieldCheckbox(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -675,6 +758,9 @@ HTML;
         echo "<input type=\"checkbox\" name=\"{$name}\" value=\"on\"{$checked} class=\"gx-checkbox-input\">";
     }
 
+    /**
+     * Renders a dropdown selection menu.
+     */
     private function fieldSelect(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -689,6 +775,9 @@ HTML;
         echo "</select>";
     }
 
+    /**
+     * Renders a segmented toggle switch (On/Off).
+     */
     private function fieldToggle(array $f): void
     {
         $name = htmlspecialchars($f['name'] ?? '');
@@ -704,6 +793,13 @@ HTML;
         echo "</div>";
     }
 
+    /**
+     * Renders a specialized typography row group (Family, Size, Weight, Color).
+     *
+     * @param string $label  Human label for the group.
+     * @param string $prefix Prefix used for the specific typography option keys.
+     * @return string        Empty string (echoes output directly).
+     */
     private function fieldTypoRow(string $label, string $prefix): string
     {
         $font = $prefix . '_font';
@@ -721,6 +817,14 @@ HTML;
         return '';
     }
 
+    /**
+     * static utility to generate a premium color field with text input sync.
+     *
+     * @param string $name  Option key name.
+     * @param string $value Current setting value.
+     * @param string $id    Optional DOM ID for synchronization.
+     * @return string        Generated HTML string.
+     */
     public static function colorField(string $name, string $value, string $id = ''): string
     {
         $id = $id ?: "color_" . rand(100, 999);
@@ -728,6 +832,10 @@ HTML;
         return "<div class=\"gx-color-field\"><input type=\"color\" id=\"{$id}\" value=\"{$value}\" oninput=\"document.getElementById('{$id}_txt').value=this.value\"><input type=\"text\" name=\"{$name}\" id=\"{$id}_txt\" value=\"{$value}\" placeholder=\"#000000\" oninput=\"document.getElementById('{$id}').value=this.value\"></div>";
     }
 
+    /**
+     * Renders the base CSS styles for the OptionsBuilder administrative interface.
+     * Includes layouts for topbar, sidebar, glassmorphism effects, and the toast system.
+     */
     public static function renderCSS(): void
     {
         echo '<style>
@@ -903,6 +1011,10 @@ HTML;
         </style>';
     }
 
+    /**
+     * Renders the administrative JavaScript logic for OptionsBuilder.
+     * Includes tab switching, preset application, and AJAX form persistence.
+     */
     private function renderJS(): void
     {
         echo <<<JS

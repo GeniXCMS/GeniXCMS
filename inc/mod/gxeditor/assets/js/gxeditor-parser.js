@@ -65,6 +65,7 @@ window.moveBlock = function(state, id, dir) {
  */
 window.serializeToTextarea = function(state) {
     if (!state || !state.textarea) return;
+    if (state.isClassic) return; // Classic mode manages its own synchronization
     var html = '';
     state.blocks.forEach(function(b) {
         var typeDef = GxEditor._blocks[b.type];
@@ -180,6 +181,8 @@ window.serializeToTextarea = function(state) {
                 break;
             case 'recent_posts': html += '<div class="gx-recent-posts mb-3">[recent_posts count="5"]</div>\n'; break;
             case 'random_posts': html += '<div class="gx-random-posts mb-3">[random_posts count="5"]</div>\n'; break;
+            case 'pricing': html += '<div class="gx-pricing-block mb-4">[pricing_table]</div>\n'; break;
+            case 'raw_html': html += '[raw_html]' + b.content + '[/raw_html]\n'; break;
             case 'divider': html += '<hr class="my-4">\n'; break;
         }
     });
@@ -229,6 +232,7 @@ window.parseHTML = function(html, state) {
             if (postMatch) { window.addBlock(state, 'single_post', postMatch[1], null); return; }
             if (content === '[recent_posts]') { window.addBlock(state, 'recent_posts', '', null); return; }
             if (content === '[random_posts]') { window.addBlock(state, 'random_posts', '', null); return; }
+            if (content === '[pricing_table]') { window.addBlock(state, 'pricing', '', null); return; }
             var iconMatch = content.match(/^\[icon\b([^\]]*)\]$/i);
             if (iconMatch) {
                 var attrStr = iconMatch[1];
@@ -256,6 +260,13 @@ window.parseHTML = function(html, state) {
                     return;
                 }
             }
+            if (content.indexOf('[raw_html]') === 0) {
+                var m = content.match(/\[raw_html\]([\s\S]*)\[\/raw_html\]/i);
+                if (m) {
+                    window.addBlock(state, 'raw_html', m[1].trim(), null);
+                    return;
+                }
+            }
         }
         
         if (node.nodeType !== 1) {
@@ -276,6 +287,9 @@ window.parseHTML = function(html, state) {
         }
         if (node.classList && (node.classList.contains('gx-random-posts') || node.querySelector('.gx-random-posts'))) {
             window.addBlock(state, 'random_posts', '', null); return;
+        }
+        if (node.classList && (node.classList.contains('gx-pricing-block') || node.querySelector('.gx-pricing-block'))) {
+            window.addBlock(state, 'pricing', '', null); return;
         }
 
         var tocWrap = node.classList && (node.classList.contains('gx-toc') ? node : node.querySelector('.gx-toc'));
@@ -353,6 +367,10 @@ window.parseHTML = function(html, state) {
             if (head) { b.hasHeader = true; b.header = shortcodeToHtml(head.innerHTML); }
             if (foot) { b.hasFooter = true; b.footer = shortcodeToHtml(foot.innerHTML); }
             b.content = body ? body.innerHTML : node.innerHTML;
+        } else if (node.nodeType === 1 && node.classList.contains('custom-code-container')) {
+            var scriptData = node.querySelector('script.raw-data');
+            var code = scriptData ? scriptData.textContent : (node.getAttribute('data-code') || '');
+            window.addBlock(state, 'raw_html', code, null);
         } else if (tag === 'a' && node.classList.contains('btn')) {
             var b = window.addBlock(state, 'button', node.innerHTML.trim(), null);
             b.btnUrl = node.getAttribute('href');

@@ -1,8 +1,16 @@
 <?php
 /**
  * GeniXCMS - Content Management System
- * 
+ *
  * PHP Based Content Management System and Framework
+ * @since 2.0.0
+ * @version 2.1.1
+ * @link https://github.com/GeniXCMS/GeniXCMS
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
+ * @copyright 2014-2023 Puguh Wijayanto
+ * @copyright 2023-2026 GeniXCMS
+ * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 defined('GX_LIB') or die('Direct Access Not Allowed!');
@@ -11,7 +19,7 @@ class Security
 {
     /**
      * Scan a ZIP file for malicious code patterns.
-     * 
+     *
      * @param string $zipPath The absolute path to the ZIP file.
      * @return array Returns an array with 'status' (bool) and 'errors' (array).
      */
@@ -25,9 +33,10 @@ class Security
         $errors = [];
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
-            
+
             // Skip directories
-            if (substr($filename, -1) == '/') continue;
+            if (substr($filename, -1) == '/')
+                continue;
 
             $content = $zip->getFromIndex($i);
             $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -53,20 +62,24 @@ class Security
     }
 
     /**
-     * Scan PHP content for dangerous patterns.
+     * Scan PHP content for dangerous patterns and critical execution functions.
+     *
+     * @param string $content  The file content to scan.
+     * @param string $filename The name of the file for reporting.
+     * @return array           List of found security violations.
      */
     private static function scanPhp($content, $filename)
     {
         $errors = [];
-        
+
         // Block critical execution functions
         $blocked = [
-            'eval\(', 
-            'passthru\(', 
-            'shell_exec\(', 
-            'system\(', 
-            'exec\(', 
-            'popen\(', 
+            'eval\(',
+            'passthru\(',
+            'shell_exec\(',
+            'system\(',
+            'exec\(',
+            'popen\(',
             'proc_open\(',
             'pcntl_exec\(',
             'create_function\(',
@@ -83,19 +96,23 @@ class Security
 
         // Check for shell execution via backticks
         if (preg_match('/`.*`/U', $content)) {
-             $errors[] = sprintf(_("Security Alert: Shell execution via backticks found in '%s'."), $filename);
+            $errors[] = sprintf(_("Security Alert: Shell execution via backticks found in '%s'."), $filename);
         }
 
         return $errors;
     }
 
     /**
-     * Scan Javascript content for dangerous patterns.
+     * Scan Javascript content for potentially dangerous or suspicious patterns.
+     *
+     * @param string $content  The file content to scan.
+     * @param string $filename The name of the file for reporting.
+     * @return array           List of found security violations.
      */
     private static function scanJs($content, $filename)
     {
         $errors = [];
-        
+
         // Suspicious JS patterns
         $blocked = [
             'eval\(',
@@ -112,7 +129,7 @@ class Security
 
         // Check for heavily obfuscated JS (common in malware)
         if (strlen($content) > 1000 && !preg_match_all('/[a-zA-Z]/', $content, $matches, PREG_SET_ORDER) / strlen($content) < 0.4) {
-             // $errors[] = sprintf(_("Security Alert: Potential obfuscated Javascript in '%s'."), $filename);
+            // $errors[] = sprintf(_("Security Alert: Potential obfuscated Javascript in '%s'."), $filename);
         }
 
         return $errors;

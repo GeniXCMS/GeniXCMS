@@ -5,16 +5,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
- *
  * @since 1.0.0 build date 20160830
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -22,10 +17,19 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 class Comments
 {
+    /**
+     * Comments Constructor.
+     */
     public function __construct()
     {
     }
 
+    /**
+     * Renders the comment submission form.
+     * Handles POST submission internally and displays success/error alerts.
+     *
+     * @return string The rendered HTML form.
+     */
     public static function form()
     {
         if (self::isEnable()) {
@@ -105,6 +109,13 @@ class Comments
         return $html;
     }
 
+    /**
+     * Processes and validates a new comment submission.
+     * Checks for spam, flooding, and mandatory fields before inserting into the database.
+     *
+     * @param array $vars POST data containing comment details.
+     * @return array Global data array updated with success/error alerts.
+     */
     public static function addComment($vars)
     {
         global $data;
@@ -189,6 +200,18 @@ class Comments
         return $data;
     }
 
+    /**
+     * Recursively retrieves and renders a list of comments for a specific post.
+     * Handles nested replies (threading).
+     *
+     * @param array $vars {
+     *     @type int $post_id The ID of the post.
+     *     @type int $parent  The parent comment ID for threading.
+     *     @type int $max     Maximum comments to show.
+     *     @type int $offset  Pagination offset.
+     * }
+     * @return string Rendered HTML list of comments.
+     */
     public static function listC($vars)
     {
         global $data;
@@ -255,6 +278,12 @@ class Comments
         return $html;
     }
 
+    /**
+     * Main entry point to display a paginated list of comments.
+     *
+     * @param array $vars Configuration including 'max' per page.
+     * @return string Rendered HTML output including pagination.
+     */
     public static function showList($vars)
     {
         if (self::isEnable()) {
@@ -296,6 +325,9 @@ class Comments
         return $html;
     }
 
+    /**
+     * Echos the JavaScript necessary for comment reply handling (Reply to parent).
+     */
     public static function validateJsComment()
     {
         $script = "
@@ -317,6 +349,11 @@ class Comments
         echo Site::minifyJS($script);
     }
 
+    /**
+     * Sets a comment status to Published (1).
+     *
+     * @param int $id Comment ID.
+     */
     public static function publish($id)
     {
         $id = Typo::int($id);
@@ -325,6 +362,11 @@ class Comments
             ->update(array('status' => '1'));
     }
 
+    /**
+     * Sets a comment status to Unpublished (0).
+     *
+     * @param int $id Comment ID.
+     */
     public static function unpublish($id)
     {
         $id = Typo::int($id);
@@ -333,6 +375,11 @@ class Comments
             ->update(array('status' => '0'));
     }
 
+    /**
+     * Sets a comment status to Pending (2).
+     *
+     * @param int $id Comment ID.
+     */
     public static function pending($id)
     {
         $id = Typo::int($id);
@@ -341,6 +388,12 @@ class Comments
             ->update(array('status' => '2'));
     }
 
+    /**
+     * Permanently deletes a comment by its ID.
+     *
+     * @param int $id Comment ID.
+     * @return bool|string Result status or error message.
+     */
     public static function delete($id)
     {
         $id = Typo::int($id);
@@ -354,6 +407,12 @@ class Comments
         }
     }
 
+    /**
+     * Deletes all comments associated with a specific post.
+     *
+     * @param int $post_id
+     * @return bool
+     */
     public static function deleteWithPost($post_id)
     {
         $post_id = Typo::int($post_id);
@@ -366,6 +425,12 @@ class Comments
         return Db::delete($var);
     }
 
+    /**
+     * Checks if any comments exist for a specific post.
+     *
+     * @param int $id Post ID.
+     * @return bool
+     */
     public static function postExist($id)
     {
         $id = Typo::int($id);
@@ -378,6 +443,13 @@ class Comments
         }
     }
 
+    /**
+     * Scans a string for prohibited spam words.
+     *
+     * @param string $vars  The string to check.
+     * @param array  $spams List of spam words.
+     * @return bool         True if spam is detected.
+     */
     public static function checkSpamWord($vars, $spams)
     {
         $spam = false;
@@ -396,6 +468,12 @@ class Comments
         return $spam;
     }
 
+    /**
+     * Prevents comment flooding by checking the time since the last comment from the session.
+     *
+     * @param int $delay Allowed delay in seconds (default 60).
+     * @return bool      True if the user is commenting too fast.
+     */
     public static function checkLastComment($delay = '60')
     {
         $last = Session::val('lastcomment');
@@ -415,6 +493,11 @@ class Comments
         }
     }
 
+    /**
+     * Checks if the comment system is globally enabled in settings.
+     *
+     * @return bool
+     */
     public static function isEnable()
     {
         $enable = Options::v('comments_enable');
@@ -434,6 +517,12 @@ class Comments
      *
      */
 
+    /**
+     * Retrieves a list of recent comments across the site.
+     *
+     * @param array|string $vars Optional configuration (num, type, post_id).
+     * @return string      Rendered HTML list of recent comments.
+     */
     public static function recent($vars = '')
     {
         $postID = isset($vars['post_id']) ? " AND `post_id` = '" . Typo::int($vars['post_id']) . "'" : '';
@@ -460,6 +549,11 @@ class Comments
         return $html;
     }
 
+    /**
+     * Compiles a comprehensive list of spam words from hardcoded data and database settings.
+     *
+     * @return array Unified list of spam words.
+     */
     public static function spamWord()
     {
         $badWord = array(

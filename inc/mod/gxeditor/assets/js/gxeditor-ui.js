@@ -227,39 +227,66 @@ window.openPicker = function(state, targetId, pos) {
     if (list) {
         list.innerHTML = '';
         var blocks = window.GX_EDITOR_BLOCKS || [];
-        blocks.forEach(function(bDefinition) {
-            var item = document.createElement('div');
-            item.className = 'gxb-picker-item';
-            item.innerHTML = '<div class="gxb-picker-icon"><i class="'+(bDefinition.icon||'bi bi-box')+'"></i></div>' +
-                             '<div><div class="gxb-picker-label">'+bDefinition.label+'</div><div class="gxb-picker-desc">'+(bDefinition.desc||'')+'</div></div>';
-            
-            // Use mousedown instead of click to prevent issues with document.mousedown clearing state
-            item.onmousedown = function(e) {
-                e.preventDefault(); e.stopPropagation();
-                if (window.addBlock) {
-                    var newB;
-                    if (isBefore && targetId) {
-                        // Insert BEFORE specific ID
-                        var idx = state.blocks.findIndex(function(blk){ return blk.id === targetId; });
-                        newB = { id: 'blk-' + Math.random().toString(36).slice(2,10), type: bDefinition.type, content: '' };
-                        if (idx !== -1) state.blocks.splice(idx, 0, newB);
-                        else state.blocks.push(newB);
-                    } else {
-                        // Regular add (at end or afterId)
-                        newB = window.addBlock(state, bDefinition.type, '', targetId);
+        
+        // Categorize blocks
+        var cats = {};
+        blocks.forEach(function(b) {
+            var c = b.cat || 'General';
+            if (!cats[c]) cats[c] = [];
+            cats[c].push(b);
+        });
+
+        // Preferred category order (if present)
+        var order = ['Basic', 'Layout', 'Standard Sections'];
+        var sortedCats = Object.keys(cats).sort(function(a, b) {
+            var ia = order.indexOf(a); var ib = order.indexOf(b);
+            if (ia !== -1 && ib !== -1) return ia - ib;
+            if (ia !== -1) return -1; if (ib !== -1) return 1;
+            return a.localeCompare(b);
+        });
+
+        sortedCats.forEach(function(catName) {
+            // Add Category Header
+            var head = document.createElement('div');
+            head.className = 'gxb-picker-cat-header';
+            head.textContent = catName;
+            list.appendChild(head);
+
+            cats[catName].forEach(function(bDefinition) {
+                var item = document.createElement('div');
+                item.className = 'gxb-picker-item';
+                item.dataset.type = bDefinition.type; // for filtering
+                item.innerHTML = '<div class="gxb-picker-icon"><i class="'+(bDefinition.icon||'bi bi-box')+'"></i></div>' +
+                                 '<div><div class="gxb-picker-label">'+bDefinition.label+'</div><div class="gxb-picker-desc">'+(bDefinition.desc||'')+'</div></div>';
+                
+                // Use mousedown instead of click to prevent issues with document.mousedown clearing state
+                item.onmousedown = function(e) {
+                    e.preventDefault(); e.stopPropagation();
+                    if (window.addBlock) {
+                        var newB;
+                        if (isBefore && targetId) {
+                            // Insert BEFORE specific ID
+                            var idx = state.blocks.findIndex(function(blk){ return blk.id === targetId; });
+                            newB = { id: 'blk-' + Math.random().toString(36).slice(2,10), type: bDefinition.type, content: '' };
+                            if (idx !== -1) state.blocks.splice(idx, 0, newB);
+                            else state.blocks.push(newB);
+                        } else {
+                            // Regular add (at end or afterId)
+                            newB = window.addBlock(state, bDefinition.type, '', targetId);
+                        }
+                        
+                        if (window.renderAllBlocks) window.renderAllBlocks(state);
+                        
+                        // Focus newly created block
+                        setTimeout(function() {
+                            var el = state.shell.querySelector('.gxb-block[data-block-id="'+newB.id+'"] .gxb-content');
+                            if (el) { el.focus(); el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+                        }, 50);
                     }
-                    
-                    if (window.renderAllBlocks) window.renderAllBlocks(state);
-                    
-                    // Focus newly created block
-                    setTimeout(function() {
-                        var el = state.shell.querySelector('.gxb-block[data-block-id="'+newB.id+'"] .gxb-content');
-                        if (el) { el.focus(); el.scrollIntoView({ behavior: "smooth", block: "center" }); }
-                    }, 50);
-                }
-                window.closePicker();
-            };
-            list.appendChild(item);
+                    window.closePicker();
+                };
+                list.appendChild(item);
+            });
         });
     }
 
@@ -292,10 +319,24 @@ window.closePicker = function() {
 window.filterPicker = function(query) {
     var list = document.getElementById('gxb-picker-list');
     if (!list) return;
-    var items = list.querySelectorAll('.gxb-picker-item');
-    items.forEach(function(it) {
-        var txt = it.textContent.toLowerCase();
-        it.style.display = txt.indexOf(query.toLowerCase()) !== -1 ? 'flex' : 'none';
+    
+    var q = query.toLowerCase();
+    var headers = list.querySelectorAll('.gxb-picker-cat-header');
+    
+    headers.forEach(function(h) {
+        var next = h.nextElementSibling;
+        var hasVisible = false;
+        while (next && !next.classList.contains('gxb-picker-cat-header')) {
+            var txt = next.textContent.toLowerCase();
+            if (txt.indexOf(q) !== -1) {
+                next.style.display = 'flex';
+                hasVisible = true;
+            } else {
+                next.style.display = 'none';
+            }
+            next = next.nextElementSibling;
+        }
+        h.style.display = hasVisible ? 'block' : 'none';
     });
 };
 
@@ -471,11 +512,14 @@ window.initGlobalUI = function() {
                     }
                 } else if (['icon_list', 'table', 'grid2', 'toc'].indexOf(cmd) !== -1) {
                     var shell = btn.closest('.gxb-shell') || document.querySelector('.gxb-shell.gxb-selected');
-                    var st = window.GxEditor._editors.find(function(ed){ return ed.shell === shell; });
+                    var st = window.GxEditor._editors.find(function (ed) { return ed.shell === shell; });
                     if (st && window.addBlock) {
-                         window.addBlock(st, cmd, '', null);
-                         window.renderAllBlocks(st);
+                        window.addBlock(st, cmd, '', null);
+                        window.renderAllBlocks(st);
                     }
+                } else if (['h1', 'h2', 'h3', 'paragraph'].indexOf(cmd) !== -1) {
+                    var tag = cmd === 'paragraph' ? '<p>' : '<' + cmd.toUpperCase() + '>';
+                    document.execCommand('formatBlock', false, tag);
                 } else {
                     document.execCommand(cmd, false, null);
                 }

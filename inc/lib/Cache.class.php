@@ -5,23 +5,18 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System
  *
  * PHP Based Content Management System and Framework
- *
  * @since 1.1.2 build date 20170912
- *
- * @version 2.1.0
- *
+ * @version 2.1.1
  * @link https://github.com/GeniXCMS/GeniXCMS
- * 
- *
- * @author Puguh Wijayanto <metalgenix@gmail.com>
- * @author GenixCMS <genixcms@gmail.com>
+ * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
 
 /**
- * 
+ *
  */
 class Cache
 {
@@ -36,7 +31,11 @@ class Cache
     private static $redis_pass;
     private static $redis_db;
 
-    function __construct()
+    /**
+     * Cache Constructor.
+     * Initializes cache settings from the database and generates a unique cache key based on the current URL.
+     */
+    public function __construct()
     {
         self::$enabled = Options::v('cache_enabled');
         self::$type = Options::v('cache_type') ?: 'file';
@@ -53,6 +52,10 @@ class Cache
         self::$cache_file = GX_PATH . self::$path . md5($url) . '.cache';
     }
 
+    /**
+     * Starts the output buffering and checks for existing valid cache content.
+     * If a valid cache exists (File or Redis), it is served immediately, and the script terminates.
+     */
     public static function start()
     {
         if (self::$enabled == 'on') {
@@ -91,6 +94,10 @@ class Cache
         }
     }
 
+    /**
+     * Ends the output buffering, captures the content, and stores it in the cache (File or Redis).
+     * The content is then flushed to the browser.
+     */
     public static function end()
     {
         if (self::$enabled == 'on') {
