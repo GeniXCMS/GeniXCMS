@@ -26,7 +26,7 @@
                 {/if}
 
                 <div class="blog-post-content fs-5 text-dark lh-lg mb-5 mb-lg-0">
-                    {Posts::content($p->content)|noescape}
+                    {$content|noescape}
                 </div>
 
                 {var $rawTags = Posts::getParam('tags', $p->id)}

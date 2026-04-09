@@ -23,15 +23,7 @@
         {/if}
         
         <div class="post-content-max-w mx-auto px-6 font-body text-xl prose-p:mb-8 prose-headings:font-headline prose-headings:font-bold prose-headings:mb-6 prose-headings:mt-12 prose-slate text-on-surface-variant leading-relaxed text-left">
-            {var $p_content = Posts::content($p->content)}
-            {* remove first image from content if it matches the featured image to avoid duplication *}
-            {if $p_img_raw}
-                {var $p_content = preg_replace('/<img .*?src=[\'"]'.preg_quote($p_img_raw, '/').'[\'"].*?>/i', '', $p_content, 1)}
-            {/if}
-            
-            {Hooks::run('post_content_before_action', ['posts' => [$p], 'website_lang' => $website_lang])|noescape}
-            {$p_content|noescape}
-            {Hooks::run('post_content_after_action', ['posts' => [$p], 'website_lang' => $website_lang])|noescape}
+            {$content|noescape}
         </div>
         {Hooks::run('post_footer_action', ['posts' => [$p], 'website_lang' => $website_lang])|noescape}
     </article>

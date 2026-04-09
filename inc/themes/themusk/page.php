@@ -9,7 +9,7 @@
         {var $p_img = Themusk::getImage($p->content)}
         
         <div class="font-body text-xl prose-p:mb-6 prose-headings:font-headline prose-headings:font-bold prose-headings:mb-4 prose-headings:mt-8 prose-slate mx-auto text-on-surface-variant leading-relaxed">
-            {Typo::Xclean($p->content)|noescape}
+            {$content|noescape}
         </div>
     </article>
     {/foreach}
