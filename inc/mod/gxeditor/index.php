@@ -2,8 +2,8 @@
 /**
  * Name: GxEditor
  * Desc: GeniXCMS Official Block Editor — Block-based editor inspired by Gutenberg & EditorJS.
- * Version: 1.0.0
- * Build: 2.0.0
+ * Version: 1.2.1
+ * Build: 2.2.1
  * Developer: GeniXCMS
  * URI: https://genixcms.web.id/
  * License: MIT License

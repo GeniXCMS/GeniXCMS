@@ -33,7 +33,7 @@
                                         <span class="font-label text-xs uppercase tracking-widest text-primary mb-4 font-bold">Featured Essay</span>
                                         <h2 class="font-headline text-3xl lg:text-5xl font-extrabold tracking-tight text-on-surface mb-6 leading-tight">
                                             <a href="{Url::post($fp->id)}" class="hover:text-primary transition-colors">
-                                                {Hooks::filter('post_title_filter', $fp->title)|noescape}
+                                                {Typo::Xclean($fp->title)}
                                             </a>
                                         </h2>
                                         <div class="font-body text-lg text-on-surface-variant mb-8 leading-relaxed line-clamp-4">
@@ -102,7 +102,7 @@
                 </div>
                 <h3 class="font-headline text-2xl font-bold text-on-surface mb-4 group-hover:text-primary transition-colors">
                     <a href="{Url::post($p->id)}">
-                        {Hooks::filter('post_title_filter', $p->title)|noescape}
+                        {Typo::Xclean($p->title)}
                     </a>
                 </h3>
                 <p class="font-body text-on-surface-variant leading-relaxed mb-6 line-clamp-3">

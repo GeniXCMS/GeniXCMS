@@ -162,7 +162,7 @@ if (Themusk::checkDB()) {
 
     $config = [
         'brandName'  => 'The Musk Theme',
-        'brandVer'   => 'v1.0',
+        'brandVer'   => 'v1.0.2',
         'brandAbbr'  => 'TM',
         'brandIcon'  => 'fa fa-book',
         'brandColor' => '#45655b',

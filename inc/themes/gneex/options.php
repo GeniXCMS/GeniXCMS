@@ -675,7 +675,7 @@ if (Gneex::checkDB()) {
     // ─────────────────────────────────────────────────────
     $config = [
         'brandName' => 'GneeX',
-        'brandVer' => 'v2.1',
+        'brandVer' => 'v2.1.1',
         'brandAbbr' => 'GL',
         'brandIcon' => 'fa fa-leaf',      // or any Font Awesome icon
         'brandColor' => '#10b981',         // custom brand color (emerald green)

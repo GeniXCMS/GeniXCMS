@@ -44,7 +44,7 @@ if (User::access(0)) {
 
         $builder = new OptionsBuilder($opt, [], [], [
             'brandName' => 'BS-Mag Premium',
-            'brandVer' => 'v2.1.0',
+            'brandVer' => 'v2.1.1',
             'brandAbbr' => 'BM',
             'brandColor' => '#dc3545', // Editorial Red
             'saveKey' => 'bsmag_save_options'

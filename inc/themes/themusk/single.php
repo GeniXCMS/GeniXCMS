@@ -7,7 +7,7 @@
                 <a href="{Url::cat($p->cat)}" class="font-label text-xs uppercase tracking-widest text-primary mb-4 font-bold inline-block hover:opacity-80 transition-opacity">{Categories::name($p->cat)}</a>
             {/if}
             <h1 class="font-headline text-4xl md:text-6xl font-bold tracking-tighter text-on-surface mb-6 leading-tight">
-                {Hooks::filter('post_title_filter', $p->title)|noescape}
+                {$p->title}
             </h1>
             <div class="font-label text-sm uppercase tracking-widest text-outline">
                 {Date::format($p->date, 'M d, Y')} • {if $p->author}{$p->author}{else}Author{/if}

@@ -104,7 +104,7 @@ textarea.editor { display: none !important; }
     color: #475569;
     border-radius: 0 6px 6px 0;
 }
-.gxb-content p { margin-bottom: 1rem; }
+.gxb-content p { margin-bottom: 0.5rem; }
 .gxb-block[data-type="code"] .gxb-content {
     background: #1e293b;
     color: #e2e8f0;
@@ -429,7 +429,7 @@ textarea.editor { display: none !important; }
 }
 
 .gxb-classic-content-wrap {
-    padding: 40px 60px 180px; /* Increased bottom padding for better flow */
+    padding: 20px 25px 120px; /* Reduced padding for more professional look */
     min-height: 450px;
     background: #fff;
     flex: 1;
@@ -536,6 +536,164 @@ textarea.editor { display: none !important; }
 .gx-toc-placeholder strong, .gx-post-placeholder strong {
     color: #334155;
     margin-right: 5px;
+}
+
+
+
+/* ── Source Editor ───────────────────────────────── */
+/* ── Source Editor ───────────────────────────────── */
+textarea.gxb-source-editor {
+    width: 100% !important;
+    min-height: 400px !important;
+    font-family: 'Fira Code', 'Cascadia Code', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    border-radius: 0 0 8px 8px !important;
+    border: 2px solid #6366f1 !important;
+    display: none;
+    resize: vertical !important;
+    background: #0f172a !important;
+    background-color: #0f172a !important;
+    background-image: none !important;
+    color: #f8fafc !important;
+    padding: 20px !important;
+    outline: none !important;
+    box-shadow: none !important;
+    tab-size: 4;
+}
+
+textarea.gxb-source-editor:focus {
+    background: #0a0f1d !important;
+    background-color: #0a0f1d !important;
+    background-image: none !important;
+    color: #fff !important;
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.15) !important;
+}
+
+
+/* ── Responsive & Content Protection ─────────────── */
+.gxb-content img, .gxb-content table, .gxb-content div, .gxb-content iframe, .gxb-content video {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+.gxb-content table {
+    width: 100% !important;
+}
+
+@media (max-width: 991px) {
+    .gxb-classic-content-wrap {
+        padding: 30px 40px 120px;
+    }
+}
+
+@media (max-width: 767px) {
+    .gxb-shell {
+        padding-left: 0;
+    }
+    .gxb-classic-content-wrap {
+        padding: 15px 15px 80px;
+    }
+    .gxb-classic-toolbar {
+        top: 0 !important;
+        position: relative;
+    }
+}
+
+/* ── Classic Mode: Image Selection & Resize ──────── */
+.gxb-img-select-wrap {
+    display: inline-block;
+    position: relative;
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+    border-radius: 4px;
+    cursor: default;
+    user-select: none;
+    max-width: 100%;
+    /* Checkerboard on the wrapper background (behind the img) */
+    background-color: #fff;
+    background-image:
+        linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+        linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+        linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+}
+
+.gxb-img-select-wrap img {
+    display: block;
+    max-width: 100%;
+    position: relative; /* stay above the wrapper background */
+    z-index: 1;
+}
+
+/* Hidden: was replaced by wrapper background approach */
+.gxb-img-canvas { display: none; }
+
+/* Resize handle – bottom-right corner */
+.gxb-img-handle-se {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+    background: #6366f1;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    cursor: se-resize;
+    z-index: 10;
+}
+
+/* Mini image toolbar above the image */
+.gxb-img-toolbar {
+    position: absolute;
+    top: -44px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    z-index: 1100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    white-space: nowrap;
+}
+
+/* Flip toolbar BELOW image when it would be covered by sticky editor toolbar */
+.gxb-img-toolbar.gxb-img-toolbar-below {
+    top: auto;
+    bottom: -44px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.gxb-img-tb-btn {
+    background: none;
+    border: none;
+    color: #e2e8f0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s;
+}
+.gxb-img-tb-btn:hover { background: rgba(255,255,255,0.15); }
+.gxb-img-tb-btn.text-danger:hover { background: rgba(239,68,68,0.25); }
+
+.gxb-img-tb-sep {
+    width: 1px;
+    height: 18px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 2px;
 }
 
 

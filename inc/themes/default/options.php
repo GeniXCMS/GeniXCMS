@@ -35,7 +35,7 @@ $opt = json_decode($optJson, true) ?: [];
 
 $builder = new OptionsBuilder($opt, [], [], [
     'brandName' => 'Default Latte',
-    'brandVer' => 'v2.0',
+    'brandVer' => 'v2.1.0',
     'brandAbbr' => 'DL',
     'brandColor' => '#0085A1',
     'saveKey' => $saveKey

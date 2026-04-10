@@ -224,7 +224,19 @@
             shell: shell,
             blocks: [],
             isClassic: isClassic,
-            isNested: textarea.classList.contains('gxb-nested-editor')
+            isNested: textarea.classList.contains('gxb-nested-editor'),
+            insertImage: function(url) {
+                if (this.isClassic) {
+                    var cw = this.shell.querySelector('.gxb-classic-content-wrap');
+                    if (cw) { cw.focus(); document.execCommand('insertImage', false, url); }
+                } else {
+                    // In Block mode, if no active block, append image block
+                    if (window.addBlock) {
+                        var b = window.addBlock(this, 'image', url, null);
+                        if (window.renderAllBlocks) window.renderAllBlocks(this);
+                    }
+                }
+            }
         };
 
         GxEditor._editors.push(state);
@@ -323,7 +335,7 @@
                 <button type="button" data-cmd="indent" title="Increase Indent"><i class="bi bi-text-indent-left"></i></button>
                 <div class="gxb-tb-sep"></div>
                 <button type="button" data-cmd="createLink" title="Insert Link"><i class="bi bi-link"></i></button>
-                <button type="button" data-cmd="unlink" title="Remove Link"><i class="bi bi-link-45deg"></i><i class="bi bi-x"></i></button>
+                <button type="button" data-cmd="unlink" title="Remove Link"><i class="bi bi-link-45deg" style="position:relative;"><i class="bi bi-x" style="position:absolute;top:-4px;right:-5px;font-size:0.7em;font-weight:900;color:#ef4444;"></i></i></button>
                 <button type="button" data-cmd="insertImageGX" title="Insert Image"><i class="bi bi-image"></i></button>
                 <button type="button" data-cmd="insertVideoGX" title="Insert Video"><i class="bi bi-camera-video"></i></button>
                 <button type="button" data-cmd="codeBlockGX" title="Insert Code Block"><i class="bi bi-code-slash"></i></button>
@@ -550,8 +562,8 @@
                         if (!sourceBox) {
                             // Create source editor panel
                             sourceBox = document.createElement('textarea');
-                            sourceBox.className = 'gxb-source-editor form-control font-monospace';
-                            sourceBox.style.cssText = 'width:100%;min-height:350px;font-size:12px;line-height:1.6;border-radius:0 0 8px 8px;border:2px solid #6366f1;display:none;resize:vertical;background:#0f172a;color:#e2e8f0;padding:16px;';
+                            sourceBox.className = 'gxb-source-editor';
+                            sourceBox.style.display = 'none';
                             shell.appendChild(sourceBox);
                             // Sync from source back to editor
                             sourceBox.addEventListener('input', function() {
@@ -568,8 +580,9 @@
                             btn.style.color = '#6366f1';
                             btn.title = 'View/Edit Source Code';
                         } else {
-                            // Switch to source mode: sync visual → source
-                            sourceBox.value = contentWrap.innerHTML;
+                            // Switch to source mode: deselect image first then sync visual → source
+                            if (typeof deselect === 'function') deselect();
+                            sourceBox.value = (typeof getCleanHTML === 'function') ? getCleanHTML() : contentWrap.innerHTML;
                             contentWrap.style.display = 'none';
                             sourceBox.style.display = 'block';
                             btn.style.color = '#f59e0b';
@@ -618,12 +631,181 @@
                 });
             });
 
-            // Sync logic
-            var sync = function () { 
-                textarea.value = (typeof htmlToShortcode === 'function') ? htmlToShortcode(contentWrap.innerHTML) : contentWrap.innerHTML; 
+            var getCleanHTML = function() {
+                // Clone the content and strip all UI-only image wrapper elements
+                var clone = contentWrap.cloneNode(true);
+                clone.querySelectorAll('.gxb-img-select-wrap').forEach(function(wrap) {
+                    var img = wrap.querySelector('img');
+                    if (img) {
+                        // Keep only the img, remove wrapper + toolbar + handle
+                        wrap.parentNode.insertBefore(img.cloneNode(true), wrap);
+                    }
+                    wrap.remove();
+                });
+                return clone.innerHTML;
             };
+
+            var sync = function () {
+                var html = getCleanHTML();
+                textarea.value = (typeof htmlToShortcode === 'function') ? htmlToShortcode(html) : html;
+            };
+            
+            contentWrap.addEventListener('paste', function(e) {
+                // Prevent default pasting to clean the content
+                e.preventDefault();
+                var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                var html = (e.originalEvent || e).clipboardData.getData('text/html');
+                
+                if (html) {
+                    // Very basic cleaning: remove fixed widths and complex styles
+                    var div = document.createElement('div');
+                    div.innerHTML = html;
+                    div.querySelectorAll('*').forEach(function(el) {
+                        el.removeAttribute('style');
+                        el.removeAttribute('width');
+                        el.removeAttribute('height');
+                        el.classList.forEach(function(c) { if (c.startsWith('Mso')) el.classList.remove(c); }); // Word cleaning
+                    });
+                    document.execCommand('insertHTML', false, div.innerHTML);
+                } else {
+                    document.execCommand('insertText', false, text);
+                }
+                sync();
+            });
+
             contentWrap.addEventListener('input', sync);
-            contentWrap.addEventListener('blur', sync);
+            contentWrap.addEventListener('blur', function(e) {
+                // Don't deselect if clicking a resize handle
+                if (e.relatedTarget && e.relatedTarget.classList && e.relatedTarget.classList.contains('gxb-img-handle')) return;
+                sync();
+            });
+
+            // ── Image Selection & Resize ─────────────────────────────
+            var _selectedImg = null;
+            var _imgWrapper  = null;
+
+            function deselect() {
+                if (_imgWrapper) {
+                    var img = _imgWrapper._img;
+                    if (img) {
+                        _imgWrapper.parentNode.insertBefore(img, _imgWrapper);
+                    }
+                    _imgWrapper.remove();
+                    _imgWrapper = null;
+                }
+                _selectedImg = null;
+            }
+
+            function selectImg(img) {
+                if (_selectedImg === img) return;
+                deselect();
+                _selectedImg = img;
+
+                var wrapper = document.createElement('span');
+                wrapper.className = 'gxb-img-select-wrap';
+                wrapper.contentEditable = 'false';
+                wrapper._img = img;
+                _imgWrapper = wrapper;
+
+                img.parentNode.insertBefore(wrapper, img);
+                wrapper.appendChild(img);
+
+                // Checkerboard for transparent images
+                var canvas = document.createElement('div');
+                canvas.className = 'gxb-img-canvas';
+                wrapper.appendChild(canvas);
+
+                // Resize handle (bottom-right)
+                var handle = document.createElement('span');
+                handle.className = 'gxb-img-handle gxb-img-handle-se';
+                wrapper.appendChild(handle);
+
+                // Context menu bar
+                var bar = document.createElement('div');
+                bar.className = 'gxb-img-toolbar';
+                bar.innerHTML = '<button type="button" class="gxb-img-tb-btn" data-align="none" title="No alignment (default)"><i class="bi bi-slash-circle"></i></button>' +
+                                '<button type="button" class="gxb-img-tb-btn" data-align="float-start" title="Float left"><i class="bi bi-align-start"></i></button>' +
+                                '<button type="button" class="gxb-img-tb-btn" data-align="mx-auto d-block" title="Center"><i class="bi bi-text-center"></i></button>' +
+                                '<button type="button" class="gxb-img-tb-btn" data-align="float-end" title="Float right"><i class="bi bi-align-end"></i></button>' +
+                                '<span class="gxb-img-tb-sep"></span>' +
+                                '<button type="button" class="gxb-img-tb-btn gxb-img-tb-replace" title="Replace image"><i class="bi bi-arrow-repeat"></i></button>' +
+                                '<button type="button" class="gxb-img-tb-btn gxb-img-tb-del text-danger" title="Delete image"><i class="bi bi-trash3"></i></button>';
+                wrapper.appendChild(bar);
+
+                // Smart position: flip toolbar below if it would be covered by sticky editor toolbar
+                setTimeout(function() {
+                    var editorToolbar = shell.querySelector('.gxb-classic-toolbar');
+                    var toolbarBottom = editorToolbar ? editorToolbar.getBoundingClientRect().bottom : 0;
+                    var wrapperTop = wrapper.getBoundingClientRect().top;
+                    // If toolbar popup would appear inside/behind the editor toolbar area, flip it below
+                    if (wrapperTop - 44 < toolbarBottom) {
+                        bar.classList.add('gxb-img-toolbar-below');
+                    } else {
+                        bar.classList.remove('gxb-img-toolbar-below');
+                    }
+                }, 0);
+
+                // Align buttons
+                bar.querySelectorAll('[data-align]').forEach(function(b) {
+                    b.addEventListener('mousedown', function(e) {
+                        e.preventDefault(); e.stopPropagation();
+                        var al = b.dataset.align;
+                        img.className = img.className.replace(/float-start|float-end|mx-auto|d-block/g, '').trim();
+                        if (al !== 'none') al.split(' ').forEach(function(c) { img.classList.add(c); });
+                        wrapper.className = wrapper.className.replace(/float-start|float-end/g, '').trim();
+                        if (al === 'float-start') wrapper.classList.add('float-start');
+                        if (al === 'float-end') wrapper.classList.add('float-end');
+                        if (al === 'mx-auto d-block') wrapper.classList.add('d-block', 'mx-auto');
+                        sync();
+                    });
+                });
+
+                // Replace button
+                bar.querySelector('.gxb-img-tb-replace').addEventListener('mousedown', function(e) {
+                    e.preventDefault(); e.stopPropagation();
+                    if (typeof window.elfinderDialog === 'function') {
+                        var ctx = { invoke: function(d, url) { img.src = url; sync(); } };
+                        window.elfinderDialog(ctx);
+                    }
+                });
+
+                // Delete button
+                bar.querySelector('.gxb-img-tb-del').addEventListener('mousedown', function(e) {
+                    e.preventDefault(); e.stopPropagation();
+                    deselect();
+                    img.remove();
+                    sync();
+                });
+
+                // Resize drag
+                var startX, startW;
+                handle.addEventListener('mousedown', function(e) {
+                    e.preventDefault(); e.stopPropagation();
+                    startX = e.clientX;
+                    startW = img.offsetWidth;
+                    function onMove(e) {
+                        var nw = Math.max(40, startW + (e.clientX - startX));
+                        img.style.width = nw + 'px';
+                        img.style.height = 'auto';
+                    }
+                    function onUp() {
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                        sync();
+                    }
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
+                });
+            }
+
+            contentWrap.addEventListener('click', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                    selectImg(e.target);
+                } else if (!e.target.closest('.gxb-img-select-wrap')) {
+                    deselect();
+                }
+            });
 
             // Double click Math editor
             contentWrap.addEventListener('dblclick', function (e) {

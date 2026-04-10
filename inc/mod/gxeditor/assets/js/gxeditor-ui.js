@@ -501,14 +501,27 @@ window.initGlobalUI = function() {
                     var url = prompt('Enter URL:');
                     if (url) document.execCommand('createLink', false, url);
                 } else if (cmd === 'insertImageGX') {
-                    var sel = window.getSelection();
-                    if (sel.rangeCount) {
-                        var range = sel.getRangeAt(0).cloneRange();
-                        range.collapse(false);
-                        var fi = document.createElement('input');
-                        fi.type = 'file'; fi.accept = 'image/*';
-                        fi.onchange = function() { if(window.uploadInlineImageElFinder) window.uploadInlineImageElFinder(fi.files[0], range); };
-                        fi.click();
+                    if (typeof window.elfinderDialog === 'function') {
+                        var sel = window.getSelection();
+                        var range = (sel.rangeCount > 0) ? sel.getRangeAt(0).cloneRange() : null;
+                        var fakeContext = {
+                            invoke: function (dummy, url) {
+                                if (range) {
+                                    var s = window.getSelection();
+                                    s.removeAllRanges();
+                                    s.addRange(range);
+                                }
+                                document.execCommand('insertImage', false, url);
+                                // Trigger sync
+                                var node = range ? range.commonAncestorContainer : null;
+                                if (node && node.nodeType === 3) node = node.parentNode;
+                                var contentEl = node ? node.closest('.gxb-content') : null;
+                                if (contentEl) {
+                                    contentEl.dispatchEvent(new Event('input', { bubbles: true }));
+                                }
+                            }
+                        };
+                        window.elfinderDialog(fakeContext);
                     }
                 } else if (['icon_list', 'table', 'grid2', 'toc'].indexOf(cmd) !== -1) {
                     var shell = btn.closest('.gxb-shell') || document.querySelector('.gxb-shell.gxb-selected');

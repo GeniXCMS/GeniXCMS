@@ -34,7 +34,7 @@
                     </p>
 
                     <div class="blog-post-content mb-4">
-                        {Posts::format(Typo::Xclean($p->content), $p->id)|noescape}
+                        {Posts::format($p->content, $p->id)|noescape}
                     </div>
                 </article>
             {/foreach}

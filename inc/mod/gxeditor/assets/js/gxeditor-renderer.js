@@ -346,12 +346,23 @@ window.refreshImageBlock = function(state, block) {
 };
 
 window.triggerImageReplace = function(state, block, content) {
-    var fi = document.createElement('input');
-    fi.type = 'file'; fi.accept = 'image/*';
-    fi.onchange = function() {
-        if (fi.files[0]) window.uploadImageFile(fi.files[0], block, content, state);
-    };
-    fi.click();
+    if (typeof window.elfinderDialog === 'function') {
+        var context = {
+            invoke: function (dummy, url) {
+                block.content = url;
+                window.renderImageBlock(state, block, content);
+                if (window.serializeToTextarea) window.serializeToTextarea(state);
+            }
+        };
+        window.elfinderDialog(context);
+    } else {
+        var fi = document.createElement('input');
+        fi.type = 'file'; fi.accept = 'image/*';
+        fi.onchange = function() {
+            if (fi.files[0]) window.uploadImageFile(fi.files[0], block, content, state);
+        };
+        fi.click();
+    }
 };
 
 /**
