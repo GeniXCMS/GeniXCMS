@@ -1,5 +1,5 @@
-# GeniXCMS v2.2.0
-> **Latest Update**: Professional Dynamic Builder Integration
+# GeniXCMS v2.2.1
+> **Latest Update**: GxEditor Classic Mode Enhancement & Media Integration Polish
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
@@ -11,18 +11,27 @@
 
 - **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3**.
 - **Dynamic Builder (v2.1.0+)**: A professional-grade visual editor with drag-and-drop mechanics, premium block library, and real-time layout synchronization.
-- **GxEditor Modular Engine**: A next-gen block-based editor allowing for custom visual blocks, Elementor-style **Nested Containers**, and a distraction-free **Classic Mode**.
+- **GxEditor v1.2.1 — Modular Engine**:
+  - Next-gen block-based editor with custom visual blocks and **Nested Grid Containers**.
+  - **Classic Mode** with a full rich-text toolbar (Bold, Italic, Tables, Math/LaTeX, Source View).
+  - **Image Selection & Resize** — Click any image to get an inline toolbar for alignment, replacement, and drag-to-resize.
+  - **Smart Paste Handler** — Cleans inline styles from Word/Google Docs pastes to maintain editor integrity.
+  - **Source Code View** with persistent dark mode theme.
+  - Fully integrated with **elFinder** media manager for seamless image insertion.
 - **Centralized Asset Management**: Robust `Asset` class for programmatic enqueuing with **Automatic Dependency Resolution**.
+- **Reactive Archive Synchronization**: Archive sidebar counts update instantly on post create/update/delete via hook-based cache invalidation.
 - **Latte Template Engine**: Fully integrated [Latte](https://latte.nette.org/) for secure, clean, and blazingly fast templating.
 - **Premium Editorial Themes**:
-  - **GneeX**: Industrial-modern design with Glassmorphism, premium magazine layouts, and responsive typography.
-  - **TheMusk**: Minimalist, high-contrast bento-grid layout using **Tailwind CSS**.
+  - **GneeX** (v2.1.1): Industrial-modern design with Glassmorphism, premium magazine layouts, and responsive typography.
+  - **TheMusk** (v1.0.2): Minimalist, high-contrast bento-grid layout using **Tailwind CSS**.
+  - **BSMag** (v2.1.1): Magazine-style theme with dark mode support and NixSlider integration.
+  - **Default** (v2.1.0): Clean, extensible base theme.
 - **Enhanced Security**:
   - **Token-Based CSRF Protection**: All forms and AJAX requests are protected with time-based CSRF tokens.
   - Out of the box **Prepared Statements** for SQL Injection prevention.
   - Hardened `.htaccess` and `nginx.conf` configurations included.
   - **HTMLPurifier** integration for robust XSS protection.
-- **Developer-Friendly**: Modular architecture with **Hooks/Filters** system, **OptionsBuilder** for programmable dashboards, and a powerful **CLI tool**.
+- **Developer-Friendly**: Modular architecture with **Hooks/Filters** system, **UiBuilder** & **OptionsBuilder** for programmable dashboards, and a powerful **CLI tool**.
 
 ---
 
@@ -31,11 +40,11 @@
 **GeniXCMS** leverages industry-standard FOSS tools:
 - **Framework Core**: PHP 8.2+
 - **Templating**: Latte 3.1+
-- **Editor Core**: GxEditor (Modular JSON Engine)
-- **Asset Management**: GeniX `Asset` Class (with enqueuing)
+- **Editor Core**: GxEditor v1.2.1 (Modular Block Engine)
+- **Asset Management**: GeniX `Asset` Class (with dependency resolution)
 - **Styling**: Bootstrap 5.3, Tailwind CSS (for modern themes), Vanilla CSS (Design Tokens).
 - **Image Processing**: Intervention Image v3.
-- **Components**: elFinder, AOS (Animate on Scroll), Swiper.js, FlexSlider.
+- **Components**: elFinder, AOS (Animate on Scroll), Swiper.js, FlexSlider, KaTeX (Math).
 
 ### 📋 Requirements
 
@@ -54,6 +63,10 @@
    - `inc/mods`
    - `assets/images/uploads`
    - `assets/cache`
+   - `assets/media/images`
+   - `assets/media/videos`
+   - `assets/media/audios`
+   
 3. Visit your domain in the browser (e.g., `http://yoursite.com`).
 4. Follow the **Installation Wizard** to set up your site and database.
 
