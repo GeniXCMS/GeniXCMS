@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -21,10 +21,26 @@ class Archives
 
     /**
      * Archives Constructor.
+     * Hooks into post lifecycle events to ensure the archive cache 
+     * stays synchronized with database changes (Insert/Update/Delete).
      */
     public function __construct()
     {
-        // No longer triggers generate here — generate is lazy-called from list()
+        // Automatically refresh archives when posts are added or modified
+        Hooks::attach('post_sqladd_action', array('Archives', 'updateAfterAction'));
+        // Automatically refresh archives when posts are deleted
+        Hooks::attach('post_sqldel_action', array('Archives', 'updateAfterAction'));
+    }
+
+    /**
+     * Bridge method for hooks to trigger an archive update.
+     *
+     * @param mixed $vars Internal data from the hook (ignored).
+     * @return void
+     */
+    public static function updateAfterAction($vars = null)
+    {
+        self::doUpdate('post');
     }
 
     /**

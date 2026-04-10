@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -421,10 +421,14 @@ class Url
     public static function thumb($vars, $type = '', $size = '', $align = '')
     {
         // $vars = urlencode($vars);
-        $vars = str_replace(Site::$url, '', $vars);
-        $vars = str_replace(Site::$cdn, '', $vars);
+        $vars = str_replace([Site::$url, Site::$cdn], '', $vars);
         $vars = ltrim($vars, '/');
-        $vars = str_replace('thumb/', '', $vars);
+        // Remove existing thumbification prefixes/parameters
+        $vars = str_replace(['thumb/', '?thumb='], '', $vars);
+        // Also strip any existing type/size/align path segments if any (Smart URL)
+        $vars = preg_replace('#(type|size|align)/[^/]+/#i', '', $vars);
+        // Strip query params if any (Non-Smart URL)
+        $vars = preg_replace('#&(type|size|align)=[^&]+#i', '', $vars);
 
         switch (SMART_URL) {
             case true:

@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * Provides access to posts, categories, authors, etc.
  * 
  * @since 2.0.0
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>

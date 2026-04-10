@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-04-10
+
+### Added
+- **Nixslider CSS Customization Docs**: Added a new "How To Use" section in the Nixslider module admin panel, providing developers with clear CSS selectors and snippets for fine-tuning the slider's appearance.
+- **Nixslider UI Polish**: Centered slider captions and implemented a Flexbox-based alignment system for a more professional and balanced visual presentation across all themes.
+- **System Core**: Bumped system version to 2.2.1 and updated professional DocBlock headers across all core library classes (`inc/lib/`).
+
+### Fixed
+- **GxEditor & Media Management**: Resolved a critical bug where images selected via elFinder failed to render. Standardized the `Asset::elfinderDialog` function to support context-aware callbacks, ensuring seamless image insertion across "Classic" and "Block" modes.
+- **GxEditor Source Mode**: Fixed high-contrast visibility bug in "View Source" mode by ensuring dark-mode persistence on focus and removing Bootstrap style conflicts.
+- **Theme Version Synchronization**: Unified version numbers in `themeinfo.php` and `options.php` for all core themes to ensure accurate update tracking.
+- **Real-time Archive Synchronization**: Resolved a bug where sidebar archive counts were inconsistent with actual posts due to a 24-hour cache delay. Implemented a reactive hook system in the `Archives` class that listens to post lifecycle events (Create, Update, Delete, Publish, Unpublish) to refresh archive data instantly.
+- **Default Theme Featured Image**: Resolved a critical layout bug where featured images were rendered twice (once in the theme's custom header and once within the post body). Fixed by decoupling image insertion from the core `PostControl` content stream.
+- **PHP Undefined Variable Fix**: Eliminated PHP warnings regarding `$site_footer` and `$site_url` in the rendering pipeline by ensuring consistent initialization in `BaseControl`.
+- **Architecture: Rendering Pipeline Refinement**: Centralized `post_title_filter` execution and HTML entity decoding (`Typo::Xclean`) within `Posts::prepare()`. This ensures consistent title rendering across all frontend views while simplifying theme development by allowing templates to use raw variables (e.g., `{$p->title}`) without manual processing.
+- **Theme Cleanup**: Refactored `default`, `bsmag`, `gneex`, and `themusk` themes to leverage the new core-level decoding, removing redundant manual filtering from templates.
+- **Smart URL Thumbnail Fix**: Implemented a "recursive-safe" `Url::thumb()` logic that automatically strips existing thumbification parameters, resolving malformed URL bugs (e.g., `?thumb=?thumb=`) when `SMART_URL` is disabled.
+- **Shortcode Decoding Fix**: Resolved a "double encoding" issue in Nixslider captions and titles by switching to `Typo::Xclean()` for proper HTML entity decoding.
+- **Theme Rendering Standardization**: Migrated `default`, `themusk`, and `bsmag` themes to use the pre-processed `{$content}` variable, ensuring all shortcodes and filters are executed consistently.
+- **BSMag Slider Reset**: Added a CSS reset for `.nixslider-slide img` in the BSMag theme to prevent global blog image styles (borders/padding) from distorting the slider layout.
+
+
 ## [2.2.0] - 2026-04-08
 
 ### Added
@@ -64,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Admin UI Polish**: Corrected inconsistent spacing and border rendering in the page and post creation forms for a more unified "GeniXCMS 2.0" aesthetic.
 
 ### Changed
-- **Version Bump**: Officially updated core version to **2.0.1** to reflect these critical stability fixes in the 2.0 series.
+- **Version Bump**: Officially updated core version to **2.2.1** and themes to **2.1.1** to reflect these critical stability fixes in the 2.0 series.
 - **Asset Registration**: Moved elFinder helper utilities to the page header to ensure core JS functions are defined before any user interaction occurs.
 
 ## [2.0.0] - 2026-04-05

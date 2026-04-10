@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * Handles registration and enqueuing of JS/CSS assets
  * @since 2.0.0
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -368,22 +368,39 @@ class Asset
                 }
             });
 
-            window.elfinderDialog = function() {
+            window.elfinderDialog = function(context) {
                 var gxEditorType = "' . $editorType . '";
                 var fm = $("<div/>").dialogelfinder({
                     url : ' . $elfinderUrl . ',
                     lang : "en", width : 840, height: 450,
                     destroyOnClose : true,
                     getFileCallback : function(file, fm) {
-                        if (gxEditorType === "editorjs" || gxEditorType === "gxeditor") {
-                            if (window.__gxEditors) {
+                        if (context && typeof context.invoke === "function") {
+                            context.invoke("editor.insertImage", file.url);
+                        } else if (gxEditorType === "editorjs" || gxEditorType === "gxeditor") {
+                            if (window.GxEditor && window.GxEditor._editors && window.GxEditor._editors.length > 0) {
+                                // For GxEditor Module
+                                var active = window.GxEditor._editors[0];
+                                if (active && typeof active.insertImage === "function") {
+                                     active.insertImage(file.url);
+                                } else {
+                                     document.execCommand("insertImage", false, file.url);
+                                }
+                            } else if (window.__gxEditors) {
+                                // For Legacy EditorJS based GxEditor
                                 var idx = Object.keys(window.__gxEditors)[0];
                                 if (window.__gxEditors[idx]) {
                                     window.__gxEditors[idx].blocks.insert("image", { file: { url: file.url } });
                                 }
+                            } else {
+                                document.execCommand("insertImage", false, file.url);
                             }
                         } else {
-                            $(".editor").summernote("editor.insertImage", file.url);
+                            try {
+                                $(".editor").summernote("editor.insertImage", file.url);
+                            } catch (e) {
+                                document.execCommand("insertImage", false, file.url);
+                            }
                         }
                     },
                     commandsOptions : { getfile : { oncomplete : "close", folders : false } }

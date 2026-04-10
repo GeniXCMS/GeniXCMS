@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -127,6 +127,7 @@ class Posts extends Model
     {
         $id = Typo::int($id);
         $post = Query::table('posts')->where('id', $id)->update(['status' => '1']);
+        Hooks::run('post_sqladd_action', ['status' => '1'], $id);
 
         return $post;
     }
@@ -141,6 +142,7 @@ class Posts extends Model
     {
         $id = Typo::int($id);
         $post = Query::table('posts')->where('id', $id)->update(['status' => '0']);
+        Hooks::run('post_sqladd_action', ['status' => '0'], $id);
 
         return $post;
     }
@@ -497,11 +499,28 @@ class Posts extends Model
                     } else {
                         $posts = $p;
                     }
+
+                    // Prepare title for frontend: decode entities and apply filters
+                    if (is_object($posts)) {
+                        $posts->title = Typo::Xclean($posts->title);
+                        $posts->title = Hooks::filter('post_title_filter', $posts->title);
+                    } elseif (is_array($posts)) {
+                        $posts['title'] = Typo::Xclean($posts['title']);
+                        $posts['title'] = Hooks::filter('post_title_filter', $posts['title']);
+                    }
+
                     $posts_arr = array();
                     $posts_arr = json_decode(json_encode($posts), false);
                     // $posts[] = $posts;
                     $post_arr[] = $posts_arr;
                     $post = $post_arr;
+                }
+            }
+        } else {
+            foreach ($post as $p) {
+                if (is_object($p)) {
+                    $p->title = Typo::Xclean($p->title);
+                    $p->title = Hooks::filter('post_title_filter', $p->title);
                 }
             }
         }
@@ -563,14 +582,14 @@ class Posts extends Model
                     }
                     $html .= '<div class="flex-shrink-0">
                         <a href="' . Url::post($p->id) . '">
-                          <img class="' . $imgClass . '" src="' . $img . '" alt="' . $p->title . '" width="' . $imgSize . '" height="' . $imgSize . '" style="object-fit: cover;">
+                          <img class="' . $imgClass . '" src="' . $img . '" alt="' . Typo::Xclean($p->title) . '" width="' . $imgSize . '" height="' . $imgSize . '" style="object-fit: cover;">
                         </a>
                       </div>';
                 }
                 $html .= '<div class="flex-grow-1 ms-3 ' . $liClass . '">';
-                $html .= (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading mb-1 ' . $h4Class . '"><a href="' . Url::post($p->id) . "\">{$p->title}</a></h4>" : '';
+                $html .= (isset($vars['title']) && $vars['title'] === true) ? '<h4 class="media-heading mb-1 ' . $h4Class . '"><a href="' . Url::post($p->id) . '">' . Typo::Xclean($p->title) . '</a></h4>' : '';
                 $html .= (isset($vars['date']) && $vars['date'] === true) ? '<small class="text-muted ' . $dateClass . '">' . Date::local($p->date) . ' </small> ' : '';
-                $html .= (isset($vars['author']) && $vars['author'] === true) ? '<small class="text-muted">by : ' . $p->author . '</small>' : '';
+                $html .= (isset($vars['author']) && $vars['author'] === true) ? '<small class="text-muted">by : ' . Typo::Xclean($p->author) . '</small>' : '';
                 $html .= (isset($vars['excerpt']) && $vars['excerpt'] === true) ? '<p class="mb-0 ' . $pClass . '">' . $content . '</p>' : '';
                 $html .= '</div>';
                 $html .= '</div>';
@@ -593,7 +612,7 @@ class Posts extends Model
         $tags_x = explode(',', $tags);
         $tag = [];
         foreach ($tags_x as $t) {
-            $tag[] = '<a href="' . Url::tag($t) . "\">{$t}</a>";
+            $tag[] = '<a href="' . Url::tag($t) . '">' . Typo::Xclean($t) . '</a>';
         }
         $tag = implode(', ', $tag);
 
@@ -648,7 +667,7 @@ class Posts extends Model
                     if (!is_object($p))
                         continue;
                     if ($p->id != $id) {
-                        $related .= '<li class="list-group-item"><a href="' . Url::post($p->id) . "\">$p->title</a></li>";
+                        $related .= '<li class="list-group-item"><a href="' . Url::post($p->id) . '">' . Typo::Xclean($p->title) . '</a></li>';
                     } else {
                         $related .= '';
                     }
@@ -669,10 +688,10 @@ class Posts extends Model
                             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden related-card transition-base">
                                 <a href="' . Url::post($p->id) . '" class="text-decoration-none text-dark h-100 d-flex flex-column">
                                     <div class="ratio ratio-16x9">
-                                        <img src="' . $imgurl . '" class="card-img-top object-fit-cover" alt="' . $p->title . '">
+                                        <img src="' . $imgurl . '" class="card-img-top object-fit-cover" alt="' . Typo::Xclean($p->title) . '">
                                     </div>
                                     <div class="card-body p-3">
-                                        <h6 class="card-title fw-bold mb-0" style="font-size: 0.9rem; line-height: 1.4;">' . $title . '</h6>
+                                        <h6 class="card-title fw-bold mb-0" style="font-size: 0.9rem; line-height: 1.4;">' . Typo::Xclean($title) . '</h6>
                                     </div>
                                 </a>
                             </div>

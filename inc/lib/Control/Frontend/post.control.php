@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.2.1
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -69,8 +69,7 @@ class PostControl extends BaseControl
             $data['content'] = "";
             $post_image = Posts::getPostImage($post->id);
             if ($post_image != "") {
-                $imgurl = Url::thumb($post_image, 'large', 850);
-                $data['content'] .= "<p><img src='{$imgurl}' width='850' class='img-fluid post_image' alt='{$post->title}' loading='lazy'></p>";
+                $data['imgurl'] = Url::thumb($post_image, 'large', 850);
             }
 
             $data['content'] .= Hooks::run('post_content_before_action', $data);
