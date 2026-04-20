@@ -28,6 +28,7 @@
     },
     "require": {
         "php": ">=8.2.0",
+        "phpunit/phpunit": "12.5.22",
         "phpmailer/phpmailer": "^6.12",
         "kissifrot/php-ixr": "^1.8",
         "google/recaptcha": "^1.3",
