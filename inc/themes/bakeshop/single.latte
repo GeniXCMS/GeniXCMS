@@ -1,0 +1,160 @@
+{var $o = Bakeshop::options()}
+
+{if isset($posts[0])}
+    {foreach $posts as $p}
+        {var $img = Posts::getPostImage($p->id)}
+        {var $catName = ($p->cat) ? Categories::name($p->cat) : _('Story')}
+        {var $author_email = User::email($p->author)}
+        {var $author_name = $p->author}
+
+        <main class="w-full">
+            <!-- Hero Section -->
+            <header class="relative w-full h-[60vh] md:h-[70vh] flex items-end overflow-hidden">
+                <img class="absolute inset-0 w-full h-full object-cover" 
+                     src="{(empty($img) ? 'https://images.unsplash.com/photo-1550617931-e17a7b701ce2?q=80&w=1200' : Url::thumb($img, 'large'))}" 
+                     alt="{$p->title|stripHtml}"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-8 pb-16 w-full">
+                    <div class="max-w-4xl">
+                        <span class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest mb-6 shadow-sm">
+                            {$catName}
+                        </span>
+                        <h1 class="text-4xl md:text-7xl font-headline font-extrabold text-on-surface tracking-tighter leading-tight mb-8">
+                            {Typo::Xclean($p->title)|noescape}
+                        </h1>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-surface-container-highest shadow-sm">
+                                <img src="{Image::getGravatar($author_email, 60)}" alt="{$author_name}"/>
+                            </div>
+                            <div>
+                                {var $word_count = count(preg_split('/\s+/', strip_tags($p->content)))}
+                                {var $read_time = ceil($word_count / 200)}
+                                <p class="font-bold text-sm text-on-surface">{$author_name}</p>
+                                <p class="text-xs text-on-surface-variant italic font-medium">{Date::format($p->date, 'F d, Y')} • {$read_time} {_('min read')}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Article Content Grid -->
+            <div class="max-w-7xl mx-auto px-8 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
+                <article class="lg:col-span-8 space-y-12">
+                    <!-- Main Body -->
+                    <section class="prose prose-xl prose-stone max-w-none editorial-content text-on-surface leading-[1.8] font-body">
+                        {var $content = Posts::content($p->content)}
+                        {$content|noescape}
+                    </section>
+
+                    <!-- Tags Section -->
+                    {var $tags = (isset($p->tags) && !empty($p->tags)) ? explode(',', $p->tags) : []}
+                    {if !empty($tags)}
+                        <div class="flex flex-wrap gap-2 pt-8 border-t border-outline-variant/10">
+                            {foreach $tags as $t}
+                                {if trim($t) !== ''}
+                                    <a href="{Url::tag(trim($t))}" class="px-4 py-2 bg-surface-container-low text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all duration-300 rounded-full text-xs font-bold font-label uppercase tracking-widest border border-black/5">
+                                        #{(trim($t))}
+                                    </a>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    {/if}
+
+                    <!-- Author Bio Card -->
+                    <section class="bg-surface-container-low p-8 md:p-10 rounded-lg flex flex-col md:flex-row gap-8 items-center md:items-start mt-12 border border-black/5">
+                        <img class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-surface-container-lowest shadow-sm" 
+                             src="{Image::getGravatar($author_email, 128)}" 
+                             alt="{$author_name}"/>
+                        <div>
+                            <h4 class="text-2xl font-headline font-bold mb-2 text-on-surface">{$author_name}</h4>
+                            <p class="text-primary font-bold text-xs mb-4 uppercase tracking-widest font-label">{_('Contributor at')} {$site_name}</p>
+                            <p class="text-on-surface-variant leading-relaxed text-sm">
+                                {sprintf(_("%s is a passionate storyteller and creator at the %s. Sharing the art of fine baking and the magic found in every handcrafted creation."), $author_name, $site_name)}
+                            </p>
+                            <div class="flex gap-4 mt-6">
+                                <a class="text-outline hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">share</span></a>
+                                <a class="text-outline hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">link</span></a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Comments Section -->
+                    <section class="pt-16 border-t border-outline-variant/10">
+                        <h3 class="text-2xl font-headline font-extrabold tracking-tight text-on-surface mb-10">{_('The Pantry Conversation')}</h3>
+                        
+                        <div class="space-y-8">
+                            <div class="comments-wrapper">
+                                {Comments::showList(['max' => 10])|noescape}
+                            </div>
+                            
+                            <div class="bg-surface-container rounded-2xl p-8 shadow-sm">
+                                <h4 class="text-lg font-bold mb-6 text-on-surface">{_('Join the discussion')}</h4>
+                                {Comments::form()|noescape}
+                            </div>
+                        </div>
+                    </section>
+                </article>
+
+                <!-- Sidebar -->
+                <aside class="lg:col-span-4 space-y-12">
+                    <div class="sticky top-28 space-y-12">
+                        <!-- Search Widget -->
+                        <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm border border-black/5">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface mb-6 font-label">{_('Search the Gallery')}</h4>
+                            <form action="{Url::search()}" method="get" class="relative">
+                                <input type="hidden" name="search" value=""/>
+                                <input name="q" class="w-full rounded-full bg-surface-container-low border-none px-6 py-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all" 
+                                       placeholder="{_('Stories, recipes...')}" type="text" required/>
+                                <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined">search</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- More Stories Section -->
+                        <div class="space-y-8">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-2 font-label">{_('More from the Gallery')}</h4>
+                            <div class="space-y-6">
+                                {var $morePosts = Posts::recent(3)}
+                                {if !isset($morePosts['error'])}
+                                    {foreach $morePosts as $mp}
+                                        {continueIf $mp->id === $p->id}
+                                        {var $m_img = Posts::getPostImage($mp->id)}
+                                        <a class="group block space-y-3" href="{Url::post($mp->id)}">
+                                            <div class="aspect-video rounded-lg overflow-hidden relative shadow-sm">
+                                                <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                                     src="{(empty($m_img) ? 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400' : Url::thumb($m_img, 'large'))}" 
+                                                     alt="{$mp->title|stripHtml}"/>
+                                            </div>
+                                            <h5 class="font-headline font-bold text-on-surface group-hover:text-primary transition-colors leading-tight">
+                                                {Typo::Xclean($mp->title)|noescape}
+                                            </h5>
+                                        </a>
+                                    {/foreach}
+                                {/if}
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Card (Small) -->
+                        <div class="bg-gradient-to-br from-primary to-primary-container rounded-lg p-8 text-on-primary shadow-lg relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h4 class="text-xl font-headline font-extrabold mb-4 leading-tight">{_('Stay Inspired')}</h4>
+                                <p class="text-xs opacity-90 mb-6 leading-relaxed">{_('Join our mailing list for weekly secrets from our master bakers.')}</p>
+                                <button class="w-full bg-white text-primary font-bold py-3 rounded-full hover:bg-opacity-90 transition-opacity text-sm">{_('Sign Up Now')}</button>
+                            </div>
+                            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    {/foreach}
+{else}
+    <div class="text-center py-24 bg-surface-container-lowest">
+        <span class="material-symbols-outlined text-outline-variant text-7xl mb-6">sentiment_dissatisfied</span>
+        <h2 class="text-4xl font-headline font-extrabold text-on-surface mb-4">{_('Post not found')}</h2>
+        <p class="text-on-surface-variant mb-10 text-lg">{_('Maybe it was so delicious it just vanished.')}</p>
+        <a href="{$site_url}" class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-md hover:opacity-90 transition-opacity">{_('Return to Home')}</a>
+    </div>
+{/if}

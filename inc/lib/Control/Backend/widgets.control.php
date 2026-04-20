@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -32,6 +32,12 @@ if (User::access(1)) {
                 'status' => 1,
                 'sorting' => (int) $_POST['sorting'],
             ]);
+            $widget_id = Db::lastId();
+            if (isset($_POST['param']) && is_array($_POST['param'])) {
+                foreach ($_POST['param'] as $k => $v) {
+                    Widget::addParam($k, $v, $widget_id);
+                }
+            }
             $data['alertSuccess'][] = _("Widget created successfully.");
         }
     }
@@ -48,6 +54,15 @@ if (User::access(1)) {
                 'content' => $_POST['content'],
                 'sorting' => (int) $_POST['sorting'],
             ]);
+            if (isset($_POST['param']) && is_array($_POST['param'])) {
+                foreach ($_POST['param'] as $k => $v) {
+                    if (Widget::existParam($k, $_POST['id'])) {
+                        Widget::editParam($k, $v, $_POST['id']);
+                    } else {
+                        Widget::addParam($k, $v, $_POST['id']);
+                    }
+                }
+            }
             $data['alertSuccess'][] = _("Widget updated.");
         }
     }

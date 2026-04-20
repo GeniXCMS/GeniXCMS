@@ -1,0 +1,5 @@
+{
+    "require": {
+        "kiriminaja/kiriminaja-php": "^1.3"
+    }
+}

@@ -1,0 +1,177 @@
+<main class="max-w-7xl mx-auto px-8 py-12 md:py-20 min-h-screen">
+    <header class="mb-16">
+        <h1 class="font-serif text-5xl md:text-6xl text-on-surface font-bold tracking-tight mb-4">Your Shopping Bag</h1>
+        <p class="text-on-surface-variant text-lg">
+            {if empty($items)}
+                Your collection of treasures is currently empty.
+            {else}
+                You have {count($items)} unique {count($items) > 1 ? 'treasures' : 'treasure'} waiting for their new home.
+            {/if}
+        </p>
+    </header>
+
+    {if !empty($items)}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <!-- Left Column: Items List -->
+            <div class="lg:col-span-8 space-y-12">
+                {foreach $items as $item}
+                    {var $p = $item['product']}
+                    {var $img = Posts::getPostImage($item['id'])}
+                    {var $sku = Posts::getParam('sku', $item['id'])}
+                    {var $material = Posts::getParam('material', $item['id'])}
+                    
+                    <div class="group flex flex-col md:flex-row gap-8 bg-surface-container-low p-6 rounded-xl transition-all duration-300 hover:shadow-sm">
+                        <div class="relative w-full md:w-56 h-64 overflow-hidden rounded-lg bg-surface-container-highest">
+                            <img alt="{$p->title|noescape}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="{(empty($img) ? artisanatelier::opt('hero_image') : Url::thumb($img, 'large'))}">
+                        </div>
+                        <div class="flex flex-col justify-between flex-grow">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-serif text-2xl text-on-surface font-semibold mb-1">{$p->title|noescape}</h3>
+                                    <span class="text-xl font-medium text-primary">{$currency} {number_format((float)$item['price'], 0, ',', '.')}</span>
+                                </div>
+                                <p class="text-secondary font-medium text-sm mb-4">SKU: {$sku ?: 'N/A'}</p>
+                                <div class="space-y-1 text-sm text-on-surface-variant">
+                                    <p n:if="$material">Material: {$material}</p>
+                                    <p>Intentional Craftsmanship</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-6">
+                                <div class="flex items-center bg-surface-container-highest rounded-full px-4 py-1">
+                                    <!-- Qty Control -->
+                                    <form method="post" class="inline">
+                                        <input type="hidden" name="nix_action" value="update">
+                                        <input type="hidden" name="product_id" value="{$item['id']}">
+                                        <input type="hidden" name="qty" value="{(int)$item['qty'] - 1}">
+                                        <button type="submit" class="text-on-surface hover:text-primary p-1 flex items-center" {if $item['qty'] <= 1}disabled{/if}>
+                                            <span class="material-symbols-outlined text-sm">remove</span>
+                                        </button>
+                                    </form>
+                                    
+                                    <span class="px-4 font-semibold">{$item['qty']}</span>
+                                    
+                                    <form method="post" class="inline">
+                                        <input type="hidden" name="nix_action" value="update">
+                                        <input type="hidden" name="product_id" value="{$item['id']}">
+                                        <input type="hidden" name="qty" value="{(int)$item['qty'] + 1}">
+                                        <button type="submit" class="text-on-surface hover:text-primary p-1 flex items-center">
+                                            <span class="material-symbols-outlined text-sm">add</span>
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <form method="post" class="inline">
+                                    <input type="hidden" name="nix_action" value="remove">
+                                    <input type="hidden" name="product_id" value="{$item['id']}">
+                                    <button type="submit" class="flex items-center text-outline-variant hover:text-error-fixed transition-colors gap-2 text-sm">
+                                        <span class="material-symbols-outlined text-lg">delete</span>
+                                        <span>Remove treasure</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+
+                <div class="pt-8 border-t border-outline-variant/20">
+                    <a class="inline-flex items-center gap-2 text-primary font-semibold hover:underline underline-offset-4 no-underline" href="{Url::mod('store')}">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        Continue browsing the gallery
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="lg:col-span-4">
+                <div class="sticky top-32 bg-surface-container p-8 rounded-2xl">
+                    <h2 class="font-serif text-3xl font-bold mb-8">Summary</h2>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between text-on-surface-variant">
+                            <span>Subtotal</span>
+                            <span>{$currency} {number_format((float)$total, 0, ',', '.')}</span>
+                        </div>
+                        <div class="flex justify-between text-on-surface-variant">
+                            <span>Tax ({$taxRate}%)</span>
+                            <span>{$currency} {number_format((float)$taxAmount, 0, ',', '.')}</span>
+                        </div>
+                        <div class="flex justify-between text-on-surface-variant">
+                            <span>Shipping</span>
+                            <span class="text-secondary italic">Complimentary</span>
+                        </div>
+                        <div class="pt-4 border-t border-outline-variant/30 flex justify-between items-baseline">
+                            <span class="text-xl font-bold">Total</span>
+                            <span class="text-3xl font-bold text-primary">{$currency} {number_format((float)$grandTotal, 0, ',', '.')}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <a href="{Url::mod('checkout')}" class="block w-full bg-primary text-on-primary py-5 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/10 active:scale-[0.98] text-center no-underline">
+                            Proceed to Checkout
+                        </a>
+                        <div class="p-4 bg-secondary-container/30 rounded-xl flex items-start gap-3">
+                            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">eco</span>
+                            <p class="text-xs text-on-surface-variant leading-relaxed">
+                                Your purchase supports independent artisans and uses plastic-free, biodegradable packaging.
+                            </p>
+                        </div>
+                        <div class="pt-8 space-y-4">
+                            <p class="text-xs uppercase tracking-widest text-outline-variant font-bold text-center">Accepted Payment Methods</p>
+                            <div class="flex justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all text-on-surface-variant">
+                                <span class="material-symbols-outlined text-2xl">credit_card</span>
+                                <span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+                                <span class="material-symbols-outlined text-2xl">contactless</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {else}
+        <!-- Empty State -->
+        <div class="text-center py-32 bg-surface-container-low rounded-[3rem] border-2 border-dashed border-outline-variant/20">
+            <span class="material-symbols-outlined text-8xl text-outline-variant/30 mb-6">shopping_bag</span>
+            <h2 class="font-serif text-3xl font-bold mb-4">Your bag is as light as air</h2>
+            <p class="text-on-surface-variant mb-12 max-w-sm mx-auto">Fill it with intentional objects that bring soul to your living space.</p>
+            <a href="{Url::mod('store')}" class="inline-block bg-primary text-on-primary px-12 py-4 rounded-full font-bold hover:shadow-xl transition-all no-underline">Start Exploring</a>
+        </div>
+    {/if}
+
+    <!-- Recommendations (Asymmetric Bento) -->
+    <section class="mt-32">
+        <h2 class="font-serif text-4xl font-bold mb-12">Pair with your treasures</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {foreach $related as $r}
+                {var $rImg = Posts::getPostImage($r->id)}
+                {var $rPrice = Posts::getParam('price', $r->id)}
+                <div class="md:col-span-1 bg-surface-container-low rounded-2xl overflow-hidden group relative min-h-[250px] flex flex-col">
+                    <div class="flex-grow overflow-hidden relative">
+                        <img alt="{$r->title|noescape}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="{(empty($rImg) ? artisanatelier::opt('hero_image') : Url::thumb($rImg, 'large'))}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                            <span class="text-white/60 text-[10px] uppercase font-bold tracking-widest mb-1">Recommended</span>
+                            <h4 class="text-white text-lg font-serif font-bold leading-tight mb-2">{$r->title|noescape}</h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-primary-container font-bold text-sm">{$currency} {number_format((float)$rPrice, 0, ',', '.')}</span>
+                                <a href="{Url::post($r->id)}" class="bg-white/10 hover:bg-white text-white hover:text-primary p-2 rounded-full backdrop-blur-sm transition-all">
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {/foreach}
+            
+            <div class="bg-surface-container-high rounded-2xl flex flex-col items-center justify-center p-6 text-center group cursor-pointer hover:bg-secondary-container/20 transition-colors md:col-span-1">
+                <div class="bg-secondary/10 w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:rotate-12">
+                    <span class="material-symbols-outlined text-secondary text-2xl">loyalty</span>
+                </div>
+                <h4 class="font-serif font-bold text-lg mb-1">Artisan Club</h4>
+                <p class="text-[10px] text-on-surface-variant line-clamp-2">Join for early access to kiln openings</p>
+            </div>
+            
+            <div class="bg-primary rounded-2xl p-6 flex flex-col justify-between text-on-primary group cursor-pointer overflow-hidden relative md:col-span-1 min-h-[200px]">
+                <span class="material-symbols-outlined text-5xl opacity-10 absolute -top-2 -right-2 scale-150">local_shipping</span>
+                <h4 class="font-serif font-bold text-xl leading-tight">Gift Wrap Service</h4>
+                <p class="text-xs opacity-90">Hand-written notes and linen ribbons available at checkout.</p>
+            </div>
+        </div>
+    </section>
+</main>

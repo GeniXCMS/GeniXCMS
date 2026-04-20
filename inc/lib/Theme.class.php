@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -266,13 +266,34 @@ class Theme
      */
     public static function activate($thm)
     {
-        if (Options::update('themes', Typo::cleanX($thm))) {
+        $thm = Typo::cleanX($thm);
+        if (Options::update('themes', $thm)) {
             new Options();
-
+            Hooks::run('theme_activate', $thm);
+            Hooks::run($thm . '_activate');
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Deletes a theme from the disk and runs lifecycle hooks.
+     *
+     * @param string $thm Theme directory name.
+     * @return bool       True on success.
+     */
+    public static function delete($thm)
+    {
+        $thm = Typo::cleanX($thm);
+        if (self::isActive($thm)) {
+            return false;
+        }
+
+        Hooks::run('theme_delete', $thm);
+        Hooks::run($thm . '_delete');
+
+        return Files::delTree(GX_THEME . '/' . $thm);
     }
 
     /**

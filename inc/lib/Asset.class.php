@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * Handles registration and enqueuing of JS/CSS assets
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -81,7 +81,7 @@ class Asset
         // Prevent duplicates
         if (!isset(self::$queue[$pos][$id])) {
             // First, load dependencies
-            if (!empty($asset["deps"])) {
+            if (!empty($asset["deps"]) && is_array($asset["deps"])) {
                 foreach ($asset["deps"] as $depId) {
                     if (isset(self::$registry[$depId])) {
                         // Ensure dependency has at least the same priority as this asset
@@ -306,6 +306,9 @@ class Asset
         self::register('jsvectormap-css', 'css', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css', 'header', [], 16);
         self::register('jsvectormap-js', 'js', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js', 'header', ['jquery'], 16);
         self::register('jsvectormap-world', 'js', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js', 'header', ['jsvectormap-js'], 17);
+
+        // GeniXCMS Base Framework (Basic Styles) - Priority 10
+        self::register('genixcms-css', 'css', $siteUrl . '/assets/css/genixcms.css', 'header', [], 10, 'all');
 
         // gneex-admin custom assets
         self::register('gneex-admin-css', 'css', $siteUrl . '/assets/css/gneex-admin.css', 'header', [], 50);

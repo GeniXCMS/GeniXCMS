@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20141006
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -17,6 +17,11 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 
 if (User::access(1)) {
     $catType = Typo::cleanX($_GET['type'] ?? 'post');
+
+    if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+        echo Hooks::run('category_param_form');
+        exit;
+    }
 
     $data['sitetitle'] = _('Categories') . ' - ' . ucfirst(str_replace('_', ' ', $catType));
     switch (isset($_POST['addcat'])) {
@@ -47,6 +52,12 @@ if (User::access(1)) {
                     'desc' => $desc,
                     'type' => $catType,
                 ]);
+                $cat_id = Db::$last_id;
+                if (isset($_POST['param'])) {
+                    foreach ($_POST['param'] as $k => $v) {
+                        Categories::addParam($k, $v, $cat_id);
+                    }
+                }
                 $data['alertSuccess'][] = _("Category Added") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {
@@ -78,6 +89,16 @@ if (User::access(1)) {
                     'image' => Typo::cleanX($_POST['image'] ?? ''),
                     'desc' => Typo::cleanX($_POST['desc'] ?? ''),
                 ]);
+                $cat_id = Typo::int($_POST['id']);
+                if (isset($_POST['param'])) {
+                    foreach ($_POST['param'] as $k => $v) {
+                        if (!Categories::existParam($k, $cat_id)) {
+                            Categories::addParam($k, $v, $cat_id);
+                        } else {
+                            Categories::editParam($k, $v, $cat_id);
+                        }
+                    }
+                }
                 $data['alertSuccess'][] = _("Category Updated") . ' ' . $_POST['cat'];
             }
             if (isset($_POST['token'])) {

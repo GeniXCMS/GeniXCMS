@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -56,6 +56,22 @@ class PostControl extends BaseControl
 
         if (!isset($data['posts']['error'])) {
             $post = $data['posts'][0];
+
+            // Core Canonical URL Enforcement (Global SEO Guard)
+            if (SMART_URL) {
+                $expected_url = Url::post($post->id);
+                $current_url = Site::canonical();
+
+                $expected_path = parse_url($expected_url, PHP_URL_PATH);
+                $current_path = parse_url($current_url, PHP_URL_PATH);
+
+                if ($expected_path !== $current_path) {
+                    Control::error('404');
+                    // header('HTTP/1.1 301 Moved Permanently');
+                    // header('Location: ' . $expected_url);
+                    exit;
+                }
+            }
             $data['title'] = $post->title;
             $data['author'] = $post->author;
             $data['category_name'] = Categories::name($post->cat);
@@ -83,7 +99,7 @@ class PostControl extends BaseControl
                 'image_size' => 100,
                 'title' => true,
                 'date' => true,
-                'type' => "post",
+                'type' => $data['p_type'],
                 'class' => [
                     'row' => 'd-flex align-items-center mb-3 border-bottom pb-3',
                     'img' => 'rounded flex-shrink-0',
@@ -93,7 +109,16 @@ class PostControl extends BaseControl
                 ]
             ]);
 
-            $view = Theme::exist($data['p_type']) ? $data['p_type'] : 'single';
+            $view = 'single';
+            if (Theme::exist('single-' . $data['p_type'])) {
+                $view = 'single-' . $data['p_type'];
+            } elseif (Theme::exist($data['p_type'])) {
+                $view = $data['p_type'];
+            }
+
+            $layout = Posts::getParam('layout', $post->id);
+            $data['layout'] = !empty($layout) ? $layout : 'default';
+
             $this->render($view, $data);
 
             Stats::addViews($post_id);

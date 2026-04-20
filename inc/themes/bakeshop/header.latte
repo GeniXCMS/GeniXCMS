@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+{var $o = Bakeshop::options()}
+<html class="light" lang="{$website_lang ?? substr(Options::v('system_lang'), 0, 2)}">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    {if isset($site_meta)}{$site_meta|noescape}{/if}
+    
+    <!-- Fonts & Icons -->  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- GeniXCMS Core Assets -->
+    <link href="{$site_url}/assets/css/genixcms.css" rel="stylesheet"/>
+    <link href="{$site_url}/inc/themes/bakeshop/assets/css/bakeshop.css" rel="stylesheet"/>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": {$o['primary_color']},
+                        "on-primary": "#ffffff",
+                        "secondary": {$o['secondary_color']},
+                        "on-secondary": "#bffff7",
+                        "secondary-container": "#7fe6db",
+                        "on-secondary-container": "#00534d",
+                        "primary-container": "#ff709f",
+                        "on-primary-container": "#4c0022",
+                        "background": {$o['background_color']},
+                        "on-background": "#2e2f2d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#e9e8e4",
+                        "surface-container-low": "#f2f1ec",
+                        "surface-container-high": "#e4e2de",
+                        "surface-container-highest": "#deddd8",
+                        "on-surface": "#2e2f2d",
+                        "on-surface-variant": "#5b5c59",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .editorial-shadow { box-shadow: 0 12px 32px -4px rgba(167, 41, 90, 0.06); }
+        .glass-nav { background: rgba(248, 246, 242, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        {Options::get('custom_css')|noescape}
+    </style>
+    
+    {Site::loadLibHeader()|noescape}
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+
+<!-- Top Navigation -->
+<nav id="main-nav" class="fixed top-0 w-full z-[100] transition-all duration-300 glass-nav border-b border-black/5 py-5">
+    <div class="flex justify-between items-center px-6 md:px-12 max-w-7xl mx-auto">
+        <!-- Logo -->
+        <div class="text-2xl font-black text-primary tracking-tighter font-headline">
+            <a href="{$site_url}" class="hover:opacity-80 transition-opacity">
+                {$o['logo_text']}
+            </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-10 font-headline font-bold text-sm tracking-widest uppercase">
+            {var $main_menu = Menus::getMenuRaw('mainmenu')}
+            {foreach $main_menu as $m}
+                {if $m->parent == '0'}
+                    {var $type = $m->type}
+                    {var $url = Url::$type($m->value)}
+                    {var $active = ($url == $_SERVER['REQUEST_URI'] || $url == (isset($site_url) ? $site_url : '') . $_SERVER['REQUEST_URI'])}
+                    <a class="transition-all hover:text-primary relative group {($active) ? 'text-primary' : 'text-on-surface/70'}" href="{$url}">
+                        {$m->name}
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full {($active) ? 'w-full' : ''}"></span>
+                    </a>
+                {/if}
+            {/foreach}
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex items-center gap-2 md:gap-4">
+            <button id="search-toggle" onclick="openSearchModal()" class="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all active:scale-90 group" aria-label="{_('Open Search')}">
+                <span class="material-symbols-outlined text-[22px] leading-none text-on-surface group-hover:text-primary transition-colors" aria-hidden="true">search</span>
+            </button>
+            <a href="{Url::mod('cart')}" class="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all active:scale-90 group relative nix-cart-container" aria-label="{_('Shopping Cart')}">
+                <span class="material-symbols-outlined text-[22px] leading-none text-on-surface group-hover:text-primary transition-colors" aria-hidden="true">shopping_bag</span>
+                {Hooks::run('nix_cart_badge')|noescape}
+            </a>
+
+            {if User::isLoggedin()}
+                {var $u_name = Session::val('username')}
+                <div class="relative group py-2">
+                    <button class="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all active:scale-90 group relative" aria-label="{_('User Profile')}">
+                        <span class="material-symbols-outlined text-[24px] leading-none text-on-surface group-hover:text-primary transition-colors" aria-hidden="true">person</span>
+                    </button>
+                    <div class="absolute right-0 top-full pt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[200] transform origin-top-right scale-95 group-hover:scale-100">
+                        <div class="bg-background border border-black/5 rounded-2xl shadow-2xl py-3 flex flex-col font-body text-sm font-semibold text-on-surface overflow-hidden">
+                            <div class="px-5 py-3 border-b border-black/5 mb-1 bg-surface-container-low/30">
+                                <div class="text-[10px] text-on-surface-variant font-black uppercase tracking-widest opacity-60 mb-0.5">{_('Signed in as')}</div>
+                                <div class="truncate text-primary font-black">@{htmlspecialchars($u_name)}</div>
+                            </div>
+                            {var $dropdownItems = UserProfile::getDropdownItems()}
+                            {foreach $dropdownItems as $key => $item}
+                                {if isset($item['divider']) && $item['divider']}
+                                    <hr class="my-1 border-black/5">
+                                {else}
+                                    <a href="{$item['url']|noescape}" class="px-5 py-2.5 {if isset($item['danger']) && $item['danger']}text-error hover:bg-error/10{else}hover:bg-primary/5 hover:text-primary{/if} transition-colors flex items-center gap-3">
+                                        <span class="material-symbols-outlined !text-[20px] opacity-70">{$item['icon'] ?? 'chevron_right'}</span> 
+                                        <span>{_($item['label'])}</span>
+                                    </a>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            {else}
+                <a href="{Url::login()}" class="w-10 h-10 flex items-center justify-center hover:bg-white rounded-full transition-all active:scale-90 group" aria-label="{_('Login')}">
+                    <span class="material-symbols-outlined text-[24px] leading-none text-on-surface group-hover:text-primary transition-colors" aria-hidden="true">person</span>
+                </a>
+            {/if}
+            
+            <!-- Mobile Toggle -->
+            <button id="mobile-toggle" class="md:hidden p-2.5 hover:bg-white rounded-full transition-all active:scale-90" aria-label="{_('Toggle Navigation')}">
+                <span class="material-symbols-outlined text-primary" aria-hidden="true">menu</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-background/95 backdrop-blur-xl z-[110] transition-all duration-500 translate-x-full md:hidden">
+        <div class="p-8 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-16">
+                <span class="text-xl font-black text-primary font-headline">{$o['logo_text']}</span>
+                <button id="close-mobile" class="p-2 hover:bg-surface-container rounded-full" aria-label="{_('Close Navigation')}">
+                    <span class="material-symbols-outlined text-primary" aria-hidden="true">close</span>
+                </button>
+            </div>
+            
+            <div class="flex flex-col gap-8 font-headline font-extrabold text-4xl tracking-tighter">
+                {foreach $main_menu as $m}
+                    {if $m->parent == '0'}
+                        {var $type = $m->type}
+                        {var $url = Url::$type($m->value)}
+                        <a href="{$url}" class="hover:text-primary transition-colors">{$m->name}</a>
+                    {/if}
+                {/foreach}
+                
+                <hr class="border-black/5 w-12">
+                
+                {if User::isLoggedin()}
+                    <a href="{Url::user(Session::val('username'))}" class="hover:text-primary transition-colors flex items-center gap-4">
+                        <span class="material-symbols-outlined text-3xl">person</span>
+                        {_('My Account')}
+                    </a>
+                {else}
+                    <a href="{Url::login()}" class="hover:text-primary transition-colors flex items-center gap-4">
+                        <span class="material-symbols-outlined text-3xl">login</span>
+                        {_('Login')}
+                    </a>
+                {/if}
+            </div>
+            
+            <div class="mt-auto pt-12 border-t border-black/5 flex flex-col gap-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Connect with Us</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary" aria-label="{_('Share')}"><span class="material-symbols-outlined text-lg" aria-hidden="true">share</span></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary" aria-label="{_('Email Us')}"><span class="material-symbols-outlined text-lg" aria-hidden="true">mail</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Search Modal -->
+<div id="search-modal" class="fixed inset-0 z-[200] flex items-start justify-center pt-24 px-4 transition-all duration-300 opacity-0 pointer-events-none" role="dialog" aria-modal="true" aria-label="Search">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-on-surface/30 backdrop-blur-md" onclick="closeSearchModal()"></div>
+
+    <!-- Search Box -->
+    <div id="search-modal-box" class="relative w-full max-w-2xl transition-all duration-300 translate-y-[-16px] scale-95">
+        <form action="{Url::search()}" method="get" class="flex items-center gap-3 bg-background rounded-2xl shadow-2xl px-5 py-4 border border-black/5">
+            <input type="hidden" name="search" value=""/>
+            <span class="material-symbols-outlined text-primary text-2xl leading-none flex-shrink-0" aria-hidden="true">search</span>
+            <label for="search-modal-input" class="sr-only">{_('Search')}</label>
+            <input
+                id="search-modal-input"
+                name="q"
+                type="text"
+                autocomplete="off"
+                placeholder="{_('Search articles, products...')}"
+                class="flex-1 bg-transparent border-none outline-none text-lg text-on-surface placeholder:text-on-surface-variant/50 font-body"
+            />
+            <button type="button" onclick="closeSearchModal()" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors" aria-label="{_('Close Search')}">
+                <span class="material-symbols-outlined text-on-surface-variant text-lg leading-none" aria-hidden="true">close</span>
+            </button>
+        </form>
+        <p class="text-center text-xs text-on-surface-variant mt-3 font-label">{_('Press')} <kbd class="bg-surface-container px-1.5 py-0.5 rounded text-[10px] font-bold">Esc</kbd> {_('to close')}</p>
+    </div>
+</div>
+
+<script>
+    function openSearchModal() {
+        var m = document.getElementById('search-modal');
+        var box = document.getElementById('search-modal-box');
+        var inp = document.getElementById('search-modal-input');
+        m.classList.remove('opacity-0', 'pointer-events-none');
+        box.classList.remove('translate-y-[-16px]', 'scale-95');
+        document.body.style.overflow = 'hidden';
+        setTimeout(function(){ if (inp) inp.focus(); }, 150);
+    }
+    function closeSearchModal() {
+        var m = document.getElementById('search-modal');
+        var box = document.getElementById('search-modal-box');
+        m.classList.add('opacity-0', 'pointer-events-none');
+        box.classList.add('translate-y-[-16px]', 'scale-95');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeSearchModal();
+    });
+</script>
+
+<script>
+    // Navigation Scroll Effect
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('main-nav');
+        if (window.scrollY > 20) {
+            nav.classList.add('py-2', 'shadow-md');
+            nav.classList.remove('py-5');
+        } else {
+            nav.classList.add('py-5');
+            nav.classList.remove('py-2', 'shadow-md');
+        }
+    });
+
+    // Mobile Menu Logic
+    const toggle = document.getElementById('mobile-toggle');
+    const close = document.getElementById('close-mobile');
+    const menu = document.getElementById('mobile-menu');
+
+    toggle.addEventListener('click', () => {
+        menu.classList.remove('translate-x-full');
+    });
+
+    close.addEventListener('click', () => {
+        menu.classList.add('translate-x-full');
+    });
+</script>
+
+<main class="pt-24 flex-grow">

@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -60,16 +60,16 @@ $id = isset($_GET['id']) ? Typo::int($_GET['id']) : '';
                                 <?php if (User::access(0)) {
                                     $userid = User::userid($id);
                                     ?>
-                                        <input type="text" name="userid"
-                                            class="form-control border-0 bg-light rounded-3 py-2 px-3" value="<?= $userid; ?>">
-                                        <input type="hidden" name="olduserid" class="form-control" value="<?= $userid; ?>">
-                                        <div class="extra-small text-muted mt-1 ps-1">
-                                            <?= _("Only administrative access can modify the unique ID."); ?>
-                                        </div>
+                                    <input type="text" name="userid"
+                                        class="form-control border-0 bg-light rounded-3 py-2 px-3" value="<?= $userid; ?>">
+                                    <input type="hidden" name="olduserid" class="form-control" value="<?= $userid; ?>">
+                                    <div class="extra-small text-muted mt-1 ps-1">
+                                        <?= _("Only administrative access can modify the unique ID."); ?>
+                                    </div>
                                 <?php } else { ?>
-                                        <div class="form-control border-0 bg-light rounded-3 py-2 px-3 text-muted">
-                                            <?= $userid; ?>
-                                        </div>
+                                    <div class="form-control border-0 bg-light rounded-3 py-2 px-3 text-muted">
+                                        <?= $userid; ?>
+                                    </div>
                                 <?php } ?>
                             </div>
                             <div class="col-md-6">
@@ -106,27 +106,27 @@ $id = isset($_GET['id']) ? Typo::int($_GET['id']) : '';
                     </div>
                     <div class="card-body p-4">
                         <?php if (User::access(1)) { ?>
-                                <div class="mb-3">
-                                    <label
-                                        class="form-label small fw-bold text-muted text-uppercase"><?= _("Permission Rank"); ?></label>
-                                    <?php
-                                    $var = array(
-                                        'name' => 'group',
-                                        'selected' => User::group($id),
-                                        'update' => true,
-                                        'class' => 'form-select border-0 bg-light rounded-3 py-2 px-3'
-                                    );
-                                    echo User::dropdown($var); ?>
-                                    <div class="extra-small text-muted mt-2">
-                                        <i class="bi bi-shield-lock me-1"></i> <?= _("Defines administrative capabilities."); ?>
-                                    </div>
+                            <div class="mb-3">
+                                <label
+                                    class="form-label small fw-bold text-muted text-uppercase"><?= _("Permission Rank"); ?></label>
+                                <?php
+                                $var = array(
+                                    'name' => 'group',
+                                    'selected' => User::group($id),
+                                    'update' => true,
+                                    'class' => 'form-select border-0 bg-light rounded-3 py-2 px-3'
+                                );
+                                echo User::dropdown($var); ?>
+                                <div class="extra-small text-muted mt-2">
+                                    <i class="bi bi-shield-lock me-1"></i> <?= _("Defines administrative capabilities."); ?>
                                 </div>
+                            </div>
                         <?php } else { ?>
-                                <div class="text-center py-4 bg-light rounded-4 opacity-75">
-                                    <i class="bi bi-lock fs-2 text-muted"></i>
-                                    <p class="extra-small fw-bold text-muted text-uppercase m-0"><?= _("Restricted Access"); ?>
-                                    </p>
-                                </div>
+                            <div class="text-center py-4 bg-light rounded-4 opacity-75">
+                                <i class="bi bi-lock fs-2 text-muted"></i>
+                                <p class="extra-small fw-bold text-muted text-uppercase m-0"><?= _("Restricted Access"); ?>
+                                </p>
+                            </div>
                         <?php } ?>
                     </div>
                 </div>

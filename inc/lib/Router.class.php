@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.7 build date 20150711
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -41,9 +41,9 @@ class Router
     public static function map()
     {
         self::$_route = array(
-            'thumb/type/(.*)/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => 4, 'type' => 1, 'size' => 2, 'align' => 3),
-            'thumb/type/(.*)/size/([0-9]+)/(.*)' => array('thumb' => 3, 'type' => 1, 'size' => 2),
-            'thumb/size/([0-9]+)/align/(.*)/(.*)' => array('thumb' => 3, 'size' => 1, 'align' => 2),
+            'thumb/type/(.*)/size/([0-9x]+)/align/(.*)/(.*)' => array('thumb' => 4, 'type' => 1, 'size' => 2, 'align' => 3),
+            'thumb/type/(.*)/size/([0-9x]+)/(.*)' => array('thumb' => 3, 'type' => 1, 'size' => 2),
+            'thumb/size/([0-9x]+)/align/(.*)/(.*)' => array('thumb' => 3, 'size' => 1, 'align' => 2),
             'category/([0-9]+)/(.*)/paging/([0-9]+)/' => array('cat' => 1, 'paging' => 3),
             'category/([0-9]+)/(.*)/' => array('cat' => 1),
             'tag/(.*)/paging/([0-9]+)/' => array('tag' => 1, 'paging' => 2),
@@ -52,12 +52,15 @@ class Router
             // '/(.[a-z]+)/(.+)'.GX_URL_PREFIX => array('page' => 2, 'lang' => 1),
             'mod/(.*)' . GX_URL_PREFIX => array('mod' => 1),
             // '/(.+)'.GX_URL_PREFIX => array('page' => 1),
+            'user/(.*)/(.*)/' => array('user' => 1, 'user_section' => 2),
+            'user/(.*)/' => array('user' => 1),
+            // '/(.+)'.GX_URL_PREFIX => array('page' => 1),
             'paging/([0-9]+)/' => array('default', 'paging' => 1),
             'error/([0-9]+)/' => array('error' => 1),
             '([a-z]{2})/(.*)' . GX_URL_PREFIX => array('post' => 2, 'lang' => 1),
             '(.*)' . GX_URL_PREFIX => array('post' => 1),
             'ajax/(.*)/(.*)' => array('ajax' => 1, 'token' => 2),
-            'thumb/size/([0-9]+)/(.*)' => array('thumb' => 2, 'size' => 1),
+            'thumb/size/([0-9x]+)/(.*)' => array('thumb' => 2, 'size' => 1),
             'thumb/type/(.*)/(.*)' => array('thumb' => 2, 'type' => 1),
             'thumb/align/(.*)/(.*)' => array('thumb' => 2, 'align' => 1),
             'thumb/(.*)' => array('thumb' => 1),

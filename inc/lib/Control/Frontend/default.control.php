@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -23,6 +23,38 @@ class DefaultControl extends BaseControl
         $data = Router::scrap($param);
         $data['p_type'] = 'index';
         $data['max'] = Options::v('post_perpage');
+
+        // Check for Custom Frontpage setting
+        $frontpage_id = (int) Options::v('frontpage_id');
+        if ($frontpage_id > 0) {
+            $post = Query::table('posts')
+                ->where('id', $frontpage_id)
+                ->where('status', '1')
+                ->first();
+
+            if ($post) {
+                $data['posts'] = Posts::prepare([$post]);
+                $post = $data['posts'][0];
+                $data['p_type'] = $post->type;
+                $data['title'] = $post->title;
+                $data['content'] = Posts::content($post->content);
+                $data['author'] = $post->author;
+                $data['date_published'] = Date::format($post->date);
+                $data['last_modified'] = Date::format($post->modified);
+                $data['url_author'] = Url::author($post->author);
+
+                // Load post parameters (meta)
+                $params = Posts::getParams($post->id);
+                foreach ($params as $k => $v) {
+                    $data[$k] = $v;
+                }
+
+                $layout = $data['layout'] ?? 'index';
+                
+                $this->render($layout, $data);
+                return;
+            }
+        }
 
         if (SMART_URL) {
             $paging = isset($data['paging']) ? $data['paging'] : 1;

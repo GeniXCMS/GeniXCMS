@@ -12,15 +12,17 @@ class Contact
         // so that Mod::getTitle('contactPage') and Mod.control.php routing work correctly.
         Mod::addMenuList(['contactPage' => _('Contact Us')]);
 
-        AdminMenu::add([
-            'id' => 'contactPage',
-            'label' => _('Contact Us'),
-            'icon' => 'bi bi-envelope',
-            'url' => 'index.php?page=mods&mod=contact-form',
-            'access' => 1,
-            'position' => 'external',
-            'order' => 10,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id' => 'contactPage',
+                'label' => _('Contact Us'),
+                'icon' => 'bi bi-envelope',
+                'url' => 'index.php?page=mods&mod=contact-form',
+                'access' => 1,
+                'position' => 'external',
+                'order' => 10,
+            ]);
+        });
     }
 
 

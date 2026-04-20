@@ -1,0 +1,172 @@
+<main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative px-12 pt-20 pb-12 overflow-hidden bg-surface-container-low">
+        <div class="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="inline-block px-4 py-1.5 mb-6 text-sm font-medium tracking-wider bg-secondary-container text-on-secondary-container rounded-full">{ArtisanAtelier::opt('catalog_hero_tag')}</span>
+                <h1 class="font-serif text-7xl font-bold text-on-surface leading-[1.1] tracking-tight mb-8">{ArtisanAtelier::opt('catalog_hero_title')|noescape}</h1>
+                <p class="text-on-surface-variant text-xl max-w-md leading-relaxed mb-10">{ArtisanAtelier::opt('catalog_hero_subtitle')}</p>
+                <div class="flex gap-4">
+                    <a href="{ArtisanAtelier::opt('catalog_hero_url1')}" class="bg-primary text-on-primary px-8 py-4 rounded-xl font-semibold shadow-lg hover:brightness-110 transition-all no-underline inline-block">{ArtisanAtelier::opt('catalog_hero_btn1')}</a>
+                    <a href="{ArtisanAtelier::opt('catalog_hero_url2')}" class="text-primary font-semibold px-8 py-4 border-2 border-primary/20 rounded-xl hover:bg-primary-container/20 transition-all no-underline inline-block">{ArtisanAtelier::opt('catalog_hero_btn2')}</a>
+                </div>
+            </div>
+            <div class="relative">
+                <!-- Tonal Layering Collage -->
+                <div class="absolute -top-12 -right-12 w-64 h-64 bg-surface-container-highest blob-mask-1 -z-10"></div>
+                <div class="absolute -bottom-8 -left-8 w-80 h-80 bg-primary-container/30 blob-mask-2 -z-10"></div>
+                <div class="grid grid-cols-2 gap-6 items-end">
+                    <div class="rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(57,56,50,0.12)]">
+                        <img class="w-full aspect-[4/5] object-cover" alt="Hero Image 1" src="{ArtisanAtelier::opt('catalog_hero_img1')}">
+                    </div>
+                    <div class="rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(57,56,50,0.12)] mb-12">
+                        <img class="w-full aspect-square object-cover" alt="Hero Image 2" src="{ArtisanAtelier::opt('catalog_hero_img2')}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters & Category Navigation -->
+    <section class="sticky top-[88px] bg-white/60 backdrop-blur-md z-40 border-b border-stone-100">
+        <div class="max-w-screen-2xl mx-auto px-12 py-8 flex items-center justify-between">
+            <div class="flex items-center gap-12" id="catalog-nav">
+                <button 
+                    data-cat="0"
+                    class="font-serif text-xl cat-btn transition-transform hover:scale-105 {if $active_cat == 0}text-primary font-bold border-b-2 border-primary pb-1{else}text-on-surface-variant hover:text-on-surface{/if}">
+                    All Collections
+                </button>
+                {if !empty($categories)}
+                    {foreach $categories as $c}
+                        <button 
+                            data-cat="{$c->id}"
+                            class="font-serif text-xl cat-btn transition-transform hover:scale-105 {if $active_cat == $c->id}text-primary font-bold border-b-2 border-primary pb-1{else}text-on-surface-variant hover:text-on-surface{/if}">
+                            {$c->name}
+                        </button>
+                    {/foreach}
+                {/if}
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm font-medium text-on-surface-variant">Filter by</span>
+                <select id="price-filter" class="pl-5 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 text-sm focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat">
+                    <option value="">Price Range</option>
+                    <option value="1">Under 100k</option>
+                    <option value="2">100k - 500k</option>
+                    <option value="3">500k - 1M</option>
+                    <option value="4">Over 1M</option>
+                </select>
+                <select id="material-filter" class="pl-5 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 text-sm focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat">
+                    <option value="">Material</option>
+                    {foreach $materials as $val => $name}
+                        {if $val}
+                            <option value="{$val}">{$name}</option>
+                        {/if}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid (Asymmetric Bento Style) -->
+    <section class="max-w-screen-2xl mx-auto px-12 py-16">
+        <div class="grid grid-cols-12 gap-10 transition-all duration-500" id="product-grid">
+            {include 'nixomers-ajax-catalog.latte', posts: $posts}
+        </div>
+    </section>
+
+    <!-- Workshop Teaser -->
+    {if ArtisanAtelier::opt('catalog_work_show') == 'on'}
+    <section class="bg-surface-container-high py-24 relative overflow-hidden">
+        <div class="max-w-screen-2xl mx-auto px-12 grid grid-cols-12 gap-16 items-center">
+            <div class="col-span-12 lg:col-span-6">
+                <img class="rounded-[3rem] shadow-2xl hover:scale-[1.01] transition-transform duration-700" alt="workshop branding image" src="{ArtisanAtelier::opt('catalog_work_img')}">
+            </div>
+            <div class="col-span-12 lg:col-span-6">
+                <span class="inline-block px-4 py-1.5 mb-6 text-sm font-medium tracking-wider bg-primary-container text-on-primary-container rounded-full">{ArtisanAtelier::opt('catalog_work_tag')}</span>
+                <h2 class="font-serif text-5xl font-bold mb-8 leading-tight">{Typo::Xclean(ArtisanAtelier::opt('catalog_work_title'))|noescape}</h2>
+                <p class="text-on-surface-variant text-lg mb-10 leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('catalog_work_desc'))|noescape}</p>
+                
+                <div class="grid grid-cols-3 gap-6 mb-12">
+                    <div class="space-y-2">
+                        <span class="material-symbols-outlined text-primary">{ArtisanAtelier::opt('catalog_work_icon1')}</span>
+                        <p class="text-xs font-bold uppercase tracking-widest">{ArtisanAtelier::opt('catalog_work_feat1')}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="material-symbols-outlined text-secondary">{ArtisanAtelier::opt('catalog_work_icon2')}</span>
+                        <p class="text-xs font-bold uppercase tracking-widest">{ArtisanAtelier::opt('catalog_work_feat2')}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="material-symbols-outlined text-tertiary">{ArtisanAtelier::opt('catalog_work_icon3')}</span>
+                        <p class="text-xs font-bold uppercase tracking-widest">{ArtisanAtelier::opt('catalog_work_feat3')}</p>
+                    </div>
+                </div>
+
+                <a class="inline-flex items-center gap-3 text-lg font-bold text-primary group no-underline" href="{ArtisanAtelier::opt('catalog_work_url')}">
+                    {ArtisanAtelier::opt('catalog_work_btn')}
+                    <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    {/if}
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('product-grid');
+    const catBtns = document.querySelectorAll('.cat-btn');
+    const priceFilter = document.getElementById('price-filter');
+    const materialFilter = document.getElementById('material-filter');
+    
+    let activeCat = 0;
+
+    const updateCatalog = () => {
+        // UI State: Loading
+        grid.style.opacity = '0.5';
+        grid.style.filter = 'blur(4px)';
+
+        const price = priceFilter.value;
+        const material = materialFilter.value;
+        
+        // Construct URL
+        const baseUrl = {Url::ajax('nixomers', ['action' => 'store_catalog'])};
+        let url = baseUrl + '&cat=' + activeCat;
+        if (price) url += '&price=' + price;
+        if (material) url += '&material=' + material;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                setTimeout(() => {
+                    grid.innerHTML = html;
+                    grid.style.opacity = '1';
+                    grid.style.filter = 'none';
+                }, 300);
+            })
+            .catch(err => {
+                console.error('Error fetching catalog:', err);
+                grid.style.opacity = '1';
+                grid.style.filter = 'none';
+            });
+    };
+
+    catBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            activeCat = this.getAttribute('data-cat');
+            
+            // UI State: Active Category
+            catBtns.forEach(b => {
+                b.classList.remove('text-primary', 'font-bold', 'border-b-2', 'border-primary', 'pb-1');
+                b.classList.add('text-on-surface-variant', 'hover:text-on-surface');
+            });
+            this.classList.add('text-primary', 'font-bold', 'border-b-2', 'border-primary', 'pb-1');
+            this.classList.remove('text-on-surface-variant', 'hover:text-on-surface');
+
+            updateCatalog();
+        });
+    });
+
+    priceFilter.addEventListener('change', updateCatalog);
+    materialFilter.addEventListener('change', updateCatalog);
+});
+</script>

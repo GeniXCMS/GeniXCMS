@@ -1,0 +1,244 @@
+<!-- Layout: Blog Directory Template -->
+<main class="flex-grow pt-8 pb-20">
+    {var $o = class_exists('Bakeshop') ? \Bakeshop::options() : []}
+    {var $pageId = Typo::int($_GET['p'] ?? 0)}
+    {var $page_num = isset($_GET['paging']) ? Typo::int($_GET['paging']) : 1}
+    {var $max = 6}
+    {var $offset = ($page_num - 1) * $max}
+    {var $total_posts = Query::table('posts')->where('type', 'post')->where('status', '1')->count()}
+    {var $total_pages = ceil($total_posts / $max)}
+
+    <!-- Only show Hero on page 1 -->
+    {if $page_num == 1}
+        {var $heroes = Query::table('posts')->where('type', 'post')->where('status', '1')->orderBy('date', 'DESC')->limit(1)->get()}
+        {if !empty($heroes)}
+            {var $hero = $heroes[0]}
+            {php
+                $hImg = Posts::getPostImage($hero->id);
+                if (empty($hImg)) {
+                    $content_clean = Typo::Xclean($hero->content);
+                    if (preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $content_clean, $m)) {
+                        $hImg = $m['src'];
+                    }
+                }
+                $heroImg = $hImg ? $hImg : (Site::$url . '/assets/images/noimage.png');
+                $heroExcerpt = Posts::getParam('excerpt', $hero->id);
+            }
+            <section class="max-w-7xl mx-auto px-8 mb-16">
+                <div class="relative group overflow-hidden rounded-lg bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
+                    <div class="flex-1 z-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="px-4 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-xs font-bold font-label uppercase tracking-widest bg-primary-container/90">{_('Featured Story')}</span>
+                            <span class="text-on-surface-variant text-sm font-medium">{Date::format($hero->date, 'M d, Y')}</span>
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-headline font-extrabold text-on-surface leading-tight mb-6">
+                            <a href="{Url::post($hero->id)}" class="hover:text-primary transition-colors">{$hero->title|noescape}</a>
+                        </h1>
+                        <p class="text-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed">
+                            {Typo::Xclean($heroExcerpt ?: $hero->content)|stripHtml|truncate:200}
+                        </p>
+                        <a href="{Url::post($hero->id)}" class="inline-flex bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-full font-bold editorial-shadow hover:opacity-90 transition-opacity items-center gap-2">
+                            {_('Read the Article')}
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </a>
+                    </div>
+                    <div class="flex-1 relative w-full">
+                        <a href="{Url::post($hero->id)}" class="block">
+                            <img class="rounded-lg object-cover w-full h-[400px] editorial-shadow transform group-hover:scale-105 transition-transform duration-700" src="{Url::thumb($heroImg, 'large')}" alt="{$hero->title|stripHtml}"/>
+                        </a>
+                        <!-- Ribbon Overlay -->
+                        <div class="absolute -bottom-4 -left-4 text-on-secondary-container p-4 rounded-lg editorial-shadow" style="background-color: rgba(127,230,219,0.85);">
+                            <span class="font-headline font-bold text-lg leading-none">{_('Latest')}</span>
+                            <p class="text-xs uppercase font-label tracking-tighter opacity-80">{_('Publication')}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {/if}
+        {var $feed = Query::table('posts')->where('type', 'post')->where('status', '1')->orderBy('date', 'DESC')->limit($max)->offset(1)->get()}
+    {else}
+        {var $feed = Query::table('posts')->where('type', 'post')->where('status', '1')->orderBy('date', 'DESC')->limit($max)->offset($offset)->get()}
+    {/if}
+
+    <!-- Categories Scroller -->
+    <section class="max-w-7xl mx-auto px-8 mb-12">
+        {var $cats = Query::table('cat')->where('type', 'post')->where('parent', '0')->orderBy('name', 'ASC')->get()}
+        <div class="flex flex-nowrap overflow-x-auto gap-4 pb-4 no-scrollbar">
+            <a href="{Url::page($pageId)}" class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-bold font-label">{_('All Stories')}</a>
+            {if !empty($cats)}
+                {foreach $cats as $c}
+                    <a href="{Url::cat($c->id)}" class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container transition-all font-bold font-label">
+                        {$c->name|noescape}
+                    </a>
+                {/foreach}
+            {/if}
+        </div>
+    </section>
+
+    <!-- Main Blog Grid -->
+    <section class="max-w-7xl mx-auto px-8">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+            
+            <!-- Blog Feed (Left Columns) -->
+            <div class="md:col-span-8 space-y-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {if !empty($feed)}
+                        {foreach $feed as $p}
+                            {php
+                                if (!is_object($p)) continue;
+                                $pImg = Posts::getPostImage($p->id);
+                                if (empty($pImg)) {
+                                    $content_clean = Typo::Xclean($p->content);
+                                    if (preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $content_clean, $m)) {
+                                        $pImg = $m['src'];
+                                    }
+                                }
+                                $postImg = $pImg ? $pImg : (Site::$url . '/assets/images/noimage.png');
+                                $p_excerpt = Posts::getParam('excerpt', $p->id);
+                                $authorName = $p->author;
+                                
+                                // Generate a pseudo-random category badge if we have categories
+                                $catName = 'JOURNAL';
+                                $badgeClass = 'bg-secondary-container/90 text-on-secondary-container';
+                                if ($p->cat) {
+                                    $catName = Categories::name($p->cat);
+                                    $colorIndex = $p->id % 3;
+                                    if ($colorIndex == 0) $badgeClass = 'bg-primary-container/90 text-on-primary-container';
+                                    elseif ($colorIndex == 1) $badgeClass = 'bg-tertiary-container/90 text-on-tertiary-container';
+                                    else $badgeClass = 'bg-secondary-container/90 text-on-secondary-container';
+                                }
+                            }
+                            <article class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:translate-y-[-4px] transition-transform duration-300 shadow-sm border border-black/5">
+                                <div class="h-64 overflow-hidden relative">
+                                    <a href="{Url::post($p->id)}" class="block w-full h-full">
+                                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="{Url::thumb($postImg, 'large')}" alt="{$p->title|stripHtml}"/>
+                                    </a>
+                                    <div class="absolute top-4 left-4">
+                                        <span class="{$badgeClass} backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold font-label uppercase">{$catName}</span>
+                                    </div>
+                                </div>
+                                <div class="p-8 flex flex-col h-[calc(100%-16rem)]">
+                                    <h3 class="text-2xl font-headline font-bold text-on-surface mb-3 leading-tight group-hover:text-primary transition-colors">
+                                        <a href="{Url::post($p->id)}">{$p->title|noescape}</a>
+                                    </h3>
+                                    <p class="text-on-surface-variant text-sm line-clamp-3 mb-6 leading-relaxed flex-grow">
+                                        {Typo::Xclean($p_excerpt ?: $p->content)|stripHtml|truncate:150}
+                                    </p>
+                                    <div class="flex items-center justify-between pt-6 border-t border-outline-variant/10 mt-auto">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+                                                <img class="w-full h-full object-cover" src="{Image::getGravatar(User::email($p->author), 60)}" alt="{$authorName}"/>
+                                            </div>
+                                            <span class="text-xs font-bold font-label text-on-surface">{$authorName}</span>
+                                        </div>
+                                        <span class="text-xs text-on-surface-variant font-medium">{Date::format($p->date, 'M d')}</span>
+                                    </div>
+                                </div>
+                            </article>
+                        {/foreach}
+                    {else}
+                        <div class="col-span-1 md:col-span-2 py-10 text-center text-on-surface-variant">
+                            {_('No more stories to display.')}
+                        </div>
+                    {/if}
+                </div>
+
+                <!-- Custom Pagination -->
+                {if $total_pages > 1}
+                <div class="flex items-center justify-center gap-2 pt-12">
+                    {if $page_num > 1}
+                        <a href="{Url::page($pageId)}{if $page_num-1>1}&paging={$page_num-1}{/if}" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </a>
+                    {else}
+                        <span class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-low text-on-surface-variant/30 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </span>
+                    {/if}
+
+                    {for $i = 1; $i <= $total_pages; $i++}
+                        <!-- Simple visual pagination (shows all, recommend offset logic for large sites) -->
+                        <a href="{Url::page($pageId)}{if $i>1}&paging={$i}{/if}" class="w-10 h-10 rounded-full flex items-center justify-center font-bold {if $i == $page_num}bg-primary text-on-primary{else}hover:bg-surface-container-high transition-colors text-on-surface-variant{/if}">
+                            {$i}
+                        </a>
+                    {/for}
+
+                    {if $page_num < $total_pages}
+                        <a href="{Url::page($pageId)}&paging={$page_num+1}" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                    {else}
+                        <span class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-low text-on-surface-variant/30 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </span>
+                    {/if}
+                </div>
+                {/if}
+            </div>
+
+            <!-- Sidebar (Right Columns) -->
+            <aside class="md:col-span-4 space-y-10">
+                <!-- Search Widget -->
+                <form action="{Url::search()}" method="get" class="bg-surface-container p-8 rounded-lg shadow-sm border border-black/5">
+                    <input type="hidden" name="search" value=""/>
+                    <h4 class="font-headline font-bold text-lg mb-4">{_('Find an Article')}</h4>
+                    <div class="relative">
+                        <input name="q" class="w-full bg-surface-container-lowest border-none rounded-full py-3 px-6 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="{_('Search the gallery...')}" type="text" required/>
+                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary">
+                            <span class="material-symbols-outlined">search</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Trending Now -->
+                <div class="bg-surface-container-lowest p-8 rounded-lg shadow-sm border border-black/5">
+                    <h4 class="font-headline font-extrabold text-xl mb-6 flex items-center gap-2">
+                        {_('Trending Now')}
+                        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                    </h4>
+                    <div class="space-y-6">
+                        {var $trending = Query::table('posts')->where('type', 'post')->where('status', '1')->orderBy('views', 'DESC')->limit(3)->get()}
+                        {if !empty($trending)}
+                            {foreach $trending as $tp}
+                                {php
+                                    $tpImg = Posts::getPostImage($tp->id);
+                                    if (empty($tpImg)) {
+                                        $content_clean = Typo::Xclean($tp->content);
+                                        if (preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $content_clean, $m)) {
+                                            $tpImg = $m['src'];
+                                        }
+                                    }
+                                    $trendImg = $tpImg ? $tpImg : (Site::$url . '/assets/images/noimage.png');
+                                    $tCat = $tp->cat ? Categories::name($tp->cat) : 'ARTICLE';
+                                }
+                                <a class="flex gap-4 group" href="{Url::post($tp->id)}">
+                                    <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-surface-container">
+                                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="{Url::thumb($trendImg, 'large')}" alt="{$tp->title|stripHtml}"/>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <span class="text-[10px] font-bold font-label text-primary uppercase tracking-wider mb-1">{$tCat}</span>
+                                        <h5 class="text-sm font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">{$tp->title|noescape}</h5>
+                                    </div>
+                                </a>
+                            {/foreach}
+                        {/if}
+                    </div>
+                </div>
+
+                <!-- Newsletter Bento Card -->
+                <div class="bg-gradient-to-br from-primary to-primary-container rounded-lg p-8 text-on-primary editorial-shadow relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h4 class="text-2xl font-headline font-extrabold mb-4 leading-tight">{_('Freshly Baked Content, In Your Inbox.')}</h4>
+                        <p class="text-sm opacity-90 mb-6">{_('Join our enthusiasts receiving weekly secrets on flavor layering and modern design.')}</p>
+                        <form action="#" method="post" class="space-y-3" onsubmit="event.preventDefault(); alert('Newsletter connected!');">
+                            <input class="w-full bg-white/20 border-white/30 rounded-full py-3 px-6 text-sm placeholder:text-white/60 focus:ring-2 focus:ring-white/40 transition-all outline-none border text-white" placeholder="{_('Your email address')}" type="email" required/>
+                            <button type="submit" class="w-full bg-on-primary text-primary font-bold py-3 rounded-full hover:bg-opacity-90 transition-opacity">{_('Subscribe Now')}</button>
+                        </form>
+                    </div>
+                    <!-- Abstract frosting shape -->
+                    <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+                </div>
+            </aside>
+        </div>
+    </section>
+</main>

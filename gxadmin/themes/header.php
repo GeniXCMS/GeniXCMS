@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Site::meta('backend'); ?>
+    <?= Site::meta(['backend']); ?>
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -122,7 +122,7 @@
 
                         <?php
                         $externalPlugMenu = AdminMenu::renderTopNav('external');
-                        if (!empty(strip_tags($externalModMenu)) || !empty($externalPlugMenu)):
+                        if (!empty($externalPlugMenu)):
                             ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle px-2 py-1 rounded text-secondary font-weight-medium hover-bg-light"
@@ -209,6 +209,7 @@
             </style>
 
             <div class="d-flex align-items-center gap-3">
+                <?php echo Hooks::run('admin_header_top_right_action'); ?>
                 <a href="<?= Site::$url; ?>" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill"
                     title="<?= _("View Site"); ?>">
                     <i class="bi bi-eye me-1"></i> <span class="d-none d-sm-inline"><?= _("Visit Site"); ?></span>

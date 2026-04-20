@@ -1,0 +1,40 @@
+<article class="pt-16 pb-24 px-6 max-w-6xl mx-auto">
+    {var $p = $data['posts'][0]}
+
+    <!-- Hero Header Section -->
+    <header class="mb-16 text-center md:text-left">
+        <div class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase mb-4">
+            {_('Page')}
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold font-headline text-on-surface tracking-tight mb-6">
+            {$p->title}
+        </h1>
+        <p class="text-on-surface-variant text-lg md:text-xl max-w-2xl font-medium leading-relaxed">
+            {_('Last updated:')} {Date::format($p->date)}
+        </p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Sidebar Navigation (Sticky) -->
+        <aside class="hidden lg:block lg:col-span-3">
+            <nav class="sticky top-32 flex flex-col gap-4">
+                <a class="text-primary font-bold border-l-4 border-primary pl-4 py-1" href="#top">{_('Overview')}</a>
+                {var $sidebar_w = Widget::show('sidebar')}
+                {if $sidebar_w}
+                    <div class="mt-8 space-y-6">
+                        {$sidebar_w|noescape}
+                    </div>
+                {/if}
+            </nav>
+        </aside>
+
+        <!-- Text Content -->
+        <div class="lg:col-span-9 space-y-12">
+            <section class="bg-surface-container p-8 md:p-12 rounded-2xl content-shadow">
+                <div class="content-rich text-lg leading-relaxed text-on-surface-variant font-body">
+                    {Posts::format($p->content, $p->id)|noescape}
+                </div>
+            </section>
+        </div>
+    </div>
+</article>

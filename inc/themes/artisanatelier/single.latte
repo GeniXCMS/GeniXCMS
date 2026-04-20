@@ -1,0 +1,33 @@
+<section class="py-24 bg-surface min-h-screen">
+    <div class="max-w-4xl mx-auto px-12">
+        <div class="mb-12">
+            <div class="text-sm font-semibold uppercase tracking-widest text-secondary mb-4">
+                {$posts[0]->date} — {$posts[0]->author}
+            </div>
+            <h1 class="text-6xl font-serif font-bold text-on-surface tracking-tight mb-8 leading-tight">
+                {$title|stripHtml}
+            </h1>
+            <div class="w-full h-[500px] overflow-hidden rounded-[2rem] shadow-xl mb-16">
+                <img src="{ArtisanAtelier::opt('hero_image')}" class="w-full h-full object-cover" alt="{$title|stripHtml}">
+            </div>
+        </div>
+
+        <article class="prose prose-stone lg:prose-xl max-w-none artisan-content">
+            <div class="text-on-surface-variant leading-relaxed">
+                {$content|noescape}
+            </div>
+        </article>
+
+        <div class="mt-24 pt-12 border-t border-stone-200">
+            <div class="flex items-center gap-6">
+                <div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center text-primary text-2xl font-serif">
+                    {substr($posts[0]->author, 0, 1)}
+                </div>
+                <div>
+                    <div class="font-serif font-bold text-xl text-on-surface">{$posts[0]->author}</div>
+                    <p class="text-stone-500 text-sm italic">Artisan & Storyteller</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

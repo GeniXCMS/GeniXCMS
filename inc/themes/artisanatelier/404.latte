@@ -1,0 +1,29 @@
+<main class="min-h-[80vh] flex items-center justify-center bg-surface-container-low relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none"
+        style="background-image: radial-gradient({ArtisanAtelier::opt('primary_color')} 0.5px, transparent 0.5px); background-size: 40px 40px;">
+    </div>
+    
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 blob-mask-1 -z-10 animate-pulse"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-secondary/20 blob-mask-2 -z-10"></div>
+
+    <div class="text-center relative z-10 px-4 max-w-2xl mx-auto">
+        <h1 class="text-[12rem] leading-none font-serif font-black text-primary mb-2 tracking-tighter drop-shadow-sm">404</h1>
+        <h2 class="text-3xl font-serif font-bold text-on-surface mb-6">Masterpiece Not Found</h2>
+        
+        <p class="text-lg text-on-surface-variant mb-10 leading-relaxed max-w-lg mx-auto">
+            We've searched the deepest corners of the atelier, but the masterpiece you're looking for seems to have been misplaced. It may have been moved, or perhaps it never existed at all.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{$site_url}" class="px-8 py-4 bg-primary text-on-primary rounded-full font-bold hover:bg-primary-container hover:text-on-primary-container transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">home</span>
+                Return to {$site_name}
+            </a>
+            <a href="{Url::mod('store')}" class="px-8 py-4 bg-white border border-outline-variant text-on-surface rounded-full font-bold hover:bg-surface-container transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">storefront</span>
+                Browse Catalog
+            </a>
+        </div>
+    </div>
+</main>

@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20150214
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -294,95 +294,105 @@ class Image
         $img = is_array($img) ? ($img[0] ?? '') : $img;
         $img = urldecode($img);
         $img = str_replace('thumb/', '', $img);
+        // Fix collapsed slashes in protocol (https:/ -> https://)
+        $img = preg_replace('#^(https?):/([^/])#i', '$1://$2', $img);
 
         $noimage = 'assets/images/noimage.png';
-        $imgExts = explode(".", $img);
-        $imgExt = strtolower(end($imgExts));
+        $imgClean = explode('?', $img)[0];
+
+        // Robust extension detection from path only
+        $urlPath = parse_url($imgClean, PHP_URL_PATH);
+        $imgExt = '';
+        if ($urlPath) {
+            $pathParts = explode('/', $urlPath);
+            $fileName = end($pathParts);
+            if (strpos($fileName, '.') !== false) {
+                $fileParts = explode('.', $fileName);
+                $imgExt = strtolower(end($fileParts));
+            }
+        }
+
+        // Validation for illegal or empty extensions (common with remote URLs like Unsplash/Google)
+        if (empty($imgExt) || strlen($imgExt) > 4 || !in_array($imgExt, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'])) {
+            $imgExt = 'png';
+        }
+
         $ighash = ($noimage == $img) ? sha1('noimage' . $img) : sha1($img);
-        // $cacheFile = ($noimage == $img) ? $img : GX_ASSET.'cache/thumb'.$type.$size.$align.'-'.$ighash.'.'.$imgExt;
         $cacheFile = GX_ASSET . 'cache/thumbs/thumb' . $type . $size . $align . '-' . $ighash . '.' . $imgExt;
 
-        $square = ($size != '') ? Typo::int($size) : 150;
-        $large = ($size != '') ? Typo::int($size) : 200;
-        $small = ($size != '') ? Typo::int($size) : 100;
+        if (strpos($size, 'x') !== false) {
+            $sizes = explode('x', $size);
+            $w = (int) $sizes[0];
+            $h = (int) $sizes[1];
+        } else {
+            $w = (int) $size;
+            $h = $w;
+        }
+
+        $square_w = ($size != '') ? $w : 150;
+        $square_h = ($size != '') ? $h : 150;
+        $large = ($size != '') ? $w : 200;
+        $small = ($size != '') ? $w : 100;
+
+        $mimes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'avif' => 'image/avif',
+        ];
+        $mime = $mimes[$imgExt] ?? 'image/jpeg';
 
         if (file_exists($cacheFile)) {
             $src = $cacheFile;
             ob_clean();
+            header("Content-Type: {$mime}");
             readfile($src);
             exit;
-            // $image = $manager->read($src);
-
-            // if (Options::v('is_logourl') == 'on' && Options::v('logourl') != '') {
-            //     $logo = GX_PATH.'/'.Options::v('logourl');
-            // } elseif (Options::v('is_logourl') == 'off' && Options::v('logo') != '') {
-            //     $logo = GX_PATH.'/'.Options::v('logo');
-            // }
-
-            // $image->place(
-            //     $logo,
-            //     'bottom-right', 
-            //     10, 
-            //     10,
-            //     30
-            // );
-
-            // if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
-            //     $encoded = $image->toJpeg();
-            // }
-            // if ($imgExt == 'gif') {
-            //     $encoded = $image->toGif();
-            // }
-            // if ($imgExt == 'png') {
-            //     $encoded = $image->toPng();
-            // }
-            // if ($imgExt == 'webp') {
-            //     $encoded = $image->toWebp();
-            // }
-
-
-
         } else {
 
 
             // check whether files exist on remote or local
-            if (Files::isRemote($img)) {
-                $imgSrc = $img;
-                $exist = Files::remoteExist($imgSrc);
-            } else {
-                $imgSrc = GX_PATH . '/' . $img;
-                $exist = file_exists($imgSrc);
-            }
-
-            if (!$exist) {
-                $imgSrc = GX_PATH . '/' . $noimage;
-                $imgExt = 'png';
-            }
-
-            $getsize = @getimagesize($imgSrc);
-            if (!$getsize) {
-                $imgSrc = GX_PATH . '/' . $noimage;
-                $getsize = getimagesize($imgSrc);
-            }
-            list($width) = $getsize;
+            $imgSrc = Files::isRemote($img) ? $img : GX_PATH . '/' . $img;
 
             try {
-                $image = $manager->read($imgSrc);
+                if (Files::isRemote($imgSrc)) {
+                    // Fetch manually to handle CDN restrictions
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $imgSrc);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+                    $data = curl_exec($ch);
+                    curl_close($ch);
+
+                    if ($data === false || empty($data)) {
+                        throw new \Exception('CURL failed to fetch remote image');
+                    }
+                    $image = $manager->read($data);
+                } else {
+                    $image = $manager->read($imgSrc);
+                }
+                $width = $image->width();
             } catch (\Exception $e) {
                 // If read fails, fallback to noimage
                 $imgSrc = GX_PATH . '/' . $noimage;
                 $image = $manager->read($imgSrc);
+                $width = $image->width();
+                $imgExt = 'png';
             }
 
-            // type : square, large, small
-            if ($type == 'square') {
-                $image->cover($square, $square);
+            // type : square, large, small, crop
+            if ($type == 'square' || $type == 'crop') {
+                $image = $image->cover($square_w, $square_h);
             }
             if ($type == 'large') {
-                $image->scale(width: $large);
+                $image = $image->scale(width: $large);
             }
             if ($type == 'small') {
-                $image->scale(width: $small);
+                $image = $image->scale(width: $small);
             }
 
             $use_watermark = Options::v('media_use_watermark');
@@ -391,10 +401,10 @@ class Image
                 $watermark_position = Options::v('media_watermark_position');
                 $watermark_opacity = Options::v('media_watermark_opacity');
                 if (
-                    (isset($size) && $size > 200) ||
-                    (!isset($size) || $size == '' && $width > 200)
+                    ($size != '' && $w > 200) ||
+                    ($size == '' && $width > 200)
                 ) {
-                    $image->place(
+                    $image = $image->place(
                         GX_PATH . '/' . $watermark_image,
                         $watermark_position,
                         0,
@@ -418,6 +428,7 @@ class Image
             $encoded->save($cacheFile);
 
             ob_clean();
+            header("Content-Type: {$mime}");
             echo (string) $encoded;
             exit;
         }

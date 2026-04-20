@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20150312
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -22,6 +22,52 @@ if (User::access(0)) {
     }
     if (isset($GLOBALS['alertSuccess'])) {
         $data['alertSuccess'][] = $GLOBALS['alertSuccess'];
+    }
+
+    if (isset($_POST['doaction']) && isset($_POST['modules'])) {
+        $token = Typo::cleanX($_POST['token'] ?? '');
+        if (!Token::validate($token, true)) {
+            $data['alertDanger'][] = _("Token not exist, or your time has expired. Please refresh your browser to get a new token.");
+        } else {
+            $action = Typo::cleanX($_POST['action']);
+            $modules = $_POST['modules'];
+            $successCount = 0;
+            $errorCount = 0;
+
+            foreach ($modules as $mod) {
+                $mod = Typo::cleanX($mod);
+                if ($action == 'activate') {
+                    if (Mod::activate($mod)) $successCount++;
+                    else $errorCount++;
+                } elseif ($action == 'deactivate') {
+                    if (Mod::deactivate($mod)) $successCount++;
+                    else $errorCount++;
+                } elseif ($action == 'remove') {
+                    if (Mod::isActive($mod)) {
+                        $errorCount++;
+                        $data['alertDanger'][] = sprintf(_("Module %s is active. Deactivate it first."), $mod);
+                        continue;
+                    }
+                    // Run Delete Hook
+                    Mod::load($mod);
+                    Hooks::run('mod_delete', $mod);
+                    Hooks::run($mod . '_delete');
+
+                    if (Files::delTree(GX_MOD . $mod)) {
+                        $successCount++;
+                    } else {
+                        $errorCount++;
+                    }
+                }
+            }
+
+            if ($successCount > 0) {
+                $data['alertSuccess'][] = sprintf(_("Successfully processed %d modules."), $successCount);
+            }
+            if ($errorCount > 0) {
+                $data['alertDanger'][] = sprintf(_("Failed to process %d modules."), $errorCount);
+            }
+        }
     }
 
     if (isset($_POST['upload'])) {

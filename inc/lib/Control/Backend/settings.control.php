@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20141006
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -59,6 +59,7 @@ if (User::access(1)) {
                 'ppsandbox',
                 'google_captcha_enable',
                 'pinger_enable',
+                'go_service_fallback',
             );
             foreach ($q as $ob) {
                 if (in_array($ob->name, $input)) {

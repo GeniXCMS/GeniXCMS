@@ -1,0 +1,72 @@
+<main class="max-w-7xl mx-auto px-8 py-12 md:py-20 min-h-screen">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 flex items-center gap-2 text-sm font-label text-on-surface-variant">
+        <span>Cart</span>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span class="text-primary font-semibold">Information</span>
+        <span class="material-symbols-outlined text-xs text-outline-variant/30">chevron_right</span>
+        <span>Shipping</span>
+        <span class="material-symbols-outlined text-xs text-outline-variant/30">chevron_right</span>
+        <span>Payment</span>
+    </nav>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <!-- Left Column: Checkout Forms (Rendered dynamically by Nixomers SDK) -->
+        <section class="lg:col-span-7 nixomers-form-wrapper">
+            {NixCheckout::showForm($framework, $total, $taxAmount)|noescape}
+        </section>
+
+        <!-- Right Column: Order Summary (Sticky) -->
+        <aside class="lg:col-span-5 lg:sticky lg:top-32 space-y-8 nixomers-summary-wrapper">
+            {NixCheckout::showSummary($framework, $total, $taxAmount, $items)|noescape}
+            
+            <!-- Trust Badges -->
+            <div class="flex justify-center gap-10 px-4 opacity-40 grayscale hover:grayscale-0 transition-all duration-700 text-on-surface-variant">
+                <span class="material-symbols-outlined text-4xl">verified_user</span>
+                <span class="material-symbols-outlined text-4xl">local_shipping</span>
+                <span class="material-symbols-outlined text-4xl">eco</span>
+            </div>
+        </aside>
+    </div>
+
+    <style>
+        /* Bridge Artisan Atelier Styling to generic Tailwind Form Elements */
+        .nixomers-form-wrapper input, .nixomers-form-wrapper select, .nixomers-form-wrapper textarea {
+            background-color: rgb(var(--md-sys-color-surface-container-low));
+            border-color: rgb(var(--md-sys-color-outline-variant) / 0.2);
+            color: rgb(var(--md-sys-color-on-surface));
+            border-radius: 0.75rem;
+        }
+        .nixomers-form-wrapper input:focus, .nixomers-form-wrapper select:focus, .nixomers-form-wrapper textarea:focus {
+            border-color: rgb(var(--md-sys-color-primary));
+            outline: none;
+            box-shadow: none;
+        }
+        .nixomers-form-wrapper label {
+            color: rgb(var(--md-sys-color-on-surface-variant));
+        }
+        .nixomers-form-wrapper button[type="submit"] {
+            background-color: rgb(var(--md-sys-color-primary));
+            color: rgb(var(--md-sys-color-on-primary));
+            border-radius: 9999px;
+            box-shadow: 0 10px 15px -3px rgb(var(--md-sys-color-primary) / 0.2);
+        }
+        .nixomers-form-wrapper button[type="submit"]:hover {
+            filter: brightness(1.1);
+        }
+        .nixomers-summary-wrapper .bg-gray-50 {
+            background-color: rgb(var(--md-sys-color-surface-container-high) / 0.4);
+            border-color: rgb(var(--md-sys-color-outline-variant) / 0.1);
+            backdrop-filter: blur(4px);
+        }
+        .nixomers-summary-wrapper .text-gray-900 {
+            color: rgb(var(--md-sys-color-on-surface));
+        }
+        .nixomers-summary-wrapper .text-gray-500 {
+            color: rgb(var(--md-sys-color-on-surface-variant));
+        }
+        .nixomers-summary-wrapper .text-blue-600 {
+            color: rgb(var(--md-sys-color-primary));
+        }
+    </style>
+</main>

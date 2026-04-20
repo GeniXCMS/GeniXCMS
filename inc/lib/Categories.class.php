@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -25,11 +25,47 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 class Categories
 {
+    /** @var array Custom labels for category types */
+    private static $_typeLabels = [];
+
     /**
      * Categories Constructor.
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Registers custom UI labels for a specific category type.
+     * 
+     * @param string $type   Category type identifier.
+     * @param array  $labels Dictionary of labels.
+     */
+    public static function setTypeLabel($type, $labels = [])
+    {
+        self::$_typeLabels[$type] = $labels;
+    }
+
+    /**
+     * Retrieves a specific UI label for a category type, with fallback to defaults.
+     * 
+     * @param string $type Category type identifier.
+     * @param string $key  Label key.
+     * @return string      The localized/custom label.
+     */
+    public static function getTypeLabel($type, $key)
+    {
+        $defaults = [
+            'title' => _('Content Taxonomy'),
+            'subtitle' => _('Organize your site content with powerful hierarchical categories.'),
+            'new_item' => _('New Category'),
+            'stats_label' => _('Registered Categories'),
+            'empty_label' => _('Taxonomy Empty'),
+            'modal_title' => _('Create New Category'),
+            'name_label' => _('Category Name')
+        ];
+
+        return self::$_typeLabels[$type][$key] ?? $defaults[$key] ?? '';
     }
 
     /**
@@ -196,24 +232,25 @@ class Categories
      */
     public static function name($id)
     {
-        if (is_array($id)) {
-            error_log("DEBUG: Categories::name received an ARRAY: " . json_encode($id));
-            return _('Multiple Categories');
-        }
-        if (isset($id)) {
-            $cat = Query::table('cat')->where('id', $id)->first();
-            //print_r($cat);
-            if (!$cat) {
-                return '';
-            } else {
-                return $cat->name;
-            }
-        } else {
-            return _('No ID Selected');
-        }
-
-        //print_r($cat);
+        $cat = self::getInfo($id);
+        return ($cat) ? $cat->name : '';
     }
+
+    /**
+     * Retrieves all information for a specific category.
+     * 
+     * @param int $id Category ID.
+     * @return object|bool The category data object or false if not found.
+     */
+    public static function getInfo($id)
+    {
+        if (is_array($id) || !isset($id)) {
+            return false;
+        }
+        $cat = Query::table('cat')->where('id', Typo::int($id))->first();
+        return ($cat) ? $cat : false;
+    }
+
 
     /**
      * Retrieves the parent ID data for a specified category.
@@ -245,6 +282,7 @@ class Categories
 
         $cat = Query::table('cat')->where('id', $id)->delete();
         if ($cat) {
+            Query::table('cat_param')->where('cat_id', $id)->delete();
             // check all posts with this category and move to parent categories
             $postCount = Query::table('posts')->where('cat', $id)->count();
 
@@ -333,6 +371,103 @@ class Categories
         } else {
             return _('No ID Selected');
         }
+    }
+
+    /**
+     * Attaches a metadata parameter to a category.
+     *
+     * @param string $param   Parameter key.
+     * @param mixed  $value   Parameter value.
+     * @param int    $cat_id  Category ID.
+     * @return bool           True on success, false on failure.
+     */
+    public static function addParam($param, $value, $cat_id)
+    {
+        $cleanValue = Typo::cleanX($value);
+
+        $q = Query::table('cat_param')->insert([
+            'cat_id' => Typo::int($cat_id),
+            'param' => Typo::cleanX($param),
+            'value' => $cleanValue
+        ]);
+
+        return $q ? true : false;
+    }
+
+    /**
+     * Updates an existing metadata parameter for a category.
+     *
+     * @param string $param   Parameter key.
+     * @param mixed  $value   New parameter value.
+     * @param int    $cat_id  Category ID.
+     * @return bool           True on success, false on failure.
+     */
+    public static function editParam($param, $value, $cat_id)
+    {
+        $cleanValue = Typo::cleanX($value);
+
+        $q = Query::table('cat_param')
+            ->where('cat_id', Typo::int($cat_id))
+            ->where('param', Typo::cleanX($param))
+            ->update(['value' => $cleanValue]);
+
+        return $q ? true : false;
+    }
+
+    /**
+     * Retrieves a metadata parameter for a category.
+     *
+     * @param string  $param  Parameter key.
+     * @param int     $cat_id Category ID.
+     * @return string         The parameter value or empty string.
+     */
+    public static function getParam($param, $cat_id)
+    {
+        $q = Query::table('cat_param')
+            ->where('cat_id', Typo::int($cat_id))
+            ->where('param', Typo::cleanX($param))
+            ->first();
+
+        if ($q) {
+            return Typo::Xclean($q->value);
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Deletes a metadata parameter for a category.
+     *
+     * @param string $param   Parameter key.
+     * @param int    $cat_id  Category ID.
+     * @return bool           True on success, false on failure.
+     */
+    public static function delParam($param, $cat_id)
+    {
+        $q = Query::table('cat_param')
+            ->where('cat_id', Typo::int($cat_id))
+            ->where('param', Typo::cleanX($param))
+            ->delete();
+
+        return $q ? true : false;
+    }
+
+    /**
+     * Checks if a metadata parameter exists for a category.
+     *
+     * @param string $param   Parameter key.
+     * @param int    $cat_id  Category ID.
+     * @return bool           True if exists, false otherwise.
+     */
+    public static function existParam($param, $cat_id)
+    {
+        $q = Query::table('cat_param')
+            ->select('id')
+            ->where('cat_id', Typo::int($cat_id))
+            ->where('param', Typo::cleanX($param))
+            ->first();
+
+        return $q ? true : false;
     }
 }
 

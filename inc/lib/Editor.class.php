@@ -5,7 +5,7 @@
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -128,36 +128,54 @@ class Editor
         // Enqueue jQuery UI CSS for elfinder dialog
         Asset::enqueue('jquery-ui-css');
 
-        // summernote-elfinder-button
-        Asset::register('summernote-elfinder-button', 'raw', '
+        // media-selector-button (replaces/augments legacy elfinder)
+        Asset::register('editor-media-selector', 'raw', '
         <script>
-            window.elfinderDialog = function(context) {
+            window.openMediaManager = function(callback) {
+                var preferred = window.GX_MEDIA_SELECTOR || "media-manager";
+                
+                if (preferred === "media-manager" && typeof GxMedia !== "undefined") {
+                    GxMedia.select(callback);
+                } else if (preferred === "elfinder" && typeof window.elfinderDialogLegacy === "function") {
+                    window.elfinderDialogLegacy(callback);
+                } else {
+                    // Fallback logic if preferred is not available
+                    if (typeof GxMedia !== "undefined") {
+                        GxMedia.select(callback);
+                    } else if (typeof window.elfinderDialogLegacy === "function") {
+                        window.elfinderDialogLegacy(callback);
+                    } else {
+                        var url = prompt("Enter Image URL:");
+                        if (url) callback(url);
+                    }
+                }
+            };
+
+            window.elfinderDialogLegacy = function(callback) {
+                var elfinderUrl = "' . $elfinderUrl . '";
+                var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
+                if (typeof $.fn.dialogelfinder === "undefined") {
+                    alert("File Manager Error: elFinder components not loaded correctly.");
+                    return;
+                }
+                $("<div />").appendTo("body").dialogelfinder({
+                    url: elfinderUrl + sep + "token=' . TOKEN . '",
+                    lang: "en", width: 840, destroyOnClose: true,
+                    getFileCallback: function(file, fm) {
+                        callback(file.url);
+                    },
+                }).dialogelfinder("instance");
+            };
+
+            window.summernoteMediaBtn = function(context) {
                 var ui = $.summernote.ui;
                 var button = ui.button({
-                    contents: \'<i class="bi bi-folder2-open"></i>\',
-                    tooltip: "File Manager",
+                    contents: \'<i class="bi bi-images"></i>\',
+                    tooltip: "Media Manager",
                     click: function() {
-                        var elfinderUrl = "' . $elfinderUrl . '";
-                        var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
-                        var context_btn = context;
-                        
-                        if (typeof $.fn.dialogelfinder === "undefined") {
-                            console.error("elFinder dialogelfinder is not loaded!");
-                            alert("File Manager Error: elFinder components not loaded correctly.");
-                            return;
-                        }
-
-                        setTimeout(function() {
-                            $("<div />").appendTo("body").dialogelfinder({
-                                url: elfinderUrl + sep + "token=' . TOKEN . '",
-                                lang: "en",
-                                width: 840,
-                                destroyOnClose: true,
-                                getFileCallback: function(file, fm) {
-                                    context_btn.invoke("editor.insertImage", file.url);
-                                },
-                            }).dialogelfinder("instance");
-                        }, 10);
+                        window.openMediaManager(function(url) {
+                            context.invoke("editor.insertImage", url);
+                        });
                     }
                 });
                 return button.render();
@@ -180,7 +198,7 @@ class Editor
         Asset::register('summernote-init', 'raw', '
         <script>
             $(document).ready(function() {
-                function sendFile(file, editor, welEditable) {
+                function sendFile(file) {
                     var elfinderUrl = "' . $elfinderUrl . '";
                     var sep = elfinderUrl.indexOf("?") === -1 ? "?" : "&";
                     $.ajax({ 
@@ -217,7 +235,7 @@ class Editor
                         maxHeight: ($(window).height() - 150),
                         toolbar: [' . System::$toolbar . '],
                         buttons: {
-                            elfinder: window.elfinderDialog,
+                            elfinder: window.summernoteMediaBtn,
                             gxcode: window.gxcodeBtn
                         },
                         callbacks: {
@@ -231,7 +249,7 @@ class Editor
                     }); 
                 });
             });
-        </script>', 'footer', ['summernote-js', 'summernote-elfinder-button']);
+        </script>', 'footer', ['summernote-js', 'editor-media-selector']);
 
         // Enqueue everything
         Asset::enqueue('summernote-css');
@@ -308,6 +326,17 @@ class Editor
                                             }).catch(reject);
                                         });
                                     }
+                                },
+                                // Added external media selector support for EditorJS
+                                buttonContent: "Select from Media Manager",
+                                selectFile: function() {
+                                    return new Promise(function(resolve) {
+                                        if (typeof window.openMediaManager === "function") {
+                                            window.openMediaManager(function(url) {
+                                                resolve(url);
+                                            });
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -385,7 +414,7 @@ class Editor
                     });
                 });
             });
-        </script>', 'footer', ['editorjs-delimiter', 'elfinder-helper']);
+        </script>', 'footer', ['editorjs-delimiter', 'elfinder-helper', 'editor-media-selector']);
 
         // Enqueue everything
         Asset::enqueue('editorjs-init');

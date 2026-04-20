@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.6 build date 20150706
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -84,6 +84,7 @@ class Hooks
             'admin_page_notif_action' => array(),
             'admin_page_top_action' => array(),
             'admin_page_bottom_action' => array(),
+            'admin_header_top_right_action' => array(),
             'admin_page_dashboard_action' => array(),
             'admin_page_dashboard_statslist_action' => array(),
             'admin_footer_action' => array(),
@@ -142,7 +143,10 @@ class Hooks
             $val = '';
             foreach ($hooks[$hook_name] as $func) {
                 if ($func != '') {
-                    $val .= $func($args);
+                    $ret = $func($args);
+                    if (!is_array($ret)) {
+                        $val .= $ret;
+                    }
                 }
             }
             return $val;

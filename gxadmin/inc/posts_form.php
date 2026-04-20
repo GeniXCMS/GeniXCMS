@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -13,14 +13,16 @@
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  */
-if (isset($_GET['token']) && Token::validate(Typo::cleanX($_GET['token']))) {
+$isAdd = ($_GET['act'] == 'add');
+$isEdit = ($_GET['act'] == 'edit');
+
+if ($isAdd || (isset($_GET['token']) && Token::validate(Typo::cleanX($_GET['token'])))) {
     $token = TOKEN;
 } else {
     $token = '';
 }
-$isEdit = ($_GET['act'] == 'edit');
 $postType = $data['postType'] ?? Typo::cleanX($_GET['type'] ?? 'post');
-$pagetitle = $isEdit ? _('Edit') : _('Create');
+$pagetitle = $isEdit ? Posts::getTypeLabel($postType, 'edit') : Posts::getTypeLabel($postType, 'create');
 $act = $isEdit ? "edit&id=" . Typo::int($_GET['id']) . "&token=" . $token : 'add';
 $act .= "&type=" . $postType;
 
@@ -47,19 +49,22 @@ if (isset($data['post'])) {
 <?php
 $ui = new UiBuilder([
     'header' => [
-        'title' => $pagetitle . ' ' . _('Post'),
+        'title' => $pagetitle . ' ' . Posts::getTypeLabel($postType, 'label'),
         'subtitle' => _('Compose and distribute high-fidelity content across the digital enterprise.'),
         'icon' => 'bi bi-pencil-square',
         'buttons' => [
             [
                 'label' => _('Publish Changes'),
                 'type' => 'button',
+                'btn_type' => 'submit',
+                'name' => 'submit',
                 'icon' => 'bi bi-send',
                 'class' => 'btn btn-primary rounded-pill px-4 shadow-sm'
             ],
             [
                 'label' => _('Discard'),
-                'url' => 'index.php?page=posts',
+                'type' => 'link',
+                'href' => 'index.php?page=posts&type=' . $postType,
                 'icon' => 'bi bi-x-circle',
                 'class' => 'btn btn-light border bg-white rounded-pill px-4'
             ]
@@ -81,85 +86,86 @@ $ui = new UiBuilder([
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-body p-4">
                         <?php if (Options::v('multilang_enable') === 'on'): ?>
-                                <ul class="nav nav-pills mb-4 bg-light p-1 rounded-pill" role="tablist"
-                                    style="width: fit-content;">
-                                    <?php
-                                    $def = Options::v('multilang_default');
-                                    $deflang = Language::getDefaultLang();
-                                    $listlang = json_decode(Options::v('multilang_country'), true);
+                            <ul class="nav nav-pills mb-4 bg-light p-1 rounded-pill" role="tablist"
+                                style="width: fit-content;">
+                                <?php
+                                $def = Options::v('multilang_default');
+                                $deflang = Language::getDefaultLang();
+                                $listlang = json_decode(Options::v('multilang_country'), true);
+                                ?>
+                                <li class="nav-item">
+                                    <button class="nav-link active rounded-pill px-4" data-bs-toggle="pill"
+                                        data-bs-target="#lang-<?= $def; ?>" type="button">
+                                        <i class="bi bi-translate me-1"></i> <?= $deflang['country']; ?>
+                                    </button>
+                                </li>
+                                <?php
+                                $clonedList = $listlang;
+                                unset($clonedList[$def]);
+                                foreach ($clonedList as $key => $value):
                                     ?>
                                     <li class="nav-item">
-                                        <button class="nav-link active rounded-pill px-4" data-bs-toggle="pill"
-                                            data-bs-target="#lang-<?= $def; ?>" type="button">
-                                            <i class="bi bi-translate me-1"></i> <?= $deflang['country']; ?>
+                                        <button class="nav-link rounded-pill px-4" data-bs-toggle="pill"
+                                            data-bs-target="#lang-<?= $key; ?>" type="button">
+                                            <?= $value['country']; ?>
                                         </button>
                                     </li>
-                                    <?php
-                                    $clonedList = $listlang;
-                                    unset($clonedList[$def]);
-                                    foreach ($clonedList as $key => $value):
-                                        ?>
-                                            <li class="nav-item">
-                                                <button class="nav-link rounded-pill px-4" data-bs-toggle="pill"
-                                                    data-bs-target="#lang-<?= $key; ?>" type="button">
-                                                    <?= $value['country']; ?>
-                                                </button>
-                                            </li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                <?php endforeach; ?>
+                            </ul>
 
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="lang-<?= $def; ?>">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="lang-<?= $def; ?>">
+                                    <div class="mb-4">
+                                        <label
+                                            class="form-label fw-bold text-dark small text-uppercase"><?= _("Primary Heading"); ?></label>
+                                        <input type="text" name="title[<?= $def; ?>]"
+                                            class="form-control form-control-lg border-0 bg-light rounded-3"
+                                            placeholder="<?= _("Write a captivating title..."); ?>" value="<?= $title; ?>">
+                                    </div>
+                                    <div class="mb-4">
+                                        <textarea name="content[<?= $def; ?>]" class="form-control editor"
+                                            id="content_<?= $def; ?>"><?= $content; ?></textarea>
+                                    </div>
+                                </div>
+                                <?php
+                                foreach ($clonedList as $key => $value):
+                                    $lang = $isEdit ? Language::getLangParam($key, $id) : ['title' => '', 'content' => ''];
+                                    if (empty($lang) || !Posts::existParam('multilang', $id)) {
+                                        $lang = ['title' => $title, 'content' => $content];
+                                    }
+                                    ?>
+                                    <div class="tab-pane fade" id="lang-<?= $key; ?>">
                                         <div class="mb-4">
                                             <label
-                                                class="form-label fw-bold text-dark small text-uppercase"><?= _("Primary Heading"); ?></label>
-                                            <input type="text" name="title[<?= $def; ?>]"
-                                                class="form-control form-control-lg border-0 bg-light rounded-3"
-                                                placeholder="<?= _("Write a captivating title..."); ?>" value="<?= $title; ?>">
+                                                class="form-label fw-bold text-dark small text-uppercase"><?= _("Translation Info"); ?></label>
+                                            <input type="text" name="title[<?= $key; ?>]"
+                                                class="form-control border-0 bg-light rounded-3"
+                                                placeholder="<?= _("Title for"); ?> <?= $value['country']; ?>"
+                                                value="<?= $lang['title']; ?>">
                                         </div>
                                         <div class="mb-4">
-                                            <textarea name="content[<?= $def; ?>]" class="form-control editor"
-                                                id="content_<?= $def; ?>"><?= $content; ?></textarea>
+                                            <textarea name="content[<?= $key; ?>]" class="form-control editor"
+                                                id="content_<?= $key; ?>"><?= $lang['content']; ?></textarea>
                                         </div>
                                     </div>
-                                    <?php
-                                    foreach ($clonedList as $key => $value):
-                                        $lang = $isEdit ? Language::getLangParam($key, $id) : ['title' => '', 'content' => ''];
-                                        if (empty($lang) || !Posts::existParam('multilang', $id)) {
-                                            $lang = ['title' => $title, 'content' => $content];
-                                        }
-                                        ?>
-                                            <div class="tab-pane fade" id="lang-<?= $key; ?>">
-                                                <div class="mb-4">
-                                                    <label
-                                                        class="form-label fw-bold text-dark small text-uppercase"><?= _("Translation Info"); ?></label>
-                                                    <input type="text" name="title[<?= $key; ?>]"
-                                                        class="form-control border-0 bg-light rounded-3"
-                                                        placeholder="<?= _("Title for"); ?> <?= $value['country']; ?>"
-                                                        value="<?= $lang['title']; ?>">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <textarea name="content[<?= $key; ?>]" class="form-control editor"
-                                                        id="content_<?= $key; ?>"><?= $lang['content']; ?></textarea>
-                                                </div>
-                                            </div>
-                                    <?php endforeach; ?>
-                                </div>
+                                <?php endforeach; ?>
+                            </div>
                         <?php else: ?>
-                                <div class="mb-4">
-                                    <label
-                                        class="form-label fw-bold text-dark small text-uppercase"><?= _("Post Architecture"); ?></label>
-                                    <input type="text" name="title"
-                                        class="form-control form-control-lg border-0 bg-light rounded-3 shadow-none"
-                                        placeholder="<?= _("Enter post title here..."); ?>" value="<?= $title; ?>">
-                                </div>
-                                <div class="mb-4">
-                                    <textarea name="content" class="form-control editor"
-                                        id="editor_main"><?= $content; ?></textarea>
-                                </div>
+                            <div class="mb-4">
+                                <label
+                                    class="form-label fw-bold text-dark small text-uppercase"><?= Posts::getTypeLabel($postType, 'title_label'); ?></label>
+                                <input type="text" name="title"
+                                    class="form-control form-control-lg border-0 bg-light rounded-3 shadow-none"
+                                    placeholder="<?= Posts::getTypeLabel($postType, 'title_placeholder'); ?>"
+                                    value="<?= $title; ?>">
+                            </div>
+                            <div class="mb-4">
+                                <textarea name="content" class="form-control editor"
+                                    id="editor_main"><?= $content; ?></textarea>
+                            </div>
                         <?php endif; ?>
 
-                        <?php Hooks::run('post_param_form_bottom', $data); ?>
+                        <?= Hooks::run('post_param_form_bottom', $data); ?>
                     </div>
                 </div>
             </div>
@@ -220,17 +226,17 @@ $ui = new UiBuilder([
                     </div>
                     <div class="card-body px-4 pb-4 pt-0 text-center">
                         <div class="media-drop-zone rounded-4 border-2 border-dashed bg-light p-3 position-relative"
-                            style="cursor: pointer;" onclick="elfinderDialog2()">
+                            style="cursor: pointer;" onclick="gxMediaFeaturedImage()">
                             <?php if ($post_image): ?>
-                                    <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm" src="<?= $post_image; ?>"
-                                        style="max-height: 250px; width: 100%; object-fit: cover;">
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm" src="<?= $post_image; ?>"
+                                    style="max-height: 250px; width: 100%; object-fit: cover;">
                             <?php else: ?>
-                                    <div class="py-5" id="post_image_placeholder">
-                                        <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
-                                        <p class="text-muted small mt-2 mb-0"><?= _("Click to select hero image"); ?></p>
-                                    </div>
-                                    <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm d-none"
-                                        style="max-height: 250px; width: 100%; object-fit: cover;">
+                                <div class="py-5" id="post_image_placeholder">
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                    <p class="text-muted small mt-2 mb-0"><?= _("Click to select hero image"); ?></p>
+                                </div>
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm d-none"
+                                    style="max-height: 250px; width: 100%; object-fit: cover;">
                             <?php endif; ?>
                         </div>
                         <input name="post_image" id="post_image" type="hidden" value="<?= $post_image; ?>">
@@ -252,7 +258,7 @@ $ui = new UiBuilder([
                     </div>
                 </div>
 
-                <?php Hooks::run('post_param_form_sidebar', $data); ?>
+                <?= Hooks::run('post_param_form_sidebar', $data); ?>
             </div>
         </div>
     </div>
@@ -322,4 +328,23 @@ $ui = new UiBuilder([
             });
         }
     });
+
+    function gxMediaFeaturedImage() {
+        if (typeof GxMedia !== 'undefined') {
+            GxMedia.select(function (url) {
+                $('#post_image').val(url);
+                $('#post_image_preview').attr('src', url).removeClass('d-none');
+                $('#post_image_placeholder').addClass('d-none');
+            });
+        } else if (typeof elfinderDialog2 === 'function') {
+            elfinderDialog2();
+        } else {
+            var url = prompt('Enter Featured Image URL:');
+            if (url) {
+                $('#post_image').val(url);
+                $('#post_image_preview').attr('src', url).removeClass('d-none');
+                $('#post_image_placeholder').addClass('d-none');
+            }
+        }
+    }
 </script>

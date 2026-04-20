@@ -1,0 +1,156 @@
+{var $o = (array)Agrifest::options()}
+
+<!-- Hero Section -->
+<section class="relative w-full h-[60vh] md:h-[70vh] flex items-center px-8 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img alt="Our Story" class="w-full h-full object-cover brightness-75" 
+             src="{$o['about_hero_img'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZ3CafK1ji1CEbFp77xc1QjGB34d5AyD_z8ULkqv_EO0aywx4xhktB3WH4hEjfWfSWVQvNu4mOLPgF6YUWT48KplxC04bHKvTO-oqqazEz5MG-MxYXVz4ta5ZHsK7X1acjc_AO8hHx7-XGmGwGUxvN0_5el6pauVNrXVp3Rw1f4G92Z3Zq-xLvxwCEimDI7BWl3zCy1i1SNXOFqPxb99bcLpPNsCVRi_uSE98-gdJnG4qUBKS9cZ7mJ4-aL5WoP6qT2hUENROOSAQ'}"/>
+        <div class="absolute inset-0 bg-black/20"></div>
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto text-center">
+        <span class="inline-block px-5 py-1.5 mb-8 rounded-full bg-secondary text-white font-bold text-xs tracking-[0.2em] uppercase shadow-xl">
+            {$o['about_hero_tagline'] ?? 'ESTABLISHED 1924'}
+        </span>
+        <h1 class="text-5xl md:text-8xl text-white font-headline font-bold mb-8 drop-shadow-2xl leading-tight tracking-tighter">
+            {$o['about_hero_title'] ?? 'The Legacy of the Soil'}
+        </h1>
+        <p class="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+            {$o['about_hero_desc'] ?? 'Cultivating excellence through four generations of sustainable farming and a deep-rooted commitment to the earth.'}
+        </p>
+    </div>
+</section>
+
+<!-- Our Story (Asymmetric Layout) -->
+<section class="py-32 px-8 max-w-7xl mx-auto overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+        <div class="lg:col-span-7 relative">
+            <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                <img alt="Heritage Harvest" class="w-full h-full object-cover" 
+                     src="{$o['about_story_img1'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZo4NU5ikKfhxXQaZYEwWnTlo_rLGrTpB1KzlQ8zU-S8f5_XFCGpzWIHkT-uu3v0TwZZaR0ximB2JH_Bn2Bcxy1mLqLk-KZFTaBR8gqthKK3v1uwGkXuBz-mrv5MGYE3fDudgQmmDzRHB2iiNe5lVRuTatibgvyrf2-bEzCdE_icOK7rDk5q52BHvxUky1Lbsi42-UhCbTy0JkugexVAM7ioV-n3ejcsXer4CIEzIXIHG7gja6jizfKeV3u2XOE1uXN9pxXs6o6jU'}"/>
+            </div>
+            <div class="absolute -bottom-12 -right-12 w-80 h-80 rounded-xl overflow-hidden border-[12px] border-background shadow-2xl hidden xl:block">
+                <img alt="Estate Produce" class="w-full h-full object-cover" 
+                     src="{$o['about_story_img2'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuC_lpl-ILERQE9n1VxfbafTClrCsK7Q492Y0tSb4EYOnedfs2cDrRuPClk3M12ROVwrV0vDFwalhV6PrQmKuHkPjBLEChanrwTbiHCg0YrYaAbProR0Kspvz6HFeRZz-VsTUO5NOt74Tf260iPW2lfbGsh0o8ZkWxdXxqonkILZ7D3VP3EX7M0yxDO-cLUyCap1jIYVXU4Knacf2AD-59HoaW32P7S9oGR126jExrw3zsIMn5-owMNC-LmXBDFMCjLNPj2oMhqwstA'}"/>
+            </div>
+        </div>
+        <div class="lg:col-span-5 flex flex-col gap-10">
+            <span class="text-primary font-black tracking-[0.3em] uppercase text-xs">A Century of Stewardship</span>
+            <h2 class="text-5xl font-headline font-bold text-on-surface leading-tight tracking-tighter">
+                {$o['about_story_title'] ?? 'Rooted in Tradition, Growing with Precision.'}
+            </h2>
+            <div class="space-y-6 text-on-surface-variant text-lg leading-relaxed">
+                <p>
+                    {$o['about_story_desc1'] ?? 'What began as a small patch of fertile land in the heart of the valley has blossomed into a curated estate. Our founders believed that if you treat the soil with respect, it returns the favor with unparalleled flavor and vitality.'}
+                </p>
+                <p>
+                    {$o['about_story_desc2'] ?? 'Today, Harvest Estate remains family-owned. We merge traditional regenerative practices with modern precision agriculture to ensure that every leaf, fruit, and grain that leaves our gates is a masterpiece of nature.'}
+                </p>
+            </div>
+            <div class="flex items-center gap-6 pt-4">
+                <div class="w-20 h-1 bg-primary/20 rounded-full"></div>
+                <span class="font-headline italic text-primary text-2xl font-bold">The Harvest Guarantee</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values (Bento Grid Style) -->
+<section class="py-32 bg-surface-container-low/50">
+    <div class="max-w-7xl mx-auto px-8">
+        <div class="mb-20 text-center space-y-4">
+            <h2 class="text-5xl font-headline font-bold text-on-surface">Cultivated with Intent</h2>
+            <p class="text-on-surface-variant max-w-xl mx-auto text-lg">Our three pillars of operation ensure that we provide more than just food; we provide a connection to the source.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <!-- Value 1 -->
+            <div class="bg-white p-12 rounded-xl flex flex-col gap-8 shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined text-4xl">eco</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface mb-4">Regenerative Practice</h3>
+                    <p class="text-on-surface-variant leading-relaxed">We don't just farm; we restore. Our carbon-negative approach focuses on soil health, biodiversity, and water conservation.</p>
+                </div>
+            </div>
+            <!-- Value 2 -->
+            <div class="bg-primary text-on-primary p-12 rounded-xl flex flex-col gap-8 shadow-2xl relative overflow-hidden group">
+                <div class="absolute -top-10 -right-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                    <span class="material-symbols-outlined text-[15rem]">verified</span>
+                </div>
+                <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-white relative z-10">
+                    <span class="material-symbols-outlined text-4xl">workspace_premium</span>
+                </div>
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-headline font-bold mb-4">Uncompromising Quality</h3>
+                    <p class="text-white/80 leading-relaxed">Every item is hand-selected at the absolute peak of its ripeness. We prioritize nutrient density and authentic flavor over commercial shelf-life.</p>
+                </div>
+            </div>
+            <!-- Value 3 -->
+            <div class="bg-white p-12 rounded-xl flex flex-col gap-8 shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                <div class="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined text-4xl">groups</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface mb-4">Local Connection</h3>
+                    <p class="text-on-surface-variant leading-relaxed">Supporting the local ecosystem is at our core. We partner with neighboring artisans to bring you a complete curated experience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-10">
+        <div class="max-w-2xl space-y-6">
+            <span class="text-primary font-black tracking-[0.3em] uppercase text-xs">Our People</span>
+            <h2 class="text-5xl md:text-7xl font-headline font-bold text-on-surface tracking-tighter">Meet the Stewards</h2>
+            <p class="text-xl text-on-surface-variant">The passionate hands and brilliant minds behind the Harvest Estate legacy.</p>
+        </div>
+        <button class="px-12 py-5 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold text-md shadow-2xl hover:scale-105 active:scale-95 transition-all">
+            JOIN OUR TEAM
+        </button>
+    </div>
+
+    <!-- Team Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        {for $i = 1; $i <= 4; $i++}
+            {var $t_name = $o['team'.$i.'_name'] ?? 'Arthur Thorne'}
+            {var $t_role = $o['team'.$i.'_role'] ?? 'Estate Manager'}
+            {var $t_img = $o['team'.$i.'_img'] ?? 'https://ui-avatars.com/api/?name='.$t_name.'&background=0d631b&color=fff'}
+            {var $t_quote = $o['team'.$i.'_quote'] ?? 'Nature is the best teacher we have.'}
+            
+            <div class="group">
+                <div class="aspect-[3/4] rounded-xl overflow-hidden mb-8 relative shadow-lg">
+                    <img alt="{$t_name}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" 
+                         src="{$t_img}"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-8">
+                        <p class="text-white text-sm italic font-medium leading-relaxed">"{$t_quote}"</p>
+                    </div>
+                </div>
+                <h4 class="text-2xl font-headline font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">{$t_name}</h4>
+                <p class="text-primary font-bold text-xs uppercase tracking-widest opacity-70">{$t_role}</p>
+            </div>
+        {/for}
+    </div>
+</section>
+
+<!-- Experience CTA -->
+<section class="py-32 px-8">
+    <div class="max-w-4xl mx-auto text-center bg-surface-container-high rounded-2xl p-16 md:p-24 relative overflow-hidden shadow-sm">
+        <div class="relative z-10 space-y-10">
+            <h2 class="text-5xl md:text-7xl font-headline font-bold text-on-surface tracking-tighter">Experience the Harvest</h2>
+            <p class="text-xl text-on-surface-variant leading-relaxed max-w-2xl mx-auto">From our estate to your table, taste the difference that a century of care makes. Explore our curated selection of seasonal offerings.</p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="{Url::mod('store')}" class="px-12 py-5 bg-primary text-white rounded-full font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all text-lg">
+                    {_('Shop the Harvest')}
+                </a>
+                <a href="{Url::mod('blog')}" class="px-12 py-5 bg-white text-on-surface rounded-full font-bold shadow-sm hover:bg-white/80 transition-all text-lg border border-primary/10">
+                    {_('Read Our Blog')}
+                </a>
+            </div>
+        </div>
+        <!-- Decorative Leaf Shadows -->
+        <span class="material-symbols-outlined absolute top-10 left-10 text-primary/5 text-[15rem] -rotate-12 select-none pointer-events-none">eco</span>
+    </div>
+</section>

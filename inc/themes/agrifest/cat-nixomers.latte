@@ -1,0 +1,183 @@
+<main class="pt-8 pb-20">
+    {var $cat_id = $data['cat']}
+    {var $cat_name = Categories::name($cat_id)}
+    {var $cat_desc = Categories::getParam('desc', $cat_id)}
+    
+    {* Fetch dynamic hero image or fallback to global default *}
+    {var $cat_img = Agrifest::get("f_cat_nix_img_" . $cat_id, Agrifest::get("cat_nix_hero_img", "https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=1600"))}
+
+    <!-- Hero Section: Organic Asymmetry -->
+    <section class="max-w-7xl mx-auto px-8 mb-16">
+        <div class="relative overflow-hidden rounded-xl bg-surface-container-low min-h-[400px] flex items-center">
+            <div class="relative z-10 w-full md:w-1/2 p-12">
+                <span class="inline-block px-4 py-1 mb-4 rounded-md bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase">{Agrifest::get('cat_nix_hero_tagline', 'The Curated Selection')}</span>
+                <h1 class="text-5xl md:text-7xl font-bold text-on-surface mb-6 leading-tight">{$cat_name}</h1>
+                <p class="text-lg text-on-surface-variant max-w-md mb-8">{!empty($cat_desc) ? $cat_desc : 'Hand-picked at the peak of ripeness from our heritage orchards. Traceable, sun-drenched, and delivered within hours of harvest.'}</p>
+                <div class="flex gap-4">
+                    <a href="#products" class="inline-block px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg font-semibold shadow-lg hover:opacity-90 transition-all">Explore Seasonal</a>
+                    <a href="{Url::mod('store')}" class="inline-block px-8 py-3 bg-surface-variant text-on-surface-variant rounded-lg font-semibold hover:bg-surface-container-high transition-all">All Harvest</a>
+                </div>
+            </div>
+            <div class="absolute right-0 top-0 h-full w-full md:w-3/5">
+                <img alt="{$cat_name}" class="w-full h-full object-cover" src="{$cat_img}"/>
+                <div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-surface-container-low/40 to-transparent"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filters & Bento Grid -->
+    <section id="products" class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+                <h2 class="text-3xl font-bold mb-2">{Agrifest::get('catalog_sidebar_title', 'Estate Harvest')}</h2>
+                <p class="text-on-surface-variant">Showing {count($data['posts'])} {Agrifest::get('catalog_inventory_label', 'items')} from {$cat_name}</p>
+            </div>
+            <div class="flex gap-2 p-1 bg-surface-container-high rounded-lg overflow-x-auto">
+                <a href="{Url::mod('store')}" class="px-6 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all text-sm font-semibold whitespace-nowrap">All Fruits</a>
+                {var $cats = Query::table('cat')->where('type', 'nixomers')->orderBy('name', 'ASC')->get()}
+                {if empty($cats)}
+                    {var $cats = Query::table('cat')->where('type', 'nixomer')->orderBy('name', 'ASC')->get()}
+                {/if}
+                {if !empty($cats)}
+                    {foreach $cats as $c}
+                        <a href="{Url::cat($c->id)}" class="px-6 py-2 rounded-lg {if $cat_id == $c->id}bg-primary text-on-primary shadow-sm{else}text-on-surface-variant hover:bg-surface-container-highest{/if} transition-all text-sm font-semibold whitespace-nowrap">{$c->name}</a>
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
+
+        <!-- Bento Product Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {if !empty($data['posts'])}
+            {foreach $data['posts'] as $k => $p}
+                {var $img = Posts::getPostImage($p->id)}
+                {var $price = Posts::getParam('price', $p->id)}
+                {var $unit = Posts::getParam('unit', $p->id)}
+                
+                {if $k == 0}
+                    <!-- Large Feature Card -->
+                    <div class="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl bg-surface-container transition-all hover:shadow-xl min-h-[400px]">
+                        <a href="{Url::post($p->id)}" class="block w-full h-full">
+                            <img alt="{$p->title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="{(empty($img) ? 'https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?q=80&w=800' : Url::thumb($img, 'large'))}"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                {var $sup = Posts::getParam('supplier', $p->id)}
+                                {var $origin = Posts::getParam('origin', $p->id)}
+                                {if !empty($sup)}
+                                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-md text-xs font-bold mb-3 inline-block uppercase">{$sup}</span>
+                                {elseif !empty($origin)}
+                                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-md text-xs font-bold mb-3 inline-block uppercase">{$origin}</span>
+                                {/if}
+                                
+                                <h3 class="text-3xl font-bold text-white mb-2">{$p->title|noescape}</h3>
+                                <div class="flex flex-col md:flex-row justify-between md:items-end gap-2">
+                                    <p class="text-white/90 font-medium line-clamp-2 pr-4">{Posts::format($p->content, $p->id)|striptags|truncate:80}</p>
+                                    <span class="text-2xl font-bold text-white shrink-0">
+                                        {if !empty($price)}
+                                            {Options::v('nixomers_currency')} {Nixomers::formatCurrency($price)}
+                                            {if !empty($unit)}<span class="text-sm font-normal">/{$unit}</span>{/if}
+                                        {/if}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {elseif $k == 3}
+                    <!-- Horizontal Feature Card -->
+                    <div class="md:col-span-2 group relative overflow-hidden rounded-xl bg-primary flex flex-col md:flex-row items-center min-h-[220px]">
+                        <div class="p-8 z-10 w-full md:w-2/3">
+                            <h3 class="text-2xl font-bold text-on-primary mb-2 line-clamp-1">{$p->title|noescape}</h3>
+                            <p class="text-on-primary/80 text-sm mb-6 line-clamp-2 pr-10">{Posts::format($p->content, $p->id)|striptags|truncate:80}</p>
+                            <a href="{Url::post($p->id)}" class="inline-block px-6 py-2 bg-white text-primary rounded-lg text-sm font-bold shadow-md hover:bg-gray-50 transition-all">
+                                {if !empty($price)}{Options::v('nixomers_currency')} {Nixomers::formatCurrency($price)}{else}View Details{/if}
+                            </a>
+                        </div>
+                        <div class="absolute right-0 top-0 h-full w-full md:w-1/3 z-0">
+                            <img alt="{$p->title}" class="w-full h-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105" src="{(empty($img) ? 'https://images.unsplash.com/photo-1605342938814-1e08ce58b888?q=80&w=400' : Url::thumb($img, 'crop','350x250'))}"/>
+                        </div>
+                    </div>
+                {else}
+                    <!-- Standard Product Card -->
+                    <div class="group bg-surface-container-low rounded-xl overflow-hidden transition-all hover:bg-surface-container border border-white/20 flex flex-col relative h-full">
+                        <a href="{Url::post($p->id)}" class="aspect-square relative block">
+                            <img alt="{$p->title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="{(empty($img) ? 'https://images.unsplash.com/photo-1596489370014-996ffcc8d3e2?q=80&w=400' : Url::thumb($img, 'crop', '300x350'))}"/>
+                        </a>
+                        <button class="absolute top-4 right-4 h-10 w-10 bg-white/80 backdrop-blur-md rounded-lg flex items-center justify-center text-primary shadow-sm hover:bg-primary hover:text-white transition-all z-10">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </button>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex justify-between items-start mb-2 gap-2">
+                                <h3 class="font-bold text-lg leading-tight line-clamp-2">
+                                    <a href="{Url::post($p->id)}" class="hover:text-primary transition-colors">{$p->title|noescape}</a>
+                                </h3>
+                            </div>
+                            <span class="text-primary font-bold text-xl mb-3 block">
+                                {if !empty($price)}{Options::v('nixomers_currency')} {Nixomers::formatCurrency($price)}{/if}
+                            </span>
+                            
+                            {var $sup = Posts::getParam('supplier', $p->id)}
+                            {var $origin = Posts::getParam('origin', $p->id)}
+                            <div class="flex items-center gap-1.5 mb-4 text-on-surface-variant text-sm mt-auto">
+                                <span class="material-symbols-outlined text-[16px] text-tertiary">nest_eco_leaf</span>
+                                {if !empty($sup)}
+                                    <span class="font-semibold">{$sup}</span>
+                                {elseif !empty($origin)}
+                                    <span class="font-semibold">{$origin}</span>
+                                {else}
+                                    <span class="font-semibold opacity-50">Local Origin</span>
+                                {/if}
+                            </div>
+                            
+                            <form action="{Url::mod('cart')}" method="post" class="mt-auto">
+                                <input type="hidden" name="product_id" value="{$p->id}">
+                                <input type="hidden" name="qty" value="1">
+                                <input type="hidden" name="nix_action" value="add">
+                                <button type="submit" class="w-full py-2.5 bg-surface-variant text-on-surface-variant rounded-lg text-sm font-bold hover:bg-primary hover:text-on-primary transition-all">
+                                    Quick Add
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {/if}
+            {/foreach}
+        {else}
+            <div class="col-span-full py-12 text-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-4xl mb-4 opacity-50">inventory_2</span>
+                <p>No agricultural products map to this harvest category.</p>
+            </div>
+        {/if}
+        </div>
+        
+        {if isset($data['paging'])}
+            <div class="mt-12 flex justify-center">
+                {$data['paging']|noescape}
+            </div>
+        {/if}
+    </section>
+
+    <!-- Secondary Promotion Section -->
+    {if Agrifest::get('cat_nix_promo_show', 'on') !== 'off'}
+    <section class="max-w-7xl mx-auto px-8 mt-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="order-2 md:order-1">
+                <img alt="Promo" class="rounded-xl shadow-2xl w-full aspect-[4/3] object-cover" src="{Agrifest::get('cat_nix_promo_img', 'https://images.unsplash.com/photo-1592424005888-0c6753086ffb?q=80&w=1200')}"/>
+            </div>
+            <div class="order-1 md:order-2">
+                <span class="text-tertiary font-bold tracking-widest text-xs uppercase mb-4 block">{Agrifest::get('cat_nix_promo_tagline', 'Coming Next Harvest')}</span>
+                <h2 class="text-4xl font-bold text-on-surface mb-6">{Agrifest::get('cat_nix_promo_title', 'Only Vegetables')}</h2>
+                <p class="text-lg text-on-surface-variant mb-8 leading-relaxed">{Agrifest::get('cat_nix_promo_desc', 'Our vegetable gardens are currently maturing under the careful watch of our estate agronomists. Expect crisp heirlooms and nutrient-dense greens within the coming weeks.')}</p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low border-l-4 border-tertiary">
+                        <span class="material-symbols-outlined text-tertiary">eco</span>
+                        <div>
+                            <p class="font-bold">Soil Regeneration Phase</p>
+                            <p class="text-sm text-on-surface-variant">Our beds are currently resting with organic compost.</p>
+                        </div>
+                    </div>
+                    <button class="px-8 py-3 border-2 border-primary text-primary rounded-lg font-bold hover:bg-primary hover:text-white transition-all">{Agrifest::get('cat_nix_promo_btn', 'Notify Me of Harvest')}</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    {/if}
+</main>

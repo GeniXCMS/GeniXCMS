@@ -1,0 +1,50 @@
+{var $o = (array)Agrifest::options()}
+{var $currency = Options::v('nixomers_currency') ?: 'IDR'}
+
+<main class="pt-12 pb-24 px-8 max-w-7xl mx-auto min-h-screen">
+    <!-- Header -->
+    <header class="mb-16">
+        <a href="{Url::mod('cart')}" class="inline-flex items-center gap-2 text-primary font-bold hover:opacity-70 transition-all group mb-6">
+            <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            <span class="text-xs uppercase tracking-[0.2em]">Review Basket</span>
+        </a>
+        <h1 class="text-5xl md:text-7xl font-headline font-extrabold text-on-surface tracking-tighter mb-4">Finalizing Harvest</h1>
+        <p class="text-on-surface-variant text-lg font-medium opacity-70">Complete your details to arrange the estate-to-door delivery.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-16 items-start">
+        <!-- Checkout Form Area -->
+        <div class="space-y-12 agrifest-checkout-container">
+            {NixCheckout::showForm('tailwindcss', $total, $taxAmount)|noescape}
+        </div>
+
+        <!-- Sidebar Summary -->
+        <aside class="sticky top-32 space-y-8">
+            <h3 class="font-headline font-extrabold text-2xl px-2 tracking-tight">Order Summary</h3>
+            <div class="agrifest-summary-wrapper">
+                {NixCheckout::showSummary('tailwindcss', $total, $taxAmount, $items)|noescape}
+            </div>
+
+            <!-- Secure Info -->
+            <div class="p-8 bg-surface-container-high/30 rounded-2xl border border-white/50 backdrop-blur-sm">
+                <div class="flex items-start gap-4">
+                    <span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+                    <div>
+                        <h4 class="font-bold text-on-surface text-sm mb-1 uppercase tracking-wider">Estate Guaranteed</h4>
+                        <p class="text-xs text-on-surface-variant font-medium opacity-70 leading-relaxed">
+                            Every transaction is encrypted and secured. Your produce is harvested only after successful confirmation to ensure maximum freshness.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="flex justify-center items-center gap-8 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
+                <span class="material-symbols-outlined text-3xl">lock</span>
+                <span class="material-symbols-outlined text-3xl">ecg_heart</span>
+                <span class="material-symbols-outlined text-3xl">local_shipping</span>
+                <span class="material-symbols-outlined text-3xl">workspace_premium</span>
+            </div>
+        </aside>
+    </div>
+</main>

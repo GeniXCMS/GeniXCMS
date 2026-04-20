@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20150126
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -52,7 +52,7 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 2.2.1
+ * @version 2.3.0
  * 
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
@@ -293,7 +293,7 @@ error_reporting(E_ALL);
         $date = date('Y-m-d H:i:s');
 
         $post = "INSERT INTO `posts` (`id`, `date`, `title`, `slug`, `content`, `author`, `type`, `cat`, `modified`, `status`, `views`) VALUES
-        (null, '{$date}', 'Welcome to GeniXCMS 2.2.1', 'welcome-to-genixcms', '&lt;p&gt;Congratulations and welcome to the next generation of Content Management! &lt;strong&gt;GeniXCMS 2.1.1&lt;/strong&gt; is our most advanced release yet, featuring a professional-grade editor and a robust modular architecture.&lt;/p&gt;&lt;p&gt;Key features to explore:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Professional GxEditor with Math &amp; Table support.&lt;/li&gt;&lt;li&gt;Dynamic Page Layouts and Dark Mode aesthetics.&lt;/li&gt;&lt;li&gt;Powerful REST API and OAuth2 integrations.&lt;/li&gt;&lt;li&gt;Secure, session-based CSRF protection.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;We hope you enjoy building with GeniXCMS. Explore the dashboard to start customizing your site!&lt;/p&gt;', '{$admin}', 'post', '1', '{$date}', '1', 42),
+        (null, '{$date}', 'Welcome to GeniXCMS 2.3.0', 'welcome-to-genixcms', '&lt;p&gt;Congratulations and welcome to the future of modular web management! &lt;strong&gt;GeniXCMS 2.3.0&lt;/strong&gt; is our most powerful release yet, featuring a refined e-commerce ecosystem and advanced financial intelligence.&lt;/p&gt;&lt;p&gt;New highlights in this version:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Nixomers Ecosystem: Ultra-Premium checkout experiences with Glassmorphism.&lt;/li&gt;&lt;li&gt;Financial Recalculate Engine: Deep data synchronization between orders and transactions.&lt;/li&gt;&lt;li&gt;Optimized Granular Tracking: Selective unit-level monitoring for performance.&lt;/li&gt;&lt;li&gt;Next-Gen UiBuilder: Programmatic logic loops and schema-driven dashboards.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;We hope you enjoy building with GeniXCMS. Explore the dashboard and start creating!&lt;/p&gt;', '{$admin}', 'post', '1', '{$date}', '1', 42),
         (null, '{$date}', 'Professional Publishing: Math &amp; Tables', 'professional-publishing-math-tables', '&lt;p&gt;GeniXCMS 2.1.1 introduces professional publishing tools: &lt;strong&gt;Math Equations&lt;/strong&gt; and the &lt;strong&gt;Table Wizard&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;Write complex LaTeX formulas with real-time previews using the Sigma-Root icon, or build structured tables via our new Bootstrap-based modal interface. These tools make GeniXCMS perfect for technical and academic content.&lt;/p&gt;', '{$admin}', 'post', '2', '{$date}', '1', 25),
         (null, '{$date}', 'Dynamic Layouts and Deep Dark Mode', 'dynamic-layouts-dark-mode', '&lt;p&gt;Themes now support &lt;strong&gt;Dynamic Page Layouts&lt;/strong&gt;—simply create a &lt;code&gt;layout-*.latte&lt;/code&gt; file and select it in the admin panel. Combined with our expanded &lt;strong&gt;Dark Mode&lt;/strong&gt; support, your site will look professional in any light.&lt;/p&gt;', '{$admin}', 'post', '2', '{$date}', '1', 18),
         (null, '{$date}', 'About Us', 'about-us', '&lt;p&gt;Hello and welcome to our website! We are a passionate team dedicated to delivering high-quality content and services to our incredible community.&lt;/p&gt;&lt;p&gt;This page is fully customizable. You can edit this text from the &lt;strong&gt;Pages&lt;/strong&gt; menu in your administration panel.&lt;/p&gt;', '{$admin}', 'page', NULL, NULL, '1', 12),

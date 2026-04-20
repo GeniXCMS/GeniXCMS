@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -40,6 +40,7 @@ class CatControl extends BaseControl
 
             $data['sitetitle'] = 'Post in : ' . Categories::name($cat) . $pagingtitle;
             $data['title'] = Categories::name($cat);
+            $data['category'] = Categories::getInfo($cat);
             $posts = Query::table('posts')
                 ->where('type', $type)
                 ->where('cat', Typo::int($cat))
@@ -68,7 +69,7 @@ class CatControl extends BaseControl
                 'image_size' => 100,
                 'title' => true,
                 'date' => true,
-                'type' => "post",
+                'type' => $type,
                 'class' => [
                     'row' => 'd-flex align-items-center mb-3 border-bottom pb-3',
                     'img' => 'rounded flex-shrink-0',
@@ -78,7 +79,11 @@ class CatControl extends BaseControl
                 ]
             ]);
 
-            $this->render('cat', $data);
+            $view = 'cat';
+            if (Theme::exist('cat-' . $type)) {
+                $view = 'cat-' . $type;
+            }
+            $this->render($view, $data);
             exit;
         } else {
             Control::error('404');

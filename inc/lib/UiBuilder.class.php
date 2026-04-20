@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * module pages (dashboards, tables, forms, stat cards) rather than just options.
  *
  * @since 2.0.0 build date 2026
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -35,73 +35,108 @@ class UiBuilder
 
     /**
      * Renders the module header including title, subtitle, and action buttons.
-     * The header is styled as a sticky-top element consistent with GeniXCMS admin standards.
      */
     public function renderHeader(): void
     {
-        if (isset($this->schema['header'])) {
-            $h = $this->schema['header'];
-            $icon = (isset($h['icon']) && $h['icon'] != "") ? "<i class=\"{$h['icon']} me-2\"></i>" : "";
-            $title = $h['title'] ?? 'Module';
-            $subtitle = $h['subtitle'] ?? '';
-
-            echo '<div class="row align-items-center mb-4 sticky-top bg-white py-3 shadow-sm border-bottom gx-module-header transition-all" style="top: calc(var(--gx-header-height, 56px) + 4px); z-index: 1020; margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px;">';
-            echo '    <div class="col-md-6">';
-            echo "        <h3 class=\"fw-bold text-dark mb-0 module-title transition-all\">{$icon}{$title}</h3>";
-            if ($subtitle) {
-                echo "        <p class=\"text-muted small mb-0 module-subtitle transition-all\">{$subtitle}</p>";
-            }
-            echo '    </div>';
-            echo '    <div class="col-md-6 text-md-end">';
-
-            // Handle Multiple Buttons or Single Button
-            $buttons = [];
-            if (isset($h['buttons'])) {
-                $buttons = $h['buttons'];
-            } elseif (isset($h['button'])) {
-                $buttons[] = $h['button'];
-            }
-
-            foreach ($buttons as $btn) {
-                $btnUrl = $btn['url'] ?? '#';
-                $btnLabel = $btn['label'] ?? 'Action';
-                $btnIcon = (isset($btn['icon']) && $btn['icon'] != "") ? "<i class=\"{$btn['icon']} me-1\"></i>" : "";
-                $btnClass = $btn['class'] ?? 'btn btn-primary rounded-pill px-4 shadow-sm';
-                $btnAttr = $btn['attr'] ?? '';
-                $btnType = $btn['type'] ?? 'link';
-
-                if ($btnType === 'button') {
-                    $btnName = $btn['name'] ?? 'submit';
-                    // Default to type="submit" for backwards compatibility with Save buttons 
-                    // Use btn_type => "button" explicitly for modal triggers
-                    $realType = $btn['btn_type'] ?? $btn['button_type'] ?? 'submit';
-                    echo "<button type=\"{$realType}\" name=\"{$btnName}\" class=\"{$btnClass} module-action-btn transition-all\" {$btnAttr}>{$btnIcon}{$btnLabel}</button> ";
-                } else {
-                    echo "<a href=\"{$btnUrl}\" class=\"{$btnClass} module-action-btn transition-all\" {$btnAttr}>{$btnIcon}{$btnLabel}</a> ";
-                }
-            }
-            echo '    </div>';
-            echo '</div>';
-
-            echo '<style>
-                .gx-module-header.shrunk { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
-                .gx-module-header.shrunk .module-title { font-size: 1.15rem !important; }
-                .gx-module-header.shrunk .module-subtitle { font-size: 0.65rem !important; display: none; }
-                .gx-module-header.shrunk .module-action-btn { font-size: 0.75rem !important; padding: 0.4rem 1.25rem !important; }
-                .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-            </style>';
-            echo '<script>
-                $(window).on("scroll.gx-header", function() {
-                    var st = $(window).scrollTop();
-                    var header = $(".gx-module-header");
-                    if (st > 120) {
-                        if (!header.hasClass("shrunk")) header.addClass("shrunk");
-                    } else if (st < 40) {
-                        if (header.hasClass("shrunk")) header.removeClass("shrunk");
-                    }
-                });
-            </script>';
+        if (empty($this->schema['header'])) {
+            return;
         }
+
+        $h = $this->schema['header'];
+        $title = $h['title'] ?? 'Dashboard';
+        $subtitle = $h['subtitle'] ?? '';
+        $icon = $h['icon'] ?? '';
+        $button = $h['button'] ?? null;
+        $buttons = $h['buttons'] ?? [];
+
+        // Dynamic Header Styling
+        echo '<style>
+            .ui-header { transition: all 0.3s ease; z-index: 1010; top: 60px; position: sticky; margin-bottom: 2rem; background: transparent; }
+            .ui-header.is-scrolled { background: white !important; padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; border-bottom: 1px solid #eee !important; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05) !important; margin-left: -1rem !important; margin-right: -1rem !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+            .ui-header .header-icon-bg { transition: all 0.3s ease; width: 48px; height: 48px; }
+            .ui-header.is-scrolled .header-icon-bg { width: 32px !important; height: 32px !important; }
+            .ui-header.is-scrolled .header-icon-bg i { font-size: 0.9rem !important; }
+            .ui-header h2 { transition: all 0.3s ease; font-size: 2rem; }
+            .ui-header.is-scrolled h2 { font-size: 1.25rem !important; }
+            .ui-header .ui-header-subtitle { transition: all 0.3s ease; }
+            .ui-header.is-scrolled .ui-header-subtitle { font-size: 0.65rem !important; opacity: 0.8; }
+        </style>';
+
+        echo '<div id="uiStickyHeader" class="row align-items-center ui-header py-3">';
+        echo '  <div class="col-md-6">';
+        echo '      <div class="d-flex align-items-center">';
+        if ($icon) {
+            echo '      <div class="header-icon-bg bg-primary bg-opacity-10 rounded-pill d-flex align-items-center justify-content-center me-3">';
+            echo '          <i class="' . $icon . ' fs-4 text-primary"></i>';
+            echo '      </div>';
+        }
+        echo '          <div>';
+        echo '              <h2 class="fw-black text-dark mb-0">' . $title . '</h2>';
+        if ($subtitle) {
+            echo '          <p class="text-muted mb-0 extra-small ui-header-subtitle">' . $subtitle . '</p>';
+        }
+        echo '          </div>';
+        echo '      </div>';
+        echo '  </div>';
+
+        if ($button || !empty($buttons)) {
+            echo '  <div class="col-md-6 text-end">';
+            if (!empty($buttons)) {
+                foreach ($buttons as $btn) {
+                    $this->renderButton($btn);
+                }
+            } else if ($button) {
+                $this->renderButton($button);
+            }
+            echo '  </div>';
+        }
+
+        echo '</div>';
+
+        echo '<script>
+            window.addEventListener("scroll", function() {
+                var header = document.getElementById("uiStickyHeader");
+                if (window.scrollY > 20) {
+                    header.classList.add("is-scrolled");
+                } else {
+                    header.classList.remove("is-scrolled");
+                }
+            });
+        </script>';
+    }
+
+    private function renderButton(array $btn): void
+    {
+        $label = $btn['label'] ?? 'Button';
+        $class = $btn['class'] ?? 'btn btn-primary rounded-pill px-4 fw-bold shadow-sm';
+        $icon = $btn['icon'] ?? '';
+        $type = $btn['type'] ?? 'button';
+        $attr = $btn['attr'] ?? '';
+        $name = $btn['name'] ?? '';
+        $form = $btn['form'] ?? '';
+        $href = $btn['href'] ?? ($btn['url'] ?? '#');
+
+        $formAttr = $form ? 'form="' . $form . '"' : '';
+        $nameAttr = $name ? 'name="' . $name . '"' : '';
+
+        if ($type === 'link') {
+            echo '<a href="' . $href . '" class="' . $class . '" ' . $attr . '>';
+        } else {
+            $btnRealType = $btn['btn_type'] ?? 'submit';
+            echo '<button type="' . $btnRealType . '" ' . $nameAttr . ' ' . $formAttr . ' class="' . $class . '" ' . $attr . '>';
+        }
+
+        if ($icon) {
+            echo '<i class="' . $icon . ' me-1"></i> ';
+        }
+        echo $label;
+
+        if ($type === 'link') {
+            echo '</a>';
+        } else {
+            echo '</button>';
+        }
+        echo ' ';
     }
 
     /**
@@ -110,7 +145,7 @@ class UiBuilder
      */
     public function render(): void
     {
-        echo '<div class="container-fluid py-4">';
+        echo '<div class="container-fluid p-0">';
 
         // Render Header (Matches GeniXCMS Admin Style)
         $this->renderHeader();
@@ -235,6 +270,115 @@ class UiBuilder
         }
 
         echo '</div>'; // container-fluid
+
+        // ── RENDER REACTIVITY SCRIPT ──────────────────────────────────
+        $this->renderReactivityScript();
+    }
+
+    /**
+     * Renders the JavaScript responsible for element dependencies (require).
+     */
+    private function renderReactivityScript(): void
+    {
+        echo '<script>
+            (function() {
+                const initReactivity = function() {
+                    const dependentElements = document.querySelectorAll("[data-ui-require]");
+                    
+                    dependentElements.forEach(el => {
+                        const targetName = el.getAttribute("data-ui-require");
+                        const requiredValue = el.getAttribute("data-ui-require-value");
+                        const action = el.getAttribute("data-ui-require-action");
+                        
+                        // Find target element by ID or Name
+                        let target = document.getElementById(targetName) || document.querySelector(`[name="${targetName}"]`) || document.querySelector(`[name="${targetName}[]"]`);
+                        
+                        if (!target) return;
+
+                        const updateState = () => {
+                            let currentValue;
+                            const targetElements = document.getElementsByName(targetName);
+                            const targetElement = document.getElementById(targetName) || (targetElements.length > 0 ? targetElements[0] : null);
+
+                            if (!targetElement && targetElements.length === 0) return;
+
+                            if (targetElement && (targetElement.type === "checkbox" || targetElement.type === "radio")) {
+                                if (targetElements.length > 1) {
+                                    // Handle Radio Group
+                                    const checkedRadio = Array.from(targetElements).find(r => r.checked);
+                                    currentValue = checkedRadio ? checkedRadio.value : "";
+                                } else {
+                                    // Handle Single Checkbox
+                                    currentValue = targetElement.checked ? (targetElement.value || "on") : "off";
+                                }
+                            } else {
+                                currentValue = targetElement ? targetElement.value : "";
+                            }
+
+                            const isMet = (requiredValue === "*" && currentValue !== "" && currentValue !== "0") || (currentValue === requiredValue);
+                            
+                            if (action === "show") {
+                                el.style.display = isMet ? "" : "none";
+                            } else if (action === "enable") {
+                                const inputs = el.querySelectorAll("input, select, textarea, button");
+                                if (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA" || el.tagName === "BUTTON") {
+                                    el.disabled = !isMet;
+                                }
+                                inputs.forEach(i => i.disabled = !isMet);
+                            }
+
+                            // Handle AJAX Reload if applicable
+                            const ajaxUrl = el.getAttribute("data-ui-ajax-url");
+                            if (ajaxUrl && isMet && currentValue !== el.getAttribute("data-last-val")) {
+                                el.setAttribute("data-last-val", currentValue);
+                                const select = el.querySelector("select");
+                                if (select) {
+                                    select.innerHTML = "<option>Loading...</option>";
+                                    fetch(ajaxUrl + "&val=" + currentValue)
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        let html = "";
+                                        if (Object.keys(data).length > 0) {
+                                            for (const [v, l] of Object.entries(data)) {
+                                                html += `<option value="${v}">${l}</option>`;
+                                            }
+                                        } else {
+                                            html = "<option value=\"0\">No options found</option>";
+                                        }
+                                        select.innerHTML = html;
+                                    })
+                                    .catch(e => {
+                                        console.error("AJAX Load Error", e);
+                                        select.innerHTML = "<option value=\"0\">Error loading options</option>";
+                                    });
+                                }
+                            }
+                        };
+
+                        const targets = document.getElementsByName(targetName);
+                        const idTarget = document.getElementById(targetName);
+                        
+                        if (idTarget) {
+                            idTarget.addEventListener("change", updateState);
+                            idTarget.addEventListener("input", updateState);
+                        }
+                        targets.forEach(t => {
+                            t.addEventListener("change", updateState);
+                            t.addEventListener("input", updateState);
+                        });
+                        
+                        // Run once on init
+                        updateState();
+                    });
+                };
+
+                if (document.readyState === "loading") {
+                    document.addEventListener("DOMContentLoaded", initReactivity);
+                } else {
+                    initReactivity();
+                }
+            })();
+        </script>';
     }
 
     /**
@@ -252,12 +396,30 @@ class UiBuilder
         }
         $type = $el['type'] ?? 'raw';
 
+        // ── DEPENDENCY HANDLING ──────────────────────────────────────
+        $requireAttr = '';
+        if (isset($el['require'])) {
+            $requireAction = $el['require_action'] ?? 'show'; // show, enable, disable
+            $requireValue = $el['require_value'] ?? '*';
+            $requireAttr = ' data-ui-require="' . $el['require'] . '" data-ui-require-value="' . $requireValue . '" data-ui-require-action="' . $requireAction . '"';
+            
+            if (isset($el['ajax_url'])) {
+                $requireAttr .= ' data-ui-ajax-url="' . $el['ajax_url'] . '"';
+            }
+
+            // Initial state for 'show' action: hidden until triggered
+            if ($requireAction === 'show' && $requireValue !== '*') {
+                $requireAttr .= ' style="display: none;"';
+            }
+        }
+
         switch ($type) {
             case 'row':
-                echo '<div class="row g-4 mb-4">';
+                echo '<div class="row g-4 mb-4"' . $requireAttr . '>';
                 foreach ($el['items'] ?? [] as $col) {
                     $w = $col['width'] ?? 12;
-                    echo "<div class=\"col-lg-{$w}\">";
+                    $class = $col['class'] ?? "col-lg-{$w}";
+                    echo "<div class=\"{$class}\">";
                     if (is_array($col['content'])) {
                         if (isset($col['content']['type'])) {
                             $this->renderElement($col['content']);
@@ -276,8 +438,9 @@ class UiBuilder
 
             case 'stat_cards':
                 echo '<div class="row g-4 mb-4">';
-                $colors = ['primary', 'success', 'warning', 'info', 'danger', 'secondary'];
+                $colors = ['primary', 'success', 'warning', 'info', 'danger', 'dark'];
                 $size = $el['size'] ?? 'normal';
+                $style = $el['style'] ?? 'classic'; // classic, modern
 
                 foreach ($el['items'] ?? [] as $i => $stat) {
                     $w = $stat['width'] ?? ($size === 'small' ? 2 : 3);
@@ -289,21 +452,49 @@ class UiBuilder
                     if ($size === 'small') {
                         echo "
                         <div class=\"col-xl-{$w} col-md-4 col-6\">
-                            <div class=\"card border-0 shadow-sm rounded-4 h-100 p-0 overflow-hidden position-relative stats-card-small border-start border-4 border-{$color}\">
+                            <div class=\"card border-0 shadow-sm rounded-5 h-100 p-0 overflow-hidden position-relative border-start border-4 border-{$color}\">
                                 <div class=\"card-body p-3\">
                                     <div class=\"d-flex align-items-center gap-3\">
-                                        <div class=\"stats-icon-bg bg-{$color} bg-opacity-10 rounded-pill d-flex align-items-center justify-content-center flex-shrink-0\" style=\"width:42px; height:42px;\">
+                                        <div class=\"stats-icon-bg bg-{$color} bg-opacity-10 rounded-pill d-flex align-items-center justify-content-center flex-shrink-0\" style=\"width:40px; height:40px;\">
                                             <i class=\"{$icon} fs-5 text-{$color}\"></i>
                                         </div>
                                         <div class=\"overflow-hidden\">
                                             <div class=\"extra-small fw-bold text-muted text-uppercase tracking-wider mb-0 truncation-ellipsis\" style=\"font-size:0.6rem; letter-spacing:0.05em;\">{$lbl}</div>
-                                            <h4 class=\"fw-black m-0 lh-1\" style=\"font-weight:900;\">{$val}</h4>
+                                            <h4 class=\"fw-black m-0 lh-1\" style=\"font-weight:900 !important;\">{$val}</h4>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>";
+                    } else if ($style === 'modern') {
+                        $txtColor = in_array($color, ['warning', 'light', 'white']) ? 'text-dark' : 'text-white';
+                        $opacity = in_array($color, ['warning', 'light', 'white']) ? 'opacity-75' : 'opacity-75';
+                        echo "
+                        <div class=\"col-xl-{$w} col-md-6\">
+                            <div class=\"card border-0 shadow-sm rounded-5 h-100 p-0 overflow-hidden position-relative bg-{$color} {$txtColor}\">
+                                <div class=\"card-body p-4\">
+                                    <div class=\"d-flex justify-content-between align-items-start\">
+                                        <div>
+                                            <div class=\"small fw-bold {$opacity} text-uppercase tracking-wider mb-1\" style=\"font-size:0.75rem;\">{$lbl}</div>
+                                            <h3 class=\"fw-black m-0 fs-3\" style=\"font-weight:900 !important;\">{$val}</h3>
+                                        </div>
+                                        <div class=\"stats-icon-bg bg-white rounded-4 d-flex align-items-center justify-content-center\" style=\"width:54px; height:54px;\">
+                                            <i class=\"{$icon} fs-2 text-{$color}\"></i>
+                                        </div>
+                                    </div>";
+                        if (isset($stat['footer_link'])) {
+                            echo "<div class=\"d-flex align-items-center justify-content-between mt-3 pt-3 border-top border-white border-opacity-10\">
+                                    <div class=\"extra-small small fw-bold {$opacity}\">" . ($stat['footer_text'] ?? '') . "</div>
+                                    <a href=\"{$stat['footer_link']}\" class=\"btn btn-white btn-sm rounded-pill px-3 fs-8 fw-bold py-1\">
+                                        Details <i class=\"bi bi-chevron-right ms-1\"></i>
+                                    </a>
+                                  </div>";
+                        }
+                        echo "  </div>
+                            </div>
+                        </div>";
                     } else {
+                        // Classic Style
                         echo "
                         <div class=\"col-xl-{$w} col-md-6\">
                             <div class=\"card border-0 shadow-sm rounded-5 h-100 p-2 overflow-hidden position-relative stats-card text-{$color}\">
@@ -319,10 +510,9 @@ class UiBuilder
                                     </div>";
 
                         if (isset($stat['footer_link'])) {
-                            $fl = $stat['footer_link'];
                             echo "<div class=\"d-flex align-items-center justify-content-between mt-3\">
                                     <div class=\"extra-small text-muted fw-bold\">" . ($stat['footer_text'] ?? '') . "</div>
-                                    <a href=\"{$fl}\" class=\"btn btn-light btn-sm rounded-pill px-3 fs-8 fw-bold\">
+                                    <a href=\"{$stat['footer_link']}\" class=\"btn btn-light btn-sm rounded-pill px-3 fs-8 fw-bold\">
                                         View All <i class=\"bi bi-chevron-right ms-1\"></i>
                                     </a>
                                   </div>";
@@ -339,19 +529,28 @@ class UiBuilder
 
             case 'card':
                 $h100 = (isset($el['full_height']) && $el['full_height']) ? 'h-100' : '';
-                echo '<div class="card border-0 shadow-sm rounded-5 overflow-hidden mb-4 ' . $h100 . (isset($el['class']) ? " " . $el['class'] : "") . '">';
+                echo '<div class="card border-0 shadow-sm rounded-5 mb-4 ' . $h100 . (isset($el['class']) ? " " . $el['class'] : "") . '">';
 
                 if (isset($el['title'])) {
-                    $icon = isset($el['icon']) ? "<i class=\"{$el['icon']} me-2 text-primary\"></i> " : "";
+                    $iconHtml = "";
+                    if (isset($el['icon'])) {
+                        $iconHtml = '
+                        <div class="bg-primary bg-opacity-10 rounded-pill d-flex align-items-center justify-content-center me-3" style="width:38px; height:38px; flex-shrink:0;">
+                            <i class="' . $el['icon'] . ' text-primary fs-5"></i>
+                        </div>';
+                    }
                     $sub = isset($el['subtitle']) ? "<p class=\"extra-small text-muted mb-0\" style=\"font-size:0.75rem;\">{$el['subtitle']}</p>" : "";
-                    echo "<div class=\"card-header bg-white border-0 py-4 px-4\">
-                            <div class=\"d-flex justify-content-between align-items-center\">
-                                <div>
-                                    <h5 class=\"fw-bold text-dark m-0 d-flex align-items-center\">{$icon}{$el['title']}</h5>
-                                    {$sub}
+                    echo "<div class=\"card-header bg-white border-0 pt-4 pb-2 px-4\">
+                            <div class=\"d-flex flex-wrap gap-3 justify-content-between align-items-center\">
+                                <div class=\"d-flex align-items-center\">
+                                    {$iconHtml}
+                                    <div>
+                                        <h5 class=\"fw-bold text-dark m-0 d-flex align-items-center\">{$el['title']}</h5>
+                                        {$sub}
+                                    </div>
                                 </div>";
                     if (isset($el['header_action'])) {
-                        echo '<div>';
+                        echo '<div class="ms-md-auto">';
                         if (is_array($el['header_action'])) {
                             if (isset($el['header_action']['type'])) {
                                 $this->renderElement($el['header_action']);
@@ -380,8 +579,37 @@ class UiBuilder
                 }
                 echo "</div>";
 
-                if (isset($el['footer'])) {
-                    echo "<div class=\"card-footer bg-light bg-opacity-50 border-0 py-3 text-center border-top\">{$el['footer']}</div>";
+                if (isset($el['footer']) || isset($el['footer_elements'])) {
+                    $footerContent = $el['footer'] ?? '';
+                    $footerElements = $el['footer_elements'] ?? [];
+                    $footerNoPadding = $el['footer_no_padding'] ?? false;
+                    $footerClass = $el['footer_class'] ?? 'card-footer bg-light bg-opacity-50 border-0 py-3 border-top';
+
+                    echo "<div class=\"{$footerClass}\">";
+                    if (!empty($footerElements) || is_array($footerContent)) {
+                        echo '<div class="d-flex flex-wrap align-items-center w-100 gap-3 ' . ($footerNoPadding ? 'p-0' : 'px-2') . '">';
+                        
+                        $toRender = !empty($footerElements) ? $footerElements : $footerContent;
+                        foreach ($toRender as $fSub) {
+                            $wrapperClass = "";
+                            if (is_array($fSub) && isset($fSub['type']) && $fSub['type'] === 'pagination') {
+                                $wrapperClass = "ms-auto";
+                            }
+                            
+                            echo "<div class=\"{$wrapperClass}\">";
+                            if (is_array($fSub)) {
+                                $this->renderElement($fSub);
+                            } else {
+                                echo $fSub;
+                            }
+                            echo '</div>';
+                        }
+                        
+                        echo '</div>';
+                    } else {
+                        echo "<div class=\"text-center\">{$footerContent}</div>";
+                    }
+                    echo "</div>";
                 }
 
                 echo "</div>";
@@ -474,32 +702,71 @@ class UiBuilder
                 break;
 
             case 'input':
-                $lbl = isset($el['label']) ? "<label class=\"form-label fw-black text-muted extra-small text-uppercase tracking-wider\" style=\"font-size:0.65rem;\">{$el['label']}</label>" : '';
-                $type = $el['input_type'] ?? 'text';
+            case 'text':
+            case 'number':
+            case 'email':
+            case 'date':
+            case 'password':
+            case 'url':
+            case 'color':
+            case 'file':
+            case 'hidden':
+                $lbl = isset($el['label']) ? "<label class=\"form-label fw-bold text-dark small\">{$el['label']}</label>" : '';
+                $inputType = $el['input_type'] ?? ($type === 'input' ? 'text' : $type);
                 $name = $el['name'] ?? '';
                 $val = htmlspecialchars((string) ($el['value'] ?? ''));
                 $plc = htmlspecialchars((string) ($el['placeholder'] ?? ''));
                 $req = !empty($el['required']) ? 'required' : '';
                 $help = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
-                echo "<div class=\"mb-4\">{$lbl}<input type=\"{$type}\" name=\"{$name}\" class=\"form-control rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold\" value=\"{$val}\" placeholder=\"{$plc}\" {$req}>{$help}</div>";
+                $wrap = $el['wrapper_class'] ?? 'mb-3';
+                $idAttr = isset($el['id']) ? "id=\"{$el['id']}\"" : "";
+                
+                // Initial state for 'enable' action
+                $disabledAttr = '';
+                if (isset($el['require']) && ($el['require_action'] ?? 'show') === 'enable') {
+                    $disabledAttr = ' disabled';
+                }
+
+                echo "<div class=\"{$wrap}\" {$requireAttr}>{$lbl}<input type=\"{$inputType}\" name=\"{$name}\" {$idAttr} class=\"form-control rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold\" value=\"{$val}\" placeholder=\"{$plc}\" {$req} {$disabledAttr}>{$help}</div>";
                 break;
 
             case 'textarea':
-                $lbl = isset($el['label']) ? "<label class=\"form-label fw-black text-muted extra-small text-uppercase tracking-wider\" style=\"font-size:0.65rem;\">{$el['label']}</label>" : '';
+                $lbl = isset($el['label']) ? "<label class=\"form-label fw-bold text-dark small\">{$el['label']}</label>" : '';
                 $name = $el['name'] ?? '';
                 $val = htmlspecialchars((string) ($el['value'] ?? ''));
                 $cls = $el['class'] ?? 'form-control bg-light shadow-none border py-2 px-3 fs-8 fw-bold';
                 $rows = $el['rows'] ?? 5;
                 $radius = strpos($cls, 'editor') !== false ? 'rounded-2' : 'rounded-4';
                 $help = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
-                echo "<div class=\"mb-4\">{$lbl}<textarea name=\"{$name}\" class=\"{$cls} {$radius}\" rows=\"{$rows}\">{$val}</textarea>{$help}</div>";
+                $wrap = $el['wrapper_class'] ?? 'mb-3';
+                $idAttr = isset($el['id']) ? "id=\"{$el['id']}\"" : "";
+
+                // Initial state for 'enable' action
+                $disabledAttr = '';
+                if (isset($el['require']) && ($el['require_action'] ?? 'show') === 'enable') {
+                    $disabledAttr = ' disabled';
+                }
+
+                echo "<div class=\"{$wrap}\" {$requireAttr}>{$lbl}<textarea name=\"{$name}\" {$idAttr} class=\"{$cls} {$radius}\" rows=\"{$rows}\" {$disabledAttr}>{$val}</textarea>{$help}</div>";
                 break;
 
             case 'select':
-                $lbl = isset($el['label']) ? "<label class=\"form-label fw-black text-muted extra-small text-uppercase tracking-wider\" style=\"font-size:0.65rem;\">{$el['label']}</label>" : '';
+            case 'dropdown':
+                $lbl = isset($el['label']) ? "<label class=\"form-label fw-bold text-dark small\">{$el['label']}</label>" : '';
                 $name = $el['name'] ?? '';
-                echo "<div class=\"mb-4\">{$lbl}<select name=\"{$name}\" class=\"form-select rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold\">";
-                foreach ($el['options'] ?? [] as $v => $l) {
+                $wrap = $el['wrapper_class'] ?? 'mb-3';
+                $idAttr = isset($el['id']) ? "id=\"{$el['id']}\"" : "";
+                $cls = $el['class'] ?? 'form-select rounded-4 bg-light shadow-none border py-2 px-3 fs-8 fw-bold';
+
+                // Initial state for 'enable' action
+                $disabledAttr = '';
+                if (isset($el['require']) && ($el['require_action'] ?? 'show') === 'enable') {
+                    $disabledAttr = ' disabled';
+                }
+
+                echo "<div class=\"{$wrap}\" {$requireAttr}>{$lbl}<select name=\"{$name}\" {$idAttr} class=\"{$cls}\" {$disabledAttr}>";
+                $options = $el['options'] ?? ($el['value'] ?? []);
+                foreach ($options as $v => $l) {
                     $sel = (isset($el['selected']) && (string) $el['selected'] === (string) $v) ? 'selected' : '';
                     echo "<option value=\"{$v}\" {$sel}>{$l}</option>";
                 }
@@ -516,13 +783,187 @@ class UiBuilder
                 $label = $el['label'] ?? '';
                 $checked = !empty($el['checked']) ? 'checked' : '';
                 $help = isset($el['help']) ? "<div class=\"form-text text-muted small mt-1\">{$el['help']}</div>" : '';
-                echo "<div class=\"mb-4\">
+                $wrap = $el['wrapper_class'] ?? 'mb-3';
+
+                // Initial state for 'enable' action
+                $disabledAttr = '';
+                if (isset($el['require']) && ($el['require_action'] ?? 'show') === 'enable') {
+                    $disabledAttr = ' disabled';
+                }
+
+                echo "<div class=\"{$wrap}\" {$requireAttr}>
                         <div class=\"form-check form-switch\">
-                            <input class=\"form-check-input\" type=\"checkbox\" name=\"{$name}\" id=\"{$id}\" value=\"on\" {$checked}>
+                            <input class=\"form-check-input\" type=\"checkbox\" name=\"{$name}\" id=\"{$id}\" value=\"on\" {$checked} {$disabledAttr}>
                             <label class=\"form-check-label fw-bold small\" for=\"{$id}\">{$label}</label>
                         </div>
                         {$help}
                       </div>";
+                break;
+
+            case 'media':
+                $lbl = isset($el['label']) ? "<label class=\"form-label fw-bold text-dark small\">{$el['label']}</label>" : '';
+                $name = $el['name'] ?? '';
+                $val = htmlspecialchars((string) ($el['value'] ?? ''));
+                $wrap = $el['wrapper_class'] ?? 'mb-3';
+                $id = $el['id'] ?? 'media_' . str_replace(['[', ']'], '_', $name);
+                
+                echo "<div class=\"{$wrap}\" {$requireAttr}>
+                        {$lbl}
+                        <div class=\"media-drop-zone rounded-4 border-2 border-dashed bg-light p-3 position-relative text-center mb-1\" 
+                             style=\"cursor: pointer; min-height: 120px;\" onclick=\"gxMediaSelector('{$id}')\">
+                            <div id=\"{$id}_placeholder\" class=\"" . ($val ? 'd-none' : 'py-3') . "\">
+                                <i class=\"bi bi-image fs-1 text-muted\"></i>
+                                <p class=\"text-muted small mt-2 mb-0\">" . _("Click to select image") . "</p>
+                            </div>
+                            <img id=\"{$id}_preview\" class=\"img-fluid rounded-3 shadow-sm " . ($val ? '' : 'd-none') . "\" 
+                                 src=\"{$val}\" style=\"max-height: 200px; width: 100%; object-fit: cover;\">
+                            <input name=\"{$name}\" id=\"{$id}\" type=\"hidden\" value=\"{$val}\">
+                        </div>
+                        <div class=\"d-flex gap-2\">
+                            <button type=\"button\" class=\"btn btn-xs btn-light border py-0 px-2 rounded-3\" onclick=\"gxMediaSelector('{$id}')\"><i class=\"bi bi-pencil small\"></i> Change</button>
+                            <button type=\"button\" class=\"btn btn-xs btn-light border py-0 px-2 rounded-3 text-danger\" onclick=\"document.getElementById('{$id}').value=''; document.getElementById('{$id}_preview').classList.add('d-none'); document.getElementById('{$id}_placeholder').classList.remove('d-none');\"><i class=\"bi bi-trash small\"></i> Remove</button>
+                        </div>
+                      </div>";
+                
+                // Add script if not already added
+                echo "<script>
+                    if (typeof gxMediaSelector === 'undefined') {
+                        window.gxMediaSelector = function(targetId) {
+                            if (typeof GxMedia !== 'undefined') {
+                                GxMedia.select(function (url) {
+                                    document.getElementById(targetId).value = url;
+                                    const preview = document.getElementById(targetId + '_preview');
+                                    const placeholder = document.getElementById(targetId + '_placeholder');
+                                    if (preview) { preview.src = url; preview.classList.remove('d-none'); }
+                                    if (placeholder) { placeholder.classList.add('d-none'); }
+                                });
+                            } else {
+                                const url = prompt('Enter Image URL:');
+                                if (url) {
+                                    document.getElementById(targetId).value = url;
+                                    const preview = document.getElementById(targetId + '_preview');
+                                    const placeholder = document.getElementById(targetId + '_placeholder');
+                                    if (preview) { preview.src = url; preview.classList.remove('d-none'); }
+                                    if (placeholder) { placeholder.classList.add('d-none'); }
+                                }
+                            }
+                        };
+                    }
+                </script>";
+                break;
+
+            case 'repeater':
+                $lbl = isset($el['label']) ? "<label class=\"form-label fw-bold text-dark mb-0\">{$el['label']}</label>" : '';
+                $name = $el['name'] ?? '';
+                $fields = $el['fields'] ?? [];
+                $val = $el['value'] ?? [];
+                
+                // If value is a string, assume it's JSON from database
+                if (!is_array($val) && !empty($val)) {
+                    $val = json_decode(htmlspecialchars_decode((string)$val), true) ?: [];
+                }
+                
+                $wrap = $el['wrapper_class'] ?? 'mb-4';
+                $id = $el['id'] ?? 'repeater_' . str_replace(['[', ']'], '_', $name);
+                
+                echo "<div class=\"{$wrap} repeater-container\" {$requireAttr} id=\"{$id}\">
+                        <div class=\"d-flex justify-content-between align-items-center mb-3\">
+                            {$lbl}
+                            <button type=\"button\" class=\"btn btn-primary btn-sm rounded-pill px-3 shadow-sm add-row-btn\">
+                                <i class=\"bi bi-plus-circle me-1\"></i> Add New Point
+                            </button>
+                        </div>
+                        <div class=\"repeater-rows space-y-3\">";
+                
+                $renderRow = function($rowData = [], $index = 'REPLACE_INDEX') use ($fields, $name) {
+                    $rowHtml = "<div class=\"repeater-row card border shadow-none rounded-4 mb-3 position-relative\" data-index=\"{$index}\" style=\"overflow: visible !important;\">";
+                    $rowHtml .= "  <div class=\"card-body p-3\">";
+                    $rowHtml .= "    <div class=\"row g-3\">";
+                    
+                    foreach ($fields as $f) {
+                        $fCopy = $f;
+                        $fNameBase = $f['name'];
+                        $fCopy['name'] = "{$name}[{$index}][{$fNameBase}]";
+                        $fCopy['value'] = $rowData[$fNameBase] ?? ($f['default'] ?? '');
+                        $fCopy['wrapper_class'] = $f['wrapper_class'] ?? 'col-md-12 mb-0';
+                        $fCopy['boxclass'] = $f['boxclass'] ?? 'col-md-12';
+                        
+                        $rowHtml .= "<div class=\"{$fCopy['boxclass']}\">";
+                        $rowHtml .= $this->renderElement($fCopy, true);
+                        $rowHtml .= "</div>";
+                    }
+                    
+                    $rowHtml .= "    </div>";
+                    $rowHtml .= "    <button type=\"button\" class=\"btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 mt-n1 me-n1 shadow-sm remove-row-btn\" style=\"width:22px; height:22px; padding:0; display:flex; align-items:center; justify-content:center; border: 2px solid #fff; z-index: 10;\">
+                                        <i class=\"bi bi-x fs-6\"></i>
+                                    </button>";
+                    $rowHtml .= "  </div>";
+                    $rowHtml .= "</div>";
+                    return $rowHtml;
+                };
+
+                if (!empty($val) && is_array($val)) {
+                    foreach ($val as $idx => $row) {
+                        echo $renderRow($row, $idx);
+                    }
+                }
+
+                echo "  </div>"; // close repeater-rows
+                
+                // Template for JS - DO NOT htmlspecialchars here as it's inside <template>
+                $template = $renderRow([], '[[INDEX]]');
+                echo "  <template id=\"{$id}_template\">{$template}</template>";
+                
+                echo "</div>"; // close repeater-container
+
+                echo "<style>
+                    .repeater-row { transition: all 0.2s ease; border: 1px solid #eee !important; background: #fafafa !important; }
+                    .repeater-row:hover { border-color: var(--bs-primary) !important; background: #fff !important; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.03); }
+                    .mt-n2 { margin-top: -0.5rem !important; }
+                    .me-n2 { margin-right: -0.5rem !important; }
+                </style>";
+
+                echo "<script>
+                    (function() {
+                        const initRepeater = function() {
+                            const container = document.getElementById('{$id}');
+                            if (!container || container.dataset.initialized) return;
+                            container.dataset.initialized = 'true';
+
+                            const rowsContainer = container.querySelector('.repeater-rows');
+                            const addBtn = container.querySelector('.add-row-btn');
+                            const templateEl = document.getElementById('{$id}_template');
+                            if (!templateEl) return;
+                            const template = templateEl.innerHTML;
+                            let nextIndex = rowsContainer.querySelectorAll('.repeater-row').length;
+
+                            addBtn.addEventListener('click', () => {
+                                let rowHtml = template.replace(/\[\[INDEX\]\]/g, nextIndex);
+                                const div = document.createElement('div');
+                                div.innerHTML = rowHtml;
+                                const newRow = div.firstChild;
+                                rowsContainer.appendChild(newRow);
+                                nextIndex++;
+                                
+                                // Re-init reactivity if needed
+                                // if (window.initReactivity) window.initReactivity();
+                            });
+
+                            rowsContainer.addEventListener('click', (e) => {
+                                const btn = e.target.closest('.remove-row-btn');
+                                if (btn) {
+                                    btn.closest('.repeater-row').remove();
+                                }
+                            });
+                        };
+                        
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initRepeater);
+                        } else {
+                            setTimeout(initRepeater, 100);
+                        }
+                    })();
+                </script>";
                 break;
 
             case 'button':
@@ -654,7 +1095,7 @@ class UiBuilder
 
             case 'pagination':
                 $html = $el['html'] ?? '';
-                echo "<div class=\"pagination-wrapper mt-4\">{$html}</div>";
+                echo "<div class=\"pagination-wrapper\">{$html}</div>";
                 break;
 
             case 'bulk_actions':
@@ -841,7 +1282,7 @@ class UiBuilder
 
             case 'grid':
                 $cls = $el['class'] ?? 'row g-4';
-                echo "<div class=\"{$cls}\">";
+                echo "<div class=\"{$cls}\" {$requireAttr}>";
                 foreach ($el['content'] ?? [] as $cel)
                     $this->renderElement($cel);
                 echo '</div>';
@@ -849,7 +1290,7 @@ class UiBuilder
             case 'column':
             case 'col':
                 $cls = $el['class'] ?? 'col-md-12';
-                echo "<div class=\"{$cls}\">";
+                echo "<div class=\"{$cls}\" {$requireAttr}>";
                 foreach ($el['content'] ?? [] as $cel)
                     $this->renderElement($cel);
                 echo '</div>';

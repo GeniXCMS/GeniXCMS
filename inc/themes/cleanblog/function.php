@@ -13,9 +13,11 @@ class CleanBlogLatte
 new CleanBlogLatte();
 
 // Register "Clean Blog Latte Options" sub-item under the Themes admin menu.
-AdminMenu::addChild('themes', [
-    'label'  => _('Clean Blog Options'),
-    'url'    => 'index.php?page=themes&view=options',
-    'icon'   => 'bi bi-sliders',
-    'access' => 0,
-]);
+Hooks::attach('init', function () {
+    AdminMenu::addChild('themes', [
+        'label'  => _('Clean Blog Options'),
+        'url'    => 'index.php?page=themes&view=options',
+        'icon'   => 'bi bi-sliders',
+        'access' => 0,
+    ]);
+});

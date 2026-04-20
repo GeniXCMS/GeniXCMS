@@ -1,0 +1,223 @@
+{var $o = Bakeshop::options()}
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden px-8 py-16 md:py-24 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="z-10">
+            <h2 class="text-primary font-headline font-bold text-xl mb-4">{$o['hero_tagline']}</h2>
+            <h1 class="text-on-surface font-headline font-extrabold text-5xl md:text-7xl leading-tight tracking-tighter mb-6">
+                {$o['hero_title']|noescape}
+            </h1>
+            <p class="text-on-surface-variant text-lg md:text-xl mb-10 max-w-lg leading-relaxed">
+                {$o['hero_desc']}
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="{$o['hero_btn_url']}" class="bg-gradient-to-br from-primary to-primary text-white px-8 py-4 rounded-full font-headline font-bold text-lg editorial-shadow active:scale-95 transition-transform inline-block">
+                    {$o['hero_btn_text']}
+                </a>
+                <button class="px-8 py-4 rounded-full border border-black/10 text-primary font-headline font-bold text-lg hover:bg-surface-container transition-colors">
+                    Our Craft Story
+                </button>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -top-12 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-12 -left-12 w-72 h-72 bg-secondary/10 rounded-full blur-3xl"></div>
+            <div class="relative z-10 grid grid-cols-2 gap-4">
+                <div class="space-y-4 translate-y-8">
+                    <img class="rounded-lg w-full h-80 object-cover editorial-shadow transform hover:scale-105 transition-transform duration-500" src="{$o['hero_img1']}" alt="{$o['hero_title']|stripHtml}"/>
+                    <div class="bg-white p-6 rounded-lg editorial-shadow">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-bold text-secondary uppercase tracking-widest font-label">Baked Fresh</span>
+                        </div>
+                        <p class="text-on-surface font-bold text-sm">Signature Lavender Sponge</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <img class="rounded-lg w-full h-96 object-cover editorial-shadow transform hover:scale-105 transition-transform duration-500" src="{$o['hero_img2']}" alt=""/>
+                    <img class="rounded-lg w-full h-48 object-cover editorial-shadow transform hover:scale-105 transition-transform duration-500" src="{$o['hero_img3']}" alt=""/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Business Values -->
+<section class="bg-surface-container py-24 px-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-primary font-headline font-bold text-lg uppercase tracking-widest mb-2">{$o['value_title']}</h2>
+            <h3 class="text-on-surface font-headline font-extrabold text-4xl">{$o['value_subtitle']}</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Value 1 -->
+            <div class="bg-white p-10 rounded-lg transform hover:-translate-y-2 transition-all duration-300">
+                <div class="w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-secondary" aria-hidden="true">{$o['value1_icon']}</span>
+                </div>
+                <h4 class="text-2xl font-headline font-bold mb-4 text-on-surface">{$o['value1_title']}</h4>
+                <p class="text-on-surface-variant leading-relaxed">{$o['value1_desc']}</p>
+            </div>
+            <!-- Value 2 -->
+            <div class="bg-white p-10 rounded-lg transform hover:-translate-y-2 transition-all duration-300">
+                <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-primary" aria-hidden="true">{$o['value2_icon']}</span>
+                </div>
+                <h4 class="text-2xl font-headline font-bold mb-4 text-on-surface">{$o['value2_title']}</h4>
+                <p class="text-on-surface-variant leading-relaxed">{$o['value2_desc']}</p>
+            </div>
+            <!-- Value 3 -->
+            <div class="bg-white p-10 rounded-lg transform hover:-translate-y-2 transition-all duration-300">
+                <div class="w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-secondary" aria-hidden="true">{$o['value3_icon']}</span>
+                </div>
+                <h4 class="text-2xl font-headline font-bold mb-4 text-on-surface">{$o['value3_title']}</h4>
+                <p class="text-on-surface-variant leading-relaxed">{$o['value3_desc']}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Posts / Catalog -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+    <div class="flex justify-between items-end mb-12">
+        <div>
+            <h2 class="text-primary font-headline font-bold text-lg uppercase tracking-widest mb-2">The Collection</h2>
+            <h3 class="text-on-surface font-headline font-extrabold text-4xl">Weekly Showpieces</h3>
+        </div>
+        <a class="text-primary font-bold hover:underline hidden md:block" href="#">Explore Full Catalog</a>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {var $recent_posts = Posts::recent(['type' => 'nixomers', 'num' => $o['featured_limit']])}
+        {var $currency = Options::v('nixomers_currency') ?: Options::v('nix_currency_symbol') ?: 'Rp'}
+        {if !isset($recent_posts['error'])}
+            {foreach $recent_posts as $p}
+                {var $img = Posts::getPostImage($p->id)}
+                {var $price = Posts::getParam('price', $p->id) ?: '0'}
+                {var $excerpt = Posts::getParam('excerpt', $p->id) ?: ($p->content|stripHtml|truncate:80)}
+                <div class="group">
+                    <div class="bg-surface-container-low rounded-lg p-6 mb-4 overflow-hidden relative">
+                        <img class="w-full h-64 object-cover rounded-lg transform group-hover:scale-110 transition-transform duration-500" src="{(empty($img) ? 'https://images.unsplash.com/photo-1578985543813-689400293afc?q=80&w=600' : Url::thumb($img, 'large'))}" alt="{Typo::Xclean($p->title)|stripHtml}"/>
+                    </div>
+                    <h4 class="text-xl font-headline font-extrabold text-on-surface group-hover:text-primary transition-colors">
+                        <a href="{Url::post($p->id)}">{Typo::Xclean($p->title)|noescape}</a>
+                    </h4>
+                    <p class="text-on-surface-variant text-sm mb-4">{$excerpt|truncate:80|noescape}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-black text-primary">{$currency}{$price|noescape}</span>
+                        <a href="{Url::post($p->id)}" class="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            {/foreach}
+        {else}
+            {for $i = 1; $i <= 4; $i++}
+                <div class="group animate-pulse">
+                    <div class="bg-surface-container-low rounded-lg h-64 mb-4"></div>
+                    <div class="h-6 bg-surface-container-high w-3/4 mb-2 rounded"></div>
+                    <div class="h-4 bg-surface-container w-1/2 rounded"></div>
+                </div>
+            {/for}
+        {/if}
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-24 px-8 bg-surface-container-low overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <img class="rounded-lg editorial-shadow aspect-square object-cover w-full transform hover:scale-[1.02] transition-transform duration-700" src="{$o['testi_main_img']}"/>
+                <div class="absolute -bottom-8 -right-8 bg-primary p-8 rounded-lg editorial-shadow max-w-xs hidden md:block">
+                    <p class="text-on-primary font-headline font-bold text-3xl leading-none">{$o['testi_stat_num']}</p>
+                    <p class="text-on-primary/80 font-medium text-sm mt-2">{$o['testi_stat_text']}</p>
+                </div>
+            </div>
+            <div class="testi-content-wrapper">
+                <div class="flex gap-1 mb-6 text-primary">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                
+                <div class="testimonial-slides grid mb-12">
+                    <!-- Slide 1 -->
+                    <div class="slide-item active-slide transition-all duration-500 col-start-1 row-start-1 opacity-100 translate-x-0 z-10">
+                        <h2 class="text-on-surface font-headline font-extrabold text-2xl md:text-3xl mb-8 leading-tight italic">
+                            "{$o['testi1_quote']}"
+                        </h2>
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full overflow-hidden bg-surface-variant border-2 border-primary/20">
+                                <img class="w-full h-full object-cover" src="{$o['testi1_img']}"/>
+                            </div>
+                            <div>
+                                <p class="font-headline font-bold text-on-surface">{$o['testi1_name']}</p>
+                                <p class="text-on-surface-variant text-sm">{$o['testi1_job']}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="slide-item transition-all duration-500 col-start-1 row-start-1 opacity-0 translate-x-8 pointer-events-none">
+                        <h2 class="text-on-surface font-headline font-extrabold text-2xl md:text-3xl mb-8 leading-tight italic">
+                            "{$o['testi2_quote']}"
+                        </h2>
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-full overflow-hidden bg-surface-variant border-2 border-primary/20">
+                                <img class="w-full h-full object-cover" src="{$o['testi2_img']}"/>
+                            </div>
+                            <div>
+                                <p class="font-headline font-bold text-on-surface">{$o['testi2_name']}</p>
+                                <p class="text-on-surface-variant text-sm">{$o['testi2_job']}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button id="prevTesti" class="w-14 h-14 flex items-center justify-center rounded-full border border-black/5 hover:bg-white hover:shadow-md transition-all active:scale-90 flex-shrink-0">
+                        <span class="material-symbols-outlined leading-none text-[24px]">arrow_back</span>
+                    </button>
+                    <button id="nextTesti" class="w-14 h-14 flex items-center justify-center rounded-full border border-black/5 hover:bg-white hover:shadow-md transition-all active:scale-90 bg-white shadow-sm flex-shrink-0">
+                        <span class="material-symbols-outlined leading-none text-[24px]">arrow_forward</span>
+                    </button>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const slides = document.querySelectorAll('.slide-item');
+                        const nextBtn = document.getElementById('nextTesti');
+                        const prevBtn = document.getElementById('prevTesti');
+                        let currentIdx = 0;
+
+                        function showSlide(idx) {
+                            slides.forEach((slide, i) => {
+                                if (i === idx) {
+                                    slide.classList.remove('opacity-0', 'translate-x-8', 'pointer-events-none');
+                                    slide.classList.add('opacity-100', 'translate-x-0', 'z-10');
+                                } else {
+                                    slide.classList.remove('opacity-100', 'translate-x-0', 'z-10');
+                                    slide.classList.add('opacity-0', 'translate-x-8', 'pointer-events-none');
+                                }
+                            });
+                        }
+                        
+                        nextBtn.addEventListener('click', () => {
+                            currentIdx = (currentIdx + 1) % slides.length;
+                            showSlide(currentIdx);
+                        });
+
+                        prevBtn.addEventListener('click', () => {
+                            currentIdx = (currentIdx - 1 + slides.length) % slides.length;
+                            showSlide(currentIdx);
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section>

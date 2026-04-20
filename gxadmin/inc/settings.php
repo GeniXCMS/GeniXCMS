@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -91,7 +91,6 @@ $schema = [
                                     <p class="extra-small text-muted mb-0 lh-base">' . _("Keep your platform slogan concise (under 60 chars) to ensure perfect visibility in social sharing previews.") . '</p>
                                 </div>'
                                         ],
-                                        ['type' => 'input', 'name' => 'api_rate_limit', 'label' => _('Rate Limit (Requests / Hour)'), 'value' => Options::v('api_rate_limit') ?: '100', 'input_type' => 'number'],
                                     ]
                                 ]
                             ]
@@ -331,6 +330,13 @@ $schema = [
                         ['width' => 6, 'content' => ['type' => 'select', 'label' => _('Pagination Interface Interface'), 'name' => 'pagination', 'selected' => Options::v('pagination'), 'options' => ['number' => _('Sequential Digits'), 'pager' => _('Minimalist Pager')]]],
                     ]
                 ],
+                ['type' => 'heading', 'text' => _('Frontpage Configuration'), 'icon' => 'bi bi-house-door', 'subtitle' => _('Define the default landing page behavior for your website.')],
+                [
+                    'type' => 'row',
+                    'items' => [
+                        ['width' => 12, 'content' => ['type' => 'select', 'label' => _('Frontpage Static Content'), 'name' => 'frontpage_id', 'selected' => Options::v('frontpage_id'), 'options' => Posts::getPageList()]],
+                    ]
+                ],
                 [
                     'type' => 'row',
                     'items' => [
@@ -343,7 +349,8 @@ $schema = [
                                     'icon' => 'bi bi-brush',
                                     'body_elements' => [
                                         ['type' => 'raw', 'html' => '<div class="form-check form-switch mb-3"><input class="form-check-input" type="checkbox" name="use_editor" ' . (Options::v('use_editor') == 'on' ? 'checked' : '') . '><label class="form-check-label fw-bold">' . _("Active WYSIWYG Catalyst") . '</label></div>'],
-                                        ['type' => 'select', 'label' => _('Architect Preferred Engine'), 'name' => 'editor_type', 'selected' => Options::v('editor_type'), 'options' => Editor::getEditors()]
+                                        ['type' => 'select', 'label' => _('Architect Preferred Engine'), 'name' => 'editor_type', 'selected' => Options::v('editor_type'), 'options' => Editor::getEditors()],
+                                        ['type' => 'select', 'label' => _('Primary Media Dispatcher'), 'name' => 'active_media_selector', 'selected' => Options::v('active_media_selector') ?: 'media-manager', 'options' => ['media-manager' => _('Modern Media Manager'), 'elfinder' => _('Legacy elFinder Server')]]
                                     ],
                                     'footer' => '<p class="extra-small text-muted mb-0"><i class="bi bi-info-circle me-1"></i> ' . _("Switch engines to change the authoring experience.") . '</p>'
                                 ]
@@ -426,31 +433,6 @@ $schema = [
                                                 ['width' => 6, 'content' => ['type' => 'input', 'label' => _('Privileged Secret Key'), 'name' => 'google_captcha_secret', 'value' => Options::v('google_captcha_secret'), 'input_type' => 'password']],
                                             ]
                                         ]
-                                    ]
-                                ]
-                            ]
-                        ],
-                        [
-                            'width' => 5,
-                            'content' => [
-                                [
-                                    'type' => 'card',
-                                    'title' => _('RESTful API KEY'),
-                                    'icon' => 'bi bi-file-earmark-lock',
-                                    'body_elements' => [
-                                        [
-                                            'type' => 'raw',
-                                            'html' => '
-                                <div class="p-3 bg-danger bg-opacity-10 rounded-4 border-start border-4 border-danger">
-                                    <h6 class="extra-small fw-black text-danger text-uppercase mb-2">Restricted Area</h6>
-                                    <p class="extra-small text-danger text-opacity-75 mb-0 lh-base fw-bold">' . _("Programmatic tokens represent the highest level of system authority. Regenerate immediately if leaked.") . '</p>
-                                </div>
-                                <div class="input-group mt-3">
-                                    <input type="text" name="api_key" id="api_key_field" value="' . Options::v('api_key') . '" class="form-control border bg-light shadow-none rounded-start-4 py-2 fs-8 fw-bold">
-                                    <button class="btn btn-white border px-3 rounded-end-4" type="button" onclick="generateApiKey()"><i class="bi bi-arrow-repeat text-primary h5 mb-0"></i></button>
-                                </div>'
-                                        ],
-                                        ['type' => 'input', 'name' => 'api_rate_limit', 'label' => _('Rate Limit (Requests / Hour)'), 'value' => Options::v('api_rate_limit') ?: '100', 'input_type' => 'number'],
                                     ]
                                 ]
                             ]

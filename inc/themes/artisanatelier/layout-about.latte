@@ -1,0 +1,137 @@
+{*
+ * Layout: Our Story
+ *}
+
+<!-- Hero Section -->
+<section class="relative min-h-[819px] flex items-center overflow-hidden py-24">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-container via-surface to-surface z-0 opacity-40"></div>
+    <div class="max-w-screen-2xl mx-auto px-12 grid grid-cols-12 gap-12 items-center relative z-10">
+        <div class="col-span-12 lg:col-span-5">
+            <span class="text-secondary font-semibold tracking-widest uppercase text-xs mb-4 block">Est. 2014</span>
+            <h1 class="font-serif text-7xl font-bold leading-[1.1] text-on-surface mb-8 tracking-tight">Crafted with Soul &amp; Intention</h1>
+            <p class="text-xl text-on-surface-variant leading-relaxed max-w-lg mb-10">
+                At The Artisanal Atelier, we believe the objects we surround ourselves with should tell a story of human touch, patience, and the raw beauty of nature.
+            </p>
+        </div>
+        <div class="col-span-12 lg:col-span-7 relative flex justify-end">
+            <div class="relative w-4/5">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-tertiary-container rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+                <div class="tonal-layer">
+                    <img alt="Our Founder" class="rounded-xl shadow-2xl object-cover aspect-[4/5] relative z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASKn_n-mVZXiYR7M0JmgM9glvIpNYeVEasSX7T8Sp6OSgo516OVsX5kJy5V-G9T63dmgcbgStP50PsLj4t_mQqjLEfYuvmcLQy0Iy1t7r0qThFjaRtZfsPlEiAYDg4DT5eXmtGr9ISgmrlVcStaEs_Xu9SaNE_tQtssxnQ0h-kOOu1O_eJqRl2ZcV_Xhg5OEGZxVkddU9D7Ue8UUbXDz6iRoLe1WMfMCT4SYaMB21Gg-B1TctmMaeo2FWJrLPP0vw4xRPoZVOe7QE"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Long-form Story Section -->
+<section class="py-32 bg-surface">
+    <div class="max-w-4xl mx-auto px-12">
+        <h2 class="font-serif text-4xl text-secondary mb-16 text-center italic">The Journey of the Kiln</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div class="space-y-6">
+                <p class="font-serif text-lg leading-relaxed text-on-surface first-letter:text-7xl first-letter:font-bold first-letter:text-primary first-letter:mr-3 first-letter:float-left">
+                    Ten years ago, The Artisanal Atelier began in a small, drafty shed at the edge of a pine forest. What started as a personal quest for silence and tactile creation evolved into a sanctuary for traditional crafts that were being forgotten in the digital rush.
+                </p>
+            </div>
+            <div class="space-y-6 md:mt-24">
+                <p class="text-on-surface-variant leading-relaxed">
+                    We didn't set out to build a brand. We set out to find the perfect weight of a linen sheet, the exact curvature of a mug that warms the hands, and the grain of paper that holds ink like a secret.
+                </p>
+                <blockquote class="border-l-4 border-primary-container pl-6 py-2">
+                    <p class="font-serif italic text-2xl text-on-surface">"To craft is to meditate with your hands."</p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fragments of Creation Section -->
+<section class="py-24 bg-surface-container-low overflow-hidden">
+    <div class="max-w-screen-2xl mx-auto px-12">
+        <div class="flex items-end justify-between mb-16">
+            <div class="max-w-xl">
+                <h2 class="font-serif text-5xl text-on-surface mb-6">{Typo::Xclean(ArtisanAtelier::opt('story_gallery_title'))|noescape}</h2>
+                <p class="text-on-surface-variant">{Typo::Xclean(ArtisanAtelier::opt('story_gallery_subtitle'))|noescape}</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-12 gap-8 items-start">
+            <div class="col-span-12 md:col-span-4 space-y-8">
+                <img alt="Pottery process" class="w-full rounded-xl object-cover aspect-square shadow-lg hover:scale-[1.02] transition-transform duration-500" src="{ArtisanAtelier::opt('story_gallery_img1')}">
+                <div class="bg-surface-container-highest p-12 rounded-xl">
+                    <h3 class="font-serif text-2xl mb-4">{Typo::Xclean(ArtisanAtelier::opt('story_gallery_card_title'))|noescape}</h3>
+                    <p class="text-on-surface-variant text-sm leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('story_gallery_card_desc'))|noescape}</p>
+                </div>
+            </div>
+            <div class="col-span-12 md:col-span-5 pt-12">
+                <img alt="Linen drying" class="w-full rounded-xl object-cover aspect-[4/5] shadow-2xl hover:scale-[1.02] transition-transform duration-500" src="{ArtisanAtelier::opt('story_gallery_img2')}">
+            </div>
+            <div class="col-span-12 md:col-span-3 space-y-8">
+                <img alt="Workshop tools" class="w-full rounded-xl object-cover aspect-[3/4] shadow-md hover:scale-[1.02] transition-transform duration-500" src="{ArtisanAtelier::opt('story_gallery_img3')}">
+                <img alt="Pigment mixing" class="w-full rounded-xl object-cover aspect-square shadow-lg hover:scale-[1.02] transition-transform duration-500" src="{ArtisanAtelier::opt('story_gallery_img4')}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- The Four Pillars Section -->
+<section class="py-32 bg-surface">
+    <div class="max-w-screen-2xl mx-auto px-12">
+        <div class="text-center mb-24">
+            <h2 class="font-serif text-5xl text-on-surface mb-4">{Typo::Xclean(ArtisanAtelier::opt('pillars_title'))|noescape}</h2>
+            <p class="text-on-surface-variant max-w-2xl mx-auto">{Typo::Xclean(ArtisanAtelier::opt('pillars_subtitle'))|noescape}</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <!-- Pillar 01 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-primary-container transition-colors duration-500">
+                    <span class="material-symbols-outlined text-primary scale-125">{ArtisanAtelier::opt('pillar1_icon')}</span>
+                </div>
+                <h4 class="font-serif text-xl mb-4">{Typo::Xclean(ArtisanAtelier::opt('pillar1_title'))|noescape}</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('pillar1_desc'))|noescape}</p>
+            </div>
+            <!-- Pillar 02 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-secondary-container transition-colors duration-500">
+                    <span class="material-symbols-outlined text-secondary scale-125">{ArtisanAtelier::opt('pillar2_icon')}</span>
+                </div>
+                <h4 class="font-serif text-xl mb-4">{Typo::Xclean(ArtisanAtelier::opt('pillar2_title'))|noescape}</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('pillar2_desc'))|noescape}</p>
+            </div>
+            <!-- Pillar 03 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-tertiary-container transition-colors duration-500">
+                    <span class="material-symbols-outlined text-tertiary scale-125">{ArtisanAtelier::opt('pillar3_icon')}</span>
+                </div>
+                <h4 class="font-serif text-xl mb-4">{Typo::Xclean(ArtisanAtelier::opt('pillar3_title'))|noescape}</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('pillar3_desc'))|noescape}</p>
+            </div>
+            <!-- Pillar 04 -->
+            <div class="text-center group">
+                <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-8 group-hover:bg-primary-container/40 transition-colors duration-500 text-on-primary-fixed-variant">
+                    <span class="material-symbols-outlined scale-125">{ArtisanAtelier::opt('pillar4_icon')}</span>
+                </div>
+                <h4 class="font-serif text-xl mb-4">{Typo::Xclean(ArtisanAtelier::opt('pillar4_title'))|noescape}</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">{Typo::Xclean(ArtisanAtelier::opt('pillar4_desc'))|noescape}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Founder's Note Section -->
+<section class="py-32 bg-secondary-container/30">
+    <div class="max-w-4xl mx-auto px-12 text-center">
+        <div class="mb-12">
+            <img alt="Elena Rivers" class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-white shadow-xl" src="{ArtisanAtelier::opt('founder_img')}">
+        </div>
+        <h2 class="font-serif text-3xl italic mb-8 text-on-secondary-container">{Typo::Xclean(ArtisanAtelier::opt('founder_note_title'))|noescape}</h2>
+        <div class="bg-white/60 backdrop-blur-md p-12 rounded-3xl shadow-[0_32px_64px_-12px_rgba(79,108,67,0.1)] relative">
+            <span class="material-symbols-outlined absolute -top-6 left-12 text-6xl text-secondary/20">format_quote</span>
+            <p class="text-xl font-serif leading-relaxed text-on-surface mb-8">
+                "{Typo::Xclean(ArtisanAtelier::opt('founder_quote'))|noescape}"
+            </p>
+            <div class="font-serif text-2xl text-secondary">{Typo::Xclean(ArtisanAtelier::opt('founder_signature'))|noescape}</div>
+            <div class="text-xs uppercase tracking-widest text-on-surface-variant mt-2">{Typo::Xclean(ArtisanAtelier::opt('founder_job'))|noescape}</div>
+        </div>
+    </div>
+</section>

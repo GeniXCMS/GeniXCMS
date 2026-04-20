@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 1.1.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -24,7 +24,8 @@ class Query
     private $params = [];
     private $order = '';
     private $orderRaw = '';
-    private $limit = '';
+    private $limit = null;
+    private $offset = null;
     private $joins = [];
     private $groupBy = '';
 
@@ -58,6 +59,19 @@ class Query
     public function select($columns = '*')
     {
         $this->select = is_array($columns) ? implode(', ', array_map([Db::class, 'quoteIdentifier'], $columns)) : $columns;
+        return $this;
+    }
+
+    /**
+     * Set the query to return distinct results.
+     *
+     * @return $this
+     */
+    public function distinct()
+    {
+        if (strpos(strtoupper($this->select), 'DISTINCT') !== 0) {
+            $this->select = "DISTINCT " . $this->select;
+        }
         return $this;
     }
 
@@ -101,6 +115,59 @@ class Query
         $this->params[] = $value;
         return $this;
     }
+
+    /**
+     * Adds a grouped WHERE clause using a closure.
+     *
+     * @param callable $callback A closure that receives a sub-query instance.
+     * @return $this
+     */
+    public function groupWhere(callable $callback)
+    {
+        $subQuery = new self();
+        $callback($subQuery);
+
+        if (!empty($subQuery->wheres)) {
+            $whereStr = "";
+            foreach ($subQuery->wheres as $i => $w) {
+                if ($i > 0 && strpos($w, 'OR ') !== 0) {
+                    $whereStr .= " AND ";
+                }
+                $whereStr .= $w . " ";
+            }
+            $this->wheres[] = "(" . trim($whereStr) . ")";
+            $this->params = array_merge($this->params, $subQuery->params);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds a grouped OR WHERE clause using a closure.
+     *
+     * @param callable $callback A closure that receives a sub-query instance.
+     * @return $this
+     */
+    public function orGroupWhere(callable $callback)
+    {
+        $subQuery = new self();
+        $callback($subQuery);
+
+        if (!empty($subQuery->wheres)) {
+            $whereStr = "";
+            foreach ($subQuery->wheres as $i => $w) {
+                if ($i > 0 && strpos($w, 'OR ') !== 0) {
+                    $whereStr .= " AND ";
+                }
+                $whereStr .= $w . " ";
+            }
+            $this->wheres[] = "OR (" . trim($whereStr) . ")";
+            $this->params = array_merge($this->params, $subQuery->params);
+        }
+
+        return $this;
+    }
+
 
     /**
      * Adds a WHERE IN clause.
@@ -156,6 +223,34 @@ class Query
     }
 
     /**
+     * Adds a LEFT JOIN clause.
+     *
+     * @param string $table    Table to join.
+     * @param string $first    Left-side column.
+     * @param string $operator Comparison operator.
+     * @param string $second   Right-side column.
+     * @return $this
+     */
+    public function leftJoin($table, $first, $operator, $second)
+    {
+        return $this->join($table, $first, $operator, $second, 'LEFT');
+    }
+
+    /**
+     * Adds a RIGHT JOIN clause.
+     *
+     * @param string $table    Table to join.
+     * @param string $first    Left-side column.
+     * @param string $operator Comparison operator.
+     * @param string $second   Right-side column.
+     * @return $this
+     */
+    public function rightJoin($table, $first, $operator, $second)
+    {
+        return $this->join($table, $first, $operator, $second, 'RIGHT');
+    }
+
+    /**
      * Adds an ORDER BY clause.
      *
      * @param string $column    Column to sort by.
@@ -166,6 +261,28 @@ class Query
     {
         $this->order = "ORDER BY " . Db::quoteIdentifier($column) . " " . strtoupper($direction);
         return $this;
+    }
+
+    /**
+     * Adds an ORDER BY DESC clause.
+     *
+     * @param string $column Column to sort by.
+     * @return $this
+     */
+    public function desc($column)
+    {
+        return $this->orderBy($column, 'DESC');
+    }
+
+    /**
+     * Adds an ORDER BY ASC clause.
+     *
+     * @param string $column Column to sort by.
+     * @return $this
+     */
+    public function asc($column)
+    {
+        return $this->orderBy($column, 'ASC');
     }
 
     /**
@@ -189,7 +306,22 @@ class Query
      */
     public function limit($limit, $offset = null)
     {
-        $this->limit = "LIMIT " . (int) $limit . ($offset !== null ? " OFFSET " . (int) $offset : "");
+        $this->limit = (int) $limit;
+        if ($offset !== null) {
+            $this->offset((int) $offset);
+        }
+        return $this;
+    }
+
+    /**
+     * Adds an OFFSET clause.
+     *
+     * @param int $offset Offset to start from.
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->offset = (int) $offset;
         return $this;
     }
 
@@ -233,10 +365,29 @@ class Query
      *
      * @return int Total count.
      */
-    public function count()
+    public function count($column = '*')
     {
-        $this->select = "COUNT(*) as total";
+        $oldSelect = $this->select;
+        $oldLimit = $this->limit;
+        $oldOffset = $this->offset;
+
+        // Handle distinct count if select already has DISTINCT
+        if (strpos(strtoupper($this->select), 'DISTINCT') === 0 && $column === '*') {
+            $col = trim(str_ireplace('DISTINCT', '', $this->select));
+            $this->select = "COUNT(DISTINCT {$col}) as total";
+        } else {
+            $this->select = "COUNT({$column}) as total";
+        }
+
+        $this->limit = null;
+        $this->offset = null;
+
         $res = $this->first();
+        
+        $this->select = $oldSelect;
+        $this->limit = $oldLimit;
+        $this->offset = $oldOffset;
+
         return $res ? (int) $res->total : 0;
     }
 
@@ -248,8 +399,10 @@ class Query
      */
     public function sum($column)
     {
+        $oldSelect = $this->select;
         $this->select = "SUM(" . Db::quoteIdentifier($column) . ") as total";
         $res = $this->first();
+        $this->select = $oldSelect;
         return $res ? (float) $res->total : 0;
     }
 
@@ -362,8 +515,11 @@ class Query
             $sql .= " " . $this->order;
         }
 
-        if ($this->limit) {
-            $sql .= " " . $this->limit;
+        if ($this->limit !== null) {
+            $sql .= " LIMIT " . (int) $this->limit;
+            if ($this->offset !== null) {
+                $sql .= " OFFSET " . (int) $this->offset;
+            }
         }
 
         return $sql;

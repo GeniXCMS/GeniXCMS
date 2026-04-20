@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20150219
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -22,22 +22,22 @@ if (Theme::exist('noaccess')) {
     $latte->render(GX_THEME . Theme::$active . $v_file, $data);
 } else {
     ?>
-        <div class="container-fluid">
-            <section class="app-content-header">
-                <div class="col-sm-12">
-                    <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
-                    <hr>
+    <div class="container-fluid">
+        <section class="app-content-header">
+            <div class="col-sm-12">
+                <h1><i class="fa fa-ban text-danger"></i> Not Allowed !!</h1>
+                <hr>
 
-                </div>
+            </div>
 
-            </section>
-            <section class="app-content">
-                <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
-                        href="<?= Site::$url; ?>">frontpage</a> or just <a href="<?= Site::$url; ?>logout/">Logout</a></div>
-            </section>
+        </section>
+        <section class="app-content">
+            <div class="alert alert-danger">You don't have Access to this page. Maybe You want to go to <a
+                    href="<?= Site::$url; ?>">frontpage</a> or just <a href="<?= Site::$url; ?>logout/">Logout</a></div>
+        </section>
 
-        </div>
+    </div>
 
-        <?php
+    <?php
 }
 ?>

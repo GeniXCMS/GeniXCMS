@@ -1,0 +1,38 @@
+{var $o = Agrifest::options()}
+{var $mProps = Mod::getProperties($mod)}
+{var $layout = $mProps['layout'] ?? ($o['mod_layout'] ?? 'default')}
+{var $showTitle = $mProps['show_title'] ?? (($o['mod_show_title'] ?? 'on') == 'on')}
+
+<div class="min-h-[70vh]">
+    <div class="{$layout == 'full' ? 'w-full px-4' : 'max-w-7xl mx-auto px-8'}">
+        <!-- Module Header -->
+        {if $showTitle}
+            <header class="mb-16">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div class="max-w-3xl">
+                        <span class="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase mb-6">{_('Integrated Module')}</span>
+                        <h1 class="text-5xl md:text-7xl font-headline font-bold text-on-surface leading-tight tracking-tighter">
+                            {Mod::getTitle($mod)|noescape}
+                        </h1>
+                    </div>
+                    <div class="hidden md:block">
+                         <div class="h-1 w-32 bg-primary rounded-full opacity-20"></div>
+                    </div>
+                </div>
+            </header>
+        {/if}
+
+        <!-- Module Bridge Container -->
+        <div class="{$layout == 'full' ? '' : 'pt-6 pb-16'} overflow-hidden relative">
+            {if $layout != 'full'}
+                <div class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+                    <span class="material-symbols-outlined text-9xl">extension</span>
+                </div>
+            {/if}
+            
+            <div class="relative z-10 agrifest-module-wrapper">
+                {Hooks::run('mod_control', $data)|noescape}
+            </div>
+        </div>
+    </div>
+</div>

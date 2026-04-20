@@ -27,14 +27,14 @@ class Gneex
         self::registerAssets();
 
         // Register "GneeX Options" sub-item under the Themes admin menu.
-        // AdminMenu is already booted before Theme::function.php is loaded,
-        // so we can call addChild() directly here.
-        AdminMenu::addChild('themes', [
-            'label' => _('GneeX Options'),
-            'url' => 'index.php?page=themes&view=options',
-            'icon' => 'bi bi-sliders',
-            'access' => 0,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::addChild('themes', [
+                'label' => _('GneeX Options'),
+                'url' => 'index.php?page=themes&view=options',
+                'icon' => 'bi bi-sliders',
+                'access' => 0,
+            ]);
+        });
     }
 
     /**

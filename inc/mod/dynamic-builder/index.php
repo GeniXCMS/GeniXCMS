@@ -34,15 +34,17 @@ class DynamicBuilder
         Asset::register('builder-js', 'js', $modUrl . 'assets/js/builder.js?v=' . time(), 'footer', ['grapesjs-js'], 21);
 
         // Register Admin Menu
-        AdminMenu::add([
-            'id' => 'dynamic-builder',
-            'label' => 'Dynamic Builder',
-            'icon' => 'bi bi-magic',
-            'url' => 'index.php?page=mods&mod=dynamic-builder',
-            'access' => 1,
-            'position' => 'external',
-            'order' => 31,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id' => 'dynamic-builder',
+                'label' => 'Dynamic Builder',
+                'icon' => 'bi bi-magic',
+                'url' => 'index.php?page=mods&mod=dynamic-builder',
+                'access' => 1,
+                'position' => 'external',
+                'order' => 31,
+            ]);
+        });
 
         // Handle Ajax Save
         if (isset($_GET['ajax']) && $_GET['ajax'] == 'dynamic_builder_save') {

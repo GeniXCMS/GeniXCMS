@@ -1,0 +1,30 @@
+<!-- Footer -->
+<footer class="bg-stone-50 dark:bg-stone-950 w-full pt-20 pb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 px-12 max-w-screen-2xl mx-auto">
+        <div class="lg:col-span-2">
+            {var $w1 = Widget::show('footer_1')}
+            {$w1|noescape}
+        </div>
+        <div>
+            {var $w2 = Widget::show('footer_2')}
+            {$w2|noescape}
+        </div>
+        <div>
+            {var $w3 = Widget::show('footer_3')}
+            {$w3|noescape}
+        </div>
+        <div>
+            {var $w4 = Widget::show('footer_4')}
+            {$w4|noescape}
+        </div>
+    </div>
+    <div class="mt-20 px-12 max-w-screen-2xl mx-auto border-t border-stone-200 dark:border-stone-800 pt-10">
+        <p class="font-sans text-stone-600 dark:text-stone-400 text-sm opacity-80">
+            {ArtisanAtelier::opt('footer_text')|noescape}
+        </p>
+    </div>
+</footer>
+
+{Site::loadLibFooter()|noescape}
+</body>
+</html>

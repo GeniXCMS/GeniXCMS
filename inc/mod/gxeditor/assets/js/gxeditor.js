@@ -1,32 +1,61 @@
 (function (window) {
     'use strict';
 
-    // ── GxEditor Global API ───────────────────────────────────────────
     var GxEditor = {
         _blocks: {},
-        _editors: [], // Track all initialized instances
-        registerBlock: function (id, config) {
-            this._blocks[id] = Object.assign({
-                icon: 'bi bi-box',
-                label: id,
-                desc: '',
-                placeholder: '',
-                render: null,
-                serialize: null,
-                parse: null
-            }, config);
-        },
-        getBlocksExclude: function (excluded) {
-            var filtered = [];
-            for (var id in this._blocks) {
-                if (excluded.indexOf(id) === -1) {
-                    var b = this._blocks[id];
-                    filtered.push({ id: id, icon: b.icon, label: b.label, desc: b.desc });
-                }
+        _editors: []
+    };
+
+    GxEditor.registerBlock = function (id, config) {
+        this._blocks[id] = Object.assign({
+            icon: 'bi bi-box',
+            label: id,
+            desc: '',
+            placeholder: '',
+            render: null,
+            serialize: null,
+            parse: null
+        }, config);
+    };
+
+    GxEditor.getBlocksExclude = function (excluded) {
+        var filtered = [];
+        for (var blockId in this._blocks) {
+            if (excluded.indexOf(blockId) === -1) {
+                var blockData = this._blocks[blockId];
+                filtered.push({ 
+                    id: blockId, 
+                    icon: blockData.icon, 
+                    label: blockData.label, 
+                    desc: blockData.desc 
+                });
             }
-            return filtered;
+        }
+        return filtered;
+    };
+
+    GxEditor.openMediaSelector = function (callback) {
+        var activeSelector = window.GX_MEDIA_SELECTOR || 'media-manager';
+        
+        // Priority 1: GxMedia (Modular Manager)
+        if (typeof GxMedia !== 'undefined') {
+            GxMedia.select(callback);
+        } 
+        // Priority 2: elFinder (Legacy Manager) - Fallback if GxMedia not loaded or specifically requested
+        else if (typeof window.elfinderDialog === 'function') {
+            window.elfinderDialog({
+                invoke: function (d, url) {
+                    callback(url);
+                }
+            });
+        } 
+        // Priority 3: Final fallback to prompt
+        else {
+            var url = prompt('Enter media URL:');
+            if (url) callback(url);
         }
     };
+
     window.GxEditor = GxEditor;
 
     // ── Core Block Definitions ────────────────────────────────────────
@@ -196,7 +225,7 @@
                 var header = document.getElementById('gxeditorTableHeader').checked;
                 var striped = document.getElementById('gxeditorTableStriped').checked;
                 var bordered = document.getElementById('gxeditorTableBordered').checked;
-                
+
                 if (window._gxTableCallback) window._gxTableCallback(rows, cols, header, striped, bordered);
                 var bsModal = bootstrap.Modal.getInstance(modalEl);
                 if (bsModal) bsModal.hide();
@@ -225,7 +254,7 @@
             blocks: [],
             isClassic: isClassic,
             isNested: textarea.classList.contains('gxb-nested-editor'),
-            insertImage: function(url) {
+            insertImage: function (url) {
                 if (this.isClassic) {
                     var cw = this.shell.querySelector('.gxb-classic-content-wrap');
                     if (cw) { cw.focus(); document.execCommand('insertImage', false, url); }
@@ -418,17 +447,10 @@
                         var url = prompt('Enter URL:');
                         if (url) document.execCommand(cmd, false, url);
                     } else if (cmd === 'insertImageGX') {
-                        if (typeof window.elfinderDialog === 'function') {
-                            var fakeContext = {
-                                invoke: function (dummy, url) {
-                                    contentWrap.focus(); document.execCommand('insertImage', false, url);
-                                }
-                            };
-                            window.elfinderDialog(fakeContext);
-                            return;
-                        }
-                        var url2 = prompt('Enter Image URL:');
-                        if (url2) { contentWrap.focus(); document.execCommand('insertImage', false, url2); }
+                        GxEditor.openMediaSelector(function (url) {
+                            contentWrap.focus();
+                            document.execCommand('insertImage', false, url);
+                        });
                     } else if (cmd === 'codeBlockGX') {
                         var sel = window.getSelection();
                         var text = (sel.rangeCount > 0 && !sel.isCollapsed) ? sel.toString() : '';
@@ -504,28 +526,28 @@
 
                         if (cmd === 'table_insert') {
                             var savedRange = (sel.rangeCount > 0) ? sel.getRangeAt(0) : null;
-                            getTableModal(function(rows, cols, hasHeader, isStriped, isBordered) {
+                            getTableModal(function (rows, cols, hasHeader, isStriped, isBordered) {
                                 contentWrap.focus();
                                 if (savedRange) {
                                     var s = window.getSelection();
                                     s.removeAllRanges();
                                     s.addRange(savedRange);
                                 }
-                                
+
                                 var classes = ['table'];
                                 if (isStriped) classes.push('table-striped');
                                 if (isBordered) classes.push('table-bordered');
-                                
+
                                 var html = '<table class="' + classes.join(' ') + '">';
                                 if (hasHeader) {
                                     html += '<thead><tr>';
-                                    for(var c=0; c<cols; c++) html += '<th>Header ' + (c+1) + '</th>';
+                                    for (var c = 0; c < cols; c++) html += '<th>Header ' + (c + 1) + '</th>';
                                     html += '</tr></thead>';
                                 }
                                 html += '<tbody>';
-                                for(var r=0; r<rows; r++) {
+                                for (var r = 0; r < rows; r++) {
                                     html += '<tr>';
-                                    for(var c=0; c<cols; c++) html += '<td><br></td>';
+                                    for (var c = 0; c < cols; c++) html += '<td><br></td>';
                                     html += '</tr>';
                                 }
                                 html += '</tbody></table><p><br></p>';
@@ -566,7 +588,7 @@
                             sourceBox.style.display = 'none';
                             shell.appendChild(sourceBox);
                             // Sync from source back to editor
-                            sourceBox.addEventListener('input', function() {
+                            sourceBox.addEventListener('input', function () {
                                 contentWrap.innerHTML = sourceBox.value;
                                 textarea.value = (typeof htmlToShortcode === 'function') ? htmlToShortcode(contentWrap.innerHTML) : contentWrap.innerHTML;
                             });
@@ -631,10 +653,10 @@
                 });
             });
 
-            var getCleanHTML = function() {
+            var getCleanHTML = function () {
                 // Clone the content and strip all UI-only image wrapper elements
                 var clone = contentWrap.cloneNode(true);
-                clone.querySelectorAll('.gxb-img-select-wrap').forEach(function(wrap) {
+                clone.querySelectorAll('.gxb-img-select-wrap').forEach(function (wrap) {
                     var img = wrap.querySelector('img');
                     if (img) {
                         // Keep only the img, remove wrapper + toolbar + handle
@@ -649,22 +671,22 @@
                 var html = getCleanHTML();
                 textarea.value = (typeof htmlToShortcode === 'function') ? htmlToShortcode(html) : html;
             };
-            
-            contentWrap.addEventListener('paste', function(e) {
+
+            contentWrap.addEventListener('paste', function (e) {
                 // Prevent default pasting to clean the content
                 e.preventDefault();
                 var text = (e.originalEvent || e).clipboardData.getData('text/plain');
                 var html = (e.originalEvent || e).clipboardData.getData('text/html');
-                
+
                 if (html) {
                     // Very basic cleaning: remove fixed widths and complex styles
                     var div = document.createElement('div');
                     div.innerHTML = html;
-                    div.querySelectorAll('*').forEach(function(el) {
+                    div.querySelectorAll('*').forEach(function (el) {
                         el.removeAttribute('style');
                         el.removeAttribute('width');
                         el.removeAttribute('height');
-                        el.classList.forEach(function(c) { if (c.startsWith('Mso')) el.classList.remove(c); }); // Word cleaning
+                        el.classList.forEach(function (c) { if (c.startsWith('Mso')) el.classList.remove(c); }); // Word cleaning
                     });
                     document.execCommand('insertHTML', false, div.innerHTML);
                 } else {
@@ -674,7 +696,7 @@
             });
 
             contentWrap.addEventListener('input', sync);
-            contentWrap.addEventListener('blur', function(e) {
+            contentWrap.addEventListener('blur', function (e) {
                 // Don't deselect if clicking a resize handle
                 if (e.relatedTarget && e.relatedTarget.classList && e.relatedTarget.classList.contains('gxb-img-handle')) return;
                 sync();
@@ -682,7 +704,7 @@
 
             // ── Image Selection & Resize ─────────────────────────────
             var _selectedImg = null;
-            var _imgWrapper  = null;
+            var _imgWrapper = null;
 
             function deselect() {
                 if (_imgWrapper) {
@@ -724,16 +746,16 @@
                 var bar = document.createElement('div');
                 bar.className = 'gxb-img-toolbar';
                 bar.innerHTML = '<button type="button" class="gxb-img-tb-btn" data-align="none" title="No alignment (default)"><i class="bi bi-slash-circle"></i></button>' +
-                                '<button type="button" class="gxb-img-tb-btn" data-align="float-start" title="Float left"><i class="bi bi-align-start"></i></button>' +
-                                '<button type="button" class="gxb-img-tb-btn" data-align="mx-auto d-block" title="Center"><i class="bi bi-text-center"></i></button>' +
-                                '<button type="button" class="gxb-img-tb-btn" data-align="float-end" title="Float right"><i class="bi bi-align-end"></i></button>' +
-                                '<span class="gxb-img-tb-sep"></span>' +
-                                '<button type="button" class="gxb-img-tb-btn gxb-img-tb-replace" title="Replace image"><i class="bi bi-arrow-repeat"></i></button>' +
-                                '<button type="button" class="gxb-img-tb-btn gxb-img-tb-del text-danger" title="Delete image"><i class="bi bi-trash3"></i></button>';
+                    '<button type="button" class="gxb-img-tb-btn" data-align="float-start" title="Float left"><i class="bi bi-align-start"></i></button>' +
+                    '<button type="button" class="gxb-img-tb-btn" data-align="mx-auto d-block" title="Center"><i class="bi bi-text-center"></i></button>' +
+                    '<button type="button" class="gxb-img-tb-btn" data-align="float-end" title="Float right"><i class="bi bi-align-end"></i></button>' +
+                    '<span class="gxb-img-tb-sep"></span>' +
+                    '<button type="button" class="gxb-img-tb-btn gxb-img-tb-replace" title="Replace image"><i class="bi bi-arrow-repeat"></i></button>' +
+                    '<button type="button" class="gxb-img-tb-btn gxb-img-tb-del text-danger" title="Delete image"><i class="bi bi-trash3"></i></button>';
                 wrapper.appendChild(bar);
 
                 // Smart position: flip toolbar below if it would be covered by sticky editor toolbar
-                setTimeout(function() {
+                setTimeout(function () {
                     var editorToolbar = shell.querySelector('.gxb-classic-toolbar');
                     var toolbarBottom = editorToolbar ? editorToolbar.getBoundingClientRect().bottom : 0;
                     var wrapperTop = wrapper.getBoundingClientRect().top;
@@ -746,12 +768,12 @@
                 }, 0);
 
                 // Align buttons
-                bar.querySelectorAll('[data-align]').forEach(function(b) {
-                    b.addEventListener('mousedown', function(e) {
+                bar.querySelectorAll('[data-align]').forEach(function (b) {
+                    b.addEventListener('mousedown', function (e) {
                         e.preventDefault(); e.stopPropagation();
                         var al = b.dataset.align;
                         img.className = img.className.replace(/float-start|float-end|mx-auto|d-block/g, '').trim();
-                        if (al !== 'none') al.split(' ').forEach(function(c) { img.classList.add(c); });
+                        if (al !== 'none') al.split(' ').forEach(function (c) { img.classList.add(c); });
                         wrapper.className = wrapper.className.replace(/float-start|float-end/g, '').trim();
                         if (al === 'float-start') wrapper.classList.add('float-start');
                         if (al === 'float-end') wrapper.classList.add('float-end');
@@ -761,16 +783,16 @@
                 });
 
                 // Replace button
-                bar.querySelector('.gxb-img-tb-replace').addEventListener('mousedown', function(e) {
+                bar.querySelector('.gxb-img-tb-replace').addEventListener('mousedown', function (e) {
                     e.preventDefault(); e.stopPropagation();
-                    if (typeof window.elfinderDialog === 'function') {
-                        var ctx = { invoke: function(d, url) { img.src = url; sync(); } };
-                        window.elfinderDialog(ctx);
-                    }
+                    GxEditor.openMediaSelector(function (url) {
+                        img.src = url;
+                        sync();
+                    });
                 });
 
                 // Delete button
-                bar.querySelector('.gxb-img-tb-del').addEventListener('mousedown', function(e) {
+                bar.querySelector('.gxb-img-tb-del').addEventListener('mousedown', function (e) {
                     e.preventDefault(); e.stopPropagation();
                     deselect();
                     img.remove();
@@ -779,7 +801,7 @@
 
                 // Resize drag
                 var startX, startW;
-                handle.addEventListener('mousedown', function(e) {
+                handle.addEventListener('mousedown', function (e) {
                     e.preventDefault(); e.stopPropagation();
                     startX = e.clientX;
                     startW = img.offsetWidth;
@@ -798,7 +820,7 @@
                 });
             }
 
-            contentWrap.addEventListener('click', function(e) {
+            contentWrap.addEventListener('click', function (e) {
                 if (e.target.tagName === 'IMG') {
                     e.preventDefault();
                     selectImg(e.target);
@@ -915,9 +937,9 @@
                     if (contentEl && contentEl.textContent.trim() === '') {
                         e.preventDefault();
                         var bEl = contentEl.closest('.gxb-block');
-                        var r = contentEl.getBoundingClientRect();
+                        var rect = contentEl.getBoundingClientRect();
                         if (typeof openPicker === 'function') {
-                            openPicker(state, bEl ? bEl.dataset.blockId : null, { top: r.top, left: r.left });
+                            openPicker(state, bEl ? bEl.dataset.blockId : null, { top: rect.top, left: rect.left });
                         }
                     }
                 }

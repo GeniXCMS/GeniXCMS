@@ -1,0 +1,44 @@
+{var $o = Bakeshop::options()}
+
+<div class="px-8 py-16 md:py-24 max-w-4xl mx-auto">
+    {if isset($posts[0])}
+        {foreach $posts as $p}
+            <article class="prose prose-lg max-w-none">
+                <header class="mb-12 text-center">
+                    <h1 class="font-headline font-extrabold text-4xl md:text-6xl text-on-surface tracking-tight mb-4">
+                        {Typo::Xclean($p->title)|noescape}
+                    </h1>
+                    <div class="flex items-center justify-center gap-4 text-sm text-on-surface-variant font-label">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full uppercase font-bold tracking-widest text-[10px]">
+                            {$p->type|noescape}
+                        </span>
+                        <span>{Date::format($p->date, 'd M Y')}</span>
+                    </div>
+                </header>
+
+                <div class="editorial-content text-on-surface leading-loose text-lg">
+                    {Posts::content($p->content)|noescape}
+                </div>
+
+                <footer class="mt-16 pt-8 border-t border-black/5">
+                    <div class="flex flex-wrap gap-2">
+                        {var $tags = explode(',', ($p->tags ?? ''))}
+                        {foreach $tags as $t}
+                            {if trim($t) !== ''}
+                                <a href="{Url::tag(trim($t))}" class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container px-3 py-1 rounded-full hover:bg-primary hover:text-white transition-colors">
+                                    #{(trim($t))}
+                                </a>
+                            {/if}
+                        {/foreach}
+                    </div>
+                </footer>
+            </article>
+        {/foreach}
+    {else}
+        <div class="text-center py-24">
+            <h2 class="text-3xl font-headline font-bold text-on-surface mb-4">Nothing here yet...</h2>
+            <p class="text-on-surface-variant mb-8">It seems we haven't baked this page yet.</p>
+            <a href="{$site_url}" class="text-primary font-bold underline">Go Back Home</a>
+        </div>
+    {/if}
+</div>

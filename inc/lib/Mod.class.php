@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140928
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -182,20 +182,24 @@ class Mod
     {
         $json = Options::v('modules');
         $mods = json_decode($json ?? '', true);
-        //print_r($mods);
+
         if (!is_array($mods) || $mods == '') {
             $mods = array();
         }
         if (!in_array($mod, $mods)) {
             $mods = array_merge($mods, array($mod));
+
+            // Load the module first so it can register its hooks
+            self::load($mod);
+            // Run activation hook
+            Hooks::run('mod_activate', $mod);
+            Hooks::run($mod . '_activate');
         }
 
         $mods = json_encode($mods);
-
         $mods = Options::update('modules', $mods);
         if ($mods) {
             new Options();
-
             return true;
         } else {
             return false;
@@ -215,22 +219,29 @@ class Mod
         if (!is_array($mods) || $mods == '') {
             $mods = array();
         }
-        //print_r($mods);
+
         $arr = [];
+        $found = false;
         for ($i = 0; $i < count($mods); ++$i) {
             if ($mods[$i] == $mod) {
-                //unset($mods[$i]);
+                $found = true;
             } else {
                 $arr[] = $mods[$i];
             }
         }
-        //print_r($arr);
-        //asort($mods);
+
+        if ($found) {
+            // Load the module if not already loaded to trigger hooks
+            self::load($mod);
+            // Run deactivation hook
+            Hooks::run('mod_deactivate', $mod);
+            Hooks::run($mod . '_deactivate');
+        }
+
         $mods = json_encode($arr);
         $mods = Options::update('modules', $mods);
         if ($mods) {
             new Options();
-
             return true;
         } else {
             return false;
@@ -307,6 +318,11 @@ class Mod
                             $alertDanger[] = _('Module is Active. Please deactivate first.');
                         }
                         if (!isset($alertDanger)) {
+                            // Run Delete Hook before deactivation and file removal
+                            self::load($modules);
+                            Hooks::run('mod_delete', $modules);
+                            Hooks::run($modules . '_delete');
+
                             self::deactivate($modules);
                             if (false != Files::delTree(GX_MOD . $_GET['modules'])) {
                                 $GLOBALS['alertSuccess'] = _('Module Deleted');
@@ -343,7 +359,7 @@ class Mod
     {
         $file = GX_MOD . '/' . $mod . '/index.php';
         if (file_exists($file)) {
-            include $file;
+            include_once $file;
         }
     }
 
@@ -368,7 +384,7 @@ class Mod
      */
     public static function exist($mod)
     {
-        $file = GX_MOD . '/' . $mod . '/options.php';
+        $file = GX_MOD . '/' . $mod . '/index.php';
         if (file_exists($file)) {
             return true;
         } else {
@@ -405,14 +421,16 @@ class Mod
             } else {
                 $selected = '';
             }
-            echo "<option value=\"{$k}\" {$selected}>{$v}</option>";
+            $label = is_array($v) ? ($v['label'] ?? $k) : $v;
+            echo "<option value=\"{$k}\" {$selected}>{$label}</option>";
         }
     }
 
     /**
      * Registers new menu items into the module menu list.
+     * Supports both simple strings and associative arrays for advanced metadata.
      *
-     * @param array $menus Array of menu keys and titles.
+     * @param array $menus Array of menu keys and configurations.
      * @return bool        Always true.
      */
     public static function addMenuList($menus)
@@ -426,13 +444,43 @@ class Mod
      * Retrieves the descriptive title for a specific registered module menu.
      *
      * @param string $mod Menu key.
-     * @return string      Title of the menu.
+     * @return string      Title/Label of the menu.
      */
     public static function getTitle($mod)
     {
         $title = self::$listMenu;
-        $titlemenu = array_key_exists($mod, $title) ? $title[$mod] : "";
-        return $titlemenu;
+        if (array_key_exists($mod, $title)) {
+            return is_array($title[$mod]) ? ($title[$mod]['label'] ?? "Module: {$mod}") : $title[$mod];
+        }
+        return "";
+    }
+
+    /**
+     * Retrieves all properties for a specific registered module menu.
+     *
+     * @param string $mod Menu key.
+     * @return array      Configuration properties.
+     */
+    public static function getProperties($mod)
+    {
+        $menus = self::$listMenu;
+        if (array_key_exists($mod, $menus)) {
+            return is_array($menus[$mod]) ? $menus[$mod] : ['label' => $menus[$mod]];
+        }
+        return [];
+    }
+
+    /**
+     * Retrieves a specific configuration property for a module menu.
+     *
+     * @param string $mod      Menu key.
+     * @param string $property Property key name.
+     * @return mixed           The property value or null if not found.
+     */
+    public static function getProperty($mod, $property)
+    {
+        $props = self::getProperties($mod);
+        return $props[$property] ?? null;
     }
 }
 

@@ -19,39 +19,77 @@ class Newsletter
     {
         Db::connect(); // ensure connection is established
         $pdo = Db::$pdo;
+        $driver = defined('DB_DRIVER') ? DB_DRIVER : 'mysql';
 
-        $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
-            `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `email`      VARCHAR(191) NOT NULL,
-            `name`       VARCHAR(100) DEFAULT '',
-            `status`     TINYINT(1) DEFAULT 1 COMMENT '1=active,0=unsubscribed',
-            `token`      VARCHAR(64)  DEFAULT NULL COMMENT 'unsubscribe token',
-            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE KEY `uq_email` (`email`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        if ($driver === 'sqlite') {
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
+                `id`         INTEGER PRIMARY KEY AUTOINCREMENT,
+                `email`      TEXT NOT NULL,
+                `name`       TEXT DEFAULT '',
+                `status`     INTEGER DEFAULT 1,
+                `token`      TEXT DEFAULT NULL,
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+            );");
+            $pdo->exec("CREATE UNIQUE INDEX IF NOT EXISTS `uq_sub_email` ON `newsletter_subscribers` (`email`);");
 
-        $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_campaigns` (
-            `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `subject`    VARCHAR(255) NOT NULL,
-            `body`       LONGTEXT NOT NULL,
-            `type`       ENUM('html','text') NOT NULL DEFAULT 'html',
-            `recipient`  VARCHAR(50) NOT NULL DEFAULT 'all' COMMENT 'all|subscribers|group_0|group_4',
-            `status`     ENUM('draft','sending','sent') NOT NULL DEFAULT 'draft',
-            `sent_count` INT UNSIGNED NOT NULL DEFAULT 0,
-            `fail_count` INT UNSIGNED NOT NULL DEFAULT 0,
-            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `sent_at`    DATETIME DEFAULT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_campaigns` (
+                `id`         INTEGER PRIMARY KEY AUTOINCREMENT,
+                `subject`    TEXT NOT NULL,
+                `body`       TEXT NOT NULL,
+                `type`       TEXT NOT NULL DEFAULT 'html',
+                `recipient`  TEXT NOT NULL DEFAULT 'all',
+                `status`     TEXT NOT NULL DEFAULT 'draft',
+                `sent_count` INTEGER NOT NULL DEFAULT 0,
+                `fail_count` INTEGER NOT NULL DEFAULT 0,
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                `sent_at`    DATETIME DEFAULT NULL
+            );");
 
-        $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_logs` (
-            `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `campaign_id` INT UNSIGNED NOT NULL,
-            `email`       VARCHAR(191) NOT NULL,
-            `status`      ENUM('sent','failed') NOT NULL DEFAULT 'sent',
-            `error`       TEXT DEFAULT NULL,
-            `sent_at`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            KEY `idx_campaign` (`campaign_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_logs` (
+                `id`          INTEGER PRIMARY KEY AUTOINCREMENT,
+                `campaign_id` INTEGER NOT NULL,
+                `email`       TEXT NOT NULL,
+                `status`      TEXT NOT NULL DEFAULT 'sent',
+                `error`       TEXT DEFAULT NULL,
+                `sent_at`     DATETIME DEFAULT CURRENT_TIMESTAMP
+            );");
+            $pdo->exec("CREATE INDEX IF NOT EXISTS `idx_log_campaign` ON `newsletter_logs` (`campaign_id`);");
+            
+        } else {
+            // MySQL/MariaDB Standard Installer
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
+                `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `email`      VARCHAR(191) NOT NULL,
+                `name`       VARCHAR(100) DEFAULT '',
+                `status`     TINYINT(1) DEFAULT 1 COMMENT '1=active,0=unsubscribed',
+                `token`      VARCHAR(64)  DEFAULT NULL COMMENT 'unsubscribe token',
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE KEY `uq_email` (`email`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_campaigns` (
+                `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `subject`    VARCHAR(255) NOT NULL,
+                `body`       LONGTEXT NOT NULL,
+                `type`       ENUM('html','text') NOT NULL DEFAULT 'html',
+                `recipient`  VARCHAR(50) NOT NULL DEFAULT 'all' COMMENT 'all|subscribers|group_0|group_4',
+                `status`     ENUM('draft','sending','sent') NOT NULL DEFAULT 'draft',
+                `sent_count` INT UNSIGNED NOT NULL DEFAULT 0,
+                `fail_count` INT UNSIGNED NOT NULL DEFAULT 0,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `sent_at`    DATETIME DEFAULT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `newsletter_logs` (
+                `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `campaign_id` INT UNSIGNED NOT NULL,
+                `email`       VARCHAR(191) NOT NULL,
+                `status`      ENUM('sent','failed') NOT NULL DEFAULT 'sent',
+                `error`       TEXT DEFAULT NULL,
+                `sent_at`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_campaign` (`campaign_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        }
     }
 
     // -----------------------------------------------------------------------

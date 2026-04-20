@@ -16,15 +16,17 @@ class Nixslider
 {
     public function __construct()
     {
-        AdminMenu::add([
-            'id' => 'nixslider',
-            'label' => _('Nixslider'),
-            'icon' => 'bi bi-images',
-            'url' => 'index.php?page=mods&mod=nixslider',
-            'access' => 1,
-            'position' => 'external',
-            'order' => 12,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id' => 'nixslider',
+                'label' => _('Nixslider'),
+                'icon' => 'bi bi-images',
+                'url' => 'index.php?page=mods&mod=nixslider',
+                'access' => 1,
+                'position' => 'external',
+                'order' => 12,
+            ]);
+        });
 
         Hooks::attach('post_content_filter', array('Nixslider', 'parseShortcode'));
         Hooks::attach('footer_load_lib', array('Nixslider', 'loadAssets'));
@@ -77,14 +79,26 @@ class Nixslider
 
             $cleanId = Typo::cleanX($id);
             $imgHeight = isset($slider['height']) ? Typo::cleanX($slider['height']) : '400px';
+            
+            // Allow shortcode attributes to override stored DB settings
+            $rounded = isset($attrs['rounded']) ? $attrs['rounded'] : (isset($slider['rounded']) ? $slider['rounded'] : 'on');
+            $arrow = isset($attrs['arrow']) ? $attrs['arrow'] : (isset($slider['arrow']) ? $slider['arrow'] : 'on');
+            $bullet = isset($attrs['bullet']) ? $attrs['bullet'] : (isset($slider['bullet']) ? $slider['bullet'] : 'on');
+            $speed = isset($attrs['speed']) ? $attrs['speed'] : (isset($slider['speed']) ? $slider['speed'] : '5000');
+            $transition = isset($attrs['transition']) ? $attrs['transition'] : (isset($slider['transition']) ? $slider['transition'] : 'fade');
 
-            $html = '<div class="nixslider-container" id="nixslider-' . $cleanId . '">';
+            $classes = ['nixslider-container'];
+            if ($rounded === 'off') $classes[] = 'nixslider-rounded-off';
+            if ($transition === 'slide') $classes[] = 'nixslider-transition-slide';
+            else $classes[] = 'nixslider-transition-fade';
+
+            $html = '<div class="' . implode(' ', $classes) . '" id="nixslider-' . $cleanId . '" data-speed="' . Typo::int($speed) . '">';
             $html .= '<div class="nixslider-wrapper" style="height: ' . $imgHeight . ';">';
             
             foreach ($slider['images'] as $index => $img) {
                 $active = $index === 0 ? 'active' : '';
                 $html .= '<div class="nixslider-slide ' . $active . '">';
-                $html .= '<img src="' . Typo::cleanX($img['url']) . '" alt="' . Typo::Xclean($img['title']) . '">';
+                $html .= '<img src="' . Typo::cleanX($img['url']) . '" alt="' . Typo::Xclean($img['title'] ?? '') . '">';
                 if (!empty($img['title']) || !empty($img['caption'])) {
                     $html .= '<div class="nixslider-caption">';
                     if (!empty($img['title'])) $html .= '<h3>' . Typo::Xclean($img['title']) . '</h3>';
@@ -97,15 +111,19 @@ class Nixslider
             $html .= '</div>';
             
             if (count($slider['images']) > 1) {
-                $html .= '<a class="nixslider-prev" onclick="moveNixslider(\'' . $cleanId . '\', -1)">&#10094;</a>';
-                $html .= '<a class="nixslider-next" onclick="moveNixslider(\'' . $cleanId . '\', 1)">&#10095;</a>';
-                
-                $html .= '<div class="nixslider-dots">';
-                foreach ($slider['images'] as $index => $img) {
-                    $active = $index === 0 ? 'active' : '';
-                    $html .= '<span class="nixslider-dot ' . $active . '" onclick="currentNixslider(\'' . $cleanId . '\', ' . $index . ')"></span>';
+                if ($arrow !== 'off') {
+                    $html .= '<a class="nixslider-prev" onclick="moveNixslider(\'' . $cleanId . '\', -1)">&#10094;</a>';
+                    $html .= '<a class="nixslider-next" onclick="moveNixslider(\'' . $cleanId . '\', 1)">&#10095;</a>';
                 }
-                $html .= '</div>';
+                
+                if ($bullet !== 'off') {
+                    $html .= '<div class="nixslider-dots">';
+                    foreach ($slider['images'] as $index => $img) {
+                        $active = $index === 0 ? 'active' : '';
+                        $html .= '<span class="nixslider-dot ' . $active . '" onclick="currentNixslider(\'' . $cleanId . '\', ' . $index . ')"></span>';
+                    }
+                    $html .= '</div>';
+                }
             }
             
             $html .= '</div>';

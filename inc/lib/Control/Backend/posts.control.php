@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20141006
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -385,17 +385,17 @@ if (User::access(3)) {
             }
 
             // search query - parameterized conditions
+            $qpage = "&type={$postType}";
             $whereRaws = [];
             $whereBindings = [];
-            $qpage = '';
             if (isset($_GET['q']) && $_GET['q'] != '') {
                 $q = Typo::cleanX($_GET['q']);
                 $whereRaws[] = "(`title` LIKE ? OR `content` LIKE ?)";
                 $whereBindings[] = "%{$q}%";
                 $whereBindings[] = "%{$q}%";
-                $qpage .= "&q={$_GET['q']}";
+                $qpage .= "&q=" . urlencode($_GET['q']);
             }
-            if (isset($_GET['cat']) && $_GET['cat'] != '') {
+            if (isset($_GET['cat']) && $_GET['cat'] != '' && $_GET['cat'] != '0') {
                 $cat = Typo::int($_GET['cat']);
                 $whereRaws[] = "`cat` = ?";
                 $whereBindings[] = $cat;
@@ -410,7 +410,7 @@ if (User::access(3)) {
             if (isset($_GET['to']) && $_GET['to'] != '') {
                 $to = Typo::cleanX($_GET['to']);
                 $whereRaws[] = "`date` <= ?";
-                $whereBindings[] = $to;
+                $whereBindings[] = $to . ' 23:59:59';
                 $qpage .= "&to={$to}";
             }
             if (isset($_GET['status']) && $_GET['status'] != '') {

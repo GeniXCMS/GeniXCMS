@@ -1,0 +1,109 @@
+{var $o = Bakeshop::options()}
+
+<!-- Archive Hero -->
+<section class="bg-surface-container-low py-16 mb-16">
+    <div class="max-w-7xl mx-auto px-8 text-center">
+         <h2 class="text-primary font-headline font-bold text-lg uppercase tracking-widest mb-2">Category Archive</h2>
+         <h1 class="text-4xl md:text-6xl font-headline font-extrabold text-on-surface">
+            {if isset($category)}
+                {Typo::Xclean($category->name)|noescape}
+            {else}
+                All Stories
+            {/if}
+         </h1>
+    </div>
+</section>
+
+<!-- Main Content Area -->
+<section class="max-w-7xl mx-auto px-8 mb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <!-- Blog Feed -->
+        <div class="md:col-span-8 space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {if isset($posts)}
+                    {foreach $posts as $p}
+                        {var $img = Posts::getPostImage($p->id)}
+                        {var $catName = 'JOURNAL'}
+                        
+                        <article class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:translate-y-[-4px] transition-transform duration-300 border border-black/5">
+                            <div class="h-64 overflow-hidden relative">
+                                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="{(empty($img) ? 'https://images.unsplash.com/photo-1495147466023-ac5c58a74e94?q=80&w=600' : Url::thumb($img, 'large'))}"/>
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-secondary-container/90 backdrop-blur-md text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold font-label uppercase">
+                                        {$catName}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <h3 class="text-2xl font-headline font-bold text-on-surface mb-3 leading-tight group-hover:text-primary transition-colors">
+                                    <a href="{Url::post($p->id)}">{Typo::Xclean($p->title)|noescape}</a>
+                                </h3>
+                                <p class="text-on-surface-variant text-sm line-clamp-3 mb-6 leading-relaxed">
+                                    {$p->content|stripHtml|truncate:120}
+                                </p>
+                                <div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+                                            <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={$p->author}&background=a7295a&color=fff"/>
+                                        </div>
+                                        <span class="text-xs font-bold font-label text-on-surface">{$p->author}</span>
+                                    </div>
+                                    <span class="text-xs text-on-surface-variant font-medium">{$p->date|date:'M d, Y'}</span>
+                                </div>
+                            </div>
+                        </article>
+                    {/foreach}
+                {/if}
+            </div>
+
+            <!-- Pagination -->
+            {if isset($pagination)}
+                <div class="flex items-center justify-center gap-2 pt-12">
+                    {$pagination|noescape}
+                </div>
+            {/if}
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="md:col-span-4 space-y-10">
+            <!-- Search Widget -->
+            <div class="bg-surface-container p-8 rounded-lg">
+                <h4 class="font-headline font-bold text-lg mb-4">Find an Article</h4>
+                <form action="{Url::search()}" method="get" class="relative">
+                    <input type="hidden" name="search" value=""/>
+                    <input name="q" class="w-full bg-surface-container-lowest border-none rounded-full py-3 px-6 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search the gallery..." type="text"/>
+                    <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Recent Stories -->
+            <div>
+                <h4 class="font-headline font-extrabold text-xl mb-6 flex items-center gap-2">
+                    Recent Stories
+                    <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                </h4>
+                <div class="space-y-6">
+                    {var $trending = Posts::recent(3)}
+                    {if !isset($trending['error'])}
+                        {foreach $trending as $tp}
+                            {var $timg = Posts::getPostImage($tp->id)}
+                            <a class="flex gap-4 group" href="{Url::post($tp->id)}">
+                                <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-surface-container">
+                                    <img class="w-full h-full object-cover" src="{(empty($timg) ? 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=200' : Url::thumb($timg, 'large'))}"/>
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold font-label text-primary uppercase tracking-wider mb-1">TECHNIQUE</span>
+                                    <h5 class="text-sm font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                        {Typo::Xclean($tp->title)|noescape}
+                                    </h5>
+                                </div>
+                            </a>
+                        {/foreach}
+                    {/if}
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>

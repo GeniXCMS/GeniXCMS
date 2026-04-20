@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20141004
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -269,6 +269,7 @@ class Site
 
         if (defined('DEBUG') && DEBUG) {
 
+
             if (isset($data)) {
                 echo "<pre>";
                 print_r($data);
@@ -307,6 +308,7 @@ class Site
                     $phpinfo
                 </div>
                 ";
+
         }
 
         return Hooks::run('footer_load_lib', $data);

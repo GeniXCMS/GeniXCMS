@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -309,9 +309,19 @@ class Db
     {
         $driver = defined('DB_DRIVER') ? DB_DRIVER : 'mysql';
         $quote = ($driver == 'mysql' || $driver == 'mysqli') ? '`' : '"';
+
+        // Handle ALIAS (AS)
+        if (stripos($identifier, ' as ') !== false) {
+            $parts = preg_split('/\s+as\s+/i', $identifier);
+            return self::quoteIdentifier($parts[0]) . ' AS ' . self::quoteIdentifier($parts[1]);
+        }
+
         // Handle dotted (table.column) notation
         if (strpos($identifier, '.') !== false) {
             return implode('.', array_map(function ($part) use ($quote) {
+                $part = trim($part);
+                if ($part === '*')
+                    return '*';
                 return $quote . trim($part, $quote) . $quote;
             }, explode('.', $identifier)));
         }

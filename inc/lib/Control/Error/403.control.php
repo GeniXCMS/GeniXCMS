@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20150219
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -28,6 +28,7 @@ $latte->setTempDirectory(GX_CACHE . '/temp');
 // Enable auto-refresh for development mode
 $latte->setautoRefresh();
 
+$data['website_lang'] = $lang;
 $data['site_name'] = Site::$name;
 $data['site_footer'] = Site::footer();
 $data['site_url'] = Site::$url;

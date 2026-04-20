@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 2.0.0
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -51,8 +51,9 @@ if ($isEdit) {
             'subtitle' => _('Adjusting global block parameters for improved layout density.'),
             'icon' => 'bi bi-pencil-square',
             'button' => [
+                'type' => 'link',
                 'url' => 'index.php?page=widgets',
-                'label' => _('Back to Registry'),
+                'label' => _('Back to Widgets'),
                 'icon' => 'bi bi-arrow-left',
                 'class' => 'btn btn-light border rounded-pill px-4 fw-bold'
             ],
@@ -77,37 +78,34 @@ if ($isEdit) {
                             [
                                 'type' => 'row',
                                 'items' => [
-                                    ['width' => 4, 'content' => ['type' => 'select', 'name' => 'location', 'label' => _("Slot Location"), 'options' => Widget::getLocations(), 'value' => $w->location]],
+                                    ['width' => 4, 'content' => ['type' => 'select', 'name' => 'location', 'label' => _("Slot Location"), 'options' => Widget::getLocations(), 'selected' => $w->location]],
                                     [
                                         'width' => 4,
                                         'content' => [
                                             'type' => 'select',
                                             'name' => 'type',
                                             'label' => _("Payload Type"),
-                                            'options' => [
-                                                'html' => 'Custom HTML / Raw',
-                                                'module' => 'Module Hook / Callback',
-                                                'recent_posts' => 'Stream: Recent Posts',
-                                                'recent_comments' => 'Stream: Recent Comments',
-                                                'tag_cloud' => 'Visualization: Tag Cloud',
-                                                'archive_list' => 'Archive: Monthly List'
-                                            ],
-                                            'value' => $w->type
+                                            'options' => Widget::types(),
+                                            'selected' => $w->type
                                         ]
                                     ],
                                     ['width' => 4, 'content' => ['type' => 'input', 'name' => 'sorting', 'label' => _("Sequence Order"), 'input_type' => 'number', 'value' => $w->sorting]]
                                 ]
                             ],
-                            ['type' => 'textarea', 'name' => 'content', 'label' => _("Content Data / Callback Hook"), 'value' => $w->content, 'rows' => 10],
                             [
                                 'type' => 'raw',
                                 'html' => '
-                                <div class="alert alert-warning border-0 bg-warning bg-opacity-10 extra-small rounded-3 mb-4">
-                                    <i class="bi bi-info-circle-fill me-2 fs-5"></i>
-                                    ' . _("If type is <strong>Module Hook</strong>, enter the system hook name provided by the developer (e.g., <code>sample_widget_render</code>).") . '
+                                <div id="widget-content-container-edit" ' . ((Hooks::run('widget_param_form', $w->type) != '') ? 'style="display:none;"' : '') . '>
+                                    <label class="form-label fw-bold text-dark small">' . _("Content Data / Callback Hook") . '</label>
+                                    <textarea name="content" class="form-control bg-light shadow-none border py-2 px-3 fs-8 fw-bold rounded-4 mb-3" rows="10">' . htmlspecialchars((string)$w->content) . '</textarea>
+                                    <div class="alert alert-warning border-0 bg-warning bg-opacity-10 extra-small rounded-3 mb-4">
+                                        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                        ' . _("If type is <strong>Module Hook</strong>, enter the system hook name provided by the developer (e.g., <code>sample_widget_render</code>).") . '
+                                    </div>
                                 </div>
                                 <input type="hidden" name="id" value="' . $w->id . '">
-                                <input type="hidden" name="token" value="' . TOKEN . '">'
+                                <input type="hidden" name="token" value="' . TOKEN . '">
+                                <div id="widget-params-container-edit" class="mb-4">' . Hooks::run('widget_param_form', $w->type) . '</div>'
                             ],
                             ['type' => 'button', 'name' => 'edit_widget', 'label' => _("Commit Modifications"), 'class' => 'btn btn-primary rounded-pill px-5 fw-bold']
                         ]
@@ -178,21 +176,26 @@ if ($isEdit) {
                                             'type' => 'select',
                                             'name' => 'type',
                                             'label' => _("Block Type"),
-                                            'options' => [
-                                                'html' => 'Custom HTML',
-                                                'module' => 'Module Integration',
-                                                'recent_posts' => 'Recent Posts',
-                                                'recent_comments' => 'Recent Comments',
-                                                'tag_cloud' => 'Tag Cloud',
-                                                'archive_list' => 'Archive List'
-                                            ]
+                                            'options' => Widget::types()
                                         ]
                                     ],
                                     ['width' => 4, 'content' => ['type' => 'input', 'name' => 'sorting', 'label' => _("Ordering"), 'input_type' => 'number', 'value' => '0']]
                                 ]
                             ],
-                            ['type' => 'textarea', 'name' => 'content', 'label' => _("Content Data / System Hook"), 'rows' => 5],
-                            ['type' => 'raw', 'html' => '<input type="hidden" name="token" value="' . TOKEN . '">'],
+                            [
+                                'type' => 'raw',
+                                'html' => '
+                                <div id="widget-content-container-add">
+                                    <label class="form-label fw-bold text-dark small">' . _("Content Data / System Hook") . '</label>
+                                    <textarea name="content" class="form-control bg-light shadow-none border py-2 px-3 fs-8 fw-bold rounded-4 mb-3" rows="5"></textarea>
+                                    <div class="alert alert-warning border-0 bg-warning bg-opacity-10 extra-small rounded-3 mb-4">
+                                        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                        ' . _("If type is <strong>Module Hook</strong>, enter the system hook name provided by the developer (e.g., <code>sample_widget_render</code>).") . '
+                                    </div>
+                                </div>
+                                <input type="hidden" name="token" value="' . TOKEN . '">
+                                <div id="widget-params-container-add" class="mb-3"></div>'
+                            ],
                             ['type' => 'button', 'name' => 'add_widget', 'label' => _("Deploy Widget"), 'class' => 'btn btn-primary rounded-pill px-5 fw-bold w-100 mt-3']
                         ]
                     ]
@@ -210,3 +213,56 @@ echo '</div>';
 $builder = new UiBuilder($schema);
 $builder->render();
 ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const handleTypeChange = function(selectEl, containerId, widgetId = 0) {
+        if (!selectEl) return;
+        selectEl.addEventListener('change', function() {
+            const type = this.value;
+            const container = document.getElementById(containerId);
+            const form = this.closest('form');
+            const contentContainer = form.querySelector('[id^="widget-content-container"]');
+
+            if (!type) {
+                container.innerHTML = '';
+                if (contentContainer) contentContainer.style.display = 'block';
+                return;
+            }
+            
+            // Use official Url::ajax() procedures
+            const baseUrl = '<?= Url::ajax("widget", "get_params") ?>';
+            const url = `${baseUrl}&type=${type}&id=${widgetId}`;
+            
+            // Show loading state
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary me-2"></div><span class="text-muted extra-small">Loading modular parameters...</span></div>';
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.html.trim() !== '') {
+                        container.innerHTML = data.html;
+                        if (contentContainer) contentContainer.style.display = 'none';
+                    } else {
+                        container.innerHTML = '';
+                        if (contentContainer) contentContainer.style.display = 'block';
+                    }
+                })
+                .catch(err => {
+                    console.error('AJAX Error:', err);
+                    container.innerHTML = '';
+                    if (contentContainer) contentContainer.style.display = 'block';
+                });
+        });
+    };
+
+    // For Edit Page
+    const editTypeSelect = document.querySelector('form[action*="widgets"] select[name="type"]:not(#addWidget *)');
+    const editWidgetId = document.querySelector('input[name="id"]')?.value || 0;
+    handleTypeChange(editTypeSelect, 'widget-params-container-edit', editWidgetId);
+
+    // For Add Modal
+    const addTypeSelect = document.querySelector('#addWidget select[name="type"]');
+    handleTypeChange(addTypeSelect, 'widget-params-container-add', 0);
+});
+</script>

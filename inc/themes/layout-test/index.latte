@@ -1,0 +1,39 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            {if $data['num'] > 0}
+                <div class="d-flex flex-column gap-5">
+                    {foreach $data['posts'] as $p}
+                        <article class="card border-0 shadow-sm rounded-4 p-4">
+                            <h2 class="fw-bold mb-2">
+                                <a href="{Url::post($p->id)}" class="text-dark text-decoration-none">
+                                    {$p->title}
+                                </a>
+                            </h2>
+                            <div class="text-muted small mb-3">
+                                <i class="bi bi-calendar3 me-1"></i> {Date::format($p->date)}
+                                &bull;
+                                <i class="bi bi-person me-1"></i> {$p->author}
+                            </div>
+                            <p class="text-secondary">
+                                {Typo::strip(Posts::format($p->content, $p->id))|truncate:200|noescape}
+                            </p>
+                            <a href="{Url::post($p->id)}" class="btn btn-outline-primary btn-sm rounded-pill px-4 align-self-start">
+                                Read More <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </article>
+                    {/foreach}
+                </div>
+
+                <nav class="d-flex justify-content-center mt-5">
+                    {$data['paging']|noescape}
+                </nav>
+            {else}
+                <div class="alert alert-light text-center p-5 rounded-4">
+                    <i class="bi bi-search display-4 text-muted d-block mb-3"></i>
+                    <h4 class="fw-bold">{_'No Posts Found.'}</h4>
+                </div>
+            {/if}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<article class="relative">
+    {var $p = $data['posts'][0]}
+    {var $img = Posts::getPostImage($p->id)}
+    
+    <!-- Hero Header -->
+    <header class="relative h-[60vh] md:h-[70vh] flex items-end overflow-hidden mb-20">
+        <div class="absolute inset-0 z-0">
+            <img alt="{$p->title}" class="w-full h-full object-cover" 
+                 src="{(empty($img) ? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600' : Url::thumb($img, 'large'))}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-8 w-full pb-20 text-center md:pb-32">
+            <div class="inline-flex items-center px-4 py-1.5 bg-primary text-white rounded-md text-[10px] font-black tracking-[0.2em] uppercase mb-8">
+                {Categories::name($p->cat)}
+            </div>
+            <h1 class="text-4xl md:text-7xl font-headline font-bold text-white mb-8 tracking-tighter leading-[0.95]">
+                {$p->title}
+            </h1>
+            <div class="flex items-center justify-center gap-6 text-white/70 text-sm font-bold uppercase tracking-widest">
+                <span>{Date::format($p->date, 'F d, Y')}</span>
+                <span class="w-1 h-1 bg-white/30 rounded-full"></span>
+                <span>By {$p->author}</span>
+                <span class="w-1 h-1 bg-white/30 rounded-full"></span>
+                {var $words = str_word_count(strip_tags($p->content))}
+                <span>{max(1, ceil($words / 200))} min read</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-20 pb-32">
+        <!-- Main Content -->
+        <div class="lg:col-span-8">
+            <div class="content-rich text-lg md:text-xl leading-relaxed text-on-surface-variant font-body">
+                {Posts::format($p->content, $p->id)|noescape}
+            </div>
+
+            <!-- Tags Section -->
+            {var $tags = Posts::getParam('tags', $p->id)}
+            {if !empty($tags)}
+                <div class="mt-16 pt-10 border-t border-black/5 flex flex-wrap gap-3">
+                    {foreach explode(',', $tags) as $tag}
+                        <a href="{Url::tag(trim($tag))}" class="px-5 py-2 bg-surface-container-low hover:bg-primary hover:text-white transition-all rounded-lg text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                            # {trim($tag)}
+                        </a>
+                    {/foreach}
+                </div>
+            {/if}
+
+            <!-- Author Bio -->
+            <div class="mt-20 p-10 bg-surface-container-low rounded-2xl flex flex-col md:flex-row gap-8 items-center md:items-start border border-black/5">
+                <div class="w-24 h-24 rounded-2xl overflow-hidden bg-primary/10 shrink-0 border-4 border-white shadow-lg">
+                    <img src="https://ui-avatars.com/api/?name={$p->author}&background=0d631b&color=fff" alt="{$p->author}" class="w-full h-full object-cover">
+                </div>
+                <div class="text-center md:text-left">
+                    <span class="text-[10px] font-black tracking-[0.2em] text-primary uppercase mb-2 block">Contributor at AgriFest</span>
+                    <h4 class="text-2xl font-headline font-bold text-on-surface mb-3">{$p->author}</h4>
+                    <p class="text-on-surface-variant text-sm leading-relaxed max-w-xl">
+                        A dedicated steward of the soil at Harvest Estate, sharing insights on regenerative agriculture, seasonal culinary traditions, and the science of organic cultivation.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mt-24">
+                <h3 class="text-2xl font-headline font-bold text-on-surface mb-10">{_('Join the Discussion')}</h3>
+                <div class="comments-container">
+                    {Comments::showList(['max' => 10])|noescape}
+                </div>
+                <div class="mt-16 bg-surface-container rounded-xl p-10">
+                    <h4 class="text-xl font-bold mb-8 text-on-surface">{_('Leave a comment')}</h4>
+                    {Comments::form()|noescape}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-4 space-y-16">
+            <!-- Search -->
+            <div class="bg-surface-container-low p-8 rounded-xl border border-black/5">
+                <h4 class="font-headline font-bold text-on-surface mb-6">{_('Search Journal')}</h4>
+                <form action="{Url::search()}" method="get" class="relative group">
+                    <input type="text" name="q" placeholder="{_('Search keywords...')}" 
+                           class="w-full bg-white border border-transparent focus:border-primary px-6 py-4 rounded-lg outline-none transition-all text-sm font-medium">
+                    <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                    <input type="hidden" name="search" value="">
+                </form>
+            </div>
+
+            <!-- Recent Posts -->
+            <div class="space-y-8">
+                <h4 class="font-headline font-bold text-on-surface text-xl">{_('Latest Stories')}</h4>
+                <div class="space-y-8">
+                    {var $recent = Posts::recent(['num' => 3])}
+                    {foreach $recent as $rp}
+                        {var $rimg = Posts::getPostImage($rp->id)}
+                        <a href="{Url::post($rp->id)}" class="flex gap-4 group">
+                            <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0">
+                                <img src="{(empty($rimg) ? 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=200' : Url::thumb($rimg, 'small'))}" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-2 leading-tight mb-2">{$rp->title}</h5>
+                                <span class="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">{Date::format($rp->date, 'M d')}</span>
+                            </div>
+                        </a>
+                    {/foreach}
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="bg-primary/5 p-8 rounded-xl">
+                <h4 class="font-headline font-bold text-on-surface mb-6">{_('Categories')}</h4>
+                <div class="flex flex-col gap-3">
+                    {var $cats = Query::table('cat')->where('type', 'post')->get()}
+                    {foreach $cats as $c}
+                        <a href="{Url::cat($c->id)}" class="flex justify-between items-center group">
+                            <span class="text-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">{$c->name}</span>
+                            <span class="w-6 h-6 rounded-md bg-white text-[10px] font-black flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                                {Query::table('posts')->where('cat', $c->id)->where('type', 'post')->where('status', '1')->count()}
+                            </span>
+                        </a>
+                    {/foreach}
+                </div>
+            </div>
+        </aside>
+    </div>
+</article>

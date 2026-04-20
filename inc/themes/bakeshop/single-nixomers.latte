@@ -1,0 +1,250 @@
+<div class="flex-grow pt-4 pb-20 max-w-7xl mx-auto px-6 md:px-8 w-full">
+    {var $p = $posts[0]}
+    {var $p_content_raw = Typo::Xclean($p->content)}
+    {var $p_title = htmlspecialchars_decode($p->title, \ENT_QUOTES)}
+    {var $p_price = (isset($p->price)) ? $p->price : Posts::getParam('price', $p->id)}
+    {var $p_cat_id = $p->cat}
+    
+    <!-- Breadcrumbs -->
+    <nav class="mb-8 flex items-center gap-2 text-sm text-on-surface-variant font-medium">
+        <a href="{$site_url}" class="hover:text-primary transition-colors">{_('Home')}</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <a href="{Url::mod('store')}" class="hover:text-primary transition-colors">{_('Catalog')}</a>
+        {var $p_cat_name = Categories::name($p_cat_id)}
+        {if $p_cat_name}
+            <span class="material-symbols-outlined text-xs">chevron_right</span>
+            <a href="{Url::cat($p_cat_id)}" class="hover:text-primary transition-colors">{$p_cat_name}</a>
+        {/if}
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span class="text-primary font-semibold">{$p_title}</span>
+    </nav>
+
+    <!-- Product Gallery & Info Shell -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <!-- Gallery Section (Asymmetric Editorial Layout) -->
+        <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+            {var $featured_img = (isset($p->image)) ? $p->image : Posts::getPostImage($p->id)}
+            {var $images = ($featured_img) ? [$featured_img] : []}
+            {var $p_content_raw = Typo::Xclean($p->content)}
+            {var $img_count = preg_match_all('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $p_content_raw, $matches)}
+            {if $img_count > 0}
+                {foreach $matches['src'] as $img_src}
+                    {if !in_array($img_src, $images)}
+                        {var $images[] = $img_src}
+                    {/if}
+                {/foreach}
+            {/if}
+
+            {if count($images) > 0}
+                <div class="col-span-2 overflow-hidden rounded-lg editorial-shadow">
+                    <img src="{Url::thumb($images[0])}" alt="{$p_title}" class="w-full aspect-[4/5] object-cover hover:scale-105 transition-transform duration-700">
+                </div>
+                {if isset($images[1])}
+                    <div class="rounded-lg overflow-hidden editorial-shadow -mt-12 lg:-mt-24 z-10 border-8 border-white">
+                        <img src="{Url::thumb($images[1])}" alt="Detail view" class="w-full aspect-square object-cover">
+                    </div>
+                {/if}
+                {if isset($images[2])}
+                    <div class="rounded-lg overflow-hidden editorial-shadow mt-4">
+                        <img src="{Url::thumb($images[2])}" alt="Close up" class="w-full aspect-square object-cover">
+                    </div>
+                {/if}
+            {else}
+                <div class="col-span-2 overflow-hidden rounded-lg editorial-shadow bg-surface-container flex items-center justify-center aspect-square">
+                    <span class="material-symbols-outlined text-outline-variant text-9xl">image</span>
+                </div>
+            {/if}
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="lg:col-span-5 sticky top-32 space-y-8">
+            <div>
+                <span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[10px] font-bold uppercase tracking-widest mb-4">
+                    <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                    {if $p->status == '1'}{_('Freshly Baked Now')}{else}{_('Coming Soon')}{/if}
+                </span>
+                <h1 class="text-4xl md:text-5xl font-headline font-extrabold text-on-surface leading-tight mb-2">{$p_title}</h1>
+                <p class="text-2xl font-headline font-bold text-primary">
+                    {(Options::v('nixomers_currency') ?: 'IDR') . ' ' . Nixomers::formatCurrency($p_price)}
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="text-on-surface-variant leading-relaxed">
+                    {Typo::strip_tags_content($p_content_raw)}
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    {if $p_cat_name}
+                        <span class="px-4 py-2 bg-tertiary-container text-on-tertiary-container rounded-full text-sm font-semibold shadow-sm">{$p_cat_name}</span>
+                    {/if}
+                    
+                    {var $p_tags = (isset($p->tags) && !empty($p->tags)) ? explode(',', $p->tags) : []}
+                    {if !empty($p_tags)}
+                        {var $colors = [
+                            'bg-primary-container/20 text-on-primary-container border-primary/10',
+                            'bg-secondary-container/20 text-on-secondary-container border-secondary/10',
+                            'bg-tertiary-container/10 text-on-tertiary-container border-tertiary/10',
+                            'bg-green-100 text-green-800 border-green-200',
+                            'bg-blue-100 text-blue-800 border-blue-200',
+                            'bg-orange-100 text-orange-800 border-orange-200'
+                        ]}
+                        {foreach $p_tags as $tag}
+                            {var $c_idx = strlen(trim($tag)) % count($colors)}
+                            <span class="px-4 py-2 {$colors[$c_idx]} rounded-full text-sm font-semibold border">{trim($tag)}</span>
+                        {/foreach}
+                    {/if}
+                </div>
+            </div>
+
+            <!-- Quantity & Actions -->
+            {var $p_stock = (int)(Posts::getParam('stock', $p->id) ?: 0)}
+            <form method="post" action="{Url::mod('cart')}" class="bg-surface-container-low p-6 rounded-lg space-y-6">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-on-surface">{if $p_stock > 0}{_('Quantity')}{else}{_('Availability')}{/if}</span>
+                    
+                    {if $p_stock > 0}
+                    <div class="flex items-center bg-surface-container-lowest rounded-full p-1 editorial-shadow">
+                        <button type="button" onclick="decrementQty()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+                            <span class="material-symbols-outlined">remove</span>
+                        </button>
+                        <input type="number" id="qty-box" name="qty" value="1" min="1" max="{$p_stock}" class="w-16 text-center font-bold text-lg bg-transparent border-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" onclick="incrementQty()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                    {else}
+                    <span class="font-bold text-error px-4 py-1.5 bg-error/10 rounded-full text-xs uppercase tracking-widest">{_('Sold Out')}</span>
+                    {/if}
+                </div>
+                
+                {if $p_stock > 0}
+                    <input type="hidden" name="nix_action" value="add">
+                    <input type="hidden" name="product_id" value="{$p->id}">
+
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-bold text-lg editorial-shadow hover:scale-[1.02] transition-transform active:scale-95 flex items-center justify-center gap-3">
+                        <span class="material-symbols-outlined">shopping_basket</span>
+                        {_('Add to Gallery Cart')}
+                    </button>
+                {else}
+                    <button type="button" disabled class="w-full py-4 bg-surface-variant text-on-surface-variant rounded-full font-bold text-lg cursor-not-allowed flex items-center justify-center gap-3 opacity-70">
+                        <span class="material-symbols-outlined">not_interested</span>
+                        {_('Currently Unavailable')}
+                    </button>
+                {/if}
+
+                <div class="flex items-center justify-center gap-6 pt-2">
+                    <button type="button" class="flex items-center gap-2 text-sm font-semibold text-secondary hover:underline">
+                        <span class="material-symbols-outlined text-lg">local_shipping</span>
+                        {_('Shipping Info')}
+                    </button>
+                    <button type="button" class="flex items-center gap-2 text-sm font-semibold text-secondary hover:underline">
+                        <span class="material-symbols-outlined text-lg">favorite</span>
+                        {_('Save for Later')}
+                    </button>
+                </div>
+            </form>
+
+            <!-- Tabs/Accordions for Info -->
+            <div class="space-y-1">
+                {var $ing = Posts::getParam('info_ingredients', $p->id)}
+                {var $all = Posts::getParam('info_allergens', $p->id)}
+                {if !empty($ing) || !empty($all)}
+                    <details class="group bg-surface-container rounded-lg" open>
+                        <summary class="list-none flex items-center justify-between p-4 cursor-pointer font-bold text-on-surface">
+                            {_('Ingredients & Allergens')}
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-sm text-on-surface-variant leading-relaxed">
+                            {if !empty($ing)}
+                                {$ing|noescape}
+                            {/if}
+                            {if !empty($all)}
+                                <br><br>
+                                <strong>{_('Contains')}:</strong> {$all}
+                            {/if}
+                        </div>
+                    </details>
+                {/if}
+
+                {var $kcal = Posts::getParam('nutri_calories', $p->id)}
+                {var $sugar = Posts::getParam('nutri_sugar', $p->id)}
+                {var $fat = Posts::getParam('nutri_fat', $p->id)}
+                {var $pro = Posts::getParam('nutri_protein', $p->id)}
+                
+                {if !empty($kcal) || !empty($sugar) || !empty($fat) || !empty($pro)}
+                    <details class="group bg-surface-container rounded-lg">
+                        <summary class="list-none flex items-center justify-between p-4 cursor-pointer font-bold text-on-surface">
+                            {_('Nutrition Facts')}
+                            <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div class="px-4 pb-4">
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                {if !empty($kcal)}
+                                    <div class="flex justify-between border-b border-outline-variant/20 py-2">
+                                        <span>{_('Energy')}</span>
+                                        <span class="font-bold">{$kcal}</span>
+                                    </div>
+                                {/if}
+                                {if !empty($sugar)}
+                                    <div class="flex justify-between border-b border-outline-variant/20 py-2">
+                                        <span>{_('Sugar')}</span>
+                                        <span class="font-bold">{$sugar}</span>
+                                    </div>
+                                {/if}
+                                {if !empty($fat)}
+                                    <div class="flex justify-between border-b border-outline-variant/20 py-2">
+                                        <span>{_('Total Fat')}</span>
+                                        <span class="font-bold">{$fat}</span>
+                                    </div>
+                                {/if}
+                                {if !empty($pro)}
+                                    <div class="flex justify-between border-b border-outline-variant/20 py-2">
+                                        <span>{_('Protein')}</span>
+                                        <span class="font-bold">{$pro}</span>
+                                    </div>
+                                {/if}
+                            </div>
+                        </div>
+                    </details>
+                {/if}
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Bento -->
+    <section class="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-surface-container-low p-8 rounded-lg flex flex-col items-center text-center gap-4">
+            <span class="material-symbols-outlined text-4xl text-primary">eco</span>
+            <h3 class="font-headline font-bold text-xl">{_('Sustainable Sourcing')}</h3>
+            <p class="text-sm text-on-surface-variant">{_('We partner with local farms to bring you the freshest seasonal flavors.')}</p>
+        </div>
+        <div class="bg-primary/5 p-8 rounded-lg flex flex-col items-center text-center gap-4 border border-primary/10">
+            <span class="material-symbols-outlined text-4xl text-primary">auto_awesome</span>
+            <h3 class="font-headline font-bold text-xl">{_('Artisanal Precision')}</h3>
+            <p class="text-sm text-on-surface-variant">{_('Every treat is a hand-painted masterpiece of taste and aesthetics.')}</p>
+        </div>
+        <div class="bg-surface-container-low p-8 rounded-lg flex flex-col items-center text-center gap-4">
+            <span class="material-symbols-outlined text-4xl text-primary">volunteer_activism</span>
+            <h3 class="font-headline font-bold text-xl">{_('Crafted with Love')}</h3>
+            <p class="text-sm text-on-surface-variant">{_('Our bakers pour their heart into every batch, ensuring premium quality.')}</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    function incrementQty() {
+        const qty = document.getElementById('qty-box');
+        const max = parseInt(qty.getAttribute('max')) || 99;
+        const current = parseInt(qty.value);
+        if (current < max) {
+            qty.value = current + 1;
+        }
+    }
+    function decrementQty() {
+        const qty = document.getElementById('qty-box');
+        const current = parseInt(qty.value);
+        if (current > 1) {
+            qty.value = current - 1;
+        }
+    }
+</script>

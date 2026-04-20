@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 2.0.0
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -137,7 +137,7 @@ $builder->render();
         footer.innerHTML = '<div class="spinner-grow spinner-grow-sm text-primary me-2" role="status"></div> Synchronizing with marketplace repository...';
 
         try {
-            const response = await fetch('index.php?page=updates&ajax=1');
+            const response = await fetch('<?= Url::ajax("updates") ?>');
             const data = await response.json();
 
             if (data.status === 'success') {

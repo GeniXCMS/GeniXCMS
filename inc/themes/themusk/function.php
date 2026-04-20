@@ -20,12 +20,14 @@ class Themusk
         }
 
         // Register "Themusk Options" sub-item under the Themes admin menu.
-        AdminMenu::addChild('themes', [
-            'label'  => _('Themusk Options'),
-            'url'    => 'index.php?page=themes&view=options',
-            'icon'   => 'bi bi-sliders',
-            'access' => 0,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::addChild('themes', [
+                'label'  => _('Themusk Options'),
+                'url'    => 'index.php?page=themes&view=options',
+                'icon'   => 'bi bi-sliders',
+                'access' => 0,
+            ]);
+        });
     }
 
     public static function checkDB()

@@ -1,0 +1,35 @@
+<main class="pt-8 pb-20 px-6 max-w-7xl mx-auto flex-grow w-full">
+    <!-- Hero Header -->
+    <header class="mb-12">
+        <h1 class="font-headline text-5xl md:text-6xl font-extrabold text-on-surface tracking-tight mb-4">
+            {_('Almost there!')} <span class="text-primary italic">{_('Sweetness')}</span> {_('is on the way.')}
+        </h1>
+        <p class="text-on-surface-variant text-lg max-w-2xl font-medium">
+            {_('We\'re ready to pack your artisanal treats. Just a few final details to ensure your delivery is as perfect as our pastries.')}
+        </p>
+    </header>
+
+    <div class="grid lg:grid-cols-[1.6fr_1fr] gap-12 items-start bakeshop-custom-checkout">
+        <!-- Main Checkout Form (Nixomers Default) -->
+        <section class="bg-surface-container-low p-8 md:p-12 rounded-lg">
+            {NixCheckout::showForm('tailwindcss', $total, $taxAmount)|noescape}
+        </section>
+
+        <!-- Order Summary Sidebar (Nixomers Default) -->
+        <aside class="sticky top-32">
+            {NixCheckout::showSummary('tailwindcss', $total, $taxAmount, $items)|noescape}
+            
+            <p class="mt-6 text-center text-xs text-on-surface-variant px-4 leading-relaxed">
+                {_('By placing your order, you agree to our terms of service. Your treats are being freshly baked just for you!')}
+            </p>
+
+            <!-- Trust Badge -->
+            <div class="mt-6 flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                <span class="material-symbols-outlined text-2xl">verified_user</span>
+                <span class="material-symbols-outlined text-2xl">lock</span>
+                <span class="material-symbols-outlined text-2xl">eco</span>
+                <span class="material-symbols-outlined text-2xl">package_2</span>
+            </div>
+        </aside>
+    </div>
+</main>

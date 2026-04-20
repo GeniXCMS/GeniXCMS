@@ -1,5 +1,5 @@
-# GeniXCMS v2.2.1
-> **Latest Update**: GxEditor Classic Mode Enhancement & Media Integration Polish
+# GeniXCMS v2.3.0
+> **Latest Update**: Nixomers Financial Intelligence & Premium Confirmation UI v2.3.0
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
@@ -10,6 +10,10 @@
 ### 🌟 Key Features in v2.x
 
 - **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3**.
+- **Nixomers Ecosystem (v2.3.0+)**:
+  - **Financial Intelligence**: Deep recalculation engine that synchronizes order items, taxes, and shipping with transaction ledgers for accurate Net Income reporting.
+  - **Granular Tracking (Optional)**: Programmatic unit-level tracking (Serial Numbers, QC) that can be toggled per-order to optimize performance.
+  - **Ultra-Premium Checkouts**: Premium UI components with Glassmorphism, Dual-Card layouts, and interactive step-based workflows.
 - **Dynamic Builder (v2.1.0+)**: A professional-grade visual editor with drag-and-drop mechanics, premium block library, and real-time layout synchronization.
 - **GxEditor v1.2.1 — Modular Engine**:
   - Next-gen block-based editor with custom visual blocks and **Nested Grid Containers**.
@@ -45,6 +49,26 @@
 - **Styling**: Bootstrap 5.3, Tailwind CSS (for modern themes), Vanilla CSS (Design Tokens).
 - **Image Processing**: Intervention Image v3.
 - **Components**: elFinder, AOS (Animate on Scroll), Swiper.js, FlexSlider, KaTeX (Math).
+
+### ⚡ High-Performance Go API Service (v2.3.0+)
+
+**GeniXCMS** includes an optional high-performance Go microservice that significantly boosts read operations for API and AJAX requests. The Go service shares the same database as your PHP installation and supports **MySQL, PostgreSQL, and SQLite3**.
+
+#### Key Benefits:
+- **Lightning-Fast Search**: Dedicated search engine for rapid text-matching across posts.
+- **Universal Dynamic Resources**: Smart handler serving data from any database table automatically.
+- **Hybrid Backend**: Supports both RESTful API and core AJAX read operations.
+- **Smart Switching**: Toggle Go service for Posts, Categories, and dashboard listings.
+- **Automatic Fallback**: Seamlessly reverts to PHP if the Go service is unreachable.
+
+#### Quick Setup:
+1. Install Go (≥1.22): [go.dev/dl](https://go.dev/dl/)
+2. Configure environment: Copy `go-service/.env.example` to `go-service/.env` and edit with your DB credentials.
+3. Install dependencies: `cd go-service && go mod tidy`
+4. Run service: `go run cmd/main.go`
+5. Enable in GeniXCMS admin: Settings → API → Backend: "go"
+
+For detailed configuration, see `go-service/README.md`.
 
 ### 📋 Requirements
 

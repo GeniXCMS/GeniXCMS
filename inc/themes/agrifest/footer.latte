@@ -1,0 +1,104 @@
+{var $o = Agrifest::options()}
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container-high dark:bg-[#171d14] w-full py-16 px-8 no-border">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto items-start">
+        <!-- Kolom 1: Brand / Footer 1 -->
+        <div class="space-y-6">
+            {var $w1 = Widget::show('footer_1')}
+            {if $w1}
+                {$w1|noescape}
+            {else}
+                <div class="font-headline text-2xl font-bold text-primary">{$o['logo_text']}</div>
+                <p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                    {$o['footer_desc']}
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-lg">share</span>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-lg">mail</span>
+                    </a>
+                </div>
+            {/if}
+        </div>
+
+        <!-- Kolom 2: Links / Footer 2 -->
+        <div class="space-y-6">
+            {var $w2 = Widget::show('footer_2')}
+            {if $w2}
+                {$w2|noescape}
+            {else}
+                <h6 class="font-bold text-primary uppercase text-xs tracking-widest font-headline">{_('Navigation')}</h6>
+                <ul class="space-y-3 text-on-surface-variant font-body text-sm">
+                    {var $footer_menu = Menus::getMenuRaw('footermenu')}
+                    {if !empty($footer_menu)}
+                        {foreach $footer_menu as $m}
+                            {var $type = $m->type}
+                            <li><a class="hover:text-primary transition-colors" href="{Url::$type($m->value)}">{$m->name}</a></li>
+                        {/foreach}
+                    {else}
+                        <li><a class="hover:text-primary transition-colors" href="{$site_url}">{_('Home')}</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{Url::mod('store')}">{_('Store')}</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{Url::mod('blog')}">{_('Blogs')}</a></li>
+                    {/if}
+                </ul>
+            {/if}
+        </div>
+
+        <!-- Kolom 3: Support / Footer 3 -->
+        <div class="space-y-6">
+            {var $w3 = Widget::show('footer_3')}
+            {if $w3}
+                {$w3|noescape}
+            {else}
+                <h6 class="font-bold text-primary uppercase text-xs tracking-widest font-headline">{_('Support')}</h6>
+                <ul class="space-y-3 text-on-surface-variant font-body text-sm">
+                    <li><a class="hover:text-primary transition-colors" href="#">{_('Contact Us')}</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="#">{_('Shipping Policy')}</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="#">{_('Refund Policy')}</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="#">{_('FAQ')}</a></li>
+                </ul>
+            {/if}
+        </div>
+
+        <!-- Kolom 4: Heritage / Footer 4 -->
+        <div class="space-y-6">
+            {var $w4 = Widget::show('footer_4')}
+            {if $w4}
+                {$w4|noescape}
+            {else}
+                <h6 class="font-bold text-primary uppercase text-xs tracking-widest font-headline">{_('Our Heritage')}</h6>
+                <p class="text-on-surface-variant text-sm italic leading-relaxed">
+                    {_('Rooted in 30 years of organic excellence, bringing the precision of technology to the wisdom of the earth.')}
+                </p>
+                <div class="pt-2">
+                    <span class="inline-flex items-center gap-2 text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-lg">verified</span>
+                        Certified Organic
+                    </span>
+                </div>
+            {/if}
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="max-w-7xl mx-auto pt-12 mt-12 border-t border-primary/10 text-center">
+        <p class="text-on-surface-variant font-body text-sm opacity-70">
+            {$o['footer_copyright']}
+        </p>
+    </div>
+</footer>
+
+<!-- FAB for Mobile Quick Order -->
+<div class="md:hidden fixed bottom-6 right-6 z-40">
+    <a href="{Url::mod('cart')}" class="w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
+        <span class="material-symbols-outlined">shopping_basket</span>
+    </a>
+</div>
+
+{Site::loadLibFooter()|noescape}
+</body>
+</html>

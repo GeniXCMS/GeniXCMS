@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 1.0.0 build date 20170118
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -99,7 +99,7 @@ class Http
         if (isset($purl['port']) && in_array($purl['port'], $ports)) {
             return true;
         } /* elseif($purl['port'] == ''){
-    return true;
+   return true;
 } */ else {
             return false;
         }
@@ -354,4 +354,20 @@ class Http
         return $headers;
     }
 
+    /**
+     * Redirects the browser to a specific URL.
+     * Sets the Location header and terminates script execution.
+     *
+     * @param string $url The target URL for redirection.
+     */
+    public static function redirect($url)
+    {
+        if (!headers_sent()) {
+            header("Location: {$url}");
+        } else {
+            echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
+            echo '<noscript><meta http-equiv="refresh" content="0;url=' . $url . '" /></noscript>';
+        }
+        exit;
+    }
 }

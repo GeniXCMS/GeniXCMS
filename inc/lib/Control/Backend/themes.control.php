@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  *
  * @since 0.0.1 build date 20150312
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -85,7 +85,6 @@ if (User::access(0)) {
 
                 if (!isset($alertDanger)) {
                     Theme::activate(Typo::cleanX($_GET['themes']));
-                    Hooks::run('theme_activated_action', Typo::cleanX($_GET['themes']));
                     $data['alertSuccess'][] = _("Themes activated.");
                 } else {
                     $data['alertDanger'] = $alertDanger;
@@ -99,7 +98,7 @@ if (User::access(0)) {
                     $alertDanger[] = _("Theme is Active. Please deactivate first.");
                 }
                 if (!isset($alertDanger)) {
-                    if (Files::delTree(GX_THEME . '/' . $_GET['themes'])) {
+                    if (Theme::delete($_GET['themes'])) {
                         $data['alertSuccess'][] = _("Themes removed.");
                     } else {
                         $data['alertDanger'][] = _("Theme Cannot removed. Please check if You had permission to remove the files.");

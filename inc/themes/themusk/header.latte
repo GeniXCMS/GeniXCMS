@@ -173,9 +173,52 @@
                 {/if}
             </div>
 
+            <!-- Cart & User -->
+            <div class="flex items-center space-x-4 h-10">
+                 <!-- Cart -->
+                 <a href="{Url::mod('cart')}" class="relative p-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors nix-cart-container" aria-label="{_('Shopping Cart')}">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 500;">shopping_bag</span>
+                    {Hooks::run('nix_cart_badge')|noescape}
+                 </a>
+                 
+                 <!-- User Profile -->
+                 {if User::isLoggedin()}
+                    {var $u_name = Session::val('username')}
+                    <div class="relative group h-full flex items-center">
+                        <button class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors flex items-center" aria-label="{_('User Menu')}">
+                            <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 500;">person</span>
+                        </button>
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 top-full pt-4 w-60 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] transform origin-top-right scale-95 group-hover:scale-100">
+                            <div class="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] py-4 flex flex-col font-sans text-sm overflow-hidden">
+                                <div class="px-6 py-4 border-b border-zinc-50 dark:border-zinc-800 mb-2 bg-zinc-50/50 dark:bg-zinc-800/30">
+                                    <div class="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-widest mb-1">{_('Editorial access')}</div>
+                                    <div class="truncate text-emerald-900 dark:text-emerald-400 font-black text-base tracking-tighter uppercase">@{htmlspecialchars($u_name)}</div>
+                                </div>
+                                {var $dropdownItems = UserProfile::getDropdownItems()}
+                                {foreach $dropdownItems as $key => $item}
+                                    {if isset($item['divider']) && $item['divider']}
+                                        <hr class="my-2 border-zinc-100 dark:border-zinc-800 mx-6">
+                                    {else}
+                                        <a href="{$item['url']|noescape}" class="px-6 py-3 {if isset($item['danger']) && $item['danger']}text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/10{else}text-zinc-600 dark:text-zinc-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 hover:text-emerald-900 dark:hover:text-emerald-200{/if} transition-colors flex items-center gap-4 group/item">
+                                            <span class="material-symbols-outlined !text-[20px] opacity-40 group-hover/item:opacity-100">{$item['icon'] ?? 'chevron_right'}</span> 
+                                            <span class="font-bold uppercase tracking-widest text-[11px]">{_($item['label'])}</span>
+                                        </a>
+                                    {/if}
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+                 {else}
+                    <a href="{Url::login()}" class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors">
+                        <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 500;">person</span>
+                    </a>
+                 {/if}
+            </div>
+
             <!-- Desktop Search Button -->
-            <div class="hidden md:flex items-center border-l border-zinc-200/50 pl-8 ml-8">
-                <button @click="searchOpen = true" class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-primary transition-colors duration-300">
+            <div class="hidden md:flex items-center border-l border-zinc-200/50 pl-4">
+                <button @click="searchOpen = true" class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors duration-300">
                     <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0, 'wght' 500;">search</span>
                 </button>
             </div>

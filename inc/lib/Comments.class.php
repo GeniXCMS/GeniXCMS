@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 1.0.0 build date 20160830
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -58,15 +58,15 @@ class Comments
                 $html .= '
             
                 <div class="form-group col-md-6">
-                    <label class="">' . _("Name") . '</label>
+                    <label for="name">' . _("Name") . '</label>
                     <input type="text" id="name" name="comments-name" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">' . _("Email") . '</label>
+                    <label for="email">' . _("Email") . '</label>
                     <input type="email" id="email" name="comments-email" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="">' . _("Website") . '</label>
+                    <label for="url">' . _("Website") . '</label>
                     <input type="text" id="url" name="comments-url" class="form-control">
                 </div>';
             } else {
@@ -74,7 +74,7 @@ class Comments
             }
             $html .= '
                 <div class="form-group col-md-12">
-                    <label>' . _("Comments") . '</label>
+                    <label for="message">' . _("Comments") . '</label>
                     <textarea class="form-control editor" name="comments-msg" id="message" data-blocks=\'' . json_encode(Hooks::filter('comment_allowed_blocks', ['paragraph', 'quote', 'code', 'ul', 'ol'])) . '\'></textarea>
                     <small class="input-help">allowed html tag : <code>&lt;b&gt;&lt;i&gt;&lt;ul&gt;&lt;li&gt;&lt;ol&gt;&lt;u&gt;&lt;s&gt;</code></small>
                 </div>
@@ -964,5 +964,99 @@ class Comments
         // print_r($result);
 
         return $result;
+    }
+
+    /**
+     * Dashboard UI: Get Table Headers
+     */
+    public static function getDashboardHeaders()
+    {
+        $headers = [
+            ['content' => '<input type="checkbox" id="checkAll" class="form-check-input shadow-none border">', 'class' => 'ps-4'],
+            ['content' => _('Comment Context')],
+            ['content' => _('Author'), 'class' => 'text-center'],
+            ['content' => _('Timestamp'), 'class' => 'text-center'],
+            ['content' => _('Approval'), 'class' => 'text-center'],
+            ['content' => _('Control'), 'class' => 'text-end pe-4']
+        ];
+
+        return Hooks::filter('admin_comments_table_headers', $headers);
+    }
+
+    /**
+     * Dashboard UI: Get Table Row
+     */
+    public static function getDashboardRow($pObj)
+    {
+        $status = '';
+        if ($pObj->status == '0') {
+            $status = ['c' => 'secondary', 'l' => _("Hidden")];
+        } elseif ($pObj->status == '1') {
+            $status = ['c' => 'success', 'l' => _("Approved")];
+        } elseif ($pObj->status == '2') {
+            $status = ['c' => 'warning', 'l' => _("Pending")];
+        }
+
+        $commentText = Typo::strip($pObj->comment);
+        $commentShort = (strlen($commentText) > 120) ? substr($commentText, 0, 117) . '...' : $commentText;
+        $commentUrl = Url::post($pObj->post_id);
+
+        // Modular Action Menu
+        $actionMenu = [];
+        if ($pObj->status != '1') {
+            $actionMenu['approve'] = [
+                'label' => _("Approve"),
+                'icon' => 'bi bi-check-circle',
+                'href' => 'index.php?page=comments&act=approve&id=' . $pObj->id . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-success'
+            ];
+        }
+        if ($pObj->status != '0') {
+            $actionMenu['hide'] = [
+                'label' => _("Hide"),
+                'icon' => 'bi bi-eye-slash',
+                'href' => 'index.php?page=comments&act=unapprove&id=' . $pObj->id . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-warning'
+            ];
+        }
+        $actionMenu['delete'] = [
+            'label' => _("Delete"),
+            'icon' => 'bi bi-trash',
+            'href' => 'index.php?page=comments&act=del&id=' . $pObj->id . '&token=' . TOKEN,
+            'class' => 'btn btn-light btn-sm rounded-circle border text-danger',
+            'onclick' => "return confirm('" . _("Permanent removal of this comment?") . "');"
+        ];
+
+        $actionMenu = Hooks::filter('admin_comments_action_menu', $actionMenu, $pObj);
+
+        $actionsHtml = '<div class="btn-group gap-1">';
+        foreach ($actionMenu as $mv) {
+            $attr = '';
+            if (isset($mv['onclick'])) $attr .= ' onclick="' . $mv['onclick'] . '"';
+            $actionsHtml .= '<a href="' . ($mv['href'] ?? '#') . '" class="' . ($mv['class'] ?? 'btn btn-light btn-sm') . '"' . $attr . ' title="' . ($mv['label'] ?? '') . '"><i class="' . ($mv['icon'] ?? '') . '"></i></a>';
+        }
+        $actionsHtml .= '</div>';
+
+        $row = [
+            ['content' => "<input type='checkbox' name='post_id[]' value='{$pObj->id}' class='check form-check-input shadow-none border'>", 'class' => 'ps-4'],
+            ['content' => "
+                <div>
+                    <a href='{$commentUrl}' target='_blank' class='text-dark fw-bold text-decoration-none h6 mb-0 d-inline-block ls-n1'>{$commentShort}</a>
+                    <div class='extra-small text-muted d-flex align-items-center mt-1'>
+                        <i class='bi bi-geo-alt me-1'></i> IP: {$pObj->ipaddress}
+                        <span class='mx-2 opacity-25'>|</span>
+                        <i class='bi bi-link-45deg me-1'></i> ID: {$pObj->id}
+                    </div>
+                </div>"],
+            ['content' => "<div class='fw-bold text-dark small mb-0'>{$pObj->name}</div><div class='extra-small text-muted'>{$pObj->email}</div>", 'class' => 'text-center'],
+            ['content' => "<div class='small fw-bold text-dark mb-0'>" . Date::format($pObj->date, 'd M Y') . "</div><div class='text-muted extra-small'>" . Date::format($pObj->date, 'H:i A') . "</div>", 'class' => 'text-center'],
+            ['content' => "<span class='badge bg-{$status['c']} bg-opacity-10 text-{$status['c']} px-3 rounded-pill fw-bold text-uppercase' style='font-size: 0.65rem;'>{$status['l']}</span>", 'class' => 'text-center']
+        ];
+
+        $row = Hooks::filter('admin_comments_table_row', $row, $pObj);
+
+        $row[] = ['content' => $actionsHtml, 'class' => 'text-end pe-4'];
+
+        return $row;
     }
 }

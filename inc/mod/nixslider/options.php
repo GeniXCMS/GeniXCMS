@@ -10,16 +10,23 @@ if (isset($_POST['save_nixslider'])) {
         if (isset($_POST['slider_id']) && is_array($_POST['slider_id'])) {
             foreach ($_POST['slider_id'] as $k => $id) {
                 $cleanId = Typo::cleanX($id);
-                if (empty($cleanId)) continue;
-                
+                if (empty($cleanId))
+                    continue;
+
                 $sliders[$cleanId] = [
                     'height' => Typo::cleanX($_POST['slider_height'][$k]),
+                    'rounded' => isset($_POST['slider_rounded'][$cleanId]) ? 'on' : 'off',
+                    'arrow' => isset($_POST['slider_arrow'][$cleanId]) ? 'on' : 'off',
+                    'bullet' => isset($_POST['slider_bullet'][$cleanId]) ? 'on' : 'off',
+                    'speed' => isset($_POST['slider_speed'][$cleanId]) ? Typo::cleanX($_POST['slider_speed'][$cleanId]) : '5000',
+                    'transition' => isset($_POST['slider_transition'][$cleanId]) ? Typo::cleanX($_POST['slider_transition'][$cleanId]) : 'fade',
                     'images' => []
                 ];
-                
+
                 if (isset($_POST['img_url'][$cleanId]) && is_array($_POST['img_url'][$cleanId])) {
                     foreach ($_POST['img_url'][$cleanId] as $imgKey => $url) {
-                        if (empty($url)) continue;
+                        if (empty($url))
+                            continue;
                         $sliders[$cleanId]['images'][] = [
                             'url' => Typo::cleanX($url),
                             'title' => Typo::cleanX($_POST['img_title'][$cleanId][$imgKey] ?? ''),
@@ -29,7 +36,7 @@ if (isset($_POST['save_nixslider'])) {
                 }
             }
         }
-        
+
         Options::update('nixslider_data', json_encode($sliders));
         $alertSuccess[] = _('Sliders saved successfully.');
     }
@@ -41,144 +48,119 @@ $data = Options::get('nixslider_data');
 $sliders = $data ? json_decode($data, true) : [];
 $token = TOKEN;
 
-require_once GX_LIB . '/UiBuilder.class.php';
 
 // Prepare unique ID generator for inline uses
-function getUid() {
+function getUid()
+{
     return substr(md5(uniqid(rand(), true)), 0, 8);
 }
 
-ob_start();
-?>
+$js_content = <<<'EOD'
 <style>
     .media-drop-zone {
         transition: all 0.3s ease;
         border: 2px dashed #e2e8f0;
     }
+
     .media-drop-zone:hover {
         border-color: var(--gx-primary, #3b82f6);
         background-color: rgba(59, 130, 246, 0.05) !important;
     }
 </style>
+EOD;
 
-<div id="sliders-container">
-<?php if (empty($sliders)): ?>
-    <div class="alert alert-info" id="no-sliders-msg">No sliders created yet. Click "Add New Slider" to start.</div>
-<?php else: 
-    foreach ($sliders as $id => $slider): ?>
-    <div class="card mb-4 border border-primary-subtle slider-item shadow-sm" id="slider-<?=$id;?>">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
-            <div>
-                <strong>Slider ID:</strong> <input type="text" name="slider_id[]" value="<?=$id;?>" class="form-control form-control-sm d-inline-block w-auto shadow-none" required readonly>
-                <span class="ms-3 text-muted small">Shortcode: <code>[nixslider id="<?=$id;?>"]</code></span>
-            </div>
-            <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" onclick="removeSlider('slider-<?=$id;?>')"><i class="bi bi-trash"></i> Remove</button>
-        </div>
-        <div class="card-body">
-            <div class="mb-4">
-                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Slider Height</label>
-                <input type="text" name="slider_height[]" class="form-control" value="<?=isset($slider['height']) ? $slider['height'] : '400px';?>" placeholder="e.g. 400px, 100vh">
-            </div>
-            
-            <h6 class="fw-bold tracking-wider text-primary mb-3">Slide Items</h6>
-            <div class="images-container" id="images-<?=$id;?>">
-                <?php if (is_array($slider['images'])): foreach ($slider['images'] as $imgKey => $img): $uid = getUid(); ?>
-                <div class="row align-items-center mb-4 pb-4 border-bottom img-item">
-                    <div class="col-md-3 text-center">
-                        <input type="hidden" name="img_url[<?=$id;?>][]" id="url_<?=$uid;?>" value="<?=$img['url'];?>" required>
-                        <div class="media-drop-zone rounded-3 border-2 border-dashed bg-light p-2 position-relative" style="cursor: pointer; min-height: 120px; display:flex; align-items:center; justify-content:center; flex-direction: column;" onclick="nixsliderElfinder('url_<?=$uid;?>', 'prev_<?=$uid;?>', 'ph_<?=$uid;?>')">
-                            <?php if (!empty($img['url'])): ?>
-                                <img id="prev_<?=$uid;?>" class="img-fluid rounded shadow-sm" src="<?=$img['url'];?>" style="max-height: 100px; width: 100%; object-fit: cover;">
-                                <div id="ph_<?=$uid;?>" class="d-none">
-                                    <i class="bi bi-cloud-arrow-up fs-2 text-muted"></i>
-                                    <p class="text-muted extra-small mb-0 mt-1">Select Image</p>
-                                </div>
-                            <?php else: ?>
-                                <img id="prev_<?=$uid;?>" class="img-fluid rounded shadow-sm d-none" style="max-height: 100px; width: 100%; object-fit: cover;">
-                                <div id="ph_<?=$uid;?>">
-                                    <i class="bi bi-cloud-arrow-up fs-2 text-muted"></i>
-                                    <p class="text-muted extra-small mb-0 mt-1">Select Image</p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="mb-2">
-                            <input type="text" name="img_title[<?=$id;?>][]" class="form-control bg-light shadow-none" value="<?=$img['title'];?>" placeholder="Title (optional)">
-                        </div>
-                        <div>
-                            <input type="text" name="img_caption[<?=$id;?>][]" class="form-control bg-light shadow-none" value="<?=$img['caption'];?>" placeholder="Caption (optional)">
-                        </div>
-                    </div>
-                    <div class="col-md-1 text-center">
-                        <button type="button" class="btn btn-outline-danger rounded-circle shadow-sm" title="Remove image" onclick="this.closest('.img-item').remove()"><i class="bi bi-x py-1"></i></button>
-                    </div>
-                </div>
-                <?php endforeach; endif; ?>
-            </div>
-            
-            <button type="button" class="btn btn-secondary rounded-pill mt-2 shadow-sm" onclick="addImage('<?=$id;?>')">
-                <i class="bi bi-plus-circle me-1"></i> Add Another Slide
-            </button>
-        </div>
-    </div>
-<?php endforeach; endif; ?>
-</div>
+$urlAjax = Url::ajax('elfinder');
 
+$js_content .= <<<'EOD'
 <script>
-function generateUid() {
-    return Math.random().toString(36).substring(2, 10);
-}
-
-function nixsliderElfinder(inputId, previewId, placeholderId) {
-    let url = "<?=Url::ajax('elfinder');?>";
-    let fm = $("<div/>").dialogelfinder({
-        url : url,
-        lang : "en", width : 840, height: 450,
-        destroyOnClose : true,
-        getFileCallback : function(file, fm) {
-            document.getElementById(inputId).value = file.url;
-            let prev = document.getElementById(previewId);
-            let ph = document.getElementById(placeholderId);
-            if(prev) {
-                prev.src = file.url;
-                prev.classList.remove('d-none');
-            }
-            if(ph) {
-                ph.classList.add('d-none');
-            }
-        },
-        commandsOptions : { getfile : { oncomplete : "close", folders : false } }
-    }).dialogelfinder("instance");
-}
-
-function addSlider() {
-    let id = prompt("Enter a unique ID for the new slider (e.g. home, gallery_1):");
-    if (!id) return;
-    id = id.replace(/[^a-zA-Z0-9_-]/g, '');
-    if (!id) return; // invalid
-    if (document.getElementById('slider-' + id)) {
-        alert("Slider ID already exists!");
-        return;
+    function generateUid() {
+        return Math.random().toString(36).substring(2, 10);
     }
-    
-    let noMsg = document.getElementById('no-sliders-msg');
-    if (noMsg) noMsg.style.display = 'none';
-    
-    let container = document.getElementById('sliders-container');
-    let html = `
+
+    function nixsliderElfinder(inputId, previewId, placeholderId) {
+EOD;
+
+$js_content .= "\n        let url = \"{$urlAjax}\";\n";
+
+$js_content .= <<<'EOD'
+        let fm = $("<div/>").dialogelfinder({
+            url: url,
+            lang: "en", width: 840, height: 450,
+            destroyOnClose: true,
+            getFileCallback: function (file, fm) {
+                document.getElementById(inputId).value = file.url;
+                let prev = document.getElementById(previewId);
+                let ph = document.getElementById(placeholderId);
+                if (prev) {
+                    prev.src = file.url;
+                    prev.classList.remove('d-none');
+                }
+                if (ph) {
+                    ph.classList.add('d-none');
+                }
+            },
+            commandsOptions: { getfile: { oncomplete: "close", folders: false } }
+        }).dialogelfinder("instance");
+    }
+
+    function addSlider() {
+        let id = prompt("Enter a unique ID for the new slider (e.g. home, gallery_1):");
+        if (!id) return;
+        id = id.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (!id) return; // invalid
+        if (document.getElementById('slider-' + id)) {
+            alert("Slider ID already exists!");
+            return;
+        }
+
+        let noMsg = document.getElementById('no-sliders-msg');
+        if (noMsg) noMsg.style.display = 'none';
+
+        let container = document.getElementById('sliders-container');
+        let html = `
     <div class="card mb-4 border border-primary-subtle slider-item shadow-sm" id="slider-${id}">
         <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
             <div>
                 <strong>Slider ID:</strong> <input type="text" name="slider_id[]" value="${id}" class="form-control form-control-sm d-inline-block w-auto shadow-none" required readonly>
-                <span class="ms-3 text-muted small">Shortcode: <code>[nixslider id="${id}"]</code></span>
+                <span class="ms-3 text-muted small">Shortcode: <code id="sc_code_${id}">[nixslider id="${id}"]</code></span>
             </div>
             <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" onclick="removeSlider('slider-${id}')"><i class="bi bi-trash"></i> Remove</button>
         </div>
         <div class="card-body">
-            <div class="mb-4">
-                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Slider Height</label>
-                <input type="text" name="slider_height[]" class="form-control" value="400px" placeholder="e.g. 400px, 100vh">
+            <div class="row mb-4">
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Slider Height</label>
+                    <input type="text" name="slider_height[]" class="form-control form-control-sm shadow-none" value="400px" placeholder="e.g. 400px, 100vh">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Rounded</label>
+                    <div class="form-check form-switch mt-1">
+                        <input class="form-check-input" type="checkbox" id="rounded_${id}" name="slider_rounded[${id}]" value="on" checked onchange="updateShortcode('${id}')">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Arrows</label>
+                    <div class="form-check form-switch mt-1">
+                        <input class="form-check-input" type="checkbox" id="arrow_${id}" name="slider_arrow[${id}]" value="on" checked onchange="updateShortcode('${id}')">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Bullets</label>
+                    <div class="form-check form-switch mt-1">
+                        <input class="form-check-input" type="checkbox" id="bullet_${id}" name="slider_bullet[${id}]" value="on" checked onchange="updateShortcode('${id}')">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Speed (ms)</label>
+                    <input type="number" id="speed_${id}" name="slider_speed[${id}]" class="form-control form-control-sm shadow-none" value="5000" onchange="updateShortcode('${id}')" onkeyup="updateShortcode('${id}')">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Transition</label>
+                    <select id="transition_${id}" name="slider_transition[${id}]" class="form-select form-select-sm shadow-none" onchange="updateShortcode('${id}')">
+                        <option value="fade" selected>Fade</option>
+                        <option value="slide">Slide</option>
+                    </select>
+                </div>
             </div>
             <h6 class="fw-bold tracking-wider text-primary mb-3">Slide Items</h6>
             <div class="images-container" id="images-${id}"></div>
@@ -187,15 +169,15 @@ function addSlider() {
             </button>
         </div>
     </div>`;
-    
-    container.insertAdjacentHTML('beforeend', html);
-    addImage(id);
-}
 
-function addImage(id) {
-    let container = document.getElementById('images-' + id);
-    let uid = generateUid();
-    let html = `
+        container.insertAdjacentHTML('beforeend', html);
+        addImage(id);
+    }
+
+    function addImage(id) {
+        let container = document.getElementById('images-' + id);
+        let uid = generateUid();
+        let html = `
     <div class="row align-items-center mb-4 pb-4 border-bottom img-item">
         <div class="col-md-3 text-center">
             <input type="hidden" name="img_url[${id}][]" id="url_${uid}" value="" required>
@@ -219,75 +201,237 @@ function addImage(id) {
             <button type="button" class="btn btn-outline-danger rounded-circle shadow-sm" title="Remove image" onclick="this.closest('.img-item').remove()"><i class="bi bi-x py-1"></i></button>
         </div>
     </div>`;
-    container.insertAdjacentHTML('beforeend', html);
-}
-
-function removeSlider(elementId) {
-    if (confirm('Are you sure you want to remove this slider completely?')) {
-        document.getElementById(elementId).remove();
+        container.insertAdjacentHTML('beforeend', html);
     }
-}
+
+    function removeSlider(elementId) {
+        if (confirm('Are you sure you want to remove this slider completely?')) {
+            document.getElementById(elementId).remove();
+        }
+    }
+
+    function updateShortcode(id) {
+        let cbRounded = document.getElementById('rounded_' + id) ? document.getElementById('rounded_' + id).checked : true;
+        let cbArrow = document.getElementById('arrow_' + id) ? document.getElementById('arrow_' + id).checked : true;
+        let cbBullet = document.getElementById('bullet_' + id) ? document.getElementById('bullet_' + id).checked : true;
+        let speedEl = document.getElementById('speed_' + id);
+        let speed = speedEl ? speedEl.value : '5000';
+        let transEl = document.getElementById('transition_' + id);
+        let trans = transEl ? transEl.value : 'fade';
+
+        let sc = '[nixslider id="' + id + '"]';
+        if (!cbRounded) sc = sc.replace(']', ' rounded="off"]');
+        if (!cbArrow) sc = sc.replace(']', ' arrow="off"]');
+        if (!cbBullet) sc = sc.replace(']', ' bullet="off"]');
+        if (speed && speed !== '5000') sc = sc.replace(']', ' speed="' + speed + '"]');
+        if (trans && trans !== 'fade') sc = sc.replace(']', ' transition="' + trans + '"]');
+
+        let scDisplay = document.getElementById('sc_code_' + id);
+        if (scDisplay) scDisplay.innerText = sc;
+    }
+
+    // Initial update for existing sliders
+    document.addEventListener("DOMContentLoaded", function () {
+        let forms = document.querySelectorAll("input[name='slider_id[]']");
+        forms.forEach(function (input) {
+            updateShortcode(input.value);
+        });
+    });
 </script>
-<?php
-$slidersHtml = ob_get_clean();
+EOD;
 
 $schema = [
     'header' => [
-        'title'    => 'Nixslider Manager',
+        'title' => 'Nixslider Manager',
+        'version' => '1.1.0',
         'subtitle' => 'Create professional image sliders and use shortcodes in your pages.',
-        'icon'     => 'bi bi-images',
-        'button'   => [
-            'type'  => 'button',
-            'btn_type'=> 'button',
+        'icon' => 'bi bi-images',
+        'button' => [
+            'type' => 'button',
+            'btn_type' => 'button',
             'label' => 'Add New Slider',
-            'icon'  => 'bi bi-plus-lg',
+            'icon' => 'bi bi-plus-lg',
             'class' => 'btn btn-outline-primary rounded-pill px-4 shadow-sm',
-            'attr'  => 'onclick="addSlider()"',
+            'attr' => 'onclick="addSlider()"',
         ]
     ],
     'default_tab' => 'manage',
     'tabs' => [
         'manage' => ['label' => 'Manage Sliders', 'icon' => 'bi bi-sliders', 'content' => []],
-        'howto'  => ['label' => 'How To Use', 'icon' => 'bi bi-book', 'content' => []],
+        'howto' => ['label' => 'How To Use', 'icon' => 'bi bi-book', 'content' => []],
     ],
 ];
 
 // --- MANAGE TAB ---
 $schema['tabs']['manage']['content'][] = [
-    'type'   => 'form',
+    'type' => 'form',
     'action' => 'index.php?page=mods&mod=nixslider',
     'hidden' => ['token' => $token],
     'fields' => [
         [
-            'type'  => 'raw',
-            'html'  => $slidersHtml
+            'type' => 'raw',
+            'html' => '<div id="sliders-container">' . (empty($sliders) ? '<div class="alert alert-info" id="no-sliders-msg">No sliders created yet. Click "Add New Slider" to start.</div>' : '')
         ],
         [
-            'type'  => 'raw',
-            'html'  => '<hr class="my-4">'
+            'type' => 'loop',
+            'data' => (!empty($sliders) && is_array($sliders)) ? $sliders : [],
+            'template' => function($slider, $id) {
+                ob_start();
+                ?>
+                <div class="card mb-4 border border-primary-subtle slider-item shadow-sm" id="slider-<?= $id; ?>">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
+                        <div>
+                            <strong>Slider ID:</strong> <input type="text" name="slider_id[]" value="<?= $id; ?>"
+                                class="form-control form-control-sm d-inline-block w-auto shadow-none" required readonly>
+                            <span class="ms-3 text-muted small">Shortcode: <code
+                                    id="sc_code_<?= $id; ?>">[nixslider id="<?= $id; ?>"]</code></span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-danger rounded-pill px-3"
+                            onclick="removeSlider('slider-<?= $id; ?>')"><i class="bi bi-trash"></i> Remove</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Slider Height</label>
+                                <input type="text" name="slider_height[]" class="form-control form-control-sm shadow-none"
+                                    value="<?= isset($slider['height']) ? $slider['height'] : '400px'; ?>"
+                                    placeholder="e.g. 400px, 100vh">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Rounded</label>
+                                <div class="form-check form-switch mt-1">
+                                    <input class="form-check-input" type="checkbox" id="rounded_<?= $id; ?>"
+                                        name="slider_rounded[<?= $id; ?>]" value="on" <?= ((isset($slider['rounded']) && $slider['rounded'] == 'on') || !isset($slider['rounded'])) ? 'checked' : ''; ?>
+                                        onchange="updateShortcode('<?= $id; ?>')">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Arrows</label>
+                                <div class="form-check form-switch mt-1">
+                                    <input class="form-check-input" type="checkbox" id="arrow_<?= $id; ?>"
+                                        name="slider_arrow[<?= $id; ?>]" value="on" <?= ((isset($slider['arrow']) && $slider['arrow'] == 'on') || !isset($slider['arrow'])) ? 'checked' : ''; ?>
+                                        onchange="updateShortcode('<?= $id; ?>')">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Bullets</label>
+                                <div class="form-check form-switch mt-1">
+                                    <input class="form-check-input" type="checkbox" id="bullet_<?= $id; ?>"
+                                        name="slider_bullet[<?= $id; ?>]" value="on" <?= ((isset($slider['bullet']) && $slider['bullet'] == 'on') || !isset($slider['bullet'])) ? 'checked' : ''; ?>
+                                        onchange="updateShortcode('<?= $id; ?>')">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Speed (ms)</label>
+                                <input type="number" id="speed_<?= $id; ?>" name="slider_speed[<?= $id; ?>]"
+                                    class="form-control form-control-sm shadow-none"
+                                    value="<?= isset($slider['speed']) ? $slider['speed'] : '5000'; ?>"
+                                    onchange="updateShortcode('<?= $id; ?>')" onkeyup="updateShortcode('<?= $id; ?>')">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold extra-small text-uppercase tracking-wider">Transition</label>
+                                <select id="transition_<?= $id; ?>" name="slider_transition[<?= $id; ?>]"
+                                    class="form-select form-select-sm shadow-none" onchange="updateShortcode('<?= $id; ?>')">
+                                    <option value="fade" <?= (isset($slider['transition']) && $slider['transition'] == 'fade') ? 'selected' : ''; ?>>Fade</option>
+                                    <option value="slide" <?= (isset($slider['transition']) && $slider['transition'] == 'slide') ? 'selected' : ''; ?>>Slide</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <h6 class="fw-bold tracking-wider text-primary mb-3">Slide Items</h6>
+                        <div class="images-container" id="images-<?= $id; ?>">
+                            <?php if (is_array($slider['images'])):
+                                foreach ($slider['images'] as $imgKey => $img):
+                                    $uid = getUid(); ?>
+                                    <div class="row align-items-center mb-4 pb-4 border-bottom img-item">
+                                        <div class="col-md-3 text-center">
+                                            <input type="hidden" name="img_url[<?= $id; ?>][]" id="url_<?= $uid; ?>" value="<?= $img['url']; ?>" required>
+                                            <div class="media-drop-zone rounded-3 border-2 border-dashed bg-light p-2 position-relative"
+                                                style="cursor: pointer; min-height: 120px; display:flex; align-items:center; justify-content:center; flex-direction: column;"
+                                                onclick="nixsliderElfinder('url_<?= $uid; ?>', 'prev_<?= $uid; ?>', 'ph_<?= $uid; ?>')">
+                                                <?php if (!empty($img['url'])): ?>
+                                                    <img id="prev_<?= $uid; ?>" class="img-fluid rounded shadow-sm" src="<?= $img['url']; ?>"
+                                                        style="max-height: 100px; width: 100%; object-fit: cover;">
+                                                    <div id="ph_<?= $uid; ?>" class="d-none">
+                                                        <i class="bi bi-cloud-arrow-up fs-2 text-muted"></i>
+                                                        <p class="text-muted extra-small mb-0 mt-1">Select Image</p>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <img id="prev_<?= $uid; ?>" class="img-fluid rounded shadow-sm d-none"
+                                                        style="max-height: 100px; width: 100%; object-fit: cover;">
+                                                    <div id="ph_<?= $uid; ?>">
+                                                        <i class="bi bi-cloud-arrow-up fs-2 text-muted"></i>
+                                                        <p class="text-muted extra-small mb-0 mt-1">Select Image</p>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="mb-2">
+                                                <input type="text" name="img_title[<?= $id; ?>][]" class="form-control bg-light shadow-none"
+                                                    value="<?= $img['title']; ?>" placeholder="Title (optional)">
+                                            </div>
+                                            <div>
+                                                <input type="text" name="img_caption[<?= $id; ?>][]" class="form-control bg-light shadow-none"
+                                                    value="<?= $img['caption']; ?>" placeholder="Caption (optional)">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 text-center">
+                                            <button type="button" class="btn btn-outline-danger rounded-circle shadow-sm"
+                                                title="Remove image" onclick="this.closest('.img-item').remove()"><i class="bi bi-x py-1"></i></button>
+                                        </div>
+                                    </div>
+                                <?php endforeach; endif; ?>
+                        </div>
+                        <button type="button" class="btn btn-secondary rounded-pill mt-2 shadow-sm" onclick="addImage('<?= $id; ?>')">
+                            <i class="bi bi-plus-circle me-1"></i> Add Another Slide
+                        </button>
+                    </div>
+                </div>
+                <?php
+                $rawHtml = ob_get_clean();
+                return [
+                    'type' => 'raw',
+                    'html' => $rawHtml
+                ];
+            }
         ],
         [
-            'type'  => 'button',
-            'name'  => 'save_nixslider',
+            'type' => 'raw',
+            'html' => '</div>' // closes #sliders-container
+        ],
+        [
+            'type' => 'raw',
+            'html' => '<hr class="my-4">'
+        ],
+        [
+            'type' => 'button',
+            'name' => 'save_nixslider',
             'label' => 'Save All Changes',
-            'icon'  => 'bi bi-save',
+            'icon' => 'bi bi-save',
             'class' => 'btn btn-primary btn-lg rounded-pill px-5 fw-bold shadow-sm',
         ],
+        [
+            'type' => 'raw',
+            'html' => $js_content
+        ]
     ],
 ];
 
 // --- HOW TO USE TAB ---
 $schema['tabs']['howto']['content'][] = [
-    'type'  => 'row',
+    'type' => 'row',
     'items' => [
         [
-            'width'   => 12,
+            'width' => 12,
             'content' => [
-                'type'          => 'card',
-                'title'         => 'Using Nixslider',
-                'icon'          => 'bi bi-info-circle',
+                'type' => 'card',
+                'title' => 'Using Nixslider',
+                'icon' => 'bi bi-info-circle',
                 'body_elements' => [
-                    ['type' => 'raw', 'html' => '
+                    [
+                        'type' => 'raw',
+                        'html' => '
                     <p class="lh-lg">Nixslider is a custom-built, professional image slider designed specifically for GeniXCMS.</p>
                     <ol class="ps-3 lh-lg">
                         <li>Click the <b>Add New Slider</b> button on the Manage tab to create your first slider.</li>
@@ -331,7 +475,8 @@ $schema['tabs']['howto']['content'][] = [
     margin: 0 !important;
     box-shadow: none !important;
 }</code></pre>
-                    </div>']
+                    </div>'
+                    ]
                 ],
             ],
         ],

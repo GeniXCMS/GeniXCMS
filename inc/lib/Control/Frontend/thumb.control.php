@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  *
  * @since 1.0.0 build date 20160902
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -35,18 +35,5 @@ if (isset($data['thumb']) && $data['thumb'] != '') {
     $size = '';
     $align = '';
 }
-
-$imgExts = explode(".", $thumb);
-$imgExt = strtolower(end($imgExts));
-if ($imgExt == 'png') {
-    header('Content-Type: image/png');
-}
-if ($imgExt == 'jpg' || $imgExt == 'jpeg') {
-    header('Content-Type: image/jpeg');
-}
-if ($imgExt == 'webp') {
-    header('Content-Type: image/webp');
-}
-
 
 Image::thumbFly($thumb, $type, $size, $align);

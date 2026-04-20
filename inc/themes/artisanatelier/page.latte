@@ -1,0 +1,25 @@
+{*
+ * Layout: Default Page
+ *}
+<section class="py-24 bg-surface min-h-screen">
+    <div class="max-w-4xl mx-auto px-12">
+        <div class="mb-16 text-center">
+            <h1 class="text-6xl font-serif font-bold text-on-surface tracking-tight mb-8">
+                {$title|stripHtml}
+            </h1>
+            <div class="w-24 h-1 bg-primary mx-auto"></div>
+        </div>
+
+        <article class="prose prose-stone lg:prose-xl max-w-none artisan-content">
+            <div class="text-on-surface-variant leading-relaxed">
+                {$content|noescape}
+            </div>
+        </article>
+    </div>
+</section>
+
+<style>
+.artisan-content p { margin-bottom: 2rem; font-size: 1.125rem; line-height: 1.8; }
+.artisan-content h2 { font-family: 'Noto Serif', serif; font-size: 2.25rem; margin-top: 3rem; margin-bottom: 1.5rem; color: #393832; }
+.artisan-content blockquote { font-family: 'Noto Serif', serif; font-style: italic; font-size: 1.5rem; border-left: 4px solid rgba(167, 70, 50, 0.2); padding-left: 2rem; margin: 3rem 0; color: #a74632; }
+</style>

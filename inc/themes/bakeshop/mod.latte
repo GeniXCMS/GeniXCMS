@@ -1,0 +1,40 @@
+{var $o = Bakeshop::options()}
+{var $mProps = Mod::getProperties($mod)}
+{var $mod_layout = $mProps['layout'] ?? ($o['mod_layout'] ?? 'default')}
+{var $show_title = $mProps['show_title'] ?? (($o['mod_show_title'] ?? 'on') == 'on')}
+
+<div class="min-h-[60vh]">
+    {if $mod_layout === 'fullwidth' || $mod_layout === 'full'}
+        <!-- Full Width Layout -->
+        {if $show_title}
+            <header class="mb-16 text-center max-w-4xl mx-auto px-8">
+                <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-on-surface tracking-tighter mb-6">
+                    {Mod::getTitle($mod)|noescape}
+                </h1>
+                <div class="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
+            </header>
+        {/if}
+        
+        <div class="bakeshop-module-content">
+            {Hooks::run('mod_control', $data)|noescape}
+        </div>
+    {else}
+        <!-- Default Framed Layout -->
+        <div class="max-w-7xl mx-auto px-8">
+            {if $show_title}
+                <header class="mb-16 text-center max-w-4xl mx-auto">
+                    <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-on-surface tracking-tighter mb-6">
+                        {Mod::getTitle($mod)|noescape}
+                    </h1>
+                    <div class="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
+                </header>
+            {/if}
+
+            <div class="p-2 md:p-4">
+                <div class="bakeshop-module-content">
+                    {Hooks::run('mod_control', $data)|noescape}
+                </div>
+            </div>
+        </div>
+    {/if}
+</div>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{var $o = Agrifest::options()}
+<html class="light" lang="{$website_lang ?? substr(Options::v('system_lang'), 0, 2)}">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    {if isset($site_meta)}{$site_meta|noescape}{/if}
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": {$o['primary_color']},
+                        "on-primary": "#ffffff",
+                        "secondary": {$o['secondary_color']},
+                        "on-secondary": "#ffffff",
+                        "background": {$o['background_color']},
+                        "on-surface": "#171d14",
+                        "on-surface-variant": "#40493d",
+                        "surface-container": "#e9f0e1",
+                        "surface-container-low": "#eff6e7",
+                        "surface-container-high": "#e3ebdc",
+                        "surface-container-highest": "#dee5d6",
+                        "secondary-container": "#fdcdbc",
+                        "on-secondary-container": "#795548",
+                        "primary-fixed-dim": "#88d982",
+                        "primary-container": "#2e7d32",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .editorial-shadow { box-shadow: 0 12px 32px rgba(23, 29, 20, 0.06); }
+        .glass-nav { background: rgba(245, 252, 237, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        :root {
+            --primary: {$o['primary_color']|noescape};
+            --surface-container: #e9f0e1;
+            --surface-container-high: #e3ebdc;
+            --on-surface-variant: #40493d;
+        }
+        {Options::get('custom_css')|noescape}
+    </style>
+    
+    {Site::loadLibHeader()|noescape}
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/20 selection:text-primary min-h-screen flex flex-col">
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-[100] transition-all duration-300 glass-nav border-b border-black/5 py-4">
+    <div class="flex justify-between items-center w-full px-8 max-w-7xl mx-auto">
+        <!-- Logo -->
+        <div class="text-2xl font-headline font-bold text-primary">
+            <a href="{$site_url}" class="hover:opacity-80 transition-opacity">
+                {$o['logo_text']}
+            </a>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-x-10 font-headline text-lg font-bold">
+            {var $main_menu = Menus::getMenuRaw('mainmenu')}
+            {foreach $main_menu as $m}
+                {if $m->parent == '0'}
+                    {var $type = $m->type}
+                    {var $url = Url::$type($m->value)}
+                    {var $active = ($url == $_SERVER['REQUEST_URI'] || $url == (isset($site_url) ? $site_url : '') . $_SERVER['REQUEST_URI'])}
+                    <a class="transition-all hover:text-primary relative group {($active) ? 'text-primary border-b-2 border-primary pb-1' : 'text-on-surface-variant'}" href="{$url}">
+                        {$m->name}
+                    </a>
+                {/if}
+            {/foreach}
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex items-center gap-6">
+            <a href="{Url::mod('cart')}" class="text-primary hover:scale-110 transition-transform nix-cart-container">
+                <span class="material-symbols-outlined">shopping_cart</span>
+                {Hooks::run('nix_cart_badge')|noescape}
+            </a>
+            {if User::isLoggedin()}
+                {var $u_name = Session::val('username')}
+                <div class="relative group py-2">
+                    <a href="{Url::user($u_name)}" class="flex items-center text-primary transition-transform cursor-pointer">
+                        <span class="material-symbols-outlined hover:scale-110 transition-transform">person</span>
+                    </a>
+                    <div class="absolute right-0 top-full pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right scale-95 group-hover:scale-100">
+                        <div class="bg-white border border-gray-100 rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] py-2 flex flex-col font-body text-sm font-semibold text-gray-700">
+                            <div class="px-4 py-2 border-b border-gray-100 mb-1">
+                                <div class="text-xs text-gray-400 font-bold uppercase tracking-wider">{_('Signed in as')}</div>
+                                <div class="truncate text-primary">{htmlspecialchars($u_name)}</div>
+                            </div>
+                            {var $dropdownItems = UserProfile::getDropdownItems()}
+                            {foreach $dropdownItems as $key => $item}
+                                {if isset($item['divider']) && $item['divider']}
+                                    <hr class="my-1 border-gray-50">
+                                {else}
+                                    <a href="{$item['url']|noescape}" class="px-4 py-2 {if isset($item['danger']) && $item['danger']}text-red-600 hover:bg-red-50{else}hover:bg-gray-50 hover:text-primary{/if} transition-colors flex items-center gap-2">
+                                        <span class="material-symbols-outlined !text-[18px]">{$item['icon'] ?? 'chevron_right'}</span> {_($item['label'])}
+                                    </a>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            {else}
+                <a href="{Url::login()}" class="text-primary hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined">person</span>
+                </a>
+            {/if}
+            
+            <!-- Mobile Toggle -->
+            <button id="mobile-toggle" class="md:hidden text-primary">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-16 flex-grow">

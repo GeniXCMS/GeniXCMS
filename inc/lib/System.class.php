@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -16,12 +16,8 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 class System
 {
-    /**
-     * GeniXCMS Version Variable.
-     *
-     * @return float
-     */
-    public static $version = '2.2.1';
+    /** @var string Current version of GeniXCMS */
+    public static $version = '2.3.0';
 
     /**
      * GeniXCMS Version Release.
@@ -79,6 +75,9 @@ class System
         /* Initiate Sitemap */
         new Sitemap();
 
+        /* Initiate Asset Manager */
+        Asset::init();
+
         /* Initiate Modules (function.php may call AdminMenu::add/addChild) */
         new Mod();
 
@@ -88,11 +87,29 @@ class System
         /* Initiate Archives */
         new Archives();
 
+        /* Load themes configuration (function.php may call AdminMenu::addChild()) */
+        new Theme();
+
         /* Run Hooks : init */
         Hooks::run('init');
 
-        /* Initiate Asset Manager */
-        Asset::init();
+        /* Register Default User Profile Sections */
+        UserProfile::registerSection('profile', [
+            'label'    => _('Profile'),
+            'icon'     => 'person',
+            'callback' => null,   // rendered by theme's user-profile.latte
+            'min_group'=> 6,      // public
+            'own_only' => false,
+            'order'    => 1,
+        ]);
+        UserProfile::registerSection('settings', [
+            'label'    => _('Settings'),
+            'icon'     => 'settings',
+            'callback' => null,   // rendered by theme's user-settings.latte or user-profile.latte
+            'min_group'=> 6,      // requires login (enforced in controller)
+            'own_only' => true,   // only visible to the profile owner
+            'order'    => 2,
+        ]);
 
         /* Initiate Editor */
         if (Options::v('use_editor') == 'on') {
@@ -101,9 +118,6 @@ class System
 
         /* Run Cron : exec scheduled tasks */
         Cron::run();
-
-        /* Load themes configuration (function.php may call AdminMenu::addChild()) */
-        new Theme();
 
         /* Set Security Headers (Moved here so Modules and Themes can hook into it) */
         self::securityHeaders();

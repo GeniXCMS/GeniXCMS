@@ -1,9 +1,28 @@
+            </div><!-- /.container -->
+        </div><!-- /.main-inner -->
+    </main>
+
     <footer class="bg-white border-top py-5 mt-5">
         <div class="container text-center">
-            <p class="text-muted mb-0">&copy; 2026 LayoutTest. Powered by GeniXCMS.</p>
+
+            <!-- Footer Menu -->
+            <div class="mb-4">
+                {Menus::getMenu('footer', 'nav justify-content-center gap-3 small footer-nav', false)|noescape}
+            </div>
+
+            <p class="mb-1 text-muted fw-light">{$site_name} &copy; {date('Y')}</p>
+            <p class="mb-4 text-muted small">
+                Powered by <a href="https://genixcms.web.id/" class="text-primary text-decoration-none fw-bold">GeniXCMS</a>
+            </p>
+
+            <a href="#!" class="btn btn-outline-secondary btn-sm rounded-pill px-4"
+               onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">
+                <i class="bi bi-arrow-up me-1"></i> Back to top
+            </a>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     {Site::loadLibFooter()|noescape}
 </body>
 </html>
+

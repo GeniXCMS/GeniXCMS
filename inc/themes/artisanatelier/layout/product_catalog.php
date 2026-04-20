@@ -1,0 +1,80 @@
+<?php
+defined('GX_LIB') or die('Direct Access Not Allowed!');
+/**
+ * Artisan Atelier - Product Catalog Layout
+ */
+?>
+
+<!-- Hero Section -->
+<section class="relative px-12 pt-20 pb-12 overflow-hidden bg-surface-container-low">
+    <div class="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+            <span class="inline-block px-4 py-1.5 mb-6 text-sm font-medium tracking-wider bg-secondary-container text-on-secondary-container rounded-full">EST. 2024</span>
+            <h1 class="font-headline text-7xl font-bold text-on-surface leading-[1.1] tracking-tight mb-8">Curated for the<br/><span class="italic text-primary">Mindful Home</span></h1>
+            <p class="text-on-surface-variant text-xl max-w-md leading-relaxed mb-10">Discover objects that carry the soul of their maker. Our ceramics, linens, and prints are crafted for those who cherish intentional living.</p>
+        </div>
+        <div class="relative">
+            <div class="absolute -top-12 -right-12 w-64 h-64 bg-surface-container-highest blob-mask-1 -z-10"></div>
+            <div class="absolute -bottom-8 -left-8 w-80 h-80 bg-primary-container/30 blob-mask-2 -z-10"></div>
+            <div class="grid grid-cols-2 gap-6 items-end">
+                <div class="rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(57,56,50,0.12)]">
+                    <img class="w-full aspect-[4/5] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNdQFfJCptn_KZDLCZKuFgcKRkfnc2-JT1pmi0YvpTTyJaGsHxjvNZaSip7wvtmAhuu1svikQP6ElOpu7-POmRjNxSDB6DhixSAH6-YEcBJrZYJSo-KA1J90yNoQyS-neePCuxx7Fgt44X8qsB-KnKwOEzpNHoYRHdqPzQuFmPaz4O1kd38tZs1wLFOu0OkqeLkJJBM_vmx-CdPq7cMyLocPZ9S7kqBc4TAQ523txGMv3J6kKTWVC3BMh9ytsFba7piZ9N2_CiErM"/>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(57,56,50,0.12)] mb-12">
+                    <img class="w-full aspect-square object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHnf3KHNHp4MYyM_TcuFdiT_DQqHGAXbrmiPmUSkGREMJa7006GimQd0vYv6lFzJcDEcaUIl-acWIXyQ1KI6jONbSZtsOUw7-RcvdXJJCnhfkTjPCN5p62BxOH6ICpR-4E3zPRZQfzjTU0UHcuY-Gb4zGwCySyX8ZcRxYqy9H2F38K_RoVwjh2iRLc1hW9dTRj_UMNwiLVJlKdVS4bOBxoZQkpHUwuYGc626oc0pSTnx4s9DO-w_aNKjkXk3znJfV5oIkjBnNRkXg"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filters & Category Navigation -->
+<section class="sticky top-[88px] bg-white/60 backdrop-blur-md z-40 border-b border-outline-variant/10">
+    <div class="max-w-screen-2xl mx-auto px-12 py-8 flex items-center justify-between">
+        <div class="flex items-center gap-12">
+            <button class="font-headline text-xl text-primary font-bold border-b-2 border-primary pb-1">All Collections</button>
+            <button class="font-headline text-xl text-on-surface-variant hover:text-on-surface transition-colors">Ceramics</button>
+            <button class="font-headline text-xl text-on-surface-variant hover:text-on-surface transition-colors">Textiles</button>
+            <button class="font-headline text-xl text-on-surface-variant hover:text-on-surface transition-colors">Art Prints</button>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-medium text-on-surface-variant">Filter by</span>
+            <button class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-full border border-outline-variant/20">
+                <span class="text-sm">Price Range</span>
+                <span class="material-symbols-outlined text-sm">expand_more</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Product Grid -->
+<section class="max-w-screen-2xl mx-auto px-12 py-16">
+    <div class="grid grid-cols-12 gap-10">
+        <!-- Feature Card -->
+        <div class="col-span-12 lg:col-span-8 bg-surface-container-low rounded-[2rem] overflow-hidden group relative flex flex-col md:flex-row shadow-sm">
+            <div class="flex-1 p-12 flex flex-col justify-center">
+                <h3 class="font-headline text-4xl mb-4">The Earth-Warmed Pitcher</h3>
+                <p class="text-on-surface-variant mb-8 max-w-sm">Hand-thrown using local clay from the high desert, featuring an organic speckled glaze.</p>
+                <div class="text-2xl font-semibold text-primary mb-8">$124.00</div>
+                <button class="w-fit bg-on-surface text-surface px-8 py-3 rounded-full hover:bg-primary transition-colors">Shop Exclusive</button>
+            </div>
+            <div class="flex-1 min-h-[400px]">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7v7xPeurt8vbY7hzoxif8WqCmgh503PCH6h_LdP5DH_Mqvd9JDCCgpmK4SELgjJeKWWjC4QNsYIwXWp5fS0D80XyCsMbIaKyn1ljNdOj7Z7GnVOuixTgKwu-8hR2fYcrpL0ck3SMxM12b86IzGujwRQM5Y7HBDAMOnfnH7aUSZtD-lFST2PpF4LiNzgFr81Jg5YpyUuFVjQNpRCrmHprfN8-Zb9_9hTl0eP50mcPb6lExd0VCfZsKYTJ11S1ygByLc8iABphbghg"/>
+            </div>
+        </div>
+
+        <!-- Mini Product 1 -->
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 bg-white rounded-[2rem] p-4 flex flex-col shadow-sm border border-stone-100">
+            <div class="rounded-[1.5rem] overflow-hidden aspect-[4/5] mb-6">
+                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc4YGPZ1H54WkDNJ0LuL4yjndde7bIPIX_84e9LWzaZ7PnIOLT8bdTBQSrDC50o3Khqe6KiC_QmNw__G7hDZJCThi4OouNDClCY9hVodTwxx13t_nhzjEMCi4wxL_q8AYWB9sj4TCMiIVRA9iSZxY2P8tElVGAgktvpToYPx3igaSv7h8poX8HZ269_vK1g_A4EibH82YVYCBk4_8mcDYrlNL376J-e8LSe_Xpdt0CPo2ahx5jOSqwdVO4zjGEhNjifbEYGlnhSDE"/>
+            </div>
+            <div class="px-4 pb-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-headline text-xl">Horizon Art Print</h4>
+                    <span class="text-lg font-medium">$68</span>
+                </div>
+                <p class="text-sm text-on-surface-variant">Archival Paper, 12x18"</p>
+            </div>
+        </div>
+    </div>
+</section>

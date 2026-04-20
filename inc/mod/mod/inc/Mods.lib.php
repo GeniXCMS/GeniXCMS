@@ -8,15 +8,17 @@ class Mods
 
         Mod::addMenuList(['page' => _('My Sample Mod Page')]);
 
-        AdminMenu::add([
-            'id' => 'mod_page',
-            'label' => _('My Sample Mod Page'),
-            'icon' => 'bi bi-box',
-            'url' => 'index.php?page=mods&mod=page',
-            'access' => 1,
-            'position' => 'external',
-            'order' => 30,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id' => 'mod_page',
+                'label' => _('My Sample Mod Page'),
+                'icon' => 'bi bi-box',
+                'url' => 'index.php?page=mods&mod=page',
+                'access' => 1,
+                'position' => 'external',
+                'order' => 30,
+            ]);
+        });
     }
     public static function show()
     {

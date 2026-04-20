@@ -1,0 +1,188 @@
+{var $o = (array)Agrifest::options()}
+
+<!-- Hero Section (Featured Post) -->
+<section class="max-w-7xl mx-auto px-8 mb-20 pt-4">
+    <div class="relative h-[65vh] md:h-[75vh] rounded-xl overflow-hidden group shadow-2xl">
+        {var $featured_id = $o['blog_featured_post'] ?? 0}
+        {var $fpa = Posts::fetch($featured_id)}
+        {if is_array($fpa) && !isset($fpa['error'])}
+            {var $fp = $fpa[0]}
+            {var $fimg = Posts::getPostImage($fp->id)}
+            <img alt="{$fp->title}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                 src="{(empty($fimg) ? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600' : Url::thumb($fimg, 'large'))}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+                <span class="inline-flex items-center px-5 py-2 rounded-full bg-secondary text-white text-[10px] font-black uppercase tracking-[0.2em] mb-8 w-fit shadow-xl">
+                    {_('Editor\'s Choice')}
+                </span>
+                <h1 class="text-white text-4xl md:text-7xl font-headline font-bold max-w-4xl leading-none mb-8 tracking-tighter drop-shadow-2xl">
+                    <a href="{Url::post($fp->id)}" class="hover:text-primary-fixed-dim transition-colors">{$fp->title}</a>
+                </h1>
+                <p class="text-white/80 text-lg md:text-xl max-w-2xl mb-12 font-body leading-relaxed line-clamp-2">
+                    {Typo::Xclean($fp->content)|stripHtml|truncate:180}
+                </p>
+                <a class="inline-flex items-center justify-center h-16 px-12 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all w-fit" href="{Url::post($fp->id)}">
+                    {_('Begin Reading')}
+                </a>
+            </div>
+        {else}
+            <!-- Fallback Static Hero if no featured post -->
+            <img alt="Harvest Field" class="w-full h-full object-cover" 
+                 src="{$o['blog_hero_img'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWkwfNDg8_zUQfr6hQZAxSdbwdbR2iT1l0lOJ6hio_OksqpHEE-5c9d14svGrDSnWlub7n1qvRqkKg-LVh_VJduR5fQaaKBb8o2BknBZXEvDtV_HYBgU4aZZZvCCsjYNFy_ogMeVLJ8DdjbyZOa-li3GiPea4905PF_MeDtj_CoeqZf_793Xqi4b5ovb9RDQ5gJjEoc9M_4sPX26YdN31EZIUN6kbc5-via1YfSVw3e13_wiuzbQrQVKOHftlEWfzn7HHInOkZKoc'}"/>
+            <div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-16">
+                <h1 class="text-white text-5xl md:text-8xl font-headline font-bold tracking-tighter leading-none mb-4">
+                    {$o['blog_hero_title'] ?? 'The Future of Regenerative Agriculture'}
+                </h1>
+                <p class="text-white/80 text-xl max-w-2xl mb-8">{$o['blog_hero_desc'] ?? 'Insights from the soil, directly to your screen.'}</p>
+                <a href="{Url::mod('blog')}" class="bg-primary text-white px-10 py-4 rounded-full font-bold w-fit shadow-lg">{_('Explore Journal')}</a>
+            </div>
+        {/if}
+    </div>
+</section>
+
+<!-- Bento Grid Sections -->
+<section class="max-w-7xl mx-auto px-8 mb-24">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Large Feature Article 1 -->
+        {var $bento1_id = $o['blog_bento_post1'] ?? 0}
+        {var $bpa1 = Posts::fetch($bento1_id)}
+        {var $bp1 = (is_array($bpa1) && !isset($bpa1['error'])) ? $bpa1[0] : null}
+        <div class="md:col-span-2 bg-white rounded-xl overflow-hidden flex flex-col md:flex-row transition-all duration-500 hover:shadow-2xl border border-primary/5 group">
+            <div class="w-full md:w-1/2 h-80 md:h-auto overflow-hidden">
+                <a href="{!empty($bp1) ? Url::post($bp1->id) : '#'}">
+                    <img alt="Bento 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                         src="{( !empty($bp1) && !empty(Posts::getPostImage($bp1->id)) ) ? Url::thumb(Posts::getPostImage($bp1->id), 'large') : 'https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=800'}"/>
+                </a>
+            </div>
+            <div class="w-full md:w-1/2 p-12 flex flex-col justify-center">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-primary font-black text-[10px] uppercase tracking-[0.2em]">{_('Insight')}</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary/10"></span>
+                    <span class="text-on-surface-variant/50 text-[10px] font-black uppercase tracking-[0.2em]">8 min read</span>
+                </div>
+                <h2 class="text-3xl font-headline font-bold mb-6 text-on-surface leading-tight hover:text-primary transition-colors">
+                    <a href="{!empty($bp1) ? Url::post($bp1->id) : '#'}">{$bp1->title ?? 'The Heirloom Secret: Why Biodiversity Tastes Better'}</a>
+                </h2>
+                <p class="text-on-surface-variant mb-10 text-lg leading-relaxed line-clamp-2">
+                    {if !empty($bp1)}{Typo::Xclean($bp1->content)|stripHtml|truncate:120}{else}Exploring the complex flavor profiles of non-commercial varieties and their superior benefits.{/if}
+                </p>
+                <a class="text-primary font-black uppercase text-xs tracking-[0.2em] flex items-center gap-3 group/link" href="{!empty($bp1) ? Url::post($bp1->id) : '#'}">
+                    {_('Read Full Story')}
+                    <span class="material-symbols-outlined text-sm group-hover/link:translate-x-2 transition-transform">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Accent Card (Bento Slot 2) -->
+        <div class="bg-primary text-on-primary rounded-xl p-12 flex flex-col justify-between transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden group">
+            <div class="absolute -top-10 -right-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                <span class="material-symbols-outlined text-[12rem] rotate-12">{$o['blog_accent_icon'] ?? 'water_drop'}</span>
+            </div>
+            <div class="relative z-10">
+                <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center mb-8">
+                    <span class="material-symbols-outlined text-3xl">{$o['blog_accent_icon'] ?? 'water_drop'}</span>
+                </div>
+                <h3 class="text-3xl font-headline font-bold mb-6 leading-tight">{$o['blog_accent_title'] ?? 'Precision Irrigation in 2024'}</h3>
+                <p class="text-white/80 text-lg leading-relaxed">{$o['blog_accent_desc'] ?? 'How satellite imagery and IoT sensors are saving millions of gallons across our estates.'}</p>
+            </div>
+            <div class="relative z-10 mt-12 flex items-center justify-between">
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">{$o['blog_accent_label'] ?? 'SUSTAINABILITY'}</span>
+                <span class="material-symbols-outlined">trending_up</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Field Notes Feed -->
+<section class="max-w-7xl mx-auto px-8 mb-24">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-10">
+        <div class="max-w-xl">
+            <span class="text-primary font-black tracking-[0.3em] uppercase text-xs">Field Dispatches</span>
+            <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter mt-4">{_('Recent Field Notes')}</h2>
+            <p class="text-xl text-on-surface-variant leading-relaxed mt-6">Insights and dispatches from our master gardeners and estate agronomists.</p>
+        </div>
+        <a href="{Url::cat('field-notes')}" class="bg-surface-container-high text-on-surface px-10 py-4 rounded-full font-bold hover:bg-primary hover:text-white transition-all shadow-sm">
+            {_('View Archive')}
+        </a>
+    </div>
+
+    <!-- Feed Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        {var $recent = Posts::recent(['num' => 4])}
+        {if is_array($recent) && !isset($recent['error'])}
+            {foreach $recent as $index => $rp}
+            {var $rimg = Posts::getPostImage($rp->id)}
+            {if $index < 2}
+                <!-- Standard Post Column -->
+                <article class="lg:col-span-1 space-y-6 group">
+                    <div class="aspect-square rounded-xl overflow-hidden shadow-sm border border-primary/5">
+                        <a href="{Url::post($rp->id)}">
+                            <img alt="{$rp->title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                                 src="{(empty($rimg) ? 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=400' : Url::thumb($rimg, 'large'))}"/>
+                        </a>
+                    </div>
+                    <div>
+                        <span class="text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-3 block">{Categories::name($rp->cat)}</span>
+                        <h4 class="text-2xl font-headline font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                            <a href="{Url::post($rp->id)}">{$rp->title}</a>
+                        </h4>
+                    </div>
+                </article>
+            {elseif $index == 2}
+                <!-- Featured Column (Spans 2) -->
+                <article class="lg:col-span-2 bg-surface-container-low rounded-xl overflow-hidden flex flex-col p-8 group border border-primary/5">
+                    <div class="flex-grow rounded-[1.5rem] overflow-hidden mb-8 h-80 shadow-inner">
+                        <a href="{Url::post($rp->id)}">
+                            <img alt="{$rp->title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                                 src="{(empty($rimg) ? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800' : Url::thumb($rimg, 'large'))}"/>
+                        </a>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <span class="text-secondary font-black text-[10px] uppercase tracking-[0.2em] mb-4 block">COMMUNITY STORIES</span>
+                        <h4 class="text-3xl font-headline font-bold text-on-surface mb-6 group-hover:text-primary transition-colors">
+                            <a href="{Url::post($rp->id)}">{$rp->title}</a>
+                        </h4>
+                        <p class="text-on-surface-variant text-lg font-body line-clamp-2">
+                             {Typo::Xclean($rp->content)|stripHtml|truncate:140}
+                        </p>
+                    </div>
+                </article>
+            {/if}
+        {/foreach}
+    {/if}
+</div>
+</section>
+
+<!-- Newsletter Section with Immersion -->
+<section class="max-w-7xl mx-auto px-8 mb-32">
+    <div class="relative rounded-2xl overflow-hidden py-24 px-8 md:px-20 shadow-2xl">
+        <div class="absolute inset-0 z-0">
+            <img alt="Newsletter Atmosphere" class="w-full h-full object-cover brightness-50" 
+                 src="{$o['blog_newsletter_img'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8vYedfmRop68vIi5g2_zKM1Ktl2A6_CzyA0RAoaVBFieD0arl_Pm23G6Rt2nFmbVspmfUxgHZsT1Z4Qs_ukymUVFUufr7ZrVxSpTkCwnxmdoZ5HgqyweK4BnrXImvU2yTyHzS-UZ9n-h9Tse2gi17DJod_Wv9mMzc5dvOvgtltkApjNXkS5U-8UbFz4TeGZ6C3CMIHSZmaOzZIuSyREqOiIVHNwWl-jz8B3WJ1SOspFLbEtGqhTSdUUWSb6XtjA6yG0GhcQL2mQE'}"/>
+            <div class="absolute inset-0 bg-primary/20 backdrop-blur-[1px]"></div>
+        </div>
+        <div class="relative z-10 max-w-2xl mx-auto text-center bg-white/10 backdrop-blur-xl p-12 md:p-16 rounded-xl border border-white/20 shadow-2xl">
+            <h2 class="text-4xl md:text-5xl font-headline font-bold text-white mb-6 leading-tight tracking-tighter">Join the Harvest Circle</h2>
+            <p class="text-white/80 text-lg mb-12 leading-relaxed">Monthly insights on seasonal planting, soil medicine, and exclusive estate heritage dispatches delivered to your screen.</p>
+            {if !empty(NewsletterModule::$statusMsg)}
+                <div class="mb-8 text-left">
+                    {NewsletterModule::$statusMsg|noescape}
+                </div>
+            {/if}
+            <form method="post" action="" class="flex flex-col md:flex-row gap-6">
+                <!-- Security Token (Required) -->
+                <input type="hidden" name="ns_token" value="{Token::create()}">
+                
+                <input class="flex-grow h-16 px-10 rounded-full bg-white/10 border-2 border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 focus:border-white outline-none font-bold text-lg transition-all" 
+                       placeholder="Enter your email" name="ns_email" type="email" required/>
+                
+                <!-- Hidden Name Input (Optional in this design) -->
+                <input type="hidden" name="ns_name" value="Valued Reader">
+
+                <button type="submit" name="sm_subscribe_newsletter" class="h-16 px-12 rounded-full bg-white text-primary font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    Subscribe
+                </button>
+            </form>
+            <p class="mt-8 text-xs text-white/50 font-black uppercase tracking-widest">No noise. Only the pure harvest.</p>
+        </div>
+    </div>
+</section>

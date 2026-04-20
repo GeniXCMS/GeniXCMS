@@ -1,0 +1,46 @@
+{*
+ * Layout: Blog Index
+ *}
+<section class="py-24 bg-surface min-h-screen">
+    <div class="max-w-screen-xl mx-auto px-12">
+        <div class="mb-16 text-center">
+            <h1 class="text-6xl font-serif font-bold text-on-surface tracking-tight mb-8">
+                Journal
+            </h1>
+            <div class="w-24 h-1 bg-primary mx-auto"></div>
+        </div>
+
+        {if $data['num'] > 0}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                {foreach $data['posts'] as $p}
+                    <article class="group bg-surface-container-low rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+                        <div class="p-8">
+                            <div class="text-sm text-primary mb-3 font-semibold uppercase tracking-widest">
+                                {Date::format($p->date)}
+                            </div>
+                            <h2 class="text-3xl font-serif text-on-surface mb-4 group-hover:text-primary transition-colors">
+                                <a href="{Url::post($p->id)}">{$p->title}</a>
+                            </h2>
+                            <div class="text-on-surface-variant mb-6 line-clamp-3">
+                                {Typo::strip(Posts::format($p->content, $p->id))|truncate:150|noescape}
+                            </div>
+                            <a href="{Url::post($p->id)}" class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-3 transition-all">
+                                Read Article <span class="material-symbols-outlined">arrow_right_alt</span>
+                            </a>
+                        </div>
+                    </article>
+                {/foreach}
+            </div>
+            
+            <nav class="mt-20 flex justify-center">
+                {$data['paging']|noescape}
+            </nav>
+        {else}
+            <div class="text-center py-20 bg-surface-container-low rounded-2xl">
+                <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-6">article</span>
+                <h3 class="text-3xl font-serif text-on-surface mb-2">{_'No Post(s) found.'}</h3>
+                <p class="text-on-surface-variant">There are currently no journal entries available.</p>
+            </div>
+        {/if}
+    </div>
+</section>

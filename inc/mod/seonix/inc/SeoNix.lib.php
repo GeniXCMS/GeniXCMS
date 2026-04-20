@@ -15,15 +15,17 @@ class SeoNix
         Hooks::attach('post_delete_action', array('SeoNix', 'indexNowDel'));
 
         // Admin Menu Registration
-        AdminMenu::add([
-            'id'       => 'seonix',
-            'label'    => _('SeoNix'),
-            'icon'     => 'bi bi-graph-up-arrow',
-            'url'      => 'index.php?page=mods&mod=seonix',
-            'access'   => 1,
-            'position' => 'settings',
-            'order'    => 90,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id'       => 'seonix',
+                'label'    => _('SeoNix'),
+                'icon'     => 'bi bi-graph-up-arrow',
+                'url'      => 'index.php?page=mods&mod=seonix',
+                'access'   => 1,
+                'position' => 'settings',
+                'order'    => 90,
+            ]);
+        });
     }
 
     public static function getOpt()

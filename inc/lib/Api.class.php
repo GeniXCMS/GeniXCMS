@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -50,6 +50,16 @@ class Api
             return self::error(429, 'Too many requests [Rate Limit Exceeded]');
         }
 
+        // Go Backend: Programmatically and dynamically extensible list
+        $coreGo = ['posts', 'categories', 'search', 'version', 'stats', 'tags'];
+        $dbGo = explode(',', Options::v('go_service_whitelist') ?? '');
+        $goSupported = array_unique(array_merge($coreGo, array_map('trim', $dbGo)));
+        $goSupported = Hooks::filter('go_api_supported_resources', $goSupported);
+        $backend = Options::v('api_backend') ?: 'php';
+        if ($backend === 'go' && in_array($resource, $goSupported)) {
+            return self::proxyToGo($resource, $identifier, $action);
+        }
+
         $resourceClass = ucfirst($resource) . 'Api'; // e.g. PostsApi
         if (class_exists($resourceClass)) {
             $api = new $resourceClass();
@@ -90,6 +100,71 @@ class Api
         } else {
             return self::error(404, "Resource '$resource' not found");
         }
+    }
+
+    /**
+     * Transparently proxy the API request to the Go service.
+     * The response format is identical to the PHP backend.
+     * If Go is unreachable and fallback is enabled, switches back to PHP automatically.
+     */
+    private static function proxyToGo($resource, $identifier = null, $action = null)
+    {
+        $goUrl  = rtrim(Options::v('go_service_url') ?: 'http://localhost:8080', '/');
+        $secret = Options::v('go_service_secret') ?: '';
+
+        // Build path identical to GeniXCMS REST structure
+        $path = '/api/' . ltrim($resource, '/');
+        if ($identifier) $path .= '/' . $identifier;
+        if ($action)     $path .= '/' . $action;
+
+        // Forward original query string (except internal params)
+        $params = $_GET;
+        unset($params['api'], $params['resource'], $params['id']);
+        $qs = http_build_query($params);
+        if ($qs) $path .= '?' . $qs;
+
+        $method  = $_SERVER['REQUEST_METHOD'];
+        $body    = ($method !== 'GET') ? file_get_contents('php://input') : null;
+        $apiKey  = $_SERVER['HTTP_GX_API_KEY'] ?? $_GET['api_key'] ?? '';
+
+        $ch = curl_init($goUrl . $path);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST  => $method,
+            CURLOPT_POSTFIELDS     => $body,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'X-GX-Secret: '     . $secret,
+                'X-GX-Whitelist: '  . Options::v('go_service_whitelist'),
+                'GX-API-KEY: '      . $apiKey,
+                'X-Forwarded-For: ' . ($_SERVER['REMOTE_ADDR'] ?? ''),
+                'X-Real-IP: '       . ($_SERVER['REMOTE_ADDR'] ?? ''),
+            ],
+            CURLOPT_TIMEOUT        => 5,
+            CURLOPT_CONNECTTIMEOUT => 2,
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Fallback logic
+        if ($httpCode === 0 || $httpCode === 403 || $httpCode === 404 || $httpCode >= 500) {
+            if (Options::v('go_service_fallback') !== 'off') {
+                return null;
+            }
+        }
+
+        if ($response) {
+            header('Content-Type: application/json; charset=UTF-8');
+            header('X-API-Backend: go');
+            http_response_code($httpCode);
+            echo $response;
+            exit;
+        }
+
+        return null;
     }
 
     /**

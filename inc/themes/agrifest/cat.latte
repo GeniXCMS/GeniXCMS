@@ -1,0 +1,199 @@
+{var $o = (array)Agrifest::options()}
+{var $cat_id = $data['cat']}
+{var $c = $data['category']}
+{var $cat_name = $c->name}
+{var $cat_desc = $c->desc}
+{var $cat_img_param = Categories::getParam('category_image', $cat_id)}
+{var $cat_hero = $cat_img_param}
+{if empty($cat_hero)}{var $cat_hero = $o['f_cat_img_'.$cat_id] ?? ''}{/if}
+{if empty($cat_hero)}{var $cat_hero = $o['cat_hero_img'] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200'}{/if}
+
+<div class="max-w-7xl mx-auto px-8 pt-12">
+    <!-- Hero Header -->
+    <header class="py-12 md:py-20">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+            <div class="md:col-span-7">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase mb-6">{_('Estate Journal')}</span>
+                <h1 class="text-5xl md:text-8xl font-headline font-bold text-on-surface leading-tight tracking-tighter">
+                    {$cat_name} <span class="text-primary italic">{_('Field')}</span>
+                </h1>
+                <p class="mt-8 text-xl text-on-surface-variant max-w-xl font-medium leading-relaxed">
+                    {if !empty($cat_desc)}{$cat_desc|stripHtml}{else}{_('Harvesting wisdom and meticulous insights from our fertile estates.')}{/if}
+                </p>
+            </div>
+            <div class="md:col-span-5 hidden md:block">
+                <div class="aspect-[4/1.5] w-full rounded-xl bg-surface-container-high relative overflow-hidden shadow-2xl">
+                    <img alt="{$cat_name}" class="w-full h-full object-cover" src="{Url::thumb($cat_hero, 'crop', '450x200')}"/>
+                    <div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+{var $posts_array = (array)$data['posts']}
+
+{* Logic for Featured Posts (comma separated ids) *}
+{var $f_raw = Categories::getParam('featured_post_cat', $cat_id)}
+{if empty($f_raw)}{var $f_raw = $o['f_cat_post_'.$cat_id] ?? ''}{/if}
+{var $f_ids = !empty($f_raw) ? explode(',', $f_raw) : []}
+
+{var $featured = []}
+{var $used_ids = []}
+
+{* 1. Extract specifically requested featured posts *}
+{foreach $f_ids as $fid}
+    {var $fid = trim($fid)}
+    {continueIf empty($fid)}
+    
+    {var $found = null}
+    {foreach $posts_array as $p}
+        {if $p->id == $fid}
+            {var $found = $p}
+            {breakIf true}
+        {/if}
+    {/foreach}
+    
+    {if !$found}
+        {var $fa = Posts::fetch($fid)}
+        {if is_array($fa) && !isset($fa['error'])}{var $found = $fa[0]}{/if}
+    {/if}
+    
+    {if $found}
+        {var $featured[] = $found}
+        {var $used_ids[] = $found->id}
+    {/if}
+    {breakIf count($featured) >= 3}
+{/foreach}
+
+{* 2. Fill remaining bento slots if less than 3 featured *}
+{if count($featured) < 3}
+    {foreach $posts_array as $p}
+        {if !in_array($p->id, $used_ids)}
+            {var $featured[] = $p}
+            {var $used_ids[] = $p->id}
+        {/if}
+        {breakIf count($featured) >= 3}
+    {/foreach}
+{/if}
+
+{* 3. Filter out all featured posts from the rest of the feed *}
+{var $others = []}
+{foreach $posts_array as $p}
+    {if !in_array($p->id, $used_ids)}
+        {var $others[] = $p}
+    {/if}
+{/foreach}
+
+{if !empty($featured)}
+    <!-- Featured Bento Grid -->
+    <section class="mb-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8 h-auto md:h-[700px]">
+            {foreach $featured as $index => $fp}
+                {var $fimg = Posts::getPostImage($fp->id)}
+                {if $index == 0}
+                    <!-- Large Featured Card -->
+                    <div class="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl bg-surface-container-low flex flex-col justify-end p-8 md:p-12 shadow-sm hover:shadow-2xl transition-all duration-700">
+                        <div class="absolute inset-0">
+                            {if !empty($fimg)}
+                                <img alt="{$fp->title} - Featured" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="{Url::thumb($fimg)}"/>
+                            {else}
+                                <div class="w-full h-full bg-surface-container-high flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-border text-6xl opacity-20">image</span>
+                                </div>
+                            {/if}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-primary-fixed text-sm font-black uppercase tracking-[0.2em]">{_('Cover Story')}</span>
+                                <span class="text-white/60 text-sm">• {Date::format($fp->date, 'M d, Y')}</span>
+                            </div>
+                            <h2 class="text-3xl md:text-5xl font-headline font-bold text-white leading-tight mb-8 drop-shadow-lg">
+                                <a href="{Url::post($fp->id)}" class="hover:text-primary-fixed transition-colors">{$fp->title}</a>
+                            </h2>
+                            <a href="{Url::post($fp->id)}" class="bg-primary text-white px-10 py-4 rounded-full font-black uppercase text-xs tracking-widest shadow-2xl hover:scale-105 active:scale-95 transition-all w-fit block">
+                                {_('Read Full Journal')}
+                            </a>
+                        </div>
+                    </div>
+                {else}
+                    <!-- Secondary Featured Cards -->
+                    <div class="md:col-span-1 md:row-span-1 group relative overflow-hidden rounded-3xl bg-surface-container p-8 flex flex-col justify-between border border-black/5 hover:shadow-xl transition-all duration-500">
+                        <div class="h-1/2 w-full mb-6 overflow-hidden rounded-2xl">
+                            <a href="{Url::post($fp->id)}">
+                                {if !empty($fimg)}
+                                    <img alt="{$fp->title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="{Url::thumb($fimg)}"/>
+                                {else}
+                                    <div class="w-full h-full bg-surface-container-high flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-border text-4xl opacity-20">image</span>
+                                    </div>
+                                {/if}
+                            </a>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-headline font-bold text-on-surface group-hover:text-primary transition-colors leading-snug">
+                                <a href="{Url::post($fp->id)}">{$fp->title}</a>
+                            </h3>
+                            <p class="text-on-surface-variant text-sm mt-3 line-clamp-2 leading-relaxed font-medium">
+                                {Typo::Xclean($fp->content)|stripHtml|truncate:80}
+                            </p>
+                        </div>
+                    </div>
+                {/if}
+            {/foreach}
+        </div>
+    </section>
+
+        <!-- Standard Feed Section -->
+        <section class="mb-24">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-10">
+                <div>
+                    <h2 class="text-4xl font-headline font-bold text-on-surface tracking-tighter">{_('More Field Notes')}</h2>
+                    <p class="text-lg text-on-surface-variant leading-relaxed mt-4 font-medium">{_('Freshly published insights from our estate managers.')}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                {foreach $others as $p}
+                    {var $img = Posts::getPostImage($p->id)}
+                    <article class="flex flex-col gap-8 group">
+                        <div class="aspect-[4/3] rounded-3xl overflow-hidden bg-surface-container-low shadow-sm border border-black/5">
+                            <a href="{Url::post($p->id)}">
+                                <img alt="{$p->title}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" src="{Url::thumb($img)}"/>
+                            </a>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-primary text-[10px] font-black uppercase tracking-widest">{Date::format($p->date, 'M d, Y')}</span>
+                            </div>
+                            <h3 class="text-2xl font-headline font-bold text-on-surface leading-tight mb-4 group-hover:text-primary transition-colors">
+                                <a href="{Url::post($p->id)}">{$p->title}</a>
+                            </h3>
+                            <p class="text-on-surface-variant leading-relaxed mb-6 font-medium line-clamp-3">
+                                {Typo::Xclean($p->content)|stripHtml|truncate:120}
+                            </p>
+                            <a class="text-primary font-black uppercase text-[10px] tracking-widest inline-flex items-center gap-3 group/link" href="{Url::post($p->id)}">
+                                {_('Continue Reading')}
+                                <span class="material-symbols-outlined text-sm group-hover/link:translate-x-2 transition-transform">east</span>
+                            </a>
+                        </div>
+                    </article>
+                {/foreach}
+            </div>
+
+            <!-- Pagination -->
+            {if isset($data['paging'])}
+                <div class="mt-20 flex justify-center">
+                    {$data['paging']|noescape}
+                </div>
+            {/if}
+        </section>
+    {else}
+        <div class="py-20 text-center bg-surface-container/30 rounded-3xl border-2 border-dashed border-outline-variant/30">
+            <span class="material-symbols-outlined text-8xl text-primary/20 mb-8" style="font-variation-settings: 'FILL' 1;">eco</span>
+            <h2 class="text-3xl font-headline font-bold text-on-surface mb-4">{_('Under Cultivation')}</h2>
+            <p class="text-on-surface-variant font-medium text-lg max-w-md mx-auto">{_('This field is currently being prepared for the next season. No stories have been harvested yet.')}</p>
+        </div>
+    {/if}
+</div>
+

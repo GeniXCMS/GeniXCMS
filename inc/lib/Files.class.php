@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.2 build date 20150313
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -121,6 +121,10 @@ class Files
 
         //don't fetch the actual page, you only want to check the connection is ok
         curl_setopt($curl, CURLOPT_NOBODY, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
 
         //do request
         $result = curl_exec($curl);
@@ -132,7 +136,7 @@ class Files
             //if request was ok, check response code
             $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-            if ($statusCode == 200) {
+            if ($statusCode >= 200 && $statusCode < 300) {
                 $ret = true;
             }
         }
@@ -150,9 +154,13 @@ class Files
      */
     public static function isRemote($path)
     {
-        if (strpos($path, '//') !== false) {
-            if (strpos($path, '//') >= max(strpos($path, '.'), strpos($path, '/'))) {
-                return false;
+        if (strpos($path, '//') !== false || preg_match('#^https?:/#i', $path)) {
+            if (strpos($path, '//') !== false) {
+                if (strpos($path, '//') >= max(strpos($path, '.'), strpos($path, '/'))) {
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
                 return true;
             }

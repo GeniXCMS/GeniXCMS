@@ -1,0 +1,183 @@
+{*
+ * Layout: Home Page
+ *}
+
+<!-- Hero Section -->
+<section class="relative min-h-[870px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-container/40 to-transparent"></div>
+        <img alt="Artisanal Pottery" class="w-full h-full object-cover object-center" src="{ArtisanAtelier::opt('hero_image')}"/>
+    </div>
+    <div class="relative z-10 max-w-screen-2xl mx-auto px-12 w-full">
+        <div class="max-w-2xl bg-white/20 backdrop-blur-md p-12 rounded-xl">
+            <h1 class="text-7xl font-serif text-on-surface leading-tight tracking-tight mb-6">{ArtisanAtelier::opt('hero_title')|noescape}</h1>
+            <p class="text-xl text-on-surface-variant font-body mb-10 leading-relaxed max-w-lg">{ArtisanAtelier::opt('hero_subtitle')|noescape}</p>
+            <div class="flex gap-4">
+                <button class="bg-primary text-on-primary px-10 py-5 rounded-xl font-semibold text-lg hover:shadow-xl transition-all hover:scale-[1.02]">Explore Collection</button>
+                <button class="text-primary font-semibold px-10 py-5 border-b-2 border-primary-container hover:bg-primary-container/20 transition-all">Our Workshop</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Welcome Section -->
+<section class="py-24 bg-surface-container-low">
+    <div class="max-w-screen-2xl mx-auto px-12 grid lg:grid-cols-2 gap-20 items-center">
+        <div class="relative">
+            <div class="absolute -top-10 -left-10 w-64 h-64 bg-tertiary-container/30 rounded-full blur-3xl"></div>
+            <div class="blob-shape overflow-hidden shadow-2xl relative z-10">
+                <img alt="Artisan at work" class="w-full h-[600px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAkUEB5Glh0GVp7AMMsBZGSStIPTJHvZMUqzpAFUhFGXte-PYzkBt5SjN8CLZgdw7WpsjnerjneGWkU8od86VszN-2cT9iidVMehxIYXgj0W9s9a6RLGyw6PB_I83LEXD49QAD7WKAn3NGyEP3Yw0M-sf9KzMr6HdYxo0WditJ-I3mWTktn3WN4PqsuXrrjD0mxp1lsUc7wnFVrnhfcem80eoQWhDUdBndps8rlKfqavcL6J0Qhc29hciO11k793P-xfClbbcy2nA"/>
+            </div>
+        </div>
+        <div class="space-y-8">
+            <span class="text-secondary font-semibold tracking-widest uppercase text-sm">Our Philosophy</span>
+            <h2 class="text-5xl font-serif text-on-surface leading-snug">Welcome to a space where <br/><em>craft meets soul.</em></h2>
+            <p class="text-lg text-on-surface-variant leading-relaxed font-body">Every piece in The Artisanal Atelier is hand-selected for its unique character. We believe the objects you surround yourself with should tell a story—one of patience, natural materials, and the timeless beauty of imperfection.</p>
+            <div class="pt-6">
+                <a class="text-primary font-bold text-lg inline-flex items-center gap-2 group" href="#">
+                    Meet the Artisans
+                    <span class="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_right_alt</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-32 bg-surface">
+    <div class="max-w-screen-2xl mx-auto px-12">
+        <div class="flex justify-between items-end mb-20">
+            <div>
+                <h2 class="text-headline-sm text-secondary mb-4 uppercase tracking-[0.2em]">Curated Favourites</h2>
+                <h3 class="text-5xl font-serif text-on-surface">The Seasonal Edit</h3>
+            </div>
+            <a href="{Url::mod('store')}" class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2">
+                View All Products
+                <span class="material-symbols-outlined">open_in_new</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {var $featured_products = Posts::recent(['type' => 'nixomers', 'num' => 3])}
+            {var $currency = Options::v('nix_currency_symbol') ?: 'Rp'}
+            
+            {if !isset($featured_products['error'])}
+                {foreach $featured_products as $p}
+                    {var $price = Posts::getParam('price', $p->id)}
+                    {var $img = Posts::getPostImage($p->id)}
+                    {var $material = Posts::getParam('material', $p->id) ?: Categories::name(Posts::getParam('category', $p->id))}
+                    
+                    <div class="group {if $iterator->counter == 2}mt-12{/if}">
+                        <a href="{Url::post($p->id)}" class="no-underline block">
+                            <div class="bg-surface-container-low rounded-lg p-6 mb-6 transition-all group-hover:shadow-[0_32px_32px_-4px_rgba(57,56,50,0.06)]">
+                                <img alt="{$p->title|noescape}" class="w-full aspect-[4/5] object-cover rounded-md mb-8" src="{(empty($img) ? ArtisanAtelier::opt('hero_image') : Url::thumb($img, 'large'))}"/>
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-stone-400 text-sm mb-1 uppercase tracking-tighter">{$material ?: 'Collection'}</p>
+                                        <h4 class="text-2xl font-serif text-on-surface group-hover:text-primary transition-colors">{Typo::Xclean($p->title)|noescape}</h4>
+                                    </div>
+                                    <span class="text-xl font-serif text-on-surface">{$currency} {number_format((float)$price, 0, ',', '.')}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {/foreach}
+            {else}
+                <div class="col-span-3 py-12 text-center text-on-surface-variant italic">
+                    Latest collection coming safe soon.
+                </div>
+            {/if}
+        </div>
+    </div>
+</section>
+
+<!-- Newly Crafted Section -->
+<section class="py-24 bg-surface-container-low overflow-hidden">
+    <div class="max-w-screen-2xl mx-auto px-12">
+        <h2 class="text-5xl font-serif mb-16 text-center">Newly Crafted</h2>
+        <div class="grid grid-cols-12 gap-8">
+            {var $recent_crafts = Posts::recent(['type' => 'post', 'num' => 2])}
+            
+            {if !isset($recent_crafts['error'])}
+                {var $p1 = $recent_crafts[0] ?? null}
+                {var $p2 = $recent_crafts[1] ?? null}
+                
+                {if $p1}
+                    {var $img1 = Posts::getPostImage($p1->id)}
+                    <div class="col-span-12 lg:col-span-8 h-[600px] relative overflow-hidden rounded-xl group">
+                        <img alt="{Typo::Xclean($p1->title)|noescape}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="{(empty($img1) ? ArtisanAtelier::opt('hero_image') : Url::thumb($img1, 'large'))}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 to-transparent flex flex-col justify-end p-12">
+                            <h4 class="text-surface text-3xl font-serif mb-2">{Typo::Xclean($p1->title)|noescape}</h4>
+                            <p class="text-surface/80 max-w-md">{Typo::Xclean($p1->content)|stripHtml|truncate:150}</p>
+                            <a href="{Url::post($p1->id)}" class="mt-4 text-surface border-b border-surface w-fit hover:text-primary hover:border-primary transition-all no-underline">Explore Collection</a>
+                        </div>
+                    </div>
+                {/if}
+                
+                <div class="col-span-12 lg:col-span-4 flex flex-col gap-8">
+                    <!-- Promo Card -->
+                    <div class="h-1/2 bg-secondary-container rounded-xl p-10 flex flex-col justify-center">
+                        <h4 class="text-on-secondary-container text-2xl font-serif mb-4">Artisan Kit No. 1</h4>
+                        <p class="text-on-secondary-container/80 mb-6 font-body">Everything you need to begin your journey into hand-built ceramics.</p>
+                        <button class="bg-secondary text-on-secondary w-fit px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">Pre-order Now</button>
+                    </div>
+                    
+                    {if $p2}
+                        {var $img2 = Posts::getPostImage($p2->id)}
+                        <div class="h-1/2 relative overflow-hidden rounded-xl group">
+                            <a href="{Url::post($p2->id)}" class="block h-full">
+                                <img alt="{Typo::Xclean($p2->title)|noescape}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="{(empty($img2) ? ArtisanAtelier::opt('hero_image') : Url::thumb($img2, 'large'))}">
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <span class="text-white font-serif text-xl border-b border-white pb-1">{Typo::Xclean($p2->title)|noescape}</span>
+                                </div>
+                            </a>
+                        </div>
+                    {/if}
+                </div>
+            {else}
+                <div class="col-span-12 py-12 text-center text-on-surface-variant italic">
+                    New artisanal creations are being prepared.
+                </div>
+            {/if}
+        </div>
+    </div>
+</section>
+
+<!-- Follow the Process Section -->
+<section class="py-32 bg-white">
+    <div class="max-w-screen-2xl mx-auto px-12">
+        <div class="grid lg:grid-cols-3 gap-16">
+            <div class="lg:sticky lg:top-32 h-fit">
+                <h2 class="text-5xl font-serif leading-tight mb-8">{Typo::Xclean(ArtisanAtelier::opt('process_title'))|noescape}</h2>
+                <p class="text-on-surface-variant text-lg leading-relaxed mb-8">{Typo::Xclean(ArtisanAtelier::opt('process_desc'))|noescape}</p>
+                <div class="flex items-center gap-4 cursor-pointer group">
+                    <div class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+                        <span class="material-symbols-outlined text-stone-400 group-hover:text-white transition-colors" data-icon="play_arrow">play_arrow</span>
+                    </div>
+                    <span class="font-bold tracking-widest text-xs uppercase group-hover:text-primary transition-colors">{ArtisanAtelier::opt('process_video_label')}</span>
+                </div>
+            </div>
+            <div class="lg:col-span-2 grid grid-cols-2 gap-8">
+                <!-- Step 01 -->
+                <div class="space-y-8 mt-12">
+                    <div class="overflow-hidden rounded-lg">
+                        <img alt="Kiln firing" class="w-full aspect-square object-cover hover:scale-105 transition-transform duration-700" src="{ArtisanAtelier::opt('process_img1')}">
+                    </div>
+                    <div class="p-4 border-l-2 border-primary-container">
+                        <h5 class="font-serif text-xl mb-2">{Typo::Xclean(ArtisanAtelier::opt('process_step1_title'))|noescape}</h5>
+                        <p class="text-on-surface-variant text-sm">{Typo::Xclean(ArtisanAtelier::opt('process_step1_desc'))|noescape}</p>
+                    </div>
+                </div>
+                <!-- Step 02 -->
+                <div class="space-y-8">
+                    <div class="overflow-hidden rounded-lg">
+                        <img alt="Glazing process" class="w-full aspect-square object-cover hover:scale-105 transition-transform duration-700" src="{ArtisanAtelier::opt('process_img2')}">
+                    </div>
+                    <div class="p-4 border-l-2 border-secondary-container">
+                        <h5 class="font-serif text-xl mb-2">{Typo::Xclean(ArtisanAtelier::opt('process_step2_title'))|noescape}</h5>
+                        <p class="text-on-surface-variant text-sm">{Typo::Xclean(ArtisanAtelier::opt('process_step2_desc'))|noescape}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

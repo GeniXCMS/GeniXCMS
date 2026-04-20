@@ -2,7 +2,7 @@
     "name": "genix/cms",
     "type": "project",
     "description": "Simple and Free Opensource CMS and Framework",
-    "version": "2.0.0-alpha",
+    "version": "2.3.0",
     "homepage": "https://genixcms.web.id",
     "keywords": [
         "genixcms",
@@ -34,6 +34,7 @@
         "studio-42/elfinder": "^2.1",
         "ezyang/htmlpurifier": "^4.18",
         "intervention/image": "^3.11",
-        "latte/latte": "^3.0"
+        "latte/latte": "^3.0",
+        "aws/aws-sdk-php": "^3.0"
     }
 }

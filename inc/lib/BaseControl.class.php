@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * Handles initialization of Latte engine and common data for controllers
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -70,7 +70,7 @@ abstract class BaseControl
     protected function initCommonData()
     {
         $lang = Options::v('system_lang');
-        $this->data['website_lang'] = substr($lang, 0, 2);
+        $this->data['website_lang'] = !empty($lang) ? substr($lang, 0, 2) : 'en';
         $this->data['site_name'] = Site::$name;
         $this->data['site_url'] = Site::$url;
         $this->data['site_cdn'] = Site::$cdn;
@@ -129,8 +129,23 @@ abstract class BaseControl
         $h_file = file_exists($theme_dir . $h_file_name . '.latte') ? $h_file_name . '.latte' : $h_file_name . '.php';
         $f_file = file_exists($theme_dir . $f_file_name . '.latte') ? $f_file_name . '.latte' : $f_file_name . '.php';
 
+        // Core fallback: if the active theme doesn't have the view,
+        // check inc/lib/templates/ — part of the GeniXCMS library, not a theme folder.
+        // This prevents '404 template not found' errors on themes that don't define every system view.
+        $v_dir = $theme_dir;
+        if (!file_exists($theme_dir . $v_file)) {
+            $core_tpl_dir = GX_LIB . 'templates' . DIRECTORY_SEPARATOR;
+            if (file_exists($core_tpl_dir . $v_file_name . '.latte')) {
+                $v_file = $v_file_name . '.latte';
+                $v_dir  = $core_tpl_dir;
+            } elseif (file_exists($core_tpl_dir . $v_file_name . '.php')) {
+                $v_file = $v_file_name . '.php';
+                $v_dir  = $core_tpl_dir;
+            }
+        }
+
         $h_out = $this->latte->renderToString($theme_dir . $h_file, $this->data);
-        $v_out = $this->latte->renderToString($theme_dir . $v_file, $this->data);
+        $v_out = $this->latte->renderToString($v_dir . $v_file, $this->data);
         $f_out = $this->latte->renderToString($theme_dir . $f_file, $this->data);
 
         echo $h_out;

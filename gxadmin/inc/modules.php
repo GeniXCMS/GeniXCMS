@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -30,7 +30,8 @@ if (count($data['mods']) > 0) {
         $rows[] = [
             [
                 'content' => "
-                <div class='d-flex align-items-center ps-4 py-3'>
+                <div class='ps-4 py-3 d-flex align-items-center'>
+                    <input type='checkbox' name='modules[]' value='{$mod}' class='form-check-input me-3 mod-checkbox'>
                     <div class='bg-{$statusClass} bg-opacity-10 p-3 rounded-4 text-{$statusClass} me-3 shadow-sm'>
                         <i class='{$icon} fs-4'></i>
                     </div>
@@ -273,12 +274,23 @@ $schema = [
                         [
                             'type' => 'table',
                             'headers' => [
-                                ['content' => _('Extension Identity'), 'class' => 'ps-4 py-3'],
+                                ['content' => '<input type="checkbox" id="checkAllMods" class="form-check-input ms-4"> ' . _('Extension Identity'), 'class' => 'ps-0 py-3'],
                                 _('Capability & Origin'),
                                 ['content' => _('Operational Control'), 'class' => 'text-end pe-4']
                             ],
                             'rows' => $rows,
                             'empty_message' => _('No modular extensions found in your library.')
+                        ]
+                    ],
+                    'footer_elements' => [
+                        [
+                            'type' => 'bulk_actions',
+                            'form' => 'bulk-modules-form',
+                            'options' => [
+                                'activate' => _('Activate'),
+                                'deactivate' => _('Deactivate'),
+                                'remove' => _('Remove')
+                            ]
                         ]
                     ],
                     'footer' => '
@@ -339,10 +351,31 @@ echo '<div class="col-md-12">';
 echo Hooks::run('admin_page_notif_action', $data);
 echo '</div>';
 
+echo '<form action="index.php?page=modules" method="POST" id="bulk-modules-form">';
+echo '<input type="hidden" name="token" value="' . TOKEN . '">';
+
 $builder = new UiBuilder($schema);
 $builder->render();
+
+echo '</form>';
 echo $marketplaceJs;
 ?>
+
+<script>
+    $(document).ready(function() {
+        $('#checkAllMods').on('click', function() {
+            $('.mod-checkbox').prop('checked', this.checked);
+        });
+
+        $('.mod-checkbox').on('click', function() {
+            if ($('.mod-checkbox:checked').length === $('.mod-checkbox').length) {
+                $('#checkAllMods').prop('checked', true);
+            } else {
+                $('#checkAllMods').prop('checked', false);
+            }
+        });
+    });
+</script>
 
 <style>
     .upload-zone {

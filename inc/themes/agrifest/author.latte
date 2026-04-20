@@ -1,0 +1,140 @@
+{var $o = (array)Agrifest::options()}
+{var $author = $data['author']}
+{var $u = UserProfile::getPublicData($author)}
+
+<main class="pt-24 pb-12">
+    <!-- Author Profile Hero Section -->
+    <section class="max-w-7xl mx-auto px-8 mb-16">
+        <div class="relative overflow-hidden rounded-2xl bg-surface-container-low p-8 md:p-16 border border-primary/5 shadow-sm">
+            <div class="flex flex-col md:flex-row gap-16 items-center md:items-start relative z-10">
+                <!-- Author Image -->
+                <div class="shrink-0">
+                    <div class="w-56 h-56 md:w-72 md:h-72 rounded-full overflow-hidden border-8 border-white shadow-2xl">
+                        <img class="w-full h-full object-cover" 
+                             src="https://ui-avatars.com/api/?name={$u->display_name ?? $author}&background=0d631b&color=fff&size=512"/>
+                    </div>
+                </div>
+                <!-- Bio Content -->
+                <div class="flex-1 text-center md:text-left pt-4">
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-6">
+                        <span class="px-5 py-1.5 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">
+                            {$o['profile_role_label'] ?? _('Expert Contributor')}
+                        </span>
+                        <span class="px-5 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-[0.2em]">
+                            {$o['profile_certification_label'] ?? _('Estate Certified')}
+                        </span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-headline font-bold text-on-surface mb-6 leading-none tracking-tighter">
+                        {$u->display_name ?? $author}
+                    </h1>
+                    <p class="text-xl md:text-2xl text-on-surface-variant font-body leading-relaxed mb-10 max-w-3xl">
+                        {if !empty($u->content)}
+                            {$u->content|stripHtml}
+                        {else}
+                            {_('Dedicated steward at Harvest Estate, specializing in regenerative agriculture and the quiet heritage of heirloom orchards. Bringing decades of soil wisdom to our global community.')}
+                        {/if}
+                    </p>
+                    {if ($o['profile_show_stats'] ?? 'on') == 'on'}
+                        <div class="flex flex-wrap justify-center md:justify-start gap-12 pt-4">
+                            <div class="text-center md:text-left">
+                                <span class="block text-4xl font-bold text-primary font-headline">{$data['num']}</span>
+                                <span class="text-[10px] uppercase tracking-[0.3em] font-black text-on-surface-variant italic">{_('Stories Published')}</span>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <span class="block text-4xl font-bold text-primary font-headline">12k+</span>
+                                <span class="text-[10px] uppercase tracking-[0.3em] font-black text-on-surface-variant italic">{_('Readers Reached')}</span>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <span class="block text-4xl font-bold text-primary font-headline">15</span>
+                                <span class="text-[10px] uppercase tracking-[0.3em] font-black text-on-surface-variant italic">{_('Earth Projects')}</span>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+            <!-- Background Decorative Element -->
+            <div class="absolute -bottom-24 -right-24 w-[30rem] h-[30rem] bg-primary/5 rounded-full blur-[8rem]"></div>
+            <div class="absolute -top-12 -left-12 w-80 h-80 bg-secondary/5 rounded-full blur-[6rem]"></div>
+        </div>
+    </section>
+
+    <!-- Articles Grid -->
+    <section class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div>
+                <span class="text-primary font-black tracking-[0.3em] uppercase text-xs mb-3 block">{_('Portfolio')}</span>
+                <h2 class="text-4xl md:text-5xl font-headline font-bold tracking-tighter">{_('Featured Contributions')}</h2>
+            </div>
+            <div class="flex items-center gap-4 text-on-surface-variant font-bold text-sm">
+                <span class="italic">{_('Viewing most recent insights')}</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+            {if isset($data['num']) && $data['num'] > 0}
+                {foreach $data['posts'] as $index => $p}
+                    {var $img = Posts::getParam('image', $p->id)}
+                    {if $index == 0}
+                        <!-- Large Feature Card -->
+                        <article class="md:col-span-8 group relative overflow-hidden rounded-2xl bg-white transition-all duration-700 hover:shadow-2xl border border-primary/5">
+                            <div class="aspect-[16/9] overflow-hidden">
+                                <a href="{Url::post($p->id)}">
+                                    <img alt="{$p->title}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                                         src="{(empty($img) ? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800' : Url::thumb($img, 'large'))}"/>
+                                </a>
+                            </div>
+                            <div class="p-12">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <span class="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{Categories::name($p->cat)}</span>
+                                    <span class="text-outline/30">•</span>
+                                    <span class="text-[10px] font-black text-on-surface-variant/50 uppercase tracking-[0.2em]">{Date::format($p->date, 'M d, Y')}</span>
+                                </div>
+                                <h3 class="text-3xl md:text-4xl font-headline font-bold mb-6 group-hover:text-primary transition-colors leading-tight tracking-tight">
+                                    <a href="{Url::post($p->id)}">{$p->title}</a>
+                                </h3>
+                                <p class="text-on-surface-variant text-lg mb-10 line-clamp-2 leading-relaxed">
+                                    {Typo::Xclean($p->content)|stripHtml|truncate:160}
+                                </p>
+                                <a class="inline-flex items-center gap-3 text-primary font-black uppercase text-xs tracking-[0.2em] group/link" href="{Url::post($p->id)}">
+                                    {_('Read Full Insight')}
+                                    <span class="material-symbols-outlined text-sm transition-transform group-hover/link:translate-x-2">arrow_forward</span>
+                                </a>
+                            </div>
+                        </article>
+                    {else}
+                        <!-- Regular Cards -->
+                        <article class="md:col-span-4 flex flex-col rounded-xl bg-white transition-all duration-500 hover:shadow-xl border border-primary/5 group">
+                            <div class="h-64 overflow-hidden rounded-t-xl">
+                                <a href="{Url::post($p->id)}">
+                                    <img alt="{$p->title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                         src="{(empty($img) ? 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=400' : Url::thumb($img, 'large'))}"/>
+                                </a>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col">
+                                <span class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] mb-4 block">{Categories::name($p->cat)}</span>
+                                <h3 class="text-xl font-headline font-bold mb-6 group-hover:text-primary transition-colors leading-snug">
+                                    <a href="{Url::post($p->id)}">{$p->title}</a>
+                                </h3>
+                                <div class="mt-auto pt-6 border-t border-primary/5 flex items-center justify-between">
+                                    <span class="text-[10px] font-black uppercase text-on-surface-variant/60 tracking-widest">{Date::format($p->date, 'M d')}</span>
+                                    <span class="material-symbols-outlined text-primary text-xl">bookmark</span>
+                                </div>
+                            </div>
+                        </article>
+                    {/if}
+                {/foreach}
+            {else}
+                <div class="col-span-12 py-32 text-center bg-surface-container-low rounded-2xl">
+                    <span class="material-symbols-outlined text-7xl text-primary/10 mb-6">edit_note</span>
+                    <p class="text-on-surface-variant font-bold text-xl">{_('This steward has not published any insights yet.')}</p>
+                </div>
+            {/if}
+        </div>
+
+        {if isset($data['paging'])}
+            <div class="mt-20 flex justify-center">
+                {$data['paging']|noescape}
+            </div>
+        {/if}
+    </section>
+</main>

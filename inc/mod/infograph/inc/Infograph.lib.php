@@ -7,15 +7,18 @@ class Infograph
         Hooks::attach('post_content_before_action', array('Infograph', 'display'));
         Hooks::attach('init', array('Infograph', 'renderParam'));
 
-        AdminMenu::add([
-            'id'       => 'infograph',
-            'label'    => _('Infograph'),
-            'icon'     => 'bi bi-geo-alt',
-            'url'      => 'index.php?page=mods&mod=infograph',
-            'access'   => 1,
-            'position' => 'external',
-            'order'    => 20,
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::add([
+                'id'       => 'infograph',
+                'label'    => _('Infograph'),
+                'icon'     => 'bi bi-geo-alt',
+                'url'      => 'index.php?page=mods&mod=infograph',
+                'access'   => 1,
+                'position' => 'external',
+                'order'    => 20,
+            ]);
+        });
+    
     }
     public static function show()
     {

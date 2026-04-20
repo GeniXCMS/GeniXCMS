@@ -1,0 +1,57 @@
+<div class="max-w-7xl mx-auto px-8 py-20">
+    <div class="mb-16">
+        <h1 class="text-5xl md:text-7xl font-headline font-bold text-on-surface mb-6 tracking-tighter">
+            {_('Estate Journal')}
+        </h1>
+        <p class="text-xl text-on-surface-variant max-w-2xl leading-relaxed">
+            {_('Stories from the soil, seasonal recipes, and insights into our regenerative farming practices.')}
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {if isset($data['num']) && $data['num'] > 0}
+            {foreach $data['posts'] as $p}
+                <article class="group relative flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
+                    {var $img = Posts::getParam('image', $p->id)}
+                    <div class="h-64 overflow-hidden relative">
+                        <a href="{Url::post($p->id)}">
+                            <img alt="{$p->title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                                 src="{(empty($img) ? 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=400' : Url::thumb($img, 'large'))}"/>
+                        </a>
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-primary/90 text-white text-[10px] px-3 py-1 rounded-full font-black tracking-widest uppercase">
+                                {Categories::name($p->cat)}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="text-xs text-on-surface-variant font-bold uppercase tracking-widest mb-4">
+                            {Date::format($p->date, 'M d, Y')} — {var $words = str_word_count(strip_tags($p->content))} {max(1, ceil($words / 200))} min read
+                        </div>
+                        <h2 class="text-2xl font-headline font-bold text-on-surface mb-4 leading-tight group-hover:text-primary transition-colors">
+                            <a href="{Url::post($p->id)}">{$p->title}</a>
+                        </h2>
+                        <p class="text-on-surface-variant text-sm mb-8 flex-grow line-clamp-2 leading-relaxed">
+                            {Typo::Xclean($p->content)|stripHtml|truncate:120}
+                        </p>
+                        <a href="{Url::post($p->id)}" class="inline-flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest group/link">
+                            {_('Read Full Story')}
+                            <span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+                        </a>
+                    </div>
+                </article>
+            {/foreach}
+        {else}
+            <div class="col-span-full py-20 text-center">
+                <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-6 opacity-20">inventory_2</span>
+                <p class="text-on-surface-variant font-medium text-lg">{_('No journal entries found matching your criteria.')}</p>
+            </div>
+        {/if}
+    </div>
+
+    {if isset($data['paging'])}
+        <div class="mt-20 flex justify-center">
+            {$data['paging']|noescape}
+        </div>
+    {/if}
+</div>

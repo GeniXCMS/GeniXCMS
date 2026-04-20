@@ -1,0 +1,693 @@
+/* Artisan Atelier Theme Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* These should ideally match your theme options */
+    --primary-color: #a74632;
+    /* Example reddish/brick color from theme */
+    --surface-color: #f7f3ed;
+    --on-surface-color: #393832;
+}
+
+h1,
+h2,
+h3,
+.font-headline,
+#shipping-section h2,
+form[action*="payment"] h2 {
+    font-family: 'Noto Serif', serif !important;
+    letter-spacing: -0.02em;
+}
+
+body,
+.font-body,
+form[action*="payment"] {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* Nixomers Form & Summary Refinements */
+.nixomers-checkout-form h2 {
+    font-size: 1.5rem !important;
+    color: var(--on-surface-color) !important;
+    border-bottom: 1px solid #ebe8df !important;
+    padding-bottom: 1rem !important;
+}
+
+.nixomers-checkout-form label.text-gray-500 {
+    font-size: 10px !important;
+    letter-spacing: 0.1em !important;
+    color: #828079 !important;
+    text-transform: uppercase !important;
+}
+
+.nixomers-checkout-form input, 
+.nixomers-checkout-form select, 
+.nixomers-checkout-form textarea {
+    background-color: #fdf9f4 !important;
+    border-color: #bcb9b1 !important;
+    border-radius: 1.5rem !important;
+    padding: 1rem 1.25rem !important;
+    transition: all 0.3s ease;
+}
+
+.nixomers-checkout-form button[type="submit"] {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    border-radius: 9999px !important;
+    padding: 1rem 3rem !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    box-shadow: 0 10px 20px -10px var(--primary-color) !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Order Summary Box */
+.nixomers-order-summary {
+    background-color: rgb(247 243 237 / var(--tw-bg-opacity, 1)) !important;
+    border: none !important;
+    border-radius: 1.5rem !important;
+    padding: 2rem !important;
+    box-shadow: none !important;
+}
+
+.nixomers-order-summary h3,
+.nixomers-order-summary h2 {
+    font-size: 1.5rem !important;
+    font-family: 'Noto Serif', serif !important;
+    color: #393832 !important;
+    margin-bottom: 2rem !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+#shipping-rates-list .text-gray-900 {
+    color: var(--on-surface-color) !important;
+}
+
+#shipping-rates-list input[type="radio"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #bcb9b1 !important;
+    border-radius: 30% !important;
+    background-color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    margin-right: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+#shipping-rates-list input[type="radio"]:checked {
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+}
+
+#shipping-rates-list input[type="radio"]:checked::after {
+    content: "" !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    background-color: var(--primary-color) !important;
+}
+
+#shipping-rates-list label:hover input[type="radio"] {
+    border-color: var(--primary-color) !important;
+}
+
+/* Order Summary Mockup Match */
+div.sticky.top-24.bg-white.border,
+.nixomers-summary-container {
+    background-color: rgba(241, 237, 230, 0.4) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: none !important;
+    border-radius: 1.5rem !important; /* rounded-3xl */
+    padding: 2rem !important; /* p-8 */
+    box-shadow: none !important;
+}
+
+div.sticky.top-24.bg-white.border h2 {
+    font-size: 1.5rem !important;
+    font-family: 'Noto Serif', serif !important;
+    color: #393832 !important;
+    margin-bottom: 2rem !important;
+    border-bottom: none !important;
+    display: block !important;
+}
+
+/* Product Item List */
+.nixomers-order-summary div.space-y-4 {
+    padding-top: 12px !important;
+}
+
+div.flex.gap-4.items-center {
+    align-items: flex-start !important;
+    margin-bottom: 2rem !important;
+    overflow: visible !important;
+}
+
+div.relative.flex-shrink-0 {
+    overflow: visible !important;
+}
+
+div.flex.gap-4.items-center img {
+    width: 72px !important;
+    height: 72px !important;
+    border-radius: 1rem !important;
+    border: none !important;
+    object-fit: cover !important;
+}
+
+/* Quantity Badge - Positioned to peek out from the corner */
+div.relative.flex-shrink-0 span.bg-gray-500 {
+    background-color: #4f6c43 !important;
+    font-size: 11px !important;
+    width: 26px !important;
+    height: 26px !important;
+    border: 3px solid #f1f0ec !important; /* Close to surface-container-high */
+    top: -12px !important;
+    right: -12px !important;
+    color: white !important;
+    z-index: 50 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: absolute !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+div.flex-1 h4.text-gray-900 {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #393832 !important;
+    margin-bottom: 0.2rem !important;
+}
+
+div.flex-1 p.text-gray-500 {
+    font-size: 0.8rem !important;
+    font-style: italic !important;
+    color: #828079 !important;
+}
+
+span.font-bold.text-gray-600 {
+    font-size: 1rem !important;
+    color: #393832 !important;
+}
+
+/* Discount Box Placeholder Styling */
+.discount-box-mock {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.discount-input-mock {
+    flex: 1;
+    background: white !important;
+    border: 1px solid #ebe8df !important;
+    border-radius: 0.75rem !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.9rem;
+}
+
+.discount-button-mock {
+    background: #e6e2d8 !important;
+    color: #393832 !important;
+    border-radius: 0.75rem !important;
+    padding: 0.85rem 1.5rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+}
+
+/* Totals Section */
+div.space-y-3.border-t.pt-6 {
+    border-color: #ebe8df !important;
+    padding-top: 2rem !important;
+}
+
+div.flex.justify-between.text-sm span {
+    font-size: 0.95rem !important;
+}
+
+#shipping-total-display {
+    color: #828079 !important;
+    font-style: italic !important;
+    font-weight: normal !important;
+}
+
+/* Grand Total Row */
+div.flex.justify-between.items-baseline.pt-4 {
+    border-color: #ebe8df !important;
+    padding-top: 1.5rem !important;
+    margin-top: 1rem !important;
+}
+
+div.flex.justify-between.items-baseline span.text-lg.font-bold {
+    font-family: 'Noto Serif', serif !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+}
+
+#grand-total-display {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: #393832 !important;
+    letter-spacing: -0.03em !important;
+}
+
+div.text-right span.tracking-widest {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    margin-right: 0.25rem !important;
+}
+
+.blob-shape {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.glass-nav {
+    backdrop-filter: blur(24px);
+}
+
+/* Widget Styling */
+.footer-widget-area h3.widget-title {
+    font-family: 'Noto Serif', serif !important;
+    font-weight: 700 !important;
+    font-size: 1.125rem !important; /* text-lg / h6 equivalent */
+    color: #1c1917 !important; /* stone-800 */
+    margin-bottom: 1.5rem !important;
+}
+
+.footer-widget-area .widget-body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 0.875rem !important; /* text-sm */
+    color: #78716c !important; /* stone-500 equivalent */
+    line-height: 1.625 !important;
+}
+
+.footer-widget-area a {
+    color: #78716c !important;
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+}
+
+.footer-widget-area a:hover {
+    color: #1c1917 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 8px !important;
+}
+
+.dark .footer-widget-area h3.widget-title {
+    color: #e7e5e4 !important; /* stone-200 */
+}
+
+.dark .footer-widget-area .widget-body,
+.dark .footer-widget-area a {
+    color: #a8a29e !important; /* stone-400 equivalent */
+}
+
+.dark .footer-widget-area a:hover {
+    color: #e7e5e4 !important;
+}
+
+/* GeniXCMS System Style Mapping - Artisan Atelier */
+.gx-btn {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    padding: 0.75rem 1.5rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+.gx-btn-primary {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(167, 70, 50, 0.2) !important;
+}
+
+.gx-btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(167, 70, 50, 0.3) !important;
+}
+
+.gx-btn-secondary {
+    background-color: #f7f3ed !important;
+    color: #393832 !important;
+    border: 1px solid #ebe8df !important;
+}
+
+.gx-btn-secondary:hover {
+    background-color: #ebe8df !important;
+    transform: translateY(-2px);
+}
+
+.gx-badge {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: 0.35rem 0.85rem !important;
+    border-radius: 99px !important;
+    font-size: 0.65rem !important;
+}
+
+.gx-card {
+    background: #ffffff !important;
+    border-radius: 2rem !important;
+    border: 1px solid #f1ede6 !important;
+    padding: 2.5rem !important;
+    box-shadow: 0 32px 64px -12px rgba(57, 56, 50, 0.06) !important;
+}
+
+.gx-alert {
+    border-radius: 1.25rem !important;
+    font-weight: 600 !important;
+    padding: 1.25rem 1.5rem !important;
+    border: 1.5px solid transparent !important;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 2rem !important;
+}
+
+.gx-alert-success {
+    background-color: #f6fdf4 !important;
+    border-color: #e2f7db !important;
+    color: #334f29 !important;
+}
+
+.gx-alert-danger {
+    background-color: #fff5f6 !important;
+    border-color: #ffe0e4 !important;
+    color: #770326 !important;
+}
+
+.gx-alert-warning {
+    background-color: #fefcf0 !important;
+    border-color: #faeeb5 !important;
+    color: #675200 !important;
+}
+
+.gx-text-muted {
+    color: #828079 !important;
+    font-weight: 500 !important;
+}
+
+.gx-h1, .gx-h2, .gx-h3, .gx-h4 {
+    font-family: "Noto Serif", serif !important;
+    color: #393832 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.gx-rounded {
+    border-radius: 1.25rem !important;
+}
+
+/* User Profile Page - Artisan Atelier Overrides */
+.gx-user-profile-wrap {
+    margin-top: 1rem;
+}
+
+.gx-user-profile-wrap .gx-card {
+    border-radius: 2rem !important;
+}
+
+.gx-user-profile-wrap aside .gx-card {
+    padding: 2.5rem 1.75rem !important;
+}
+
+.gx-user-profile-wrap aside .gx-h5 {
+    font-family: "Noto Serif", serif !important;
+    font-weight: 800 !important;
+    font-size: 1.5rem !important;
+}
+
+.gx-user-profile-wrap .gx-list-group {
+    background: transparent !important;
+    border: none !important;
+}
+
+.gx-user-profile-wrap .gx-list-group-item {
+    border: none !important;
+    border-radius: 1rem !important;
+    margin-bottom: 0.35rem !important;
+    font-weight: 700 !important;
+    color: #828079 !important;
+    padding: 1rem 1.25rem !important;
+    font-size: 0.9rem !important;
+}
+
+.gx-user-profile-wrap .gx-list-group-item.gx-bg-soft.gx-text-primary {
+    background-color: #fdf9f4 !important;
+    color: var(--primary-color) !important;
+}
+
+.gx-user-profile-wrap .gx-list-group-item:hover {
+    background-color: #fdf9f4 !important;
+    color: var(--primary-color) !important;
+}
+
+/* User Avatar */
+.gx-user-profile-wrap img.gx-shadow-sm {
+    border: 4px solid #ffffff !important;
+    box-shadow: 0 12px 32px -4px rgba(50, 40, 20, 0.08) !important;
+    border-radius: 2.5rem !important;
+}
+
+/* Form & Layout Styling in Profile */
+.gx-form-group {
+    margin-bottom: 1.5rem !important;
+}
+
+.gx-label {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    color: #a8a29e !important;
+    margin-bottom: 0.65rem !important;
+    display: block !important;
+}
+
+.gx-input {
+    background-color: #fcfaf7 !important;
+    border: 1.25px solid #ebe8df !important;
+    border-radius: 1.25rem !important;
+    padding: 0.9rem 1.25rem !important;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    color: #393832 !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    font-size: 0.95rem !important;
+}
+
+.gx-input:focus {
+    border-color: var(--primary-color) !important;
+    background-color: #ffffff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 4px rgba(167, 70, 50, 0.06) !important;
+}
+
+.gx-user-profile-wrap fieldset {
+    border: none !important;
+    padding: 0 !important;
+    margin: 2.5rem 0 !important;
+}
+
+.gx-user-profile-wrap legend {
+    font-family: "Noto Serif", serif !important;
+    font-size: 1.25rem !important;
+    color: #393832 !important;
+    font-weight: 800 !important;
+    border-bottom: 1.5px solid #f1ede6 !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 1.75rem !important;
+    width: 100% !important;
+    float: none !important;
+}
+
+.gx-bg-soft {
+    background-color: #fdf9f4 !important;
+}
+
+.gx-border {
+    border-color: #f1ede6 !important;
+}
+
+.gx-rounded-full {
+    border-radius: 9999px !important;
+}
+
+/* Recent Posts List group in Profile */
+.gx-list-group-item.gx-p-3.gx-gap-3 {
+    border: 1px solid #f1ede6 !important;
+    border-radius: 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.gx-list-group-item .gx-text-dark {
+    font-family: "Noto Serif", serif !important;
+    font-weight: 700 !important;
+}
+
+/* GX Input Group Refinements - Artisan Atelier */
+.gx-input-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    background-color: #fcfaf7 !important;
+    border: 1.5px solid #ebe8df !important;
+    border-radius: 1.25rem !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+}
+
+.gx-input-group:focus-within {
+    border-color: var(--primary-color) !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 4px rgba(167, 70, 50, 0.05) !important;
+}
+
+.gx-input-group-text {
+    background-color: #f1ede6 !important;
+    border: none !important;
+    border-right: 1.5px solid #ebe8df !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 1.25rem !important;
+    color: var(--primary-color) !important;
+    font-weight: 800 !important;
+    min-width: 4rem !important;
+    flex-shrink: 0 !important;
+}
+
+.gx-input-group .gx-input {
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    flex: 1 1 auto !important;
+    width: 1% !important; /* Forces the input to grow correctly within flex */
+    min-width: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding-left: 1.5rem !important;
+    height: auto !important;
+    min-height: 3.5rem !important; /* Ensures the input has sufficient height */
+}
+
+.gx-input-group .gx-input:focus {
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Payment Confirmation Specifics - Artisan Atelier */
+.nix-upload-zone {
+    background-color: #fcfaf7 !important;
+    border: 2.5px dashed #ebe8df !important;
+    border-radius: 2rem !important;
+    transition: all 0.3s ease !important;
+    padding: 3rem 2rem !important;
+}
+
+.nix-upload-zone:hover {
+    border-color: var(--primary-color) !important;
+    background-color: #fdf9f4 !important;
+}
+
+.nix-upload-icon {
+    color: var(--primary-color) !important;
+    opacity: 0.5 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.nix-upload-zone:hover .nix-upload-icon {
+    opacity: 1 !important;
+}
+
+.nix-upload-text {
+    font-family: "Noto Serif", serif !important;
+    font-weight: 700 !important;
+    color: #393832 !important;
+}
+
+/* Purchase History - Artisan Atelier Overrides */
+.gx-user-profile-wrap .gx-card.gx-row.gx-items-center {
+    background-color: #ffffff !important;
+    border: 1.5px solid #f1ede6 !important;
+    margin-bottom: 1rem !important;
+    padding: 1.25rem !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    box-shadow: none !important;
+}
+
+.gx-user-profile-wrap .gx-card.gx-row.gx-items-center:hover {
+    transform: translateX(12px) !important;
+    border-color: var(--primary-color) !important;
+    background-color: #fcfaf7 !important;
+}
+
+.gx-user-profile-wrap .gx-bg-soft.gx-rounded {
+    background-color: #fdf9f4 !important;
+}
+
+.gx-user-profile-wrap .gx-text-lg.gx-fw-black {
+    font-family: "Noto Serif", serif !important;
+    font-size: 1.15rem !important;
+    color: #393832 !important;
+}
+
+.gx-user-profile-wrap .gx-text-xl.gx-fw-black.gx-text-primary {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-size: 1.35rem !important;
+    letter-spacing: -0.04em !important;
+    font-weight: 800 !important;
+}
+
+.gx-user-profile-wrap .gx-badge-success {
+    background-color: #f6fdf4 !important;
+    color: #334f29 !important;
+    border: 1.25px solid #e2f7db !important;
+}
+
+.gx-user-profile-wrap .gx-badge-warning {
+    background-color: #fefcf0 !important;
+    color: #675200 !important;
+    border: 1.25px solid #faeeb5 !important;
+}
+
+.gx-user-profile-wrap .gx-badge-danger {
+    background-color: #fff5f6 !important;
+    color: #770326 !important;
+    border: 1.25px solid #ffe0e4 !important;
+}
+
+.gx-user-profile-wrap .gx-text-muted.gx-fw-bold {
+    color: #a8a29e !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.1em !important;
+}
+
+.gx-user-profile-wrap .gx-text-sm.gx-fw-bold.gx-text-dark {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-weight: 700 !important;
+    color: #44403c !important;
+}

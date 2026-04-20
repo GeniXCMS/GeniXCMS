@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * @package GeniXCMS
  * @since 0.0.1 build date 20150221
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * 
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>

@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20141006
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -112,7 +112,8 @@ class Control
             'register',
             'forgotpass',
             'logout',
-            'archive'
+            'archive',
+            'user'
         );
         if (defined('SMART_URL') && SMART_URL) {
             if (isset($_REQUEST) && $_REQUEST != '' && count($_REQUEST) > 0) {
@@ -316,13 +317,8 @@ class Control
     public static function ajax($vars = '', $param = '')
     {
         if (isset($vars) && $vars != '') {
-            $page = "ajax";
-            $file = GX_PATH . '/inc/lib/Control/Ajax/' . $vars . '-ajax.control.php';
-            if (file_exists($file)) {
-                include $file;
-            } else {
-                self::error('404');
-            }
+            $action = $_GET['action'] ?? null;
+            Ajax::dispatch($vars, $action, $param);
         }
     }
 }

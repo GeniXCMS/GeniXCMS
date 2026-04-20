@@ -1,0 +1,44 @@
+<main class="min-h-[70vh] flex items-center justify-center bg-surface relative overflow-hidden py-20">
+    <!-- Background Accents -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none z-0" 
+         style="background-image: radial-gradient(var(--color-primary) 1px, transparent 1px); background-size: 30px 30px;">
+    </div>
+    
+    <div class="absolute top-1/4 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px] -z-10"></div>
+    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary/10 rounded-full blur-[100px] -z-10"></div>
+
+    <div class="container mx-auto px-8 relative z-10 text-center">
+        <div class="mb-8">
+            <h1 class="text-8xl md:text-[12rem] font-headline font-black text-on-surface leading-none tracking-tighter mb-4 drop-shadow-sm italic">
+                Oop<span class="text-primary">s!</span>
+            </h1>
+            <h2 class="text-3xl md:text-5xl font-headline font-extrabold text-on-surface mb-8">The Batch is Gone.</h2>
+            <p class="text-lg text-on-surface-variant max-w-xl mx-auto leading-relaxed mb-12">
+                It seems the recipe you followed for this page didn't quite work out. The page you're looking for might have been moved, deleted, or simply whisked away.
+            </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <a href="{$site_url}" class="group bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-full font-bold editorial-shadow hover:opacity-90 transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined transition-transform group-hover:-translate-x-1">arrow_back</span>
+                Return to Home
+            </a>
+            <a href="{Url::search()}" class="px-10 py-4 bg-surface-container-low text-on-surface border border-black/5 rounded-full font-bold hover:bg-surface-container transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined">search</span>
+                Search Anything
+            </a>
+        </div>
+
+        <!-- Optional Search Form for 404 -->
+        <div class="max-w-md mx-auto">
+            <form action="{Url::search()}" method="get" class="relative group">
+                <input type="hidden" name="search" value=""/>
+                <input name="q" class="w-full bg-surface-container-low border border-black/5 rounded-2xl py-5 px-8 text-sm focus:ring-4 focus:ring-primary/10 transition-all outline-none pr-16" 
+                       placeholder="Maybe try searching for a different recipe?" type="text"/>
+                <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary text-on-primary rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</main>

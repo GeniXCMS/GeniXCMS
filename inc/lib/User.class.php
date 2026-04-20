@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -547,5 +547,91 @@ class User
 
             return false;
         }
+    }
+
+    /**
+     * Dashboard UI: Get Table Headers
+     */
+    public static function getDashboardHeaders()
+    {
+        $headers = [
+            ['content' => _('ID'), 'class' => 'ps-4 py-3'],
+            ['content' => _('User Identity')],
+            ['content' => _('Role'), 'class' => 'text-center'],
+            ['content' => _('Status & Joined'), 'class' => 'text-center'],
+            ['content' => _('Origin'), 'class' => 'text-center'],
+            ['content' => _('Control'), 'class' => 'text-end pe-4'],
+            ['content' => '<input type="checkbox" id="checkAll" class="form-check-input shadow-none border">', 'class' => 'text-center pe-4']
+        ];
+
+        return Hooks::filter('admin_users_table_headers', $headers);
+    }
+
+    /**
+     * Dashboard UI: Get Table Row
+     */
+    public static function getDashboardRow($pObj)
+    {
+        $grp = self::$group[$pObj->group] ?? "Unknown ({$pObj->group})";
+
+        if ($pObj->status == '0') {
+            $statusBadge = '<a href="index.php?page=users&act=active&id=' . $pObj->id . '&token=' . TOKEN . '" class="badge bg-danger bg-opacity-10 text-danger text-decoration-none px-3 py-2 rounded-pill fw-bold" style="font-size: 0.65rem;">' . _("Inactive") . '</a>';
+        } else {
+            $statusBadge = '<a href="index.php?page=users&act=inactive&id=' . $pObj->id . '&token=' . TOKEN . '" class="badge bg-success bg-opacity-10 text-success text-decoration-none px-3 py-2 rounded-pill fw-bold" style="font-size: 0.65rem;">' . _("Active") . '</a>';
+        }
+        
+        $country = ($pObj->country != "") ? strtolower($pObj->country) : "unknown";
+        $originToken = ($country != "unknown")
+            ? "<span class='flag-icon flag-icon-{$country} shadow-sm rounded-1' title='" . strtoupper($country) . "'></span>"
+            : "<i class='bi bi-geo-alt text-muted opacity-50'></i>";
+
+        // Modular Action Menu
+        $actionMenu = [
+            'edit' => [
+                'label' => _("Edit Profile"),
+                'icon' => 'bi bi-pencil-square',
+                'href' => 'index.php?page=users&act=edit&id=' . $pObj->id . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-success'
+            ],
+            'delete' => [
+                'label' => _("Delete"),
+                'icon' => 'bi bi-trash',
+                'href' => 'index.php?page=users&act=del&id=' . $pObj->id . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-danger',
+                'onclick' => "return confirm('" . _("Remove user permanently?") . "');"
+            ]
+        ];
+
+        $actionMenu = Hooks::filter('admin_users_action_menu', $actionMenu, $pObj);
+
+        $actionsHtml = '<div class="btn-group gap-1">';
+        foreach ($actionMenu as $mv) {
+            $attr = '';
+            if (isset($mv['onclick'])) $attr .= ' onclick="' . $mv['onclick'] . '"';
+            $actionsHtml .= '<a href="' . ($mv['href'] ?? '#') . '" class="' . ($mv['class'] ?? 'btn btn-light btn-sm') . '"' . $attr . ' title="' . ($mv['label'] ?? '') . '"><i class="' . ($mv['icon'] ?? '') . '"></i></a>';
+        }
+        $actionsHtml .= '</div>';
+
+        $row = [
+            ['content' => "<span class='text-muted extra-small'>#{$pObj->id}</span>", 'class' => 'ps-4 py-3'],
+            ['content' => "
+                <div class='d-flex align-items-center py-2'>
+                    <div class='bg-primary bg-opacity-10 p-2 rounded-circle text-primary me-3 d-flex align-items-center justify-content-center border border-primary border-opacity-10' style='width: 42px; height: 42px;'><i class='bi bi-person fs-5'></i></div>
+                    <div>
+                        <div class='fw-bold text-dark mb-0 ls-n1' style='font-size: 0.95rem;'>{$pObj->userid}</div>
+                        <div class='text-muted extra-small'>{$pObj->email}</div>
+                    </div>
+                </div>"],
+            ['content' => "<span class='badge bg-dark bg-opacity-10 text-dark border-0 px-3 py-2 rounded-pill fw-bold text-uppercase' style='font-size: 0.65rem;'>{$grp}</span>", 'class' => 'text-center'],
+            ['content' => "<div class='mb-1'>{$statusBadge}</div><div class='extra-small text-muted fw-bold'>" . Date::format($pObj->join_date, 'd M Y') . "</div>", 'class' => 'text-center'],
+            ['content' => $originToken, 'class' => 'text-center']
+        ];
+
+        $row = Hooks::filter('admin_users_table_row', $row, $pObj);
+
+        $row[] = ['content' => $actionsHtml, 'class' => 'text-end pe-4'];
+        $row[] = ['content' => "<div class='text-center pe-4'><input type='checkbox' name='user_id[]' value='{$pObj->id}' class='check form-check-input shadow-none border'></div>", 'class' => 'p-0'];
+
+        return $row;
     }
 }

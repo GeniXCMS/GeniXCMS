@@ -1,0 +1,629 @@
+/* Agrifest Theme - Core Design System */
+
+:root {
+    --radius-editorial: 1rem;
+    --shadow-editorial: 0 20px 40px -10px rgba(13, 99, 27, 0.08);
+
+    /* GeniXCMS Standard UI Overrides (gx-*) */
+    --gx-primary: #0d631b;
+    --gx-primary-soft: #e9f0e1;
+    --gx-secondary: #40493d;
+    --gx-text: #171d14;
+    --gx-bg-soft: #fbfdf9;
+    --gx-border: rgba(13, 99, 27, 0.08);
+    --gx-radius: 1.25rem;
+    --gx-font: 'Manrope', system-ui, sans-serif;
+}
+
+.hero-gradient {
+    background: linear-gradient(rgba(13, 99, 27, 0.05), rgba(13, 99, 27, 0));
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, .font-headline {
+    font-family: 'Noto Serif', serif;
+    letter-spacing: -0.02em;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Overrides */
+.glass-nav {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* Bento Cards */
+.bento-item {
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bento-item:hover {
+    transform: translateY(-8px);
+}
+
+/* Content Area Overrides */
+article.content-rich {
+    line-height: 1.8;
+    color: var(--color-on-surface-variant);
+}
+
+article.content-rich p {
+    margin-bottom: 1.5rem;
+}
+
+article.content-rich h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-on-surface);
+}
+
+/* Newsletter Input Glow */
+.newsletter-input:focus {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+/* Utility: Line Clamp */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Mobile Nav Patch */
+#mobile-menu.active {
+    transform: translateX(0);
+}
+
+/* RTL Support if needed */
+[dir="rtl"] .font-headline {
+    letter-spacing: 0;
+}
+
+/* Premium Capsule Pagination Styling */
+.pagination {
+    display: inline-flex !important;
+    background: var(--surface-container, #e9f0e1);
+    padding: 0.5rem;
+    border-radius: 9999px;
+    list-style: none !important;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination li a,
+.pagination li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--on-surface-variant, #40493d);
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none !important;
+}
+
+.pagination li.active span,
+.pagination li.active a {
+    background: var(--primary, #0d631b) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(13, 99, 27, 0.2);
+    border-color: transparent;
+}
+
+.pagination li a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--primary, #0d631b);
+    transform: scale(1.1);
+}
+
+.pagination li.disabled span {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Checkout Specialized Styling */
+.agrifest-checkout-container {
+    --checkout-border: rgba(0,0,0,0.06);
+    --checkout-green-soft: #e9f0e1;
+}
+
+.agrifest-checkout-container form.nixomers-checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem; /* Increased gap for step indicators */
+}
+
+/* Target only top-level sections for the card look */
+.agrifest-checkout-container form.nixomers-checkout-form > div {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid var(--checkout-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    position: relative;
+    overflow: visible;
+}
+
+/* Pseudo-Step Indicators - Only on direct children */
+.agrifest-checkout-container form.nixomers-checkout-form > div::before {
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #0d631b;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    box-shadow: 0 4px 12px rgba(13, 99, 27, 0.2);
+    z-index: 10;
+}
+
+.agrifest-checkout-container form.nixomers-checkout-form > div:nth-child(1)::before { content: "1"; }
+.agrifest-checkout-container form.nixomers-checkout-form > div:nth-child(2)::before { content: "2"; }
+.agrifest-checkout-container form.nixomers-checkout-form > div:nth-child(4)::before { content: "3"; } /* 4th child because of hidden inputs/divs */
+
+/* Adjust heading padding */
+.agrifest-checkout-container h2 {
+    font-family: 'Noto Serif', serif;
+    font-weight: 800;
+    font-size: 1.5rem !important;
+    color: #171d14;
+    border-bottom: 0px !important;
+    padding-bottom: 0.5rem !important;
+}
+
+/* Specific Input Styling - Exclude Radios */
+.agrifest-checkout-container input[type="text"],
+.agrifest-checkout-container input[type="email"],
+.agrifest-checkout-container input[type="number"],
+.agrifest-checkout-container select,
+.agrifest-checkout-container textarea {
+    background-color: #fbfdf9 !important;
+    border: 1px solid rgba(0,0,0,0.04) !important;
+    border-radius: 1rem !important;
+    padding: 1.125rem 1.25rem !important;
+    font-size: 0.85rem !important;
+    transition: all 0.4s ease !important;
+    width: 100% !important;
+    color: #171d14 !important;
+}
+
+/* Ensure radio buttons don't get 100% width */
+.agrifest-checkout-container input[type="radio"] {
+    width: auto !important;
+    height: auto !important;
+}
+
+.agrifest-checkout-container input:focus, 
+.agrifest-checkout-container select:focus, 
+.agrifest-checkout-container textarea:focus {
+    border-color: #0d631b !important;
+    box-shadow: 0 0 0 4px rgba(13, 99, 27, 0.05) !important;
+    background-color: #ffffff !important;
+}
+
+.agrifest-checkout-container label {
+    font-size: 0.65rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    color: #40493d !important;
+    opacity: 0.5 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Button Styling */
+.agrifest-checkout-container button[type="submit"] {
+    background: #0d631b !important;
+    color: white !important;
+    padding: 1.25rem 3.5rem !important;
+    border-radius: 9999px !important;
+    font-weight: 800 !important;
+    font-size: 1.125rem !important;
+    box-shadow: 0 10px 30px rgba(13, 99, 27, 0.15) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.agrifest-checkout-container button[type="submit"]:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(13, 99, 27, 0.2) !important;
+}
+
+/* Shipping Options Specific Fix */
+#shipping-rates-list label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+    padding: 1.25rem 1.5rem !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity: 1 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-weight: normal !important;
+    position: relative;
+}
+
+#shipping-rates-list input[type="radio"] {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    accent-color: #0d631b !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+}
+
+#shipping-rates-list label:hover {
+    background: #fbfdf9 !important;
+    border-color: #0d631b80 !important;
+    transform: translateX(8px);
+}
+
+/* Active State for Shipping Cards */
+#shipping-rates-list label:has(input:checked) {
+    background: #f1f8ee !important;
+    border-color: #0d631b !important;
+    border-width: 2px !important;
+    box-shadow: 0 10px 25px -5px rgba(13, 99, 27, 0.1) !important;
+}
+
+#shipping-rates-list label:has(input:checked) .text-primary {
+    font-size: 1.1rem !important;
+}
+
+#shipping-rates-list input[type="radio"]:checked + div {
+    color: #0d631b;
+}
+
+/* Summary Refinements */
+.agrifest-summary-wrapper .nixomers-summary-container {
+    background: #ffffff !important;
+    border: 1px solid var(--checkout-border) !important;
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.04) !important;
+    border-radius: 2rem !important;
+    padding: 2.5rem !important;
+}
+
+.agrifest-summary-wrapper .nixomers-summary-container h3 {
+    font-family: 'Noto Serif', serif;
+    font-weight: 800;
+    font-size: 1.75rem !important;
+    letter-spacing: -0.03em;
+}
+
+/* Comments Section - Journal Discussion */
+.comments-container {
+    margin-top: 2rem;
+}
+
+/* Fix Bootstrap .row negative margins that cause overflow */
+.comments-container .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+}
+
+/* Polyfill Bootstrap classes missing in Tailwind */
+.comments-container .d-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+    width: 100%;
+}
+
+.comments-container .flex-shrink-0 {
+    flex-shrink: 0;
+    width: 64px;
+    margin-right: 1.5rem;
+}
+
+.comments-container .flex-grow-1 {
+    flex-grow: 1;
+    min-width: 0; /* Prevents flex children from overflowing */
+}
+
+.comments-container .ms-3 {
+    margin-left: 1rem;
+}
+
+.comments-container .float-end {
+    float: right;
+}
+
+/* Override Bootstrap .img-thumbnail to ensure perfect circle */
+.comments-container .media-object.img-thumbnail {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    object-fit: cover !important;
+    border: 3px solid #ffffff !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08) !important;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    background: transparent !important;
+}
+
+.comments-container .d-flex:hover .media-object.img-thumbnail {
+    transform: scale(1.1) rotate(-5deg) !important;
+}
+
+.comments-container .text-center {
+    text-align: center;
+    margin-top: 0.75rem;
+}
+
+.comments-container .badge.text-bg-primary {
+    background-color: transparent !important;
+    color: #0d631b !important;
+    font-size: 0.65rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    border: 1px solid rgba(13, 99, 27, 0.15) !important;
+    border-radius: 9999px !important;
+    padding: 0.35rem 0.75rem !important;
+    transition: all 0.3s !important;
+    text-decoration: none !important;
+    display: inline-block !important; /* Forces inline layout */
+    width: auto !important; /* Overrides inline style="width: 100%" */
+    white-space: nowrap !important; /* Prevents text from wrapping/squishing */
+}
+
+.comments-container .badge.text-bg-primary:hover {
+    background-color: #0d631b !important;
+    color: #ffffff !important;
+    border-color: #0d631b !important;
+}
+
+.comments-container h4 {
+    font-family: 'Noto Serif', serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #171d14;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comments-container .meta-desc {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #40493d;
+    opacity: 0.5;
+}
+
+.comments-container .flex-grow-1 {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #40493d;
+}
+
+/* Recursive/Nested Comments */
+.comments-container .flex-grow-1 .row {
+    margin-top: 1.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(13, 99, 27, 0.05);
+}
+
+.comments-container hr {
+    display: none; /* Cleaner look without HRs */
+}
+
+/* Comment Form Styling */
+#commentForm {
+    background: transparent;
+}
+
+#commentForm .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#commentForm label {
+    font-size: 0.65rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    color: #40493d !important;
+    opacity: 0.6 !important;
+    margin-bottom: 0.75rem !important;
+    display: block;
+}
+
+#commentForm .form-control {
+    width: 100% !important;
+    display: block !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    border-radius: 1.25rem !important;
+    padding: 1.125rem 1.5rem !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02) !important;
+}
+
+/* Polyfill for Bootstrap Grid inside the Comment Form since Tailwind is used */
+#commentForm .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+#commentForm .col-md-6 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+#commentForm .col-md-12 {
+    flex: 0 0 auto;
+    width: 100%;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    #commentForm .col-md-6 {
+        width: 100%;
+    }
+}
+
+#commentForm .form-control:focus {
+    border-color: #0d631b !important;
+    box-shadow: 0 10px 30px rgba(13, 99, 27, 0.08) !important;
+    outline: none !important;
+}
+
+#commentForm textarea.form-control {
+    min-height: 160px;
+    resize: none;
+}
+
+#commentForm .input-help {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #40493d;
+    opacity: 0.4;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+#commentForm .btn-success {
+    background: #0d631b !important;
+    border: none !important;
+    color: white !important;
+    padding: 1.25rem 3rem !important;
+    border-radius: 9999px !important;
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    box-shadow: 0 10px 30px rgba(13, 99, 27, 0.15) !important;
+    transition: all 0.4s !important;
+    margin-top: 1rem;
+}
+
+#commentForm .btn-success:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(13, 99, 27, 0.2) !important;
+}
+
+/* Cancel Reply indicator */
+#cancelreply .badge.bg-danger {
+    background-color: rgba(186, 26, 26, 0.1) !important;
+    color: #ba1a1a !important;
+    font-size: 0.65rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 9999px !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.agrifest-summary-wrapper .text-primary {
+    color: #0d631b !important;
+    font-weight: 900 !important;
+}
+
+/* ============================================================
+   WIDGET STYLING (Sidebar & Footers)
+   ============================================================ */
+.widget-box {
+    margin-bottom: 3rem;
+}
+
+.widget-title {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #171d14;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(13, 99, 27, 0.08);
+    position: relative;
+}
+
+/* Green indicator underline */
+.widget-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 2.5rem;
+    height: 2px;
+    background: #0d631b;
+}
+
+.widget-body ul, 
+.widget-body ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.widget-body li {
+    padding: 0.75rem 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #40493d;
+}
+
+.widget-body li:last-child {
+    border-bottom: none;
+}
+
+.widget-body li::before {
+    content: "•";
+    color: #0d631b;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.widget-body a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.widget-body a:hover {
+    color: #0d631b;
+    font-weight: 700;
+}

@@ -1,9 +1,9 @@
 <?php
+
 Theme::editor();
 require_once __DIR__ . '/Newsletter.class.php';
 
-// Install tables on first load
-Newsletter::install();
+// Table installation is now handled by the activation hook in index.php
 
 $data  = [];
 $tab   = isset($_GET['tab']) ? Typo::cleanX($_GET['tab']) : 'dashboard';
@@ -58,6 +58,27 @@ if (isset($_GET['del_campaign'])) {
 }
 
 // ── SUBSCRIBER ACTIONS ───────────────────────────────────────────────────────
+if (isset($_GET['export_csv'])) {
+    if (!Token::validate(Typo::cleanX($_GET['token'] ?? ''))) {
+        $data['alertDanger'][] = _("Invalid token.");
+    } else {
+        $allSubs = Newsletter::subscriberList(0, 1000000); // large limit to get all
+        ob_end_clean();
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=subscribers_'.date('Ymd_His').'.csv');
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['ID', 'Email', 'Name', 'Status', 'Date Joined']);
+        if (!empty($allSubs)) {
+            foreach ($allSubs as $sub) {
+                $status = ($sub->status == 1) ? 'Active' : 'Unsubscribed';
+                fputcsv($output, [$sub->id, $sub->email, $sub->name, $status, $sub->created_at]);
+            }
+        }
+        fclose($output);
+        exit;
+    }
+}
+
 if (isset($_POST['add_subscriber'])) {
     if (!Token::validate(Typo::cleanX($_POST['token']))) {
         $data['alertDanger'][] = _("Invalid token.");
@@ -430,13 +451,13 @@ $schema['tabs']['subscribers']['content'][] = [
         ]],
         ['width' => 8, 'content' => [
             'type' => 'card', 'title' => "Subscribers List", 'icon' => 'bi bi-people',
-            'header_action' => (new UiBuilder())->renderElement([
+            'header_action' => '<div class="d-flex align-items-center"><a href="index.php?page=mods&mod=newsletter&tab=subscribers&export_csv=true&token='.$token.'" class="btn btn-sm btn-success rounded-pill fw-bold me-3 shadow-sm" title="Export to CSV"><i class="bi bi-file-earmark-excel me-1"></i> Export</a>' . (new UiBuilder())->renderElement([
                 'type' => 'search_group', 
                 'action' => 'index.php',
                 'hidden' => ['page' => 'mods', 'mod' => 'newsletter', 'tab' => 'subscribers'],
                 'value' => $searchSub,
                 'placeholder' => 'Search by email...'
-            ], true),
+            ], true) . '</div>',
             'no_padding' => true,
             'body_elements' => [
                 [

@@ -9,7 +9,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * Modules and themes can call AdminMenu::add() to inject menu items
  * without hardcoding HTML in any template file.
  * @since 2.0.0
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -49,8 +49,11 @@ class AdminMenu
             'position' => 'main',
             'order' => 20,
             'children' => [
-                ['label' => _('All Posts'), 'url' => 'index.php?page=posts', 'access' => 4],
-                ['label' => _('Categories'), 'url' => 'index.php?page=categories', 'access' => 1],
+                ['label' => _('All Posts'), 'url' => 'index.php?page=posts', 'access' => 4, 'aliases' => [
+                    'index.php?page=posts&act=add&type=post', 
+                    'index.php?page=posts&act=edit&type=post'
+                ]],
+                ['label' => _('Categories'), 'url' => 'index.php?page=categories&type=post', 'access' => 1],
                 ['label' => _('Tags'), 'url' => 'index.php?page=tags', 'access' => 1],
             ],
         ]);
@@ -64,6 +67,12 @@ class AdminMenu
             'access' => 1,
             'position' => 'main',
             'order' => 30,
+            'aliases' => [
+                'index.php?page=pages&act=add&type=page', 
+                'index.php?page=pages&act=edit&type=page',
+                'index.php?page=posts&act=add&type=page', // Ensure we catch standard pages logic if routed via posts logic
+                'index.php?page=posts&act=edit&type=page'
+            ]
         ]);
 
         // Comments (Editor+)
@@ -75,6 +84,7 @@ class AdminMenu
             'access' => 1,
             'position' => 'main',
             'order' => 40,
+            'aliases' => ['index.php?page=comments&act=edit']
         ]);
 
         // Media (all logged-in)
@@ -100,7 +110,7 @@ class AdminMenu
             'position' => 'management',
             'order' => 10,
             'children' => [
-                ['label' => _('All Users'), 'url' => 'index.php?page=users', 'access' => 1],
+                ['label' => _('All Users'), 'url' => 'index.php?page=users', 'access' => 1, 'aliases' => ['index.php?page=users&act=edit', 'index.php?page=users&act=add']],
                 ['label' => _('ACL Manager'), 'url' => 'index.php?page=permissions', 'access' => 1],
             ],
         ]);
@@ -116,7 +126,7 @@ class AdminMenu
             'order' => 30,
             'children' => [
                 ['label' => _('Themes'), 'url' => 'index.php?page=themes', 'access' => 0],
-                ['label' => _('Menus'), 'url' => 'index.php?page=menus', 'access' => 1],
+                ['label' => _('Menus'), 'url' => 'index.php?page=menus', 'access' => 1, 'aliases' => ['index.php?page=menus&act=edit']],
                 ['label' => _('Widgets'), 'url' => 'index.php?page=widgets', 'access' => 1],
             ],
         ]);
@@ -164,6 +174,7 @@ class AdminMenu
                 ['label' => _('Permalink Settings'), 'url' => 'index.php?page=settings-permalink', 'access' => 0],
                 ['label' => _('Comments Settings'), 'url' => 'index.php?page=settings-comments', 'access' => 1],
                 ['label' => _('Cache Settings'), 'url' => 'index.php?page=settings-cache', 'access' => 1],
+                ['label' => _('API Service'), 'url' => 'index.php?page=settings-api', 'access' => 0],
             ],
         ]);
     }
@@ -280,6 +291,7 @@ class AdminMenu
         $currentView = $_GET['view'] ?? '';
         $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
+        $currentSel = $_GET['sel'] ?? '';
 
         $html = '';
         foreach ($items as $item) {
@@ -287,7 +299,7 @@ class AdminMenu
             if (!User::access((string) $item['access']))
                 continue;
 
-            $isActive = self::isActive($item, $currentPage, $currentMod);
+            $isActive = self::isActive($item, $currentPage, $currentMod, $currentSel);
 
             if (!empty($item['children'])) {
                 // Filter children the user can access
@@ -301,9 +313,18 @@ class AdminMenu
                     $html .= "<a href=\"#\" class=\"has-tree\"><i class=\"{$item['icon']}\"></i> <span>{$item['label']}</span> <i class=\"bi bi-chevron-down ms-auto small\"></i></a>";
                     $html .= '<ul class="nav-tree">';
                     foreach ($visibleChildren as $child) {
-                        $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType) ? 'text-white' : '';
+                        $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType, $currentSel);
+                        if (!$cActive && !empty($child['aliases'])) {
+                            foreach ((array)$child['aliases'] as $alias) {
+                                if (self::isUrlActive($alias, $currentPage, $currentMod, $currentView, $currentAct, $currentType, $currentSel)) {
+                                    $cActive = true;
+                                    break;
+                                }
+                            }
+                        }
+                        $cActiveCls = $cActive ? 'text-white fw-bold active' : '';
                         $cIcon = isset($child['icon']) ? "<i class=\"{$child['icon']} me-1\"></i> " : '';
-                        $html .= "<li><a href=\"{$child['url']}\" class=\"{$cActive}\">{$cIcon}{$child['label']}</a></li>";
+                        $html .= "<li><a href=\"{$child['url']}\" class=\"{$cActiveCls}\">{$cIcon}{$child['label']}</a></li>";
                     }
                     $html .= '</ul></li>';
                 } else {
@@ -345,13 +366,14 @@ class AdminMenu
         $currentView = $_GET['view'] ?? '';
         $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
+        $currentSel = $_GET['sel'] ?? '';
 
         $html = '';
         foreach ($items as $item) {
             if (!User::access((string) $item['access']))
                 continue;
 
-            $isActive = self::isActive($item, $currentPage, $currentMod);
+            $isActive = self::isActive($item, $currentPage, $currentMod, $currentSel);
             $activeClass = $isActive
                 ? 'bg-primary bg-opacity-10 text-primary fw-bold'
                 : 'text-secondary hover-bg-light';
@@ -372,9 +394,18 @@ class AdminMenu
                     $html .= "<i class=\"{$item['icon']} me-1\"></i> {$item['label']}</a>";
                     $html .= "<ul class=\"dropdown-menu border-0 shadow-sm mt-0 rounded-3\">";
                     foreach ($visibleChildren as $child) {
-                        $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType) ? 'bg-primary bg-opacity-10 text-primary fw-bold' : '';
+                        $cActive = self::isUrlActive($child['url'], $currentPage, $currentMod, $currentView, $currentAct, $currentType, $currentSel);
+                        if (!$cActive && !empty($child['aliases'])) {
+                            foreach ((array)$child['aliases'] as $alias) {
+                                if (self::isUrlActive($alias, $currentPage, $currentMod, $currentView, $currentAct, $currentType, $currentSel)) {
+                                    $cActive = true;
+                                    break;
+                                }
+                            }
+                        }
+                        $cActiveCls = $cActive ? 'bg-primary bg-opacity-10 text-primary fw-bold active' : '';
                         $cIcon = isset($child['icon']) ? "<i class=\"{$child['icon']} me-2 text-muted\"></i>" : '';
-                        $html .= "<li><a class=\"dropdown-item py-2 {$cActive}\" href=\"{$child['url']}\">{$cIcon}{$child['label']}</a></li>";
+                        $html .= "<li><a class=\"dropdown-item py-2 {$cActiveCls}\" href=\"{$child['url']}\">{$cIcon}{$child['label']}</a></li>";
                     }
                     $html .= "</ul></li>";
                 } else {
@@ -408,30 +439,41 @@ class AdminMenu
     // HELPERS
     // ─────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Determine if a menu item is currently active.
-     */
-    private static function isActive(array $item, string $page, string $mod): bool
+    private static function isActive(array $item, string $page, string $mod, string $sel = ''): bool
     {
         $currentView = $_GET['view'] ?? '';
         $currentAct = $_GET['act'] ?? '';
         $currentType = $_GET['type'] ?? '';
+        $currentSel = $sel ?: ($_GET['sel'] ?? '');
 
         // Exact ID match for simple pages
-        if ($page === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType))
+        if ($page === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType) && empty($currentSel))
             return true;
-        if ($mod === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType))
+        if ($mod === $item['id'] && empty($currentView) && empty($currentAct) && empty($currentType) && empty($currentSel))
             return true;
 
-        // Specific URL matching (handles parameters like page=themes&view=options)
-        if (self::isUrlActive($item['url'], $page, $mod, $currentView, $currentAct, $currentType))
+        // Specific URL matching
+        if (self::isUrlActive($item['url'], $page, $mod, $currentView, $currentAct, $currentType, $currentSel))
             return true;
+        
+        if (!empty($item['aliases'])) {
+            foreach ((array)$item['aliases'] as $alias) {
+                if (self::isUrlActive($alias, $page, $mod, $currentView, $currentAct, $currentType, $currentSel))
+                    return true;
+            }
+        }
 
         // Check if any child is active
         if (!empty($item['children'])) {
             foreach ($item['children'] as $child) {
-                if (self::isUrlActive($child['url'], $page, $mod, $currentView, $currentAct, $currentType))
+                if (self::isUrlActive($child['url'], $page, $mod, $currentView, $currentAct, $currentType, $currentSel))
                     return true;
+                if (!empty($child['aliases'])) {
+                    foreach ((array)$child['aliases'] as $alias) {
+                        if (self::isUrlActive($alias, $page, $mod, $currentView, $currentAct, $currentType, $currentSel))
+                            return true;
+                    }
+                }
             }
         }
         return false;
@@ -442,7 +484,7 @@ class AdminMenu
      * Prevents 'themes' from matching 'themes&view=options' by checking 
      * both the base parameter and optional 'view' parameter.
      */
-    private static function isUrlActive(string $url, string $page, string $mod, string $view = '', string $act = '', string $type = ''): bool
+    private static function isUrlActive(string $url, string $page, string $mod, string $view = '', string $act = '', string $type = '', string $sel = ''): bool
     {
         $query = parse_url($url, PHP_URL_QUERY) ?? '';
         parse_str($query, $params);
@@ -452,6 +494,7 @@ class AdminMenu
         $itemView = $params['view'] ?? '';
         $itemAct = $params['act'] ?? '';
         $itemType = $params['type'] ?? '';
+        $itemSel = $params['sel'] ?? '';
 
         if (empty($itemPage) && empty($itemMod) && empty($page) && empty($mod))
             return true;
@@ -469,8 +512,9 @@ class AdminMenu
         $viewMatch = ($itemView !== '') ? ($view === $itemView) : ($view === '' || $view === 'all');
         $actMatch = ($itemAct !== '') ? ($act === $itemAct) : ($act === '' || $act === 'index');
         $typeMatch = ($itemType !== '') ? ($type === $itemType) : ($type === '' || $type === 'post');
+        $selMatch = ($itemSel !== '') ? ($sel === $itemSel) : true;
 
-        return $viewMatch && $actMatch && $typeMatch;
+        return $viewMatch && $actMatch && $typeMatch && $selMatch;
     }
 }
 

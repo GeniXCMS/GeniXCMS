@@ -1,0 +1,261 @@
+{var $o = (array)Agrifest::options()}
+
+<!-- Hero Section -->
+<section class="relative min-h-[80vh] md:min-h-[90vh] flex items-center px-8 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img alt="{$o['logo_text']}" class="w-full h-full object-cover" 
+             src="{$o['hero_img']}"/>
+        <div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div class="space-y-10">
+            <div class="inline-flex items-center px-5 py-2 bg-secondary-container text-on-secondary-container rounded-full text-xs font-black tracking-[0.2em] uppercase shadow-sm">
+                {$o['hero_tagline']}
+            </div>
+            <h1 class="text-6xl md:text-9xl font-headline font-bold leading-[0.95] text-on-surface tracking-tighter">
+                {$o['hero_title']|noescape}
+            </h1>
+            <p class="text-xl text-on-surface-variant max-w-lg leading-relaxed font-medium">
+                {$o['hero_desc']}
+            </p>
+            <div class="flex flex-wrap gap-5 pt-4">
+                <a href="{Url::mod('store')}" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-5 rounded-full font-bold shadow-xl flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition-all duration-300">
+                    {_('Shop the Harvest')}
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+                <a href="{Url::page('our-story')}" class="bg-surface-container-high text-on-surface px-10 py-5 rounded-full font-bold hover:bg-surface-container transition-all">
+                    {_('Our Story')}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bento Featured Categories -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <!-- Bento Item 1: Main -->
+        {var $cid1 = (isset($o['bento1_cat']) && is_numeric($o['bento1_cat'])) ? $o['bento1_cat'] : Categories::id($o['bento1_cat'] ?? '')}
+        {var $cat1 = $cid1 ? Categories::getInfo($cid1) : null}
+        {var $t1 = (!empty($o['bento1_title'])) ? $o['bento1_title'] : ($cat1 ? $cat1->name : 'Heritage Vegetables')}
+        {var $d1 = (!empty($o['bento1_desc'])) ? $o['bento1_desc'] : 'Slow-grown for maximum nutritional density and depth of flavor.'}
+        {var $img1 = (!empty($o['bento1_img'])) ? $o['bento1_img'] : 'https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=800'}
+        {var $url1 = $cat1 ? Url::cat($cat1->id) : Url::cat('vegetables')}
+        <div class="md:col-span-8 relative group overflow-hidden rounded-xl bg-surface-container aspect-[16/10] md:aspect-auto md:h-[600px] shadow-sm">
+            <img alt="{$t1}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                 src="{$img1}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:via-black/10 transition-all"></div>
+            <div class="absolute bottom-12 left-12">
+                <h3 class="text-4xl md:text-5xl font-headline font-bold text-white mb-3">{$t1}</h3>
+                <p class="text-white/80 font-medium mb-6 max-w-md">{$d1}</p>
+                <a href="{$url1}" class="text-white underline font-bold tracking-widest uppercase text-xs hover:text-primary-fixed transition-colors">Explore Variety</a>
+            </div>
+        </div>
+        
+        <!-- Bento Item 2: Top Right -->
+        {var $cid2 = (isset($o['bento2_cat']) && is_numeric($o['bento2_cat'])) ? $o['bento2_cat'] : Categories::id($o['bento2_cat'] ?? '')}
+        {var $cat2 = $cid2 ? Categories::getInfo($cid2) : null}
+        {var $t2 = (!empty($o['bento2_title'])) ? $o['bento2_title'] : ($cat2 ? $cat2->name : 'Seasonal Fruits')}
+        {var $img2 = (!empty($o['bento2_img'])) ? $o['bento2_img'] : 'https://images.unsplash.com/photo-1610832958506-aa5633842699?q=80&w=600'}
+        {var $url2 = $cat2 ? Url::cat($cat2->id) : Url::cat('fruits')}
+        <div class="md:col-span-4 relative group overflow-hidden rounded-xl bg-surface-container aspect-square md:aspect-auto shadow-sm">
+            <img alt="{$t2}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                 src="{$img2}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <div class="absolute bottom-10 left-10">
+                <h3 class="text-3xl font-headline font-bold text-white mb-3">{$t2}</h3>
+                <a href="{$url2}" class="text-white underline font-bold tracking-widest uppercase text-xs">Shop Selection</a>
+            </div>
+        </div>
+
+        <!-- Bento Item 3: Bottom Right -->
+        {var $cid3 = (isset($o['bento3_cat']) && is_numeric($o['bento3_cat'])) ? $o['bento3_cat'] : Categories::id($o['bento3_cat'] ?? '')}
+        {var $cat3 = $cid3 ? Categories::getInfo($cid3) : null}
+        {var $t3 = (!empty($o['bento3_title'])) ? $o['bento3_title'] : ($cat3 ? $cat3->name : 'Ancient Grains')}
+        {var $img3 = (!empty($o['bento3_img'])) ? $o['bento3_img'] : 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=600'}
+        {var $url3 = $cat3 ? Url::cat($cat3->id) : Url::cat('grains')}
+        <div class="md:col-span-4 relative group overflow-hidden rounded-xl bg-surface-container aspect-square md:aspect-auto shadow-sm">
+            <img alt="{$t3}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                 src="{$img3}"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            <div class="absolute bottom-10 left-10">
+                <h3 class="text-3xl font-headline font-bold text-white mb-3">{$t3}</h3>
+                <a href="{$url3}" class="text-white underline font-bold tracking-widest uppercase text-xs">View Collection</a>
+            </div>
+        </div>
+
+        <!-- Philosophy Section -->
+        <div class="md:col-span-8 flex flex-col justify-center p-12 md:p-20 bg-surface-container-high rounded-xl relative overflow-hidden group">
+            <div class="relative z-10">
+                <span class="text-primary font-black tracking-[0.3em] text-[10px] uppercase mb-6 block">DIRECT SOURCE</span>
+                <h2 class="text-4xl md:text-5xl font-headline font-bold text-on-surface mb-8 max-w-md leading-tight">The quality of the soil determines the flavor of the fruit.</h2>
+                <p class="text-on-surface-variant leading-relaxed text-lg mb-10 max-w-lg">We utilize regenerative farming practices that restore the earth while producing flavor profiles you won't find in conventional markets.</p>
+                <div class="flex items-center gap-5">
+                    <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                        <span class="material-symbols-outlined text-3xl">eco</span>
+                    </div>
+                    <span class="font-bold text-on-surface">100% Certified Organic Estate</span>
+                </div>
+            </div>
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Harvest (Dynamic Products) -->
+<section class="py-24 bg-surface-container-low/30">
+    <div class="max-w-7xl mx-auto px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-xl">
+                <h2 class="text-5xl md:text-6xl font-headline font-bold text-on-surface mb-6 tracking-tight">Fresh This Week</h2>
+                <div class="h-1.5 w-24 bg-primary/20 rounded-full mb-6"></div>
+                <p class="text-on-surface-variant text-lg">Direct from the morning's harvest. Limited availability of our seasonal estate curation.</p>
+            </div>
+            <a href="{Url::mod('store')}" class="text-primary font-bold flex items-center gap-3 hover:translate-x-3 transition-transform font-headline text-lg group">
+                {_('See All Harvest')} 
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {var $products = Posts::recent(['type' => 'nixomers', 'num' => 4])}
+            {if is_array($products) && !isset($products['error'])}
+                {foreach $products as $p}
+                    {var $img = Posts::getPostImage($p->id)}
+                    <div class="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                        <div class="h-72 overflow-hidden relative">
+                            <a href="{Url::post($p->id)}">
+                                <img alt="{$p->title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                     src="{(empty($img) ? 'https://images.unsplash.com/photo-1566385101042-1a000c1268c4?q=80&w=400' : Url::thumb($img, 'large'))}"/>
+                            </a>
+                            <div class="absolute top-5 left-5">
+                                <span class="bg-primary/90 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full font-black tracking-widest uppercase">
+                                    NEW
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <div class="mb-4">
+                                <h3 class="font-headline font-bold text-xl text-on-surface mb-1 truncate">
+                                    <a href="{Url::post($p->id)}" class="hover:text-primary transition-colors">{$p->title}</a>
+                                </h3>
+                                <p class="text-primary font-black text-lg font-headline">
+                                    {Options::v('nixomers_currency') ?: 'IDR'} {Nixomers::formatCurrency(Posts::getParam('price', $p->id))}
+                                </p>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-8 flex-grow line-clamp-2 leading-relaxed">
+                                {Typo::Xclean($p->content)|stripHtml|truncate:80}
+                            </p>
+                            <a href="{Url::post($p->id)}" class="w-full py-4 text-center bg-surface-container-high text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all duration-300">
+                                {_('View Detail')}
+                            </a>
+                        </div>
+                    </div>
+                {/foreach}
+            {else}
+                <!-- Fallback Mockup if no products exist -->
+                {for $i = 1; $i <= 4; $i++}
+                    <div class="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm opacity-50 grayscale hover:grayscale-0 transition-all">
+                        <div class="h-72 bg-surface-container-high flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-on-surface-variant">eco</span>
+                        </div>
+                        <div class="p-8">
+                            <div class="h-6 bg-surface-container-low rounded-full w-3/4 mb-4"></div>
+                            <div class="h-4 bg-surface-container-low rounded-full w-1/4 mb-6"></div>
+                            <div class="h-20 bg-surface-container-low rounded-lg mb-6"></div>
+                        </div>
+                    </div>
+                {/for}
+            {/if}
+        </div>
+    </div>
+</section>
+
+<!-- Our Story snippet -->
+<section class="py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div class="relative">
+                <div class="absolute -top-12 -left-12 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+                <div class="rounded-xl overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                    <img alt="Farm Hands" class="w-full h-auto" 
+                         src="https://images.unsplash.com/photo-1533062609751-ac83fb2ce370?q=80&w=600"/>
+                </div>
+                <div class="absolute -bottom-8 -right-8 bg-secondary p-10 rounded-lg z-20 hidden md:block shadow-xl">
+                    <p class="text-white font-headline text-4xl font-extrabold italic leading-none mb-1">30+ Years</p>
+                    <p class="text-white/70 text-xs font-black tracking-[0.2em] uppercase">of Heritage</p>
+                </div>
+            </div>
+            <div class="space-y-10">
+                <span class="text-primary font-black tracking-[0.3em] uppercase text-xs">Our Philosophy</span>
+                <h2 class="text-5xl md:text-7xl font-headline font-bold text-on-surface leading-[0.9] tracking-tighter">Precision Farming, <br/>Ancestral Wisdom.</h2>
+                <p class="text-xl text-on-surface-variant leading-relaxed">
+                    Harvest Estate isn't just an agrobusiness; it's a commitment to the ecosystem. We utilize state-of-the-art soil sensors and climate modeling alongside traditional crop rotation and biodiversity practices.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-5">
+                        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container mt-1 shrink-0">
+                            <span class="material-symbols-outlined">water_drop</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-on-surface text-lg">Resource Preservation</h4>
+                            <p class="text-on-surface-variant text-sm">Advanced irrigation systems reducing water waste by 40%.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-5">
+                        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container mt-1 shrink-0">
+                            <span class="material-symbols-outlined">verified_user</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-on-surface text-lg">Total Traceability</h4>
+                            <p class="text-on-surface-variant text-sm">Deep insights into every seed's journey from planting to delivery.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-6">
+                    <a href="{Url::page('about')}" class="text-primary font-black border-b-4 border-primary/20 pb-2 inline-flex items-center gap-3 group text-lg font-headline">
+                        Learn More About Us
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="py-24 px-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="bg-primary rounded-xl p-12 md:p-24 text-center relative overflow-hidden shadow-2xl">
+            <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+            <div class="relative z-10">
+                <h2 class="text-5xl md:text-7xl font-headline font-bold text-white mb-8 leading-[0.9] tracking-tighter">Freshness doesn't wait. <br/>Join our harvest list.</h2>
+                <p class="text-white/70 text-xl max-w-2xl mx-auto mb-12">Get early access to seasonal releases, estate events, and masterclass recipes from our farm kitchen.</p>
+                
+                {if !empty(NewsletterModule::$statusMsg)}
+                    <div class="max-w-2xl mx-auto mb-8 text-left">
+                        {NewsletterModule::$statusMsg|noescape}
+                    </div>
+                {/if}
+                <form method="post" action="" class="flex flex-col sm:flex-row gap-5 max-w-2xl mx-auto group">
+                    <!-- Security Token (Required) -->
+                    <input type="hidden" name="ns_token" value="{Token::create()}">
+                    
+                    <input class="flex-grow px-10 py-5 rounded-full bg-white/10 border-2 border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 focus:border-white outline-none transition-all text-lg" 
+                           placeholder="Enter your email address" name="ns_email" type="email" required/>
+                    
+                    <!-- Hidden Name Input (Optional in this design, but mapped for module compatibility) -->
+                    <input type="hidden" name="ns_name" value="Valued Subscriber">
+
+                    <button type="submit" name="sm_subscribe_newsletter" class="bg-white text-primary px-12 py-5 rounded-full font-black text-lg hover:scale-105 active:scale-95 transition-all shadow-xl">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+            <!-- Decorative Elements -->
+            <div class="absolute -top-20 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+        </div>
+    </div>
+</section>

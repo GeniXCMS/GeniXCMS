@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -61,12 +61,15 @@ $ui = new UiBuilder([
             [
                 'label' => _('Commit Changes'),
                 'type' => 'button',
+                'btn_type' => 'submit',
+                'name' => 'submit',
                 'icon' => 'bi bi-cloud-upload',
                 'class' => 'btn btn-primary rounded-pill px-4 shadow-sm'
             ],
             [
                 'label' => _('Back'),
-                'url' => 'index.php?page=pages',
+                'type' => 'link',
+                'href' => 'index.php?page=pages',
                 'icon' => 'bi bi-arrow-left',
                 'class' => 'btn btn-light border bg-white rounded-pill px-4'
             ]
@@ -95,23 +98,23 @@ $ui = new UiBuilder([
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
                         <?php if (Options::v('multilang_enable') === 'on'): ?>
-                                <ul class="nav nav-pills nav-pills-custom mb-3" id="langTab" role="tablist">
-                                    <?php
-                                    $def = Options::v('multilang_default');
-                                    $listlang = json_decode(Options::v('multilang_country'), true);
-                                    foreach ($listlang as $key => $value):
-                                        $flag = strtolower($value['flag']);
-                                        $isActive = ($key == $def) ? 'active' : '';
-                                        ?>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link <?= $isActive; ?> rounded-pill px-4" id="tab-<?= $key; ?>"
-                                                    data-bs-toggle="pill" data-bs-target="#pane-<?= $key; ?>" type="button" role="tab">
-                                                    <span class="flag-icon flag-icon-<?= $flag; ?> me-2 small"></span>
-                                                    <?= $value['country']; ?>
-                                                </button>
-                                            </li>
-                                    <?php endforeach; ?>
-                                </ul>
+                            <ul class="nav nav-pills nav-pills-custom mb-3" id="langTab" role="tablist">
+                                <?php
+                                $def = Options::v('multilang_default');
+                                $listlang = json_decode(Options::v('multilang_country'), true);
+                                foreach ($listlang as $key => $value):
+                                    $flag = strtolower($value['flag']);
+                                    $isActive = ($key == $def) ? 'active' : '';
+                                    ?>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link <?= $isActive; ?> rounded-pill px-4" id="tab-<?= $key; ?>"
+                                            data-bs-toggle="pill" data-bs-target="#pane-<?= $key; ?>" type="button" role="tab">
+                                            <span class="flag-icon flag-icon-<?= $flag; ?> me-2 small"></span>
+                                            <?= $value['country']; ?>
+                                        </button>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
                         <?php endif; ?>
                     </div>
 
@@ -131,42 +134,42 @@ $ui = new UiBuilder([
                                         $langData['content'] = '';
                                     }
                                     ?>
-                                            <div class="tab-pane fade <?= $isActive; ?>" id="pane-<?= $key; ?>" role="tabpanel">
-                                                <div class="mb-2">
-                                                    <label
-                                                        class="form-label small text-muted text-uppercase fw-bold"><?= _("Page Heading"); ?>
-                                                        (<?= $key; ?>)</label>
-                                                    <input type="text" name="title[<?= $key; ?>]"
-                                                        class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold"
-                                                        placeholder="<?= _("Enter a descriptive title..."); ?>"
-                                                        value="<?= $langData['title']; ?>">
-                                                </div>
-                                                <div class="mb-0">
-                                                    <label
-                                                        class="form-label small text-muted text-uppercase fw-bold"><?= _("Body Composition"); ?></label>
-                                                    <textarea name="content[<?= $key; ?>]" class="form-control editor rounded-4"
-                                                        id="editor_<?= $key; ?>" rows="22"><?= $langData['content']; ?></textarea>
-                                                </div>
-                                            </div>
-                                    <?php endforeach; else: ?>
-                                    <div class="mb-2">
-                                        <label
-                                            class="form-label small text-muted text-uppercase fw-bold"><?= _("Page Heading"); ?></label>
-                                        <input type="text" name="title"
-                                            class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold"
-                                            placeholder="<?= _("Enter a descriptive title..."); ?>" value="<?= $title; ?>">
+                                    <div class="tab-pane fade <?= $isActive; ?>" id="pane-<?= $key; ?>" role="tabpanel">
+                                        <div class="mb-2">
+                                            <label
+                                                class="form-label small text-muted text-uppercase fw-bold"><?= _("Page Heading"); ?>
+                                                (<?= $key; ?>)</label>
+                                            <input type="text" name="title[<?= $key; ?>]"
+                                                class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold"
+                                                placeholder="<?= _("Enter a descriptive title..."); ?>"
+                                                value="<?= $langData['title']; ?>">
+                                        </div>
+                                        <div class="mb-0">
+                                            <label
+                                                class="form-label small text-muted text-uppercase fw-bold"><?= _("Body Composition"); ?></label>
+                                            <textarea name="content[<?= $key; ?>]" class="form-control editor rounded-4"
+                                                id="editor_<?= $key; ?>" rows="22"><?= $langData['content']; ?></textarea>
+                                        </div>
                                     </div>
-                                    <div class="mb-0">
-                                        <label
-                                            class="form-label small text-muted text-uppercase fw-bold"><?= _("Body Composition"); ?></label>
-                                        <textarea name="content" class="form-control editor rounded-4" id="primary_editor"
-                                            rows="22"><?= $content; ?></textarea>
-                                    </div>
+                                <?php endforeach; else: ?>
+                                <div class="mb-2">
+                                    <label
+                                        class="form-label small text-muted text-uppercase fw-bold"><?= _("Page Heading"); ?></label>
+                                    <input type="text" name="title"
+                                        class="form-control form-control-lg border-0 bg-light rounded-3 px-4 py-3 fw-bold"
+                                        placeholder="<?= _("Enter a descriptive title..."); ?>" value="<?= $title; ?>">
+                                </div>
+                                <div class="mb-0">
+                                    <label
+                                        class="form-label small text-muted text-uppercase fw-bold"><?= _("Body Composition"); ?></label>
+                                    <textarea name="content" class="form-control editor rounded-4" id="primary_editor"
+                                        rows="22"><?= $content; ?></textarea>
+                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php Hooks::run('page_param_form_bottom', $data); ?>
+                <?= Hooks::run('page_param_form_bottom', $data); ?>
             </div>
 
             <!-- Sidebar Controls -->
@@ -192,9 +195,9 @@ $ui = new UiBuilder([
                                         <?= _("Default Theme Layout"); ?>
                                     </option>
                                     <?php foreach ($layouts as $slug => $name): ?>
-                                            <option value="<?= $slug; ?>" <?= ($layout == $slug ? 'selected' : ''); ?>>
-                                                <?= $name; ?>
-                                            </option>
+                                        <option value="<?= $slug; ?>" <?= ($layout == $slug ? 'selected' : ''); ?>>
+                                            <?= $name; ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -238,24 +241,24 @@ $ui = new UiBuilder([
                     </div>
                     <div class="card-body px-4 pb-4 pt-0 text-center">
                         <div class="media-drop-zone rounded-4 border-2 border-dashed bg-light p-3 position-relative"
-                            style="cursor: pointer;" onclick="elfinderDialog2()">
+                            style="cursor: pointer;" onclick="gxMediaFeaturedImage()">
                             <?php if ($post_image): ?>
-                                    <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm" src="<?= $post_image; ?>"
-                                        style="max-height: 250px; width: 100%; object-fit: cover;">
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm" src="<?= $post_image; ?>"
+                                    style="max-height: 250px; width: 100%; object-fit: cover;">
                             <?php else: ?>
-                                    <div class="py-5" id="post_image_placeholder">
-                                        <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
-                                        <p class="text-muted small mt-2 mb-0"><?= _("Click to select hero image"); ?></p>
-                                    </div>
-                                    <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm d-none"
-                                        style="max-height: 250px; width: 100%; object-fit: cover;">
+                                <div class="py-5" id="post_image_placeholder">
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                    <p class="text-muted small mt-2 mb-0"><?= _("Click to select hero image"); ?></p>
+                                </div>
+                                <img id="post_image_preview" class="img-fluid rounded-3 shadow-sm d-none"
+                                    style="max-height: 250px; width: 100%; object-fit: cover;">
                             <?php endif; ?>
                         </div>
                         <input name="post_image" id="post_image" type="hidden" value="<?= $post_image; ?>">
                     </div>
                 </div>
 
-                <?php Hooks::run('page_param_form_sidebar', $data); ?>
+                <?= Hooks::run('page_param_form_sidebar', $data); ?>
             </div>
         </div>
     </div>
@@ -263,3 +266,24 @@ $ui = new UiBuilder([
 </form>
 
 </style>
+
+<script>
+    function gxMediaFeaturedImage() {
+        if (typeof GxMedia !== 'undefined') {
+            GxMedia.select(function (url) {
+                $('#post_image').val(url);
+                $('#post_image_preview').attr('src', url).removeClass('d-none');
+                $('#post_image_placeholder').addClass('d-none');
+            });
+        } else if (typeof elfinderDialog2 === 'function') {
+            elfinderDialog2();
+        } else {
+            var url = prompt('Enter Featured Image URL:');
+            if (url) {
+                $('#post_image').val(url);
+                $('#post_image_preview').attr('src', url).removeClass('d-none');
+                $('#post_image_placeholder').addClass('d-none');
+            }
+        }
+    }
+</script>

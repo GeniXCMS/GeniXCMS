@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -20,6 +20,9 @@ class Posts extends Model
     protected $table = 'posts';
 
     public static $last_id = '';
+
+    /** @var array Custom labels for post types */
+    private static $_typeLabels = [];
 
     /**
      * Posts Constructor.
@@ -80,6 +83,221 @@ class Posts extends Model
         }
 
         return $post;
+    }
+
+    /**
+     * Registers custom UI labels for a specific post type.
+     * 
+     * @param string $type   Post type identifier.
+     * @param array  $labels Dictionary of labels (label, create, edit, title_label, title_placeholder).
+     */
+    public static function setTypeLabel($type, $labels = [])
+    {
+        self::$_typeLabels[$type] = $labels;
+    }
+
+    /**
+     * Retrieves a specific UI label for a post type, with fallback to defaults.
+     * 
+     * @param string $type   Post type identifier.
+     * @param string $key    Label key.
+     * @return string        The localized label or empty string.
+     */
+    public static function getTypeLabel($type, $key)
+    {
+        $defaults = [
+            'label' => _("Publication"),
+            'create' => _("New"),
+            'edit' => _("Edit"),
+            'repository_title' => _("Publication Repository"),
+            'records_library' => _("Records Library"),
+            'new_item' => _("New Publication"),
+            'title_label' => _("Publication Title"),
+            'title_placeholder' => _("Enter publication title here...")
+        ];
+
+        // Specific overrides for core types if not registered
+        if (!isset(self::$_typeLabels[$type])) {
+            if ($type === 'post') {
+                $defaults['label'] = _("Post");
+                $defaults['title_label'] = _("Post Title");
+            } elseif ($type === 'page') {
+                $defaults['label'] = _("Page");
+                $defaults['title_label'] = _("Page Title");
+            }
+        }
+
+        return self::$_typeLabels[$type][$key] ?? $defaults[$key] ?? '';
+    }
+
+    /**
+     * Generates a dashboard row for a post object, including hooks.
+     * Centralized for AJAX and server-side rendering.
+     * 
+     * @since 2.3.0
+     */
+    public static function getDashboardRow($pObj, $group, $username, $postType)
+    {
+        $id = $pObj->id ?? 0;
+        $title = $pObj->title ?? '';
+        $author = $pObj->author ?? 'Unknown';
+        $status_val = $pObj->status ?? '0';
+        $content = $pObj->content ?? '';
+        $cat = $pObj->cat ?? 0;
+        $date = $pObj->date ?? date('Y-m-d H:i:s');
+        $views = $pObj->views ?? 0;
+
+        $accessEdit = $group <= 2 ? 1 : ($author == $username ? 1 : 0);
+        $accessDelete = $group < 2 ? 1 : 0;
+
+        $status = ($status_val == '0') ? 'warning' : 'success';
+        $statusLabel = ($status_val == '0') ? _("Draft") : _("Live");
+
+        $viewsFormatted = number_format($views);
+        $commentCount = Query::table('comments')->where('post_id', $id)->where('status', '1')->count();
+
+        // Thumbnail Logic
+        $post_image = Posts::getPostImage($id);
+        $thumb = ($post_image != "") ? $post_image : Posts::getImage(Typo::Xclean($content), 1);
+        $thumbUrl = ($thumb != '') ? Url::thumb($thumb, 'square', 100) : Site::$url . 'assets/images/noimage.png';
+
+        // Modular Action Menu
+        $previewUrl = ($postType === 'page') ? Url::page($id) : Url::post($id);
+        $actionMenu = [
+            'preview' => [
+                'label' => _("Preview"),
+                'icon' => 'bi bi-eye',
+                'href' => $previewUrl,
+                'class' => 'btn btn-light btn-sm rounded-circle border',
+                'target' => '_blank'
+            ]
+        ];
+        if ($accessEdit) {
+            $actionMenu['edit'] = [
+                'label' => _("Edit"),
+                'icon' => 'bi bi-pencil-square',
+                'href' => 'index.php?page=' . (($postType === 'page') ? 'pages' : 'posts') . '&act=edit&id=' . $id . (($postType !== 'page') ? '&type=' . $postType : '') . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-success'
+            ];
+        }
+        if ($accessDelete) {
+            $actionMenu['delete'] = [
+                'label' => _("Delete"),
+                'icon' => 'bi bi-trash',
+                'href' => 'index.php?page=' . (($postType === 'page') ? 'pages' : 'posts') . '&act=del&id=' . $id . (($postType !== 'page') ? '&type=' . $postType : '') . '&token=' . TOKEN,
+                'class' => 'btn btn-light btn-sm rounded-circle border text-danger',
+                'onclick' => 'return confirm(\'' . _("Are you sure you want to delete this?") . '\');'
+            ];
+        }
+
+        // Allow developers to inject extra post actions
+        $hookActionMenu = ($postType === 'page') ? 'admin_pages_action_menu' : 'admin_posts_action_menu';
+        $actionMenu = Hooks::filter($hookActionMenu, $actionMenu, $pObj);
+
+        $actionsHtml = '<div class="btn-group gap-1">';
+        foreach ($actionMenu as $mv) {
+            $attr = '';
+            if (isset($mv['onclick'])) $attr .= ' onclick="' . $mv['onclick'] . '"';
+            if (isset($mv['target'])) $attr .= ' target="' . $mv['target'] . '"';
+            $actionsHtml .= '<a href="' . ($mv['href'] ?? '#') . '" class="' . ($mv['class'] ?? 'btn btn-light btn-sm') . '"' . $attr . ' title="' . ($mv['label'] ?? '') . '"><i class="' . ($mv['icon'] ?? '') . '"></i></a>';
+        }
+        $actionsHtml .= '</div>';
+
+        $row = [
+            [
+                'content' => "
+                <div class='d-flex align-items-center ps-4 py-2'>
+                    <div class='me-3 position-relative'>
+                        <img src='{$thumbUrl}' class='rounded-3 shadow-sm border' width='50' height='50' style='object-fit: cover;'>
+                        <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white border text-dark extra-small' style='font-size: 0.6rem;'>#{$id}</span>
+                    </div>
+                    <div>
+                        <a href='index.php?page=" . (($postType === 'page') ? 'pages' : 'posts') . "&act=edit&id={$id}" . (($postType !== 'page') ? "&type={$postType}" : "") . "&token=" . TOKEN . "' class='fw-bold text-dark text-decoration-none d-block mb-1 ls-n1' style='font-size: 0.95rem;'>" . ((strlen($title) > 60) ? substr($title, 0, 57) . '...' : $title) . "</a>
+                        <div class='d-flex gap-2 align-items-center'>
+                            <span class='badge bg-{$status} bg-opacity-10 text-{$status} border border-{$status} border-opacity-25 rounded-pill px-2 fw-bold text-uppercase ls-1' style='font-size: 0.65rem;'>{$statusLabel}</span>
+                            " . (($postType !== 'page') ? "<span class='badge bg-light text-muted border px-2 py-1 rounded-pill fw-bold text-uppercase' style='font-size: 0.65rem;'>" . Categories::name($cat) . "</span>" : "") . "
+                        </div>
+                    </div>
+                </div>",
+                'class' => 'p-0'
+            ],
+            [
+                'content' => "
+                <div class='d-flex align-items-center justify-content-center'>
+                    <img src='" . Image::getGravatar(User::email($author), 40) . "' class='rounded-circle me-2 border p-1 bg-white' width='32'>
+                    <div class='text-start'>
+                        <div class='small fw-bold text-dark mb-0'>{$author}</div>
+                        <div class='text-muted extra-small'>" . (($postType === 'page') ? _("Curator") : _("Writer")) . "</div>
+                    </div>
+                </div>",
+                'class' => 'text-center'
+            ],
+            [
+                'content' => "
+                <div class='d-flex flex-column align-items-center justify-content-center opacity-75'>
+                    <div class='d-flex align-items-center gap-2 mb-1'>
+                        <i class='bi bi-" . (($postType === 'page') ? 'activity' : 'eye') . " text-primary'></i>
+                        <span class='small fw-bold text-dark'>{$viewsFormatted}</span>
+                    </div>
+                    " . (($postType === 'page') ? "<div class='extra-small text-muted text-uppercase fw-bold ls-1'>" . _("Visibility") . "</div>" : "<div class='d-flex align-items-center gap-2'>
+                        <i class='bi bi-chat-dots text-success'></i>
+                        <span class='small fw-bold text-dark'>{$commentCount}</span>
+                    </div>") . "
+                </div>",
+                'class' => 'text-center'
+            ],
+            [
+                'content' => "
+                <div class='text-center'>
+                    <div class='small fw-bold text-dark mb-0'>" . Date::format($date, 'd M Y') . "</div>
+                    <div class='text-muted extra-small'>" . Date::format($date, 'H:i A') . "</div>
+                </div>",
+                'class' => 'text-center'
+            ]
+        ];
+
+        // Allow developers to inject extra columns
+        $hookRow = ($postType === 'page') ? 'admin_pages_table_row' : 'admin_posts_table_row';
+        $filtered = Hooks::filter($hookRow, $row, $pObj);
+        if (is_array($filtered) && isset($filtered[1]) && $filtered[1] === $pObj) {
+            $row = $filtered[0];
+        } else {
+            $row = $filtered;
+        }
+
+        // Management column
+        $row[] = ['content' => $actionsHtml, 'class' => 'text-center'];
+
+        // Selection column
+        $row[] = ['content' => "<div class='text-center pe-4'><input type='checkbox' name='post_id[]' value='{$id}' class='check form-check-input shadow-none border'></div>", 'class' => 'p-0'];
+
+        return $row;
+    }
+
+    /**
+     * Generates dashboard table headers, including hooks.
+     * Centralized for AJAX and server-side rendering.
+     * 
+     * @since 2.3.0
+     */
+    public static function getDashboardHeaders($postType)
+    {
+        $headers = [
+            ['content' => ($postType === 'page') ? _('Architecture Details') : _('Publication Details'), 'class' => 'ps-4 py-3'],
+            ['content' => ($postType === 'page') ? _('Accountability') : _('Ownership'), 'class' => 'text-center'],
+            ['content' => _('Engagement'), 'class' => 'text-center'],
+            ['content' => _('Timeline'), 'class' => 'text-center'],
+            ['content' => _('Management'), 'class' => 'text-center'],
+            ['content' => '<div class="text-center pe-4"><input type="checkbox" id="selectall" class="form-check-input shadow-none border"></div>', 'class' => 'p-0', 'width' => '50px']
+        ];
+
+        $hookHeaders = ($postType === 'page') ? 'admin_pages_table_headers' : 'admin_posts_table_headers';
+        $filtered = Hooks::filter($hookHeaders, $headers, $postType);
+        if (is_array($filtered) && isset($filtered[1]) && $filtered[1] === $postType) {
+            return $filtered[0];
+        } else {
+            return $filtered;
+        }
     }
 
     /**
@@ -380,7 +598,11 @@ class Posts extends Model
         if (strpos($param, 'builder_') === 0) {
             $cleanValue = $value;
         } else {
-            $cleanValue = Typo::cleanX($value);
+            if (is_array($value)) {
+                $cleanValue = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            } else {
+                $cleanValue = Typo::cleanX($value);
+            }
         }
 
 
@@ -408,7 +630,11 @@ class Posts extends Model
         if (strpos($param, 'builder_') === 0) {
             $cleanValue = $value;
         } else {
-            $cleanValue = Typo::cleanX($value);
+            if (is_array($value)) {
+                $cleanValue = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            } else {
+                $cleanValue = Typo::cleanX($value);
+            }
         }
 
 
@@ -439,6 +665,49 @@ class Posts extends Model
         } else {
             return '';
         }
+    }
+
+    /**
+     * Retrieves all metadata parameters for a post.
+     *
+     * @param int $post_id Post ID.
+     * @return array        Associative array of parameters.
+     */
+    public static function getParams($post_id)
+    {
+        $q = Query::table('posts_param')
+            ->where('post_id', Typo::int($post_id))
+            ->get();
+
+        $params = [];
+        if ($q) {
+            foreach ($q as $p) {
+                $params[$p->param] = Typo::Xclean($p->value);
+            }
+        }
+        return $params;
+    }
+
+    /**
+     * Get list of published pages for a dropdown selection.
+     * 
+     * @return array
+     */
+    public static function getPageList()
+    {
+        $pages = Query::table('posts')
+            ->where('type', 'page')
+            ->where('status', '1')
+            ->orderBy('title', 'ASC')
+            ->get();
+
+        $list = ['0' => _('-- Recent Posts (Default) --')];
+        if ($pages) {
+            foreach ($pages as $p) {
+                $list[$p->id] = Typo::Xclean($p->title);
+            }
+        }
+        return $list;
     }
 
     /**
@@ -906,6 +1175,9 @@ class Posts extends Model
      */
     public static function fetch($vars)
     {
+        if (is_numeric($vars)) {
+            $vars = ['id' => $vars];
+        }
         $q = Query::table('posts');
         if (isset($vars['id'])) {
             $q->where('id', Typo::int($vars['id']));

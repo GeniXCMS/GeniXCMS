@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -18,6 +18,7 @@
 $catType = isset($data['type']) ? $data['type'] : 'post';
 $typeParam = ($catType !== 'post') ? '&type=' . $catType : '';
 $baseAction = '?page=categories' . $typeParam;
+$params = Hooks::run('category_param_form');
 
 $categoryCards = [];
 if ($data['num'] > 0 && !isset($data['cat']['error'])) {
@@ -54,7 +55,7 @@ if ($data['num'] > 0 && !isset($data['cat']['error'])) {
                 $subHtml = "<span class='text-muted small opacity-50 italic'>" . _("No children defined") . "</span>";
             }
 
-            $categoryCards[] = "
+            $cardHtml = "
             <div class='card border-0 shadow-sm rounded-4 h-100 category-card'>
                 <div class='card-body p-4'>
                     <div class='d-flex align-items-start gap-4'>
@@ -78,6 +79,9 @@ if ($data['num'] > 0 && !isset($data['cat']['error'])) {
                     </div>
                 </div>
             </div>";
+
+            // Allow developers to inject extra HTML into the category card
+            $categoryCards[] = Hooks::filter('admin_categories_card', $cardHtml, $c);
         }
     }
 }
@@ -85,12 +89,12 @@ if ($data['num'] > 0 && !isset($data['cat']['error'])) {
 // ── DEFINE UI SCHEMA ──────────────────────────────────────────────
 $schema = [
     'header' => [
-        'title' => _('Content Taxonomy'),
-        'subtitle' => _('Organize your site content with powerful hierarchical categories.'),
+        'title' => Categories::getTypeLabel($catType, 'title'),
+        'subtitle' => Categories::getTypeLabel($catType, 'subtitle'),
         'icon' => 'bi bi-diagram-3',
         'button' => [
             'url' => '#',
-            'label' => _('New Category'),
+            'label' => Categories::getTypeLabel($catType, 'new_item'),
             'icon' => 'bi bi-folder-plus',
             'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold',
             'attr' => 'data-bs-toggle="modal" data-bs-target="#addCategoryModal"'
@@ -104,7 +108,7 @@ $schema = [
                 <div class="col-12 text-start">
                     <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-inline-flex flex-row align-items-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary me-2">' . Stats::totalCat($catType) . '</span>
-                        <span class="text-muted small fw-bold text-uppercase fs-xs">' . _("Registered Categories") . '</span>
+                        <span class="text-muted small fw-bold text-uppercase fs-xs">' . Categories::getTypeLabel($catType, 'stats_label') . '</span>
                         <span class="mx-3 text-zinc-200">|</span>
                         <span class="text-muted small opacity-75">' . _("Adding context to your topics makes them easier to navigate.") . '</span>
                     </div>
@@ -113,10 +117,10 @@ $schema = [
         ],
         [
             'type' => 'row',
-            'items' => (function () use ($categoryCards) {
+            'items' => (function () use ($categoryCards, $catType) {
                 $items = [];
                 if (empty($categoryCards)) {
-                    $items[] = ['width' => 12, 'content' => ['type' => 'raw', 'html' => '<div class="text-center py-5"><i class="bi bi-diagram-3 fs-1 text-muted opacity-25 d-block mb-3"></i><h5 class="text-dark fw-bold">' . _("Taxonomy Empty") . '</h5></div>']];
+                    $items[] = ['width' => 12, 'content' => ['type' => 'raw', 'html' => '<div class="text-center py-5"><i class="bi bi-diagram-3 fs-1 text-muted opacity-25 d-block mb-3"></i><h5 class="text-dark fw-bold">' . Categories::getTypeLabel($catType, 'empty_label') . '</h5></div>']];
                 } else {
                     foreach ($categoryCards as $card) {
                         $items[] = ['width' => 4, 'content' => ['type' => 'raw', 'html' => $card]];
@@ -130,7 +134,7 @@ $schema = [
         [
             'type' => 'modal',
             'id' => 'addCategoryModal',
-            'header' => '<i class="bi bi-plus-circle me-2"></i>' . _("Create New Category"),
+            'header' => '<i class="bi bi-plus-circle me-2"></i>' . Categories::getTypeLabel($catType, 'modal_title'),
             'body_elements' => [
                 [
                     'type' => 'form',
@@ -145,13 +149,14 @@ $schema = [
                                         'type' => 'raw',
                                         'html' => '
                                 <div class="mb-4">
-                                    <label class="form-label text-muted text-uppercase fw-bold ls-1 fs-xs">' . _("Category Name") . '</label>
+                                    <label class="form-label text-muted text-uppercase fw-bold ls-1 fs-xs">' . Categories::getTypeLabel($catType, 'name_label') . '</label>
                                     <input type="text" name="cat" class="form-control border-0 bg-light rounded-3 py-2 px-3" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label text-muted text-uppercase fw-bold ls-1 fs-xs">' . _("Hierarchical Parent") . '</label>
                                     ' . Categories::dropdown(['parent' => '0', 'name' => 'parent', 'sort' => 'ASC', 'order_by' => 'name', 'type' => $catType, 'class' => 'form-select border-0 bg-light rounded-3 py-2 px-3']) . '
-                                </div>'
+                                </div>
+                                '.$params.'
+                                '
                                     ]
                                 ],
                                 [
@@ -196,9 +201,10 @@ $schema = [
                                     <input type="text" name="cat" id="edit_cat_name" class="form-control border-0 bg-light rounded-3 py-2 px-3" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label text-muted text-uppercase fw-bold ls-1 fs-xs">' . _("Parent Category") . '</label>
                                     ' . Categories::dropdown(['parent' => '0', 'name' => 'parent', 'id' => 'edit_cat_parent', 'sort' => 'ASC', 'order_by' => 'name', 'type' => $catType, 'class' => 'form-select border-0 bg-light rounded-3 py-2 px-3']) . '
-                                </div>'
+                                </div>
+                                <div id="edit_category_params"></div>
+                                '
                                     ]
                                 ],
                                 [
@@ -231,6 +237,9 @@ echo '<div class="col-md-12">';
 echo Hooks::run('admin_page_notif_action', $data);
 echo '</div>';
 
+// Allow developers to modify the entire categories dashboard schema
+$schema = Hooks::filter('admin_categories_schema', $schema, $catType);
+
 $builder = new UiBuilder($schema);
 $builder->render();
 ?>
@@ -243,6 +252,24 @@ $builder->render();
         document.getElementById('edit_cat_image').value = data.image || '';
         document.getElementById('edit_cat_desc').value = data.desc || '';
         updateIconPreview(data.image || '');
+
+        // Load params if any
+        const paramsEl = document.getElementById('edit_category_params');
+        paramsEl.innerHTML = '<div class="text-center p-3 text-muted small"><i class="bi bi-arrow-repeat spin"></i> Loading params...</div>';
+        
+        fetch('index.php?page=categories&act=edit&id=' + data.id + '&type=<?= $catType ?>&ajax=1')
+            .then(response => response.text())
+            .then(html => {
+                paramsEl.innerHTML = html;
+                // Manually execute scripts to ensure dependencies work
+                const scripts = paramsEl.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            });
     }
     function updateIconPreview(val) {
         const preview = document.getElementById('edit_icon_preview');

@@ -1,0 +1,204 @@
+<main class="flex-grow pb-12">
+    <div class="max-w-7xl mx-auto px-8">
+        <!-- Header Section -->
+        <header class="mb-12">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h2 class="text-primary font-bold text-lg mb-2">{_('Our Collection')}</h2>
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-on-surface tracking-tight leading-tight">
+                        {if isset($category)}
+                            {$category->name} <span class="text-primary">{_('Collection')}</span>
+                        {else}
+                            Artisanal <span class="text-primary">Confections</span>
+                        {/if}
+                    </h1>
+                </div>
+                
+                <!-- Category Scroll Navigation -->
+                <div class="relative flex items-center gap-1 max-w-full md:max-w-[480px]">
+                    <!-- Left Arrow -->
+                    <button id="cat-scroll-left" onclick="catScroll(-1)" class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface-variant flex items-center justify-center transition-all shadow-sm opacity-0 pointer-events-none" aria-label="Scroll left">
+                        <span class="material-symbols-outlined text-sm">chevron_left</span>
+                    </button>
+
+                    <!-- Scrollable Pills -->
+                    <div id="cat-scroll-track" class="flex gap-3 overflow-x-auto pb-1 no-scrollbar scroll-smooth" onscroll="updateCatArrows()">
+                        <a href="{Url::mod('store')}" class="px-6 py-2 {(!isset($category)) ? 'bg-primary text-on-primary shadow-lg shadow-primary/10' : 'bg-surface-container hover:bg-surface-container-high'} rounded-full font-semibold whitespace-nowrap transition-all flex-shrink-0">
+                            {_('All Items')}
+                        </a>
+                        {var $nix_cats = Query::table('cat')->where('type', 'nixomers')->get()}
+                        {foreach $nix_cats as $c}
+                            <a href="{Url::cat($c->id)}" class="px-6 py-2 {(isset($category) && $category->id == $c->id) ? 'bg-primary text-on-primary shadow-lg shadow-primary/10' : 'bg-surface-container hover:bg-surface-container-high'} rounded-full font-medium transition-all whitespace-nowrap flex-shrink-0">
+                                {$c->name}
+                            </a>
+                        {/foreach}
+                    </div>
+
+                    <!-- Right Arrow -->
+                    <button id="cat-scroll-right" onclick="catScroll(1)" class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface-variant flex items-center justify-center transition-all shadow-sm" aria-label="Scroll right">
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
+
+                <script>
+                    function catScroll(dir) {
+                        var t = document.getElementById('cat-scroll-track');
+                        if (t) t.scrollBy({ left: dir * 200, behavior: 'smooth' });
+                        setTimeout(updateCatArrows, 320);
+                    }
+                    function updateCatArrows() {
+                        var t = document.getElementById('cat-scroll-track');
+                        var btnL = document.getElementById('cat-scroll-left');
+                        var btnR = document.getElementById('cat-scroll-right');
+                        if (!t || !btnL || !btnR) return;
+                        var atStart = t.scrollLeft <= 4;
+                        var atEnd   = t.scrollLeft + t.clientWidth >= t.scrollWidth - 4;
+                        btnL.classList.toggle('opacity-0', atStart);
+                        btnL.classList.toggle('pointer-events-none', atStart);
+                        btnR.classList.toggle('opacity-0', atEnd);
+                        btnR.classList.toggle('pointer-events-none', atEnd);
+                    }
+                    document.addEventListener('DOMContentLoaded', updateCatArrows);
+                </script>
+            </div>
+        </header>
+
+        <!-- Search Mobile -->
+        <div class="md:hidden mb-8">
+            <form action="{Url::mod('store')}" method="get" class="relative">
+                <input type="text" name="q" class="w-full bg-surface-container-lowest border-none rounded-full py-3 px-6 pr-12 shadow-sm focus:ring-2 focus:ring-primary text-base" placeholder="{_('Search treats...')}">
+                <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-primary">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Sidebar Filters (Web) -->
+            <aside class="hidden lg:block w-64 space-y-10">
+                <section>
+                    <h3 class="font-headline font-bold text-xl mb-6">{_('Refine Search')}</h3>
+                    <form action="{Url::mod('store')}" method="get" class="space-y-6">
+                        <div class="relative group">
+                            <input type="text" name="q" value="{(isset($_GET['q'])) ? $_GET['q'] : ''}" class="bg-surface-container-low border-none rounded-full py-3 px-6 pr-10 focus:ring-2 focus:ring-primary w-full text-sm transition-all" placeholder="{_('Search...')}">
+                            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline-variant">search</span>
+                        </div>
+
+                        <div>
+                            <span class="text-on-surface-variant font-medium text-xs mb-4 block uppercase tracking-wider">{_('Categories')}</span>
+                            <div class="flex flex-wrap gap-2">
+                                {var $nix_cats = Query::table('cat')->where('type', 'nixomers')->get()}
+                                {foreach $nix_cats as $c}
+                                    <a href="{Url::cat($c->id)}" class="px-3 py-1.5 {(isset($data['category']) && $data['category']->id == $c->id) ? 'bg-primary/10 text-primary border-primary/20' : 'bg-surface-container text-on-surface-variant border-transparent'} border rounded-full text-xs font-bold transition-all hover:bg-primary/5">
+                                        {$c->name}
+                                    </a>
+                                {/foreach}
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="p-6 bg-primary-container/10 rounded-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-primary mb-2">{_('Special Offer')}</h4>
+                        <p class="text-sm text-on-surface-variant leading-snug">{_('Subscribe to our newsletter for exclusive flavor drops and weekend discounts.')}</p>
+                    </div>
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">cake</span>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="flex-1">
+                {if isset($posts) && count($posts) > 0}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                        {foreach $posts as $p}
+                            {var $p_url = Url::post($p->id)}
+                            <div class="bg-surface-container-lowest rounded-lg p-6 group transition-all hover:translate-y-[-8px] editorial-shadow border border-black/5">
+                                <a href="{$p_url}" class="block">
+                                    <div class="relative aspect-square mb-8 rounded-lg overflow-hidden bg-surface-container-low">
+                                        {var $img_src = (isset($p->image)) ? $p->image : Posts::getPostImage($p->id)}
+                                        {if empty($img_src)}
+                                            {var $p_content_raw = Typo::Xclean($p->content)}
+                                            {var $has_img = preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $p_content_raw, $match)}
+                                            {if $has_img}
+                                                {var $img_src = $match['src']}
+                                            {/if}
+                                        {/if}
+
+                                        {if !empty($img_src)}
+                                            <img src="{Url::thumb($img_src, 'large')}" alt="{$p->title|noescape}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                        {else}
+                                            <div class="w-full h-full flex items-center justify-center bg-surface-container">
+                                                <span class="material-symbols-outlined text-outline-variant text-4xl">image</span>
+                                            </div>
+                                        {/if}
+                                        
+                                        {var $p_cat_name = Categories::name($p->cat)}
+                                        {if $p_cat_name}
+                                            <div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">
+                                                {$p_cat_name}
+                                            </div>
+                                        {/if}
+                                    </div>
+                                    <div class="space-y-4">
+                                    <div class="flex flex-col gap-1">
+                                        <h3 class="font-headline font-extrabold text-xl text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-1" title="{$p->title|stripHtml|noescape}">
+                                            {$p->title|noescape}
+                                        </h3>
+                                        <div class="flex items-center">
+                                            <span class="text-2xl font-black text-primary tracking-tighter">
+                                                {var $p_price = (isset($p->price)) ? $p->price : Posts::getParam('price', $p->id)}
+                                                {if $p_price}
+                                                    <span class="text-sm font-bold opacity-60 mr-1">{(Options::v('nixomers_currency') ?: 'IDR')}</span>{Nixomers::formatCurrency($p_price)}
+                                                {/if}
+                                            </span>
+                                        </div>
+                                    </div>
+                                        <p class="text-on-surface-variant text-sm leading-relaxed line-clamp-2">
+                                            {Typo::strip_tags_content(Typo::Xclean($p->content))|truncate:80}
+                                        </p>
+                                        
+                                        {var $p_stock = (int)(Posts::getParam('stock', $p->id) ?: 0)}
+                                        <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest {if $p_stock > 0 && $p->status == '1'}text-secondary{else}text-outline-variant{/if}">
+                                            <span class="w-2 h-2 rounded-full {if $p_stock > 0 && $p->status == '1'}bg-secondary animate-pulse{else}bg-outline-variant{/if}"></span>
+                                            {if $p->status != '1'}
+                                                {_('Coming Soon')}
+                                            {elseif $p_stock > 0}
+                                                {_('Available Now')}
+                                            {else}
+                                                {_('Out of Stock')}
+                                            {/if}
+                                        </div>
+
+                                        <div class="w-full py-4 {if $p_stock > 0 && $p->status == '1'}bg-gradient-to-br from-primary to-primary-container text-on-primary{else}bg-surface-container-high text-on-surface-variant{/if} rounded-full font-bold flex items-center justify-center gap-2 shadow-lg {if $p_stock > 0 && $p->status == '1'}shadow-primary/20 group-hover:shadow-primary/40 active:scale-95{/if} transition-all">
+                                            <span class="material-symbols-outlined text-lg">visibility</span>
+                                            {if $p_stock > 0 && $p->status == '1'}{_('View Details')}{else}{_('Sold Out')}{/if}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {/foreach}
+                    </div>
+
+                    <!-- Pagination -->
+                    {if isset($data['paging'])}
+                        <div class="mt-16 flex justify-center">
+                            <div class="pagination flex gap-2">
+                                {$data['paging']|noescape}
+                            </div>
+                        </div>
+                    {/if}
+                {else}
+                    <div class="text-center py-32 bg-surface-container-lowest rounded-lg border border-dashed border-outline-variant">
+                        <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">cookie</span>
+                        <h3 class="font-headline font-bold text-2xl text-on-surface">{_('No Treats Found')}</h3>
+                        <p class="text-on-surface-variant mt-2">{_('We are currently baking something new. Please check back later.')}</p>
+                        <a href="{Url::mod('store')}" class="inline-block mt-8 px-8 py-3 bg-primary text-on-primary rounded-full font-bold active:scale-95 transition-all">{_('View All Items')}</a>
+                    </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</main>

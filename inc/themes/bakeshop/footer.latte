@@ -1,0 +1,47 @@
+</main>
+
+{var $o = Bakeshop::options()}
+
+<!-- Footer -->
+<footer class="w-full mt-auto py-12 bg-surface-container border-t border-black/5">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 max-w-7xl mx-auto">
+
+        <!-- Dynamic Widget Areas -->
+        {php
+            $w1 = Widget::show('footer_1');
+            $w2 = Widget::show('footer_2');
+            $w3 = Widget::show('footer_3');
+            $w4 = Widget::show('footer_4');
+        }
+        {if $w1 !== ''}
+        <div class="footer-widget-area">
+            {$w1|noescape}
+        </div>
+        {/if}
+        {if $w2 !== ''}
+        <div class="footer-widget-area">
+            {$w2|noescape}
+        </div>
+        {/if}
+        {if $w3 !== ''}
+        <div class="footer-widget-area">
+            {$w3|noescape}
+        </div>
+        {/if}
+        {if $w4 !== ''}
+        <div class="footer-widget-area">
+            {$w4|noescape}
+        </div>
+        {/if}
+    </div>
+
+    <div class="max-w-7xl mx-auto px-8 mt-12 pt-8 border-t border-outline-variant/10 text-center text-sm text-on-surface-variant font-label">
+        &copy; {date('Y')} {$o['logo_text']}. Handcrafted with GeniXCMS.
+    </div>
+</footer>
+
+{if isset($site_footer)}{$site_footer|noescape}{/if}
+{Site::loadLibFooter()|noescape}
+
+</body>
+</html>

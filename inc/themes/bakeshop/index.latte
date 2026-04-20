@@ -1,0 +1,144 @@
+{var $o = Bakeshop::options()}
+
+<!-- Hero Featured Section (Topmost post usually) -->
+{if isset($posts) && count($posts) > 0}
+    {var $featured = $posts[0]}
+    {var $f_img = Posts::getPostImage($featured->id)}
+    <section class="max-w-7xl mx-auto px-8 mb-16 mt-8">
+        <div class="relative group overflow-hidden rounded-lg bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1 z-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-4 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-[10px] font-bold font-label uppercase tracking-widest">Featured Story</span>
+                    <span class="text-on-surface-variant text-sm font-medium">{$featured->date|date:'M d, Y'}</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-headline font-extrabold text-on-surface leading-tight mb-6">
+                    {Typo::Xclean($featured->title)|noescape}
+                </h1>
+                <p class="text-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed">
+                    {Typo::Xclean(Posts::getParam('excerpt', $featured->id) ?: $featured->content)|stripHtml|truncate:150}
+                </p>
+                <a href="{Url::post($featured->id)}" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-4 rounded-full font-bold editorial-shadow hover:opacity-90 transition-opacity flex items-center gap-2 w-fit">
+                    Read the Article
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+            <div class="flex-1 relative">
+                <img class="rounded-lg object-cover w-full h-[400px] editorial-shadow transform group-hover:scale-105 transition-transform duration-700" src="{(empty($f_img) ? 'https://images.unsplash.com/photo-1550617931-e17a7b701ce2?q=80&w=800' : Url::thumb($f_img, 'large'))}"/>
+                <div class="absolute -bottom-4 -left-4 bg-secondary-container text-on-secondary-container p-4 rounded-lg editorial-shadow">
+                    <span class="font-headline font-bold text-lg leading-none">Freshly Made</span>
+                    <p class="text-xs uppercase font-label tracking-tighter opacity-80">Gallery Quality</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{/if}
+
+<!-- Main Content Area -->
+<section class="max-w-7xl mx-auto px-8 mb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <!-- Blog Feed -->
+        <div class="md:col-span-8 space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {if isset($posts)}
+                    {foreach $posts as $p}
+                        {continueIf $p->id === $featured->id}
+                        {var $img = Posts::getPostImage($p->id)}
+                        {var $catId = $p->cat}
+                        {var $catName = 'JOURNAL'}
+                        
+                        <article class="bg-surface-container-lowest rounded-lg overflow-hidden group hover:translate-y-[-4px] transition-transform duration-300 border border-black/5">
+                            <div class="h-64 overflow-hidden relative">
+                                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="{(empty($img) ? 'https://images.unsplash.com/photo-1495147466023-ac5c58a74e94?q=80&w=600' : Url::thumb($img, 'large'))}"/>
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-secondary-container/90 backdrop-blur-md text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold font-label uppercase">
+                                        {$catName}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <h3 class="text-2xl font-headline font-bold text-on-surface mb-3 leading-tight group-hover:text-primary transition-colors">
+                                    <a href="{Url::post($p->id)}">{Typo::Xclean($p->title)|noescape}</a>
+                                </h3>
+                                <p class="text-on-surface-variant text-sm line-clamp-3 mb-6 leading-relaxed">
+                                    {Typo::Xclean(Posts::getParam('excerpt', $p->id) ?: $p->content)|stripHtml|truncate:120}
+                                </p>
+                                <div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+                                            <img class="w-full h-full object-cover" src="https://ui-avatars.com/api/?name={$p->author}&background=a7295a&color=fff"/>
+                                        </div>
+                                        <span class="text-xs font-bold font-label text-on-surface">{$p->author}</span>
+                                    </div>
+                                    <span class="text-xs text-on-surface-variant font-medium">{$p->date|date:'M d, Y'}</span>
+                                </div>
+                            </div>
+                        </article>
+                    {/foreach}
+                {/if}
+            </div>
+
+            <!-- Pagination -->
+            {if isset($pagination)}
+                <div class="flex items-center justify-center gap-2 pt-12">
+                    {$pagination|noescape}
+                </div>
+            {/if}
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="md:col-span-4 space-y-10">
+            <!-- Search Widget -->
+            <div class="bg-surface-container p-8 rounded-lg">
+                <h4 class="font-headline font-bold text-lg mb-4">Find an Article</h4>
+                <form action="{Url::search()}" method="get" class="relative">
+                    <input type="hidden" name="search" value=""/>
+                    <input name="q" class="w-full bg-surface-container-lowest border-none rounded-full py-3 px-6 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Search the gallery..." type="text"/>
+                    <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Trending / Recent Posts -->
+            <div>
+                <h4 class="font-headline font-extrabold text-xl mb-6 flex items-center gap-2">
+                    Recent Stories
+                    <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                </h4>
+                <div class="space-y-6">
+                    {var $trending = Posts::recent(3)}
+                    {if !isset($trending['error'])}
+                        {foreach $trending as $tp}
+                            {var $timg = Posts::getPostImage($tp->id)}
+                            <a class="flex gap-4 group" href="{Url::post($tp->id)}">
+                                <div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-surface-container">
+                                    <img class="w-full h-full object-cover" src="{(empty($timg) ? 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=200' : Url::thumb($timg, 'large'))}"/>
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <span class="text-[10px] font-bold font-label text-primary uppercase tracking-wider mb-1">TECHNIQUE</span>
+                                    <h5 class="text-sm font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                        {Typo::Xclean($tp->title)|noescape}
+                                    </h5>
+                                </div>
+                            </a>
+                        {/foreach}
+                    {/if}
+                </div>
+            </div>
+
+            <!-- Newsletter Card -->
+            <div class="bg-gradient-to-br from-primary to-primary-container rounded-lg p-8 text-on-primary editorial-shadow relative overflow-hidden">
+                <div class="relative z-10">
+                    <h4 class="text-2xl font-headline font-extrabold mb-4 leading-tight">Freshly Baked Content, In Your Inbox.</h4>
+                    <p class="text-sm opacity-90 mb-6">Join our enthusiasts receiving weekly secrets on flavor layering and modern design.</p>
+                    <div class="space-y-3">
+                        <input class="w-full bg-white/20 border-white/30 rounded-full py-3 px-6 text-sm placeholder:text-white/60 focus:ring-2 focus:ring-white/40 transition-all outline-none border text-white" placeholder="Your email address" type="email"/>
+                        <button class="w-full bg-white text-primary font-bold py-3 rounded-full hover:bg-opacity-90 transition-opacity">Subscribe Now</button>
+                    </div>
+                </div>
+                <!-- Abstract shape -->
+                <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+            </div>
+        </aside>
+    </div>
+</section>

@@ -1,0 +1,160 @@
+<main class="flex-grow pt-8 pb-24 px-6">
+<div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="mb-12">
+        <h1 class="text-5xl md:text-6xl font-headline font-extrabold text-on-surface tracking-tight mb-2">Your Sweet Selection</h1>
+        <p class="text-primary font-headline font-semibold text-xl">
+            {if empty($items)}
+                {_('Your treat selection is currently empty.')}
+            {else}
+                {_('Review and refine your artisanal treats.')}
+            {/if}
+        </p>
+    </div>
+
+    {if !empty($items)}
+    <!-- Cart Content: Asymmetric Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Items List (Left Side) -->
+        <div class="lg:col-span-8 space-y-6">
+            {foreach $items as $item}
+                {var $p = $item['product']}
+                {var $img_src = (isset($p->image)) ? $p->image : Posts::getPostImage($item['id'])}
+                {if empty($img_src)}
+                    {var $p_content_raw = Typo::Xclean($p->content)}
+                    {var $has_img = preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $p_content_raw, $match)}
+                    {if $has_img}
+                        {var $img_src = $match['src']}
+                    {/if}
+                {/if}
+
+                <div class="bg-surface-container-lowest rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6 transition-all editorial-shadow border border-black/5">
+                    <div class="w-32 h-32 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0">
+                        {if !empty($img_src)}
+                            <img alt="{$p->title|noescape}" class="w-full h-full object-cover" src="{Url::thumb($img_src, 'large')}"/>
+                        {else}
+                            <div class="w-full h-full flex items-center justify-center bg-surface-container">
+                                <span class="material-symbols-outlined text-outline-variant text-4xl">image</span>
+                            </div>
+                        {/if}
+                    </div>
+                    
+                    <div class="flex-grow text-center sm:text-left">
+                        <h3 class="font-headline font-bold text-xl text-on-surface">
+                            <a href="{Url::post($item['id'])}" class="hover:text-primary transition-colors">{$p->title|noescape}</a>
+                        </h3>
+                        {var $sku = Posts::getParam('sku', $item['id'])}
+                        {var $brand = Categories::name(Posts::getParam('brand', $item['id']))}
+                        <p class="text-on-surface-variant text-sm mb-4">
+                            {if $sku}SKU: {$sku}{else}Handcrafted{/if} {if $brand}• {$brand}{/if}
+                        </p>
+                        
+                        {var $stockLeft = (int)(Posts::getParam('stock', $item['id']) ?: 0)}
+                        <div class="flex items-center justify-center sm:justify-start gap-4">
+                            {if $stockLeft > 0}
+                                <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">{_('In Stock')}</span>
+                            {else}
+                                <span class="bg-error/10 text-error px-3 py-1 rounded-full text-xs font-semibold">{_('Sold Out')}</span>
+                            {/if}
+                            <span class="text-primary font-bold">{$currency|noescape} {Nixomers::formatCurrency($item['price'])}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Qty Controls -->
+                    <div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-full {if $stockLeft <= 0}opacity-50{/if}">
+                        <form method="post" class="inline m-0">
+                            <input type="hidden" name="nix_action" value="update">
+                            <input type="hidden" name="product_id" value="{$item['id']}">
+                            <input type="hidden" name="qty" value="{(int)$item['qty'] - 1}">
+                            <button type="submit" class="hover:text-primary transition-colors flex items-center" {if $item['qty'] <= 1}disabled{/if}>
+                                <span class="material-symbols-outlined text-sm">remove</span>
+                            </button>
+                        </form>
+                        
+                        <span class="font-headline font-bold w-4 text-center">{$item['qty']}</span>
+                        
+                        <form method="post" class="inline m-0">
+                            <input type="hidden" name="nix_action" value="update">
+                            <input type="hidden" name="product_id" value="{$item['id']}">
+                            <input type="hidden" name="qty" value="{(int)$item['qty'] + 1}">
+                            <button type="submit" class="hover:text-primary transition-colors flex items-center" {if $item['qty'] >= $stockLeft}disabled{/if}>
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Remove Item -->
+                    <form method="post" class="inline m-0">
+                        <input type="hidden" name="nix_action" value="remove">
+                        <input type="hidden" name="product_id" value="{$item['id']}">
+                        <button type="submit" class="text-outline hover:text-error transition-colors p-2 flex items-center">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </form>
+                </div>
+            {/foreach}
+            
+            <div class="pt-8 flex justify-center sm:justify-start">
+                <a href="{Url::mod('store')}" class="inline-flex items-center gap-2 text-primary font-bold hover:underline transition-colors">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    {_('Continue browsing treats')}
+                </a>
+            </div>
+        </div>
+
+        <!-- Checkout Summary (Right Side) -->
+        <div class="lg:col-span-4">
+            <div class="bg-surface-container p-8 rounded-xl sticky top-32">
+                <h2 class="font-headline font-extrabold text-2xl text-on-surface mb-8">{_('Order Summary')}</h2>
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span>{_('Subtotal')}</span>
+                        <span class="font-bold text-on-surface">{$currency|noescape} {Nixomers::formatCurrency($total)}</span>
+                    </div>
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span>{_('Estimated Tax')} ({$taxRate}%)</span>
+                        <span class="font-bold text-on-surface">{$currency|noescape} {Nixomers::formatCurrency($taxAmount)}</span>
+                    </div>
+                    <div class="flex justify-between text-on-surface-variant">
+                        <span>{_('Shipping')}</span>
+                        <span class="font-bold text-on-surface italic text-secondary">{_('Calculated next')}</span>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-outline-variant/20 flex justify-between items-center">
+                        <span class="font-headline font-bold text-xl text-on-surface">{_('Total')}</span>
+                        <span class="font-headline font-extrabold text-3xl text-primary">{$currency|noescape} {Nixomers::formatCurrency($grandTotal)}</span>
+                    </div>
+                </div>
+
+                <a href="{Url::mod('checkout')}" class="block text-center w-full py-5 px-8 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                    {_('Proceed to Checkout')}
+                </a>
+                
+                <div class="mt-6 flex items-center justify-center gap-2 text-secondary text-sm font-medium">
+                    <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                    <span>{_('Secure & Encrypted Checkout')}</span>
+                </div>
+            </div>
+
+            <!-- Promotion Teaser -->
+            <div class="mt-6 p-6 bg-tertiary-container/30 rounded-xl flex items-center gap-4">
+                <div class="bg-tertiary-container p-3 rounded-full">
+                    <span class="material-symbols-outlined text-on-tertiary-container">card_giftcard</span>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-on-tertiary-fixed-variant">{_('Artisanal Packaging')}</p>
+                    <p class="text-xs text-on-tertiary-fixed-variant/70">{_('Every order includes our signature frosted box.')}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {else}
+        <!-- Empty Cart State -->
+        <div class="text-center py-24 bg-surface-container-lowest rounded-2xl border border-dashed border-outline-variant mt-8 max-w-2xl mx-auto">
+            <span class="material-symbols-outlined text-8xl text-outline-variant/50 mb-6">shopping_cart</span>
+            <h2 class="font-headline text-3xl font-bold mb-4">{_('Your cart is empty')}</h2>
+            <p class="text-on-surface-variant mb-12 max-w-sm mx-auto">{_('Treat yourself to some of our artisanal bakes and confections. Fresh out of the oven!')}</p>
+            <a href="{Url::mod('store')}" class="inline-block bg-primary text-on-primary font-bold px-10 py-4 rounded-full hover:shadow-lg transition-all active:scale-95">{_('Explore Catalog')}</a>
+        </div>
+    {/if}
+</div>
+</main>

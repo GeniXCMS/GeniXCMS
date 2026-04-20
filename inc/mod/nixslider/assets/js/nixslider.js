@@ -8,10 +8,12 @@ function initNixsliders() {
         nixsliderIndex[id] = 0;
         showNixslider(id, 0);
         
-        // Auto slide every 5 seconds
+        var speed = parseInt(slider.getAttribute('data-speed')) || 5000;
+        
+        // Auto slide every 'speed' milliseconds
         nixsliderTimers[id] = setInterval(function() {
             moveNixslider(id, 1);
-        }, 5000);
+        }, speed);
         
         // Pause on hover
         slider.addEventListener('mouseenter', function() {
@@ -22,7 +24,7 @@ function initNixsliders() {
         slider.addEventListener('mouseleave', function() {
             nixsliderTimers[id] = setInterval(function() {
                 moveNixslider(id, 1);
-            }, 5000);
+            }, speed);
         });
         
         // Swipe support for touch devices

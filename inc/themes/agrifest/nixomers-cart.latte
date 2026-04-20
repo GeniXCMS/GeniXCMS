@@ -1,0 +1,161 @@
+{var $o = (array)Agrifest::options()}
+{var $currency = Options::v('nixomers_currency') ?: 'IDR'}
+
+<div class="max-w-7xl mx-auto px-8 pt-12 pb-24">
+    <!-- Header Section -->
+    <div class="mb-12">
+        <h1 class="text-5xl md:text-6xl font-headline font-extrabold text-on-surface tracking-tighter mb-4">Your Harvest Basket</h1>
+        <p class="text-primary font-headline font-bold text-xl opacity-80 uppercase tracking-widest text-sm">Review your selected estate produce.</p>
+    </div>
+
+    {if empty($items)}
+        <!-- Empty State -->
+        <div class="bg-surface-container-low rounded-xl p-20 text-center border border-black/5">
+            <div class="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8">
+                <span class="material-symbols-outlined text-5xl">shopping_basket</span>
+            </div>
+            <h2 class="text-3xl font-headline font-bold text-on-surface mb-4">Your basket is currently empty</h2>
+            <p class="text-on-surface-variant max-w-md mx-auto mb-10">It seems you haven't added any of our fresh estate produce to your selection yet.</p>
+            <a href="{Url::mod('store')}" class="inline-flex items-center gap-3 bg-primary text-white px-10 py-5 rounded-full font-bold shadow-xl hover:scale-105 active:scale-95 transition-all">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Return to Store
+            </a>
+        </div>
+    {else}
+        <!-- Cart Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Items List (Left Side) -->
+            <div class="lg:col-span-8 space-y-4">
+                {foreach $items as $item}
+                    {var $p_img = Posts::getPostImage($item['id'])}
+                    {var $p_stock = (int)Posts::getParam('stock', $item['id'])}
+                    <div class="bg-white rounded-xl p-6 flex flex-col sm:flex-row items-center gap-8 shadow-sm border border-black/5 hover:shadow-xl transition-all duration-500 group">
+                        <!-- Product Image -->
+                        <div class="w-28 h-28 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0 border border-black/5">
+                            <img alt="{$item['product']->title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                 src="{(empty($p_img) ? Site::$url . '/assets/images/noimage.png' : Url::thumb($p_img, 'small'))}"/>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="flex-grow text-center sm:text-left">
+                            <h3 class="font-headline font-bold text-xl text-on-surface mb-1 truncate max-w-xs sm:max-w-md">
+                                <a href="{Url::post($item['id'])}" class="hover:text-primary transition-colors">{Typo::Xclean($item['product']->title)|noescape}</a>
+                            </h3>
+                            <p class="text-on-surface-variant text-[10px] font-black uppercase tracking-[0.2em] mb-4 opacity-50">
+                                SKU: {Posts::getParam('sku', $item['id'])}
+                            </p>
+                            <div class="flex items-center justify-center sm:justify-start gap-6">
+                                <span class="text-primary font-black text-lg">{$currency} {Nixomers::formatCurrency($item['price'])}</span>
+                                <div class="h-1 w-1 rounded-full bg-black/10"></div>
+                                <span class="text-on-surface-variant font-bold text-sm">Subtotal: {$currency} {Nixomers::formatCurrency($item['subtotal'])}</span>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Actions -->
+                        <div class="flex items-center gap-6 bg-surface-container-low px-6 py-3 rounded-full border border-black/5">
+                            <form method="post" class="flex items-center gap-4">
+                                <input type="hidden" name="product_id" value="{$item['id']}">
+                                <input type="hidden" name="nix_action" value="update">
+                                
+                                <button type="submit" name="qty" value="{$item['qty'] - 1}" class="text-on-surface-variant hover:text-primary transition-colors {($item['qty'] <= 1) ? 'opacity-20 pointer-events-none'}">
+                                    <span class="material-symbols-outlined text-sm">remove</span>
+                                </button>
+                                
+                                <span class="font-headline font-black text-lg w-6 text-center">{$item['qty']}</span>
+                                
+                                <button type="submit" name="qty" value="{$item['qty'] + 1}" class="text-on-surface-variant hover:text-primary transition-colors {($item['qty'] >= $p_stock) ? 'opacity-20 pointer-events-none'}">
+                                    <span class="material-symbols-outlined text-sm">add</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        {if $item['qty'] >= $p_stock}
+                            <div class="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest z-20">
+                                Max Stock Reached
+                            </div>
+                        {/if}
+
+                        <!-- Remove Action -->
+                        <form method="post" class="ml-4">
+                            <input type="hidden" name="product_id" value="{$item['id']}">
+                            <input type="hidden" name="nix_action" value="remove">
+                            <button type="submit" class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </form>
+                    </div>
+                {/foreach}
+
+                <div class="pt-8">
+                    <a href="{Url::mod('store')}" class="inline-flex items-center gap-3 text-on-surface-variant font-bold hover:text-primary transition-colors group">
+                        <span class="material-symbols-outlined group-hover:-translate-x-2 transition-transform">keyboard_backspace</span>
+                        Add more produce from the fields
+                    </a>
+                </div>
+            </div>
+
+            <!-- Summary Sidebar -->
+            <sidebar class="lg:col-span-4">
+                <div class="bg-surface-container-high/50 backdrop-blur-md p-10 rounded-xl border border-white sticky top-32 shadow-sm">
+                    <h2 class="font-headline font-extrabold text-2xl text-on-surface mb-8 tracking-tight">Order Summary</h2>
+                    
+                    <div class="space-y-5 mb-10">
+                        <div class="flex justify-between items-center text-on-surface-variant">
+                            <span class="font-medium">Subtotal</span>
+                            <span class="font-bold text-on-surface">{$currency} {Nixomers::formatCurrency($total)}</span>
+                        </div>
+                        {if $taxAmount > 0}
+                            <div class="flex justify-between items-center text-on-surface-variant">
+                                <span class="font-medium">Tax ({$taxRate}%)</span>
+                                <span class="font-bold text-on-surface">{$currency} {Nixomers::formatCurrency($taxAmount)}</span>
+                            </div>
+                        {/if}
+                        <div class="pt-6 mt-6 border-t border-black/5 flex flex-col gap-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-headline font-bold text-lg text-on-surface">Total</span>
+                                <span class="font-headline font-black text-3xl text-primary">{$currency} {Nixomers::formatCurrency($grandTotal)}</span>
+                            </div>
+                            <p class="text-[10px] text-on-surface-variant/50 font-bold text-right uppercase tracking-widest">Pricing in {Options::v('nixomers_currency') ?: 'IDR'}</p>
+                        </div>
+                    </div>
+
+                    <a href="{Url::mod('checkout')}" class="group relative flex items-center justify-center w-full py-5 px-8 bg-primary text-white rounded-full font-bold text-lg shadow-xl hover:shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-3">
+                            Proceed to Checkout
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    </a>
+
+                    <div class="mt-8 flex flex-col items-center gap-4 text-xs font-bold text-on-surface-variant/60 uppercase tracking-widest">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-lg">verified_user</span>
+                            Secure Payment
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related / Suggestions -->
+                {if !empty($related)}
+                    <div class="mt-12 space-y-6">
+                        <h4 class="font-headline font-bold text-lg px-2 tracking-tight">You might also like</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            {foreach $related as $r}
+                                {var $r_img = Posts::getPostImage($r->id)}
+                                <a href="{Url::post($r->id)}" class="flex items-center gap-4 p-4 bg-white rounded-xl border border-black/5 hover:border-primary/20 transition-all group shadow-sm">
+                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low flex-shrink-0">
+                                        <img src="{(empty($r_img) ? Site::$url . '/assets/images/noimage.png' : Url::thumb($r_img, 'small'))}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <h5 class="font-bold text-sm text-on-surface truncate">{Typo::Xclean($r->title)|noescape}</h5>
+                                        <p class="text-primary font-black text-xs">{$currency} {Nixomers::formatCurrency(Posts::getParam('price', $r->id))}</p>
+                                    </div>
+                                </a>
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+            </sidebar>
+        </div>
+    {/if}
+</div>

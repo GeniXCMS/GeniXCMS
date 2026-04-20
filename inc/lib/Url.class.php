@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.2.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -265,35 +265,40 @@ class Url
     }
 
     /**
-     * Generates a URL for Internal Ajax calls.
-     * Includes the security TOKEN automatically.
+     * Generates a URL for an Ajax request.
      *
-     * @param string $vars Ajax method/resource.
+     * @param string $resource Ajax method/resource.
+     * @param string|array $action Specific action to perform or array of params.
      * @param array $params Additional query parameters.
      * @return string
      * @since 1.0.0
      */
-    public static function ajax($vars, $params = [])
+    public static function ajax($resource, $action = '', $params = [])
     {
-        $queryString = '';
-        if (!empty($params)) {
-            $queryString = '?' . http_build_query($params);
+        if (is_array($action)) {
+            $params = $action;
+            $action = '';
         }
+
+        if ($action !== '') {
+            $params['action'] = $action;
+        }
+
+        $params['token'] = TOKEN;
+        $queryString = '?' . http_build_query($params);
 
         switch (SMART_URL) {
             case true:
                 $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
-                $url = Site::$url . $inFold . 'ajax/' . $vars . '/' . TOKEN;
-                if ($queryString !== '') {
-                    $url .= $queryString;
-                }
+                $url = Site::$url . $inFold . 'ajax/' . $resource . '/' . TOKEN;
+                // Since Router only handles 2 parts, we keep token in path and others in query string
+                // or we could update Router. For now, consistency with query string is safer.
+                $url .= $queryString;
                 break;
 
             default:
-                $url = Site::$url . "?ajax={$vars}&token=" . TOKEN;
-                if (!empty($params)) {
-                    $url .= '&' . http_build_query($params);
-                }
+                $url = Site::$url . "?ajax={$resource}";
+                $url .= '&' . http_build_query($params);
                 break;
         }
 
@@ -451,7 +456,8 @@ class Url
                 break;
         }
 
-        $url = str_replace(':/', '://', str_replace('//', '/', $url));
+        // Clean up double slashes but preserve protocol
+        $url = preg_replace('#(?<!:)/+#', '/', $url);
         return $url;
     }
 
@@ -465,6 +471,34 @@ class Url
         $theme = Options::v('themes');
 
         return Site::$cdn . 'inc/themes/' . $theme . '/';
+    }
+
+    /**
+     * Generates a URL for the frontend user profile page.
+     *
+     * @param string $username  The user's username (userid).
+     * @param string $section   Optional profile section (e.g. 'settings', 'orders').
+     * @return string
+     * @since 2.3.0
+     */
+    public static function user(string $username, string $section = ''): string
+    {
+        switch (SMART_URL) {
+            case true:
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url . $inFold . 'user/' . rawurlencode($username) . '/';
+                if ($section !== '' && $section !== 'profile') {
+                    $url .= rawurlencode($section) . '/';
+                }
+                break;
+            default:
+                $url = Site::$url . '?user=' . urlencode($username);
+                if ($section !== '' && $section !== 'profile') {
+                    $url .= '&section=' . urlencode($section);
+                }
+                break;
+        }
+        return $url;
     }
 
     /**
@@ -649,6 +683,18 @@ class Url
         $out .= '</ol></nav>';
 
         return $out;
+    }
+
+    /**
+     * Returns the full URL of the current page.
+     * Includes the scheme, host, and request URI.
+     *
+     * @return string The current page URL.
+     */
+    public static function current()
+    {
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
+        return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 }
 

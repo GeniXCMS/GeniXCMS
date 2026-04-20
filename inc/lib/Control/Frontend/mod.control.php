@@ -7,10 +7,10 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.1.1
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
- * @author GeniXCMS <[EMAIL_ADDRESS]>
+ * @author GeniXCMS <genixcms@gmail.com>
  * @copyright 2014-2023 Puguh Wijayanto
  * @copyright 2023-2026 GeniXCMS
  * @license http://www.opensource.org/licenses/mit-license.php MIT
@@ -33,8 +33,13 @@ class ModControl extends BaseControl
 
         $data['mod'] = $mod_name;
         $data['mod_params'] = $mod_params;
+        $data = array_merge($route, $data);
         $data['p_type'] = 'mod';
         $data['max'] = Options::v('post_perpage');
+
+        // Detect post_type from module properties if registered
+        $post_type = Mod::getProperty($mod_name, 'post_type') ?: "post";
+        $data['post_type'] = $post_type;
 
         $data['recent_posts'] = Posts::lists([
             'num' => 5,
@@ -42,7 +47,7 @@ class ModControl extends BaseControl
             'image_size' => 100,
             'title' => true,
             'date' => true,
-            'type' => "post",
+            'type' => $post_type,
             'class' => [
                 'row' => 'd-flex align-items-center mb-3 border-bottom pb-3',
                 'img' => 'rounded flex-shrink-0',

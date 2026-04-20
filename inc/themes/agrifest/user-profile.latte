@@ -1,0 +1,287 @@
+{**
+ * Agrifest Theme — User Profile Page
+ **}
+{var $u = $data['profile_user']}
+{var $username = $data['profile_username']}
+{var $displayName = trim(($u->fname ?? '') . ' ' . ($u->lname ?? ''))}
+{if empty($displayName)}{var $displayName = htmlspecialchars($username)}{/if}
+{var $groupName = User::$group[$u->group ?? 6] ?? 'Member'}
+{var $joinDate = Date::format($u->join_date ?? '', 'F Y')}
+{var $email = $u->email ?? ''}
+{var $avatarUrl = UserProfile::avatar($email, 160)}
+{var $city = $u->city ?? ''}
+{var $country = $u->country ?? ''}
+{var $addr = $u->addr ?? ''}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full relative z-10">
+    
+    <!-- Status Notifications -->
+    {if isset($data['save_result']) && $data['save_result']['message'] != ''}
+        {if $data['save_result']['success']}
+            <div class="mb-6 p-4 bg-[#ecfdf5] border border-[#a7f3d0] rounded-xl text-[#065f46] font-semibold flex items-center gap-2">
+                <span class="material-symbols-outlined">check_circle</span> {htmlspecialchars($data['save_result']['message'])}
+            </div>
+        {else}
+            <div class="mb-6 p-4 bg-[#fef2f2] border border-[#fecaca] rounded-xl text-[#991b1b] font-semibold flex items-center gap-2">
+                <span class="material-symbols-outlined">error</span> {htmlspecialchars($data['save_result']['message'])}
+            </div>
+        {/if}
+    {/if}
+
+    <!-- Hero Section / Profile Header -->
+    <header class="mb-12 relative overflow-hidden rounded-xl bg-surface-container-low p-8 md:p-12">
+        <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+            <div class="relative group">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white">
+                    <img alt="User Profile" class="w-full h-full object-cover" src="{$avatarUrl}"/>
+                </div>
+                {if $data['is_own_profile']}
+                <a title="Settings" href="{Url::user($username, 'settings')}" class="absolute bottom-2 right-2 bg-primary text-on-primary p-2 rounded-full shadow-md hover:scale-105 duration-150 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+                </a>
+                {/if}
+            </div>
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-on-surface mb-2">{$displayName}</h1>
+                <p class="text-on-surface-variant font-medium mb-4">Estate Member since {$joinDate}</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                    <span class="inline-flex items-center px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold uppercase tracking-wider">
+                        {$groupName}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 bg-tertiary-container text-on-tertiary rounded-full text-xs font-bold uppercase tracking-wider">
+                        Verified
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Element -->
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+    </header>
+
+    <!-- Bento Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left Column: Account Details & Addresses -->
+        <div class="lg:col-span-4 space-y-8">
+            <!-- Account Details Card -->
+            <section class="bg-surface-container rounded-xl p-8 transition-all">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-on-surface">Account Details</h2>
+                    {if $data['is_own_profile']}
+                    <a href="{Url::user($username, 'settings')}" class="text-primary hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    </a>
+                    {/if}
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Username</label>
+                        <p class="text-on-surface font-medium">@{$username}</p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Email Address</label>
+                        <p class="text-on-surface font-medium">{($email != '') ? $email : 'Not set'}</p>
+                    </div>
+                    {if $addr != ''}
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Address</label>
+                        <p class="text-on-surface font-medium">{$addr}</p>
+                    </div>
+                    {/if}
+                    {if $city != '' || $country != ''}
+                    <div>
+                        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Location</label>
+                        <p class="text-on-surface font-medium">{if $city}{$city}{/if}{if $city && $country}, {/if}{$country}</p>
+                    </div>
+                    {/if}
+                </div>
+                {if $data['is_own_profile']}
+                <a href="{Url::user($username, 'settings')}" class="mt-8 block text-center w-full py-3 px-4 bg-surface-container-highest text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all text-sm">
+                    Edit Information
+                </a>
+                {/if}
+            </section>
+
+            <!-- Additional Sidebar Content from Modules -->
+            {var $sidebarExtra = Hooks::filter('user_profile_sidebar_extra', '', ['username' => $username, 'user' => $u])}
+            {var $sidebarHtml = is_array($sidebarExtra) ? ($sidebarExtra[0] ?? '') : $sidebarExtra}
+            {if $sidebarHtml}
+                <div class="mt-8 space-y-8">
+                    {$sidebarHtml|noescape}
+                </div>
+            {/if}
+
+        </div>
+
+        <!-- Right Column: System Sections OR Overview Bento content -->
+        <div class="lg:col-span-8 space-y-8">
+
+            <!-- Check if Custom Section is Active -->
+            {if $data['profile_section'] !== 'profile'}
+                
+                {if $data['profile_section'] === 'settings'}
+                    <section class="bg-surface-container-lowest rounded-xl p-8 border border-surface-container shadow-sm">
+                        <div class="flex items-center justify-between mb-8">
+                            <div>
+                                <h2 class="text-2xl font-bold text-on-surface">Account Settings</h2>
+                                <p class="text-on-surface-variant text-sm mt-1">Manage your personal information and security preferences.</p>
+                            </div>
+                        </div>
+                        <form method="post" action="{Url::user($username, 'settings')}" class="space-y-8">
+                            <input type="hidden" name="profile_save" value="1">
+                            
+                            <!-- Personal Information -->
+                            <div>
+                                <h3 class="text-xs font-bold text-primary uppercase tracking-widest border-b border-surface-container pb-3 mb-6">Personal Information</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-bold text-on-surface-variant mb-2">First Name</label>
+                                        <input type="text" name="fname" value="{htmlspecialchars($u->fname ?? '')}" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-bold text-on-surface-variant mb-2">Last Name</label>
+                                        <input type="text" name="lname" value="{htmlspecialchars($u->lname ?? '')}" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-bold text-on-surface-variant mb-2">City</label>
+                                        <input type="text" name="city" value="{htmlspecialchars($u->city ?? '')}" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-bold text-on-surface-variant mb-2">Address</label>
+                                        <input type="text" name="addr" value="{htmlspecialchars($u->addr ?? '')}" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Account & Security -->
+                            <div>
+                                <h3 class="text-xs font-bold text-primary uppercase tracking-widest border-b border-surface-container pb-3 mb-6 mt-4">Account & Security</h3>
+                                <div class="space-y-6">
+                                    <div class="max-w-md">
+                                        <label class="block text-sm font-bold text-on-surface-variant mb-2">Email Address</label>
+                                        <input type="email" name="email" value="{htmlspecialchars($u->email ?? '')}" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                        <p class="text-xs text-primary/70 mt-2 font-medium">Leave blank to keep current email.</p>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+                                        <div>
+                                            <label class="block text-sm font-bold text-on-surface-variant mb-2">New Password</label>
+                                            <input type="password" name="new_password" autocomplete="new-password" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                            <p class="text-xs text-primary/70 mt-2 font-medium">Min. 6 characters.</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-bold text-on-surface-variant mb-2">Confirm Password</label>
+                                            <input type="password" name="confirm_password" autocomplete="new-password" class="w-full px-5 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface focus:ring-2 focus:ring-primary transition-all">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Extra Module Settings -->
+                            {var $settingsExtra = Hooks::filter('user_profile_settings_fields', '', ['username' => $username, 'user' => $u])}
+                            {if $settingsExtra}
+                                <div class="pt-4">{$settingsExtra|noescape}</div>
+                            {/if}
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-4 pt-6 mt-8 border-t border-surface-container">
+                                <button type="submit" class="px-8 py-3.5 bg-primary text-on-primary font-bold rounded-full shadow-md hover:scale-105 duration-150 transition-all">
+                                    Save Changes
+                                </button>
+                                <a href="{Url::user($username)}" class="px-6 py-3.5 text-on-surface-variant font-bold rounded-full hover:bg-surface-container-high transition-colors">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </section>                {else}
+                    <section class="bg-surface-container-lowest rounded-xl p-8 border border-surface-container">
+                        <h2 class="text-2xl font-bold text-on-surface mb-6">{htmlspecialchars($data['profile_sections'][$data['profile_section']]['label'] ?? ucfirst($data['profile_section']))}</h2>
+                        {if $data['section_content'] != ''}
+                            {$data['section_content']|noescape}
+                        {else}
+                            <div class="text-center py-12">
+                                <span class="material-symbols-outlined text-4xl text-outline mb-2">folder_open</span>
+                                <p class="text-on-surface-variant">No content available for this section.</p>
+                            </div>
+                        {/if}
+                    </section>
+                {/if}
+
+            {else}
+
+                <!-- Render specific section content automatically from Modules -->
+                {var $hookExtra = Hooks::filter('user_profile_overview_extra', '', ['username' => $username, 'user' => $u])}
+                {var $hookHtml = is_array($hookExtra) ? ($hookExtra[0] ?? '') : $hookExtra}
+                {if $hookHtml}
+                    {$hookHtml|noescape}
+                {/if}
+
+                <section class="bg-surface-container-lowest rounded-xl p-8 border border-surface-container mb-8">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold text-on-surface">Recent Activity</h2>
+                            <p class="text-on-surface-variant text-sm mt-1">Latest posts and updates published by {$displayName}.</p>
+                        </div>
+                    </div>
+                    {var $posts = Query::table('posts')->where('author', $username)->where('status', '1')->orderBy('date', 'DESC')->limit(4)->get()}
+                    {if !empty($posts)}
+                        <div class="space-y-6">
+                            {foreach $posts as $p}
+                            <div class="flex flex-col md:flex-row md:items-center gap-6 p-4 rounded-xl hover:bg-surface-container-low transition-colors duration-300">
+                                {var $img = Posts::getPostImage($p->id)}
+                                {if $img != ''}
+                                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-surface-container">
+                                    <img alt="{$p->title}" class="w-full h-full object-cover" src="{Url::thumb($img, 'crop', '100x100')}"/>
+                                </div>
+                                {/if}
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h3 class="font-bold text-lg text-on-surface">{$p->title|truncate:50}</h3>
+                                    </div>
+                                    <div class="flex gap-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider mt-2">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded">{htmlspecialchars($p->type)}</span>
+                                        <span class="py-0.5">{Date::format($p->date, 'd M Y')}</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="{Url::post($p->id)}" class="px-4 py-2 bg-primary text-on-primary rounded-full text-xs font-bold shadow-sm hover:scale-105 duration-150">Read Post</a>
+                                </div>
+                            </div>
+                            {/foreach}
+                        </div>
+                    {else}
+                        <div class="text-center py-10">
+                            <p class="text-on-surface-variant font-medium">No recent activity found.</p>
+                        </div>
+                    {/if}
+                </section>
+
+                <!-- Visual Preferences Bento Piece (Static Example connected to theme aesthetics) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section class="bg-[#ebbcac]/30 rounded-xl p-8 flex flex-col justify-between">
+                        <div>
+                            <span class="material-symbols-outlined text-secondary mb-4" data-icon="card_giftcard">card_giftcard</span>
+                            <h3 class="text-xl font-bold text-on-surface mb-2">Rewards Program</h3>
+                            <p class="text-on-surface-variant text-sm mb-6">Explore the Harvest Estate rewards system and redeem unique perks.</p>
+                        </div>
+                        <button class="bg-secondary text-on-primary py-3 rounded-full text-sm font-bold w-fit px-8 hover:opacity-90 transition-all opacity-50 cursor-not-allowed">Coming Soon</button>
+                    </section>
+                    <section class="bg-primary/5 rounded-xl p-8 border border-primary/10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+                            <h3 class="text-xl font-bold text-on-surface">Newsletter</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-sm font-medium text-on-surface-variant mb-4">Stay tuned for monthly harvest notes and estate stories.</p>
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-sm font-bold text-on-surface">Subscribe</span>
+                                <div class="w-10 h-5 bg-primary/20 rounded-full relative">
+                                    <div class="absolute right-1 top-1 w-3 h-3 bg-primary rounded-full"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </section>
+                </div>
+            {/if}
+
+        </div>
+    </div>
+</div>

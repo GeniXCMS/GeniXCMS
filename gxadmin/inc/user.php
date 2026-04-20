@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.2.0
+ * @version 2.3.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -15,46 +15,15 @@
  */
 
 // ── PREPARE DATA ──────────────────────────────────────────────────
-$rows = [];
-if ($data['num'] > 0) {
-    foreach ($data['usr'] as $p) {
-        $pObj = (object) $p;
-        $grp = User::$group[$pObj->group] ?? "Unknown ({$pObj->group})";
+$username = Session::val('username');
+$group = Session::val('group');
 
-        if ($pObj->status == '0') {
-            $statusBadge = '<a href="index.php?page=users&act=active&id=' . $pObj->id . '&token=' . TOKEN . '" class="badge bg-danger bg-opacity-10 text-danger text-decoration-none px-3 py-2 rounded-pill fw-bold" style="font-size: 0.65rem;">' . _("Inactive") . '</a>';
-        } else {
-            $statusBadge = '<a href="index.php?page=users&act=inactive&id=' . $pObj->id . '&token=' . TOKEN . '" class="badge bg-success bg-opacity-10 text-success text-decoration-none px-3 py-2 rounded-pill fw-bold" style="font-size: 0.65rem;">' . _("Active") . '</a>';
-        }
-        $country = ($pObj->country != "") ? strtolower($pObj->country) : "unknown";
-        $originToken = ($country != "unknown")
-            ? "<span class='flag-icon flag-icon-{$country} shadow-sm rounded-1' title='" . strtoupper($country) . "'></span>"
-            : "<i class='bi bi-geo-alt text-muted opacity-50'></i>";
-
-        $rows[] = [
-            ['content' => "<span class='text-muted extra-small'>#{$pObj->id}</span>", 'class' => 'ps-4 py-3'],
-            "<div class='d-flex align-items-center py-2'>
-                <div class='bg-primary bg-opacity-10 p-2 rounded-circle text-primary me-3 d-flex align-items-center justify-content-center border border-primary border-opacity-10' style='width: 42px; height: 42px;'><i class='bi bi-person fs-5'></i></div>
-                <div>
-                    <div class='fw-bold text-dark mb-0 ls-n1' style='font-size: 0.95rem;'>{$pObj->userid}</div>
-                    <div class='text-muted extra-small'>{$pObj->email}</div>
-                </div>
-             </div>",
-            ['content' => "<span class='badge bg-dark bg-opacity-10 text-dark border-0 px-3 py-2 rounded-pill fw-bold text-uppercase' style='font-size: 0.65rem;'>{$grp}</span>", 'class' => 'text-center'],
-            ['content' => "<div class='mb-1'>{$statusBadge}</div><div class='extra-small text-muted fw-bold'>" . Date::format($pObj->join_date, 'd M Y') . "</div>", 'class' => 'text-center'],
-            ['content' => $originToken, 'class' => 'text-center'],
-            [
-                'content' => "
-                <div class='btn-group gap-1'>
-                    <a href='index.php?page=users&act=edit&id={$pObj->id}&token=" . TOKEN . "' class='btn btn-light btn-sm rounded-circle border' title='Edit Profile'><i class='bi bi-pencil-square text-success'></i></a>
-                    <a href='index.php?page=users&act=del&id={$pObj->id}&token=" . TOKEN . "' class='btn btn-light btn-sm rounded-circle border' onclick=\"return confirm('" . _("Remove user permanently?") . "');\"><i class='bi bi-trash text-danger'></i></a>
-                </div>",
-                'class' => 'text-end pe-4'
-            ],
-            ['content' => "<div class='text-center pe-4'><input type='checkbox' name='user_id[]' value='{$pObj->id}' class='check form-check-input shadow-none border'></div>", 'class' => 'p-0']
-        ];
-    }
-}
+// Stats Data
+$statsItems = [
+    ['label' => _('Total Accounts'), 'value' => (string) Stats::totalUser(), 'icon' => 'bi bi-people', 'color' => 'primary'],
+    ['label' => _('Active Staff'), 'value' => (string) Stats::activeUser(), 'icon' => 'bi bi-person-check', 'color' => 'success'],
+    ['label' => _('Inactive'), 'value' => (string) Stats::inactiveUser(), 'icon' => 'bi bi-person-x', 'color' => 'warning']
+];
 
 // ── DEFINE UI SCHEMA ──────────────────────────────────────────────
 $schema = [
@@ -63,7 +32,8 @@ $schema = [
         'subtitle' => _('Monitor and manage administrative access and user community.'),
         'icon' => 'bi bi-people',
         'button' => [
-            'url' => '#',
+            'type' => 'link',
+            'href' => '#',
             'label' => _('New User'),
             'icon' => 'bi bi-person-plus-fill',
             'class' => 'btn btn-primary rounded-pill px-4 shadow-sm fw-bold',
@@ -71,81 +41,74 @@ $schema = [
         ],
     ],
     'content' => [
-        [
-            'type' => 'stat_cards',
-            'size' => 'small',
-            'items' => [
-                ['label' => _('Total Library'), 'value' => (string) Stats::totalUser(), 'icon' => 'bi bi-people', 'color' => 'primary'],
-                ['label' => _('Active Accounts'), 'value' => (string) Stats::activeUser(), 'icon' => 'bi bi-person-check', 'color' => 'success'],
-                ['label' => _('Pending Verification'), 'value' => (string) Stats::pendingUser(), 'icon' => 'bi bi-clock-history', 'color' => 'warning'],
-                ['label' => _('Inactive/Blocked'), 'value' => (string) Stats::inactiveUser(), 'icon' => 'bi bi-person-x', 'color' => 'danger']
-            ]
-        ],
+        ['type' => 'stat_cards', 'size' => 'small', 'items' => $statsItems],
         [
             'type' => 'card',
-            'title' => _('Account Registry'),
-            'icon' => 'bi bi-person-lines-fill',
+            'title' => _('Identity Directory'),
+            'icon' => 'bi bi-database-fill',
             'no_padding' => true,
+            'footer_no_padding' => true,
+            'footer_class' => 'card-footer bg-transparent border-0 p-0',
             'header_action' => '
-                <form action="index.php?page=users" method="get" class="d-flex gap-2 flex-wrap justify-content-end align-items-center">
-                    <input type="hidden" name="page" value="users">
+                <form id="users-filter-form" class="d-flex gap-2 flex-wrap justify-content-end align-items-center" onsubmit="loadUsers(); return false;">
                     <div class="input-group input-group-sm w-auto shadow-sm rounded-pill overflow-hidden border">
                         <span class="input-group-text bg-white border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="q" class="form-control border-0 ps-1 bg-white" placeholder="' . _("Account...") . '" style="width:140px;" value="' . ($_GET['q'] ?? '') . '">
+                        <input type="text" name="q" class="form-control border-0 ps-1 bg-white" placeholder="' . _("Search users...") . '" style="width:140px;" value="' . Typo::cleanX($_GET['q'] ?? '') . '">
                     </div>
-                    <div class="d-flex gap-1 align-items-center bg-white border rounded-pill px-2 shadow-sm">
-                        <i class="bi bi-calendar-check text-muted ms-1" style="font-size:0.75rem;"></i>
-                        <input type="date" name="from" class="form-control form-control-sm border-0 bg-transparent p-1" style="font-size:0.75rem; width:110px;" value="' . ($_GET['from'] ?? '') . '" title="' . _("Joined From") . '">
-                        <span class="text-muted small">-</span>
-                        <input type="date" name="to" class="form-control form-control-sm border-0 bg-transparent p-1" style="font-size:0.75rem; width:110px;" value="' . ($_GET['to'] ?? '') . '" title="' . _("Joined To") . '">
-                    </div>
-                    ' . User::dropdown(['name' => 'group', 'selected' => ($_GET['group'] ?? ''), 'class' => 'form-select form-select-sm rounded-pill px-3 shadow-none border bg-white shadow-sm', 'attr' => 'style="width:140px;"']) . '
+                    <select name="group" class="form-select form-select-sm rounded-pill px-3 shadow-none border bg-white shadow-sm" style="width:130px;">
+                        <option value="">' . _("All Roles") . '</option>
+                        ' . (function() {
+                            $html = '';
+                            foreach (User::$group as $k => $v) {
+                                $selected = (isset($_GET['group']) && $_GET['group'] !== '' && (int)$_GET['group'] == $k) ? 'selected' : '';
+                                $html .= "<option value='{$k}' {$selected}>{$v}</option>";
+                            }
+                            return $html;
+                        })() . '
+                    </select>
                     <select name="status" class="form-select form-select-sm rounded-pill px-3 shadow-none border bg-white shadow-sm" style="width:110px;">
                         <option value="">' . _("All Status") . '</option>
-                        <option value="1" ' . (isset($_GET['status']) && $_GET['status'] == '1' ? 'selected' : '') . '>' . _("Active") . '</option>
-                        <option value="0" ' . (isset($_GET['status']) && $_GET['status'] == '0' ? 'selected' : '') . '>' . _("Inactive") . '</option>
+                        <option value="1" ' . (isset($_GET['status']) && $_GET['status'] !== '' && (int)$_GET['status'] == 1 ? 'selected' : '') . '>' . _("Active") . '</option>
+                        <option value="0" ' . (isset($_GET['status']) && $_GET['status'] !== '' && (int)$_GET['status'] == 0 ? 'selected' : '') . '>' . _("Inactive") . '</option>
                     </select>
                     <button type="submit" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold shadow-sm"><i class="bi bi-funnel-fill me-1"></i> ' . _("Filter") . '</button>
-                    <a href="index.php?page=users" class="btn btn-light btn-sm rounded-pill px-3 border shadow-sm" title="' . _("Reset") . '"><i class="bi bi-arrow-counterclockwise"></i></a>
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="loadUsers()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh</button>
                 </form>',
             'body_elements' => [
                 [
-                    'type' => 'form',
-                    'action' => '',
-                    'attr' => 'id="users-bulk-form"',
-                    'fields' => [
-                        [
-                            'type' => 'table',
-                            'headers' => [
-                                ['content' => _('ID'), 'class' => 'ps-4 py-3', 'width' => '60px'],
-                                _('Identity'),
-                                ['content' => _('Permission Level'), 'class' => 'text-center'],
-                                ['content' => _('Journey Status'), 'class' => 'text-center'],
-                                ['content' => _('Origin'), 'class' => 'text-center'],
-                                ['content' => _('Interaction'), 'class' => 'text-end pe-4'],
-                                ['content' => '<input type="checkbox" id="selectall" class="form-check-input">', 'class' => 'text-center pe-4', 'width' => '50px']
-                            ],
-                            'rows' => $rows,
-                            'empty_message' => _('No users found matching your search criteria.')
-                        ]
-                    ]
+                    'type' => 'raw',
+                    'html' => '
+                        <form action="" method="post" id="users-bulk-form">
+                            <div id="users-desktop-container" class="p-0">
+                                <div class="d-flex justify-content-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="token" value="' . TOKEN . '">
+                        </form>
+                    '
                 ]
             ],
             'footer' => '
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <div>
+                <div class="d-flex justify-content-between align-items-center w-100 p-3">
+                    <div class="bulk-action-wrapper">
                         ' . ((new UiBuilder())->renderElement([
                     'type' => 'bulk_actions',
+                    'button_label' => _('Apply to Selected'),
                     'options' => [
-                        'activate' => _('Batch Activate'),
-                        'deactivate' => _('Batch Deactivate'),
-                        'delete' => _('Batch Delete')
+                        'activate' => _('Set as Active'),
+                        'inactive' => _('Set as Inactive'),
+                        'delete' => _('Remove Permanently')
                     ],
-                    'button_label' => _('Start Action'),
                     'form' => 'users-bulk-form'
                 ], true)) . '
                     </div>
-                    <div>' . $data['paging'] . '</div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div id="users-pagination-info" class="small text-muted fw-bold"></div>
+                        <nav id="users-pagination-nav"></nav>
+                    </div>
                 </div>'
         ],
         // Modal
@@ -190,21 +153,29 @@ echo '<div class="col-md-12">';
 echo Hooks::run('admin_page_notif_action', $data);
 echo '</div>';
 
+// Allow developers to modify the entire users dashboard schema
+$schema = Hooks::filter('admin_users_schema', $schema);
+
 $builder = new UiBuilder($schema);
 $builder->render();
 ?>
 
-<script>
-    $(document).ready(function () {
-        $('#selectall').click(function () { $('.check').prop('checked', this.checked); });
-        $('.check').click(function () {
-            if (!this.checked) $('#selectall').prop('checked', false);
-            if ($('.check:checked').length == $('.check').length && $('.check').length > 0) $('#selectall').prop('checked', true);
-        });
-    });
-</script>
-
 <style>
+    .ls-1 { letter-spacing: 0.5px; }
+    .ls-n1 { letter-spacing: -0.5px; }
+    .extra-small { font-size: 0.65rem !important; }
+    .pagination-wrapper.pagination { margin-bottom: 0; gap: 5px; }
+    .pagination-wrapper .page-link {
+        border-radius: 50% !important;
+        width: 35px; height: 35px;
+        display: flex; align-items: center; justify-content: center;
+        border: 0; background: #f8f9fa; color: #6c757d;
+        font-weight: bold; font-size: 0.85rem;
+    }
+    .pagination-wrapper.pagination .page-item.active .page-link {
+        background: var(--gx-primary); color: #fff;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+    }
     .flag-icon {
         width: 22px;
         height: 16px;
@@ -214,3 +185,128 @@ $builder->render();
         background-repeat: no-repeat;
     }
 </style>
+
+<script>
+    $(document).ready(function () {
+        loadUsers();
+    });
+
+    function loadUsers(offset = 0) {
+        const container = $('#users-desktop-container');
+        const filterData = $('#users-filter-form').serialize();
+        const ajaxUrl = '<?= Url::ajax("user", "list_users") ?>&offset=' + offset + '&' + filterData;
+
+        container.html(`
+            <div class="d-flex justify-content-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `);
+
+        $.getJSON(ajaxUrl, function(response) {
+            if (response.status === 'success') {
+                renderUsersTable(response.headers, response.data);
+                renderUsersPagination(response.total, response.limit, response.offset);
+            } else {
+                container.html(`<div class="alert alert-danger m-3">${response.message || 'Error loading records'}</div>`);
+            }
+        }).fail(function() {
+            container.html('<div class="alert alert-danger m-3">Failed to connect to server.</div>');
+        });
+    }
+
+    function renderUsersTable(headers, data) {
+        const container = $('#users-desktop-container');
+        if (data.length === 0) {
+            container.html('<div class="p-5 text-center text-muted">No records found.</div>');
+            return;
+        }
+
+        let html = `
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+        `;
+
+        headers.forEach(h => {
+            html += `<th class="${h.class || ''}" ${h.width ? 'width="'+h.width+'"' : ''}>${h.content}</th>`;
+        });
+
+        html += `
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        data.forEach(row => {
+            html += `<tr>`;
+            row.forEach(cell => {
+                html += `<td class="${cell.class || ''}">${cell.content}</td>`;
+            });
+            html += `</tr>`;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        container.html(html);
+
+        $('#checkAll').click(function () {
+            $('.check').prop('checked', this.checked);
+        });
+        $('.check').click(function () {
+            if (!this.checked) {
+                $('#checkAll').prop('checked', false);
+            }
+            if ($('.check:checked').length == $('.check').length && $('.check').length > 0) {
+                $('#checkAll').prop('checked', true);
+            }
+        });
+    }
+
+    function renderUsersPagination(total, limit, offset) {
+        const nav = $('#users-pagination-nav');
+        const info = $('#users-pagination-info');
+        
+        const start = total === 0 ? 0 : offset + 1;
+        const end = Math.min(offset + limit, total);
+        info.text(`Showing ${start} to ${end} of ${total} records`);
+
+        if (total <= limit) {
+            nav.empty();
+            return;
+        }
+
+        const currentPage = Math.floor(offset / limit) + 1;
+        const totalPages = Math.ceil(total / limit);
+
+        let html = '<ul class="pagination pagination-sm pagination-wrapper mb-0 gap-1">';
+        
+        // Prev
+        html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadUsers(${offset - limit}); return false;"><i class="bi bi-chevron-left"></i></a>
+                 </li>`;
+
+        // Pages
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="loadUsers(${(i - 1) * limit}); return false;">${i}</a>
+                         </li>`;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+
+        // Next
+        html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="loadUsers(${offset + limit}); return false;"><i class="bi bi-chevron-right"></i></a>
+                 </li>`;
+
+        html += '</ul>';
+        nav.html(html);
+    }
+</script>

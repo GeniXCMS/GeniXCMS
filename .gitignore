@@ -8,6 +8,7 @@ assets/media/audios/*
 assets/media/videos/*
 assets/media/images/*
 assets/media/cache/*
+go-service/.env
 .htaccess
 .idea
 test*

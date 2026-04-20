@@ -1,0 +1,62 @@
+{if !empty($posts)}
+    {foreach $posts as $p}
+        {var $img = Posts::getPostImage($p->id)}
+        {var $price = Posts::getParam('price', $p->id)}
+        {var $material = Posts::getParam('material', $p->id)}
+        {var $sku = Posts::getParam('sku', $p->id)}
+
+        {if $iterator->first}
+            <!-- Large Feature Card -->
+            <div class="col-span-12 lg:col-span-8 bg-surface-container-low rounded-[2rem] overflow-hidden group relative flex flex-col md:flex-row shadow-sm hover:shadow-xl transition-all duration-700">
+                <div class="flex-1 p-12 flex flex-col justify-center">
+                    <h3 class="font-serif text-4xl mb-4">{$p->title|noescape}</h3>
+                    <p class="text-on-surface-variant mb-8 max-w-sm">{$p->content|stripHtml|truncate:120}</p>
+                    <div class="text-2xl font-bold text-primary mb-8">{$currency} {number_format((float)$price, 0, ',', '.')}</div>
+                    <a href="{Url::post($p->id)}" class="w-fit bg-on-surface text-surface px-8 py-3 rounded-full hover:bg-primary transition-colors text-center no-underline">Shop Exclusive</a>
+                </div>
+                <div class="flex-1 min-h-[400px] overflow-hidden">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{$p->title|noescape}" src="{(empty($img) ? ArtisanAtelier::opt('hero_image') : Url::thumb($img, 'large'))}">
+                </div>
+            </div>
+        {else}
+            <!-- Regular Product Card -->
+            <div class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container-lowest rounded-[2rem] p-4 flex flex-col shadow-sm hover:shadow-xl transition-all duration-700">
+                <a href="{Url::post($p->id)}" class="flex flex-col h-full group no-underline text-on-surface">
+                    <div class="rounded-[1.5rem] overflow-hidden aspect-square mb-6 relative">
+                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="{$p->title|noescape}" src="{(empty($img) ? ArtisanAtelier::opt('hero_image') : Url::thumb($img, 'large'))}">
+                        <form method="post" class="absolute bottom-4 right-4">
+                            <input type="hidden" name="product_id" value="{$p->id}">
+                            <input type="hidden" name="nix_action" value="add">
+                            <button type="submit" class="bg-white/90 backdrop-blur p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity text-on-surface hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">add_shopping_cart</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="px-2 pb-4 flex flex-col flex-grow">
+                        <h4 class="font-serif text-xl font-bold mb-3 flex-grow line-clamp-2">{$p->title|noescape}</h4>
+                        <div class="flex items-end justify-between border-t border-stone-100 pt-4">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Price</span>
+                                <span class="text-xl font-bold text-primary leading-none">{$currency} {number_format((float)$price, 0, ',', '.')}</span>
+                            </div>
+                            <span class="text-xs text-on-surface-variant italic mb-1">{$sku}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {/if}
+    {/foreach}
+{else}
+    <div class="col-span-full py-24 text-center">
+        <span class="material-symbols-outlined text-stone-200 text-8xl mb-6">inventory_2</span>
+        <h3 class="text-2xl font-serif text-stone-400">No objects found in this collection</h3>
+        <p class="text-stone-400 mt-2">Check back soon for new arrivals.</p>
+    </div>
+{/if}
+
+<!-- Values Card (Integrating into Bento Layout) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-primary-container/20 rounded-[2rem] p-12 flex flex-col justify-center border border-primary/10">
+    <span class="material-symbols-outlined text-primary text-5xl mb-6">eco</span>
+    <h3 class="font-serif text-2xl font-bold mb-4">Sustainably Sourced</h3>
+    <p class="text-on-surface-variant leading-relaxed">Every piece in our collection is vetted for ethical production and environmental impact. We believe in beauty that leaves no trace.</p>
+</div>

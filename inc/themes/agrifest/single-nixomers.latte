@@ -1,0 +1,287 @@
+{var $p = $data['posts'][0]}
+{var $img = Posts::getPostImage($p->id)}
+{var $currency = Options::v('nixomers_currency')}
+{if empty($currency)}{var $currency = 'IDR'}{/if}
+
+<main class="pt-8 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
+    <!-- Breadcrumbs -->
+    <nav class="mb-8 flex items-center gap-2 text-sm text-on-surface-variant font-label">
+        <a class="hover:text-primary" href="{Url::mod('store')}">{_('Store')}</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <a class="hover:text-primary" href="{Url::cat($p->cat)}">{Categories::name($p->cat)}</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span class="text-on-surface font-semibold">{$p->title}</span>
+    </nav>
+
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <!-- Product Visuals (Bento Style) -->
+        <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+            <div class="col-span-2 aspect-[4/3] rounded-3xl overflow-hidden bg-surface-container shadow-sm border border-black/5">
+                {var $mainImg = 'https://images.unsplash.com/photo-1566385101042-1a000c1268c4?q=80&w=1200'}
+                {if !empty($img)}{var $mainImg = Url::thumb($img)}{/if}
+                <img alt="{$p->title} - Main View" class="w-full h-full object-cover" src="{$mainImg}"/>
+            </div>
+            {var $img1 = Posts::getParam('custom_image_1', $p->id)}
+            {if !empty($img1)}
+            <div class="aspect-square rounded-3xl overflow-hidden bg-surface-container shadow-sm border border-black/5">
+                <img alt="{$p->title} - Detail View 1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
+                     src="{$img1|thumb:'crop','350x350'}"/>
+            </div>
+            {/if}
+            {var $img2 = Posts::getParam('custom_image_2', $p->id)}
+            {if !empty($img2)}
+            <div class="aspect-square rounded-3xl overflow-hidden bg-surface-container shadow-sm border border-black/5">
+                <img alt="{$p->title} - Detail View 2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
+                     src="{$img2|stripHtml|thumb:'crop','350x350'}"/>
+            </div>
+            {/if}
+        </div>
+
+        <!-- Product Info -->
+        <div class="lg:col-span-5 flex flex-col gap-8">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    {var $unit = Posts::getParam('unit', $p->id)}
+                    <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black tracking-widest uppercase">
+                        {if $unit}{$unit}{else}ESTATE BOTTLED{/if}
+                    </span>
+                    <div class="flex items-center gap-1 text-tertiary">
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="text-xs font-bold">4.9 (124 Reviews)</span>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-headline font-bold text-on-surface leading-tight mb-4 tracking-tighter">
+                    {$p->title}
+                </h1>
+                <p class="text-on-surface-variant font-bold text-sm uppercase tracking-widest">
+                    {var $batch = Posts::getParam('batch_code', $p->id)}
+                    {var $hdate = Posts::getParam('harvest_date', $p->id)}
+                    {_('Batch')} {if $batch}{$batch}{else}042{/if} — {_('Harvested')} {if $hdate}{Date::format($hdate, 'F Y')}{else}June 2024{/if}
+                </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="flex items-baseline gap-4">
+                    <span class="text-4xl font-headline font-black text-primary">
+                        {$currency} {Nixomers::formatCurrency(Posts::getParam('price', $p->id))}
+                    </span>
+                    {var $oldPrice = Posts::getParam('old_price', $p->id)}
+                    {if $oldPrice}
+                        <span class="text-on-surface-variant/50 line-through text-lg">
+                            {$currency} {Nixomers::formatCurrency($oldPrice)}
+                        </span>
+                    {/if}
+                </div>
+
+                <!-- Stock Status -->
+                {var $stock = (int) Posts::getParam('stock', $p->id)}
+                <div class="flex items-center gap-2">
+                    {if $stock > 10}
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-xs font-black uppercase text-green-600 tracking-wider font-label">{_('In Stock')}</span>
+                    {elseif $stock > 0}
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        <span class="text-xs font-black uppercase text-amber-600 tracking-wider font-label">{_('Limited Stock')} ({$stock})</span>
+                    {else}
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span class="text-xs font-black uppercase text-red-600 tracking-wider font-label">{_('Out of Stock')}</span>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="content-rich text-on-surface-variant leading-relaxed font-body text-lg">
+                {Posts::excerpt($p->id)|stripHtml}
+            </div>
+
+            <!-- Product Features -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex items-center gap-3 p-5 rounded-2xl bg-surface-container-low border border-black/5">
+                    <span class="material-symbols-outlined text-primary">eco</span>
+                    <span class="text-xs font-bold uppercase tracking-wider">100% Organic</span>
+                </div>
+                <div class="flex items-center gap-3 p-5 rounded-2xl bg-surface-container-low border border-black/5">
+                    <span class="material-symbols-outlined text-primary">location_on</span>
+                    <span class="text-xs font-bold uppercase tracking-wider">Local Origin</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-4">
+                    <form action="{Url::mod('cart')}" method="post" class="flex items-center gap-4 w-full">
+                        <div class="flex items-center border border-black/5 rounded-full px-4 py-2 bg-white shadow-sm {if $stock <= 0}opacity-50 pointer-events-none{/if}">
+                            <button type="button" class="p-1 hover:text-primary transition-colors flex items-center justify-center" 
+                                    onclick="this.parentNode.querySelector('input').stepDown()" 
+                                    {if $stock <= 0}disabled{/if}
+                                    aria-label="{_('Decrease quantity')}">
+                                <span class="material-symbols-outlined" aria-hidden="true">remove</span>
+                            </button>
+                            <label for="qty-input" class="sr-only">{_('Quantity')}</label>
+                            <input type="number" id="qty-input" name="qty" value="1" min="1" max="{$stock}" 
+                                   class="w-12 text-center font-bold bg-transparent border-none outline-none focus:ring-0" 
+                                   {if $stock <= 0}disabled{/if}
+                                   aria-label="{_('Product quantity')}">
+                            <button type="button" class="p-1 hover:text-primary transition-colors flex items-center justify-center" 
+                                    onclick="this.parentNode.querySelector('input').stepUp()" 
+                                    {if $stock <= 0}disabled{/if}
+                                    aria-label="{_('Increase quantity')}">
+                                <span class="material-symbols-outlined" aria-hidden="true">add</span>
+                            </button>
+                        </div>
+                        <input type="hidden" name="product_id" value="{$p->id}">
+                        <input type="hidden" name="nix_action" value="add">
+                        <button type="submit" class="flex-1 {if $stock > 0}bg-primary shadow-primary/20 hover:scale-[1.02]{else}bg-on-surface-variant/20 cursor-not-allowed{/if} text-white py-5 rounded-full font-black text-xs tracking-widest uppercase shadow-xl active:scale-[0.98] transition-all focus:outline-none focus:ring-4 focus:ring-primary/30" 
+                                {if $stock <= 0}disabled{/if}
+                                aria-label="{if $stock > 0}{_('Add product to cart')}{else}{_('Product currently out of stock')}{/if}">
+                            {if $stock > 0}{_('Add to Cart')}{else}{_('Out of Stock')}{/if}
+                        </button>
+                    </form>
+                </div>
+                <button class="w-full border border-black/10 py-5 rounded-full font-black text-xs tracking-widest uppercase text-on-surface-variant hover:bg-surface-container transition-all focus:outline-none focus:ring-4 focus:ring-black/5" 
+                        aria-label="{_('Save this product to your wishlist')}">
+                    {_('Save to Wishlist')}
+                </button>
+            </div>
+
+            <!-- Nutritional Info Accordion -->
+            {var $e = Posts::getParam('nutri_energy', $p->id)}
+            {var $c = Posts::getParam('nutri_carbs', $p->id)}
+            {var $s = Posts::getParam('nutri_sugars', $p->id)}
+            {var $pr = Posts::getParam('nutri_protein', $p->id)}
+
+            {if $e || $c || $s || $pr}
+                <div class="mt-4 border-t border-black/5 pt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-headline font-bold text-xl text-on-surface">{_('Nutritional Information')}</h3>
+                        <span class="material-symbols-outlined text-on-surface-variant">nutrition</span>
+                    </div>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {if $e}
+                        <div class="flex flex-col p-4 bg-white rounded-2xl border border-black/5 shadow-sm">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-1">{_('Energy')}</span>
+                            <span class="font-headline font-bold text-lg text-primary">{$e|stripHtml}</span>
+                        </div>
+                        {/if}
+                        {if $c}
+                        <div class="flex flex-col p-4 bg-white rounded-2xl border border-black/5 shadow-sm">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-1">{_('Carbs')}</span>
+                            <span class="font-headline font-bold text-lg text-primary">{$c|stripHtml}</span>
+                        </div>
+                        {/if}
+                        {if $s}
+                        <div class="flex flex-col p-4 bg-white rounded-2xl border border-black/5 shadow-sm">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-1">{_('Sugars')}</span>
+                            <span class="font-headline font-bold text-lg text-primary">{$s|stripHtml}</span>
+                        </div>
+                        {/if}
+                        {if $pr}
+                        <div class="flex flex-col p-4 bg-white rounded-2xl border border-black/5 shadow-sm">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-1">{_('Protein')}</span>
+                            <span class="font-headline font-bold text-lg text-primary">{$pr|stripHtml}</span>
+                        </div>
+                        {/if}
+                    </div>
+                    <p class="mt-4 text-[10px] text-on-surface-variant italic leading-relaxed">
+                        * {_('Values based on 100g of harvest product. Actual values may vary based on seasonal conditions.')}
+                    </p>
+                </div>
+            {/if}
+        </div>
+    </section>
+
+    <!-- Product Story / Details Section -->
+    {var $procT = Posts::getParam('proc_title', $p->id)}
+    {var $procD = Posts::getParam('proc_desc', $p->id)}
+    {var $pImg = Posts::getParam('proc_image', $p->id)}
+    {var $pointsRaw = Posts::getParam('proc_points', $p->id)}
+    {var $points = ($pointsRaw) ? json_decode(htmlspecialchars_decode($pointsRaw), true) : []}
+
+    {if $procT || $procD || !empty($points)}
+        <section class="mt-32">
+            <div class="grid lg:grid-cols-2 items-center gap-20">
+                <div class="order-2 lg:order-1 relative">
+                    <div class="rounded-3xl overflow-hidden aspect-[16/10] shadow-2xl relative z-10">
+                        {var $finalPImg = 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200'}
+                        {if !empty($pImg)}{var $finalPImg = $pImg}{/if}
+                        <img alt="{if $procT}{$procT}{else}{$p->title} - Process Details{/if}" class="w-full h-full object-cover" src="{$finalPImg}"/>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full -z-0 blur-3xl"></div>
+                    <div class="absolute -top-10 -left-10 w-64 h-64 bg-secondary/5 rounded-full -z-0 blur-3xl"></div>
+                </div>
+                <div class="order-1 lg:order-2 space-y-8">
+                    <span class="text-primary font-black tracking-[0.3em] text-[10px] uppercase">{_('The Process')}</span>
+                    {if $procT}
+                    <h2 class="text-4xl md:text-5xl font-headline font-bold text-on-surface tracking-tighter leading-tight">
+                        {$procT}
+                    </h2>
+                    {/if}
+                    {if $procD}
+                    <div class="content-rich text-on-surface-variant text-lg leading-relaxed">
+                        {$procD|stripHtml}
+                    </div>
+                    {/if}
+                    
+                    {if !empty($points)}
+                        <ul class="space-y-4">
+                            {foreach $points as $pt}
+                                <li class="flex items-center gap-4 text-sm font-bold text-on-surface">
+                                    <span class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-xs">check</span>
+                                    </span>
+                                    {$pt['point']}
+                                </li>
+                            {/foreach}
+                        </ul>
+                    {/if}
+                </div>
+            </div>
+        </section>
+    {/if}
+
+    <!-- Related Products -->
+    <section class="mt-32">
+        <div class="flex justify-between items-end mb-16">
+            <div>
+                <span class="text-primary font-black tracking-[0.3em] text-[10px] uppercase">{_('Curated For You')}</span>
+                <h2 class="text-4xl font-headline font-bold text-on-surface mt-4 tracking-tighter">
+                    {_('Related Harvest')}
+                </h2>
+            </div>
+            <a href="{Url::mod('store')}" class="text-primary font-black text-xs tracking-widest uppercase flex items-center gap-2 group">
+                {_('View Collection')}
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {var $related = Posts::recent(['type' => 'nixomers', 'num' => 4])}
+            {if is_array($related) && !isset($related['error'])}
+                {foreach $related as $rp}
+                    {if $rp->id != $p->id}
+                        <div class="bg-white rounded-3xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500 border border-black/5">
+                            <div class="aspect-square relative overflow-hidden">
+                                <a href="{Url::post($rp->id)}">
+                                    <img alt="{$rp->title} - Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                                         src="{Url::thumb(Posts::getPostImage($rp->id), 'medium')}"/>
+                                </a>
+                            </div>
+                            <div class="p-8">
+                                <h4 class="font-headline font-bold text-lg text-on-surface mb-2 line-clamp-1">
+                                    <a href="{Url::post($rp->id)}">{$rp->title}</a>
+                                </h4>
+                                <div class="flex justify-between items-center mt-6">
+                                    <span class="font-headline font-black text-primary">
+                                        {$currency} {Nixomers::formatCurrency(Posts::getParam('price', $rp->id))}
+                                    </span>
+                                    <a href="{Url::post($rp->id)}" class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+                                        <span class="material-symbols-outlined text-sm">add</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                {/foreach}
+            {/if}
+        </div>
+    </section>
+</main>

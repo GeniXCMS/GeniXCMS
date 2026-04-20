@@ -23,11 +23,13 @@ class Gxeditor
         Hooks::attach('post_content_filter', array('Gxeditor', 'parseShortcodes'));
         Hooks::attach('comment_allowed_blocks', array('Gxeditor', 'filterCommentBlocks'));
 
-        AdminMenu::addChild('settings', [
-            'label' => _('GxEditor Settings'),
-            'url' => 'index.php?page=mods&mod=gxeditor',
-            'access' => 0
-        ]);
+        Hooks::attach('init', function () {
+            AdminMenu::addChild('settings', [
+                'label' => _('GxEditor Settings'),
+                'url' => 'index.php?page=mods&mod=gxeditor',
+                'access' => 0
+            ]);
+        });
     }
 
 

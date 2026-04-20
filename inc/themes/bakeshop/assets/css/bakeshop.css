@@ -1,0 +1,623 @@
+/**
+ * Bakeshop Theme - Custom CSS
+ * Supplements Tailwind CDN with overrides for CMS-generated HTML
+ * (Comments, Forms, Widgets, Prose content, etc.)
+ */
+
+/* ============================================================
+   1. CSS VARIABLES (sync with Tailwind config)
+   ============================================================ */
+:root {
+    --color-primary: #a7295a;
+    --color-primary-container: #ff709f;
+    --color-secondary: #006760;
+    --color-on-primary: #ffffff;
+    --color-on-secondary: #bffff7;
+    --color-surface: #f8f6f2;
+    --color-surface-container: #e9e8e4;
+    --color-surface-container-low: #f2f1ec;
+    --color-on-surface: #2e2f2d;
+    --color-on-surface-variant: #5b5c59;
+    --color-outline-variant: #aeadaa;
+    --color-secondary-container: #7fe6db;
+    --color-on-secondary-container: #00534d;
+    --color-tertiary-container: #ea93f7;
+    --color-on-tertiary-container: #59046a;
+    --radius: 1rem;
+    --shadow-editorial: 0 12px 32px -4px rgba(167, 41, 90, 0.08);
+
+    /* GeniXCMS Standard UI Overrides (gx-*) */
+    --gx-primary: var(--color-primary);
+    --gx-primary-soft: var(--color-surface-container);
+    --gx-secondary: var(--color-secondary);
+    --gx-text: var(--color-on-surface);
+    --gx-bg: #ffffff; /* Typically cards stay white in Bakeshop */
+    --gx-bg-soft: var(--color-surface-container-low);
+    --gx-border: var(--color-surface-container);
+    --gx-radius: var(--radius);
+    --gx-font: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* ============================================================
+   2. TYPOGRAPHY – Prose / editorial-content area
+   ============================================================ */
+.editorial-content h2,
+.editorial-content h3,
+.editorial-content h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    color: var(--color-on-surface);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+}
+
+.editorial-content h2 {
+    font-size: 1.75rem;
+}
+
+.editorial-content h3 {
+    font-size: 1.35rem;
+}
+
+.editorial-content p {
+    margin-bottom: 1.25rem;
+    color: var(--color-on-surface);
+    line-height: 1.8;
+}
+
+.editorial-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity .15s;
+}
+
+.editorial-content a:hover {
+    opacity: .75;
+}
+
+.editorial-content blockquote {
+    border-left: 4px solid var(--color-primary-container);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: var(--color-surface-container-low);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--color-on-surface-variant);
+    font-style: italic;
+}
+
+.editorial-content code {
+    background: var(--color-surface-container);
+    color: var(--color-primary);
+    padding: .1em .4em;
+    border-radius: .4rem;
+    font-size: .9em;
+}
+
+.editorial-content pre {
+    background: var(--color-on-surface);
+    color: #f8f6f2;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.editorial-content ul,
+.editorial-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.editorial-content li {
+    margin-bottom: .35rem;
+}
+
+.editorial-content img {
+    border-radius: var(--radius);
+    max-width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-editorial);
+}
+
+/* ============================================================
+   3. COMMENT SECTION – Editorial Conversation Design
+   ============================================================ */
+
+/* Wrapper */
+.comments-wrapper {
+    padding: 0;
+    margin-top: 2rem;
+}
+
+/* Form labels */
+.comments-wrapper label,
+#commentForm label {
+    display: block;
+    font-size: .75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--color-on-surface);
+    margin-bottom: .5rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Form inputs */
+.comments-wrapper .form-control,
+#commentForm .form-control,
+#commentForm input[type="text"],
+#commentForm input[type="email"],
+#commentForm textarea {
+    width: 100%;
+    background: #ffffff;
+    border: 2px solid var(--color-surface-container);
+    border-radius: 1.25rem;
+    padding: 1rem 1.25rem;
+    font-size: .95rem;
+    color: var(--color-on-surface);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    margin-bottom: 1.25rem;
+}
+
+.comments-wrapper .form-control:focus,
+#commentForm .form-control:focus,
+#commentForm input:focus,
+#commentForm textarea:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 8px 24px -8px rgba(167, 41, 90, 0.15);
+}
+
+/* Textarea / editor */
+#commentForm textarea,
+#commentForm .form-control.editor {
+    min-height: 160px;
+    resize: vertical;
+}
+
+/* Submit button */
+#commentForm .btn-success,
+#commentForm button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dim, #971b4e));
+    color: var(--color-on-primary);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 999px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    box-shadow: 0 10px 25px -5px rgba(167, 41, 90, 0.4);
+}
+
+#commentForm .btn-success:hover,
+#commentForm button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(167, 41, 90, 0.5);
+    filter: brightness(1.1);
+}
+
+/* Alert messages */
+.comments-wrapper .alert {
+    padding: 1.25rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    font-size: .9rem;
+    border: none;
+    font-weight: 600;
+}
+
+.comments-wrapper .alert-danger {
+    background: #fff1f2;
+    color: #be123c;
+    border-left: 4px solid #f43f5e;
+}
+
+.comments-wrapper .alert-success {
+    background: #f0fdf4;
+    color: #15803d;
+    border-left: 4px solid #22c55e;
+}
+
+/* -------- Comment List -------- */
+
+/* Outer container */
+.comments-wrapper .row {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+}
+
+/* Each comment block */
+.comments-wrapper .d-flex {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.comments-wrapper .d-flex:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px -12px rgba(167, 41, 90, 0.1);
+    border-color: var(--color-primary-container);
+}
+
+/* Avatar styling column */
+.comments-wrapper .flex-shrink-0 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem;
+    min-width: 100px;
+    flex-shrink: 0;
+}
+
+.comments-wrapper .media-object,
+.comments-wrapper .img-thumbnail {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    padding: 3px;
+    border: 2px solid var(--color-primary-container) !important;
+    box-shadow: 0 8px 20px rgba(167, 41, 90, 0.15);
+}
+
+.comments-wrapper .d-flex:hover .media-object {
+    transform: scale(1.1);
+}
+
+/* Reply Link Badge */
+.comments-wrapper .badge.text-bg-primary,
+.comments-wrapper a.badge {
+    background: var(--color-surface-container);
+    color: var(--color-primary);
+    font-size: .75rem;
+    border-radius: 999px;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    transition: all .2s ease;
+    border: 1.5px solid transparent;
+}
+
+.comments-wrapper a.badge:hover {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(167, 41, 90, 0.3);
+}
+
+/* Comment Content Area */
+.comments-wrapper .flex-grow-1 {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header: Name and Date */
+.comments-wrapper h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--color-on-surface);
+    margin: 0 0 .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.comments-wrapper h4 .meta-desc,
+.comments-wrapper h4 small {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--color-on-surface-variant);
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+/* The actual comment text */
+.comments-wrapper .flex-grow-1>p,
+.comments-wrapper .flex-grow-1>div:not(:empty) {
+    font-size: 1rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Nested replies */
+.comments-wrapper .flex-grow-1 .row {
+    margin-top: 2rem;
+    padding-left: 2rem;
+    border-left: 3px solid var(--color-surface-container);
+    gap: 1.5rem;
+}
+
+/* Paging container */
+.comments-wrapper .pagination {
+    display: flex;
+    gap: .75rem;
+    list-style: none;
+    padding: 0;
+    margin: 3rem 0;
+    justify-content: center;
+}
+
+.comments-wrapper .pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--color-on-surface);
+    background: #fff;
+    border: 2px solid var(--color-surface-container);
+    text-decoration: none;
+    transition: all .2s ease;
+}
+
+.comments-wrapper .pagination .page-item.active .page-link,
+.comments-wrapper .pagination .page-item .page-link:hover {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 20px -5px rgba(167, 41, 90, 0.4);
+    transform: translateY(-2px);
+}
+
+/* ============================================================
+   4. WIDGET AREA (Footer)
+   ============================================================ */
+.footer-widget-area .widget-box {
+    margin-bottom: 2.5rem;
+}
+
+.footer-widget-area .widget-header,
+.footer-widget-area .widget-title,
+.footer-widget-area h2,
+.footer-widget-area h3,
+.footer-widget-area h4,
+.footer-widget-area h5 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: .875rem;
+    color: var(--color-on-surface);
+    margin: 0 0 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    position: relative;
+    display: table;
+    line-height: 1.2;
+}
+
+.footer-widget-area .widget-title::after,
+.footer-widget-area h2::after,
+.footer-widget-area h3::after,
+.footer-widget-area h4::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+}
+
+.footer-widget-area .widget-body {
+    font-size: .875rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.8;
+}
+
+.footer-widget-area .widget-body a {
+    color: var(--color-on-surface-variant);
+    text-decoration: none;
+    transition: all .25s ease;
+    display: inline-block;
+}
+
+.footer-widget-area .widget-body a:hover {
+    color: var(--color-primary);
+    transform: translateX(3px);
+}
+
+.footer-widget-area .widget-body ul,
+.footer-widget-area .widget-body ol {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.footer-widget-area .widget-body li {
+    padding: .2rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .03);
+    display: flex;
+    align-items: center;
+}
+
+.footer-widget-area .widget-body li:last-child {
+    border-bottom: none;
+}
+
+.footer-widget-area .widget-body li::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-primary-container);
+    margin-right: .75rem;
+    opacity: 0.5;
+}
+
+/* ============================================================
+   5. SIDEBAR WIDGET AREA (index.latte, cat.latte, etc.)
+   ============================================================ */
+.sidebar-widget .widget-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--color-on-surface);
+    margin-bottom: 1rem;
+}
+
+.sidebar-widget .widget-body ol,
+.sidebar-widget .widget-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-widget .widget-body li {
+    padding: .5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    font-size: .875rem;
+}
+
+.sidebar-widget .widget-body li a {
+    color: var(--color-on-surface);
+    text-decoration: none;
+    transition: color .15s;
+}
+
+.sidebar-widget .widget-body li a:hover {
+    color: var(--color-primary);
+}
+
+/* ============================================================
+   6. MISC UTILITY
+   ============================================================ */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ============================================================
+   7. CHECKOUT & NIXOMERS ENHANCEMENTS
+   ============================================================ */
+
+/* Order Summary Card Enhancement */
+.nix-order-summary {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    box-shadow: var(--shadow-editorial) !important;
+}
+
+/* Override utility classes with theme colors where needed */
+.nix-order-summary .gx-text-primary {
+    color: var(--color-primary) !important;
+}
+
+.nix-order-summary .gx-bg-dark {
+    background-color: var(--color-on-surface) !important;
+}
+
+/* Item List Refinement */
+.nix-order-summary .gx-border-bottom {
+    border-color: var(--color-surface-container) !important;
+}
+
+.nix-order-summary h6 {
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+}
+
+/* Grand Total Section */
+#summary-grand-total {
+    font-size: 1.75rem !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--color-primary) !important;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Utility Overrides for Bakeshop */
+.gx-btn-primary {
+    background: var(--color-primary) !important;
+    border-radius: 999px !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    box-shadow: 0 10px 25px -5px rgba(167, 41, 90, 0.3) !important;
+}
+
+.gx-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(167, 41, 90, 0.4) !important;
+}
+
+.gx-form-control, .gx-input {
+    border-radius: 1.25rem !important;
+    border-width: 2px !important;
+    padding: 0.8rem 1.25rem !important;
+}
+
+.gx-form-control:focus, .gx-input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 8px 24px -8px rgba(167, 41, 90, 0.15) !important;
+}
+/* Global Utility Synchronization */
+.gx-card {
+    border-radius: var(--radius) !important;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+}
+
+.gx-bg-light, 
+.hover\:gx-bg-light:hover {
+    background-color: var(--color-surface-container-low) !important;
+}
+
+.gx-text-primary {
+    color: var(--color-primary) !important;
+}
+
+.gx-text-muted {
+    color: var(--color-on-surface-variant) !important;
+}
+
+.gx-badge-primary {
+    background-color: var(--color-primary) !important;
+}
+
+.gx-border {
+    border-color: var(--color-surface-container) !important;
+}
+
+.gx-rounded-lg {
+    border-radius: 1.25rem !important;
+}
+
+.gx-rounded-xl {
+    border-radius: 2rem !important;
+}
