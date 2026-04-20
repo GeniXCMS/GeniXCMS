@@ -68,7 +68,16 @@
 4. Run service: `go run cmd/main.go`
 5. Enable in GeniXCMS admin: Settings → API → Backend: "go"
 
-For detailed configuration, see `go-service/README.md`.
+### ☁️ Cloud Storage Support (S3-Compatible)
+
+**GeniXCMS** supports cloud storage integration with S3-compatible services (AWS S3, DigitalOcean Spaces, etc.) through a lightweight Async AWS S3 library. This feature is completely optional and only loads when S3 credentials are configured.
+
+#### Benefits:
+- **Reduced Bundle Size**: Uses `async-aws/s3` (~2MB) instead of full AWS SDK (~50MB+).
+- **Better Performance**: Async operations with minimal memory footprint.
+- **S3-Compatible**: Works with AWS S3, DigitalOcean Spaces, and other S3-compatible services.
+
+For detailed configuration, see Media Manager settings in the admin panel.
 
 ### 📋 Requirements
 
