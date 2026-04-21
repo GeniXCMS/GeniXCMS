@@ -155,58 +155,54 @@ class MediaManager {
                 'Bucket' => $bucket,
                 'Prefix' => $prefix,
                 'Delimiter' => '/'
-            ]);
+            ])->wait();
 
             $files = [];
             $mediaExt = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg', 'pdf', 'zip', 'txt'];
 
             // Folders (CommonPrefixes)
-            if (isset($results['CommonPrefixes'])) {
-                foreach ($results['CommonPrefixes'] as $cp) {
-                    $name = basename(rtrim($cp['Prefix'], '/'));
-                    $relPath = $subdir ? $subdir . '/' . $name : $name;
-                    $files[] = [
-                        'name' => $name,
-                        'path' => $relPath,
-                        'url' => '#',
-                        'is_dir' => true,
-                        'extension' => '',
-                        'size' => 0,
-                        'modified' => time(),
-                        'type' => 'folder',
-                        'icon' => self::getFileIcon('', true)
-                    ];
-                }
+            foreach ($results->getCommonPrefixes() as $cp) {
+                $name = basename(rtrim($cp->getPrefix(), '/'));
+                $relPath = $subdir ? $subdir . '/' . $name : $name;
+                $files[] = [
+                    'name' => $name,
+                    'path' => $relPath,
+                    'url' => '#',
+                    'is_dir' => true,
+                    'extension' => '',
+                    'size' => 0,
+                    'modified' => time(),
+                    'type' => 'folder',
+                    'icon' => self::getFileIcon('', true)
+                ];
             }
 
             // Files (Contents)
-            if (isset($results['Contents'])) {
-                foreach ($results['Contents'] as $object) {
-                    $name = basename($object['Key']);
-                    if (empty($name)) continue; // It's the directory itself
-                    
-                    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+            foreach ($results->getContents() as $object) {
+                $name = basename($object->getKey());
+                if (empty($name)) continue; // It's the directory itself
 
-                    // Filter: Only defined Media Extensions
-                    if (!in_array($ext, $mediaExt)) continue;
+                $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
-                    $relPath = $subdir ? $subdir . '/' . $name : $name;
-                    $url = $s3->getObjectUrl($bucket, $object['Key']);
+                // Filter: Only defined Media Extensions
+                if (!in_array($ext, $mediaExt)) continue;
 
-                    $files[] = [
-                        'name' => $name,
-                        'path' => $relPath,
-                        'url' => $url,
-                        'thumb' => $url,
-                        'thumb_tiles' => $url,
-                        'is_dir' => false,
-                        'extension' => $ext,
-                        'size' => $object['Size'],
-                        'modified' => strtotime($object['LastModified']),
-                        'type' => self::getFileType($ext, false),
-                        'icon' => self::getFileIcon($ext, false)
-                    ];
-                }
+                $relPath = $subdir ? $subdir . '/' . $name : $name;
+                $url = 'https://' . $bucket . '.s3.' . (Options::v('media_s3_region') ?: 'us-east-1') . '.amazonaws.com/' . $object->getKey();
+
+                $files[] = [
+                    'name' => $name,
+                    'path' => $relPath,
+                    'url' => $url,
+                    'thumb' => $url,
+                    'thumb_tiles' => $url,
+                    'is_dir' => false,
+                    'extension' => $ext,
+                    'size' => $object->getSize(),
+                    'modified' => $object->getLastModified()->getTimestamp(),
+                    'type' => self::getFileType($ext, false),
+                    'icon' => self::getFileIcon($ext, false)
+                ];
             }
             return self::sortFiles($files);
         } catch (\Exception $e) {
@@ -215,14 +211,10 @@ class MediaManager {
     }
 
     private static function getS3Client() {
-        return new \Aws\S3\S3Client([
-            'version' => 'latest',
-            'region'  => Options::v('media_s3_region') ?: 'us-east-1',
-            'credentials' => [
-                'key'    => Options::v('media_s3_key'),
-                'secret' => Options::v('media_s3_secret'),
-            ],
-            'use_path_style_endpoint' => true
+        return new \AsyncAws\S3\S3Client([
+            'region' => Options::v('media_s3_region') ?: 'us-east-1',
+            'accessKeyId' => Options::v('media_s3_key'),
+            'accessKeySecret' => Options::v('media_s3_secret'),
         ]);
     }
 
@@ -370,9 +362,9 @@ class MediaManager {
             $s3->putObject([
                 'Bucket' => $bucket,
                 'Key'    => $remoteKey,
-                'SourceFile' => $tmp,
+                'Body' => file_get_contents($tmp),
                 'ACL'    => 'public-read'
-            ]);
+            ])->wait();
 
             unlink($tmp);
             return ['status' => 'success', 'message' => 'Uploaded to S3.', 'file' => $name];
@@ -466,7 +458,7 @@ class MediaManager {
             $s3->deleteObject([
                 'Bucket' => $bucket,
                 'Key'    => $remoteKey
-            ]);
+            ])->wait();
             return ['status' => 'success', 'message' => 'Deleted from S3.'];
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => 'S3 delete failed.'];

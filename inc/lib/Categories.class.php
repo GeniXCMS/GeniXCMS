@@ -331,8 +331,10 @@ class Categories
             // print_r($cat);
             if (isset($cat['error'])) {
                 return '';
-            } else {
+            } elseif (!empty($cat) && isset($cat[0]->id)) {
                 return $cat[0]->id;
+            } else {
+                return '';
             }
         } else {
             return _('No Name Selected');
