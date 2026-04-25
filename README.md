@@ -1,5 +1,5 @@
-# GeniXCMS v2.3.0
-> **Latest Update**: Nixomers Financial Intelligence & Premium Confirmation UI v2.3.0
+# GeniXCMS v2.4.0
+> **Latest Update**: Industrial Theme Orchestration & Layout Block Builder v2.4.0
 
 [![Latest Stable Version](https://poser.pugx.org/genix/cms/v/stable)](https://packagist.org/packages/genix/cms) [![License](https://poser.pugx.org/genix/cms/license)](https://packagist.org/packages/genix/cms) [![Documentation Status](https://readthedocs.org/projects/genixcms/badge/?version=latest)](http://genixcms.readthedocs.org/en/latest/?badge=latest)
 
@@ -9,6 +9,10 @@
 
 ### 🌟 Key Features in v2.x
 
+- **Industrial Theme Orchestration (v2.4.0+)**:
+  - **Layout Block Editor**: A premium layout builder integrated into `OptionsBuilder`. Build pages by arranging modular components (Hero, Features, Grids) with built-in reordering and AJAX synchronization.
+  - **Advanced Repeater Engine**: Multi-level nested `list` fields for complex data structures (Mega Menus, Feature Lists).
+  - **Native AJAX Engine**: High-performance form submission with premium "Saving..." states and automatic CSRF handling.
 - **Multi-DB Support**: Flexible database abstraction layer supporting **MySQL**, **PostgreSQL**, and **SQLite3**.
 - **Nixomers Ecosystem (v2.3.0+)**:
   - **Financial Intelligence**: Deep recalculation engine that synchronizes order items, taxes, and shipping with transaction ledgers for accurate Net Income reporting.
@@ -44,6 +48,7 @@
 **GeniXCMS** leverages industry-standard FOSS tools:
 - **Framework Core**: PHP 8.2+
 - **Templating**: Latte 3.1+
+- **Theme Orchestration**: OptionsBuilder v2.4.0 (Layout Block Editor & Repeater Engine)
 - **Editor Core**: GxEditor v1.2.1 (Modular Block Engine)
 - **Asset Management**: GeniX `Asset` Class (with dependency resolution)
 - **Styling**: Bootstrap 5.3, Tailwind CSS (for modern themes), Vanilla CSS (Design Tokens).
@@ -127,7 +132,8 @@ Upgrading from v1.x involves significant core changes.
 ### 🌐 Links & Community
 
 - **Official Website**: [genixcms.web.id](https://genixcms.web.id/)
-- **Documentation**: [genixcms.web.id/mod/docs.html](https://genixcms.web.id/mod/docs.html)
+- **Official Documentation**: [docs.genixcms.web.id](https://docs.genixcms.web.id/)
+- **GitBook Docs**: [genixcms-docs](https://genixcms.gitbook.io/genixcms-docs/)
 - **Demo**: [demo.genixcms.web.id](https://demo.genixcms.web.id/)
 - **GitHub**: [GeniXCMS Organization](https://github.com/GeniXCMS)
 
