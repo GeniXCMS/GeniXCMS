@@ -673,6 +673,9 @@ HTML;
             case 'media':
                 $this->fieldMedia($field);
                 break;
+            case 'blocks':
+                $this->fieldBlocks($field);
+                break;
         }
         if (!empty($field['hint']))
             echo '<span class="hint">' . htmlspecialchars($field['hint']) . '</span>';
@@ -812,6 +815,126 @@ HTML;
     }
 
     /**
+     * Renders a full Layout Block Editor.
+     * Allows defining multiple block types with specific fields.
+     */
+    private function fieldBlocks(array $f): void
+    {
+        $name = htmlspecialchars($f['name'] ?? '');
+        $rawVal = $this->getValue($f['name'] ?? '', '[]');
+        $items = json_decode($rawVal, true) ?: [];
+        $blocksDef = $f['blocks'] ?? []; // array of block_type => config
+        $label = $f['label'] ?? 'Block';
+        
+        echo "<div class=\"gx-blocks-container\" data-name=\"{$name}\">";
+        echo "<input type=\"hidden\" name=\"{$name}\" class=\"gx-blocks-hidden gx-list-input\" data-key=\"{$name}\" value='" . htmlspecialchars($rawVal, ENT_QUOTES) . "'>";
+        echo "<div class=\"gx-blocks-items\">";
+        
+        foreach ($items as $index => $item) {
+            $bType = $item['block_type'] ?? '';
+            if (!isset($blocksDef[$bType])) continue;
+            $bDef = $blocksDef[$bType];
+            $bLabel = $bDef['label'] ?? $bType;
+            $fields = $bDef['fields'] ?? [];
+            
+            echo "<div class=\"gx-list-item px-4 py-4 bg-white rounded-4 mb-3 border border-2 shadow-sm position-relative\" data-block-type=\"{$bType}\">";
+            echo "<input type=\"hidden\" class=\"gx-block-input\" data-key=\"block_type\" value=\"{$bType}\">";
+            echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom\">";
+            echo "<span class=\"fw-bold text-dark fs-6 d-flex align-items-center gap-2\"><i class=\"bi bi-puzzle text-primary\"></i> {$bLabel} <span class=\"badge bg-light text-secondary border rounded-pill ms-2 idx\">" . ($index + 1) . "</span></span>";
+            echo "<div class=\"d-flex align-items-center gap-2\">";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxBlockUp(this)\" title=\"Move Up\"><i class=\"fa fa-arrow-up\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxBlockDown(this)\" title=\"Move Down\"><i class=\"fa fa-arrow-down\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-danger ms-2\" onclick=\"removeGxBlock(this)\" title=\"Remove Block\"><i class=\"fa fa-trash-alt\"></i></button>";
+            echo "</div>";
+            echo "</div>";
+            echo "<div class=\"gx-list-fields row g-4\">";
+            foreach ($fields as $sf) {
+                $this->renderBlockField($sf, $item[$sf['name']] ?? '');
+            }
+            echo "</div>";
+            echo "</div>";
+        }
+        echo "</div>";
+        
+        echo "<div class=\"gx-block-adder mt-4 p-4 bg-light rounded-4 border border-dashed border-2 d-flex flex-column align-items-center justify-content-center\">";
+        echo "<span class=\"text-muted fw-bold small mb-3 text-uppercase tracking-widest\">Add Layout Component</span>";
+        echo "<div class=\"d-flex gap-2 w-100 max-width-sm mx-auto justify-content-center\">";
+        echo "<select class=\"gx-input gx-block-selector w-auto shadow-sm\" style=\"min-width: 200px;\">";
+        foreach ($blocksDef as $bType => $bDef) {
+            $bLabel = htmlspecialchars($bDef['label'] ?? $bType);
+            echo "<option value=\"{$bType}\">{$bLabel}</option>";
+        }
+        echo "</select>";
+        echo "<button type=\"button\" class=\"btn btn-primary shadow-sm px-4 fw-bold\" onclick=\"addGxBlock(this)\"><i class=\"fa fa-plus me-2\"></i> Add Block</button>";
+        echo "</div>";
+        echo "</div>";
+        
+        foreach ($blocksDef as $bType => $bDef) {
+            $bLabel = htmlspecialchars($bDef['label'] ?? $bType);
+            $fields = $bDef['fields'] ?? [];
+            
+            echo "<script type=\"text/template\" class=\"gx-block-template\" data-block-type=\"{$bType}\">";
+            echo "<div class=\"gx-list-item px-4 py-4 bg-white rounded-4 mb-3 border border-2 shadow-sm position-relative\" data-block-type=\"{$bType}\">";
+            echo "<input type=\"hidden\" class=\"gx-block-input\" data-key=\"block_type\" value=\"{$bType}\">";
+            echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom\">";
+            echo "<span class=\"fw-bold text-dark fs-6 d-flex align-items-center gap-2\"><i class=\"bi bi-puzzle text-primary\"></i> {$bLabel} <span class=\"badge bg-light text-secondary border rounded-pill ms-2 idx\">__IDX__</span></span>";
+            echo "<div class=\"d-flex align-items-center gap-2\">";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxBlockUp(this)\"><i class=\"fa fa-arrow-up\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxBlockDown(this)\"><i class=\"fa fa-arrow-down\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-danger ms-2\" onclick=\"removeGxBlock(this)\"><i class=\"fa fa-trash-alt\"></i></button>";
+            echo "</div>";
+            echo "</div>";
+            echo "<div class=\"gx-list-fields row g-4\">";
+            foreach ($fields as $sf) {
+                $this->renderBlockField($sf, '');
+            }
+            echo "</div>";
+            echo "</div>";
+            echo "</script>";
+        }
+        echo "</div>";
+    }
+
+    private function renderBlockField(array $sf, $sfVal)
+    {
+        $sfName = htmlspecialchars($sf['name']);
+        $sfVal = htmlspecialchars($sfVal, ENT_QUOTES);
+        $sfType = $sf['type'] ?? 'text';
+        $sfLabel = $sf['label'] ?? '';
+        $sfBox = $sf['box'] ?? 'col-12';
+        echo "<div class=\"{$sfBox}\">";
+        if ($sfLabel) echo "<label class=\"small fw-bold text-secondary d-block mb-2\">" . htmlspecialchars($sfLabel) . "</label>";
+        
+        if ($sfType === 'textarea') {
+            echo "<textarea class=\"gx-input gx-block-input\" data-key=\"{$sfName}\" rows=\"3\">{$sfVal}</textarea>";
+        } elseif ($sfType === 'media') {
+            $sfId = 'media_blk_' . rand(10000, 99999);
+            echo "<div class=\"gx-media-group\">";
+            echo "<div class=\"media-drop-zone rounded-4 border bg-light p-3 position-relative text-center mb-1\" 
+                         style=\"cursor: pointer; min-height: 120px; border-style: dashed !important;\" onclick=\"gxMediaSelector('{$sfId}')\">
+                    <div id=\"{$sfId}_placeholder\" class=\"" . ($sfVal ? 'd-none' : 'py-3') . "\">
+                        <i class=\"bi bi-image text-muted fs-2\"></i>
+                        <p class=\"small text-muted mt-2 mb-0\">Select Image</p>
+                    </div>
+                    <img id=\"{$sfId}_preview\" class=\"img-fluid rounded-3 shadow-sm " . ($sfVal ? '' : 'd-none') . "\" 
+                         src=\"{$sfVal}\" style=\"max-height: 180px; width: 100%; object-fit: cover;\">
+                    <input class=\"gx-block-input\" data-key=\"{$sfName}\" id=\"{$sfId}\" type=\"hidden\" value=\"{$sfVal}\">
+                </div>";
+            echo "</div>";
+        } elseif ($sfType === 'select') {
+            echo "<select class=\"gx-input gx-block-input\" data-key=\"{$sfName}\">";
+            foreach ($sf['options'] ?? [] as $v => $l) {
+                $sel = ((string)$sfVal === (string)$v) ? 'selected' : '';
+                echo "<option value=\"" . htmlspecialchars($v) . "\" {$sel}>" . htmlspecialchars($l) . "</option>";
+            }
+            echo "</select>";
+        } else {
+            echo "<input type=\"text\" class=\"gx-input gx-block-input\" data-key=\"{$sfName}\" value=\"{$sfVal}\">";
+        }
+        echo "</div>";
+    }
+
+    /**
      * Renders a dynamic, repeatable list field (Repeater).
      * Data is stored as a base64-encoded JSON string to ensure integrity.
      */
@@ -829,9 +952,13 @@ HTML;
         
         foreach ($items as $index => $item) {
             echo "<div class=\"gx-list-item px-4 py-3 bg-light rounded-4 mb-3 border position-relative\">";
-            echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3\">";
-            echo "<span class=\"fw-bold text-primary small\">{$label} #<span class=\"idx\">" . ($index + 1) . "</span></span>";
-            echo "<button type=\"button\" class=\"btn btn-link text-danger p-0\" onclick=\"removeGxListItem(this)\"><i class=\"fa fa-trash-alt\"></i></button>";
+            echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom\">";
+            echo "<span class=\"fw-bold text-primary small d-flex align-items-center gap-2\"><i class=\"fa fa-cube opacity-50\"></i> {$label} <span class=\"badge bg-primary rounded-pill ms-1 idx\">" . ($index + 1) . "</span></span>";
+            echo "<div class=\"d-flex align-items-center gap-2\">";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxListItemUp(this)\" title=\"Move Up\"><i class=\"fa fa-arrow-up\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxListItemDown(this)\" title=\"Move Down\"><i class=\"fa fa-arrow-down\"></i></button>";
+            echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-danger ms-2\" onclick=\"removeGxListItem(this)\" title=\"Remove Block\"><i class=\"fa fa-trash-alt\"></i></button>";
+            echo "</div>";
             echo "</div>";
             echo "<div class=\"gx-list-fields row g-3\">";
             foreach ($fields as $sf) {
@@ -878,9 +1005,13 @@ HTML;
         // Template for new items
         echo "<script type=\"text/template\" class=\"gx-list-template\">";
         echo "<div class=\"gx-list-item px-4 py-3 bg-light rounded-4 mb-3 border position-relative shadow-sm\">";
-        echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3\">";
-        echo "<span class=\"fw-bold text-primary small\">{$label} #<span class=\"idx\">__IDX__</span></span>";
-        echo "<button type=\"button\" class=\"btn btn-link text-danger p-0\" onclick=\"removeGxListItem(this)\"><i class=\"fa fa-trash-alt\"></i></button>";
+        echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom\">";
+        echo "<span class=\"fw-bold text-primary small d-flex align-items-center gap-2\"><i class=\"fa fa-cube opacity-50\"></i> {$label} <span class=\"badge bg-primary rounded-pill ms-1 idx\">__IDX__</span></span>";
+        echo "<div class=\"d-flex align-items-center gap-2\">";
+        echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxListItemUp(this)\" title=\"Move Up\"><i class=\"fa fa-arrow-up\"></i></button>";
+        echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-secondary\" onclick=\"moveGxListItemDown(this)\" title=\"Move Down\"><i class=\"fa fa-arrow-down\"></i></button>";
+        echo "<button type=\"button\" class=\"btn btn-sm btn-light border py-1 px-2 text-danger ms-2\" onclick=\"removeGxListItem(this)\" title=\"Remove Block\"><i class=\"fa fa-trash-alt\"></i></button>";
+        echo "</div>";
         echo "</div>";
         echo "<div class=\"gx-list-fields row g-3\">";
         foreach ($fields as $sf) {
@@ -1306,6 +1437,32 @@ HTML;
             updateGxListValue(container);
         };
 
+        window.moveGxListItemUp = function(btn) {
+            const item = btn.closest('.gx-list-item');
+            const prev = item.previousElementSibling;
+            if (prev && prev.classList.contains('gx-list-item')) {
+                item.parentNode.insertBefore(item, prev);
+                const container = item.closest('.gx-list-container');
+                container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                    it.querySelector('.idx').innerText = i + 1;
+                });
+                updateGxListValue(container);
+            }
+        };
+
+        window.moveGxListItemDown = function(btn) {
+            const item = btn.closest('.gx-list-item');
+            const next = item.nextElementSibling;
+            if (next && next.classList.contains('gx-list-item')) {
+                item.parentNode.insertBefore(next, item);
+                const container = item.closest('.gx-list-container');
+                container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                    it.querySelector('.idx').innerText = i + 1;
+                });
+                updateGxListValue(container);
+            }
+        };
+
         window.updateGxListValue = function(container) {
             const hiddenInput = container.querySelector('.gx-list-hidden');
             const items = [];
@@ -1328,12 +1485,81 @@ HTML;
             }
         };
 
-        // Attach event to existing inputs
         document.addEventListener('input', (e) => {
-            if(e.target.classList.contains('gx-list-input')) {
+            if(e.target.classList.contains('gx-list-input') && e.target.closest('.gx-list-container')) {
                 updateGxListValue(e.target.closest('.gx-list-container'));
             }
+            if(e.target.classList.contains('gx-block-input') && e.target.closest('.gx-blocks-container')) {
+                updateGxBlocksValue(e.target.closest('.gx-blocks-container'));
+            }
         });
+
+        // --- Layout Block Editor Functions ---
+        window.addGxBlock = function(btn) {
+            const container = btn.closest('.gx-blocks-container');
+            const selector = container.querySelector('.gx-block-selector');
+            const blockType = selector.value;
+            const template = container.querySelector(`.gx-block-template[data-block-type="\${blockType}"]`).innerHTML;
+            const list = container.querySelector('.gx-blocks-items');
+            
+            let html = template;
+            html = html.replace(/media_blk_\d+/g, 'media_blk_' + Math.floor(Math.random() * 90000 + 10000));
+            const newIdx = list.querySelectorAll('.gx-list-item').length + 1;
+            html = html.replace(/__IDX__/g, newIdx);
+            
+            list.insertAdjacentHTML('beforeend', html);
+            updateGxBlocksValue(container);
+        };
+
+        window.removeGxBlock = function(btn) {
+            if(!confirm("Remove this block component?")) return;
+            const container = btn.closest('.gx-blocks-container');
+            btn.closest('.gx-list-item').remove();
+            
+            container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                it.querySelector('.idx').innerText = i + 1;
+            });
+            updateGxBlocksValue(container);
+        };
+
+        window.moveGxBlockUp = function(btn) {
+            const item = btn.closest('.gx-list-item');
+            const prev = item.previousElementSibling;
+            if (prev && prev.classList.contains('gx-list-item')) {
+                item.parentNode.insertBefore(item, prev);
+                const container = item.closest('.gx-blocks-container');
+                container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                    it.querySelector('.idx').innerText = i + 1;
+                });
+                updateGxBlocksValue(container);
+            }
+        };
+
+        window.moveGxBlockDown = function(btn) {
+            const item = btn.closest('.gx-list-item');
+            const next = item.nextElementSibling;
+            if (next && next.classList.contains('gx-list-item')) {
+                item.parentNode.insertBefore(next, item);
+                const container = item.closest('.gx-blocks-container');
+                container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                    it.querySelector('.idx').innerText = i + 1;
+                });
+                updateGxBlocksValue(container);
+            }
+        };
+
+        window.updateGxBlocksValue = function(container) {
+            const hiddenInput = container.querySelector('.gx-blocks-hidden');
+            const items = [];
+            container.querySelectorAll('.gx-blocks-items > .gx-list-item').forEach(item => {
+                const data = {};
+                item.querySelectorAll('.gx-block-input').forEach(input => {
+                    data[input.dataset.key] = input.value;
+                });
+                items.push(data);
+            });
+            hiddenInput.value = JSON.stringify(items);
+        };
 
         window.gxMediaSelector = function(targetId) {
             if (typeof GxMedia !== 'undefined') {
