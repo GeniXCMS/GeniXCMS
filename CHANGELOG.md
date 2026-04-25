@@ -4,6 +4,125 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-04-22
+
+### Added
+- **Offline-Ready Admin Panel**: All external CDN dependencies for the admin dashboard are now bundled locally under `assets/js/vendor/`, `assets/css/vendor/`, and `assets/fonts/`. The CMS is fully usable without an internet connection — ideal for local development and offline environments.
+- **Local Vendor Bundle**: Downloaded and committed the following libraries at pinned versions: jQuery 3.7.1, jQuery UI 1.13.2, Bootstrap 5.3.3 (CSS + JS bundle), Bootstrap Icons 1.11.3 (CSS + fonts), Font Awesome 6.7.2 (CSS + webfonts), jQuery TagsInput 1.3.6, jsVectorMap 1.5.3 (+ world map), Chart.js 4.4.1.
+- **`OFFLINE_MODE` Constant**: New constant in `config.php`. Set `true` to load all framework assets from local files; `false` (default) uses CDN. Switchable with one line.
+- **`DEVELOPER_MODE` Constant**: New constant in `config.php`. Set `true` to reveal the Dev Tools menu (Asset Inspector + Hook Inspector) in the admin panel. Hidden by default in production.
+- **Asset Inspector** (`?page=devtools-assets`): Developer tool that lists every registered and enqueued asset with type, source (local vs CDN badge), position, priority, dependencies, and enqueue status. Supports filtering by type, context, and search.
+- **Hook Inspector** (`?page=devtools-hooks`): Developer tool that lists all registered hooks and their attached callbacks. Closures show the source file and line number via `ReflectionFunction`. Supports filtering by name and callback status.
+- **`ADMIN_THEME` Constant**: New constant in `config.php` to select the active admin panel theme. Defaults to `'default'`.
+- **Ribbon Admin Theme** (`gxadmin/themes/ribbon/`): MS Office / WPS-style ribbon toolbar layout. Each top-level menu item becomes a tab; items without children render as a large icon button, items with children render their children as icon buttons. Client-side tab switching via `history.pushState`, responsive fallback, and per-tab hooks (`admin_ribbon_tab_{id}`).
+- **Moluka Admin Theme** (`gxadmin/themes/moluka/`): Clean SaaS-style layout with white sidebar, avatar + online status, treeview nav, gradient footer card, and accent color `#00A3EA`. Dashboard features a large greeting header, teal subtitle, and pill quick-action buttons.
+- **Fresco Admin Theme** (`gxadmin/themes/fresco/`): Compact financial-dashboard style layout. White sidebar with section labels, lime-green accent `#c8f04a` for active states, minimal top header with search bar and action buttons. All nav active detection uses the same strict URL param matching as moluka and ribbon.
+- **Admin Menu Icons**: All children in `AdminMenu::bootCoreMenu()` now have Bootstrap Icons assigned — Posts, Categories, Tags, Users, ACL, Themes, Menus, Widgets, System Health, Updates, and all Settings sub-pages.
+- **Nixomers Menu Icons**: All 15 children in the Nixomers admin menu now have contextual icons (Dashboard, Orders, Analytics, Transactions, Stock, Products, Categories, Brands, Suppliers, etc.).
+- **Admin Theme System**: `gxadmin/themes/` restructured — existing theme moved to `gxadmin/themes/default/`. `Theme::admin()`, `Theme::auth()`, and `Theme::install()` now resolve files from the active `ADMIN_THEME` with automatic fallback to `default`.
+- **Chart.js Offline Support**: Chart.js 4.4.1 registered in `Asset::registerCore()` respecting `OFFLINE_MODE`. `UiBuilder` lazy-load and `Nixomers` analytics page both use the centralized registration instead of hardcoded CDN URLs.
+- **CSP Whitelist for Common Analytics**: Default Content Security Policy now includes trusted domains for Google Analytics / GTM, Google Ads, Meta / Facebook Pixel, and Histats across `script-src`, `connect-src`, and `frame-src` directives — no manual CSP editing needed for the most common tracking integrations.
+- **Go Service Detection & Optional Install**: `settings-api.php` now detects whether the `go-service/` folder exists at root. If missing: Active Driver dropdown is disabled and locked, Auto PHP Fallback checkbox is disabled, and a warning banner with a "Download Go Service" button is shown. If present: a green status badge confirms installation. When `api_backend=go` is saved but folder is absent, it auto-reverts to `php`.
+- **Go Service One-Click Download**: New `UpdatesAjax::installGoService()` action fetches the Go service package info from `genixcms.web.id/api/v1/download/go-service`, downloads the ZIP to `assets/cache/`, extracts it into `go-service/` at root (stripping top-level folder prefix), then reloads the page. Download is restricted to `genixcms.web.id` domain only.
+- **Offline Font Support**: Downloaded Inter font (weights 300–900) as local `.woff2` files to `assets/fonts/inter/`. Created `assets/css/vendor/inter-local.css` with `@font-face` declarations pointing to local files. `Asset::registerCore()` now registers `inter-font` conditionally — local CSS when `OFFLINE_MODE=true`, Google Fonts CDN when `false`. All admin theme headers (moluka, ribbon, fresco, prodify, default) and auth pages (login, register, forgotpass) wrap their Google Fonts `<link>` tags in `<?php if (!OFFLINE_MODE): ?>` guards.
+- **Improved Admin Dashboard**: Added Content Health progress bars (Publish Rate, Comment Approval, User Activity), New Members list with Gravatar avatars, System Info panel (PHP version, CMS version, DB driver, memory limit, disk usage bar, uptime), and Top Content ranking with medal colors. All post/user titles decoded via `Typo::Xclean()`. Username in greeting uses accent color via `var(--gx-primary)`.
+- **Admin Menu Icons**: All children in `AdminMenu::bootCoreMenu()` and modules (`nix_confirmation`, `nix_fulfillment`, `gxeditor`) now have Bootstrap Icons assigned.
+
+### Fixed (continued)
+- **settings-api.php Script Remnant**: Removed orphaned JavaScript fragment (`$'; let result = ''...`) left over from a partial string replacement in the old `generateSecret` function — it was being rendered as visible text on the page.
+- **EditorJS Tools Not Loading**: `editorjs-header`, `editorjs-list`, `editorjs-image`, `editorjs-quote`, `editorjs-table` were registered but never enqueued — added all as dependencies of `editorjs-init` so Asset manager loads them automatically.
+- **EditorJS Offline Support**: Downloaded all EditorJS tool bundles (core, header, list, image, quote, table, delimiter) to `assets/js/vendor/editorjs/`. `Editor::editorjs()` now registers local paths when `OFFLINE_MODE=true`, CDN when false.
+- **EditorJS Image Upload**: Replaced complex elFinder-based uploader with direct POST to `SaveimageAjax`. Fixed field name detection (accepts `image`, `file`, or `upload`). Added proper PHP upload error code mapping with human-readable messages. Fixed auth to not require `Http::validateUrl()`. Added `upload_max_filesize` error reporting so users know when file is too large.
+
+### Changed
+- **Asset Registration**: `Asset::registerCore()` now points all framework URLs to local paths or CDN based on `OFFLINE_MODE`. No CDN calls are made for core admin assets when offline mode is active.
+- **Font Paths**: Bootstrap Icons CSS patched to use relative paths pointing to `assets/fonts/bootstrap-icons/`. Font Awesome CSS already uses correct relative `../webfonts/` paths.
+- **Ribbon Menu Active Detection**: `rbUrlMatches()` now compares all query params defined in a child URL (including `sel`, `act`, `type`, `view`) against the current request — prevents false-positive active states when multiple items share the same `page` or `mod` param.
+- **Ribbon Button Labels**: `white-space: normal` + `word-break: break-word` applied to `.rb-btn` so long labels wrap to two lines instead of overflowing.
+- **Moluka Nav Active Detection**: Child items use full URL param matching (page + mod + sel + act + type) — same logic as ribbon, prevents all children activating simultaneously.
+- **Nav Active Detection — Strict Negative Guards**: `rbUrlMatches()` / `$pdUrlMatches` / `$frUrlMatches` now enforce that if a child URL does not define `type`, `mod`, `act`, or `sel`, the current URL must also not have those params. Eliminates cross-contamination between menu items sharing the same `page` param (e.g. `?page=posts` vs `?page=posts&type=nixomers` vs `?page=posts&act=add&type=nixomers`).
+- **Dashboard Quick-Action Buttons**: Replaced theme-specific `mk-quick-btn` classes with inline styles using `var(--gx-primary, #00A3EA)` — buttons now render correctly across all admin themes.
+- **Moluka Topbar**: Changed from `padding: 14px 28px 0` / transparent background to `height: 52px` / white background with border — topbar now sits flush at the top like a proper header bar.
+- **`ADMIN_DIR` Constant Usage**: Replaced all hardcoded `'gxadmin/'` URL strings in `NixomersAjax.class.php`, `Ajax.class.php`, `UserProfile.class.php`, `media-manager/index.php`, `gneex/function.php`, `madxion/function.php`, and `MdoTheme.class.php` with `ADMIN_DIR` constant. Install `step4.php` intentionally left as-is (config not yet available during install).
+- **Dashboard Greeting**: Replaced old welcome header with modern layout — date line, large bold greeting, teal subtitle, pill quick-action buttons, and accent orb.
+- **CSP Analytics Domains**: Expanded from CDN-only to include all major analytics and advertising platforms by default.
+
+### Fixed
+- **`curl_close()` Deprecation (PHP 8.0+)**: Replaced all 15 occurrences of `curl_close($ch)` across `inc/lib/` and `inc/mod/` with `unset($ch)`. `@curl_close()` in `Http.class.php` also fixed (error suppressor not valid on `unset`).
+- **Null Array Key Deprecation**: `$locations[$l->location_id]` in `nixomers/options/stock.php` — `null` location_id now cast to empty string before use as array key.
+- **Nixomers Fatal TypeError**: `Url::user(null, 'purchase')` crash when admin panel accessed unauthenticated — `registerDropdownItem` now guarded with `!empty($sessionUsername)`.
+- **Moluka Treeview Dropdown**: Fixed CSS adjacent sibling selector not working — replaced with JS-toggled `.open` class on both trigger and `nextElementSibling`.
+- **Moluka/Fresco/Ribbon JS Function Names**: Fixed leftover `pdOpenSidebar`/`pdCloseSidebar` function names (from prodify rename) in moluka footer — renamed to `mkOpenSidebar`/`mkCloseSidebar`.
+- **Chart.js Lazy-Load URL**: `json_encode()` was wrapping the URL in quotes causing `script.src = '"https://..."'` — replaced with direct PHP string concatenation.
+- **BOM (Byte Order Mark) Removal**: Removed UTF-8 BOM from all admin theme files (`moluka`, `fresco`, `ribbon`, `prodify`) and affected lib files (`Ajax.class.php`, `UserProfile.class.php`, `NixomersAjax.class.php`) that were written via PowerShell `WriteAllText` with BOM encoding. BOM caused browser to misparse `<head>` and inject `&#xFEFF;` text nodes into `<body>`.
+- **System Core**: Bumped GeniXCMS to version **2.4.0**.
+
+## [2.3.0] - 2026-04-20
+
+### Added
+- **High-Performance Go Search**: Introduced a dedicated search engine in Go that performs rapid text-matching across posts, significantly faster than traditional PHP-based LIKE queries.
+- **Universal Dynamic Resource Engine (Go)**: The Go microservice now features a smart dynamic handler capable of serving data from ANY database table (including third-party modules) automatically, while maintaining strict security blacklists for core sensitive data.
+- **Unified Hybrid Backend (Go-Powered)**: Expanded the high-performance Go-based microservice to support both RESTful API and core AJAX read operations. This significantly reduces latency for frontend data fetching.
+- **Smart Switch System (API & AJAX)**: Administrators can now toggle the Go service for the entire ecosystem (GET requests), inclusive of Posts, Categories, and dynamic dashboard listings.
+- **Multi-DB Support for Go**: The Go microservice now natively supports MySQL, PostgreSQL, and SQLite3, ensuring full compatibility with the existing GeniXCMS ecosystem.
+- **Dedicated API Service Dashboard**: Created a separate administration panel for API configuration, decoupling it from general settings for better clarity.
+- **Internal Security Handshake**: Implemented a shared-secret authorization mechanism to secure high-speed proxy requests between PHP and the Go service.
+- **Modernized API Key Management**: Added auto-generation features for both Public RESTful Tokens and Shared Authorization Secrets with a refreshed UI.
+- **Smart PHP Fallback**: Introduced a reactive fallback system that automatically reverts to the PHP engine if the Go microservice becomes unreachable.
+- **Media Manager Isolation (v1.3.0)**: Implemented `GX_USER_FOLDER` support to strictly isolate user assets into their own subdirectories. The file manager now treats the user's folder as a virtual root, preventing unauthorized directory traversal.
+- **Extended File Support**: Media Manager now natively supports `zip`, `pdf`, and `txt` file types with context-aware Bootstrap Icons and improved grid previews.
+- **Cross-Platform Path Security**: Enhanced `MediaManager` core with a new `normPath()` helper and traversal protection, ensuring consistent and secure file operations across Linux and Windows hosting environments.
+- **Centralized Media AJAX Engine**: Fully refactored the media controller into a dedicated `MediaManagerAjax` class, standardizing all file operations (upload, delete, rename, list) via the core AJAX dispatcher.
+- **Programmatic User Profile Extensions**: Overhauled the frontend `UserProfile` class with new `registerSection` and `registerDropdownItem` methods. Theme and module developers can now dynamically add new profile pages (e.g., `/user/.../finance`) and append menu links without touching core template files.
+- **Dynamic Profile Template Routing**: The CMS now seamlessly detects and loads custom profile layout templates (e.g., `user-finance.latte`) straight from the theme folder, eliminating restrictive layout wrappers for complex module pages.
+- **Profile Context Badges**: Upgraded the standard `user-profile.latte` Recent Posts board with custom badge labels so viewers can instantly identify post context (e.g., PAGE vs POST vs PRODUCT).
+- **Recent Orders Profile Hook**: Modules like Nixomers can now hook into `user_profile_overview_extra` or `user_profile_sidebar_extra` to natively render their own data metrics directly onto the user's dashboard.
+- **Core Canonical URL Enforcement**: Implemented a global SEO guard in `PostControl` that validates requested paths and enforces 301 Moved Permanently redirects (or 404s) to the canonical URL, effectively eliminating duplicate content issues.
+- **Custom Product URL Architecture**: Introduced a `/product/` prefix for Nixomers e-commerce items through a modular `post_url` hook and corresponding router definitions.
+- **Premium 404 Error Page (Artisan Atelier)**: Created a custom, high-end 404 error template for the Artisan Atelier theme, featuring animated blob masks, radial design tokens, and converted navigation CTAs.
+- **GxMedia Selector Integration**: Modernized the GxEditor media integration by replacing legacy dialogs with the native, modular GxMedia selector across Posts and Pages forms.
+- **Media Selector AJAX Upload**: Integrated a high-performance AJAX upload feature directly into the Media Selector dialog with real-time grid refresh.
+- **Adaptive Sticky Header (UiBuilder)**: Implemented a premium "Elevated Header" system in UiBuilder that transitions from transparent to a compact sticky state upon scrolling, featuring smooth CSS transitions and auto-scroll detection.
+- **Smart Media Location Logic**: Enhanced `MediaManager` to intelligently differentiate between Local and Cloud (S3/FTP) storage.
+- **Nixomers Ecosystem Overhaul**: Implemented a "Ultra-Premium" design system for the `nix_confirmation` module, featuring glassmorphism (`.gx-glass`), deep shadows, and professional dual-card layout.
+- **Financial Intelligence (Recalculate Engine)**: Introduced a deep re-calculation system in Nixomers. It programmatically re-scans order items, reapplies current tax rates, updates total orders, and synchronizes the transaction ledger to ensure accurate Net Income (Gross - Fee - Tax - Shipping).
+- **Granular Inventory Control**: Refined the inventory tracking system by making granular unit tracking (per-item records) optional. Administrators now have full control to "Sync Granular Tracking" only for required orders, optimizing database performance for high-volume stores.
+- **UiBuilder Logic Loops**: Introduced natively integrated `'loop'` capabilities within the UiBuilder schema framework, significantly streamlining form generation and reducing monolithic string buffers.
+- **Premium CSS Utilities**: Expanded the core `genixcms.css` with advanced flexbox gaps, seamless input group borders, soft background shades, and smooth micro-animations.
+- **UiBuilder Module Versioning**: Expanded the `header` component configuration schema in UiBuilder with a new optional `version` tag.
+- **Nixslider Architecture Modernization**: Refactored the Nixslider backend payload decoupling monolithic HTML string buffering into discrete `UiBuilder` `'loop'` configurations. Resolved PHP 8.2 interpolation deprecations.
+- **Nixomers AJAX Standardization**: Fully refactored the Nixomers module's AJAX routing to utilize the centralized `Ajax` class architecture. Consolidated all legacy endpoint hijacking into a single, modular `NixomersAjax` class.
+- **Improved AJAX Resource Resolution**: Optimized the core `Ajax` dispatcher to automatically resolve PascalCase class names for module-based resources, enabling seamless routing for underscored module names.
+- **Refined Shipping Engine Integration**: Enhanced the shipping regional search logic to support both KiriminAja and API.CO.ID within the standardized AJAX framework.
+- **Centralized System Updates Engine**: Introduced a dedicated `UpdatesAjax` class that harmonizes system update checks (core, modules, themes) through the core AJAX dispatcher. Go service also provides a high-performance `UpdateHandler` that scans local module/theme directories and fetches marketplace updates with graceful fallback when external APIs are unavailable.
+- **Admin User List Via Go Service**: Expanded Go service with a new `UserHandler` that provides lightning-fast user listing with support for role-based filtering (group, status, search). The PHP bridge automatically decorates raw user data into dashboard-ready HTML rows with avatars, badges, and actions.
+- **Enhanced AJAX URL Generation**: Improved `Url::ajax()` method to intelligently handle both action-less endpoints (e.g., `/ajax/updates`) and action-based endpoints (e.g., `/ajax/user/list_users`), eliminating malformed URL generation and simplifying frontend code.
+- **Unified Go-Supported Resource Tracking**: Extended the core Go-supported resource list to include `updates` and `user`, enabling seamless switching between PHP and Go backends without additional configuration.
+- **Graceful API Fallback Mechanism**: Implemented robust error handling in Go handlers (Updates, User) to return valid fallback responses (empty data arrays, version defaults) instead of HTTP errors when external services are unreachable, ensuring the admin panel remains responsive even during API outages.
+
+### Changed
+- **Premium User Profile Interface**: Completely redesigned the Agrifest theme's `user-profile.latte` and `user-settings.latte` into a modern Bento-grid layout utilizing Tailwind CSS, refined spacing, unified hover interactions, and responsive column structures.
+- **Dropdown Logic Decoupling**: Refactored the core `header.latte` top navigation. Replaced bloated static HTML with a seamless `<foreach>` loop binding to `UserProfile::getDropdownItems()` to securely handle dynamic links driven by the CMS Core.
+- **Profile Order Flow Adjustments**: Transitioned injected table modules (like Nixomers Orders) from the narrow left sidebar column (`col-span-4`) to the principal reading column (`col-span-8`) for an uncluttered horizontal layout.
+- **Permanent Cloud Watermarking**: Shifted watermarking logic for S3/FTP assets to the upload phase, enabling direct CDN delivery with brand identity and eliminating server-side network bottlenecks.
+- **Media Selector UI Polish**: Balanced the Media Selector dialog width and height for improved usability on various screen resolutions.
+- **GeniXCMS UI Standardization**: Standardized modular UI views (UserProfile, Nixomers Purchase History) to exclusively utilize the framework-agnostic `genixcms.css` (`gx-*`) utility system. Replaced hardcoded Tailwind dependencies to ensure component harmony across all active themes (native integration accomplished in the Bakeshop theme).
+- **Unified Thumbnail Strategy**: Standardized the use of `Url::thumb()` across all Bakeshop and Artisan Atelier templates (both `.latte` and `.php`) to optimize performance via the "on-the-fly" image processing engine.
+- **Nixomers AJAX Modernization**: Migrated frontend catalog AJAX calls to the dedicated `nixomers` module namespace for better endpoint isolation.
+
+### Fixed
+- **Smart URL Query Builder**: Fixed the logic in `Url::mod()` output handling within extensions (like Nixomers) ensuring gateway URLs don't break with malformed `&order_id=` querystrings when Smart URLs are active.
+- **Template Array Conversion**: Fixed a persistent `Array to string conversion` bug when echoing filtered string outputs from `Hooks::filter` directly inside Latte template files.
+- **GxEditor Stability**: Resolved persistent JavaScript syntax errors in `gxeditor.js` and ensured global accessibility for key interaction models.
+- **Architecture Stability**: Resolved PHP 8.1+ deprecation warnings and undefined variable warnings in the admin header related to external module menus.
+- **Asset Loading Logic**: Fixed a critical CSS loading bug in the confirmation module by implementing a robust URL detection for both `?mod=` and path-based Smart URLs.
+- **JavaScript Upload Faults**: Resolved `TypeError` in the file upload interface by ensuring required DOM elements are present during initialization.
+- **PHP 8.1+ Security Hardening**: Resolved deprecation warnings in `Typo::cleanX()` related to null parameter handling in `preg_replace_callback`.
+- **Latte Template Stability**: Fixed "Undefined variable $website_lang" warnings in theme headers using null-coalescing fallbacks to system defaults.
+- **Hook Argument Handling**: Resolved "Undefined array key" errors in Nixomers hooks by properly destructuring variadic arguments in `Hooks::filter` and `Hooks::run`.
+- **Layout Parameter Persistence**: Fixed a routing bug where specific post layouts were bypassed when `SMART_URL` was active.
+- **System Core**: Officially bumped GeniXCMS to version **2.3.0**.
+
 ## [2.2.1] - 2026-04-10
 
 ### Added
