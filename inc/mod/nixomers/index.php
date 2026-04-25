@@ -2,7 +2,7 @@
 /**
  * Name: Nixomers
  * Desc: A amazing powerfull E-Commerce Module
- * Version: 1.0.0
+ * Version: 1.0.1
  * Build: 2.3.0
  * Developer: GeniXCMS
  * URI: https://genixcms.web.id/
@@ -177,13 +177,16 @@ if (class_exists('Nixomers')) {
                 'order' => 15
             ]);
 
-            // Register quick access in header dropdown
-            UserProfile::registerDropdownItem('purchase', [
-                'label' => 'Purchase History',
-                'url' => Url::user(Session::val('username'), 'purchase'),
-                'icon' => 'shopping_bag',
-                'order' => 15
-            ]);
+            // Register quick access in header dropdown (only when user is logged in)
+            $sessionUsername = Session::val('username');
+            if (!empty($sessionUsername)) {
+                UserProfile::registerDropdownItem('purchase', [
+                    'label' => 'Purchase History',
+                    'url' => Url::user((string)$sessionUsername, 'purchase'),
+                    'icon' => 'shopping_bag',
+                    'order' => 15
+                ]);
+            }
         }
     });
 

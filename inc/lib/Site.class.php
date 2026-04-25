@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20141004
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -51,6 +51,8 @@ class Site
         } else {
             self::$isOffline = true;
         }
+
+        self::debug();
 
         // Asset management is now handled explicitly by themes and modules
         // via call to Site::loadLibHeader() and Site::loadLibFooter()
@@ -263,27 +265,28 @@ class Site
      *
      * @return string Hook execution results for footer scripts.
      */
-    public static function footer()
+    public static function debug()
     {
         global $data;
 
         if (defined('DEBUG') && DEBUG) {
 
+            $html = "";
 
             if (isset($data)) {
-                echo "<pre>";
-                print_r($data);
-                echo "</pre>";
+                $html .= "<pre>";
+                $html .= print_r($data, true);
+                $html .= "</pre>";
             }
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
+            $html .= "<pre>";
+            $html .= print_r($_SESSION, true);
+            $html .= "</pre>";
             ob_start();
             phpinfo();
             $phpinfo = ob_get_contents();
             ob_end_clean();
             $phpinfo = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $phpinfo);
-            echo "
+            $html .= "
                 <style type='text/css'>
                     #phpinfo {}
                     #phpinfo pre {margin: 0; font-family: monospace;}
@@ -309,9 +312,14 @@ class Site
                 </div>
                 ";
 
+            Hooks::attach('footer_load_lib', function ($data) use ($html) {
+                return $html;
+            });
+
         }
 
-        return Hooks::run('footer_load_lib', $data);
+        return "";
+
     }
 
     /**

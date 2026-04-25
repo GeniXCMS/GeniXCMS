@@ -186,7 +186,7 @@ class Sso
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $res = curl_exec($ch);
-        curl_close($ch);
+        unset($ch);
         return $res;
     }
 
@@ -196,7 +196,7 @@ class Sso
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if (!empty($headers)) curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $res = curl_exec($ch);
-        curl_close($ch);
+        unset($ch);
         return $res;
     }
 

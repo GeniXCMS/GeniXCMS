@@ -1,10 +1,13 @@
 <?php
+
 /**
  * This is a PHP library that handles calling reCAPTCHA.
  *
  * BSD 3-Clause License
+ *
  * @copyright (c) 2019, Google Inc.
- * @link https://www.google.com/recaptcha
+ *
+ * @see https://www.google.com/recaptcha
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,47 +43,54 @@ namespace ReCaptcha\RequestMethod;
  */
 class Socket
 {
-    private $handle = null;
+    private $handle;
 
     /**
-     * fsockopen
+     * fsockopen.
      *
      * @see http://php.net/fsockopen
+     *
      * @param string $hostname
-     * @param int $port
-     * @param int $errno
+     * @param int    $port
+     * @param int    $errno
      * @param string $errstr
-     * @param float $timeout
+     * @param float  $timeout
+     *
      * @return resource
      */
     public function fsockopen($hostname, $port = -1, &$errno = 0, &$errstr = '', $timeout = null)
     {
-        $this->handle = fsockopen($hostname, $port, $errno, $errstr, (is_null($timeout) ? ini_get("default_socket_timeout") : $timeout));
+        $this->handle = fsockopen($hostname, $port, $errno, $errstr, is_null($timeout) ? ini_get('default_socket_timeout') : $timeout);
 
-        if ($this->handle != false && $errno === 0 && $errstr === '') {
+        if (false != $this->handle && 0 === $errno && '' === $errstr) {
             return $this->handle;
         }
+
         return false;
     }
 
     /**
-     * fwrite
+     * fwrite.
      *
      * @see http://php.net/fwrite
+     *
      * @param string $string
-     * @param int $length
-     * @return int | bool
+     * @param int    $length
+     *
+     * @return bool|int
      */
     public function fwrite($string, $length = null)
     {
-        return fwrite($this->handle, $string, (is_null($length) ? strlen($string) : $length));
+        return fwrite($this->handle, $string, is_null($length) ? strlen($string) : $length);
     }
 
     /**
-     * fgets
+     * fgets.
      *
      * @see http://php.net/fgets
+     *
      * @param int $length
+     *
      * @return string
      */
     public function fgets($length = null)
@@ -89,9 +99,10 @@ class Socket
     }
 
     /**
-     * feof
+     * feof.
      *
      * @see http://php.net/feof
+     *
      * @return bool
      */
     public function feof()
@@ -100,9 +111,10 @@ class Socket
     }
 
     /**
-     * fclose
+     * fclose.
      *
      * @see http://php.net/fclose
+     *
      * @return bool
      */
     public function fclose()

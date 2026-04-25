@@ -213,7 +213,7 @@ class SeoNix
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 2); 
             curl_exec($ch);
-            curl_close($ch);
+            unset($ch);
         }
     }
 }

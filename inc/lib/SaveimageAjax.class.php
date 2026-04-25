@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -28,14 +28,56 @@ class SaveimageAjax
         }
 
         // A list of permitted file extensions
-        $allowed = array('png', 'jpg', 'jpeg', 'gif');
-        if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
-            $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+        $allowed = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+
+        // Ensure upload directory exists
+        $uploadDir = GX_PATH . '/assets/media/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Map PHP upload error codes to readable messages
+        $uploadErrors = [
+            UPLOAD_ERR_INI_SIZE   => _('File exceeds the server upload_max_filesize limit.'),
+            UPLOAD_ERR_FORM_SIZE  => _('File exceeds the MAX_FILE_SIZE limit.'),
+            UPLOAD_ERR_PARTIAL    => _('File was only partially uploaded.'),
+            UPLOAD_ERR_NO_FILE    => _('No file was uploaded.'),
+            UPLOAD_ERR_NO_TMP_DIR => _('Missing temporary folder.'),
+            UPLOAD_ERR_CANT_WRITE => _('Failed to write file to disk.'),
+            UPLOAD_ERR_EXTENSION  => _('Upload blocked by a PHP extension.'),
+        ];
+
+        // Accept any file field name (EditorJS uses 'image', others use 'file')
+        $fileKey = null;
+        foreach (['image', 'file', 'upload'] as $k) {
+            if (isset($_FILES[$k])) {
+                // Report PHP-level upload errors immediately
+                if ($_FILES[$k]['error'] !== UPLOAD_ERR_OK) {
+                    $msg = $uploadErrors[$_FILES[$k]['error']] ?? _('Unknown upload error: ') . $_FILES[$k]['error'];
+                    return Ajax::error(400, $msg);
+                }
+                $fileKey = $k;
+                break;
+            }
+        }
+        // Fallback: first available file
+        if (!$fileKey && !empty($_FILES)) {
+            $first = array_key_first($_FILES);
+            if ($_FILES[$first]['error'] !== UPLOAD_ERR_OK) {
+                $msg = $uploadErrors[$_FILES[$first]['error']] ?? _('Upload error: ') . $_FILES[$first]['error'];
+                return Ajax::error(400, $msg);
+            }
+            $fileKey = $first;
+        }
+
+        if ($fileKey && $_FILES[$fileKey]['error'] == 0) {
+            $extension = pathinfo($_FILES[$fileKey]['name'], PATHINFO_EXTENSION);
             if (!in_array(strtolower($extension), $allowed)) {
                 return Ajax::error(400, 'Invalid file extension');
             }
-            if (move_uploaded_file($_FILES['file']['tmp_name'], GX_PATH . '/assets/media/images/' . $_FILES['file']['name'])) {
-                $tmp = GX_PATH . '/assets/media/images/' . $_FILES['file']['name'];
+            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $_FILES[$fileKey]['name']);
+            if (move_uploaded_file($_FILES[$fileKey]['tmp_name'], GX_PATH . '/assets/media/images/' . $filename)) {
+                $tmp = GX_PATH . '/assets/media/images/' . $filename;
                 if (Image::isPng($tmp)) {
                     Image::compressPng($tmp);
                 } elseif (Image::isJpg($tmp)) {
@@ -44,16 +86,17 @@ class SaveimageAjax
 
                 $output = [
                     'success' => 1,
-                    'status' => 'success',
-                    'url' => Site::$url . '/assets/media/images/' . $_FILES['file']['name'],
-                    'path' => 'assets/media/images/' . $_FILES['file']['name'],
-                    'file' => [
-                        'url' => Site::$url . '/assets/media/images/' . $_FILES['file']['name']
+                    'status'  => 'success',
+                    'url'     => rtrim(Site::$url, '/') . '/assets/media/images/' . $filename,
+                    'path'    => 'assets/media/images/' . $filename,
+                    'file'    => [
+                        'url' => rtrim(Site::$url, '/') . '/assets/media/images/' . $filename,
                     ]
                 ];
 
                 return Ajax::response($output);
             }
+            return Ajax::error(500, 'Failed to move uploaded file');
         } elseif (isset($_POST['file'])) {
             $data = $_POST['file'];
 
@@ -96,7 +139,7 @@ class SaveimageAjax
             return Ajax::response($output);
         }
 
-        return Ajax::error(400, 'No file provided');
+        return Ajax::error(400, _('No file provided.'));
     }
 
     /**
@@ -104,11 +147,16 @@ class SaveimageAjax
      */
     private function _auth($param = null)
     {
-        $data = Router::scrap($param);
-        $gettoken = (SMART_URL) ? ($data['token'] ?? '') : (isset($_GET['token']) ? Typo::cleanX($_GET['token']) : '');
-        $token = (true === Token::validate($gettoken, true)) ? $gettoken : '';
-        $url = Site::canonical();
-        
-        return ($token != '' && Http::validateUrl($url) && User::access(2));
+        $gettoken = '';
+        if (SMART_URL && $param) {
+            $data = Router::scrap($param);
+            $gettoken = $data['token'] ?? '';
+        }
+        if (empty($gettoken)) {
+            $gettoken = $_GET['token'] ?? $_REQUEST['token'] ?? '';
+            $gettoken = Typo::cleanX($gettoken);
+        }
+
+        return ($gettoken !== '' && Token::validate($gettoken, true) && User::access(2));
     }
 }

@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -455,6 +455,36 @@ class Posts extends Model
             $q->where('cat', Typo::int($vars['cat']));
         }
         $posts = $q->orderBy('date', 'DESC')->limit($num)->get();
+
+        if (empty($posts)) {
+            $posts = ['error' => _('Error: No Posts found.')];
+        } else {
+            $posts = self::prepare($posts);
+        }
+
+        return $posts;
+    }
+
+    /**
+     * Retrieves a list of most viewed posts filtered by type.
+     *
+     * @param array $vars {
+     *     @type int    $num  Max number of posts (default: 10).
+     *     @type string $type Post type filter (default: 'post').
+     * }
+     * @return array List of post objects or error array.
+     */
+    public static function popular($vars)
+    {
+        $type = isset($vars['type']) ? Typo::cleanX($vars['type']) : 'post';
+        $num = isset($vars['num']) ? Typo::int($vars['num']) : '10';
+
+        $posts = Query::table('posts')
+            ->where('type', $type)
+            ->where('status', '1')
+            ->orderBy('views', 'DESC')
+            ->limit($num)
+            ->get();
 
         if (empty($posts)) {
             $posts = ['error' => _('Error: No Posts found.')];

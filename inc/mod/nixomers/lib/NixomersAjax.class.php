@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -118,7 +118,7 @@ class NixomersAjax
 
         $orders = $query->limit($num)->offset($offset)->get();
         $currency = Options::v('nixomers_currency') ?: 'IDR';
-        $mod_url = Site::$url . 'gxadmin/index.php?page=mods&mod=nixomers';
+        $mod_url = Site::$url . ADMIN_DIR . '/index.php?page=mods&mod=nixomers';
 
         $rows = [];
         foreach ($orders as $o) {
@@ -266,7 +266,7 @@ class NixomersAjax
         $transactions = $query->orderBy('id', 'DESC')->limit($num)->offset($offset)->get();
 
         $currency = Options::v('nixomers_currency') ?: 'IDR';
-        $mod_url = Site::$url . 'gxadmin/index.php?page=mods&mod=nixomers';
+        $mod_url = Site::$url . ADMIN_DIR . '/index.php?page=mods&mod=nixomers';
 
         $rows = [];
         foreach ($transactions as $t) {
@@ -402,7 +402,7 @@ class NixomersAjax
                 'title' => $n->title,
                 'message' => $n->message,
                 'time' => date('H:i', strtotime($n->created_at)),
-                'url' => Site::$url . 'gxadmin/' . $n->url . '&mark_read=' . $n->id
+                'url' => Site::$url . ADMIN_DIR . '/' . $n->url . '&mark_read=' . $n->id
             ];
         }
 

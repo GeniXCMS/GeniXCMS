@@ -8,7 +8,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * module pages (dashboards, tables, forms, stat cards) rather than just options.
  *
  * @since 2.0.0 build date 2026
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -1270,7 +1270,11 @@ class UiBuilder
                         if (typeof Chart === 'undefined' && !window.chartJsLoading) {
                             window.chartJsLoading = true;
                             const script = document.createElement('script');
-                            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                            script.src = '" . (
+                                (defined('OFFLINE_MODE') && OFFLINE_MODE)
+                                    ? rtrim(Site::$url, '/') . '/assets/js/vendor/chartjs-4.4.1.min.js'
+                                    : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'
+                            ) . "';
                             script.onload = initChart;
                             document.head.appendChild(script);
                         } else {

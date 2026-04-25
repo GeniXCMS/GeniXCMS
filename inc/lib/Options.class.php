@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20141001
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -38,13 +38,13 @@ class Options
      * @param array $vars Dictionary of setting names and their values.
      * @return bool|int    Result of the last insertion.
      */
-    public static function insert($vars)
+    public static function insert($vars, $sanitize = true)
     {
         if (is_array($vars)) {
             foreach ($vars as $name => $value) {
                 $opt = Query::table('options')->insert([
                     'name' => Typo::cleanX($name),
-                    'value' => Typo::cleanX($value)
+                    'value' => $sanitize ? Typo::cleanX($value) : $value
                 ]);
             }
         } else {
@@ -62,12 +62,15 @@ class Options
      * @param mixed        $val Value to set (if $key is a string).
      * @return bool             Always true.
      */
-    public static function update($key, $val = '')
+    public static function update($key, $val = '', $sanitize = true)
     {
         if (is_array($key)) {
+            if (is_bool($val)) {
+                $sanitize = $val;
+            }
             foreach ($key as $k => $v) {
                 $k = Typo::cleanX($k);
-                $v = Typo::cleanX($v);
+                $v = $sanitize ? Typo::cleanX($v) : $v;
                 $exist = self::get($k);
                 if ($exist === false) {
                     Query::table('options')->insert([
@@ -80,7 +83,7 @@ class Options
             }
         } else {
             $key = Typo::cleanX($key);
-            $val = Typo::cleanX($val);
+            $val = $sanitize ? Typo::cleanX($val) : $val;
             $exist = self::get($key);
             if ($exist === false) {
                 Query::table('options')->insert([

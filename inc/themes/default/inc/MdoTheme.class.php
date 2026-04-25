@@ -15,7 +15,7 @@ class MdoTheme
         $mdo_opt = Options::get(self::$optionKey);
         self::$opt = json_decode($mdo_opt, true) ?: [];
 
-        $isAdmin = defined('GX_ADMIN') || strpos($_SERVER['SCRIPT_FILENAME'], 'gxadmin') !== false;
+        $isAdmin = defined('GX_ADMIN') || strpos($_SERVER['SCRIPT_FILENAME'], defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin') !== false;
 
         if (!$isAdmin) {
             if (!empty(self::$opt['mdo_adsense'])) {

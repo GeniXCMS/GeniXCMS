@@ -4,7 +4,7 @@
  *
  * PHP Based Content Management System and Framework
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -33,6 +33,11 @@ class WidgetAjax
         // Mock state for Params::build()
         $_GET['page'] = 'widgets';
         if ($id) $_GET['id'] = $id;
+
+        // Force Widget.class.php to autoload so Widget::setup() runs and
+        // registers all widget type params (navigation, recent_posts, etc.)
+        // into the Params system BEFORE we call renderWidget().
+        Widget::getLocations();
 
         // Fetch dynamic parameter fields from Params system
         $html = Params::renderWidget($type);

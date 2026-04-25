@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -44,7 +44,22 @@ class Theme
             $GLOBALS['data'] = $data;
         }
         if (self::exist($var)) {
-            include GX_THEME . THEME . '/' . $var . '.php';
+            $file_php = GX_THEME . THEME . '/' . $var . '.php';
+            $file_latte = GX_THEME . THEME . '/' . $var . '.latte';
+
+            if (file_exists($file_latte)) {
+                $latte = new Latte\Engine;
+                $latte->addExtension(new Latte\Essential\RawPhpExtension);
+                $latte->setTempDirectory(GX_CACHE . '/temp');
+
+                $renderData = array_merge($GLOBALS, (array)$data);
+                $renderData['site_meta'] = Site::meta($renderData);
+                $renderData['data'] = $renderData;
+
+                $latte->render($file_latte, $renderData);
+            } else {
+                include $file_php;
+            }
         } else {
             Control::error('unknown', _('Theme file is missing.'));
         }
@@ -77,18 +92,73 @@ class Theme
     }
 
     /**
-     * Includes an admin theme file.
+     * Returns the active admin theme name from ADMIN_THEME constant.
+     * Falls back to 'default' if not defined.
      *
-     * @param string $var  File name.
-     * @param mixed  $data Data.
+     * @return string Admin theme directory name.
+     */
+    public static function adminTheme(): string
+    {
+        return defined('ADMIN_THEME') ? ADMIN_THEME : 'default';
+    }
+
+    /**
+     * Returns the base path for the active admin theme.
+     *
+     * @param string $sub Optional sub-directory (e.g. 'auth', 'install').
+     * @return string Absolute path to the admin theme directory.
+     */
+    public static function adminThemePath(string $sub = ''): string
+    {
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        $theme     = self::adminTheme();
+        $base      = GX_PATH . '/' . $admin_dir . '/themes/' . $theme;
+        return $sub ? $base . '/' . $sub : $base;
+    }
+
+    /**
+     * Checks if a file exists in the active admin theme.
+     * Falls back to the 'default' theme if not found in the active one.
+     *
+     * @param string $var File name (without extension).
+     * @param string $sub Optional sub-directory ('auth', 'install').
+     * @return string|false Resolved file path, or false if not found anywhere.
+     */
+    public static function adminExist(string $var, string $sub = '')
+    {
+        $file = self::adminThemePath($sub) . '/' . $var . '.php';
+        if (file_exists($file)) {
+            return $file;
+        }
+
+        // Fallback to default theme
+        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        $fallback  = GX_PATH . '/' . $admin_dir . '/themes/default' . ($sub ? '/' . $sub : '') . '/' . $var . '.php';
+        if (file_exists($fallback)) {
+            return $fallback;
+        }
+
+        return false;
+    }
+
+    /**
+     * Includes an admin theme file from the active ADMIN_THEME.
+     * Falls back to the 'default' theme if the file is missing in the active theme.
+     *
+     * @param string $var  File name (without .php extension).
+     * @param mixed  $data Data to expose via $GLOBALS['data'].
      */
     public static function admin($var, $data = '')
     {
         if (isset($data)) {
             $GLOBALS['data'] = $data;
         }
-        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
-        include GX_PATH . '/' . $admin_dir . '/themes/' . $var . '.php';
+        $file = self::adminExist($var);
+        if ($file) {
+            include $file;
+        } else {
+            Control::error('unknown', _('Admin theme file is missing: ') . $var);
+        }
     }
 
     /**
@@ -170,14 +240,21 @@ class Theme
 
     public static function install($var)
     {
-        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
-        include GX_PATH . '/' . $admin_dir . '/themes/install/' . $var . '.php';
+        $file = self::adminExist($var, 'install');
+        if ($file) {
+            include $file;
+        }
     }
 
     public static function auth($var, $data = '')
     {
-        $admin_dir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
-        include GX_PATH . '/' . $admin_dir . '/themes/auth/' . $var . '.php';
+        if (isset($data)) {
+            $GLOBALS['data'] = $data;
+        }
+        $file = self::adminExist($var, 'auth');
+        if ($file) {
+            include $file;
+        }
     }
 
     /**

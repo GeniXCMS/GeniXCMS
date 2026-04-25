@@ -4,7 +4,7 @@
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -117,7 +117,7 @@ class Marketplace
         curl_exec($ch);
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        unset($ch);
         fclose($fp);
 
         if ($httpCode == 200 && file_exists($tmpFile)) {

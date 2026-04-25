@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * PHP Based Content Management System and Framework
  * 
  * @since 0.0.1
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -16,6 +16,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  */
 
 $data = [];
+$data['token'] = TOKEN;
 
 $login_url = Url::login();
 if (!isset($_GET['backto'])) {
@@ -109,9 +110,13 @@ if (isset($_POST['login'])) {
 
 
 if (!User::isLoggedin()) {
-    Theme::admin('headermini', $data);
-    Theme::auth('login', $data);
-    Theme::admin('footermini', $data);
+    if (Theme::exist('login')) {
+        Theme::theme('login', $data);
+    } else {
+        Theme::admin('headermini', $data);
+        Theme::auth('login', $data);
+        Theme::admin('footermini', $data);
+    }
 } else {
     $backto = isset($_GET['backto']) ? Typo::cleanX($_GET['backto']) : Site::$url;
     header("Location: " . $backto);

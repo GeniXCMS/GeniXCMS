@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -17,7 +17,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
 class System
 {
     /** @var string Current version of GeniXCMS */
-    public static $version = '2.3.0';
+    public static $version = '2.4.0';
 
     /**
      * GeniXCMS Version Release.
@@ -209,17 +209,75 @@ class System
         /**
          * Content Security Policy (CSP)
          * Defines trusted sources for scripts, styles, and other resources.
-         * Default includes common CDNs used by GeniXCMS Admin UI.
+         * Default includes common CDNs used by GeniXCMS Admin UI,
+         * plus standard analytics/ads platforms (Google, Meta, Histats).
          */
         $csp_rules = [
             "default-src" => ["'self'"],
-            "script-src" => ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com", "https://static.cloudflareinsights.com", "https://unpkg.com"],
-            "style-src" => ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://code.jquery.com", "https://cdnjs.cloudflare.com", "https://unpkg.com"],
-            "img-src" => ["'self'", "data:", "https:", "*"],
-            "font-src" => ["'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "https://unpkg.com"],
-            "connect-src" => ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://cloudflareinsights.com", "https://unpkg.com"],
-            "frame-src" => ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com", "https://www.dailymotion.com"],
-            "object-src" => ["'none'"]
+
+            "script-src" => [
+                "'self'", "'unsafe-inline'", "'unsafe-eval'",
+                // GeniXCMS CDNs
+                "https://cdn.jsdelivr.net", "https://code.jquery.com",
+                "https://cdnjs.cloudflare.com", "https://cdn.tailwindcss.com",
+                "https://static.cloudflareinsights.com", "https://unpkg.com",
+                // Google Analytics & Tag Manager
+                "https://www.googletagmanager.com", "https://www.google-analytics.com",
+                "https://ssl.google-analytics.com", "https://analytics.google.com",
+                "https://region1.google-analytics.com",
+                // Google Ads
+                "https://googleads.g.doubleclick.net", "https://www.googleadservices.com",
+                "https://www.google.com",
+                // Meta / Facebook Pixel
+                "https://connect.facebook.net", "https://www.facebook.com",
+                // Histats
+                "https://s10.histats.com", "https://sstatic1.histats.com",
+            ],
+
+            "style-src" => [
+                "'self'", "'unsafe-inline'",
+                "https://cdn.jsdelivr.net", "https://fonts.googleapis.com",
+                "https://code.jquery.com", "https://cdnjs.cloudflare.com",
+                "https://unpkg.com",
+            ],
+
+            "img-src" => [
+                "'self'", "data:", "https:", "*",
+            ],
+
+            "font-src" => [
+                "'self'", "data:",
+                "https://cdn.jsdelivr.net", "https://fonts.gstatic.com",
+                "https://cdnjs.cloudflare.com", "https://unpkg.com",
+            ],
+
+            "connect-src" => [
+                "'self'",
+                // GeniXCMS CDNs
+                "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com",
+                "https://cloudflareinsights.com", "https://unpkg.com",
+                // Google Analytics
+                "https://www.google-analytics.com", "https://analytics.google.com",
+                "https://ssl.google-analytics.com", "https://region1.google-analytics.com",
+                "https://www.googletagmanager.com",
+                // Meta / Facebook
+                "https://www.facebook.com", "https://graph.facebook.com",
+                // Histats
+                "https://c.histats.com",
+            ],
+
+            "frame-src" => [
+                "'self'",
+                "https://www.youtube.com", "https://www.youtube-nocookie.com",
+                "https://player.vimeo.com", "https://www.dailymotion.com",
+                // Google Ads iframes
+                "https://bid.g.doubleclick.net", "https://googleads.g.doubleclick.net",
+                "https://www.google.com",
+                // Meta
+                "https://www.facebook.com",
+            ],
+
+            "object-src" => ["'none'"],
         ];
 
         // Allow developers to inject their own trusted origins or adjust directives

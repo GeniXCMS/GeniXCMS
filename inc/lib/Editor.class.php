@@ -5,7 +5,7 @@
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -263,14 +263,18 @@ class Editor
      */
     public static function editorjs()
     {
-        // Register EditorJS Core & Tools
-        Asset::register('editorjs-core', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.30.6/dist/editorjs.umd.min.js', 'footer');
-        Asset::register('editorjs-header', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.7/dist/header.umd.min.js', 'footer', ['editorjs-core']);
-        Asset::register('editorjs-list', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/list@2.0.9/dist/editorjs-list.umd.min.js', 'footer', ['editorjs-core']);
-        Asset::register('editorjs-image', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/image@2.10.1/dist/image.umd.min.js', 'footer', ['editorjs-core']);
-        Asset::register('editorjs-quote', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/quote@2.7.6/dist/quote.umd.min.js', 'footer', ['editorjs-core']);
-        Asset::register('editorjs-table', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/table@2.4.3/dist/table.umd.min.js', 'footer', ['editorjs-core']);
-        Asset::register('editorjs-delimiter', 'js', 'https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.3.0/dist/bundle.min.js', 'footer', ['editorjs-core']);
+        // Register EditorJS Core & Tools — local when OFFLINE_MODE, CDN otherwise
+        $offline  = defined('OFFLINE_MODE') && OFFLINE_MODE;
+        $siteUrl  = rtrim(Site::$url, '/');
+        $ejsBase  = $offline ? $siteUrl . '/assets/js/vendor/editorjs' : 'https://cdn.jsdelivr.net/npm';
+
+        Asset::register('editorjs-core',      'js', $offline ? "{$ejsBase}/editorjs-core.min.js"      : 'https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.30.6/dist/editorjs.umd.min.js',      'footer');
+        Asset::register('editorjs-header',    'js', $offline ? "{$ejsBase}/editorjs-header.min.js"    : 'https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.7/dist/header.umd.min.js',            'footer', ['editorjs-core']);
+        Asset::register('editorjs-list',      'js', $offline ? "{$ejsBase}/editorjs-list.min.js"      : 'https://cdn.jsdelivr.net/npm/@editorjs/list@2.0.9/dist/editorjs-list.umd.min.js',      'footer', ['editorjs-core']);
+        Asset::register('editorjs-image',     'js', $offline ? "{$ejsBase}/editorjs-image.min.js"     : 'https://cdn.jsdelivr.net/npm/@editorjs/image@2.10.1/dist/image.umd.min.js',            'footer', ['editorjs-core']);
+        Asset::register('editorjs-quote',     'js', $offline ? "{$ejsBase}/editorjs-quote.min.js"     : 'https://cdn.jsdelivr.net/npm/@editorjs/quote@2.7.6/dist/quote.umd.min.js',             'footer', ['editorjs-core']);
+        Asset::register('editorjs-table',     'js', $offline ? "{$ejsBase}/editorjs-table.min.js"     : 'https://cdn.jsdelivr.net/npm/@editorjs/table@2.4.3/dist/table.umd.min.js',             'footer', ['editorjs-core']);
+        Asset::register('editorjs-delimiter', 'js', $offline ? "{$ejsBase}/editorjs-delimiter.min.js" : 'https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.3.0/dist/bundle.min.js',            'footer', ['editorjs-core']);
 
         // EditorJS Init logic
         $url = Url::ajax('saveimage');
@@ -307,36 +311,21 @@ class Editor
                             config: {
                                 uploader: {
                                     uploadByFile: function(file) {
-                                        return new Promise(function(resolve, reject) {
-                                            fetch(elfinderUrlRaw + (elfinderUrlRaw.indexOf("?") === -1 ? "?" : "&") + "cmd=open&init=1&target=")
-                                            .then(function(res) { return res.json(); })
-                                            .then(function(initData) {
-                                                if (!initData || !initData.cwd) return reject("Failed to init elfinder API");
-                                                var target = initData.cwd.hash;
-                                                var fd = new FormData();
-                                                fd.append("cmd", "upload");
-                                                fd.append("target", target);
-                                                fd.append("upload[]", file);
-                                                fetch(elfinderUrlRaw + (elfinderUrlRaw.indexOf("?") === -1 ? "?" : "&") + "auto_sort=1", { method: "POST", body: fd })
-                                                .then(function(r) { return r.json(); })
-                                                .then(function(upRes) {
-                                                    if (upRes.added && upRes.added.length > 0) resolve({ success: 1, file: { url: upRes.added[0].url } });
-                                                    else reject(upRes.error || "Upload failed");
-                                                }).catch(reject);
-                                            }).catch(reject);
-                                        });
-                                    }
-                                },
-                                // Added external media selector support for EditorJS
-                                buttonContent: "Select from Media Manager",
-                                selectFile: function() {
-                                    return new Promise(function(resolve) {
-                                        if (typeof window.openMediaManager === "function") {
-                                            window.openMediaManager(function(url) {
-                                                resolve(url);
+                                        var saveUrl = ' . $encodedUrl . ';
+                                        var fd = new FormData();
+                                        fd.append("file", file);
+                                        return fetch(saveUrl, { method: "POST", body: fd })
+                                            .then(function(r) { return r.json(); })
+                                            .then(function(res) {
+                                                if (res.success === 1) {
+                                                    return { success: 1, file: { url: res.file.url } };
+                                                }
+                                                return Promise.reject(res.message || "Upload failed");
                                             });
-                                        }
-                                    });
+                                    },
+                                    uploadByUrl: function(url) {
+                                        return Promise.resolve({ success: 1, file: { url: url } });
+                                    }
                                 }
                             }
                         }
@@ -414,7 +403,7 @@ class Editor
                     });
                 });
             });
-        </script>', 'footer', ['editorjs-delimiter', 'elfinder-helper', 'editor-media-selector']);
+        </script>', 'footer', ['editorjs-header', 'editorjs-list', 'editorjs-image', 'editorjs-quote', 'editorjs-table', 'editorjs-delimiter', 'elfinder-helper', 'editor-media-selector']);
 
         // Enqueue everything
         Asset::enqueue('editorjs-init');

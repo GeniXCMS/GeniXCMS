@@ -26,6 +26,7 @@ class Gxeditor
         Hooks::attach('init', function () {
             AdminMenu::addChild('settings', [
                 'label' => _('GxEditor Settings'),
+                'icon'  => 'bi bi-pencil-square',
                 'url' => 'index.php?page=mods&mod=gxeditor',
                 'access' => 0
             ]);

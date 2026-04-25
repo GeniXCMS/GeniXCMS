@@ -89,7 +89,7 @@ class UserProfile
             ]);
             self::registerDropdownItem('dashboard', [
                 'label'     => 'Admin Dashboard',
-                'url'       => Site::$url . 'gxadmin/',
+                'url'       => Site::$url . ADMIN_DIR . '/',
                 'icon'      => 'dashboard',
                 'min_group' => 4, // Admins & Managers
                 'order'     => 60

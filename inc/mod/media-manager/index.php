@@ -40,7 +40,7 @@ Hooks::attach('init', function () {
         'id' => 'media-manager',
         'label' => 'Media Manager',
         'icon' => 'bi bi-images',
-        'url' => Site::$url . 'gxadmin/index.php?page=mods&mod=media-manager&sel=manager',
+        'url' => Site::$url . ADMIN_DIR . '/index.php?page=mods&mod=media-manager&sel=manager',
         'access' => 0 // Admin only
     ]);
 });

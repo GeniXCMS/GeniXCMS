@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * Handles registration and enqueuing of JS/CSS assets
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -25,6 +25,26 @@ class Asset
         'header' => [],
         'footer' => []
     ];
+
+    /**
+     * Returns the full asset registry (all registered assets).
+     *
+     * @return array
+     */
+    public static function getRegistry(): array
+    {
+        return self::$registry;
+    }
+
+    /**
+     * Returns the current enqueue queue for header and footer.
+     *
+     * @return array
+     */
+    public static function getQueue(): array
+    {
+        return self::$queue;
+    }
 
     /**
      * Registers a new asset in the system registry for later enqueuing.
@@ -209,21 +229,8 @@ class Asset
     public static function init()
     {
         self::registerCore();
-        // These hooks echo directly to output
-        Hooks::attach('admin_header_action', function () {
-            return self::get('header');
-        });
-        Hooks::attach('admin_footer_action', function () {
-            return self::get('footer');
-        });
-
-        // Frontend hooks
-        Hooks::attach('header_load_lib', function () {
-            return self::get('header');
-        });
-        Hooks::attach('footer_load_lib', function () {
-            return self::get('footer');
-        });
+        // Asset manager hooks are redundant as Site class handles rendering
+        // after hook execution. This allows correct sorting by priority.
 
         // Auto-enqueue Core Assets globally (Context handled by registration)
         self::enqueue(['jquery', 'jquery-ui', 'bootstrap-js', 'bootstrap-icons', 'fontawesome']);
@@ -245,22 +252,39 @@ class Asset
     {
         $vendorUrl = Vendor::url();
         $siteUrl = rtrim(Site::$url, "/");
+        $offline = defined('OFFLINE_MODE') && OFFLINE_MODE;
 
         // Priorities: 1-9 Frameworks, 10-19 Core Libs, 20+ Mod Assets
 
-        // jQuery & UI (Priority 1-2) - Header to support inline scripts
-        $jquery_v = Options::v('jquery_v') ?: '3.7.1';
-        self::register('jquery', 'js', "https://code.jquery.com/jquery-{$jquery_v}.min.js", 'header', [], 1, 'all');
-        self::register('jquery-ui', 'js', "https://code.jquery.com/ui/1.13.2/jquery-ui.min.js", 'header', ['jquery'], 2, 'all');
-        self::register('jquery-ui-css', 'css', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css', 'header', [], 2, 'all');
+        // ── FONTS ───────────────────────────────────────────────────
+        // Inter font: local when offline, Google Fonts when online
+        if ($offline) {
+            self::register('inter-font', 'css', $siteUrl . '/assets/css/vendor/inter-local.css', 'header', [], 0, 'all');
+        } else {
+            self::register('inter-font', 'css', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap', 'header', [], 0, 'all');
+        }
+        self::enqueue('inter-font');
+        $jqueryJs    = $offline ? $siteUrl . '/assets/js/vendor/jquery-3.7.1.min.js'       : 'https://code.jquery.com/jquery-3.7.1.min.js';
+        $jqueryUiJs  = $offline ? $siteUrl . '/assets/js/vendor/jquery-ui-1.13.2.min.js'   : 'https://code.jquery.com/ui/1.13.2/jquery-ui.min.js';
+        $jqueryUiCss = $offline ? $siteUrl . '/assets/css/vendor/jquery-ui-1.13.2.min.css' : 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css';
 
-        // Bootstrap (Priority 3)
-        self::register('bootstrap-css', 'css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', 'header', [], 3, 'all');
-        self::register('bootstrap-js', 'js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', 'footer', ['jquery'], 3, 'all');
-        self::register('bootstrap-icons', 'css', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css', 'header', [], 4, 'all');
+        self::register('jquery',      'js',  $jqueryJs,    'header', [],         1, 'all');
+        self::register('jquery-ui',   'js',  $jqueryUiJs,  'header', ['jquery'], 2, 'all');
+        self::register('jquery-ui-css','css', $jqueryUiCss, 'header', [],         2, 'all');
 
-        // FontAwesome (Priority 5)
-        self::register('fontawesome', 'css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css', 'header', [], 5, 'all');
+        // ── BOOTSTRAP (Priority 3) ──────────────────────────────────
+        $bootstrapCss = $offline ? $siteUrl . '/assets/css/vendor/bootstrap-5.3.3.min.css'        : 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
+        $bootstrapJs  = $offline ? $siteUrl . '/assets/js/vendor/bootstrap-5.3.3.bundle.min.js'   : 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
+        $bootstrapIco = $offline ? $siteUrl . '/assets/css/vendor/bootstrap-icons-1.11.3.min.css' : 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css';
+
+        self::register('bootstrap-css',   'css', $bootstrapCss, 'header', [],         3, 'all');
+        self::register('bootstrap-js',    'js',  $bootstrapJs,  'footer', ['jquery'], 3, 'all');
+        self::register('bootstrap-icons', 'css', $bootstrapIco, 'header', [],         4, 'all');
+
+        // ── FONT AWESOME (Priority 5) ───────────────────────────────
+        $fontawesome = $offline ? $siteUrl . '/assets/fonts/fontawesome/css/all.min.css' : 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css';
+
+        self::register('fontawesome', 'css', $fontawesome, 'header', [], 5, 'all');
 
 
         // elFinder Core Assets (Priority 10+)
@@ -299,13 +323,20 @@ class Asset
         self::register('elfinder-js', 'js', $vendorUrl . '/studio-42/elfinder/js/elfinder.min.js', 'footer', ['jquery', 'jquery-ui'], 10);
         self::register('elfinder-proxy', 'js', $vendorUrl . '/studio-42/elfinder/js/proxy/elFinderSupportVer1.js', 'footer', ['elfinder-js'], 11);
 
-        // GeniXCMS Admin UI Tools - Header to support inline scripts
-        self::register('tagsinput-css', 'css', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css', 'header', [], 15);
-        self::register('tagsinput-js', 'js', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js', 'header', ['jquery'], 15);
+        // ── ADMIN UI TOOLS (Priority 15-17) ────────────────────────
+        $tagsinputCss    = $offline ? $siteUrl . '/assets/css/vendor/jquery-tagsinput-1.3.6.min.css' : 'https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css';
+        $tagsinputJs     = $offline ? $siteUrl . '/assets/js/vendor/jquery-tagsinput-1.3.6.min.js'   : 'https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js';
+        $jsvectormapCss  = $offline ? $siteUrl . '/assets/css/vendor/jsvectormap-1.5.3.min.css'      : 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css';
+        $jsvectormapJs   = $offline ? $siteUrl . '/assets/js/vendor/jsvectormap-1.5.3.min.js'        : 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js';
+        $jsvectormapWorld= $offline ? $siteUrl . '/assets/js/vendor/jsvectormap-world-1.5.3.js'      : 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js';
+        $chartjsUrl      = $offline ? $siteUrl . '/assets/js/vendor/chartjs-4.4.1.min.js'            : 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
 
-        self::register('jsvectormap-css', 'css', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css', 'header', [], 16);
-        self::register('jsvectormap-js', 'js', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js', 'header', ['jquery'], 16);
-        self::register('jsvectormap-world', 'js', 'https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js', 'header', ['jsvectormap-js'], 17);
+        self::register('tagsinput-css',    'css', $tagsinputCss,     'header', [],                15);
+        self::register('tagsinput-js',     'js',  $tagsinputJs,      'header', ['jquery'],        15);
+        self::register('jsvectormap-css',  'css', $jsvectormapCss,   'header', [],                16);
+        self::register('jsvectormap-js',   'js',  $jsvectormapJs,    'header', ['jquery'],        16);
+        self::register('jsvectormap-world','js',  $jsvectormapWorld, 'header', ['jsvectormap-js'],17);
+        self::register('chartjs',          'js',  $chartjsUrl,       'header', [],                18);
 
         // GeniXCMS Base Framework (Basic Styles) - Priority 10
         self::register('genixcms-css', 'css', $siteUrl . '/assets/css/genixcms.css', 'header', [], 10, 'all');

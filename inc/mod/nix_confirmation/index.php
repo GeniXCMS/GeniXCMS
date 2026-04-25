@@ -61,6 +61,7 @@ Hooks::attach('init', function () {
     if (class_exists('AdminMenu')) {
         AdminMenu::addChild('nixomers', [
             'label' => 'Payment Confirmations',
+            'icon'  => 'bi bi-check2-circle',
             'url' => 'index.php?page=mods&mod=nix_confirmation',
             'access' => 1
         ]);

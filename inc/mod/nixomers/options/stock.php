@@ -126,7 +126,7 @@ $logRows = [];
 foreach ($logs as $l) {
     $badgeClass = ($l->type == 'IN') ? 'success' : 'danger';
     $prefix = ($l->type == 'IN') ? '+' : '-';
-    $locName = $locations[$l->location_id] ?? 'Main Warehouse';
+    $locName = $locations[(string)($l->location_id ?? '')] ?? 'Main Warehouse';
     
     $logRows[] = [
         ['content' => date('d/m/y H:i', strtotime($l->date)), 'class' => 'ps-4 py-3'],

@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -143,18 +143,18 @@ $builder->render();
             if (data.status === 'success') {
                 // Update Core
                 document.getElementById('core-v-latest').innerText = 'v' + data.core.v_latest;
-                updateStatus('core-status', 'core-action', data.core.can_update, data.core.download_url);
+                updateStatus('core-status', 'core-action', data.core.can_update, data.core.download_url, 'core', '');
 
                 // Update Modules
                 for (const id in data.mods) {
                     const m = data.mods[id];
-                    updateStatus('mod-status-' + id, 'mod-action-' + id, m.can_update, m.download_url);
+                    updateStatus('mod-status-' + id, 'mod-action-' + id, m.can_update, m.download_url, 'module', id);
                 }
 
                 // Update Themes
                 for (const id in data.themes) {
                     const t = data.themes[id];
-                    updateStatus('thm-status-' + id, 'thm-action-' + id, t.can_update, t.download_url);
+                    updateStatus('thm-status-' + id, 'thm-action-' + id, t.can_update, t.download_url, 'theme', id);
                 }
 
                 footer.innerHTML = '<i class="bi bi-shield-check-fill me-2 text-success fs-5"></i> System successfully synchronized with repository.';
@@ -165,18 +165,58 @@ $builder->render();
         }
     }
 
-    function updateStatus(statusId, actionId, canUpdate, downloadUrl) {
+    function updateStatus(statusId, actionId, canUpdate, downloadUrl, type, itemId) {
         const statusEl = document.getElementById(statusId);
         const actionEl = document.getElementById(actionId);
 
         if (canUpdate) {
             statusEl.className = 'badge bg-danger text-white px-3 py-1 rounded-pill shadow-sm';
             statusEl.innerText = 'New Version Available!';
-            actionEl.innerHTML = `<a href="${downloadUrl}" target="_blank" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm pulse-animation">Download Update</a>`;
+
+            const idAttr  = itemId  ? `data-id="${itemId}"`   : '';
+            const typeAttr = type   ? `data-type="${type}"`   : 'data-type="core"';
+            actionEl.innerHTML = `<button onclick="performUpdate(this)" ${typeAttr} ${idAttr}
+                class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm pulse-animation">
+                <i class="bi bi-cloud-download me-1"></i> Update Now
+            </button>`;
         } else {
             statusEl.className = 'badge bg-success text-white px-3 py-1 rounded-pill shadow-sm';
             statusEl.innerText = 'Up-to-Date';
             actionEl.innerHTML = `<a href="#" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm disabled opacity-50">Up-to-Date</a>`;
+        }
+    }
+
+    async function performUpdate(btn) {
+        const type   = btn.dataset.type || 'core';
+        const itemId = btn.dataset.id   || '';
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Updating...';
+
+        let url = `<?= Url::ajax("updates") ?>&action=perform_update&type=${encodeURIComponent(type)}`;
+        if (itemId) url += `&id=${encodeURIComponent(itemId)}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                btn.closest('div').innerHTML = `<span class="badge bg-success text-white px-3 py-1 rounded-pill shadow-sm">
+                    <i class="bi bi-check-circle me-1"></i> Updated!
+                </span>`;
+                document.getElementById('update-footer').innerHTML =
+                    `<i class="bi bi-check-circle-fill me-2 text-success fs-5"></i> ${data.message}`;
+                // Reload after 2s so versions refresh
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-cloud-download me-1"></i> Retry';
+                alert('Update failed: ' + (data.message || 'Unknown error'));
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-cloud-download me-1"></i> Retry';
+            alert('Update request failed: ' + err.message);
         }
     }
 

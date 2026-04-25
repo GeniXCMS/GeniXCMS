@@ -372,7 +372,7 @@ class Gneex
     public static function loadCSS()
     {
         // Global safeguard: never inject the theme's premium frontend styles into the administrative portal
-        if (strpos($_SERVER['PHP_SELF'], 'gxadmin') !== false) {
+        if (strpos($_SERVER['PHP_SELF'], defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin') !== false) {
             return '';
         }
 

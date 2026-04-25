@@ -24,6 +24,7 @@ Hooks::attach('init', function () {
     if (class_exists('AdminMenu')) {
         AdminMenu::addChild('nixomers', [
             'label' => 'Fulfillment Control',
+            'icon'  => 'bi bi-box-seam',
             'url' => 'index.php?page=mods&mod=nix_fulfillment',
             'access' => 1
         ]);

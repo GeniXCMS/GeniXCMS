@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * GeniXCMS - Content Management System
  *
  * @since 1.4.0
- * @version 2.3.0
+ * @version 2.4.0
  */
 
 if (User::access(0)) {

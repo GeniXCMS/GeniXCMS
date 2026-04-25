@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -251,6 +251,21 @@ class Categories
         return ($cat) ? $cat : false;
     }
 
+    /**
+     * Retrieves a list of categories for a specific type.
+     * 
+     * @param string $type Category type filter (default: 'post').
+     * @return array|bool  Array of category objects or false on failure.
+     */
+    public static function getList($type = 'post')
+    {
+        $cats = Query::table('cat')
+            ->where('type', Typo::cleanX($type))
+            ->orderBy('name', 'ASC')
+            ->get();
+        return (!empty($cats)) ? $cats : false;
+    }
+
 
     /**
      * Retrieves the parent ID data for a specified category.
@@ -287,7 +302,8 @@ class Categories
             $postCount = Query::table('posts')->where('cat', $id)->count();
 
             if ($postCount > 0) {
-                Query::table('posts')->where('cat', $id)->update(['cat' => $parent[0]->parent ?? 0]);
+                $newCat = (!empty($parent) && isset($parent[0]->parent)) ? $parent[0]->parent : 0;
+                Query::table('posts')->where('cat', $id)->update(['cat' => $newCat]);
             }
             return true;
         } else {
@@ -307,7 +323,7 @@ class Categories
         if (isset($id)) {
             $cat = Db::result('SELECT ' . Db::quoteIdentifier('type') . ' FROM ' . Db::quoteIdentifier('cat') . ' WHERE ' . Db::quoteIdentifier('id') . ' = ? LIMIT 1', [$id]);
             //print_r($cat);
-            if (isset($cat['error'])) {
+            if (isset($cat['error']) || empty($cat)) {
                 return '';
             } else {
                 return $cat[0]->type;

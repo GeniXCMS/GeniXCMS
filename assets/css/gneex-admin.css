@@ -347,7 +347,7 @@ body {
 }
 
 .nav-tree li a {
-    padding: 7px 20px 7px 45px !important;
+    padding: 5px 20px 5px 45px !important;
     font-size: 0.75rem;
 }
 
@@ -431,4 +431,8 @@ body {
 #scrollTop.visible {
     opacity: 1;
     visibility: visible;
+}
+
+.fw-black {
+    font-weight: 900 !important;
 }

@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20150126
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -52,7 +52,7 @@ class Install
  *
  * @package GeniXCMS
  * @since 0.0.1 build date 20140925
- * @version 2.3.0
+ * @version 2.4.0
  * 
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
@@ -75,10 +75,14 @@ error_reporting(E_ALL);
 !defined('GX_URL_PREFIX')  ? define('GX_URL_PREFIX',  '.html') : null;
 
 !defined('ADMIN_DIR')      ? define('ADMIN_DIR',      'gxadmin') : null;
+!defined('ADMIN_THEME')    ? define('ADMIN_THEME',    'default') : null;
 !defined('USE_MEMCACHED')  ? define('USE_MEMCACHED',  false) : null;
 !defined('SITE_ID')        ? define('SITE_ID',        '{$siteId}') : null;
 
 !defined('DEBUG')          ? define('DEBUG',          false) : null;
+
+!defined('OFFLINE_MODE')   ? define('OFFLINE_MODE',   false) : null; // true = local assets, false = CDN
+!defined('DEVELOPER_MODE') ? define('DEVELOPER_MODE', false) : null; // true = show Assets & Hooks inspector
 
 !defined('SESSION_EXPIRES') ? define('SESSION_EXPIRES', 720) : null;
 !defined('SESSION_DB')      ? define('SESSION_DB',      false) : null;
@@ -145,7 +149,8 @@ error_reporting(E_ALL);
             $tables[] = "CREATE TABLE IF NOT EXISTS \"user\" (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), \"group\" VARCHAR(1) CHECK (\"group\" IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TIMESTAMP NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
             $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id BIGSERIAL PRIMARY KEY, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate DATE, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
             $tables[] = "CREATE TABLE IF NOT EXISTS comments (id BIGSERIAL PRIMARY KEY, date TIMESTAMP NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
-            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id SERIAL PRIMARY KEY, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id SERIAL PRIMARY KEY, name TEXT NOT NULL, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status CHAR(1) CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets_param (id SERIAL PRIMARY KEY, widget_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL DEFAULT '')";
             $tables[] = "CREATE TABLE IF NOT EXISTS permissions (id SERIAL PRIMARY KEY, group_id INTEGER NOT NULL, permission VARCHAR(100) NOT NULL, status SMALLINT NOT NULL DEFAULT 0)";
         } elseif ($driver == 'sqlite') {
             $tables[] = "CREATE TABLE IF NOT EXISTS cat (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, slug TEXT NOT NULL, parent TEXT, image TEXT, [desc] TEXT, type TEXT NOT NULL)";
@@ -157,7 +162,8 @@ error_reporting(E_ALL);
             $tables[] = "CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, pass VARCHAR(255) NOT NULL, confirm VARCHAR(255), [group] TEXT CHECK ([group] IN ('0','1','2','3','4','5','6')) NOT NULL, email VARCHAR(255) NOT NULL, join_date TEXT NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL, activation TEXT, ipaddress TEXT)";
             $tables[] = "CREATE TABLE IF NOT EXISTS user_detail (id INTEGER PRIMARY KEY AUTOINCREMENT, userid VARCHAR(32) NOT NULL, fname VARCHAR(32), lname VARCHAR(255), sex VARCHAR(2), birthplace VARCHAR(32), birthdate TEXT, addr VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255), postcode VARCHAR(32), avatar TEXT, balance FLOAT DEFAULT 0)";
             $tables[] = "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, userid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, url TEXT NOT NULL, comment TEXT NOT NULL, post_id INTEGER NOT NULL, parent INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1','2')) NOT NULL, type TEXT NOT NULL, ipaddress TEXT NOT NULL)";
-            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, title TEXT NOT NULL, content TEXT NOT NULL, type TEXT NOT NULL, location TEXT NOT NULL, sorting INTEGER NOT NULL, status TEXT CHECK (status IN ('0','1')) NOT NULL)";
+            $tables[] = "CREATE TABLE IF NOT EXISTS widgets_param (id INTEGER PRIMARY KEY AUTOINCREMENT, widget_id INTEGER NOT NULL, param TEXT NOT NULL, value TEXT NOT NULL DEFAULT '')";
             $tables[] = "CREATE TABLE IF NOT EXISTS permissions (id INTEGER PRIMARY KEY AUTOINCREMENT, group_id INTEGER NOT NULL, permission TEXT NOT NULL, status INTEGER NOT NULL DEFAULT 0)";
         } else {
             // Default to MySQL
@@ -170,7 +176,8 @@ error_reporting(E_ALL);
             $tables[] = "CREATE TABLE IF NOT EXISTS `user` (`id` bigint(32) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `pass` varchar(255) NOT NULL, `confirm` varchar(255) DEFAULT NULL, `group` enum('0','1','2','3','4','5','6') NOT NULL, `email` varchar(255) NOT NULL, `join_date` datetime NOT NULL, `status` enum('0','1') NOT NULL, `activation` text, `ipaddress` text) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `user_detail` (`id` bigint(20) NOT NULL PRIMARY KEY AUTO_INCREMENT, `userid` varchar(32) NOT NULL, `fname` varchar(32) DEFAULT NULL, `lname` varchar(255) DEFAULT NULL, `sex` varchar(2) DEFAULT NULL, `birthplace` varchar(32) DEFAULT NULL, `birthdate` date DEFAULT NULL, `addr` varchar(255) DEFAULT NULL, `city` varchar(255) DEFAULT NULL, `state` varchar(255) DEFAULT NULL, `country` varchar(255) DEFAULT NULL, `postcode` varchar(32) DEFAULT NULL, `avatar` text, `balance` float DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $tables[] = "CREATE TABLE IF NOT EXISTS `comments` (`id` bigint(22) NOT NULL PRIMARY KEY AUTO_INCREMENT, `date` datetime NOT NULL, `userid` text NOT NULL, `name` text NOT NULL, `email` text NOT NULL, `url` text NOT NULL, `comment` longtext NOT NULL, `post_id` int(11) NOT NULL, `parent` int(11) NOT NULL, `status` enum('0','1','2') NOT NULL, `type` text NOT NULL, `ipaddress` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-            $tables[] = "CREATE TABLE IF NOT EXISTS `widgets` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `title` text NOT NULL, `content` longtext NOT NULL, `type` text NOT NULL, `location` text NOT NULL, `sorting` int(11) NOT NULL, `status` enum('0','1') NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `widgets` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `name` text NOT NULL, `title` text NOT NULL, `content` longtext NOT NULL, `type` text NOT NULL, `location` text NOT NULL, `sorting` int(11) NOT NULL, `status` enum('0','1') NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $tables[] = "CREATE TABLE IF NOT EXISTS `widgets_param` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `widget_id` int(11) NOT NULL, `param` varchar(191) NOT NULL, `value` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
             $tables[] = "CREATE TABLE IF NOT EXISTS `permissions` (`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, `group_id` int(11) NOT NULL, `permission` varchar(100) NOT NULL, `status` tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB DEFAULT CHARSET=utf8";
         }
 

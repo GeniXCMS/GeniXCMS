@@ -6,7 +6,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140925
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -623,6 +623,22 @@ class Typo
         $translated = _($original);
 
         return $translated;
+    }
+
+    /**
+     * Limits a string to a specified number of words.
+     *
+     * @param string $text The text to process.
+     * @param int $limit The number of words to limit to.
+     * @return string The processed text.
+     */
+    public static function limitWords($text, $limit = 25)
+    {
+        $words = explode(' ', $text);
+        if (count($words) > $limit) {
+            return implode(' ', array_slice($words, 0, $limit));
+        }
+        return $text;
     }
 }
 

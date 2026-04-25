@@ -12,7 +12,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * - CSS Engine: Reactive typography and color mapping using standard prefixes.
  * - Notifications: Integrated global AJAX toast system.
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -46,6 +46,8 @@ class OptionsBuilder
         '"Lato", sans-serif' => 'Lato',
         '"Poppins", sans-serif' => 'Poppins',
         '"Nunito", sans-serif' => 'Nunito',
+        '"Plus Jakarta Sans", sans-serif' => 'Plus Jakarta Sans',
+        '"Noto Serif", serif' => 'Noto Serif (Serif)',
         '"Material Symbols Outlined", sans-serif' => 'Material Icons',
         '"Merriweather", serif' => 'Merriweather (Serif)',
         '"Playfair Display", serif' => 'Playfair Display (Serif)',
@@ -61,6 +63,8 @@ class OptionsBuilder
         '"Lato", sans-serif' => 'Lato:wght@300;400;700;900',
         '"Poppins", sans-serif' => 'Poppins:wght@300;400;500;600;700;800;900',
         '"Nunito", sans-serif' => 'Nunito:wght@300;400;500;600;700;800;900',
+        '"Plus Jakarta Sans", sans-serif' => 'Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900',
+        '"Noto Serif", serif' => 'Noto+Serif:wght@400;700',
         '"Merriweather", serif' => 'Merriweather:wght@300;400;700;900',
         '"Playfair Display", serif' => 'Playfair+Display:wght@400;500;600;700;800;900',
         '"Georgia", serif' => '', // web-safe, no import needed
@@ -113,7 +117,7 @@ class OptionsBuilder
     private function getValue(string $key, $default = ''): string
     {
         $v = (string) ($this->opt[$key] ?? $default);
-        return htmlspecialchars_decode($v, ENT_QUOTES | ENT_HTML5);
+        return Typo::Xclean($v);
     }
 
     /**
@@ -660,13 +664,45 @@ HTML;
             case 'toggle':
                 $this->fieldToggle($field);
                 break;
+            case 'list':
+                $this->fieldList($field);
+                break;
             case 'checkbox':
                 $this->fieldCheckbox($field);
+                break;
+            case 'media':
+                $this->fieldMedia($field);
                 break;
         }
         if (!empty($field['hint']))
             echo '<span class="hint">' . htmlspecialchars($field['hint']) . '</span>';
         echo '</div>';
+    }
+
+    /**
+     * Renders a media selector field with a Browse button connected to Media Manager.
+     */
+    private function fieldMedia(array $f): void
+    {
+        $name = htmlspecialchars($f['name'] ?? '');
+        $val = htmlspecialchars($this->getValue($f['name'] ?? ''));
+        $id = $f['id'] ?? 'media_' . rand(1000, 9999);
+        echo "<div class=\"gx-media-group mb-3\">";
+        echo "<div class=\"media-drop-zone rounded-4 border-2 border-dashed bg-light p-3 position-relative text-center mb-1\" 
+                     style=\"cursor: pointer; min-height: 120px; border-style: dashed !important;\" onclick=\"gxMediaSelector('{$id}')\">
+                <div id=\"{$id}_placeholder\" class=\"" . ($val ? 'd-none' : 'py-3') . "\">
+                    <i class=\"bi bi-image fs-1 text-muted\"></i>
+                    <p class=\"text-muted small mt-2 mb-0\">Click to select image</p>
+                </div>
+                <img id=\"{$id}_preview\" class=\"img-fluid rounded-3 shadow-sm " . ($val ? '' : 'd-none') . "\" 
+                     src=\"{$val}\" style=\"max-height: 200px; width: 100%; object-fit: cover;\">
+                <input name=\"{$name}\" id=\"{$id}\" type=\"hidden\" value=\"{$val}\">
+            </div>
+            <div class=\"d-flex gap-2\">
+                <button type=\"button\" class=\"btn btn-xs btn-light border py-1 px-3 rounded-pill small fw-bold\" onclick=\"gxMediaSelector('{$id}')\"><i class=\"bi bi-pencil small\"></i> Change</button>
+                <button type=\"button\" class=\"btn btn-xs btn-light border py-1 px-3 rounded-pill small text-danger fw-bold\" onclick=\"document.getElementById('{$id}').value=''; document.getElementById('{$id}_preview').classList.add('d-none'); document.getElementById('{$id}_placeholder').classList.remove('d-none');\"><i class=\"bi bi-trash small\"></i> Remove</button>
+            </div>";
+        echo "</div>";
     }
 
     /**
@@ -773,6 +809,118 @@ HTML;
             echo "<option value=\"{$val_attr}\"{$sel}>" . htmlspecialchars($label) . "</option>";
         }
         echo "</select>";
+    }
+
+    /**
+     * Renders a dynamic, repeatable list field (Repeater).
+     * Data is stored as a base64-encoded JSON string to ensure integrity.
+     */
+    private function fieldList(array $f, $passedVal = null): void
+    {
+        $name = htmlspecialchars($f['name'] ?? '');
+        $rawVal = ($passedVal !== null) ? $passedVal : $this->getValue($f['name'] ?? '', '[]');
+        $items = json_decode($rawVal, true) ?: [];
+        $fields = $f['fields'] ?? [];
+        $label = $f['label'] ?? 'Item';
+        
+        echo "<div class=\"gx-list-container\" data-name=\"{$name}\">";
+        echo "<input type=\"hidden\" name=\"{$name}\" class=\"gx-list-hidden gx-list-input\" data-key=\"{$name}\" value='" . htmlspecialchars($rawVal) . "'>";
+        echo "<div class=\"gx-list-items\">";
+        
+        foreach ($items as $index => $item) {
+            echo "<div class=\"gx-list-item px-4 py-3 bg-light rounded-4 mb-3 border position-relative\">";
+            echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3\">";
+            echo "<span class=\"fw-bold text-primary small\">{$label} #<span class=\"idx\">" . ($index + 1) . "</span></span>";
+            echo "<button type=\"button\" class=\"btn btn-link text-danger p-0\" onclick=\"removeGxListItem(this)\"><i class=\"fa fa-trash-alt\"></i></button>";
+            echo "</div>";
+            echo "<div class=\"gx-list-fields row g-3\">";
+            foreach ($fields as $sf) {
+                $sfName = $sf['name'];
+                $sfVal = htmlspecialchars($item[$sfName] ?? '');
+                $sfType = $sf['type'] ?? 'text';
+                $sfLabel = $sf['label'] ?? '';
+                $sfBox = $sf['box'] ?? 'col-12';
+                echo "<div class=\"{$sfBox}\">";
+                if ($sfLabel) echo "<label class=\"extra-small fw-bold text-muted d-block mb-1\">{$sfLabel}</label>";
+                if ($sfType === 'textarea') {
+                    echo "<textarea class=\"gx-input gx-list-input\" data-key=\"{$sfName}\" rows=\"2\">{$sfVal}</textarea>";
+                } elseif ($sfType === 'media') {
+                    $sfId = 'media_list_' . rand(10000, 99999);
+                    echo "<div class=\"gx-media-group\">";
+                    echo "<div class=\"media-drop-zone rounded-4 border bg-white p-2 position-relative text-center mb-1\" 
+                                 style=\"cursor: pointer; min-height: 80px;\" onclick=\"gxMediaSelector('{$sfId}')\">
+                            <div id=\"{$sfId}_placeholder\" class=\"" . ($sfVal ? 'd-none' : 'py-2') . "\">
+                                <i class=\"bi bi-image text-muted\"></i>
+                                <p class=\"extra-small text-muted mb-0\">Select</p>
+                            </div>
+                            <img id=\"{$sfId}_preview\" class=\"img-fluid rounded-3 " . ($sfVal ? '' : 'd-none') . "\" 
+                                 src=\"{$sfVal}\" style=\"max-height: 80px; width: 100%; object-fit: cover;\">
+                            <input class=\"gx-list-input\" data-key=\"{$sfName}\" id=\"{$sfId}\" type=\"hidden\" value=\"{$sfVal}\">
+                        </div>";
+                    echo "</div>";
+                } elseif ($sfType === 'list') {
+                    // Nested List!
+                    $this->fieldList($sf, $item[$sfName] ?? '[]');
+                } else {
+                    echo "<input type=\"text\" class=\"gx-input gx-list-input\" data-key=\"{$sfName}\" value=\"{$sfVal}\">";
+                }
+                echo "</div>";
+            }
+            echo "</div>";
+            echo "</div>";
+        }
+        
+        echo "</div>";
+        echo "<button type=\"button\" class=\"btn btn-outline-primary btn-sm rounded-pill w-100 py-2 mt-2\" onclick=\"addGxListItem(this)\">";
+        echo "<i class=\"fa fa-plus-circle me-1\"></i> Add New {$label}";
+        echo "</button>";
+        
+        // Template for new items
+        echo "<script type=\"text/template\" class=\"gx-list-template\">";
+        echo "<div class=\"gx-list-item px-4 py-3 bg-light rounded-4 mb-3 border position-relative shadow-sm\">";
+        echo "<div class=\"gx-list-item-header d-flex justify-content-between align-items-center mb-3\">";
+        echo "<span class=\"fw-bold text-primary small\">{$label} #<span class=\"idx\">__IDX__</span></span>";
+        echo "<button type=\"button\" class=\"btn btn-link text-danger p-0\" onclick=\"removeGxListItem(this)\"><i class=\"fa fa-trash-alt\"></i></button>";
+        echo "</div>";
+        echo "<div class=\"gx-list-fields row g-3\">";
+        foreach ($fields as $sf) {
+            $sfName = $sf['name'];
+            $sfType = $sf['type'] ?? 'text';
+            $sfLabel = $sf['label'] ?? '';
+            $sfBox = $sf['box'] ?? 'col-12';
+            echo "<div class=\"{$sfBox}\">";
+            if ($sfLabel) echo "<label class=\"extra-small fw-bold text-muted d-block mb-1\">{$sfLabel}</label>";
+            if ($sfType === 'textarea') {
+                echo "<textarea class=\"gx-input gx-list-input\" data-key=\"{$sfName}\" rows=\"2\"></textarea>";
+            } elseif ($sfType === 'media') {
+                $sfId = 'media_list_tmp_' . rand(10000, 99999);
+                echo "<div class=\"gx-media-group\">";
+                echo "<div class=\"media-drop-zone rounded-4 border bg-white p-2 position-relative text-center mb-1\" 
+                             style=\"cursor: pointer; min-height: 80px;\" onclick=\"gxMediaSelector('{$sfId}')\">
+                        <div id=\"{$sfId}_placeholder\" class=\"py-2\">
+                            <i class=\"bi bi-image text-muted\"></i>
+                            <p class=\"extra-small text-muted mb-0\">Select</p>
+                        </div>
+                        <img id=\"{$sfId}_preview\" class=\"img-fluid rounded-3 d-none\" 
+                             src=\"\" style=\"max-height: 80px; width: 100%; object-fit: cover;\">
+                        <input class=\"gx-list-input\" data-key=\"{$sfName}\" id=\"{$sfId}\" type=\"hidden\" value=\"\">
+                    </div>";
+                echo "</div>";
+            } elseif ($sfType === 'list') {
+                // Buffer and escape nested template to avoid breaking parent script tag
+                ob_start();
+                $this->fieldList($sf, '[]');
+                $nested = ob_get_clean();
+                echo str_replace('</script>', '<\/script>', $nested);
+            } else {
+                echo "<input type=\"text\" class=\"gx-input gx-list-input\" data-key=\"{$sfName}\" value=\"\">";
+            }
+            echo "</div>";
+        }
+        echo "</div>";
+        echo "</div>";
+        echo "</script>";
+        echo "</div>";
     }
 
     /**
@@ -1008,6 +1156,27 @@ HTML;
         .gx-toast.out { animation: gxToastOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes gxToastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
         .gx-toast i { color: #22c55e; font-size: 20px; }
+
+        .gx-list-item { transition: all 0.3s ease; }
+        .gx-list-item:hover { border-color: #3b82f6 !important; background: #fff !important; }
+        .gx-list-item .btn-link { opacity: 0.3; transition: opacity 0.2s; }
+        .gx-list-item:hover .btn-link { opacity: 1; }
+        .extra-small { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .gx-btn-media { 
+            background: #0f172a; color: #fff; width: 50px; height: 50px; 
+            border-radius: 14px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
+            flex-shrink: 0;
+        }
+        .gx-btn-media:hover { background: #3b82f6; transform: scale(1.05); }
+
+        .gx-media-group .gx-input { border-radius: 14px 0 0 14px; }
+        .gx-media-group .gx-btn-media { border-radius: 0 14px 14px 0; height: 52px; width: 52px; }
+
+        .media-drop-zone { transition: all 0.2s ease; border: 2px dashed #e2e8f0 !important; }
+        .media-drop-zone:hover { border-color: #3b82f6 !important; background: #fff !important; }
+        .btn-xs { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
         </style>';
     }
 
@@ -1111,6 +1280,89 @@ HTML;
                         window.showGxToast("Error connecting to server.", "fa-exclamation-triangle");
                     });
                 };
+            }
+        };
+        
+        window.addGxListItem = function(btn) {
+            const container = btn.closest('.gx-list-container');
+            const list = container.querySelector('.gx-list-items');
+            const template = container.querySelector('.gx-list-template').innerHTML;
+            const newIdx = list.querySelectorAll('.gx-list-item').length + 1;
+            const html = template.replace(/__IDX__/g, newIdx);
+            list.insertAdjacentHTML('beforeend', html);
+            updateGxListValue(container);
+        };
+
+        window.removeGxListItem = function(btn) {
+            if(!confirm("Remove this item?")) return;
+            const container = btn.closest('.gx-list-container');
+            const item = btn.closest('.gx-list-item');
+            item.remove();
+            
+            // Re-index
+            container.querySelectorAll('.gx-list-item').forEach((it, i) => {
+                it.querySelector('.idx').innerText = i + 1;
+            });
+            updateGxListValue(container);
+        };
+
+        window.updateGxListValue = function(container) {
+            const hiddenInput = container.querySelector('.gx-list-hidden');
+            const items = [];
+            container.querySelectorAll('.gx-list-item').forEach(item => {
+                const data = {};
+                item.querySelectorAll('.gx-list-input').forEach(input => {
+                    // Check if this input belongs to this specific container (not a nested one)
+                    if (input.closest('.gx-list-container') === container) {
+                         data[input.dataset.key] = input.value;
+                    }
+                });
+                items.push(data);
+            });
+            hiddenInput.value = JSON.stringify(items);
+            
+            // If this container is itself inside another list, trigger update on parent
+            const parentContainer = container.parentElement.closest('.gx-list-container');
+            if (parentContainer) {
+                updateGxListValue(parentContainer);
+            }
+        };
+
+        // Attach event to existing inputs
+        document.addEventListener('input', (e) => {
+            if(e.target.classList.contains('gx-list-input')) {
+                updateGxListValue(e.target.closest('.gx-list-container'));
+            }
+        });
+
+        window.gxMediaSelector = function(targetId) {
+            if (typeof GxMedia !== 'undefined') {
+                GxMedia.select(function (url) {
+                    const input = document.getElementById(targetId);
+                    if(!input) return;
+                    input.value = url;
+                    const preview = document.getElementById(targetId + '_preview');
+                    const placeholder = document.getElementById(targetId + '_placeholder');
+                    if (preview) { preview.src = url; preview.classList.remove('d-none'); }
+                    if (placeholder) { placeholder.classList.add('d-none'); }
+                    
+                    // Trigger input event for list update
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            } else {
+                const url = prompt('Enter Image URL:');
+                if (url) {
+                    const input = document.getElementById(targetId);
+                    if(!input) return;
+                    input.value = url;
+                    const preview = document.getElementById(targetId + '_preview');
+                    const placeholder = document.getElementById(targetId + '_placeholder');
+                    if (preview) { preview.src = url; preview.classList.remove('d-none'); }
+                    if (placeholder) { placeholder.classList.add('d-none'); }
+                    
+                    // Trigger input event for list update
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
             }
         };
         

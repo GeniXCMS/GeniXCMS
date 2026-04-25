@@ -83,7 +83,7 @@ if (!class_exists('NixFonnte')) {
 
             $response = curl_exec($curl);
             $err = curl_error($curl);
-            curl_close($curl);
+            unset($curl);
 
             if ($err) {
                 return ['status' => false, 'message' => 'Curl Error: ' . $err];

@@ -5,7 +5,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 0.0.1 build date 20140930
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -623,6 +623,54 @@ class Url
     }
 
     /**
+     * Generates a URL for the register page.
+     *
+     * @param string $var Optional parameters.
+     * @return string
+     */
+    public static function register($var = '')
+    {
+        switch (SMART_URL) {
+            case true:
+                $param = ($var != '') ? "?" . $var : "";
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url . $inFold . 'register/' . $param;
+                break;
+
+            default:
+                $param = ($var != '') ? "&" . $var : "";
+                $url = Site::$url . "?register" . $param;
+                break;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Generates a URL for the forgot password page.
+     *
+     * @param string $var Optional parameters.
+     * @return string
+     */
+    public static function forgotpass($var = '')
+    {
+        switch (SMART_URL) {
+            case true:
+                $param = ($var != '') ? "?" . $var : "";
+                $inFold = (Options::v('permalink_use_index_php') == 'on') ? 'index.php/' : '';
+                $url = Site::$url . $inFold . 'forgotpass/' . $param;
+                break;
+
+            default:
+                $param = ($var != '') ? "&" . $var : "";
+                $url = Site::$url . "?forgotpass" . $param;
+                break;
+        }
+
+        return $url;
+    }
+
+    /**
      * Generates HTML breadcrumbs based on the current context or provided data.
      *
      * @param array $data Contextual data for manual injection.
@@ -683,6 +731,21 @@ class Url
         $out .= '</ol></nav>';
 
         return $out;
+    }
+
+    /**
+     * Generates a URL for the admin dashboard.
+     * Utilizes the ADMIN_DIR constant to resolve the correct admin folder name.
+     *
+     * @param string $path Optional path to append to the admin URL.
+     * @return string The generated Admin URL.
+     * @since 2.4.0
+     */
+    public static function admin($path = '')
+    {
+        $adminDir = defined('ADMIN_DIR') ? ADMIN_DIR : 'gxadmin';
+        $path = $path ? '/' . ltrim($path, '/') : '';
+        return Site::$url . $adminDir . $path;
     }
 
     /**

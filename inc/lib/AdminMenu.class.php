@@ -9,7 +9,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  * Modules and themes can call AdminMenu::add() to inject menu items
  * without hardcoding HTML in any template file.
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -49,12 +49,12 @@ class AdminMenu
             'position' => 'main',
             'order' => 20,
             'children' => [
-                ['label' => _('All Posts'), 'url' => 'index.php?page=posts', 'access' => 4, 'aliases' => [
-                    'index.php?page=posts&act=add&type=post', 
+                ['label' => _('All Posts'),   'icon' => 'bi bi-file-earmark-richtext', 'url' => 'index.php?page=posts', 'access' => 4, 'aliases' => [
+                    'index.php?page=posts&act=add&type=post',
                     'index.php?page=posts&act=edit&type=post'
                 ]],
-                ['label' => _('Categories'), 'url' => 'index.php?page=categories&type=post', 'access' => 1],
-                ['label' => _('Tags'), 'url' => 'index.php?page=tags', 'access' => 1],
+                ['label' => _('Categories'),  'icon' => 'bi bi-tag',                   'url' => 'index.php?page=categories&type=post', 'access' => 1],
+                ['label' => _('Tags'),         'icon' => 'bi bi-hash',                  'url' => 'index.php?page=tags', 'access' => 1],
             ],
         ]);
 
@@ -110,8 +110,8 @@ class AdminMenu
             'position' => 'management',
             'order' => 10,
             'children' => [
-                ['label' => _('All Users'), 'url' => 'index.php?page=users', 'access' => 1, 'aliases' => ['index.php?page=users&act=edit', 'index.php?page=users&act=add']],
-                ['label' => _('ACL Manager'), 'url' => 'index.php?page=permissions', 'access' => 1],
+                ['label' => _('All Users'),  'icon' => 'bi bi-people',       'url' => 'index.php?page=users', 'access' => 1, 'aliases' => ['index.php?page=users&act=edit', 'index.php?page=users&act=add']],
+                ['label' => _('ACL Manager'),'icon' => 'bi bi-shield-lock',  'url' => 'index.php?page=permissions', 'access' => 1],
             ],
         ]);
 
@@ -125,9 +125,9 @@ class AdminMenu
             'position' => 'management',
             'order' => 30,
             'children' => [
-                ['label' => _('Themes'), 'url' => 'index.php?page=themes', 'access' => 0],
-                ['label' => _('Menus'), 'url' => 'index.php?page=menus', 'access' => 1, 'aliases' => ['index.php?page=menus&act=edit']],
-                ['label' => _('Widgets'), 'url' => 'index.php?page=widgets', 'access' => 1],
+                ['label' => _('Themes'),  'icon' => 'bi bi-palette2',       'url' => 'index.php?page=themes', 'access' => 0],
+                ['label' => _('Menus'),   'icon' => 'bi bi-list-nested',    'url' => 'index.php?page=menus', 'access' => 1, 'aliases' => ['index.php?page=menus&act=edit']],
+                ['label' => _('Widgets'), 'icon' => 'bi bi-layout-sidebar', 'url' => 'index.php?page=widgets', 'access' => 1],
             ],
         ]);
 
@@ -152,10 +152,27 @@ class AdminMenu
             'position' => 'management',
             'order' => 70,
             'children' => [
-                ['label' => _('System Health'), 'url' => 'index.php?page=health', 'access' => 0],
-                ['label' => _('Updates'), 'url' => 'index.php?page=updates', 'access' => 0],
+                ['label' => _('System Health'), 'icon' => 'bi bi-heart-pulse',  'url' => 'index.php?page=health',  'access' => 0],
+                ['label' => _('Updates'),        'icon' => 'bi bi-arrow-repeat', 'url' => 'index.php?page=updates', 'access' => 0],
             ],
         ]);
+
+        // Developer Tools (Admin only, DEVELOPER_MODE must be true)
+        if (defined('DEVELOPER_MODE') && DEVELOPER_MODE) {
+            self::add([
+                'id' => 'devtools',
+                'label' => _('Dev Tools'),
+                'icon' => 'bi bi-terminal',
+                'url' => 'index.php?page=devtools-assets',
+                'access' => 0,
+                'position' => 'management',
+                'order' => 80,
+                'children' => [
+                    ['label' => _('Asset Inspector'), 'icon' => 'bi bi-box-seam',   'url' => 'index.php?page=devtools-assets', 'access' => 0],
+                    ['label' => _('Hook Inspector'),  'icon' => 'bi bi-diagram-3',  'url' => 'index.php?page=devtools-hooks',  'access' => 0],
+                ],
+            ]);
+        }
 
         // ── SETTINGS ─────────────────────────────────────────────────────
 
@@ -168,13 +185,13 @@ class AdminMenu
             'position' => 'settings',
             'order' => 10,
             'children' => [
-                ['label' => _('Global Settings'), 'url' => 'index.php?page=settings', 'access' => 1],
-                ['label' => _('Media Settings'), 'url' => 'index.php?page=settings-media', 'access' => 0],
-                ['label' => _('Multilanguage Settings'), 'url' => 'index.php?page=settings-multilang', 'access' => 0],
-                ['label' => _('Permalink Settings'), 'url' => 'index.php?page=settings-permalink', 'access' => 0],
-                ['label' => _('Comments Settings'), 'url' => 'index.php?page=settings-comments', 'access' => 1],
-                ['label' => _('Cache Settings'), 'url' => 'index.php?page=settings-cache', 'access' => 1],
-                ['label' => _('API Service'), 'url' => 'index.php?page=settings-api', 'access' => 0],
+                ['label' => _('Global Settings'),        'icon' => 'bi bi-sliders',          'url' => 'index.php?page=settings',            'access' => 1],
+                ['label' => _('Media Settings'),         'icon' => 'bi bi-image',             'url' => 'index.php?page=settings-media',       'access' => 0],
+                ['label' => _('Multilanguage Settings'), 'icon' => 'bi bi-translate',         'url' => 'index.php?page=settings-multilang',   'access' => 0],
+                ['label' => _('Permalink Settings'),     'icon' => 'bi bi-link-45deg',        'url' => 'index.php?page=settings-permalink',   'access' => 0],
+                ['label' => _('Comments Settings'),      'icon' => 'bi bi-chat-square-text',  'url' => 'index.php?page=settings-comments',    'access' => 1],
+                ['label' => _('Cache Settings'),         'icon' => 'bi bi-lightning-charge',  'url' => 'index.php?page=settings-cache',       'access' => 1],
+                ['label' => _('API Service'),            'icon' => 'bi bi-cloud-arrow-up',    'url' => 'index.php?page=settings-api',         'access' => 0],
             ],
         ]);
     }

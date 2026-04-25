@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Media Manager UI - Manager View
  */

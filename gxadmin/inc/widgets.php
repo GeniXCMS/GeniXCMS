@@ -5,7 +5,7 @@
  * PHP Based Content Management System and Framework
  * 
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -265,4 +265,4 @@ document.addEventListener('DOMContentLoaded', function() {
     const addTypeSelect = document.querySelector('#addWidget select[name="type"]');
     handleTypeChange(addTypeSelect, 'widget-params-container-add', 0);
 });
-</script>
+</script>

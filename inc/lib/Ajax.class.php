@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.3.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -220,7 +220,7 @@ class Ajax
         $response = curl_exec($ch);
         
         if (curl_errno($ch)) {
-            curl_close($ch);
+            unset($ch);
             return null; // Fallback
         }
 
@@ -229,7 +229,7 @@ class Ajax
 
             if ($httpCode === 0 || $httpCode === 403 || $httpCode === 404 || $httpCode >= 500) {
                  if (Options::v('go_service_fallback') !== 'off') {
-                     curl_close($ch);
+                     unset($ch);
                      return null; 
                  }
             }
@@ -296,7 +296,7 @@ class Ajax
                             'title' => $nObj->title,
                             'message' => $nObj->message,
                             'time' => date('H:i', strtotime($nObj->created_at)),
-                            'url' => Site::$url . 'gxadmin/' . $nObj->url . '&mark_read=' . $nObj->id
+                            'url' => Site::$url . ADMIN_DIR . '/' . $nObj->url . '&mark_read=' . $nObj->id
                         ];
                     }
                     $response = json_encode([
@@ -316,7 +316,7 @@ class Ajax
                     $nixAjax = new NixomersAjax();
                     
                     $currency = Options::v('nixomers_currency') ?: 'IDR';
-                    $mod_url = Site::$url . 'gxadmin/index.php?page=mods&mod=nixomers';
+                    $mod_url = Site::$url . ADMIN_DIR . '/index.php?page=mods&mod=nixomers';
 
                     foreach ($orders as $o) {
                         $oObj = (object) $o;

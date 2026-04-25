@@ -7,7 +7,7 @@ defined('GX_LIB') or die('Direct Access Not Allowed!');
  *
  * PHP Based Content Management System and Framework
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.4.0
  * @link https://github.com/GeniXCMS/GeniXCMS
  * @author Puguh Wijayanto <[EMAIL_ADDRESS]>
  * @author GeniXCMS <genixcms@gmail.com>
@@ -33,12 +33,23 @@ abstract class Migration
      */
     public static function init()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `migrations` (
-            `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            `migration` varchar(255) NOT NULL,
-            `batch` int(11) NOT NULL,
-            `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+        $driver = defined('DB_DRIVER') ? DB_DRIVER : 'mysql';
+
+        if (in_array($driver, ['sqlite', 'pgsql'])) {
+            $sql = "CREATE TABLE IF NOT EXISTS migrations (
+                id INTEGER PRIMARY KEY " . ($driver === 'sqlite' ? 'AUTOINCREMENT' : 'GENERATED ALWAYS AS IDENTITY') . ",
+                migration VARCHAR(255) NOT NULL,
+                batch INTEGER NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+        } else {
+            $sql = "CREATE TABLE IF NOT EXISTS `migrations` (
+                `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `migration` varchar(255) NOT NULL,
+                `batch` int(11) NOT NULL,
+                `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        }
         Db::query($sql);
     }
 

@@ -28,7 +28,7 @@ class Nixomers
         // Add to Admin Menu automatically when initialized
         Hooks::attach('init', function () {
             if (isset($_GET['page']) && $_GET['page'] == 'mods' && isset($_GET['mod']) && $_GET['mod'] == 'nixomers' && isset($_GET['sel']) && $_GET['sel'] == 'analytics') {
-                Asset::load('chartjs', 'js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js', 'header');
+                Asset::enqueue('chartjs');
             }
             if (class_exists('AdminMenu')) {
                 AdminMenu::add([
@@ -40,21 +40,21 @@ class Nixomers
                     'position' => 'main', // Place it under "Main Navigation"
                     'order' => 0,
                     'children' => Hooks::filter('nix_admin_menu_children', [
-                        ['label' => _('Dashboard'), 'url' => 'index.php?page=mods&mod=nixomers&sel=dashboard', 'access' => 1],
-                        ['label' => _('Orders'), 'url' => 'index.php?page=mods&mod=nixomers&sel=orders', 'access' => 1, 'aliases' => ['index.php?page=mods&mod=nixomers&sel=orderdetail']],
-                        ['label' => _('Analytics'), 'url' => 'index.php?page=mods&mod=nixomers&sel=analytics', 'access' => 1],
-                        ['label' => _('Transactions'), 'url' => 'index.php?page=mods&mod=nixomers&sel=transactions', 'access' => 1],
-                        ['label' => _('Stock Inventory'), 'url' => 'index.php?page=mods&mod=nixomers&sel=stock', 'access' => 1],
-                        ['label' => _('Product List'), 'url' => 'index.php?page=posts&type=nixomers', 'access' => 1],
-                        ['label' => _('Add Product'), 'url' => 'index.php?page=posts&act=add&type=nixomers&token=' . TOKEN, 'access' => 1],
-                        ['label' => _('Categories'), 'url' => 'index.php?page=categories&type=nixomers', 'access' => 1],
-                        ['label' => _('Brands'), 'url' => 'index.php?page=categories&type=brand', 'access' => 1],
-                        ['label' => _('Suppliers'), 'url' => 'index.php?page=categories&type=supplier', 'access' => 1],
-                        ['label' => _('Product Types'), 'url' => 'index.php?page=categories&type=product_type', 'access' => 1],
-                        ['label' => _('Warranty Options'), 'url' => 'index.php?page=categories&type=warranty', 'access' => 1],
-                        ['label' => _('Materials'), 'url' => 'index.php?page=categories&type=material', 'access' => 1],
-                        ['label' => _('Stock Locations'), 'url' => 'index.php?page=categories&type=stock_location', 'access' => 1],
-                        ['label' => _('Settings'), 'url' => 'index.php?page=mods&mod=nixomers&sel=settings', 'access' => 0],
+                        ['label' => _('Dashboard'),      'icon' => 'bi bi-speedometer2',        'url' => 'index.php?page=mods&mod=nixomers&sel=dashboard',    'access' => 1],
+                        ['label' => _('Orders'),         'icon' => 'bi bi-bag-check',           'url' => 'index.php?page=mods&mod=nixomers&sel=orders',       'access' => 1, 'aliases' => ['index.php?page=mods&mod=nixomers&sel=orderdetail']],
+                        ['label' => _('Analytics'),      'icon' => 'bi bi-bar-chart-line',      'url' => 'index.php?page=mods&mod=nixomers&sel=analytics',    'access' => 1],
+                        ['label' => _('Transactions'),   'icon' => 'bi bi-credit-card',         'url' => 'index.php?page=mods&mod=nixomers&sel=transactions', 'access' => 1],
+                        ['label' => _('Stock Inventory'),'icon' => 'bi bi-boxes',               'url' => 'index.php?page=mods&mod=nixomers&sel=stock',        'access' => 1],
+                        ['label' => _('Product List'),   'icon' => 'bi bi-grid',                'url' => 'index.php?page=posts&type=nixomers',                'access' => 1],
+                        ['label' => _('Add Product'),    'icon' => 'bi bi-plus-square',         'url' => 'index.php?page=posts&act=add&type=nixomers&token=' . TOKEN, 'access' => 1],
+                        ['label' => _('Categories'),     'icon' => 'bi bi-tag',                 'url' => 'index.php?page=categories&type=nixomers',           'access' => 1],
+                        ['label' => _('Brands'),         'icon' => 'bi bi-award',               'url' => 'index.php?page=categories&type=brand',              'access' => 1],
+                        ['label' => _('Suppliers'),      'icon' => 'bi bi-truck',               'url' => 'index.php?page=categories&type=supplier',           'access' => 1],
+                        ['label' => _('Product Types'),  'icon' => 'bi bi-collection',          'url' => 'index.php?page=categories&type=product_type',       'access' => 1],
+                        ['label' => _('Warranty Options'),'icon' => 'bi bi-shield-check',       'url' => 'index.php?page=categories&type=warranty',           'access' => 1],
+                        ['label' => _('Materials'),      'icon' => 'bi bi-layers',              'url' => 'index.php?page=categories&type=material',           'access' => 1],
+                        ['label' => _('Stock Locations'),'icon' => 'bi bi-geo-alt',             'url' => 'index.php?page=categories&type=stock_location',     'access' => 1],
+                        ['label' => _('Settings'),       'icon' => 'bi bi-gear',                'url' => 'index.php?page=mods&mod=nixomers&sel=settings',     'access' => 0],
                     ])
                 ]);
             }
@@ -1701,7 +1701,7 @@ class Nixomers
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        unset($ch);
 
         $data = json_decode($response, true);
         if ($httpCode === 200 && isset($data['is_success']) && $data['is_success'] === true) {
